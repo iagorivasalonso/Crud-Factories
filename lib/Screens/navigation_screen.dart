@@ -1,4 +1,5 @@
 import 'package:desktop_app/Screens/Primera_Screen.dart';
+import 'package:desktop_app/Screens/Segunda_Screen.dart';
 import 'package:flutter/material.dart';
 
 class NavigationScreen extends StatefulWidget {
@@ -18,11 +19,16 @@ class _NavigationScreenState extends State<NavigationScreen> {
 
   List<String> Sitens = [];
   int itenSelection = -1;
-  var psmenu = const EdgeInsets.only(top: 0,left: 0,right: 0);
+  int subItenSelection = -1;
+  int itenSelect = -1;
+  int subItenSelect = -1;
 
+  var psmenu = const EdgeInsets.only(top: 0,left: 0,right: 0);
   Color cBackground = Colors.blue;
   Color cSelect = Colors.green;
-  double posMenu=0;
+  double posMenu = 0;
+
+
   @override
   Widget build(BuildContext context) {
 
@@ -33,107 +39,156 @@ class _NavigationScreenState extends State<NavigationScreen> {
     print('alto $mHeight');
      */
     return Scaffold(
-        body: Column(
-          children: [
-            SizedBox(
-              width: mWidth,
-              height: 40,
-              child: Column(
-                children: [
-                  Container(
-                    color: cBackground,
-                    width: mWidth,
-                    height: 40,
-                    child: ListView.builder(
-                        physics: const BouncingScrollPhysics(),
-                        scrollDirection: Axis.horizontal,
-                        itemCount: itens.length,
-                        itemBuilder: (BuildContext context, index) {
-                          return MouseRegion(
-                              onHover: (s) {
-                                setState(() {
-                                  itenSelection=index;
-                                  if(itenSelection==0)
-                                  {
-                                    psmenu = const EdgeInsets.only(left: 0);
-                                    Sitens =Sitens2;
-                                  }
-
-                                  if(itenSelection==1)
-                                  {
-                                    psmenu = const EdgeInsets.only(left: 75);
-                                    Sitens =Sitens2;
-                                  }
-                                  if(itenSelection==2)
-                                  {
-                                    psmenu = const EdgeInsets.only(left: 150);
-                                    Sitens =Sitens3;
-                                  }
-
-                                  if(itenSelection==3)
-                                  {
-                                    psmenu = const EdgeInsets.only(left: 225);
-                                    Sitens =Sitens4;
-                                  }
-                                  posMenu=itenSelection*75;
-                                });
-                              },
-                              child: Container(
-                                  width: 75,
-                                  color: itenSelection == index
+      body: Column(
+        children: [
+          Container(
+            child: itenSelection==-1
+                  ?SizedBox(
+                        width: mWidth,
+                        child: buildMenu(mWidth,mHeight),
+                       )
+                  :SizedBox(
+                        width: mWidth,
+                        height: 40,
+                        child: buildMenu(mWidth,mHeight),
+                       )
+            ),
+          if(itenSelection>-1)
+            Padding(
+              padding: psmenu,
+              child: SafeArea(
+                  child: Column(
+                    children: [
+                      for (int index1 = 0; index1 < Sitens.length; index1++)
+                        Align(
+                          alignment: Alignment.topLeft,
+                          child: MouseRegion(
+                             onHover: (s){
+                               setState(() {
+                                 subItenSelection = index1;
+                               });
+                             },
+                              child:Container(
+                                  width: 100,
+                                  height: 40,
+                                  color: subItenSelection == index1
                                       ? cSelect
                                       : cBackground,
-                                  child: Padding(
-                                    padding: const EdgeInsets.all(12.0),
-                                    child: Text(itens[index]),
+                                  child: GestureDetector(
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(12.0),
+                                      child: Text(Sitens[index1]),
+                                    ),
+                                     onTap: (){
+                                         setState(() {
+                                           itenSelect = itenSelection;
+                                           subItenSelect = subItenSelection;
+                                           itenSelection = -1;
+                                           subItenSelection = -1;
+                                           print('menu $itenSelect apartado $subItenSelect');
+                                         });
+
+                                     },
                                   )
-                              )
-                          );
-                        }),
-                  ),
 
+                              ),
 
-                  StreamBuilder<Object>(
-                          stream: null,
-                          builder: (context, snapshot) {
-
-                            return Container(
-                              width:mWidth,
-                              height: mHeight,
-                              child: PrimeraScreen(),
-
-                            );
-                          }
-                      ),
+                          ),
+                        ),
 
                     ],
-                  ),
-
-                ),
-                if(itenSelection>-1)
-                    SafeArea(
-                        child: Column(
-                          children: [
-                             for (var objeto in Sitens)
-                                Align(
-                                  alignment: Alignment.topLeft,
-                                  child: Container(
-                                    width: 100,
-                                    height: 55,
-                                    color: Colors.cyan,
-                                    child: Text(objeto)
-
-                                  ),
-                                ),
-
-                          ],
-                        )
-                    ),
-
-              ],
+                  )
+              ),
             ),
+
+        ],
+      ),
 
 
     );
+  }
+
+  Column buildMenu(double mWidth, double mHeight) {
+
+    return Column(
+            children: [
+              Container(
+                color: cBackground,
+                width:mWidth,
+                height: 40,
+                child: ListView.builder(
+                    physics: const BouncingScrollPhysics(),
+                    scrollDirection: Axis.horizontal,
+                    itemCount: itens.length,
+                    itemBuilder: (BuildContext context, index) {
+                      return MouseRegion(
+                          onHover: (s) {
+                            setState(() {
+                              itenSelection=index;
+                              if(itenSelection==0)
+                              {
+                                psmenu = const EdgeInsets.only(left: 0);
+                                Sitens =Sitens1;
+                              }
+
+                              if(itenSelection==1)
+                              {
+                                psmenu = const EdgeInsets.only(left: 75);
+                                Sitens =Sitens2;
+                              }
+                              if(itenSelection==2)
+                              {
+                                psmenu = const EdgeInsets.only(left: 150);
+                                Sitens =Sitens3;
+                              }
+
+                              if(itenSelection==3)
+                              {
+                                psmenu = const EdgeInsets.only(left: 225);
+                                Sitens =Sitens4;
+                              }
+                              posMenu=itenSelection*75;
+                            });
+                          },
+                          child: Container(
+                              width: 75,
+                              color: itenSelection == index
+                                  ? cSelect
+                                  : cBackground,
+                              child: Padding(
+                                padding: const EdgeInsets.all(12.0),
+                                child: Text(itens[index]),
+
+                              )
+                          )
+                      );
+                    }),
+              ),
+
+              StreamBuilder<Object>(
+                  stream: null,
+                  builder: (context, snapshot) {
+                    return Container(
+                      width:mWidth,
+                      height: mHeight,
+                      color: Colors.white,
+                      child: _funtionSeleted(itenSelect),
+
+                    );
+                  }
+              ),
+
+            ],
+          );
+  }
+
+  _funtionSeleted(int option) {
+
+    if(option==0){
+      return PrimeraScreen();
+    }else if(option==1){
+      return SegundaScreen();
+    }
+
   }
 }
