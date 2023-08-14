@@ -8,7 +8,7 @@ class SegundaScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return ScaffoldPage(
       content: Center(
-        child: Text("hola2"),
+        child: Text("hola1"),
       ),
     );
   }
