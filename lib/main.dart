@@ -1,8 +1,9 @@
 import 'package:fluent_ui/fluent_ui.dart';
-import 'package:flutter/material.dart';
 import 'package:window_manager/window_manager.dart';
 
-import 'Screens/navigation_screen.dart';
+import 'Frontend/close_app.dart';
+import 'Frontend/navigation_screen.dart';
+
 
 void main() {
   runApp(MyApp());
@@ -12,7 +13,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return FluentApp(
-      title: "Test",
+      debugShowCheckedModeBanner: false,
       home: MyApp1(),
     );
   }
@@ -24,7 +25,7 @@ class MyApp1 extends StatefulWidget {
 }
 
 class _MyApp1State extends State<MyApp1> with WindowListener {
-/*
+
   @override
   void initState() {
     super.initState();
@@ -41,33 +42,21 @@ class _MyApp1State extends State<MyApp1> with WindowListener {
     await windowManager.setPreventClose(true);
     setState(() {});
   }
-*/
+
   @override
   Widget build(BuildContext context) {
     return FluentApp(
       debugShowCheckedModeBanner: false,
-      title: 'Materialapp',
       home: NavigationScreen(),
     );
-  }/*
+  }
   @override
   void onWindowClose() async {
-    print("object");
-    testAlert();
-    bool _isPreventClose = await windowManager.isPreventClose();
+
+    closeAlert(context);
+    //bool _isPreventClose = await windowManager.isPreventClose();
 
   }
 
-  void testAlert() {
-    showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            title: Text("Test"),
-            content: Text("Done..!"),
-          );
 
-        });
-  }
-  */
 }
