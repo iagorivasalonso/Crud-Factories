@@ -58,11 +58,15 @@ class _NavigationScreenState extends State<NavigationScreen> {
                 child: SizedBox(
                   width: itenSelection == 0
                          ? 140
-                         : itenSelection==1
+                         : itenSelection == 1
                          ? 180
                          : 300,
                   child: Padding(
-                    padding:psmenu,
+                    padding: itenSelection == 0
+                             ?  psmenu = const EdgeInsets.only(left: 0)
+                             :  itenSelection == 1
+                             ?  psmenu = const EdgeInsets.only(left: 75)
+                             :  psmenu = const EdgeInsets.only(left: 150),
                     child: SizedBox(
                       child: SafeArea(
                        child: Column(
@@ -138,21 +142,11 @@ class _NavigationScreenState extends State<NavigationScreen> {
                     onHover: (s) {
                       setState(() {
                         itenSelection = index;
-                        if (itenSelection == 0) {
-                          psmenu = const EdgeInsets.only(left: 0);
-                          Sitens = Sitens1;
-                        }
-
-                        if (itenSelection == 1) {
-                          psmenu = const EdgeInsets.only(left: 75);
-                          Sitens = Sitens2;
-                        }
-                        if (itenSelection == 2) {
-                          psmenu = const EdgeInsets.only(left: 150);
-                          Sitens = Sitens3;
-                        }
-
-                        posMenu = itenSelection * 75;
+                               index == 0
+                            ?  Sitens = Sitens1
+                            :  index == 1
+                            ?  Sitens = Sitens2
+                            :  Sitens = Sitens3;
                       });
                     },
                     child: Container(
@@ -161,7 +155,15 @@ class _NavigationScreenState extends State<NavigationScreen> {
                         child: Padding(
                           padding: const EdgeInsets.all(12.0),
                           child: Center(child: Text(itens[index])),
-                        )));
+                        )
+                    ),
+                    onExit: (s) {
+                        setState(() {
+                          if (itenSelection == 3)
+                                itenSelection = -1;
+                        });
+                },
+                );
               }),
         ),
         StreamBuilder<Object>(
@@ -177,8 +179,6 @@ class _NavigationScreenState extends State<NavigationScreen> {
       ],
     );
   }
-
-
 
 }
 
