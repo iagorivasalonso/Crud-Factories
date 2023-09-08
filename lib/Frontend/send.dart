@@ -1,4 +1,4 @@
-import 'package:fluent_ui/fluent_ui.dart';
+import 'package:desktop_app/Widgets/table.dart';
 import 'package:flutter/material.dart';
 
 
@@ -12,20 +12,20 @@ class newSend extends StatefulWidget {
 class _newSendState extends State<newSend> {
   @override
   Widget build(BuildContext context) {
-    return const ScaffoldPage(
-      content: Align(
+    return Scaffold(
+      body: Align(
         alignment: Alignment.topLeft,
         child:  Padding(
-          padding: EdgeInsets.only(left: 30.0),
+          padding: const EdgeInsets.only(left: 30.0,top: 30.0),
           child: Column(
             children: [
-              Row(
+              const Row(
                 children: [
                   Text('Envio: ',
                     style: TextStyle(fontWeight: FontWeight.bold),),
                 ],
               ),
-              Padding(
+              const Padding(
                 padding: EdgeInsets.only(top:20.0, bottom: 30.0),
                 child: Row(
                   children: [
@@ -43,83 +43,39 @@ class _newSendState extends State<newSend> {
                   ],
                 ),
               ),
-              Row(
+              const Row(
                 children: [
                   Text('Selección de empresas: ',
                     style: TextStyle(fontWeight: FontWeight.bold),),
                 ],
               ),
-              Padding(
+              const Padding(
                   padding: EdgeInsets.only(top:20.0,bottom: 30.0),
-                  child: tableWidget(),
+                  child: table(),
               ),
-
+              Padding(
+                padding: const EdgeInsets.only(top: 150.0),
+                child: Row(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.only(left: 800.0,right: 30.0),
+                      child: ElevatedButton(
+                        child: const Text('Crear envio'),
+                        onPressed: (){},
+                      ),
+                    ),
+                    ElevatedButton(
+                      child: const Text('Cancelar'),
+                      onPressed: (){},
+                    ),
+                  ],
+                ),
+              ),
             ],
           ),
         ),
       ),
     );
 
-  }
-}
-
-class tableWidget extends StatefulWidget {
-  const tableWidget({
-    super.key,
-  });
-
-  @override
-  State<tableWidget> createState() => _tableWidgetState();
-}
-
-class _tableWidgetState extends State<tableWidget> {
-  bool check = false;
-  @override
-  Widget build(BuildContext context) {
-
-    return DataTable(
-        columns: const <DataColumn>[
-               DataColumn(
-                 label: SizedBox(
-                     width:200,
-                     child: Text('Empresa')
-                 )
-               ),
-               DataColumn(
-                   label: Text('Estado')
-               ),
-               DataColumn(
-                   label: SizedBox(
-                       child: Text('Seleccionar')
-                   )
-               ),
-        ],
-        rows: <DataRow>[
-               DataRow(
-                   selected: false,
-                   cells: [
-                       const DataCell(
-                           Text('1'),
-                       ),
-                       const DataCell(
-                           Text('1p'),
-                       ),
-                       DataCell(
-                           Center(
-                               child: CheckboxListTile(
-                                    value: check,
-                                    onChanged: (bool? value) {
-                                          setState(() {
-                                             check = value!;
-                                          });
-                                     },
-                                  ),
-                               ),
-                           )
-                   ]
-               ),
-
-        ],
-    );
   }
 }

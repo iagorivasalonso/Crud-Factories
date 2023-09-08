@@ -1,4 +1,3 @@
-import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter/material.dart';
 
 
@@ -12,11 +11,11 @@ class newFactory extends StatefulWidget {
 class _newFactoryState extends State<newFactory> {
   @override
   Widget build(BuildContext context) {
-    return ScaffoldPage(
-      content: Align(
+    return Scaffold(
+      body: Align(
         alignment: Alignment.topLeft,
         child:  Padding(
-          padding: const EdgeInsets.only(left: 30.0),
+          padding: const EdgeInsets.only(left: 30.0,top: 30.0),
           child: Column(
             children: [
               const Row(

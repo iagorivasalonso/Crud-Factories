@@ -1,14 +1,44 @@
-import 'package:fluent_ui/fluent_ui.dart';
+import 'package:flutter/material.dart';
+
+import 'factory.dart';
+import 'list_factories.dart';
 
 
-class viewFactory extends StatelessWidget {
-  const viewFactory({Key? key}) : super(key: key);
+class viewFactory extends StatefulWidget {
+  double mWidth;
+  double mHeight;
+
+  viewFactory(this.mWidth, this.mHeight);
+
+  @override
+  State<viewFactory> createState() => _viewFactoryState();
+}
+
+class _viewFactoryState extends State<viewFactory> {
 
   @override
   Widget build(BuildContext context) {
-    return ScaffoldPage(
-      content: Center(
-        child: Text("aqui ira la lista de empres"),
+
+    double mWidth=widget.mWidth;
+    double mHeight=widget.mHeight;
+
+    return Scaffold(
+      body: Align(
+        alignment: Alignment.topLeft,
+        child: Row(
+          children: [
+             SizedBox(
+                 width: mWidth*0.2,
+                 height: mHeight,
+                 child: const listFactories(),
+             ),
+             SizedBox(
+                 width: mWidth*0.8,
+                 height: mHeight,
+                 child: const newFactory()
+             ),
+          ],
+        )
       ),
     );
   }

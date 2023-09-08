@@ -10,6 +10,7 @@ class NavigationScreen extends StatefulWidget {
 }
 
 class _NavigationScreenState extends State<NavigationScreen> {
+
   //List Menu Item
   List<String> itens = ['Archivo', 'Edicion', 'Ver', 'Conectar'];
   List<String> Sitens1 = ['Nueva Empresa','Nuevo Envio','Importar datos','Salir' ];
@@ -94,12 +95,16 @@ class _NavigationScreenState extends State<NavigationScreen> {
                                     ),
                                     onTap: (){
                                         setState(() {
-                                              if(itenSelection == 0 && subItenSelection ==3)
-                                                    closeAlert(context);
-                                              itenSelect = itenSelection;
-                                              subItenSelect = subItenSelection;
-                                              itenSelection = -1;
-                                              subItenSelection = -1;
+                                          if(itenSelection == 0 && subItenSelection ==3)
+                                          {
+                                                  closeAlert(context);
+
+                                          } else {
+                                            itenSelect = itenSelection;
+                                            subItenSelect = subItenSelection;
+                                            itenSelection = -1;
+                                            subItenSelection = -1;
+                                          }
                                         });
                                     },
 
@@ -149,13 +154,22 @@ class _NavigationScreenState extends State<NavigationScreen> {
                             :  Sitens = Sitens3;
                       });
                     },
-                    child: Container(
-                        width: 75,
-                        color: itenSelection == index ? cSelect : cBackground,
-                        child: Padding(
-                          padding: const EdgeInsets.all(12.0),
-                          child: Center(child: Text(itens[index])),
-                        )
+                    child: GestureDetector(
+                        child: Container(
+                            width: 75,
+                            color: itenSelection == index ? cSelect : cBackground,
+                            child: Padding(
+                              padding: const EdgeInsets.all(12.0),
+                              child: Center(child: Text(itens[index])),
+                            )
+                        ),
+                      onTap: (){
+                        setState(() {
+                          if (itenSelection == 3)
+                          itenSelect = itenSelection;
+                        });
+                      },
+
                     ),
                     onExit: (s) {
                         setState(() {
@@ -173,7 +187,7 @@ class _NavigationScreenState extends State<NavigationScreen> {
                 width: mWidth,
                 height: mHeight,
                 color: Colors.white,
-                child: FuntionSeleted(itenSelect, subItenSelect),
+                child: FuntionSeleted(itenSelect, subItenSelect,mWidth, mHeight),
               );
             }),
       ],

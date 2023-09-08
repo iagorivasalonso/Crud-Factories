@@ -3,10 +3,10 @@ import 'package:desktop_app/Frontend/factory.dart';
 import 'package:desktop_app/Frontend/importData.dart';
 import 'package:desktop_app/Frontend/send.dart';
 import 'package:desktop_app/Frontend/view_email.dart';
-
+import '../Frontend/conection.dart';
 import '../Frontend/view_factory.dart';
 
-FuntionSeleted (int itenSelection, int subItenSelection) {
+FuntionSeleted (int itenSelection, int subItenSelection, double mWidth, double mHeight) {
 
   switch (itenSelection){
     case 0:
@@ -21,18 +21,17 @@ FuntionSeleted (int itenSelection, int subItenSelection) {
 
     case 1:
 
-      break;
 
     case 2:
         if(subItenSelection==0)
-             return viewFactory();
+             return viewFactory(mWidth,mHeight);
 
         if(subItenSelection==1)
             return viewEmail();
 
     case 3:
+            return conection();
 
-      break;
 
 
   }

@@ -6,28 +6,28 @@ void closeAlert(BuildContext  context) {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text('Salida de la aplicación'),
-          content: Text('¿Desea salir de la aplicación?'),
+          title: const Text('Salida de la aplicación'),
+          content: const Text('¿Desea salir de la aplicación?'),
           actions: [
-            ElevatedButton(
-                child: Text('Si'),
+            TextButton(
+                child: const Text('Si'),
                 onPressed: () async {
-                   Navigator.of(context).pop(true);
-                   await windowManager.destroy();
+                  Navigator.of(context).pop(true);
+                  await windowManager.destroy();
                 },
             ),
-            ElevatedButton(
-                child: Text('No'),
-                onPressed: (){
-                   Navigator.of(context).pop(false);
+            TextButton(
+              child: const Text('No'),
+              onPressed: () async {
+                Navigator.of(context).pop(false);
+
               },
-            )
+            ),
+
           ],
         );
 
       });
 }
-
-
 
 
