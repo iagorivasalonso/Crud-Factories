@@ -2,7 +2,7 @@
 import 'package:desktop_app/Frontend/factory.dart';
 import 'package:desktop_app/Frontend/importData.dart';
 import 'package:desktop_app/Frontend/send.dart';
-import 'package:desktop_app/Frontend/view_email.dart';
+import 'package:desktop_app/Frontend/send_mail.dart';
 import '../Frontend/conection.dart';
 import '../Frontend/view_factory.dart';
 
@@ -27,7 +27,7 @@ FuntionSeleted (int itenSelection, int subItenSelection, double mWidth, double m
              return viewFactory(mWidth,mHeight);
 
         if(subItenSelection==1)
-            return viewEmail();
+            return sendMail();
 
     case 3:
             return conection();

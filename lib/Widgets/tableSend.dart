@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 
 class table extends StatefulWidget {
   const table({
-    super.key,
+    super.key
   });
 
   @override
@@ -21,7 +21,7 @@ class _tableState extends State<table> {
       columns: const <DataColumn>[
         DataColumn(
             label: SizedBox(
-                width:200,
+                width: 200,
                 child: Text('Empresa')
             ),
         ),
@@ -61,7 +61,6 @@ class _tableState extends State<table> {
                        },)
                  ),
                )
-
              ]
             ),
         ),

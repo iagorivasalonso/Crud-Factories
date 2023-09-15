@@ -1,4 +1,4 @@
-import 'package:desktop_app/Widgets/table.dart';
+import 'package:desktop_app/Widgets/tableSend.dart';
 import 'package:flutter/material.dart';
 
 
@@ -10,6 +10,7 @@ class newSend extends StatefulWidget {
 }
 
 class _newSendState extends State<newSend> {
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(

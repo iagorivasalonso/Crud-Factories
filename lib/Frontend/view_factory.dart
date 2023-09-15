@@ -5,6 +5,7 @@ import 'list_factories.dart';
 
 
 class viewFactory extends StatefulWidget {
+
   double mWidth;
   double mHeight;
 

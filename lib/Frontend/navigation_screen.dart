@@ -15,7 +15,7 @@ class _NavigationScreenState extends State<NavigationScreen> {
   List<String> itens = ['Archivo', 'Edicion', 'Ver', 'Conectar'];
   List<String> Sitens1 = ['Nueva Empresa','Nuevo Envio','Importar datos','Salir' ];
   List<String> Sitens2 = ['Copiar', 'Cortar', 'Pegar'];
-  List<String> Sitens3 = ['Lista Empresas', 'Cuentas de email'];
+  List<String> Sitens3 = ['Lista Empresas', 'Envio de emails'];
 
   List<String> Sitens = [];
   int itenSelection = -1;

@@ -14,20 +14,25 @@ class _listFactoriesState extends State<listFactories> {
   @override
   Widget build(BuildContext context) {
 
-     return Container(
-       decoration: const BoxDecoration(
-           border: Border(
-               right: BorderSide(width: 5, color: Colors.grey)
-           )
-       ),
-       child: ListView.builder(
-           itemCount: 3,
-           itemBuilder: (context,index){
-              return factoryCard();
-           },
+    return Container(
+      decoration: const BoxDecoration(
+          border: Border(
+              right: BorderSide(width: 5, color: Colors.grey)
+          )
+      ),
+      child: ListView.builder(
+        itemCount: 3,
+        itemBuilder: (context,index){
+          return factoryCard(
+              name: 'nombre',
+              address: 'dirreccion',
+              telephone: 'telefono',
+              city: 'ciudad'
+          );
+        },
 
-       ),
-     );
+      ),
+    );
 
   }
 

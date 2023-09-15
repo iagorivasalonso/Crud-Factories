@@ -1,48 +1,70 @@
 import 'package:flutter/material.dart';
 
-Card factoryCard() {
+
+
+
+Card factoryCard({
+  required String name,
+  required String address,
+  required String telephone,
+  required String city}) {
 
   return Card(
     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
     margin: const EdgeInsets.all(10),
     elevation: 10,
-    child: const Padding(
-      padding: EdgeInsets.all(7.0),
+    child: Padding(
+      padding: const EdgeInsets.all(15.0),
       child: SizedBox(
           height: 70,
           child: Column(
             children: [
               Row(
                 children: [
-                  Text("nombre",
-                   style: TextStyle(fontWeight: FontWeight.bold),),
+                  Expanded(child: Text(name,
+                   style: const TextStyle(fontWeight: FontWeight.bold),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,),
+                  )
+
                 ],
               ),
               Row(
                 children: [
-                  SizedBox(
-                    width: 150,
-                    child: Text("direccion"),
-                  ),
+                  Expanded(child: Text(address,
+                   maxLines: 1,
+                   overflow: TextOverflow.ellipsis,),
+                  )
                 ],
               ),
               Padding(
-                padding: EdgeInsets.only(top: 10),
+                padding: const EdgeInsets.only(top: 10),
                 child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Column(
+                    Expanded(child: Column(
+                        children: [
+                          Align(
+                            alignment: Alignment.topLeft,
+                            child: SizedBox(
+                                child: Text(telephone,
+                                 maxLines: 1,
+                                 overflow: TextOverflow.ellipsis,),),
+                          ),
+                        ],
+                      ),),
+                    Expanded(child: Column(
                       children: [
-                        SizedBox(
-                            width: 170,
-                            child: Text("telefono"))
+                        Align(
+                          alignment: Alignment.topRight,
+                          child: SizedBox(
+                            child: Text(city,
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,),),
+                        ),
                       ],
-                    ),
-                    Column(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        Text("ciudad")
-                      ],
-                    ),
+                    ),),
+
                   ],
                 ),
               ),
