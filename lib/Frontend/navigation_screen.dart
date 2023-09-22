@@ -20,8 +20,8 @@ class _NavigationScreenState extends State<NavigationScreen> {
   List<String> Sitens = [];
   int itenSelection = -1;
   int subItenSelection = -1;
-  int itenSelect = 0;
-  int subItenSelect = 1;
+  int itenSelect = -1;
+  int subItenSelect = -1;
 
 
   var psmenu = const EdgeInsets.only(top: 0, left: 0, right: 0);
