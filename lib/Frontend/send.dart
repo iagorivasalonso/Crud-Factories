@@ -1,18 +1,28 @@
-import 'package:desktop_app/Widgets/tableSend.dart';
+import 'package:desktop_app/Widgets/table.dart';
 import 'package:flutter/material.dart';
 
 
 class newSend extends StatefulWidget {
+
   const newSend({Key? key}) : super(key: key);
 
   @override
   State<newSend> createState() => _newSendState();
 }
 
+
 class _newSendState extends State<newSend> {
+
+  List<String> cColumns = [];
+  int rows = 0;
+  bool selectable = false;
+
+
 
   @override
   Widget build(BuildContext context) {
+
+    var value;
     return Scaffold(
       body: Align(
         alignment: Alignment.topLeft,
@@ -50,12 +60,18 @@ class _newSendState extends State<newSend> {
                     style: TextStyle(fontWeight: FontWeight.bold),),
                 ],
               ),
-              const Padding(
-                  padding: EdgeInsets.only(top:20.0,bottom: 30.0),
-                  child: table(),
+              Padding(
+                  padding: const EdgeInsets.only(top:20.0,bottom: 30.0),
+                  child: table(
+                      cColumns = ['Empresa', 'Observaciones', 'Estado'],
+                      rows = 5,
+                      selectable=true
+
+                  ),
+
               ),
               Padding(
-                padding: const EdgeInsets.only(top: 150.0),
+                padding: const EdgeInsets.only(top: 80.0),
                 child: Row(
                   children: [
                     Padding(
@@ -79,4 +95,10 @@ class _newSendState extends State<newSend> {
     );
 
   }
+
+
 }
+
+
+
+

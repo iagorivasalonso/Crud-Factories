@@ -44,7 +44,6 @@ class _newImportState extends State<newImport> {
                         decoration: InputDecoration(
                           border: OutlineInputBorder(),
                         ),
-
                       ),
                     ),
                     Padding(
