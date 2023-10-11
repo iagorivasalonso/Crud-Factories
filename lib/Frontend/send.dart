@@ -11,18 +11,16 @@ class newSend extends StatefulWidget {
 }
 
 
+
 class _newSendState extends State<newSend> {
 
   List<String> cColumns = [];
   int rows = 0;
-  bool selectable = false;
-
-
+  List<bool>selectable = [];
 
   @override
   Widget build(BuildContext context) {
 
-    var value;
     return Scaffold(
       body: Align(
         alignment: Alignment.topLeft,
@@ -64,9 +62,8 @@ class _newSendState extends State<newSend> {
                   padding: const EdgeInsets.only(top:20.0,bottom: 30.0),
                   child: table(
                       cColumns = ['Empresa', 'Observaciones', 'Estado'],
-                      rows = 5,
-                      selectable=true
-
+                      rows = 2,
+                      selectable=List.generate(rows, (index) => false),
                   ),
 
               ),

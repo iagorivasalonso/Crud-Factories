@@ -6,7 +6,7 @@ class table extends StatefulWidget {
 
   List<String> cColumns;
   int rows;
-  bool selectable;
+  List<bool> selectable;
 
   table(this.cColumns, this.rows,this.selectable);
 
@@ -17,22 +17,26 @@ class table extends StatefulWidget {
 class _tableState extends State<table> {
 
 
-  List<bool> check =List.generate(5, (index) => false);
+
 
   @override
   Widget build(BuildContext context) {
 
     int rows=widget.rows;
     List<String> cColumns= widget.cColumns;
-    bool selectable=widget.selectable;
+
+    List<bool> check = widget.selectable;
+    int endTable = 0;
 
 
-    int endTable = cColumns.length;
-
-    if(selectable==true)
+    if(check.isEmpty)
     {
-      endTable=endTable-1;
+       endTable = cColumns.length;
+    }else{
+
+      endTable = cColumns.length-1;
     }
+
     return DataTable(
       columns: <DataColumn>[
         for(int i=0 ; i < cColumns.length ; i++)
@@ -51,7 +55,7 @@ class _tableState extends State<table> {
               const DataCell(
                 Text('1'),
               ),
-               if(selectable==true)
+              if(check.isNotEmpty)
                DataCell(
                 Center(
                     child: CheckboxListTile(
@@ -63,6 +67,7 @@ class _tableState extends State<table> {
                       },)
                 ),
               )
+
             ]
         ),
       ),
@@ -73,7 +78,10 @@ class _tableState extends State<table> {
 }
 
 
-
+/*
+gestion de envios
+correo elect inicio sesion
+ */
 
 
 

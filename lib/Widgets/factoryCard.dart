@@ -11,7 +11,7 @@ Card factoryCard({
 
   return Card(
     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-    margin: const EdgeInsets.all(10),
+    margin: const EdgeInsets.all(15),
     elevation: 10,
     child: Padding(
       padding: const EdgeInsets.all(15.0),

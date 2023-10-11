@@ -19,14 +19,14 @@ int _value =1;
 
 List<String> cColumns = [];
 int rows = 0;
-bool selectable = false;
+List<bool>selectable = [];
 
 class _sendMailState extends State<sendMail> {
 
   @override
   Widget build(BuildContext context) {
 
-    String  animal='dog';
+
 
     List<String> factoryList = ['uno', 'dos'];
     return Scaffold(
@@ -144,12 +144,13 @@ class _sendMailState extends State<sendMail> {
                                     alignment: Alignment.topLeft,
                                     child: Column(
                                       children: [
+
                                         Row(
                                           children: [
                                             Column(
                                               children: [
                                                 Padding(
-                                                  padding: const EdgeInsets.only(left: 50.0,right: 50.0),
+                                                  padding: const EdgeInsets.only(left: 80.0),
                                                   child: DropdownButton<String>(
                                                       items: factoryList.map<DropdownMenuItem<String>>((String value){
                                                         return DropdownMenuItem<String>(
@@ -171,21 +172,24 @@ class _sendMailState extends State<sendMail> {
                                                 ),
                                               ],
                                             ),
-                                            Padding(
-                                              padding: const EdgeInsets.only(top: 30.0),
-                                              child: Column(
-                                                children: [
-                                                  table(
-                                                    cColumns = ['Empresa', 'Email',],
-                                                    rows = 3,
-                                                    selectable = false
-                                                  ),
-                                                ],
-                                              ),
-                                            )
+
                                           ],
                                         ),
-
+                                        Align(
+                                          alignment: Alignment.topLeft,
+                                          child: Padding(
+                                            padding: const EdgeInsets.only(top: 30.0,left: 150.0),
+                                            child: Column(
+                                              children: [
+                                                table(
+                                                  cColumns = ['Empresa', 'Email',],
+                                                  rows = 3,
+                                                  selectable =[],
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                        )
                                       ],
                                     ),
                                   ),
