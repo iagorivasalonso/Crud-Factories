@@ -67,12 +67,14 @@ class _newSendState extends State<newSend> {
                   ),
 
               ),
-              Padding(
-                padding: const EdgeInsets.only(top: 80.0),
+              Container(
+                height: 50,
+                width: 770,
                 child: Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
                   children: [
                     Padding(
-                      padding: const EdgeInsets.only(left: 800.0,right: 30.0),
+                      padding: const EdgeInsets.only(right: 30.0),
                       child: ElevatedButton(
                         child: const Text('Crear envio'),
                         onPressed: (){},

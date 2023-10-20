@@ -1,11 +1,11 @@
 import 'package:desktop_app/Widgets/cardDefault.dart';
 import 'package:flutter/material.dart';
 
-import '../Widgets/factoryCard.dart';
-
 class listEmails extends StatefulWidget {
 
+  double mHeight;
 
+  listEmails(this.mHeight);
 
   State<listEmails> createState() => _listEmailsState();
 }
@@ -20,6 +20,8 @@ class _listEmailsState extends State<listEmails> {
 
   @override
   Widget build(BuildContext context) {
+
+    double mHeight = widget.mHeight;
 
     return Column(
       children: [
@@ -125,7 +127,7 @@ class _listEmailsState extends State<listEmails> {
               child: SizedBox(
                   height:600,
                   child: ListView.builder(
-                     itemCount: 4,
+                     itemCount: 40,
                      itemBuilder: (context,index){
                         return GestureDetector(
                           child: cardDefault(

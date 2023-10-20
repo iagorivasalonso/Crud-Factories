@@ -12,18 +12,23 @@ class NavigationScreen extends StatefulWidget {
 class _NavigationScreenState extends State<NavigationScreen> {
 
   //List Menu Item
-  List<String> itens = ['Archivo', 'Edicion', 'Ver', 'Conectar'];
-  List<String> Sitens1 = ['Nuevo','Importar datos','Salir' ];
-  List<String> Sitens2 = ['Copiar', 'Cortar', 'Pegar'];
-  List<String> Sitens3 = ['Lista Empresas', 'Envio de emails'];
+  List<String> itens = ['Archivo', 'Edicion', 'Listas','Enviar Emails', 'Conectar'];
+  List<String> N1itens1 = ['Nuevo','Importar','Salir' ];
+  List<String> N2itens1 = ['Empresa', 'Email', 'Envio'];
+  List<String> N1itens2 = ['Copiar', 'Cortar', 'Pegar'];
+  List<String> N1itens3 = ['Empresas', 'Emails', 'Envios'];
 
-  List<String> Sitens = [];
+  List<String> N1itens = [];
+  List<String> N2itens = [];
   int itenSelection = -1;
-  int subItenSelection = -1;
+  int subIten1Selection = -1;
   int subIten2Selection = -1;
   int itenSelect = 0;
-  int subIten1Select = 1;
-  int subIten2Select = 1;
+  int subIten1Select = -1;
+  int subIten2Select = -1;
+  int itenSelectable = -1;
+  int subIten1Selectable = -1;
+
 
   var psmenu = const EdgeInsets.only(top: 0, left: 0, right: 0);
   Color cBackground = Colors.blue;
@@ -58,11 +63,6 @@ class _NavigationScreenState extends State<NavigationScreen> {
               alignment: Alignment.topLeft,
               child: MouseRegion(
                 child: SizedBox(
-                  width: itenSelection == 0
-                         ? 440
-                         : itenSelection == 1
-                         ? 180
-                         : 300,
                   child: Padding(
                     padding: itenSelection == 0
                              ?  psmenu = const EdgeInsets.only(left: 0)
@@ -72,68 +72,100 @@ class _NavigationScreenState extends State<NavigationScreen> {
                     child: SizedBox(
                       child: Row(
                         children: [
-                          SafeArea(
-                           child: Column(
-                            children: [
-                              for (int index1 = 0; index1 < Sitens.length; index1++)
-                                Align(
-                                  alignment: Alignment.topLeft,
-                                  child: MouseRegion(
-                                    onHover: (s) {
-                                      setState(() {
-                                       subItenSelection = index1;
-                                      });
-                                    },
-                                    child: GestureDetector(
-                                        child: Container(
-                                            width: 100,
-                                            height: 40,
-                                            color: subItenSelection == index1
-                                                ? cSelect
-                                                : cBackground,
-                                            child: Padding(
-                                              padding: const EdgeInsets.all(12.0),
-                                              child: Text(Sitens[index1]),
-                                            )
-                                        ),
-                                        onTap: (){
-                                            setState(() {
-                                              if (itenSelection==0 && subItenSelection==0)
+                          MouseRegion(
+                            child: SafeArea(
+                             child: Column(
+                              children: [
+                                for (int index1 = 0; index1 < N1itens.length; index1++)
+                                  Align(
+                                    alignment: Alignment.topLeft,
+                                    child: MouseRegion(
+                                      onHover: (s) {
+                                        setState(() {
+                                              subIten1Selection = index1;
+
+                                              if(itenSelection == 0 && subIten1Selection ==0)
                                               {
-
-                                              } else {
-                                                if(itenSelection == 0 && subItenSelection ==3)
-                                                {
-                                                  closeAlert(context);
-
-                                                } else {
-                                                  itenSelect = itenSelection;
-                                                  subIten1Select = subItenSelection;
-                                                  itenSelection = -1;
-                                                  subItenSelection = -1;
-                                                }
+                                                  N2itens=N2itens1;
+                                                  itenSelectable = itenSelection;
+                                                  subIten1Selectable = subIten1Selection;
                                               }
 
-                                            });
-                                        },
+                                        });
+                                      },
+                                      child: GestureDetector(
+                                          child: Container(
+                                              width: 100,
+                                              height: 40,
+                                              color: subIten1Selection == index1
+                                                  ? cSelect
+                                                  : cBackground,
+                                              child: Padding(
+                                                padding: const EdgeInsets.all(12.0),
+                                                child:Row(
+                                                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                       children: [
+                                                        Text(N1itens[index1]),
+                                                         index1==0 && itenSelection == 0
+                                                         ? const Text(">")
+                                                         : const Text(""),
+
+                                                        ],
+                                                    ),
+                                              )
+                                          ),
+                                          onTap: (){
+                                              setState(() {
+
+                                                  if(itenSelection == 0 && subIten1Selection ==2)
+                                                  {
+                                                    closeAlert(context);
+
+                                                  } else {
+                                                    itenSelect = itenSelection;
+                                                    subIten1Select = subIten1Selection;
+                                                    itenSelection = -1;
+                                                    subIten1Selection = -1;
+                                                  }
+
+                                              });
+                                          },
+
+                                      ),
 
                                     ),
-
                                   ),
-                                ),
-                            ],
-                          )),
-                          if (itenSelection==0 && subItenSelection==0)
+                              ],
+                            )),
+                            onExit: (s){
+                              setState(() {
+
+                                if (itenSelectable == 0 && subIten1Selectable == 0)
+                                {
+                                  itenSelectable = itenSelection;
+                                  subIten1Selectable = subIten1Selection;
+                                }
+                                else{
+                                  itenSelection = -1;
+                                  subIten1Selection = -1;
+                                }
+
+                              });
+                            },
+                          ),
+                          if (itenSelection==itenSelectable && subIten1Selection==subIten1Selectable)
                             SafeArea(
                                 child: Column(
                                   children: [
-                                    for (int index2 = 0; index2 < Sitens.length; index2++)
+                                    for (int index2 = 0; index2 < N2itens.length; index2++)
                                       Align(
                                         alignment: Alignment.topLeft,
                                         child: MouseRegion(
                                           onHover: (s) {
                                             setState(() {
                                               subIten2Selection = index2;
+                                              itenSelection = itenSelectable;
+                                              subIten1Selection = subIten1Selectable;
                                             });
                                           },
                                           child: GestureDetector(
@@ -145,26 +177,32 @@ class _NavigationScreenState extends State<NavigationScreen> {
                                                     : cBackground,
                                                 child: Padding(
                                                   padding: const EdgeInsets.all(12.0),
-                                                  child: Text(Sitens[index2]),
+                                                  child: Text(N2itens[index2]),
                                                 )
                                             ),
                                             onTap: (){
                                               setState(() {
-                                                if(itenSelection == 0 && subItenSelection ==3)
+                                                if(itenSelection == 0 && subIten1Selection ==3)
                                                 {
                                                   closeAlert(context);
 
                                                 } else {
                                                   itenSelect = itenSelection;
-                                                  subIten1Select = subItenSelection;
+                                                  subIten1Select = subIten1Selection;
+                                                  subIten2Select = subIten2Selection;
                                                   itenSelection = -1;
-                                                  subItenSelection = -1;
+                                                  subIten1Selection = -1;
                                                 }
                                               });
                                             },
 
                                           ),
-
+                                          onExit: (s){
+                                            setState(() {
+                                              itenSelection = -1;
+                                              subIten1Selection = -1;
+                                            });
+                                          },
                                         ),
                                       ),
                                   ],
@@ -174,13 +212,6 @@ class _NavigationScreenState extends State<NavigationScreen> {
                     ),
                   ),
                 ),
-                onExit: (s) {
-                  setState(() {
-                    itenSelection = -1;
-                    subItenSelection = -1;
-
-                  });
-                },
               ),
             ),
         ],
@@ -205,10 +236,10 @@ class _NavigationScreenState extends State<NavigationScreen> {
                       setState(() {
                         itenSelection = index;
                                index == 0
-                            ?  Sitens = Sitens1
+                            ?  N1itens = N1itens1
                             :  index == 1
-                            ?  Sitens = Sitens2
-                            :  Sitens = Sitens3;
+                            ?  N1itens = N1itens2
+                            :  N1itens = N1itens3;
                       });
                     },
                     child: GestureDetector(

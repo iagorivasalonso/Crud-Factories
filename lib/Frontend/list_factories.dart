@@ -4,7 +4,9 @@ import '../Widgets/factoryCard.dart';
 
 class listFactories extends StatefulWidget {
 
+  double mHeight;
 
+  listFactories(this.mHeight);
 
   State<listFactories> createState() => _listFactoriesState();
 }
@@ -15,10 +17,11 @@ class _listFactoriesState extends State<listFactories> {
   List<String> filterList = ['uno', 'dos'];
 
   int opSelected = 0;
+
   @override
   Widget build(BuildContext context) {
 
-
+    double mHeight = widget.mHeight;
 
     return Container(
       decoration: const BoxDecoration(
@@ -34,11 +37,12 @@ class _listFactoriesState extends State<listFactories> {
                 Expanded(
                   child: GestureDetector(
                     child: Container(
-                     color: index==opSelected
+                      height: 40,
+                      color: index==opSelected
                             ? Colors.lightGreen
                             : Colors.white,
                     child: Center(
-                      child: Padding(
+                       child: Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: Text(opSearch[index],
                                style: TextStyle(fontWeight: FontWeight.bold,
@@ -64,7 +68,7 @@ class _listFactoriesState extends State<listFactories> {
             child: Row(
               children: [
               SizedBox(
-                  height: 170,
+                  height: mHeight * 0.30,
                   child: Padding(
                     padding: const EdgeInsets.only(left: 20.0,top:20.0),
                     child: Column(
@@ -73,7 +77,7 @@ class _listFactoriesState extends State<listFactories> {
                           padding: const EdgeInsets.only(left: 15.0),
                           child: Row(
                             children: [
-                               Text("Filtrar por:"),
+                               const Text("Filtrar por:"),
                                Padding(
                                 padding: const EdgeInsets.only(left: 20.0),
                                 child: DropdownButton<String>(
@@ -99,15 +103,15 @@ class _listFactoriesState extends State<listFactories> {
                         ),
 
                        const Padding(
-                          padding: EdgeInsets.only(top: 40.0),
+                          padding: EdgeInsets.only(top: 30.0),
                           child: Row(
                             children: [
                               Padding(
-                                padding: EdgeInsets.only(left: 40.00),
+                                padding: const EdgeInsets.only(left: 40.00),
                                 child: SizedBox(
-                                  height: 40,
+                                  height: 80,
                                   width: 150,
-                                  child: TextField(
+                                  child:  TextField(
                                     decoration: InputDecoration(
                                       border: OutlineInputBorder(),
                                       hintText: 'Buscar...'
@@ -132,9 +136,9 @@ class _listFactoriesState extends State<listFactories> {
               children: [
                 Expanded(
                   child: SizedBox(
-                      height:330,
+                      height:mHeight-55.0,
                       child: ListView.builder(
-                         itemCount: 2,
+                         itemCount: 50,
                          itemBuilder: (context,index){
                             return factoryCard(
                                 name: 'nombre',

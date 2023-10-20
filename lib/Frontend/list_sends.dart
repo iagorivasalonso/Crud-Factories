@@ -1,11 +1,13 @@
 import 'package:desktop_app/Widgets/cardDefault.dart';
 import 'package:flutter/material.dart';
 
-import '../Widgets/factoryCard.dart';
+
 
 class listSends extends StatefulWidget {
 
+  double mHeight;
 
+  listSends(this.mHeight);
 
   State<listSends> createState() => _listSendsState();
 }
@@ -20,6 +22,8 @@ class _listSendsState extends State<listSends> {
 
   @override
   Widget build(BuildContext context) {
+
+    double mHeight = widget.mHeight;
 
     return Column(
       children: [

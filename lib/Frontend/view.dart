@@ -1,5 +1,5 @@
 import 'package:desktop_app/Frontend/list_emails.dart';
-import 'package:desktop_app/Frontend/send.dart';
+import 'package:desktop_app/Frontend/new_send.dart';
 import 'package:flutter/material.dart';
 
 import 'email.dart';
@@ -37,12 +37,11 @@ class _viewState extends State<view> {
           children: [
              SizedBox(
                  width: mWidth*0.2,
-                 height: mHeight,
                  child: view == 'factory'
-                        ? listFactories()
+                        ? listFactories(mHeight)
                         : view == 'email'
-                        ? listEmails()
-                        : listSends()
+                        ? listEmails(mHeight)
+                        : listSends(mHeight)
              ),
              SizedBox(
                  width: mWidth*0.8,

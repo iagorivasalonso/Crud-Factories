@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 
 
-
-
 Card factoryCard({
   required String name,
   required String address,
@@ -11,7 +9,7 @@ Card factoryCard({
 
   return Card(
     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-    margin: const EdgeInsets.all(15),
+    margin: const EdgeInsets.all(10),
     elevation: 10,
     child: Padding(
       padding: const EdgeInsets.all(15.0),

@@ -188,13 +188,13 @@ class _newFactoryState extends State<newFactory> {
                 ],
               ),
             Padding(
-                padding: const EdgeInsets.only(top: 20.0,bottom: 30.0,left: 20.0),
+                padding: const EdgeInsets.only(top: 20.0, left: 20.0),
                 child: Row(
                   children: [
                        const Padding(
                          padding: EdgeInsets.only(bottom: 150.0),
                          child: SizedBox(
-                             width: 300,
+                             width: 250,
                              height: 40,
                              child: TextField(
                                decoration: InputDecoration(
@@ -225,7 +225,7 @@ class _newFactoryState extends State<newFactory> {
                          ),
                        ),
                        const SizedBox(
-                         width: 200,
+                         width: 250,
                          height: 210,
                          child: TextField(
                            maxLines: 5,
