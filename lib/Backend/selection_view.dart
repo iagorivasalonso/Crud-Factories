@@ -14,7 +14,7 @@ FuntionSeleted (int itenSelection, int subIten1Selection,int subIten2Selection, 
         if(subIten1Selection==0)
          {
            if(subIten2Selection==0)
-                return newFactory();
+                return newFactory(mWidth,mHeight);
            if(subIten2Selection==1)
                  return newEmail();
            if(subIten2Selection==2)

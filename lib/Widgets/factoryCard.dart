@@ -15,6 +15,7 @@ Card factoryCard({
       padding: const EdgeInsets.all(15.0),
       child: SizedBox(
           height: 70,
+          width: 120,
           child: Column(
             children: [
               Row(

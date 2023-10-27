@@ -26,7 +26,7 @@ class _newEmailState extends State<newEmail> {
                 ],
               ),
               const Padding(
-                padding: EdgeInsets.only(top:20.0, bottom: 80.0),
+                padding: EdgeInsets.only(top:20.0,bottom: 30.0),
                 child: Row(
                   children: [
                     Text('Nuevo email: '),

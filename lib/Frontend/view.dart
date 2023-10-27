@@ -26,8 +26,8 @@ class _viewState extends State<view> {
   Widget build(BuildContext context) {
 
     double mWidth = widget.mWidth;
+    double mWidthList = widget.mWidth*0.2;
     double mHeight = widget.mHeight;
-
     String view = widget.tView;
 
     return Scaffold(
@@ -36,13 +36,17 @@ class _viewState extends State<view> {
         child: Row(
           children: [
              SizedBox(
-                 width: mWidth*0.2,
+                 width: mWidthList < 200
+                        ? 200
+                        : mWidthList,
+                 height: mHeight,
                  child: view == 'factory'
-                        ? listFactories(mHeight)
+                        ? listFactories(mHeight,mWidth)
                         : view == 'email'
                         ? listEmails(mHeight)
                         : listSends(mHeight)
              ),
+/*
              SizedBox(
                  width: mWidth*0.8,
                  height: mHeight,
@@ -51,9 +55,7 @@ class _viewState extends State<view> {
                         : view == 'email'
                         ? const newEmail()
                         : const newSend()
-
-
-             ),
+             ),*/
           ],
         )
       ),

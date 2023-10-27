@@ -5,8 +5,9 @@ import '../Widgets/factoryCard.dart';
 class listFactories extends StatefulWidget {
 
   double mHeight;
+  double mWidth;
 
-  listFactories(this.mHeight);
+  listFactories(this.mHeight, this.mWidth);
 
   State<listFactories> createState() => _listFactoriesState();
 }
@@ -22,6 +23,30 @@ class _listFactoriesState extends State<listFactories> {
   Widget build(BuildContext context) {
 
     double mHeight = widget.mHeight;
+    double mHeightfilter = 0;
+    double mHeightList = 0;
+
+
+    double mHeightbutton;
+
+
+    if(mHeight>190)
+    {
+      mHeightbutton = 40;
+      mHeightList = mHeight-mHeightbutton;
+    }
+    else
+    {
+      mHeightbutton =0;
+      mHeightList = mHeight;
+    }
+
+    if(mHeight>190 && opSelected==1)
+    {
+      mHeightfilter = 150;
+      mHeightList=mHeightList-mHeightfilter;
+    }
+
 
     return Container(
       decoration: const BoxDecoration(
@@ -37,7 +62,7 @@ class _listFactoriesState extends State<listFactories> {
                 Expanded(
                   child: GestureDetector(
                     child: Container(
-                      height: 40,
+                      height:mHeightbutton,
                       color: index==opSelected
                             ? Colors.lightGreen
                             : Colors.white,
@@ -64,95 +89,84 @@ class _listFactoriesState extends State<listFactories> {
           ),
           if(opSelected==1)
           Container(
-            color: Colors.black12,
-            child: Row(
+            height: mHeightfilter,
+            color: Colors.greenAccent,
+            child: Column(
               children: [
-              SizedBox(
-                  height: mHeight * 0.30,
-                  child: Padding(
-                    padding: const EdgeInsets.only(left: 20.0,top:20.0),
-                    child: Column(
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.only(left: 15.0),
-                          child: Row(
-                            children: [
-                               const Text("Filtrar por:"),
-                               Padding(
-                                padding: const EdgeInsets.only(left: 20.0),
-                                child: DropdownButton<String>(
-                                    items: filterList.map<DropdownMenuItem<String>>((String value){
-                                      return DropdownMenuItem<String>(
-                                        value: value,
-                                        child: SizedBox(
-                                            width: 80,
-                                            height: 30,
-                                            child: Text(value)
-                                        ),
-                                      );
-                                    }).toList(),
-                                    onChanged: (String? newValue){
-                                      setState(() {
-
-                                      });
-                                    }
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-
-                       const Padding(
-                          padding: EdgeInsets.only(top: 30.0),
-                          child: Row(
-                            children: [
-                              Padding(
-                                padding: const EdgeInsets.only(left: 40.00),
-                                child: SizedBox(
-                                  height: 80,
-                                  width: 150,
-                                  child:  TextField(
-                                    decoration: InputDecoration(
-                                      border: OutlineInputBorder(),
-                                      hintText: 'Buscar...'
-                                    ),
-                                  ),
-                                ),
-                              )
-
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-              )
-              ],
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.only(top:15.0),
-            child: Row(
-              children: [
-                Expanded(
-                  child: SizedBox(
-                      height:mHeight-55.0,
-                      child: ListView.builder(
-                         itemCount: 50,
-                         itemBuilder: (context,index){
-                            return factoryCard(
-                                name: 'nombre',
-                                address: 'dirreccion',
-                                telephone: 'telefono',
-                                city: 'ciudad'
-                            );
-                          },
+                Padding(
+                  padding: const EdgeInsets.only(right: 20.0,top: 10.0),
+                  child: Row(
+                    children: [
+                     const Padding(
+                       padding: EdgeInsets.only(left: 20.0,right: 20.0),
+                       child: Text("Filtrar por:",
+                         maxLines: 1,
+                         overflow: TextOverflow.ellipsis,),
                      ),
+                      Expanded(
+                        child: DropdownButton<String>(
+                          isExpanded: true,
+                            items: filterList.map<DropdownMenuItem<String>>((String value){
+                              return DropdownMenuItem<String>(
+                                value: value,
+                                child: Text(value),
+                              );
+                            }).toList(),
+                            onChanged: (String? newValue){
+                              setState(() {
+
+                              });
+                            }
+                        ),
+                      )
+                    ],
                   ),
+                ),
+                const Row(
+                  children: [
+                    Expanded(
+                      child: Padding(
+                        padding: EdgeInsets.only(top: 15.0,left: 40.0,right: 40.0),
+                        child: TextField(
+                          decoration: InputDecoration(
+                            border: OutlineInputBorder(),
+                            hintText: 'Buscar...'
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
               ],
             ),
           ),
+
+          Container(
+            color: Colors.cyan,
+            height: mHeightList,
+            child: Row (
+              children: [
+                Expanded(
+                  child: ListView.builder(
+                     itemCount: 50,
+                     itemBuilder: (context,index){
+                        return Padding(
+                          padding: const EdgeInsets.only(left: 3.0,right: 9.0, top: 3.0),
+                          child: factoryCard(
+                              name: 'nombre',
+                              address: 'dirreccion',
+                              telephone: 'telefono',
+                              city: 'ciudad'
+                          ),
+                        );
+                      },
+                     ),
+                ),
+              ],
+            ),
+          ),
+
+
         ],
       ),
     );

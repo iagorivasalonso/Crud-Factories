@@ -23,7 +23,7 @@ class _NavigationScreenState extends State<NavigationScreen> {
   int itenSelection = -1;
   int subIten1Selection = -1;
   int subIten2Selection = -1;
-  int itenSelect = 0;
+  int itenSelect = -1;
   int subIten1Select = -1;
   int subIten2Select = -1;
   int itenSelectable = -1;
@@ -37,12 +37,13 @@ class _NavigationScreenState extends State<NavigationScreen> {
 
   @override
   Widget build(BuildContext context) {
+
     double mWidth = MediaQuery.of(context).size.width;
     double mHeight = MediaQuery.of(context).size.height - 40;
-    /*
+
     print('ancho $mWidth');
     print('alto $mHeight');
-     */
+
 
     return Scaffold(
       body: Column(
