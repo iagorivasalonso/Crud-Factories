@@ -14,7 +14,7 @@ class _newEmailState extends State<newEmail> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Align(
-        alignment: Alignment.topLeft,
+        alignment: Alignment.topRight,
         child:  Padding(
           padding: const EdgeInsets.only(left: 30.0,top: 30.0),
           child: Column(
