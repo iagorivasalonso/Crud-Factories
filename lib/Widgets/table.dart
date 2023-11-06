@@ -16,7 +16,10 @@ class table extends StatefulWidget {
 
 class _tableState extends State<table> {
 
+  final ScrollController horizontalScroll = ScrollController();
+  final ScrollController verticalScroll = ScrollController();
 
+  double widthBar = 10.0;
 
 
   @override
@@ -36,53 +39,54 @@ class _tableState extends State<table> {
 
       endTable = cColumns.length-1;
     }
+     return Container(
+       height: 250,
+       child: Scrollbar(
+         controller: verticalScroll,
+         child: SingleChildScrollView(
+           controller: verticalScroll,
+           scrollDirection: Axis.vertical,
+           child: DataTable(
+             columns: <DataColumn>[
+               for(int i=0 ; i < cColumns.length ; i++)
+                 DataColumn(
+                   label: SizedBox(
+                       width: 110,
+                       child: Text(cColumns[i])
+                   ),
+                 ),
 
-    return DataTable(
-      columns: <DataColumn>[
-        for(int i=0 ; i < cColumns.length ; i++)
-        DataColumn(
-          label: SizedBox(
-              width: 110,
-              child: Text(cColumns[i])
-          ),
-        ),
+             ],
+             rows: List<DataRow>.generate(rows,
+                   (int index) =>  DataRow(
+                   cells: <DataCell>[
+                     for(int i=0 ; i < endTable ; i++)
+                       const DataCell(
+                         Text('1'),
+                       ),
+                     if(check.isNotEmpty)
+                       DataCell(
+                         Center(
+                             child: CheckboxListTile(
+                               value: check[index],
+                               onChanged:  (bool? value) {
+                                 setState(() {
+                                   check[index]= value!;
+                                 });
+                               },)
+                         ),
+                       )
 
-      ],
-      rows: List<DataRow>.generate(rows,
-            (int index) =>  DataRow(
-            cells: <DataCell>[
-              for(int i=0 ; i < endTable ; i++)
-              const DataCell(
-                Text('1'),
-              ),
-              if(check.isNotEmpty)
-               DataCell(
-                Center(
-                    child: CheckboxListTile(
-                      value: check[index],
-                      onChanged:  (bool? value) {
-                        setState(() {
-                          check[index]= value!;
-                        });
-                      },)
-                ),
-              )
-
-            ]
-        ),
-      ),
-    );
-
-
+                   ]
+               ),
+             ),
+           ),
+         ),
+       ),
+     );
   }
+
 }
-
-
-/*
-gestion de envios
-correo elect inicio sesion
- */
-
 
 
 

@@ -1,4 +1,4 @@
-import 'package:desktop_app/Widgets/cardDefault.dart';
+import 'package:desktop_app/Widgets/defaultCard.dart';
 import 'package:flutter/material.dart';
 
 
@@ -23,7 +23,32 @@ class _listSendsState extends State<listSends> {
   @override
   Widget build(BuildContext context) {
 
+
     double mHeight = widget.mHeight;
+    double mHeightfilter = 0;
+    double mHeightList = 0;
+
+
+    double mHeightbutton;
+
+
+    if(mHeight>190)
+    {
+      mHeightbutton = 40;
+      mHeightList = mHeight-mHeightbutton;
+    }
+    else
+    {
+      mHeightbutton =0;
+      mHeightList = mHeight;
+    }
+
+    if(mHeight>190 && opSelected==1)
+    {
+      mHeightfilter = 150;
+      mHeightList=mHeightList-mHeightfilter;
+    }
+
 
     return Column(
       children: [
@@ -33,6 +58,7 @@ class _listSendsState extends State<listSends> {
               Expanded(
                 child: GestureDetector(
                   child: Container(
+                   height:mHeightbutton,
                    color: index==opSelected
                           ? Colors.lightGreen
                           : Colors.white,
@@ -60,65 +86,51 @@ class _listSendsState extends State<listSends> {
         ),
         if(opSelected==1)
         Container(
+          height: mHeightfilter,
           color: Colors.greenAccent,
           child: Row(
             children: [
-            SizedBox(
-                height: 170,
-                child: Column(
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.only(left: 15.0),
-                      child: Row(
-                        children: [
-                           const Text("Filtrar por:"),
-                           Padding(
-                            padding: const EdgeInsets.only(left: 20.0),
-                            child: DropdownButton<String>(
-                                items: filterList.map<DropdownMenuItem<String>>((String value){
-                                  return DropdownMenuItem<String>(
-                                    value: value,
-                                    child: SizedBox(
-                                        width: 80,
-                                        height: 30,
-                                        child: Text(value)
-                                    ),
-                                  );
-                                }).toList(),
-                                onChanged: (String? newValue){
-                                  setState(() {
+            Padding(
+              padding: const EdgeInsets.only(left: 15.0),
+              child: Row(
+                children: [
+                   const Text("Filtrar por:"),
+                   Padding(
+                    padding: const EdgeInsets.only(left: 20.0),
+                    child: DropdownButton<String>(
+                        items: filterList.map<DropdownMenuItem<String>>((String value){
+                          return DropdownMenuItem<String>(
+                            value: value,
+                            child: Text(value),
+                          );
+                        }).toList(),
+                        onChanged: (String? newValue){
+                          setState(() {
 
-                                  });
-                                }
-                            ),
-                          ),
-                        ],
+                          });
+                        }
+                    ),
+                  ),
+                ],
+              ),
+            ),
+
+               const Padding(
+              padding: EdgeInsets.only(top: 40.0),
+              child: Row(
+                children: [
+                  Padding(
+                    padding: EdgeInsets.only(left: 40.00),
+                    child: TextField(
+                      decoration: InputDecoration(
+                        border: OutlineInputBorder(),
+                        hintText: 'Buscar...'
                       ),
                     ),
+                  )
 
-                   const Padding(
-                      padding: EdgeInsets.only(top: 40.0),
-                      child: Row(
-                        children: [
-                          Padding(
-                            padding: EdgeInsets.only(left: 40.00),
-                            child: SizedBox(
-                              height: 40,
-                              width: 150,
-                              child: TextField(
-                                decoration: InputDecoration(
-                                  border: OutlineInputBorder(),
-                                  hintText: 'Buscar...'
-                                ),
-                              ),
-                            ),
-                          )
-
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
+                ],
+              ),
             )
             ],
           ),
@@ -127,12 +139,12 @@ class _listSendsState extends State<listSends> {
           children: [
             Expanded(
               child: SizedBox(
-                  height:600,
+                  height:mHeightList,
                   child: ListView.builder(
                      itemCount: 4,
                      itemBuilder: (context,index){
                         return GestureDetector(
-                          child: cardDefault(
+                          child: defaultCard(
                               title: 'Envio 1',
                               description: 'Envio octubre 2023',
                               color: index == cardSeleted

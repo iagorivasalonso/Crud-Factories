@@ -38,12 +38,24 @@ class _NavigationScreenState extends State<NavigationScreen> {
   @override
   Widget build(BuildContext context) {
 
+    double mHeightBar = 0;
+    double mHeightContent = 0;
+
     double mWidth = MediaQuery.of(context).size.width;
-    double mHeight = MediaQuery.of(context).size.height - 40;
+    double mHeight = MediaQuery.of(context).size.height;
 
-    print('ancho $mWidth');
-    print('alto $mHeight');
-
+    print(mHeight);
+    print(mWidth);
+    if(mHeight>40)
+    {
+      mHeightBar = 40;
+      mHeightContent = mHeight - mHeightBar;
+    }
+    else
+    {
+      mHeightBar = mHeight * 0.9;
+      mHeightContent = mHeight * 0.1;
+    }
 
     return Scaffold(
       body: Column(
@@ -52,12 +64,12 @@ class _NavigationScreenState extends State<NavigationScreen> {
               child: itenSelection == -1
                   ? SizedBox(
                       width: mWidth,
-                      child: buildMenu(mWidth, mHeight),
+                      child: buildMenu(mWidth, mHeightContent, mHeightBar),
                     )
                   : SizedBox(
                       width: mWidth,
-                      height: 40,
-                      child: buildMenu(mWidth, mHeight),
+                      height: mHeightBar,
+                      child: buildMenu(mWidth, mHeightContent, mHeightBar),
                     )),
           if (itenSelection > -1 && itenSelection < 3)
             Align(
@@ -219,14 +231,14 @@ class _NavigationScreenState extends State<NavigationScreen> {
       ),
     );
   }
-  Column buildMenu(double mWidth, double mHeight) {
+  Column buildMenu(double mWidth, double mHeight, double mHeightBar) {
 
     return Column(
       children: [
         Container(
           color: cBackground,
           width: mWidth,
-          height: 40,
+          height: mHeightBar,
           child: ListView.builder(
               physics: const BouncingScrollPhysics(),
               scrollDirection: Axis.horizontal,
@@ -254,7 +266,7 @@ class _NavigationScreenState extends State<NavigationScreen> {
                         ),
                       onTap: (){
                         setState(() {
-                          if (itenSelection == 3)
+                          if (itenSelection == 4)
                           itenSelect = itenSelection;
                         });
                       },
@@ -269,6 +281,7 @@ class _NavigationScreenState extends State<NavigationScreen> {
                 );
               }),
         ),
+
         StreamBuilder<Object>(
             stream: null,
             builder: (context, snapshot) {
@@ -276,7 +289,12 @@ class _NavigationScreenState extends State<NavigationScreen> {
                 width: mWidth,
                 height: mHeight,
                 color: Colors.white,
-                child: FuntionSeleted(itenSelect, subIten1Select, subIten2Select,mWidth, mHeight),
+                child: mHeight> 18
+                       ? FuntionSeleted(itenSelect, subIten1Select, subIten2Select,mWidth, mHeight)
+                       : Container(
+                    color: Colors.white,
+                ),
+
               );
             }),
       ],

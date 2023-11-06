@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-Card cardDefault({
+Card defaultCard({
    required String title,
    required String description, required Color color,
 }){
@@ -22,13 +22,19 @@ Card cardDefault({
                      children: [
                        Row(
                          children: [
-                           Text(title,
-                             style: TextStyle(fontWeight: FontWeight.bold),),
+                           Expanded(child: Text(title,
+                             style: const TextStyle(fontWeight: FontWeight.bold),
+                             maxLines: 1,
+                             overflow: TextOverflow.ellipsis,),
+                           )
                          ],
                        ),
                        Row(
                          children: [
-                           Text(description),
+                           Expanded(child: Text(description,
+                             maxLines: 1,
+                             overflow: TextOverflow.ellipsis,),
+                           )
                          ],
                        ),
 

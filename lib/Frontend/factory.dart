@@ -2,26 +2,24 @@ import 'package:adaptive_scrollbar/adaptive_scrollbar.dart';
 import 'package:flutter/material.dart';
 
 class newFactory extends StatefulWidget {
-  double mHeight;
-  double mWidth;
 
-  newFactory(this.mHeight, this.mWidth);
+
+  newFactory();
 
   @override
   State<newFactory> createState() => _newFactoryState();
 }
 
 class _newFactoryState extends State<newFactory> {
+
   final ScrollController horizontalScroll = ScrollController();
   final ScrollController verticalScroll = ScrollController();
 
-  double widthBar = 15.0;
+  double widthBar = 10.0;
+
   @override
   Widget build(BuildContext context) {
-    double mHeight = widget.mHeight;
-    double mWidth = widget.mWidth;
-    print(mWidth);
-    print(mHeight);
+
     return AdaptiveScrollbar(
       controller: verticalScroll,
       width: widthBar,
@@ -39,8 +37,8 @@ class _newFactoryState extends State<newFactory> {
               controller: horizontalScroll,
               scrollDirection: Axis.horizontal,
               child: Container(
-                height: 900,
-                width: 888,
+                height: 946,
+                width: 856,
                 child: Align(
                   alignment: Alignment.topLeft,
                   child: Padding(
@@ -56,7 +54,7 @@ class _newFactoryState extends State<newFactory> {
                           ],
                         ),
                         const Padding(
-                          padding: EdgeInsets.only(top: 20.0, bottom: 30.0),
+                          padding: EdgeInsets.only(top: 20.0, left: 30.0, bottom: 30.0),
                           child: Row(
                             children: [
                               Text('Nombre: '),
@@ -73,7 +71,7 @@ class _newFactoryState extends State<newFactory> {
                           ),
                         ),
                         const Padding(
-                          padding: EdgeInsets.only(top: 20.0, bottom: 30.0),
+                          padding: EdgeInsets.only(top: 20.0, left: 30.0, bottom: 30.0),
                           child: Row(
                             children: [
                               Text('Fecha de alta: '),
@@ -128,8 +126,7 @@ class _newFactoryState extends State<newFactory> {
                           ),
                         ),
                         const Padding(
-                          padding:
-                              EdgeInsets.only(top: 20.0, bottom: 30.0, left: 20.0),
+                          padding: EdgeInsets.only(top: 20.0, bottom: 30.0, left: 20.0),
                           child: Row(
                             children: [
                               Text('Email: '),
@@ -143,7 +140,7 @@ class _newFactoryState extends State<newFactory> {
                                 ),
                               ),
                               Padding(
-                                padding: EdgeInsets.only(left: 85.0),
+                                padding: EdgeInsets.only(left: 70.0),
                                 child: Text('Pagina web: '),
                               ),
                               SizedBox(
@@ -176,8 +173,7 @@ class _newFactoryState extends State<newFactory> {
                           ),
                         ),
                         const Padding(
-                          padding:
-                              EdgeInsets.only(top: 20.0, bottom: 30.0, left: 20.0),
+                          padding: EdgeInsets.only(top: 20.0, bottom: 30.0, left: 20.0),
                           child: Row(
                             children: [
                               Text('Ciudad: '),
@@ -215,7 +211,7 @@ class _newFactoryState extends State<newFactory> {
                           ],
                         ),
                         Padding(
-                          padding: const EdgeInsets.only(top: 20.0, left: 20.0),
+                          padding: const EdgeInsets.only(top: 20.0, left: 50.0),
                           child: Row(
                             children: [
                               const Padding(
@@ -268,21 +264,24 @@ class _newFactoryState extends State<newFactory> {
                             ],
                           ),
                         ),
-                        Row(
-                          children: [
-                            Padding(
-                              padding:
-                                  const EdgeInsets.only(left: 600.0, right: 30.0),
-                              child: ElevatedButton(
-                                child: const Text('Nuevo'),
-                                onPressed: () {},
-                              ),
+                        Padding(
+                          padding: const EdgeInsets.only(top: 30.0, left: 550.0),
+                          child: Container(
+                            width: 200,
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                ElevatedButton(
+                                  child: const Text('Nuevo'),
+                                  onPressed: () {},
+                                ),
+                                ElevatedButton(
+                                  child: const Text('Cancelar'),
+                                  onPressed: () {},
+                                ),
+                              ],
                             ),
-                            ElevatedButton(
-                              child: const Text('Cancelar'),
-                              onPressed: () {},
-                            ),
-                          ],
+                          ),
                         ),
                       ],
                     ),
