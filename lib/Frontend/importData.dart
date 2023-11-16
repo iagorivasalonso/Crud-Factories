@@ -1,4 +1,5 @@
 import 'package:adaptive_scrollbar/adaptive_scrollbar.dart';
+import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 
 class newImport extends StatefulWidget {
@@ -15,8 +16,11 @@ class _newImportState extends State<newImport> {
 
   double widthBar = 10.0;
 
+  get selectedValue => null;
+
   @override
   Widget build(BuildContext context) {
+    List<String> typeList = ['uno', 'dos'];
 
     return AdaptiveScrollbar(
       controller: verticalScroll,
@@ -35,7 +39,7 @@ class _newImportState extends State<newImport> {
               controller: horizontalScroll,
               scrollDirection: Axis.horizontal,
               child: Container(
-                height: 418,
+                height: 429,
                 width: 736,
                 child: Align(
                   alignment: Alignment.topLeft,
@@ -51,9 +55,58 @@ class _newImportState extends State<newImport> {
                         ),
                         const Padding(
                           padding: EdgeInsets.only(top: 15.00),
+                          child: Column(
+                            children: [
+                              Row(
+                                children: [
+                                  Text('Importar datos en formato CSV.'),
+                                ],
+                              ),
+                            ],
+                          ),
+
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(top: 25.0),
                           child: Row(
                             children: [
-                              Text('Importar datos en formato CSV.'),
+                              Text("Tipo de dato: "),
+                              Column(
+                                children: [
+                                  Padding(
+                                    padding: const EdgeInsets.only(left: 20.0),
+                                    child: DropdownButtonHideUnderline(
+                                      child: DropdownButton2<String>(
+                                        isExpanded: true,
+                                        hint: const Expanded(
+                                          child: Text('Select Item',
+                                            overflow: TextOverflow.ellipsis,
+                                          ),
+                                        ),
+                                        items: typeList
+                                            .map((String item) => DropdownMenuItem<String>(
+                                          value: item,
+                                          child:Text(item,
+                                            overflow: TextOverflow.ellipsis,
+                                          ),
+                                        ))
+                                            .toList(),
+                                        value: selectedValue,
+                                        onChanged:
+                                            (String?  value) {
+                                          setState(()
+                                          {});
+                                        },
+                                        buttonStyleData: const  ButtonStyleData(
+                                          height: 50,
+                                          width: 160,
+                                          padding: EdgeInsets.only(left:14, right: 14),
+                                        )
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
                             ],
                           ),
                         ),
@@ -94,7 +147,7 @@ class _newImportState extends State<newImport> {
                           ),
                         ),
                         Padding(
-                          padding: const EdgeInsets.only(top:100.0,left: 400),
+                          padding: const EdgeInsets.only(top:34.0,left: 400),
                           child: Container(
                             width: 250,
                             child: Row(

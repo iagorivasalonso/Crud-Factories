@@ -5,7 +5,9 @@ import 'package:flutter/material.dart';
 
 class newSend extends StatefulWidget {
 
-  const newSend({Key? key}) : super(key: key);
+  int select;
+
+  newSend(this.select);
 
   @override
   State<newSend> createState() => _newSendState();
@@ -20,6 +22,8 @@ class _newSendState extends State<newSend> {
 
   double widthBar = 10.0;
 
+  late TextEditingController controllerData;
+
   List<String> cColumns = [];
   int rows = 0;
   List<bool>selectable = [];
@@ -27,6 +31,25 @@ class _newSendState extends State<newSend> {
   @override
   Widget build(BuildContext context) {
 
+    controllerData = new TextEditingController();
+
+    int select = widget.select;
+
+    String title ="" ;
+    String dataSend = controllerData.text;
+    bool viewButoons = false;
+
+    if(select == -1)
+    {
+      title = "Nuevo ";
+      viewButoons = true;
+    }
+    else
+    {
+      controllerData.text = "Edit";
+      title = "Ver ";
+      viewButoons = false;
+    }
 
     return AdaptiveScrollbar(
       controller: verticalScroll,
@@ -45,21 +68,21 @@ class _newSendState extends State<newSend> {
               controller: horizontalScroll,
               scrollDirection: Axis.horizontal,
               child: Container(
-                height: 570,
-                width: 750,
+                height: 588,
+                width: 848,
                 child: Align(
                   alignment: Alignment.topLeft,
                   child:  Padding(
                     padding: const EdgeInsets.only(left: 30.0,top: 30.0),
                     child: Column(
                       children: [
-                        const Row(
+                         Row(
                           children: [
-                            Text('Envio: ',
-                              style: TextStyle(fontWeight: FontWeight.bold),),
+                            Text('$title Envio: ',
+                              style: const TextStyle(fontWeight: FontWeight.bold),),
                           ],
                         ),
-                        const Padding(
+                        Padding(
                           padding: EdgeInsets.only(top:20.0),
                           child: Row(
                             children: [
@@ -68,10 +91,10 @@ class _newSendState extends State<newSend> {
                                 width: 300,
                                 height: 40,
                                 child: TextField(
+                                  controller: controllerData,
                                   decoration: InputDecoration(
-                                    border: OutlineInputBorder(),
+                                      border: OutlineInputBorder(),
                                   ),
-
                                 ),
                               ),
                             ],
@@ -87,27 +110,34 @@ class _newSendState extends State<newSend> {
                           ),
                         ),
                         Padding(
-                            padding: const EdgeInsets.only(top: 40.0, right: 80.0),
+                            padding: const EdgeInsets.only(top: 40.0,left: 10.0),
                             child: table(
-                              cColumns = ['Empresa', 'Observaciones', 'Estado'],
+                              cColumns = ['Empresa', 'Observaciones', 'Estado','Seleccionar'],
                               rows = 8,
-                              selectable=List.generate(rows, (index) => false),
+                              selectable=viewButoons==true
+                                        ? List.generate(rows, (index) => false)
+                                        : [],
                             ),
                           ),
+
+                       if(viewButoons == true)
                         Padding(
-                          padding: const EdgeInsets.only(top: 70.0, left: 500.0),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              ElevatedButton(
-                                child: const Text('Nuevo'),
-                                onPressed: () {},
-                              ),
-                              ElevatedButton(
-                                child: const Text('Cancelar'),
-                                onPressed: () {},
-                              ),
-                            ],
+                          padding: const EdgeInsets.only( top: 70.0, left: 550.0),
+                          child: Container(
+                            width: 200,
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                ElevatedButton(
+                                  child: const Text('Nuevo'),
+                                  onPressed: () {},
+                                ),
+                                ElevatedButton(
+                                  child: const Text('Cancelar'),
+                                  onPressed: () {},
+                                ),
+                              ],
+                            ),
                           ),
                         ),
                   ]

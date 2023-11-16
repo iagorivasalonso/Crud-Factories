@@ -39,6 +39,7 @@ dependencies:
   window_manager: ^0.3.5
   rflutter_alert: ^2.0.7
   adaptive_scrollbar: ^2.1.2
+  dropdown_button2: ^2.3.9
 
 
 

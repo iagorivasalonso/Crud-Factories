@@ -9,7 +9,9 @@ class NavigationScreen extends StatefulWidget {
   State<NavigationScreen> createState() => _NavigationScreenState();
 }
 
+
 class _NavigationScreenState extends State<NavigationScreen> {
+
 
   //List Menu Item
   List<String> itens = ['Archivo', 'Edicion', 'Listas','Enviar Emails', 'Conectar'];
@@ -29,11 +31,11 @@ class _NavigationScreenState extends State<NavigationScreen> {
   int itenSelectable = -1;
   int subIten1Selectable = -1;
 
-
   var psmenu = const EdgeInsets.only(top: 0, left: 0, right: 0);
   Color cBackground = Colors.blue;
   Color cSelect = Colors.green;
   double posMenu = 0;
+
 
   @override
   Widget build(BuildContext context) {
@@ -41,11 +43,13 @@ class _NavigationScreenState extends State<NavigationScreen> {
     double mHeightBar = 0;
     double mHeightContent = 0;
 
+
     double mWidth = MediaQuery.of(context).size.width;
     double mHeight = MediaQuery.of(context).size.height;
-
+/*
     print(mHeight);
     print(mWidth);
+*/
     if(mHeight>40)
     {
       mHeightBar = 40;
@@ -61,13 +65,12 @@ class _NavigationScreenState extends State<NavigationScreen> {
       body: Column(
         children: [
           Container(
-              child: itenSelection == -1
+              child: itenSelection == -1 || itenSelection == 3 || itenSelection == 4
                   ? SizedBox(
                       width: mWidth,
                       child: buildMenu(mWidth, mHeightContent, mHeightBar),
                     )
                   : SizedBox(
-                      width: mWidth,
                       height: mHeightBar,
                       child: buildMenu(mWidth, mHeightContent, mHeightBar),
                     )),
@@ -97,7 +100,7 @@ class _NavigationScreenState extends State<NavigationScreen> {
                                         setState(() {
                                               subIten1Selection = index1;
 
-                                              if(itenSelection == 0 && subIten1Selection ==0)
+                                              if(itenSelection == 0 && subIten1Selection == 0)
                                               {
                                                   N2itens=N2itens1;
                                                   itenSelectable = itenSelection;
@@ -153,15 +156,9 @@ class _NavigationScreenState extends State<NavigationScreen> {
                             onExit: (s){
                               setState(() {
 
-                                if (itenSelectable == 0 && subIten1Selectable == 0)
-                                {
-                                  itenSelectable = itenSelection;
-                                  subIten1Selectable = subIten1Selection;
-                                }
-                                else{
                                   itenSelection = -1;
                                   subIten1Selection = -1;
-                                }
+
 
                               });
                             },
@@ -195,9 +192,11 @@ class _NavigationScreenState extends State<NavigationScreen> {
                                             ),
                                             onTap: (){
                                               setState(() {
+
                                                 if(itenSelection == 0 && subIten1Selection ==3)
                                                 {
-                                                  closeAlert(context);
+                                                         closeAlert(context);
+
 
                                                 } else {
                                                   itenSelect = itenSelection;
@@ -257,7 +256,9 @@ class _NavigationScreenState extends State<NavigationScreen> {
                     },
                     child: GestureDetector(
                         child: Container(
-                            width: 75,
+                            width: index == 3 || index == 4
+                                   ? 110
+                                   : 75,
                             color: itenSelection == index ? cSelect : cBackground,
                             child: Padding(
                               padding: const EdgeInsets.all(12.0),
@@ -266,7 +267,8 @@ class _NavigationScreenState extends State<NavigationScreen> {
                         ),
                       onTap: (){
                         setState(() {
-                          if (itenSelection == 4)
+                          if (itenSelection == 3 || itenSelection == 4)
+
                           itenSelect = itenSelection;
                         });
                       },
@@ -290,7 +292,7 @@ class _NavigationScreenState extends State<NavigationScreen> {
                 height: mHeight,
                 color: Colors.white,
                 child: mHeight> 18
-                       ? FuntionSeleted(itenSelect, subIten1Select, subIten2Select,mWidth, mHeight)
+                       ? FuntionSeleted(itenSelect, subIten1Select, subIten2Select,mWidth, mHeight,itens)
                        : Container(
                     color: Colors.white,
                 ),

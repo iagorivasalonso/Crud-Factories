@@ -2,7 +2,10 @@ import 'package:adaptive_scrollbar/adaptive_scrollbar.dart';
 import 'package:flutter/material.dart';
 
 class conection extends StatefulWidget {
-  const conection({Key? key}) : super(key: key);
+
+List<String> itens;
+
+conection(this.itens);
 
   @override
   State<conection> createState() => _conectionState();
@@ -18,6 +21,8 @@ class _conectionState extends State<conection> {
 
   @override
   Widget build(BuildContext context) {
+
+   List <String> items = widget.itens;
 
     return AdaptiveScrollbar(
       controller: verticalScroll,
@@ -37,7 +42,7 @@ class _conectionState extends State<conection> {
               scrollDirection: Axis.horizontal,
               child: Container(
                 height: 418,
-                width: 750,
+                width: 723,
                 child: Align(
                   alignment: Alignment.topLeft,
                   child:  Padding(
@@ -135,10 +140,14 @@ class _conectionState extends State<conection> {
                         Row(
                           children: [
                             Padding(
-                              padding: const EdgeInsets.only(left: 600.0,right: 30.0,top:40.0),
+                              padding: const EdgeInsets.only(left: 550.0,right: 30.0,top:40.0),
                               child: ElevatedButton(
-                                child: const Text('Conectar'),
-                                onPressed: (){},
+                                child: Text(items[4]),
+                                onPressed: (){
+                                       setState(() {
+                                           items[4] = "Desconectar";
+                                       });
+                                },
                               ),
                             ),
 

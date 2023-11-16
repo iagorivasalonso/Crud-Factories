@@ -2,23 +2,48 @@
 import 'package:adaptive_scrollbar/adaptive_scrollbar.dart';
 import 'package:flutter/material.dart';
 
-class newEmail extends StatefulWidget {
-  const newEmail({super.key});
+class newMail extends StatefulWidget {
 
-  @override
-  State<newEmail> createState() => _newEmailState();
+  int select;
+
+  newMail(this.select);
+
+
+  State<newMail> createState() => _newMailState();
 }
 
-class _newEmailState extends State<newEmail> {
+class _newMailState extends State<newMail> {
 
   final ScrollController horizontalScroll = ScrollController();
   final ScrollController verticalScroll = ScrollController();
 
   double widthBar = 10.0;
 
+  late TextEditingController controllerMail;
+
   @override
   Widget build(BuildContext context) {
 
+    controllerMail = new TextEditingController();
+
+    int select = widget.select;
+
+    String action = "";
+    String title = "";
+    String mail = controllerMail.text;
+
+    if(select == -1)
+    {
+      title = "Nueva ";
+      action = "Crear";
+    }
+    else
+    {
+      controllerMail.text = "Edit";
+
+      title = "Editar ";
+      action = "Actualizar";
+    }
     return AdaptiveScrollbar(
       controller: verticalScroll,
       width: widthBar,
@@ -26,16 +51,16 @@ class _newEmailState extends State<newEmail> {
         controller: horizontalScroll,
         width: widthBar,
         position: ScrollbarPosition.bottom,
-        underSpacing: EdgeInsets.only(bottom: 8),
+        underSpacing: const EdgeInsets.only(bottom: 8),
         child: SingleChildScrollView(
           controller: verticalScroll,
           scrollDirection: Axis.vertical,
-          child: Container(
+          child: SizedBox(
             width: 2000,
             child: SingleChildScrollView(
               controller: horizontalScroll,
               scrollDirection: Axis.horizontal,
-              child: Container(
+              child: SizedBox(
                 height: 416,
                 width: 854,
                 child:  Align(
@@ -44,25 +69,25 @@ class _newEmailState extends State<newEmail> {
                     padding: const EdgeInsets.only(left: 30.0,top: 30.0),
                     child: Column(
                       children: [
-                        const Row(
+                         Row(
                           children: [
-                            Text('Email: ',
-                              style: TextStyle(fontWeight: FontWeight.bold),),
+                            Text('$title Email: ',
+                              style: const TextStyle(fontWeight: FontWeight.bold),),
                           ],
                         ),
-                        const Padding(
-                          padding: EdgeInsets.only(top:20.0,bottom: 30.0),
+                      Padding(
+                          padding: const EdgeInsets.only(top:20.0,bottom: 30.0),
                           child: Row(
                             children: [
-                              Text('Nuevo email: '),
+                              const Text('Nuevo email: '),
                               SizedBox(
                                 width: 450,
                                 height: 40,
                                 child: TextField(
+                                  controller: controllerMail,
                                   decoration: InputDecoration(
-                                    border: OutlineInputBorder(),
+                                      border: OutlineInputBorder(),
                                   ),
-
                                 ),
                               ),
                             ],
@@ -124,7 +149,7 @@ class _newEmailState extends State<newEmail> {
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 ElevatedButton(
-                                  child: const Text('Nuevo'),
+                                  child: Text(action),
                                   onPressed: () {},
                                 ),
                                 ElevatedButton(

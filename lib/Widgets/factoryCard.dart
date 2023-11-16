@@ -3,9 +3,9 @@ import 'package:flutter/material.dart';
 
 Card factoryCard({
   required String name,
-  required String address,
+  String? address,
   required String telephone,
-  required String city}) {
+  String? city}) {
 
   return Card(
     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
@@ -30,7 +30,7 @@ Card factoryCard({
               ),
               Row(
                 children: [
-                  Expanded(child: Text(address,
+                  Expanded(child: Text(address!,
                    maxLines: 1,
                    overflow: TextOverflow.ellipsis,),
                   )
@@ -57,7 +57,7 @@ Card factoryCard({
                         Align(
                           alignment: Alignment.topRight,
                           child: SizedBox(
-                            child: Text(city,
+                            child: Text(city!,
                               maxLines: 1,
                               overflow: TextOverflow.ellipsis,),),
                         ),
