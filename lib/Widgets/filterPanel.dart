@@ -42,7 +42,7 @@ class _filterPanelState extends State<filterPanel> {
                   child:DropdownButtonHideUnderline(
                     child: DropdownButton2<String>(
                       isExpanded: true,
-                      hint: const Expanded(
+                      hint:  Expanded(
                         child: Text('Select Item',
                           overflow: TextOverflow.ellipsis,
                         ),

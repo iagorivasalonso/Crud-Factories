@@ -1,6 +1,6 @@
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:window_manager/window_manager.dart';
-import 'Frontend/close_app.dart';
+import 'Widgets/close_app.dart';
 import 'Frontend/navigation_screen.dart';
 
 

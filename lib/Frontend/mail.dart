@@ -2,11 +2,14 @@
 import 'package:adaptive_scrollbar/adaptive_scrollbar.dart';
 import 'package:flutter/material.dart';
 
+import '../Objects/Mail.dart';
+
 class newMail extends StatefulWidget {
 
+  List<Mail> mails;
   int select;
 
-  newMail(this.select);
+  newMail(this.mails, this.select);
 
 
   State<newMail> createState() => _newMailState();
@@ -20,17 +23,21 @@ class _newMailState extends State<newMail> {
   double widthBar = 10.0;
 
   late TextEditingController controllerMail;
+  late TextEditingController controllerPas1;
+  late TextEditingController controllerPas2;
 
   @override
   Widget build(BuildContext context) {
 
     controllerMail = new TextEditingController();
+    controllerPas1 = new TextEditingController();
+    controllerPas2 = new TextEditingController();
 
+    List<Mail> mails = widget.mails;
     int select = widget.select;
 
     String action = "";
     String title = "";
-    String mail = controllerMail.text;
 
     if(select == -1)
     {
@@ -39,7 +46,7 @@ class _newMailState extends State<newMail> {
     }
     else
     {
-      controllerMail.text = "Edit";
+      controllerMail.text = mails[select].addrres;
 
       title = "Editar ";
       action = "Actualizar";
@@ -62,7 +69,7 @@ class _newMailState extends State<newMail> {
               scrollDirection: Axis.horizontal,
               child: SizedBox(
                 height: 416,
-                width: 854,
+                width: 890,
                 child:  Align(
                   alignment: Alignment.topRight,
                   child:  Padding(
@@ -76,7 +83,7 @@ class _newMailState extends State<newMail> {
                           ],
                         ),
                       Padding(
-                          padding: const EdgeInsets.only(top:20.0,bottom: 30.0),
+                          padding: const EdgeInsets.only(left:30, top:20.0,bottom: 30.0),
                           child: Row(
                             children: [
                               const Text('Nuevo email: '),
@@ -93,8 +100,8 @@ class _newMailState extends State<newMail> {
                             ],
                           ),
                         ),
-                        const Padding(
-                          padding: EdgeInsets.only(top:20.0, bottom: 30.0),
+                       Padding(
+                          padding: EdgeInsets.only(left:30, top:20.0, bottom: 30.0),
                           child: Row(
                             children: [
                               Text('Contraseña: '),
@@ -102,17 +109,17 @@ class _newMailState extends State<newMail> {
                                 width: 400,
                                 height: 40,
                                 child: TextField(
-                                  decoration: InputDecoration(
+                                  controller: controllerPas1,
+                                  decoration: const InputDecoration(
                                     border: OutlineInputBorder(),
                                   ),
-
                                 ),
                               ),
                             ],
                           ),
                         ),
-                        const Padding(
-                          padding: EdgeInsets.only(top:20.0, bottom: 20.0),
+                       Padding(
+                          padding: EdgeInsets.only(left:30, top:20.0, bottom: 20.0),
                           child: Row(
                             children: [
                               Text('Verificar contraseña: '),
@@ -120,7 +127,8 @@ class _newMailState extends State<newMail> {
                                 width: 400,
                                 height: 40,
                                 child: TextField(
-                                  decoration: InputDecoration(
+                                  controller: controllerPas2,
+                                  decoration: const InputDecoration(
                                     border: OutlineInputBorder(),
                                   ),
 
@@ -134,7 +142,7 @@ class _newMailState extends State<newMail> {
                           child: Row(
                             children: [
                               Padding(
-                                padding: EdgeInsets.only(left: 130.0),
+                                padding: EdgeInsets.only(left: 160.0),
                                 child: Text('Las contraseñas no coinciden ',
                                   style: TextStyle(color: Colors.red),),
                               ),
@@ -150,7 +158,11 @@ class _newMailState extends State<newMail> {
                               children: [
                                 ElevatedButton(
                                   child: Text(action),
-                                  onPressed: () {},
+                                  onPressed: () {
+                                    print(controllerMail.text);
+                                    print(controllerPas1.text);
+                                    print(controllerPas2.text);
+                                  },
                                 ),
                                 ElevatedButton(
                                   child: const Text('Cancelar'),

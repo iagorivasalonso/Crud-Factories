@@ -5,6 +5,7 @@ List<String> avoidRepeteat(List<String> allElements) {
 
   for(int i = 0; i < allElements.length; i++)
   {
+
     if(i==0)
     {
       disting = false;
@@ -14,8 +15,11 @@ List<String> avoidRepeteat(List<String> allElements) {
       {
         if(allElements[i]==elementsDiferent[x])
         {
-          disting=true;
-
+          disting = true;
+        }
+        else
+        {
+          disting = false;
         }
       }
       if(disting==false)
@@ -23,7 +27,6 @@ List<String> avoidRepeteat(List<String> allElements) {
         elementsDiferent.add(allElements[i]);
       }
     }
-
   }
   return elementsDiferent;
 }

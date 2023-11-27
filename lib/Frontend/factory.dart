@@ -1,14 +1,15 @@
 import 'package:adaptive_scrollbar/adaptive_scrollbar.dart';
 import 'package:flutter/material.dart';
 
+import '../Objects/Factory.dart';
+
 
 class newFactory extends StatefulWidget {
 
+  List<Factory> factories;
   int select;
 
-  newFactory(this.select);
-
-
+  newFactory(this.factories,this.select,);
 
   @override
   State<newFactory> createState() => _newFactoryState();
@@ -22,18 +23,40 @@ class _newFactoryState extends State<newFactory> {
   double widthBar = 10.0;
 
   late TextEditingController controllerName;
-
+  late TextEditingController controllerHighDate;
+  late TextEditingController controllerTelephone1;
+  late TextEditingController controllerTelephone2;
+  late TextEditingController controllerMail;
+  late TextEditingController controllerWeb;
+  late TextEditingController controllerAdrress;
+  late TextEditingController controllerCity;
+  late TextEditingController controllerPostalCode;
+  late TextEditingController controllerProvince;
+  List<TextEditingController> controllerContacs=[];
+  late TextEditingController controllerEmpleoyee;
 
   @override
   Widget build(BuildContext context) {
 
-    controllerName = new TextEditingController();
+    controllerName =  TextEditingController();
+    controllerHighDate = TextEditingController();
+    controllerTelephone1= TextEditingController();
+    controllerTelephone2 = TextEditingController();
+    controllerMail = TextEditingController();
+    controllerWeb = TextEditingController();
+    controllerAdrress = TextEditingController();
+    controllerCity = TextEditingController();
+    controllerPostalCode = TextEditingController();
+    controllerProvince = TextEditingController();
+    controllerEmpleoyee = TextEditingController();
 
+
+    List<Factory> factories = widget.factories;
     int select = widget.select;
 
     String action = "";
     String title = "";
-    String factory = controllerName.text;
+
 
     if(select == -1)
     {
@@ -42,11 +65,49 @@ class _newFactoryState extends State<newFactory> {
     }
     else
     {
-      controllerName.text = "Edit";
-
       title = "Editar ";
+
+      controllerName.text = factories[select].name;
+      controllerHighDate.text = factories[select].highDate;
+      controllerTelephone1.text = factories[select].thelephones[0];
+      controllerTelephone2.text = factories[select].thelephones[1];
+      controllerMail.text = factories[select].mail;
+      controllerWeb.text = factories[select].web;
+
+              var address = factories[select].address['street']!;
+              var number = factories[select].address['number']!;
+              var apartament =factories[select].address['apartament']!;
+
+              String allAddress = "";
+
+              if(apartament == "")
+              {
+                allAddress ='$address, $number ';
+              }
+              else
+              {
+                allAddress ='$address, $number - $apartament';
+              }
+
+      controllerAdrress.text = allAddress!;
+      controllerCity.text = factories[select].address['city']!;
+      controllerPostalCode.text = factories[select].address['postalCode']!;
+      controllerProvince.text = factories[select].address['province']!;
+
+      controllerContacs.clear();
+      for (int i = 0; i < factories[select].contacts.length; i++)
+      {
+
+
+        controllerEmpleoyee.text=factories[select].contacts[i];
+        controllerContacs.add(controllerEmpleoyee);
+
+      }
+      print(controllerContacs.length);
+
       action = "Actualizar";
     }
+
     return AdaptiveScrollbar(
       controller: verticalScroll,
       width: widthBar,
@@ -64,7 +125,7 @@ class _newFactoryState extends State<newFactory> {
               controller: horizontalScroll,
               scrollDirection: Axis.horizontal,
               child: Container(
-                height: 916,
+                height: 1005,
                 width: 856,
                 child: Align(
                   alignment: Alignment.topLeft,
@@ -83,13 +144,13 @@ class _newFactoryState extends State<newFactory> {
                           padding: const EdgeInsets.only(top: 20.0, left: 30.0, bottom: 30.0),
                           child: Row(
                             children: [
-                              Text('Nombre: '),
+                              const Text('Nombre: '),
                               SizedBox(
                                 width: 450,
                                 height: 40,
                                 child: TextField(
                                   controller: controllerName,
-                                  decoration: InputDecoration(
+                                  decoration: const InputDecoration(
                                       border: OutlineInputBorder(),
                                   ),
                                 ),
@@ -97,17 +158,17 @@ class _newFactoryState extends State<newFactory> {
                             ],
                           ),
                         ),
-                        const Padding(
-                          padding: EdgeInsets.only(
-                              top: 20.0, left: 30.0, bottom: 30.0),
+                       Padding(
+                          padding: const EdgeInsets.only(top: 20.0, left: 30.0, bottom: 30.0),
                           child: Row(
                             children: [
-                              Text('Fecha de alta: '),
+                              const Text('Fecha de alta: '),
                               SizedBox(
                                 width: 150,
                                 height: 40,
                                 child: TextField(
-                                  decoration: InputDecoration(
+                                  controller: controllerHighDate,
+                                  decoration: const InputDecoration(
                                     border: OutlineInputBorder(),
                                   ),
                                 ),
@@ -123,22 +184,22 @@ class _newFactoryState extends State<newFactory> {
                             ),
                           ],
                         ),
-                        const Padding(
-                          padding: EdgeInsets.only(
-                              top: 20.0, bottom: 30.0, left: 20.0),
+                         Padding(
+                           padding: const EdgeInsets.only(top: 20.0, bottom: 30.0, left: 20.0),
                           child: Row(
                             children: [
-                              Text('Telefono 1: '),
+                              const Text('Telefono 1: '),
                               SizedBox(
                                 width: 200,
                                 height: 40,
                                 child: TextField(
-                                  decoration: InputDecoration(
+                                  controller: controllerTelephone1,
+                                  decoration: const InputDecoration(
                                     border: OutlineInputBorder(),
                                   ),
                                 ),
                               ),
-                              Padding(
+                              const Padding(
                                 padding: EdgeInsets.only(left: 85.0),
                                 child: Text('Telefono 2: '),
                               ),
@@ -146,7 +207,8 @@ class _newFactoryState extends State<newFactory> {
                                 width: 200,
                                 height: 40,
                                 child: TextField(
-                                  decoration: InputDecoration(
+                                  controller: controllerTelephone2,
+                                  decoration: const InputDecoration(
                                     border: OutlineInputBorder(),
                                   ),
                                 ),
@@ -154,9 +216,8 @@ class _newFactoryState extends State<newFactory> {
                             ],
                           ),
                         ),
-                        const Padding(
-                          padding: EdgeInsets.only(
-                              top: 20.0, bottom: 30.0, left: 20.0),
+                        Padding(
+                          padding: const EdgeInsets.only(top: 20.0, bottom: 30.0, left: 20.0),
                           child: Row(
                             children: [
                               Text('Email: '),
@@ -164,12 +225,13 @@ class _newFactoryState extends State<newFactory> {
                                 width: 300,
                                 height: 40,
                                 child: TextField(
-                                  decoration: InputDecoration(
+                                  controller: controllerMail,
+                                  decoration: const InputDecoration(
                                     border: OutlineInputBorder(),
                                   ),
                                 ),
                               ),
-                              Padding(
+                             const Padding(
                                 padding: EdgeInsets.only(left: 70.0),
                                 child: Text('Pagina web: '),
                               ),
@@ -177,7 +239,8 @@ class _newFactoryState extends State<newFactory> {
                                 width: 300,
                                 height: 40,
                                 child: TextField(
-                                  decoration: InputDecoration(
+                                  controller: controllerWeb,
+                                  decoration: const InputDecoration(
                                     border: OutlineInputBorder(),
                                   ),
                                 ),
@@ -185,17 +248,17 @@ class _newFactoryState extends State<newFactory> {
                             ],
                           ),
                         ),
-                        const Padding(
-                          padding: EdgeInsets.only(
-                              top: 20.0, bottom: 30.0, left: 20.0),
+                        Padding(
+                          padding:const EdgeInsets.only(top: 20.0, bottom: 30.0, left: 20.0),
                           child: Row(
                             children: [
-                              Text('Dirección: '),
+                              const Text('Dirección: '),
                               SizedBox(
                                 width: 600,
                                 height: 40,
                                 child: TextField(
-                                  decoration: InputDecoration(
+                                  controller: controllerAdrress,
+                                  decoration: const InputDecoration(
                                     border: OutlineInputBorder(),
                                   ),
                                 ),
@@ -203,21 +266,22 @@ class _newFactoryState extends State<newFactory> {
                             ],
                           ),
                         ),
-                        const Padding(
-                          padding: EdgeInsets.only(top: 20.0, bottom: 30.0, left: 20.0),
+                        Padding(
+                          padding: const EdgeInsets.only(top: 20.0, bottom: 30.0, left: 20.0),
                           child: Row(
                             children: [
-                              Text('Ciudad: '),
+                              const Text('Ciudad: '),
                               SizedBox(
                                 width: 200,
                                 height: 40,
                                 child: TextField(
-                                  decoration: InputDecoration(
+                                  controller: controllerCity,
+                                  decoration: const InputDecoration(
                                     border: OutlineInputBorder(),
                                   ),
                                 ),
                               ),
-                              Padding(
+                              const Padding(
                                 padding: EdgeInsets.only(left: 85.0),
                                 child: Text('Código postal: '),
                               ),
@@ -225,7 +289,26 @@ class _newFactoryState extends State<newFactory> {
                                 width: 200,
                                 height: 40,
                                 child: TextField(
-                                  decoration: InputDecoration(
+                                  controller: controllerPostalCode,
+                                  decoration: const InputDecoration(
+                                    border: OutlineInputBorder(),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                         Padding(
+                          padding: const EdgeInsets.only(top: 20.0, bottom: 30.0, left: 20.0),
+                          child: Row(
+                            children: [
+                              const Text('Provincia: '),
+                              SizedBox(
+                                width: 200,
+                                height: 40,
+                                child: TextField(
+                                  controller: controllerProvince,
+                                  decoration: const InputDecoration(
                                     border: OutlineInputBorder(),
                                   ),
                                 ),
@@ -242,56 +325,69 @@ class _newFactoryState extends State<newFactory> {
                           ],
                         ),
                         Padding(
-                          padding: const EdgeInsets.only(top: 20.0, left: 80.0),
+                          padding: const EdgeInsets.only(top: 24.0, left: 80.0, bottom: 40.0),
                           child: Row(
                             children: [
-                              const Padding(
-                                padding: EdgeInsets.only(bottom: 150.0),
+                            const SizedBox(
+                               height: 160,
+                               child: SizedBox(
+                                 width: 250,
+                                 height: 40,
+                                 child: TextField(
+                                   decoration: InputDecoration(
+                                     border: OutlineInputBorder(),
+                                   ),
+                                 ),
+                               ),
+                             ),
+                              Padding(
+                                padding: const EdgeInsets.only(
+                                    left: 20.0,
+                                    right: 20.0),
                                 child: SizedBox(
-                                  width: 250,
-                                  height: 40,
-                                  child: TextField(
-                                    decoration: InputDecoration(
-                                      border: OutlineInputBorder(),
-                                    ),
-                                  ),
-                                ),
-                              ),
-                              SizedBox(
-                                child: Padding(
-                                  padding: const EdgeInsets.only(
-                                      top: 2,
-                                      bottom: 120.0,
-                                      left: 20.0,
-                                      right: 20.0),
+                                  height: 160,
                                   child: Column(
                                     children: [
                                       ElevatedButton(
                                         child: Text('>>'),
                                         onPressed: () {},
                                       ),
-                                      const SizedBox(
-                                        height: 20.0,
-                                      ),
-                                      ElevatedButton(
-                                        child: const Text('<<'),
-                                        onPressed: () {},
+                                      Padding(
+                                        padding: const EdgeInsets.only(top: 12.0),
+                                        child: ElevatedButton(
+                                          child: const Text('<<'),
+                                          onPressed: () {},
+                                        ),
                                       ),
                                     ],
                                   ),
                                 ),
                               ),
-                              const SizedBox(
-                                width: 250,
-                                height: 210,
-                                child: TextField(
-                                  maxLines: 5,
-                                  minLines: 4,
-                                  decoration: InputDecoration(
-                                    border: OutlineInputBorder(),
-                                  ),
+                             Align(
+                               alignment: Alignment.topLeft,
+                               child: Container(
+                                   decoration: BoxDecoration(
+                                       borderRadius: const BorderRadius.all( Radius.circular(5),
+                                       ),
+                                       border: Border.all(
+                                           color: Colors.black38,
+                                           width: 1.0,
+                                       )
+                                   ),
+                                  width: 250,
+                                  height: 170,
+                                  child: ListView.builder(
+                                      itemCount: controllerContacs.length,
+                                      itemBuilder: (BuildContext context, index) {
+                                        return Padding(
+                                          padding: const EdgeInsets.only(left:8.0, top: 4.0),
+                                          child: Text(controllerContacs[index].text),
+                                        );
+                                      },
+
+                                  )
                                 ),
-                              ),
+                             ),
                             ],
                           ),
                         ),
@@ -305,7 +401,7 @@ class _newFactoryState extends State<newFactory> {
                                 ElevatedButton(
                                   child: Text(action),
                                   onPressed: () {
-print(controllerName.text);
+
                                   },
                                 ),
                                 ElevatedButton(

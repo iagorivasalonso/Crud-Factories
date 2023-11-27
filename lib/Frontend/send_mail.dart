@@ -10,10 +10,7 @@ class sendMail extends StatefulWidget {
   State<sendMail> createState() => _sendMailState();
 }
 
-int _value = 1;
-List <String> cColumns = [];
-int rows = 0;
-List<bool> selectable = [];
+
 
 class _sendMailState extends State<sendMail> {
 
@@ -21,6 +18,14 @@ class _sendMailState extends State<sendMail> {
   final ScrollController verticalScroll = ScrollController();
 
   double widthBar = 10.0;
+
+  int _value = 1;
+  List <String> cColumns = [];
+  List <String> cTable = [];
+  bool edit = false;
+  List<bool> selectable = [];
+  int rows = 0;
+
   get selectedValue => null;
 
   @override
@@ -46,8 +51,8 @@ class _sendMailState extends State<sendMail> {
               scrollDirection: Axis.horizontal,
               child: Container(
                 height: _value == 1
-                        ? 744
-                        : 1033,
+                        ? 714
+                        : 1005,
                 width: 880,
                 child: Align(
                   alignment: Alignment.topLeft,
@@ -236,14 +241,7 @@ class _sendMailState extends State<sendMail> {
                                                         padding: const EdgeInsets.only(top: 30.0, left: 150.0),
                                                         child: Column(
                                                           children: [
-                                                            table(
-                                                              cColumns = [
-                                                                'Empresa',
-                                                                'Email',
-                                                              ],
-                                                              rows = 3,
-                                                              selectable = [],
-                                                            ),
+                                                                             Text("aqui tabla"),
                                                           ],
                                                         ),
                                                       ),

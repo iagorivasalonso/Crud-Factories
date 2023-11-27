@@ -34,7 +34,10 @@ class _viewState extends State<view> {
 
   int opSelected = 0;
   int select = 0;
+  String selectDate=" ";
   int cardSeleted = 0;
+  List<lineSend> sendsDay =[];
+
 
   @override
   Widget build(BuildContext context) {
@@ -44,9 +47,9 @@ class _viewState extends State<view> {
 
     List<Factory> factories = widget.factories;
     List<Mail> mails = widget.mails;
-
-    //List<lineSend> line=widget.line;
+    List<lineSend> line =widget.line;
     List<String> datesSends =widget.datesSends;
+
 
     double mWidthList = mWidth * 0.2;
 
@@ -78,10 +81,6 @@ class _viewState extends State<view> {
       mHeightList = mHeight;
     }
 
-    if (mHeight > 190 && opSelected == 1) {
-      mHeightfilter = 150;
-      mHeightList = mHeightList - mHeightfilter;
-    }
 
     return Scaffold(
       body: Align(
@@ -94,9 +93,7 @@ class _viewState extends State<view> {
                   child: view == 'factory'
                       ? Container(
                           decoration: const BoxDecoration(
-                              border: Border(
-                                  right: BorderSide(
-                                      width: 5, color: Colors.grey))),
+                              border: Border(right: BorderSide(width: 5, color: Colors.grey))),
                           child: Column(
                             children: [
                               Row(
@@ -135,14 +132,16 @@ class _viewState extends State<view> {
                                     ),
                                 ],
                               ),
+
                               if (opSelected == 1)
                                 filterPanel(
                                   mHeightfilter = 150,
                                   filterList = ['uno', 'dos'],
                                 ),
+
                               Container(
                                 color: Colors.cyan,
-                                height: mHeightList,
+                                height: mHeightList-mHeightfilter,
                                 child: Row(
                                   children: [
                                     Expanded(
@@ -183,8 +182,8 @@ class _viewState extends State<view> {
                           ? Column(
                               children: [
                                 Expanded(
-                                  child: SizedBox(
-                                    height: mHeight,
+                                  child: Container(
+                                    color: Colors.grey,
                                     child: ListView.builder(
                                       itemCount: mails.length,
                                       itemBuilder: (context, index) {
@@ -236,6 +235,7 @@ class _viewState extends State<view> {
                                 onTap: (){
                                   setState(() {
                                     opSelected=indexFilter;
+
                                   });
                                 },
                               ),
@@ -248,34 +248,45 @@ class _viewState extends State<view> {
                           filterList =['uno', 'dos'],
                         ),
                       Container(
-                        height: mHeightList,
+                        color: Colors.grey,
+                        height: mHeightList-mHeightfilter,
                         child: Row(
                           children: [
                             Expanded(
-                              child: SizedBox(
-                                height:mHeightList,
-                                child: ListView.builder(
-                                  itemCount: datesSends.length,
-                                  itemBuilder: (context,index){
-                                    int nSend =index + 1;
-                                    String send ="Envio $nSend";
-                                    return GestureDetector(
-                                      child: defaultCard(
-                                          title: send,
-                                          description: datesSends[index],
-                                          color: index == cardSeleted
-                                              ? Colors.white
-                                              : Colors.grey
-                                      ),
-                                      onTap: (){
-                                        setState(() {
-                                          cardSeleted = index;
-                                          select = index;
-                                        });
-                                      },
-                                    );
-                                  },
-                                ),
+                              child: ListView.builder(
+                                itemCount: datesSends.length,
+                                itemBuilder: (context,index){
+                                  int nSend =index + 1;
+                                  String send ="Envio $nSend";
+                                  return GestureDetector(
+                                    child: defaultCard(
+                                        title: send,
+                                        description: datesSends[index],
+                                        color: index == cardSeleted
+                                            ? Colors.white
+                                            : Colors.grey
+                                    ),
+                                    onTap: (){
+                                      setState(() {
+                                        sendsDay.clear();
+                                        cardSeleted = index;
+                                        select = index;
+
+                                        String sendSelect=datesSends[index];
+                                        selectDate=sendSelect;
+
+                                        for(int i = 0; i < line.length ; i++)
+                                        {
+                                          if(sendSelect == line[i].date)
+                                          {
+                                            sendsDay.add(line[i]);
+                                          }
+
+                                        }
+                                      });
+                                    },
+                                  );
+                                },
                               ),
                             ),
                           ],
@@ -283,14 +294,15 @@ class _viewState extends State<view> {
                       ),
                     ],
                   )),
+
               SizedBox(
                   width: mWidthPanel,
                   height: mHeight,
                   child: view == 'factory'
-                      ? newFactory(select)
+                      ? newFactory(factories,select)
                       : view == 'email'
-                          ? newMail(select)
-                          : newSend(select)
+                          ? newMail(mails,select)
+                          : newSend(sendsDay,select,selectDate)
               ),
             ],
           )),

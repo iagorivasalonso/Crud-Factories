@@ -19,23 +19,27 @@ List<Mail> mails=[];
 List<lineSend> line=[];
 List<String> datesSends;
 
+
 List<String> telephones;
 List<String> empleoyes;
+
 Map<String,String> address;
 
+telephones =['', ''];
+empleoyes =['',''];
+address = {'street': '', 'number': '', 'apartament': '', 'city':'', 'postalCode':'', 'province':''};
+factories.add(Factory(name: '', highDate: '', thelephones: telephones, mail: '', web: 'w', address: address, contacts: empleoyes));
+telephones =['',''];
 
-telephones =[];
-empleoyes =[];
-address = {'street': '', 'number': '', 'apartament': '', 'postalCode':'', 'city':''};
-factories.add(Factory(name: '', highDate: '', thelephones: telephones, mail: '', web: '', address: address, contacts: empleoyes));
 
 /*            */
 
 mails.add(Mail(company: '', addrres: '', password:''));
 
-/*            */
 
-line.add(lineSend(date: '', factory: '', observations: '', state: ''));
+/*            */
+line.add(lineSend(date: '', factory: '' , observations: '', state: ''));
+
 
 
   List<String> element = [];
@@ -48,17 +52,19 @@ line.add(lineSend(date: '', factory: '', observations: '', state: ''));
  datesSends = avoidRepeteat(element);
 
    int newdato = -1;
+   String selectDate =" ";
 
   switch (itenSelection){
     case 0:
         if(subIten1Selection==0)
          {
            if(subIten2Selection==0)
-               return newFactory(newdato);
+               return newFactory(factories, newdato);
            if(subIten2Selection==1)
-                return newMail(newdato);
+                return newMail(mails,newdato);
+
            if(subIten2Selection==2)
-                return newSend(newdato);
+                return newSend(line,newdato,selectDate);
          }
 
         if(subIten1Selection==1)

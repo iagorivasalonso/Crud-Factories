@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import '../Backend/selection_view.dart';
-import 'close_app.dart';
+import '../Widgets/close_app.dart';
 
 class NavigationScreen extends StatefulWidget {
   const NavigationScreen({Key? key}) : super(key: key);

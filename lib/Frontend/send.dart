@@ -2,12 +2,16 @@ import 'package:adaptive_scrollbar/adaptive_scrollbar.dart';
 import 'package:desktop_app/Widgets/table.dart';
 import 'package:flutter/material.dart';
 
+import '../Objects/lineSend.dart';
+
 
 class newSend extends StatefulWidget {
 
+  List<lineSend> sendsDay;
   int select;
+  String selectDate;
 
-  newSend(this.select);
+  newSend(this.sendsDay,this.select,this.selectDate);
 
   @override
   State<newSend> createState() => _newSendState();
@@ -24,32 +28,48 @@ class _newSendState extends State<newSend> {
 
   late TextEditingController controllerData;
 
-  List<String> cColumns = [];
+  List<String> columns = [];
+  List<String> columnsTable = [];
   int rows = 0;
+  int rowsTable = 0;
   List<bool>selectable = [];
+  List <bool> selectTable = [];
+  List<lineSend> sends = [];
+  List<lineSend> sendsDay = [];
 
   @override
   Widget build(BuildContext context) {
 
     controllerData = new TextEditingController();
 
+    sendsDay =widget.sendsDay;
     int select = widget.select;
+    String selectDate = widget.selectDate;
 
+    List <bool> selectTable =[];
     String title ="" ;
-    String dataSend = controllerData.text;
+
     bool viewButoons = false;
 
     if(select == -1)
     {
       title = "Nuevo ";
+      columnsTable = ['Empresa', 'Observaciones', 'Estado' ,'Seleccionar'];
+      rowsTable = 5;
+      selectTable = List.generate(rowsTable, (index) => false);
       viewButoons = true;
     }
     else
     {
-      controllerData.text = "Edit";
+      controllerData.text = selectDate;
       title = "Ver ";
+      columnsTable = ['Empresa', 'Observaciones', 'Estado'];
+      rowsTable = 9;
+      selectTable = [];
       viewButoons = false;
+
     }
+
 
     return AdaptiveScrollbar(
       controller: verticalScroll,
@@ -86,13 +106,13 @@ class _newSendState extends State<newSend> {
                           padding: EdgeInsets.only(top:20.0),
                           child: Row(
                             children: [
-                              Text('Fecha: '),
+                              const Text('Fecha: '),
                               SizedBox(
                                 width: 300,
                                 height: 40,
                                 child: TextField(
                                   controller: controllerData,
-                                  decoration: InputDecoration(
+                                  decoration: const InputDecoration(
                                       border: OutlineInputBorder(),
                                   ),
                                 ),
@@ -112,11 +132,10 @@ class _newSendState extends State<newSend> {
                         Padding(
                             padding: const EdgeInsets.only(top: 40.0,left: 10.0),
                             child: table(
-                              cColumns = ['Empresa', 'Observaciones', 'Estado','Seleccionar'],
-                              rows = 8,
-                              selectable=viewButoons==true
-                                        ? List.generate(rows, (index) => false)
-                                        : [],
+                              columns = columnsTable,
+                              rows = rowsTable,
+                              selectable = selectTable,
+                              sends = sendsDay,
                             ),
                           ),
 
