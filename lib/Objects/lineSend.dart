@@ -1,4 +1,4 @@
-import 'package:desktop_app/Objects/Factory.dart';
+import 'package:crud_factories/Objects/Factory.dart';
 
 class lineSend {
 

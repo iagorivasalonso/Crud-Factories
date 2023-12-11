@@ -1,5 +1,5 @@
 import 'package:adaptive_scrollbar/adaptive_scrollbar.dart';
-import 'package:desktop_app/Widgets/table.dart';
+import 'package:crud_factories/Widgets/table.dart';
 import 'package:flutter/material.dart';
 
 import '../Objects/lineSend.dart';

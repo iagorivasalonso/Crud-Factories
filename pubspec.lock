@@ -69,10 +69,10 @@ packages:
     dependency: "direct main"
     description:
       name: fluent_ui
-      sha256: "43e95034b12a8285a78703b5995bb4d2e02a28750a1a363044c150533bc7f027"
+      sha256: f5996aa055a8fe3f90dd97b9cf8f6522ae87df5d2d0ccb81b0142e4e4ca03f51
       url: "https://pub.dev"
     source: hosted
-    version: "4.7.6"
+    version: "4.8.2"
   flutter:
     dependency: "direct main"
     description: flutter
@@ -204,10 +204,10 @@ packages:
     dependency: transitive
     description:
       name: scroll_pos
-      sha256: "4246bff3afc779d87cdf650a67d42d67ae71b23ff020d14592e6b89e28a7f9cc"
+      sha256: cebf602b2dd939de6832bb902ffefb574608d1b84f420b82b381a4007d3c1e1b
       url: "https://pub.dev"
     source: hosted
-    version: "0.4.0"
+    version: "0.5.0"
   sky_engine:
     dependency: transitive
     description: flutter

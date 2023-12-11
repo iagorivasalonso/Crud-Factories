@@ -1,4 +1,4 @@
-package com.example.desktop_app
+package com.example.crud_factories
 
 import io.flutter.embedding.android.FlutterActivity
 

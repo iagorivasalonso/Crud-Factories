@@ -1,6 +1,6 @@
 {
-    "name": "desktop_app",
-    "short_name": "desktop_app",
+    "name": "crud_factories",
+    "short_name": "crud_factories",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",

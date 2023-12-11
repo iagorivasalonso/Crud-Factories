@@ -1,12 +1,11 @@
 
-import 'package:desktop_app/Frontend/mail.dart';
-import 'package:desktop_app/Frontend/factory.dart';
-import 'package:desktop_app/Frontend/importData.dart';
-import 'package:desktop_app/Frontend/send.dart';
-import 'package:desktop_app/Frontend/send_mail.dart';
-import 'package:desktop_app/Objects/Mail.dart';
-import 'package:desktop_app/Objects/Factory.dart';
-import 'package:desktop_app/Objects/lineSend.dart';
+import 'package:crud_factories/Frontend/mail.dart';
+import 'package:crud_factories/Frontend/factory.dart';
+import 'package:crud_factories/Frontend/importData.dart';
+import 'package:crud_factories/Frontend/send_mail.dart';
+import 'package:crud_factories/Objects/Mail.dart';
+import 'package:crud_factories/Objects/Factory.dart';
+import 'package:crud_factories/Objects/lineSend.dart';
 import '../Frontend/conection.dart';
 import '../Frontend/view.dart';
 import '../Functions/avoidRepeat.dart';
@@ -22,21 +21,18 @@ List<Mail> mails =[];
 List<String> telephones;
 List<String> empleoyes;
 Map<String,String> address;
-
 telephones =['', ''];
 empleoyes =['',''];
 address = {'street': '', 'number': '', 'apartament': '', 'city':'', 'postalCode':'', 'province':''};
 factories.add(Factory(id: 0, name: '', highDate: '', thelephones: telephones, mail: '', web: 'w', address: address, contacts: empleoyes));
 telephones =['',''];
-
-
 /*            */
 
-  mails.add(Mail(company: '', addrres: '', password:''));
-
+mails.add(Mail(company: '', addrres: '', password:''));
 
 /*            */
-  line.add(lineSend(date: '', factory: '' , observations: '', state: ''));
+line.add(lineSend(date: '', factory: factories[0], observations: '', state: ''));
+
 
 
 

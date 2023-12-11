@@ -1,6 +1,10 @@
 import 'package:adaptive_scrollbar/adaptive_scrollbar.dart';
 import 'package:flutter/material.dart';
 
+import '../Backend/selection_view.dart';
+import 'importData.dart';
+import 'navigation_screen.dart';
+
 class conection extends StatefulWidget {
 
 List<String> itens;
@@ -19,10 +23,19 @@ class _conectionState extends State<conection> {
 
   double widthBar = 10.0;
 
+
+  List <String> items=[];
+
+
   @override
   Widget build(BuildContext context) {
 
-   List <String> items = widget.itens;
+    items = widget.itens;
+   int itenSelect = 1;
+   int subIten1Select = 3;
+   int subIten2Select = 1;
+   double mWidth = 0;
+   double mHeight = 0;
 
     return AdaptiveScrollbar(
       controller: verticalScroll,
@@ -146,7 +159,15 @@ class _conectionState extends State<conection> {
                                 onPressed: (){
                                        setState(() {
                                            items[3] = "Desconectar";
+                                           Navigator.push(
+                                             context,
+                                             MaterialPageRoute(
+                                               builder: (context) =>
+                                                 NavigationScreen(),
+                                             ),
+                                           );
 
+                                           //;
                                        });
                                 },
                               ),

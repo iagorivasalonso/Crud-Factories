@@ -1,4 +1,4 @@
-import 'package:desktop_app/Objects/lineSend.dart';
+import 'package:crud_factories/Objects/lineSend.dart';
 import 'package:flutter/material.dart';
 
 class table extends StatefulWidget {

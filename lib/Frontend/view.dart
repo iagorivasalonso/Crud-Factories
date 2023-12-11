@@ -1,4 +1,4 @@
-import 'package:desktop_app/Frontend/send.dart';
+import 'package:crud_factories/Frontend/send.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 import '../Objects/Factory.dart';
