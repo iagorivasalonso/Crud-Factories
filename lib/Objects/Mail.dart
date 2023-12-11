@@ -1,13 +1,13 @@
 
 class Mail {
 
-   String company;
    String addrres;
+   String company;
    String password;
 
    Mail({
-    required this.company,
     required this.addrres,
+    required this.company,
     required this.password
 });
 
@@ -15,4 +15,6 @@ class Mail {
   String toString() {
     return 'Mail{company: $company, addrres: $addrres, password: $password}';
   }
+
+
 }

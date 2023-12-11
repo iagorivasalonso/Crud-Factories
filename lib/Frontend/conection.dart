@@ -142,10 +142,11 @@ class _conectionState extends State<conection> {
                             Padding(
                               padding: const EdgeInsets.only(left: 550.0,right: 30.0,top:40.0),
                               child: ElevatedButton(
-                                child: Text(items[4]),
+                                child: Text(items[3]),
                                 onPressed: (){
                                        setState(() {
-                                           items[4] = "Desconectar";
+                                           items[3] = "Desconectar";
+
                                        });
                                 },
                               ),

@@ -23,30 +23,36 @@ class _newMailState extends State<newMail> {
   double widthBar = 10.0;
 
   late TextEditingController controllerMail;
+  late TextEditingController controllerCompany;
   late TextEditingController controllerPas1;
   late TextEditingController controllerPas2;
+ late List<Mail> mails;
+  late int select;
+
 
   @override
   Widget build(BuildContext context) {
 
     controllerMail = new TextEditingController();
+    controllerCompany = new TextEditingController();
     controllerPas1 = new TextEditingController();
     controllerPas2 = new TextEditingController();
 
-    List<Mail> mails = widget.mails;
-    int select = widget.select;
+    mails = widget.mails;
+    select = widget.select;
 
     String action = "";
     String title = "";
 
     if(select == -1)
     {
-      title = "Nueva ";
+      title = "Nuevo ";
       action = "Crear";
     }
     else
     {
       controllerMail.text = mails[select].addrres;
+      controllerCompany.text = mails[select].company;
 
       title = "Editar ";
       action = "Actualizar";
@@ -68,7 +74,7 @@ class _newMailState extends State<newMail> {
               controller: horizontalScroll,
               scrollDirection: Axis.horizontal,
               child: SizedBox(
-                height: 416,
+                height: 505,
                 width: 890,
                 child:  Align(
                   alignment: Alignment.topRight,
@@ -100,7 +106,25 @@ class _newMailState extends State<newMail> {
                             ],
                           ),
                         ),
-                       Padding(
+                      Padding(
+                          padding: const EdgeInsets.only(left:30, top:20.0,bottom: 30.0),
+                          child: Row(
+                            children: [
+                              const Text('Compañia: '),
+                              SizedBox(
+                                width: 200,
+                                height: 40,
+                                child: TextField(
+                                  controller: controllerCompany,
+                                  decoration: InputDecoration(
+                                    border: OutlineInputBorder(),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      Padding(
                           padding: EdgeInsets.only(left:30, top:20.0, bottom: 30.0),
                           child: Row(
                             children: [
@@ -117,7 +141,7 @@ class _newMailState extends State<newMail> {
                               ),
                             ],
                           ),
-                        ),
+                       ),
                        Padding(
                           padding: EdgeInsets.only(left:30, top:20.0, bottom: 20.0),
                           child: Row(
@@ -159,9 +183,10 @@ class _newMailState extends State<newMail> {
                                 ElevatedButton(
                                   child: Text(action),
                                   onPressed: () {
-                                    print(controllerMail.text);
-                                    print(controllerPas1.text);
-                                    print(controllerPas2.text);
+                                    setState(() {
+                                      print(controllerMail.text);
+                                      print(controllerCompany.text);
+                                    });
                                   },
                                 ),
                                 ElevatedButton(
@@ -182,6 +207,5 @@ class _newMailState extends State<newMail> {
         ),
       ),
     );
-
   }
 }

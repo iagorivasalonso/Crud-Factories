@@ -13,32 +13,30 @@ import '../Functions/avoidRepeat.dart';
 
 FuntionSeleted (int itenSelection, int subIten1Selection,int subIten2Selection, double mWidth, double mHeight, List<String> itens) {
 
-List<Factory> factories=[];
-List<Mail> mails=[];
-
-List<lineSend> line=[];
+List<Factory> factories = [];
+List<lineSend> line = [];
 List<String> datesSends;
+List<Mail> mails =[];
 
 
 List<String> telephones;
 List<String> empleoyes;
-
 Map<String,String> address;
 
 telephones =['', ''];
 empleoyes =['',''];
 address = {'street': '', 'number': '', 'apartament': '', 'city':'', 'postalCode':'', 'province':''};
-factories.add(Factory(name: '', highDate: '', thelephones: telephones, mail: '', web: 'w', address: address, contacts: empleoyes));
+factories.add(Factory(id: 0, name: '', highDate: '', thelephones: telephones, mail: '', web: 'w', address: address, contacts: empleoyes));
 telephones =['',''];
 
 
 /*            */
 
-mails.add(Mail(company: '', addrres: '', password:''));
+  mails.add(Mail(company: '', addrres: '', password:''));
 
 
 /*            */
-line.add(lineSend(date: '', factory: '' , observations: '', state: ''));
+  line.add(lineSend(date: '', factory: '' , observations: '', state: ''));
 
 
 
@@ -52,7 +50,6 @@ line.add(lineSend(date: '', factory: '' , observations: '', state: ''));
  datesSends = avoidRepeteat(element);
 
    int newdato = -1;
-   String selectDate =" ";
 
   switch (itenSelection){
     case 0:
@@ -64,32 +61,37 @@ line.add(lineSend(date: '', factory: '' , observations: '', state: ''));
                 return newMail(mails,newdato);
 
            if(subIten2Selection==2)
-                return newSend(line,newdato,selectDate);
+           {
+             line.clear();
+
+             for(int i = 0 ; i <factories.length; i++)
+             {
+               line.add(lineSend(date: '2 de noviembre del 2023', factory: factories[i], observations: '', state: 'Enviado'));
+             }
+
+            // return newSend(line,newdato,selectDate);
+           }
+
          }
 
         if(subIten1Selection==1)
           return newImport();
 
     case 1:
-      itenSelection = -1;
-      subIten1Selection = -1;
-      subIten2Selection = -1;
-
-    case 2:
       String tView ='';
       if(subIten1Selection==0)
         tView ='factory';
       if(subIten1Selection==1)
-        tView ='email';
+        tView ='mail';
       if(subIten1Selection==2)
         tView ='send';
 
-        return view(mWidth,mHeight,tView,factories,mails,line,datesSends);
+        return view(mWidth,mHeight,tView,factories,mails,datesSends,line);
+
+    case 2:
+        return sendMail(datesSends,line,mails);
 
     case 3:
-        return sendMail();
-
-    case 4:
       return conection(itens);
 
 

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../Backend/selection_view.dart';
+import '../Objects/Mail.dart';
 import '../Widgets/close_app.dart';
 
 class NavigationScreen extends StatefulWidget {
@@ -14,11 +15,10 @@ class _NavigationScreenState extends State<NavigationScreen> {
 
 
   //List Menu Item
-  List<String> itens = ['Archivo', 'Edicion', 'Listas','Enviar Emails', 'Conectar'];
+  List<String> itens = ['Archivo', 'Listas','Enviar Emails', 'Conectar'];
   List<String> N1itens1 = ['Nuevo','Importar','Salir' ];
   List<String> N2itens1 = ['Empresa', 'Email', 'Envio'];
-  List<String> N1itens2 = ['Copiar', 'Cortar', 'Pegar'];
-  List<String> N1itens3 = ['Empresas', 'Emails', 'Envios'];
+  List<String> N1itens2 = ['Empresas', 'Emails', 'Envios'];
 
   List<String> N1itens = [];
   List<String> N2itens = [];
@@ -36,6 +36,8 @@ class _NavigationScreenState extends State<NavigationScreen> {
   Color cSelect = Colors.green;
   double posMenu = 0;
 
+  List<Mail> mails=[];
+
 
   @override
   Widget build(BuildContext context) {
@@ -46,6 +48,9 @@ class _NavigationScreenState extends State<NavigationScreen> {
 
     double mWidth = MediaQuery.of(context).size.width;
     double mHeight = MediaQuery.of(context).size.height;
+
+    mails.add(Mail(company: 'Gmail', addrres: '123@gmail.com', password:''));
+    mails.add(Mail(company: 'Hotmail', addrres: '456@hotmail.com', password:''));
 /*
     print(mHeight);
     print(mWidth);
@@ -65,7 +70,7 @@ class _NavigationScreenState extends State<NavigationScreen> {
       body: Column(
         children: [
           Container(
-              child: itenSelection == -1 || itenSelection == 3 || itenSelection == 4
+              child: itenSelection == -1 || itenSelection == 2 || itenSelection == 3
                   ? SizedBox(
                       width: mWidth,
                       child: buildMenu(mWidth, mHeightContent, mHeightBar),
@@ -74,7 +79,7 @@ class _NavigationScreenState extends State<NavigationScreen> {
                       height: mHeightBar,
                       child: buildMenu(mWidth, mHeightContent, mHeightBar),
                     )),
-          if (itenSelection > -1 && itenSelection < 3)
+          if (itenSelection > -1 && itenSelection < 2)
             Align(
               alignment: Alignment.topLeft,
               child: MouseRegion(
@@ -82,9 +87,7 @@ class _NavigationScreenState extends State<NavigationScreen> {
                   child: Padding(
                     padding: itenSelection == 0
                              ?  psmenu = const EdgeInsets.only(left: 0)
-                             :  itenSelection == 1
-                             ?  psmenu = const EdgeInsets.only(left: 75)
-                             :  psmenu = const EdgeInsets.only(left: 150),
+                             :  psmenu = const EdgeInsets.only(left: 75),
                     child: SizedBox(
                       child: Row(
                         children: [
@@ -249,14 +252,12 @@ class _NavigationScreenState extends State<NavigationScreen> {
                         itenSelection = index;
                                index == 0
                             ?  N1itens = N1itens1
-                            :  index == 1
-                            ?  N1itens = N1itens2
-                            :  N1itens = N1itens3;
+                            :  N1itens = N1itens2;
                       });
                     },
                     child: GestureDetector(
                         child: Container(
-                            width: index == 3 || index == 4
+                            width: index == 2 || index == 3
                                    ? 110
                                    : 75,
                             color: itenSelection == index ? cSelect : cBackground,
@@ -267,9 +268,8 @@ class _NavigationScreenState extends State<NavigationScreen> {
                         ),
                       onTap: (){
                         setState(() {
-                          if (itenSelection == 3 || itenSelection == 4)
-
-                          itenSelect = itenSelection;
+                          if (itenSelection == 2 || itenSelection == 3)
+                                   itenSelect = itenSelection;
                         });
                       },
 

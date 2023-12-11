@@ -1,7 +1,9 @@
+import 'package:desktop_app/Objects/Factory.dart';
+
 class lineSend {
 
   String date;
-  String factory;
+  Factory factory;
   String observations;
   String state;
 

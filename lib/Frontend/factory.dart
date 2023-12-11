@@ -34,6 +34,10 @@ class _newFactoryState extends State<newFactory> {
   late TextEditingController controllerProvince;
   List<TextEditingController> controllerContacs=[];
   late TextEditingController controllerEmpleoyee;
+  late TextEditingController controllerEmpleoyeeNew;
+
+  List<String> contacs=[];
+
 
   @override
   Widget build(BuildContext context) {
@@ -49,10 +53,13 @@ class _newFactoryState extends State<newFactory> {
     controllerPostalCode = TextEditingController();
     controllerProvince = TextEditingController();
     controllerEmpleoyee = TextEditingController();
+    controllerEmpleoyeeNew = TextEditingController();
 
 
     List<Factory> factories = widget.factories;
+
     int select = widget.select;
+    List<String> contacs = widget.factories[select].contacts;
 
     String action = "";
     String title = "";
@@ -94,18 +101,17 @@ class _newFactoryState extends State<newFactory> {
       controllerPostalCode.text = factories[select].address['postalCode']!;
       controllerProvince.text = factories[select].address['province']!;
 
-      controllerContacs.clear();
-      for (int i = 0; i < factories[select].contacts.length; i++)
-      {
 
-
-        controllerEmpleoyee.text=factories[select].contacts[i];
-        controllerContacs.add(controllerEmpleoyee);
-
-      }
-      print(controllerContacs.length);
+     if(contacs.isEmpty)
+     {
+       for (int i = 0; i < factories[select].contacts.length; i++)
+       {
+         contacs.add(factories[select].contacts[i]);
+       }
+     }
 
       action = "Actualizar";
+
     }
 
     return AdaptiveScrollbar(
@@ -328,13 +334,14 @@ class _newFactoryState extends State<newFactory> {
                           padding: const EdgeInsets.only(top: 24.0, left: 80.0, bottom: 40.0),
                           child: Row(
                             children: [
-                            const SizedBox(
+                             SizedBox(
                                height: 160,
                                child: SizedBox(
                                  width: 250,
                                  height: 40,
                                  child: TextField(
-                                   decoration: InputDecoration(
+                                   controller: controllerEmpleoyeeNew,
+                                   decoration: const InputDecoration(
                                      border: OutlineInputBorder(),
                                    ),
                                  ),
@@ -350,13 +357,20 @@ class _newFactoryState extends State<newFactory> {
                                     children: [
                                       ElevatedButton(
                                         child: Text('>>'),
-                                        onPressed: () {},
+                                        onPressed: () {
+                                          setState(() {
+                                            contacs.add(controllerEmpleoyeeNew.text);
+                                          });
+
+                                        },
                                       ),
                                       Padding(
                                         padding: const EdgeInsets.only(top: 12.0),
                                         child: ElevatedButton(
                                           child: const Text('<<'),
-                                          onPressed: () {},
+                                          onPressed: () {
+                                            contacs.clear();
+                                          },
                                         ),
                                       ),
                                     ],
@@ -367,7 +381,8 @@ class _newFactoryState extends State<newFactory> {
                                alignment: Alignment.topLeft,
                                child: Container(
                                    decoration: BoxDecoration(
-                                       borderRadius: const BorderRadius.all( Radius.circular(5),
+                                       borderRadius: const BorderRadius.all(
+                                         Radius.circular(5),
                                        ),
                                        border: Border.all(
                                            color: Colors.black38,
@@ -377,11 +392,11 @@ class _newFactoryState extends State<newFactory> {
                                   width: 250,
                                   height: 170,
                                   child: ListView.builder(
-                                      itemCount: controllerContacs.length,
+                                      itemCount:contacs.length ,
                                       itemBuilder: (BuildContext context, index) {
                                         return Padding(
-                                          padding: const EdgeInsets.only(left:8.0, top: 4.0),
-                                          child: Text(controllerContacs[index].text),
+                                          padding: const EdgeInsets.only(top: 3.0,left: 10.0),
+                                          child: Text(contacs[index]),
                                         );
                                       },
 
