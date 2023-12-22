@@ -1,10 +1,8 @@
 import 'package:adaptive_scrollbar/adaptive_scrollbar.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
-
 import '../Objects/Mail.dart';
 import '../Objects/lineSend.dart';
-import '../Widgets/table.dart';
 
 
 class sendMail extends StatefulWidget {
@@ -108,7 +106,6 @@ class _sendMailState extends State<sendMail> {
                                     onChanged: (Mail? mailChoose) {
                                       setState(() {
                                               selectedMail = mailChoose;
-
                                       });
                                     },
                                     buttonStyleData: const ButtonStyleData(

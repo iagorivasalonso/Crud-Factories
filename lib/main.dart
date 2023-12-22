@@ -1,6 +1,6 @@
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:window_manager/window_manager.dart';
-import 'Widgets/close_app.dart';
+import 'Alertdialogs/closeApp.dart';
 import 'Frontend/navigation_screen.dart';
 
 
@@ -44,7 +44,7 @@ class _MyApp1State extends State<MyApp1> with WindowListener {
 
   @override
   Widget build(BuildContext context) {
-    return FluentApp(
+    return const FluentApp(
       debugShowCheckedModeBanner: false,
       home: NavigationScreen(),
     );
@@ -53,7 +53,6 @@ class _MyApp1State extends State<MyApp1> with WindowListener {
   void onWindowClose() async {
 
     closeAlert(context);
-    //bool _isPreventClose = await windowManager.isPreventClose();
 
   }
 

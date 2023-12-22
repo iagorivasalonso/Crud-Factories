@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import '../Backend/selection_view.dart';
 import '../Objects/Mail.dart';
-import '../Widgets/close_app.dart';
+import '../Alertdialogs/closeApp.dart';
 
 class NavigationScreen extends StatefulWidget {
   const NavigationScreen({Key? key}) : super(key: key);
@@ -36,7 +36,7 @@ class _NavigationScreenState extends State<NavigationScreen> {
   Color cSelect = Colors.green;
   double posMenu = 0;
 
-  List<Mail> mails=[];
+
 
 
   @override
@@ -49,8 +49,7 @@ class _NavigationScreenState extends State<NavigationScreen> {
     double mWidth = MediaQuery.of(context).size.width;
     double mHeight = MediaQuery.of(context).size.height;
 
-    mails.add(Mail(company: 'Gmail', addrres: '123@gmail.com', password:''));
-    mails.add(Mail(company: 'Hotmail', addrres: '456@hotmail.com', password:''));
+
 /*
     print(mHeight);
     print(mWidth);
@@ -233,6 +232,7 @@ class _NavigationScreenState extends State<NavigationScreen> {
       ),
     );
   }
+
   Column buildMenu(double mWidth, double mHeight, double mHeightBar) {
 
     return Column(
@@ -287,12 +287,13 @@ class _NavigationScreenState extends State<NavigationScreen> {
         StreamBuilder<Object>(
             stream: null,
             builder: (context, snapshot) {
+              int option=0;
               return Container(
                 width: mWidth,
                 height: mHeight,
                 color: Colors.white,
                 child: mHeight> 18
-                       ? FuntionSeleted(itenSelect, subIten1Select, subIten2Select,mWidth, mHeight,itens)
+                       ? FuntionSeleted(itenSelect, subIten1Select, subIten2Select,mWidth, mHeight,itens,context)
                        : Container(
                     color: Colors.white,
                 ),

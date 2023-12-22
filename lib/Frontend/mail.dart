@@ -22,21 +22,17 @@ class _newMailState extends State<newMail> {
 
   double widthBar = 10.0;
 
-  late TextEditingController controllerMail;
-  late TextEditingController controllerCompany;
-  late TextEditingController controllerPas1;
-  late TextEditingController controllerPas2;
- late List<Mail> mails;
+  late TextEditingController controllerMail = new TextEditingController();
+  late TextEditingController controllerCompany = new TextEditingController();
+  late TextEditingController controllerPas1 = new TextEditingController();
+  late TextEditingController controllerPas2 = new TextEditingController();
+  late List<Mail> mails;
   late int select;
 
 
   @override
   Widget build(BuildContext context) {
 
-    controllerMail = new TextEditingController();
-    controllerCompany = new TextEditingController();
-    controllerPas1 = new TextEditingController();
-    controllerPas2 = new TextEditingController();
 
     mails = widget.mails;
     select = widget.select;

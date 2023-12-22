@@ -1,16 +1,18 @@
-
 import 'package:crud_factories/Frontend/mail.dart';
 import 'package:crud_factories/Frontend/factory.dart';
 import 'package:crud_factories/Frontend/importData.dart';
+import 'package:crud_factories/Frontend/send.dart';
 import 'package:crud_factories/Frontend/send_mail.dart';
 import 'package:crud_factories/Objects/Mail.dart';
 import 'package:crud_factories/Objects/Factory.dart';
 import 'package:crud_factories/Objects/lineSend.dart';
+import 'package:fluent_ui/fluent_ui.dart';
 import '../Frontend/conection.dart';
 import '../Frontend/view.dart';
-import '../Functions/avoidRepeat.dart';
+import '../Functions/avoidRepeatArray.dart';
 
-FuntionSeleted (int itenSelection, int subIten1Selection,int subIten2Selection, double mWidth, double mHeight, List<String> itens) {
+
+FuntionSeleted(int itenSelection, int subIten1Selection,int subIten2Selection, double mWidth, double mHeight, List<String> itens, BuildContext context) {
 
 List<Factory> factories = [];
 List<lineSend> line = [];
@@ -24,16 +26,14 @@ Map<String,String> address;
 telephones =['', ''];
 empleoyes =['',''];
 address = {'street': '', 'number': '', 'apartament': '', 'city':'', 'postalCode':'', 'province':''};
-factories.add(Factory(id: 0, name: '', highDate: '', thelephones: telephones, mail: '', web: 'w', address: address, contacts: empleoyes));
+factories.add(Factory(id: 1, name: '', highDate: '', thelephones: telephones, mail: '', web: 'w', address: address, contacts: empleoyes));
 telephones =['',''];
 /*            */
 
-mails.add(Mail(company: '', addrres: '', password:''));
+  mails.add(Mail(id: 1,company: '', addrres: '', password:''));
 
 /*            */
-line.add(lineSend(date: '', factory: factories[0], observations: '', state: ''));
-
-
+  line.add(lineSend(date: '', factory: factories[0], observations: '', state: ''));
 
 
   List<String> element = [];
@@ -53,6 +53,7 @@ line.add(lineSend(date: '', factory: factories[0], observations: '', state: ''))
          {
            if(subIten2Selection==0)
                return newFactory(factories, newdato);
+
            if(subIten2Selection==1)
                 return newMail(mails,newdato);
 
@@ -62,10 +63,10 @@ line.add(lineSend(date: '', factory: factories[0], observations: '', state: ''))
 
              for(int i = 0 ; i <factories.length; i++)
              {
-               line.add(lineSend(date: '2 de noviembre del 2023', factory: factories[i], observations: '', state: 'Enviado'));
+               line.add(lineSend(date: '', factory: factories[i], observations: '', state: ''));
              }
 
-            // return newSend(line,newdato,selectDate);
+              return newSend(line,newdato,"","",line,"");
            }
 
          }
@@ -75,20 +76,26 @@ line.add(lineSend(date: '', factory: factories[0], observations: '', state: ''))
 
     case 1:
       String tView ='';
+
       if(subIten1Selection==0)
         tView ='factory';
+
       if(subIten1Selection==1)
         tView ='mail';
       if(subIten1Selection==2)
         tView ='send';
 
-        return view(mWidth,mHeight,tView,factories,mails,datesSends,line);
+        if(tView != '')
+        {
+          return view(mWidth,mHeight,tView,factories,mails,datesSends,line);
+        }
+
 
     case 2:
         return sendMail(datesSends,line,mails);
 
     case 3:
-      return conection(itens);
+      return conection();
 
 
 

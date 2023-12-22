@@ -1,6 +1,9 @@
 import 'package:adaptive_scrollbar/adaptive_scrollbar.dart';
+import 'package:crud_factories/Alertdialogs/noDat.dart';
+import 'package:crud_factories/Functions/avoidRepeatArray.dart';
 import 'package:flutter/material.dart';
 
+import '../Functions/avoidRepeatCamp.dart';
 import '../Objects/Factory.dart';
 
 
@@ -22,19 +25,19 @@ class _newFactoryState extends State<newFactory> {
 
   double widthBar = 10.0;
 
-  late TextEditingController controllerName;
-  late TextEditingController controllerHighDate;
-  late TextEditingController controllerTelephone1;
-  late TextEditingController controllerTelephone2;
-  late TextEditingController controllerMail;
-  late TextEditingController controllerWeb;
-  late TextEditingController controllerAdrress;
-  late TextEditingController controllerCity;
-  late TextEditingController controllerPostalCode;
-  late TextEditingController controllerProvince;
+  late TextEditingController controllerName = TextEditingController();
+  late TextEditingController controllerHighDate = TextEditingController();
+  late TextEditingController controllerTelephone1 = TextEditingController();
+  late TextEditingController controllerTelephone2 = TextEditingController();
+  late TextEditingController controllerMail = TextEditingController();
+  late TextEditingController controllerWeb = TextEditingController();
+  late TextEditingController controllerAdrress = TextEditingController();
+  late TextEditingController controllerCity = TextEditingController();
+  late TextEditingController controllerPostalCode  = TextEditingController();
+  late TextEditingController controllerProvince  = TextEditingController();
   List<TextEditingController> controllerContacs=[];
-  late TextEditingController controllerEmpleoyee;
-  late TextEditingController controllerEmpleoyeeNew;
+  late TextEditingController controllerEmpleoyee = TextEditingController();
+  late TextEditingController controllerEmpleoyeeNew = TextEditingController();
 
   List<String> contacs=[];
 
@@ -42,24 +45,15 @@ class _newFactoryState extends State<newFactory> {
   @override
   Widget build(BuildContext context) {
 
-    controllerName =  TextEditingController();
-    controllerHighDate = TextEditingController();
-    controllerTelephone1= TextEditingController();
-    controllerTelephone2 = TextEditingController();
-    controllerMail = TextEditingController();
-    controllerWeb = TextEditingController();
-    controllerAdrress = TextEditingController();
-    controllerCity = TextEditingController();
-    controllerPostalCode = TextEditingController();
-    controllerProvince = TextEditingController();
-    controllerEmpleoyee = TextEditingController();
-    controllerEmpleoyeeNew = TextEditingController();
-
-
     List<Factory> factories = widget.factories;
 
+    if(factories.isEmpty)
+    {
+
+    }
+
     int select = widget.select;
-    List<String> contacs = widget.factories[select].contacts;
+    List<String> contacs = [];
 
     String action = "";
     String title = "";
@@ -100,7 +94,7 @@ class _newFactoryState extends State<newFactory> {
       controllerCity.text = factories[select].address['city']!;
       controllerPostalCode.text = factories[select].address['postalCode']!;
       controllerProvince.text = factories[select].address['province']!;
-
+      contacs = widget.factories[select].contacts;
 
      if(contacs.isEmpty)
      {
@@ -416,7 +410,9 @@ class _newFactoryState extends State<newFactory> {
                                 ElevatedButton(
                                   child: Text(action),
                                   onPressed: () {
-
+                                    String nameCamp ="nombre de usuario";
+                                    bool repeat = false;
+                                   avoidRepeteatCamp(context,repeat, nameCamp,controllerName, factories, select);
                                   },
                                 ),
                                 ElevatedButton(
@@ -440,4 +436,6 @@ class _newFactoryState extends State<newFactory> {
       ),
     );
   }
+
+
 }

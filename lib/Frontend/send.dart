@@ -1,7 +1,5 @@
 import 'package:adaptive_scrollbar/adaptive_scrollbar.dart';
-import 'package:crud_factories/Widgets/table.dart';
 import 'package:flutter/material.dart';
-
 import '../Objects/lineSend.dart';
 
 
@@ -11,10 +9,11 @@ class newSend extends StatefulWidget {
   int select;
   String selectCamp;
   String filter;
+  List<lineSend> line;
+  String SeletedFilter;
 
 
-
-  newSend(this.sendsLine,this.select,this.selectCamp, this.filter);
+  newSend(this.sendsLine,this.select,this.selectCamp, this.filter,  this.line, this.SeletedFilter);
 
   @override
   State<newSend> createState() => _newSendState();
@@ -30,7 +29,7 @@ class _newSendState extends State<newSend> {
 
   double widthBar = 10.0;
 
-  late TextEditingController controllerText;
+  late TextEditingController controllerText = new TextEditingController();
 
   List<String> columns = [];
   List<String> campsTable = [];
@@ -49,23 +48,24 @@ class _newSendState extends State<newSend> {
 
     List<TextEditingController> _controllersObserLine =[];
     for (int i = 1; i < 75; i++) _controllersObserLine.add(TextEditingController());
-    controllerText = new TextEditingController();
+
 
     int select = widget.select;
-    String selectedCamp = widget.selectCamp;
+    String selectCamp = widget.selectCamp;
     String filter = widget.filter;
+    List<lineSend> line = widget.line;
     int cant = 0;
     String stringFactories = "";
     String title ="" ;
-    String type ="";
-
+    String type =widget.SeletedFilter;
+    campsTable = ['Empresa', 'Observaciones', 'Estado' ,'Seleccionar'];
 
     bool viewButoons = false;
-
 
     if(select == -1)
     {
       title = "Nuevo ";
+      type= "Fecha ";
       campsTable = ['Empresa', 'Observaciones', 'Estado' ,'Seleccionar'];
       listSend = widget.sendsLine;
       cant = listSend.length;
@@ -74,26 +74,58 @@ class _newSendState extends State<newSend> {
     }
     else
     {
-      controllerText.text = selectedCamp;
+      controllerText.text = "";
+
+
       title = "Ver ";
 
-      if(filter== 'Por fecha')
+      if(type== "Fecha")
       {
         type = "Fecha:  ";
-        controllerText.text =' ';
         campsTable = ['Empresa', 'Observaciones', 'Estado'];
         listSend = widget.sendsLine;
+
+
+        if(controllerText.text=="") {
+          controllerText.text = line[0].date;
+          listSend = widget.sendsLine;
+        }
+        cant= 0;
+        listSend.clear();
+          for(int i = 0; i < line.length ; i++)
+          {
+            if(controllerText.text  == line[i].date)
+            {
+              listSend.add(line[i]);
+              cant+=1;
+            }
+
+          }
+
+        stringFactories = "Este dia se hicieron $cant envios";
       }
-      else
+
+
+      if(type == "Empresa")
       {
         type = "Empresa:  ";
         campsTable = ['Fecha', 'Observaciones', 'Estado'];
         listSend = widget.sendsLine;
+        if(controllerText.text=="") {
+          controllerText.text = line[0].factory.name;
+          listSend = widget.sendsLine;
+        }
+
+        if(selectCamp==" ")
+        {
+          controllerText.text = line[0].factory.name;
+          listSend = widget.sendsLine;
+        }
+        cant = listSend.length;
+        stringFactories = "A esta empresa se le hicieron $cant envios";
       }
 
 
-      cant = listSend.length;
-      stringFactories = "A esta empresa se le hicieron $cant envios";
       viewButoons = false;
 
     }
@@ -108,7 +140,6 @@ class _newSendState extends State<newSend> {
     {
       endTable = campsTable.length-1;
     }
-
 
     return AdaptiveScrollbar(
       controller: verticalScroll,
@@ -130,69 +161,72 @@ class _newSendState extends State<newSend> {
                 height: 630,
                 width: 848,
                 child: Align(
-                  alignment: Alignment.topLeft,
-                  child:  Padding(
-                    padding: const EdgeInsets.only(left: 30.0,top: 30.0),
-                    child: Column(
-                      children: [
-                         Row(
+                    alignment: Alignment.topLeft,
+                    child:  Padding(
+                      padding: const EdgeInsets.only(left: 30.0,top: 30.0),
+                      child: Column(
                           children: [
-                            Text('$title Envio: ',
-                              style: const TextStyle(fontWeight: FontWeight.bold),),
-                          ],
-                        ),
-                        Padding(
-                          padding: EdgeInsets.only(top:20.0),
-                          child: Row(
-                            children: [
-                              Text(type),
-                              SizedBox(
-                                width: 300,
-                                height: 40,
-                                child: TextField(
-                                  controller: controllerText,
-                                  decoration: const InputDecoration(
-                                      border: OutlineInputBorder(),
+                            Row(
+                              children: [
+                                Text('$title Envio: ',
+                                  style: const TextStyle(fontWeight: FontWeight.bold),),
+                              ],
+                            ),
+                            Padding(
+                              padding: EdgeInsets.only(top:20.0),
+                              child: Row(
+                                children: [
+                                  Padding(
+                                    padding: const EdgeInsets.only(left: 20.0),
+                                    child: Text('$type:  '),
                                   ),
-                                ),
+                                  SizedBox(
+                                    width: 300,
+                                    height: 40,
+                                    child: TextField(
+                                      controller: controllerText,
+                                      decoration: const InputDecoration(
+                                        border: OutlineInputBorder(),
+                                      ),
+                                    ),
+                                  ),
+                                ],
                               ),
-                            ],
-                          ),
-                        ),
-                        const Padding(
-                          padding: EdgeInsets.only(top: 40.0),
-                          child: Row(
-                            children: [
-                              Text('Selección de empresas: ',
-                                style: TextStyle(fontWeight: FontWeight.bold),),
-                            ],
-                          ),
-                        ),
-                        Padding(
-                            padding: const EdgeInsets.only(top: 40.0,left: 10.0),
-                            child:Scrollbar(
-                              controller: verticalScrollTable,
-                              child: Container(
-                                height: 250,
-                                child: SingleChildScrollView(
-                                  controller: verticalScrollTable,
-                                  scrollDirection: Axis.vertical,
-                                  child: DataTable(
-                                    columns: <DataColumn>[
-                                      for(int i=0 ; i < endTable; i++)
-                                        DataColumn(
-                                          label: SizedBox(
-                                              width: 110,
-                                              child: Text(campsTable[i])
+                            ),
+                            const Padding(
+                              padding: EdgeInsets.only(top: 40.0),
+                              child: Row(
+                                children: [
+                                  Text('Selección de empresas: ',
+                                    style: TextStyle(fontWeight: FontWeight.bold),),
+                                ],
+                              ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.only(top: 40.0,left: 10.0),
+                              child:Scrollbar(
+                                controller: verticalScrollTable,
+                                child: Container(
+                                  height: 250,
+                                  child: SingleChildScrollView(
+                                    controller: verticalScrollTable,
+                                    scrollDirection: Axis.vertical,
+                                    child: DataTable(
+                                      columns: <DataColumn>[
+                                        for(int i=0 ; i < endTable; i++)
+                                          DataColumn(
+                                            label: SizedBox(
+                                                width: 110,
+                                                child: Text(campsTable[i])
+                                            ),
                                           ),
-                                        ),
 
-                                    ],
-                                    rows: List<DataRow>.generate(listSend.length,
-                                          (int index) =>  DataRow(
-                                          cells: <DataCell>[
-                                            for(int i=0 ; i < endTable; i++)
-                                              DataCell(
+                                      ],
+                                      rows: List<DataRow>.generate(listSend.length,
+                                            (int index) =>  DataRow(
+                                            cells: <DataCell>[
+                                              for(int i=0 ; i < endTable; i++)
+                                                DataCell(
                                                   campsTable[i] == "Empresa"
                                                       ? Text(listSend[index].factory.name)
                                                       : campsTable[i] == "Fecha"
@@ -219,72 +253,68 @@ class _newSendState extends State<newSend> {
                                                       });
                                                     },)
                                                       : Text("Otro"),
-                                              ),
-                                          ]
+                                                ),
+                                            ]
+                                        ),
                                       ),
                                     ),
                                   ),
                                 ),
                               ),
                             ),
-                          ),
-                         Row(
-                          children: [
-                            Padding(
-                              padding: const EdgeInsets.only(top: 30.0,left: 50.0),
-                              child: Text(stringFactories),
-                            ),
-                          ],
-                        ),
-                       if(viewButoons == true)
-                        Padding(
-                          padding: const EdgeInsets.only( top: 70.0, left: 550.0),
-                          child: Container(
-                            width: 200,
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            Row(
                               children: [
-                                ElevatedButton(
-                                  child: const Text('Nuevo'),
-                                  onPressed: () {
-                                    setState(() {
-
-                                      for(int i = 0 ; i <listSend.length; i++) {
-
-                                        String factory = listSend[i].factory.name;
-                                        String observations = listSend[i].observations;
-                                        String state = listSend[i].state;
-                                        bool select = Send[i];
-
-                                        print('\nEmpresa: $factory \nObservations: $observations \nEstado: $state \nselect: $select');
-                                      }
-
-                                    });
-                                  },
-                                ),
-                                ElevatedButton(
-                                  child: const Text('Cancelar'),
-                                  onPressed: () {},
+                                Padding(
+                                  padding: const EdgeInsets.only(top: 30.0,left: 50.0),
+                                  child: Text(stringFactories),
                                 ),
                               ],
                             ),
-                          ),
-                        ),
-                  ]
+                            if(viewButoons == true)
+                              Padding(
+                                padding: const EdgeInsets.only( top: 70.0, left: 550.0),
+                                child: Container(
+                                  width: 200,
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      ElevatedButton(
+                                        child: const Text('Nuevo'),
+                                        onPressed: () {
+                                          setState(() {
+
+                                            for(int i = 0 ; i <listSend.length; i++) {
+
+                                              String factory = listSend[i].factory.name;
+                                              String observations = listSend[i].observations;
+                                              String state = listSend[i].state;
+                                              bool select = Send[i];
+
+                                              print('\nEmpresa: $factory \nObservations: $observations \nEstado: $state \nselect: $select');
+                                            }
+
+                                          });
+                                        },
+                                      ),
+                                      ElevatedButton(
+                                        child: const Text('Cancelar'),
+                                        onPressed: () {},
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                          ]
+                      ),
+                    )
                 ),
-              )
               ),
             ),
           ),
         ),
-    ),
-    ),
+      ),
     );
   }
 
 
 }
-
-
-
-

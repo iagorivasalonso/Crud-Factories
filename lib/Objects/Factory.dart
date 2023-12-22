@@ -24,4 +24,15 @@ class Factory {
   String toString() {
     return '\n Factory{\n id: $id,\n name: $name,\n highDate: $highDate,\n thelephones: $thelephones,\n mail: $mail,\n web: $web,\n address: $address,\n employees: $contacts}';
   }
+
+  String allAdress() {
+
+    String address1= address['street'].toString();
+    String number= address['number'].toString();
+
+    String addressComplete=  '$address1, $number';
+
+    return addressComplete;
+
+  }
 }
