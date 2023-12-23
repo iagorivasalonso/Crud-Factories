@@ -47,10 +47,6 @@ class _newFactoryState extends State<newFactory> {
 
     List<Factory> factories = widget.factories;
 
-    if(factories.isEmpty)
-    {
-
-    }
 
     int select = widget.select;
     List<String> contacs = [];

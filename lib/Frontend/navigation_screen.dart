@@ -195,10 +195,10 @@ class _NavigationScreenState extends State<NavigationScreen> {
                                             onTap: (){
                                               setState(() {
 
+
                                                 if(itenSelection == 0 && subIten1Selection ==3)
                                                 {
-                                                         closeAlert(context);
-
+                                                 closeAlert(context);
 
                                                 } else {
                                                   itenSelect = itenSelection;
@@ -270,6 +270,7 @@ class _NavigationScreenState extends State<NavigationScreen> {
                         setState(() {
                           if (itenSelection == 2 || itenSelection == 3)
                                    itenSelect = itenSelection;
+
                         });
                       },
 
@@ -305,4 +306,6 @@ class _NavigationScreenState extends State<NavigationScreen> {
   }
 
 }
+
+
 

@@ -1,3 +1,4 @@
+import 'package:crud_factories/Alertdialogs/closeApp.dart';
 import 'package:crud_factories/Frontend/send.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
@@ -136,7 +137,6 @@ class _viewState extends State<view> {
                 element.address['city']!.toLowerCase().contains(enteredKeyboard.toLowerCase())).toList();
             break;
 
-
         }
 
       }
@@ -200,6 +200,7 @@ class _viewState extends State<view> {
    });
   }
 
+
   @override
   Widget build(BuildContext context) {
     double mWidth = widget.mWidth;
@@ -227,6 +228,8 @@ class _viewState extends State<view> {
 
     if(view == "factory")
     {
+         if(factories.length == 0)
+            mWidthList = 0;
 
       filterList = filterListFactories;
     }
@@ -238,6 +241,7 @@ class _viewState extends State<view> {
 
     if(controllerSearchFactory.text=="")
     {
+
       if(view== 'factory' )
         resulFactories=factories;
     }
@@ -624,10 +628,16 @@ class _viewState extends State<view> {
                   width: mWidthPanel,
                   height: mHeight,
                   child: view == 'factory'
-                      ? newFactory(factories, select)
+                       ? factories.length == 0
+                          ? newFactory(factories, -1)
+                          : newFactory(factories, select)
                       : view == 'mail'
-                      ? newMail(mails, select)
-                      : newSend(sendsDay,select,selectCamp,filterFactory,line,sendFilter)
+                        ? mails.length == 0
+                           ? newMail(mails, -1)
+                           : newMail(mails, select)
+                      : sendsDay.length == 0
+                        ? newSend(sendsDay,select,selectCamp,filterFactory,line,sendFilter)
+                        : newSend(line,-1,"","",line,""),
 
               ),
             ],

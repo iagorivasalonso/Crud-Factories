@@ -76,7 +76,6 @@ class _newSendState extends State<newSend> {
     {
       controllerText.text = "";
 
-
       title = "Ver ";
 
       if(type== "Fecha")

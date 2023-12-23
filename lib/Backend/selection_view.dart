@@ -19,21 +19,40 @@ List<lineSend> line = [];
 List<String> datesSends;
 List<Mail> mails =[];
 
-
 List<String> telephones;
 List<String> empleoyes;
 Map<String,String> address;
-telephones =['', ''];
-empleoyes =['',''];
-address = {'street': '', 'number': '', 'apartament': '', 'city':'', 'postalCode':'', 'province':''};
-factories.add(Factory(id: 1, name: '', highDate: '', thelephones: telephones, mail: '', web: 'w', address: address, contacts: empleoyes));
-telephones =['',''];
-/*            */
 
-  mails.add(Mail(id: 1,company: '', addrres: '', password:''));
+telephones =['986 241 300', '610 925 664'];
+empleoyes =['name 1','name 2'];
+address = {'street': 'S. pelayo de navia, redondo', 'number': '30', 'apartament': 'Bajo', 'city':'Vigo', 'postalCode':'36212', 'province':'Pontevedra'};
+factories.add(Factory(id: 01, name: 'Empresa Iago', highDate: '21-08-2009', thelephones: telephones, mail: 'iago@gmail.es', web: 'www.rivas.es', address: address, contacts: empleoyes));
 
-/*            */
-  line.add(lineSend(date: '', factory: factories[0], observations: '', state: ''));
+telephones =['123 456 789',''];
+empleoyes =[];
+address = {'street': 'ty', 'number': '1', 'apartament': '', 'city':'Vigo', 'postalCode':'36212', 'province':'Pontevedra'};
+factories.add(Factory(id: 02, name: 'mame 1', highDate: '21-07-2009', thelephones: telephones, mail: 'iago@gmail.es', web: 'www.rivas.es', address: address, contacts: empleoyes));
+
+telephones =['123 456 789',''];
+empleoyes =[];
+address = {'street': 'ty', 'number': '1', 'apartament': '', 'city':'Sanxenxo', 'postalCode':'36212', 'province':'Pontevedra'};
+factories.add(Factory(id: 03, name: 'mame 2', highDate: '21-07-2009', thelephones: telephones, mail: 'iagoghhhhhhhvm@gmail.es', web: 'www.rivas.es', address: address, contacts: empleoyes));
+
+
+mails.add(Mail(id: 1, company: 'Gmail', addrres: 'iagorivasalonso@gmail.com', password:''));
+mails.add(Mail(id: 2, company: 'Hotmail', addrres: 'iagorivas@hotmail.com', password:''));
+
+/*          */
+line.add(lineSend(date: '11 de enero del 2023', factory: factories[0], observations: 'h', state: 'Enviado'));
+line.add(lineSend(date: '11 de enero del 2023', factory: factories[1], observations: '7', state: 'Enviado'));
+line.add(lineSend(date: '1 de enero del 2023', factory: factories[2], observations: '9', state: 'Enviado'));
+line.add(lineSend(date: '11 de abril del 2023', factory: factories[0], observations: 'gjh', state: 'Enviado'));
+line.add(lineSend(date: '18 de abril del 2023', factory: factories[1], observations: 'hmn', state: 'Enviado'));
+line.add(lineSend(date: '2 de octubre del 2023', factory: factories[0], observations: 'cggfv', state: 'Enviado'));
+line.add(lineSend(date: '24 de octubre del 2023', factory: factories[1], observations: 'cfrtgh', state: 'Enviado'));
+
+
+
 
 
   List<String> element = [];
@@ -53,7 +72,6 @@ telephones =['',''];
          {
            if(subIten2Selection==0)
                return newFactory(factories, newdato);
-
            if(subIten2Selection==1)
                 return newMail(mails,newdato);
 
