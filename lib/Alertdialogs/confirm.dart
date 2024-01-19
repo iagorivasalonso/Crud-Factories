@@ -1,20 +1,23 @@
 import 'package:flutter/material.dart';
 
 
-Future<bool> noFind(BuildContext  context, bool noDat, String strindDialog) async {
+ confirm(BuildContext  context, String action) async {
+
+
+
   showDialog(
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title:  const Text('No encontrado'),
-          content: Text(strindDialog),
+          title:  const Text('Confirmar'),
+          content: Text(action),
           actions: [
             Center(
               child:Padding(
                 padding: const EdgeInsets.only(bottom: 10.0),
                 child: MaterialButton(
                   onPressed: () {
-                    noDat = true;
+
                     Navigator.of(context).pop(false);
                   },
                   color: Colors.lightBlue,
@@ -26,8 +29,9 @@ Future<bool> noFind(BuildContext  context, bool noDat, String strindDialog) asyn
             ),
           ],
         );
+
       });
-  return noDat;
+
 }
 
 

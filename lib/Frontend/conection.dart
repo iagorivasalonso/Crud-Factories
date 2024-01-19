@@ -140,6 +140,7 @@ class _conectionState extends State<conection> {
                               child: ElevatedButton(
                                 child: Text("Conectar"),
                                 onPressed: (){
+                                  /*
                                        setState(() {
                                            Navigator.push(
                                              context,
@@ -149,6 +150,8 @@ class _conectionState extends State<conection> {
                                              ),
                                            );
                                        });
+
+                                   */
                                 },
                               ),
                             ),

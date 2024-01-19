@@ -1,7 +1,11 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import '../Backend/selection_view.dart';
-import '../Objects/Mail.dart';
 import '../Alertdialogs/closeApp.dart';
+import '../Objects/Factory.dart';
+import '../Objects/Mail.dart';
+import '../Objects/lineSend.dart';
 
 class NavigationScreen extends StatefulWidget {
   const NavigationScreen({Key? key}) : super(key: key);
@@ -19,25 +23,27 @@ class _NavigationScreenState extends State<NavigationScreen> {
   List<String> N1itens1 = ['Nuevo','Importar','Salir' ];
   List<String> N2itens1 = ['Empresa', 'Email', 'Envio'];
   List<String> N1itens2 = ['Empresas', 'Emails', 'Envios'];
-
+   late File file;
   List<String> N1itens = [];
   List<String> N2itens = [];
-  int itenSelection = -1;
-  int subIten1Selection = -1;
+  int itenSelection = 1;
+  int subIten1Selection = 1;
   int subIten2Selection = -1;
   int itenSelect = -1;
   int subIten1Select = -1;
   int subIten2Select = -1;
   int itenSelectable = -1;
   int subIten1Selectable = -1;
-
+  List<String> allcontatcs=[];
   var psmenu = const EdgeInsets.only(top: 0, left: 0, right: 0);
   Color cBackground = Colors.blue;
   Color cSelect = Colors.green;
   double posMenu = 0;
-
-
-
+  String allEmp="";
+  List<String> fileContent =[];
+  List<Factory> factories = [];
+  List<Mail> mails =[];
+  List<lineSend> line = [];
 
   @override
   Widget build(BuildContext context) {
@@ -71,13 +77,13 @@ class _NavigationScreenState extends State<NavigationScreen> {
           Container(
               child: itenSelection == -1 || itenSelection == 2 || itenSelection == 3
                   ? SizedBox(
-                      width: mWidth,
-                      child: buildMenu(mWidth, mHeightContent, mHeightBar),
-                    )
+                width: mWidth,
+                child: buildMenu(mWidth, mHeightContent, mHeightBar),
+              )
                   : SizedBox(
-                      height: mHeightBar,
-                      child: buildMenu(mWidth, mHeightContent, mHeightBar),
-                    )),
+                height: mHeightBar,
+                child: buildMenu(mWidth, mHeightContent, mHeightBar),
+              )),
           if (itenSelection > -1 && itenSelection < 2)
             Align(
               alignment: Alignment.topLeft,
@@ -85,81 +91,189 @@ class _NavigationScreenState extends State<NavigationScreen> {
                 child: SizedBox(
                   child: Padding(
                     padding: itenSelection == 0
-                             ?  psmenu = const EdgeInsets.only(left: 0)
-                             :  psmenu = const EdgeInsets.only(left: 75),
+                        ?  psmenu = const EdgeInsets.only(left: 0)
+                        :  psmenu = const EdgeInsets.only(left: 75),
                     child: SizedBox(
                       child: Row(
                         children: [
                           MouseRegion(
                             child: SafeArea(
-                             child: Column(
-                              children: [
-                                for (int index1 = 0; index1 < N1itens.length; index1++)
-                                  Align(
-                                    alignment: Alignment.topLeft,
-                                    child: MouseRegion(
-                                      onHover: (s) {
-                                        setState(() {
+                                child: Column(
+                                  children: [
+                                    for (int index1 = 0; index1 < N1itens.length; index1++)
+                                      Align(
+                                        alignment: Alignment.topLeft,
+                                        child: MouseRegion(
+                                          onHover: (s) {
+                                            setState(() {
                                               subIten1Selection = index1;
 
                                               if(itenSelection == 0 && subIten1Selection == 0)
                                               {
-                                                  N2itens=N2itens1;
-                                                  itenSelectable = itenSelection;
-                                                  subIten1Selectable = subIten1Selection;
+                                                N2itens=N2itens1;
+                                                itenSelectable = itenSelection;
+                                                subIten1Selectable = subIten1Selection;
                                               }
 
-                                        });
-                                      },
-                                      child: GestureDetector(
-                                          child: Container(
-                                              width: 100,
-                                              height: 40,
-                                              color: subIten1Selection == index1
-                                                  ? cSelect
-                                                  : cBackground,
-                                              child: Padding(
-                                                padding: const EdgeInsets.all(12.0),
-                                                child:Row(
-                                                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                                       children: [
-                                                        Text(N1itens[index1]),
-                                                         index1==0 && itenSelection == 0
-                                                         ? const Text(">")
-                                                         : const Text(""),
+                                            });
+                                          },
+                                          child: GestureDetector(
+                                            child: Container(
+                                                width: 100,
+                                                height: 40,
+                                                color: subIten1Selection == index1
+                                                    ? cSelect
+                                                    : cBackground,
+                                                child: Padding(
+                                                  padding: const EdgeInsets.all(12.0),
+                                                  child:Row(
+                                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                    children: [
+                                                      Text(N1itens[index1]),
+                                                      index1==0 && itenSelection == 0
+                                                          ? const Text(">")
+                                                          : const Text(""),
 
-                                                        ],
-                                                    ),
-                                              )
-                                          ),
-                                          onTap: (){
-                                              setState(() {
+                                                    ],
+                                                  ),
+                                                )
+                                            ),
+                                            onTap: () async {
 
-                                                  if(itenSelection == 0 && subIten1Selection ==2)
-                                                  {
-                                                    closeAlert(context);
 
-                                                  } else {
-                                                    itenSelect = itenSelection;
-                                                    subIten1Select = subIten1Selection;
-                                                    itenSelection = -1;
-                                                    subIten1Selection = -1;
+                                                if(itenSelection == 0 && subIten1Selection ==2)
+                                                {
+                                                  closeAlert(context);
+
+                                                }
+                                                if(itenSelection == 1)
+                                                {
+
+                                                  switch(subIten1Selection) {
+                                                    case 0:
+                                                      try {
+                                                        factories.clear();
+                                                        file =new File('D:/ite.csv');
+
+                                                        fileContent = await file.readAsLines();
+
+                                                        List<String> select;
+                                                        List<String> select1;
+                                                        String temp = "";
+
+                                                        for (int i = 0; i <fileContent.length; i++) {
+                                                          select =fileContent[i].split(",");
+
+                                                          List<String> telephones;
+                                                          telephones = [ select[3],select[4]];
+                                                          select1 = fileContent[i].split("[");
+                                                          allEmp = fileContent[1];
+                                                          temp = select1[1];
+                                                          select1 = temp.split("[");
+                                                          temp = temp.substring(0, temp.length - 2);
+                                                          select1 = temp.split(",");
+
+
+                                                          List<String>num = select[9].split(" ");
+                                                          factories.add(Factory(
+                                                              id: select[0],
+                                                              name: select[1],
+                                                              highDate: select[2],
+                                                              thelephones: telephones,
+                                                              mail: select[5],
+                                                              web: select[6],
+                                                              address: {
+                                                                'street': select[7].substring(1),
+                                                                'number': num[1],
+                                                                'apartament': num[7].substring(0, num[7].length - 3),
+                                                                'city': select[10],
+                                                                'postalCode': select[11],
+                                                                'province': select[12]
+                                                              },
+                                                              contacts: select1));
+                                                        }
+                                                      } catch (Exeption) {
+
+                                                      }
+
+                                                      break;
+
+                                                       case 1:
+                                                            mails.clear();
+                                                            try {
+                                                              file = new File('D:/mails.csv');
+
+                                                            fileContent = await file.readAsLines();
+
+                                                            List<String> select;
+
+                                                          for (int i = 0; i <
+                                                              fileContent.length; i++) {
+                                                            select = fileContent[i].split(",");
+
+                                                            mails.add(Mail(
+                                                                id: select[0],
+                                                                company: select[2],
+                                                                addrres: select[1],
+                                                                password: select[3]));
+                                                          }
+                                                        } catch (Exeption) {
+
+                                                        }
+
+                                                        break;
+
+                                                    case 2:
+                                                      line.clear();
+                                                      try {
+                                                        file = new File('D:/lineSends.csv');
+
+                                                        fileContent = await file.readAsLines();
+
+                                                        List<String> select;
+
+                                                        for (int i = 0; i <
+                                                            fileContent.length; i++) {
+                                                          select = fileContent[i].split(",");
+
+
+                                                          line.add(lineSend(
+                                                              date: select[0],
+                                                              factory: select[1],
+                                                              observations: select[2],
+                                                              state: select[3]));
+                                                        }
+                                                      } catch (Exeption) {
+
+                                                      }
+
+                                                      break;
+                                                      }
                                                   }
 
-                                              });
-                                          },
 
+
+
+                                                  itenSelect = itenSelection;
+                                                  subIten1Select = subIten1Selection;
+                                                  subIten2Select = subIten2Selection;
+                                                  itenSelection = -1;
+                                                  subIten1Selection = -1;
+                                                }
+
+
+
+                                          ),
+
+                                        ),
                                       ),
-
-                                    ),
-                                  ),
-                              ],
-                            )),
+                                  ],
+                                )),
                             onExit: (s){
                               setState(() {
 
-                                  itenSelection = -1;
-                                  subIten1Selection = -1;
+                                itenSelection = -1;
+                                subIten1Selection = -1;
 
 
                               });
@@ -178,6 +292,7 @@ class _NavigationScreenState extends State<NavigationScreen> {
                                               subIten2Selection = index2;
                                               itenSelection = itenSelectable;
                                               subIten1Selection = subIten1Selectable;
+
                                             });
                                           },
                                           child: GestureDetector(
@@ -195,10 +310,10 @@ class _NavigationScreenState extends State<NavigationScreen> {
                                             onTap: (){
                                               setState(() {
 
-
                                                 if(itenSelection == 0 && subIten1Selection ==3)
                                                 {
-                                                 closeAlert(context);
+                                                  closeAlert(context);
+
 
                                                 } else {
                                                   itenSelect = itenSelection;
@@ -247,40 +362,41 @@ class _NavigationScreenState extends State<NavigationScreen> {
               itemCount: itens.length,
               itemBuilder: (BuildContext context, index) {
                 return MouseRegion(
-                    onHover: (s) {
-                      setState(() {
-                        itenSelection = index;
-                               index == 0
-                            ?  N1itens = N1itens1
-                            :  N1itens = N1itens2;
+                  onHover: (s) {
+                    setState(() {
+                      itenSelection = index;
+                      index == 0
+                          ?  N1itens = N1itens1
+                          :  N1itens = N1itens2;
+                    });
+                  },
+                  child: GestureDetector(
+                    child: Container(
+                        width: index == 2 || index == 3
+                            ? 110
+                            : 75,
+                        color: itenSelection == index ? cSelect : cBackground,
+                        child: Padding(
+                          padding: const EdgeInsets.all(12.0),
+                          child: Center(child: Text(itens[index])),
+                        )
+                    ),
+                    onTap: (){
+                      setState(() async {
+
+
+                        if (itenSelection == 2 || itenSelection == 3)
+                          itenSelect = itenSelection;
                       });
                     },
-                    child: GestureDetector(
-                        child: Container(
-                            width: index == 2 || index == 3
-                                   ? 110
-                                   : 75,
-                            color: itenSelection == index ? cSelect : cBackground,
-                            child: Padding(
-                              padding: const EdgeInsets.all(12.0),
-                              child: Center(child: Text(itens[index])),
-                            )
-                        ),
-                      onTap: (){
-                        setState(() {
-                          if (itenSelection == 2 || itenSelection == 3)
-                                   itenSelect = itenSelection;
 
-                        });
-                      },
-
-                    ),
-                    onExit: (s) {
-                        setState(() {
-                          if (itenSelection == 3)
-                                itenSelection = -1;
-                        });
-                },
+                  ),
+                  onExit: (s) {
+                    setState(() {
+                      if (itenSelection == 3)
+                        itenSelection = -1;
+                    });
+                  },
                 );
               }),
         ),
@@ -288,15 +404,14 @@ class _NavigationScreenState extends State<NavigationScreen> {
         StreamBuilder<Object>(
             stream: null,
             builder: (context, snapshot) {
-              int option=0;
               return Container(
                 width: mWidth,
                 height: mHeight,
                 color: Colors.white,
                 child: mHeight> 18
-                       ? FuntionSeleted(itenSelect, subIten1Select, subIten2Select,mWidth, mHeight,itens,context)
-                       : Container(
-                    color: Colors.white,
+                    ? FuntionSeleted(itenSelect, subIten1Select, subIten2Select,mWidth, mHeight,itens,factories,mails,line)
+                    : Container(
+                  color: Colors.white,
                 ),
 
               );
@@ -306,6 +421,3 @@ class _NavigationScreenState extends State<NavigationScreen> {
   }
 
 }
-
-
-

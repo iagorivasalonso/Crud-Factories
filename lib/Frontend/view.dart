@@ -1,4 +1,3 @@
-import 'package:crud_factories/Alertdialogs/closeApp.dart';
 import 'package:crud_factories/Frontend/send.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
@@ -16,6 +15,7 @@ class view extends StatefulWidget {
   double mHeight;
   String tView;
 
+
   List<Factory> factories;
   List<Mail> mails;
   List<String> datesSends;
@@ -28,7 +28,7 @@ class view extends StatefulWidget {
   State<view> createState() => _viewState();
 }
 
- @override
+@override
 class _viewState extends State<view> {
 
   List<String> opSearch = ['Todos','Filtrar'];
@@ -59,41 +59,41 @@ class _viewState extends State<view> {
   String  filterFactory='Nombre';
 
 
+
   String campfilter =" ";
 
-   TextEditingController controllerSearchFactory = new TextEditingController();
-   TextEditingController controllerSearchSend = new TextEditingController();
-
+  TextEditingController controllerSearchFactory = new TextEditingController();
+  TextEditingController controllerSearchSend = new TextEditingController();
 
   void _runFilter(String view,String enteredKeyboard, String filter,String filter1, List<String> factoryName){
 
 
-        if(filter1=="Nombre")
-        {
-             filterFactory="Nombre";
-        }
+    if(filter1=="Nombre")
+    {
+      filterFactory="Nombre";
+    }
 
-         if(filter1=="")
-         {
-           filter1="Fecha";
-         }
+    if(filter1=="")
+    {
+      filter1="Fecha";
+    }
 
     if(enteredKeyboard.isEmpty)
     {
-         if(view == "send" && filter1=="Fecha")
-         {
-           result = datesSends;
-         }
+      if(view == "send" && filter1=="Fecha")
+      {
+        result = datesSends;
+      }
 
-         if(view == "send" && filter1=="Empresa")
-         {
+      if(view == "send" && filter1=="Empresa")
+      {
 
-           result = factoryName;
-         }
-         if(view ==  'factory')
-         {
-           resulFactories = factories;
-         }
+        result = factoryName;
+      }
+      if(view ==  'factory')
+      {
+        resulFactories = factories;
+      }
     }
     else
     {
@@ -136,6 +136,7 @@ class _viewState extends State<view> {
             resulFactories = factories.where((element)=>
                 element.address['city']!.toLowerCase().contains(enteredKeyboard.toLowerCase())).toList();
             break;
+
 
         }
 
@@ -183,23 +184,22 @@ class _viewState extends State<view> {
         noDatfunction= noFind(context,noDat,strindDialog);
       }
     }
-   setState(() {
-     if(view == "send" && filter1=="Fecha")
-     {
+    setState(() {
+      if(view == "send" && filter1=="Fecha")
+      {
         datesSends = result;
-     }
+      }
 
-     if(view =="send" && filter1=="Empresa")
-     {
-       factoryName = result;
-     }
-     if(view == "factory")
-     {
-       campSearchFactory = resulFactories;
-     }
-   });
+      if(view =="send" && filter1=="Empresa")
+      {
+        factoryName = result;
+      }
+      if(view == "factory")
+      {
+        campSearchFactory = resulFactories;
+      }
+    });
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -228,8 +228,6 @@ class _viewState extends State<view> {
 
     if(view == "factory")
     {
-         if(factories.length == 0)
-            mWidthList = 0;
 
       filterList = filterListFactories;
     }
@@ -241,7 +239,6 @@ class _viewState extends State<view> {
 
     if(controllerSearchFactory.text=="")
     {
-
       if(view== 'factory' )
         resulFactories=factories;
     }
@@ -252,7 +249,7 @@ class _viewState extends State<view> {
 
       if(view =="send" && factoryFilter=="Empresa")
       {
-         result = factoryName;
+        result = factoryName;
 
       }
       else
@@ -355,7 +352,7 @@ class _viewState extends State<view> {
                                             child: DropdownButton2<String>(
                                               isExpanded: true,
                                               hint: Text(
-                                                 filterFactory,
+                                                filterFactory,
                                                 overflow: TextOverflow.ellipsis,
                                               ),
                                               items: filterList.map((String itemFactory) =>
@@ -373,8 +370,8 @@ class _viewState extends State<view> {
                                                 setState(() {
                                                   selectedFactory = value;
                                                   factoryFilter=value.toString();
-                                                   filterFactory = value.toString();
-                                                   selectCamp=value.toString();
+                                                  filterFactory = value.toString();
+                                                  selectCamp=value.toString();
 
 
                                                 });
@@ -554,6 +551,7 @@ class _viewState extends State<view> {
                                           setState(() {
                                             cardSeleted = index;
                                             select = index;
+
                                           });
                                         },
                                       );
@@ -586,25 +584,27 @@ class _viewState extends State<view> {
                                             sendsDay.clear();
                                             cardSeleted = index;
                                             select = index;
+                                            selectCamp=result[select];
 
                                             late String campSelect;
                                             if(selectedFilterSend== "Fecha")
                                             {
+                                              campSelect="";
                                               campSelect=datesSends[index];
-                                              selectCamp=campSelect;
+
 
 
                                             }
                                             if(selectedFilterSend == "Empresa")
                                             {
-                                              campSelect=factories[index].name;
-                                              selectCamp=campSelect;
+
 
                                               for(int i = 0; i < line.length ; i++)
                                               {
-                                                if(campSelect == line[i].factory.name)
+                                                if(campSelect == line[i].factory)
                                                 {
                                                   sendsDay.add(line[i]);
+
                                                 }
 
                                               }
@@ -628,16 +628,10 @@ class _viewState extends State<view> {
                   width: mWidthPanel,
                   height: mHeight,
                   child: view == 'factory'
-                       ? factories.length == 0
-                          ? newFactory(factories, -1)
-                          : newFactory(factories, select)
+                      ? newFactory(factories, select)
                       : view == 'mail'
-                        ? mails.length == 0
-                           ? newMail(mails, -1)
-                           : newMail(mails, select)
-                      : sendsDay.length == 0
-                        ? newSend(sendsDay,select,selectCamp,filterFactory,line,sendFilter)
-                        : newSend(line,-1,"","",line,""),
+                      ? newMail(mails, select)
+                      :  newSend(datesSends,sendsDay,select,selectCamp,filterFactory,line,sendFilter)
 
               ),
             ],

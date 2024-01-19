@@ -1,18 +1,18 @@
 import 'package:adaptive_scrollbar/adaptive_scrollbar.dart';
-import 'package:crud_factories/Alertdialogs/noDat.dart';
-import 'package:crud_factories/Functions/avoidRepeatArray.dart';
+import 'package:csv/csv.dart';
 import 'package:flutter/material.dart';
-
+import '../Alertdialogs/confirm.dart';
 import '../Functions/avoidRepeatCamp.dart';
 import '../Objects/Factory.dart';
-
+import 'dart:io';
 
 class newFactory extends StatefulWidget {
 
   List<Factory> factories;
   int select;
 
-  newFactory(this.factories,this.select,);
+
+  newFactory(this.factories,this.select);
 
   @override
   State<newFactory> createState() => _newFactoryState();
@@ -23,9 +23,11 @@ class _newFactoryState extends State<newFactory> {
   final ScrollController horizontalScroll = ScrollController();
   final ScrollController verticalScroll = ScrollController();
 
-  double widthBar = 10.0;
+  bool actionDelete = false;
 
-  late TextEditingController controllerName = TextEditingController();
+  double widthBar = 10.0;
+  TextEditingController controllerName = new TextEditingController();
+
   late TextEditingController controllerHighDate = TextEditingController();
   late TextEditingController controllerTelephone1 = TextEditingController();
   late TextEditingController controllerTelephone2 = TextEditingController();
@@ -33,76 +35,76 @@ class _newFactoryState extends State<newFactory> {
   late TextEditingController controllerWeb = TextEditingController();
   late TextEditingController controllerAdrress = TextEditingController();
   late TextEditingController controllerCity = TextEditingController();
-  late TextEditingController controllerPostalCode  = TextEditingController();
-  late TextEditingController controllerProvince  = TextEditingController();
-  List<TextEditingController> controllerContacs=[];
+  late TextEditingController controllerPostalCode = TextEditingController();
+  late TextEditingController controllerProvince = TextEditingController();
+  List<TextEditingController> controllerContacs = [];
   late TextEditingController controllerEmpleoyee = TextEditingController();
   late TextEditingController controllerEmpleoyeeNew = TextEditingController();
 
-  List<String> contacs=[];
-
+  List<String> contacs = [];
+  int contactSelect = 0;
+  bool edit = false;
+  String id ="";
 
   @override
   Widget build(BuildContext context) {
-
     List<Factory> factories = widget.factories;
 
-
     int select = widget.select;
-    List<String> contacs = [];
 
-    String action = "";
+
+    String action = "actualizar";
     String title = "";
 
 
-    if(select == -1)
-    {
+
+    if (select == -1) {
       title = "Nueva ";
       action = "Crear";
+
     }
-    else
-    {
+    else {
       title = "Editar ";
 
-      controllerName.text = factories[select].name;
-      controllerHighDate.text = factories[select].highDate;
-      controllerTelephone1.text = factories[select].thelephones[0];
-      controllerTelephone2.text = factories[select].thelephones[1];
-      controllerMail.text = factories[select].mail;
-      controllerWeb.text = factories[select].web;
 
-              var address = factories[select].address['street']!;
-              var number = factories[select].address['number']!;
-              var apartament =factories[select].address['apartament']!;
+        id=factories[select].id;
+        controllerName.text = factories[select].name;
+        controllerHighDate.text = factories[select].highDate;
+        controllerTelephone1.text = factories[select].thelephones[0];
+        controllerTelephone2.text = factories[select].thelephones[1];
+        controllerMail.text = factories[select].mail;
+        controllerWeb.text = factories[select].web;
 
-              String allAddress = "";
+        var address = factories[select].address['street']!;
+        var number = factories[select].address['number']!;
+        var apartament = factories[select].address['apartament']!;
 
-              if(apartament == "")
-              {
-                allAddress ='$address, $number ';
-              }
-              else
-              {
-                allAddress ='$address, $number - $apartament';
-              }
+        String allAddress = "";
 
-      controllerAdrress.text = allAddress!;
-      controllerCity.text = factories[select].address['city']!;
-      controllerPostalCode.text = factories[select].address['postalCode']!;
-      controllerProvince.text = factories[select].address['province']!;
-      contacs = widget.factories[select].contacts;
+        if (apartament == "") {
+          allAddress = '$address, $number ';
+        }
+        else {
+          allAddress = '$address, $number - $apartament';
+        }
 
-     if(contacs.isEmpty)
-     {
-       for (int i = 0; i < factories[select].contacts.length; i++)
-       {
-         contacs.add(factories[select].contacts[i]);
-       }
-     }
+        controllerAdrress.text = allAddress!;
+        controllerCity.text = factories[select].address['city']!;
+        controllerPostalCode.text = factories[select].address['postalCode']!;
+        controllerProvince.text = factories[select].address['province']!;
+        contacs = widget.factories[select].contacts;
 
-      action = "Actualizar";
+        if (contacs.isEmpty) {
+          for (int i = 0; i < factories[select].contacts.length; i++) {
+            contacs.add(factories[select].contacts[i]);
+          }
+        }
 
-    }
+
+
+     action = "Actualizar";
+
+   }
 
     return AdaptiveScrollbar(
       controller: verticalScroll,
@@ -132,12 +134,14 @@ class _newFactoryState extends State<newFactory> {
                         Row(
                           children: [
                             Text('$title Empresa: ',
-                              style: const TextStyle(fontWeight: FontWeight.bold),
+                              style: const TextStyle(
+                                  fontWeight: FontWeight.bold),
                             ),
                           ],
                         ),
                         Padding(
-                          padding: const EdgeInsets.only(top: 20.0, left: 30.0, bottom: 30.0),
+                          padding: const EdgeInsets.only(
+                              top: 20.0, left: 30.0, bottom: 30.0),
                           child: Row(
                             children: [
                               const Text('Nombre: '),
@@ -147,15 +151,17 @@ class _newFactoryState extends State<newFactory> {
                                 child: TextField(
                                   controller: controllerName,
                                   decoration: const InputDecoration(
-                                      border: OutlineInputBorder(),
+                                    border: OutlineInputBorder(),
                                   ),
+
                                 ),
                               ),
                             ],
                           ),
                         ),
-                       Padding(
-                          padding: const EdgeInsets.only(top: 20.0, left: 30.0, bottom: 30.0),
+                        Padding(
+                          padding: const EdgeInsets.only(
+                              top: 20.0, left: 30.0, bottom: 30.0),
                           child: Row(
                             children: [
                               const Text('Fecha de alta: '),
@@ -167,6 +173,7 @@ class _newFactoryState extends State<newFactory> {
                                   decoration: const InputDecoration(
                                     border: OutlineInputBorder(),
                                   ),
+
                                 ),
                               ),
                             ],
@@ -180,8 +187,9 @@ class _newFactoryState extends State<newFactory> {
                             ),
                           ],
                         ),
-                         Padding(
-                           padding: const EdgeInsets.only(top: 20.0, bottom: 30.0, left: 20.0),
+                        Padding(
+                          padding: const EdgeInsets.only(
+                              top: 20.0, bottom: 30.0, left: 20.0),
                           child: Row(
                             children: [
                               const Text('Telefono 1: '),
@@ -213,7 +221,8 @@ class _newFactoryState extends State<newFactory> {
                           ),
                         ),
                         Padding(
-                          padding: const EdgeInsets.only(top: 20.0, bottom: 30.0, left: 20.0),
+                          padding: const EdgeInsets.only(
+                              top: 20.0, bottom: 30.0, left: 20.0),
                           child: Row(
                             children: [
                               Text('Email: '),
@@ -227,7 +236,7 @@ class _newFactoryState extends State<newFactory> {
                                   ),
                                 ),
                               ),
-                             const Padding(
+                              const Padding(
                                 padding: EdgeInsets.only(left: 70.0),
                                 child: Text('Pagina web: '),
                               ),
@@ -245,7 +254,8 @@ class _newFactoryState extends State<newFactory> {
                           ),
                         ),
                         Padding(
-                          padding:const EdgeInsets.only(top: 20.0, bottom: 30.0, left: 20.0),
+                          padding: const EdgeInsets.only(
+                              top: 20.0, bottom: 30.0, left: 20.0),
                           child: Row(
                             children: [
                               const Text('Dirección: '),
@@ -263,7 +273,8 @@ class _newFactoryState extends State<newFactory> {
                           ),
                         ),
                         Padding(
-                          padding: const EdgeInsets.only(top: 20.0, bottom: 30.0, left: 20.0),
+                          padding: const EdgeInsets.only(
+                              top: 20.0, bottom: 30.0, left: 20.0),
                           child: Row(
                             children: [
                               const Text('Ciudad: '),
@@ -294,8 +305,9 @@ class _newFactoryState extends State<newFactory> {
                             ],
                           ),
                         ),
-                         Padding(
-                          padding: const EdgeInsets.only(top: 20.0, bottom: 30.0, left: 20.0),
+                        Padding(
+                          padding: const EdgeInsets.only(
+                              top: 20.0, bottom: 30.0, left: 20.0),
                           child: Row(
                             children: [
                               const Text('Provincia: '),
@@ -321,22 +333,23 @@ class _newFactoryState extends State<newFactory> {
                           ],
                         ),
                         Padding(
-                          padding: const EdgeInsets.only(top: 24.0, left: 80.0, bottom: 40.0),
+                          padding: const EdgeInsets.only(
+                              top: 24.0, left: 80.0, bottom: 40.0),
                           child: Row(
                             children: [
-                             SizedBox(
-                               height: 160,
-                               child: SizedBox(
-                                 width: 250,
-                                 height: 40,
-                                 child: TextField(
-                                   controller: controllerEmpleoyeeNew,
-                                   decoration: const InputDecoration(
-                                     border: OutlineInputBorder(),
-                                   ),
-                                 ),
-                               ),
-                             ),
+                              SizedBox(
+                                height: 160,
+                                child: SizedBox(
+                                  width: 250,
+                                  height: 40,
+                                  child: TextField(
+                                    controller: controllerEmpleoyeeNew,
+                                    decoration: const InputDecoration(
+                                      border: OutlineInputBorder(),
+                                    ),
+                                  ),
+                                ),
+                              ),
                               Padding(
                                 padding: const EdgeInsets.only(
                                     left: 20.0,
@@ -350,49 +363,75 @@ class _newFactoryState extends State<newFactory> {
                                         onPressed: () {
                                           setState(() {
                                             contacs.add(controllerEmpleoyeeNew.text);
+                                            controllerEmpleoyeeNew.text = "";
                                           });
-
                                         },
                                       ),
                                       Padding(
-                                        padding: const EdgeInsets.only(top: 12.0),
+                                        padding: const EdgeInsets.only(
+                                            top: 12.0),
                                         child: ElevatedButton(
-                                          child: const Text('<<'),
+                                          child: const Text('X'),
                                           onPressed: () {
-                                            contacs.clear();
-                                          },
-                                        ),
+                                            setState(() {
+                                              var delete = contacs[contactSelect];
+                                              if (contacs[contactSelect] == delete) {
+                                                contacs.removeAt(contactSelect);
+                                                String action ='El empleado se ha quitado correctamente';
+                                                confirm(context,action);
+                                              }
+                                              });
+                                            },
+
+                                      ),
                                       ),
                                     ],
                                   ),
                                 ),
                               ),
-                             Align(
-                               alignment: Alignment.topLeft,
-                               child: Container(
-                                   decoration: BoxDecoration(
-                                       borderRadius: const BorderRadius.all(
-                                         Radius.circular(5),
-                                       ),
-                                       border: Border.all(
-                                           color: Colors.black38,
-                                           width: 1.0,
-                                       )
-                                   ),
-                                  width: 250,
-                                  height: 170,
-                                  child: ListView.builder(
-                                      itemCount:contacs.length ,
-                                      itemBuilder: (BuildContext context, index) {
-                                        return Padding(
-                                          padding: const EdgeInsets.only(top: 3.0,left: 10.0),
-                                          child: Text(contacs[index]),
+                              Align(
+                                alignment: Alignment.topLeft,
+                                child: Container(
+                                    decoration: BoxDecoration(
+                                        borderRadius: const BorderRadius.all(
+                                          Radius.circular(5),
+                                        ),
+                                        border: Border.all(
+                                          color: Colors.black38,
+                                          width: 1.0,
+                                        )
+                                    ),
+                                    width: 250,
+                                    height: 170,
+                                    child: ListView.builder(
+                                      itemCount: contacs.length,
+                                      itemBuilder: (BuildContext context,
+                                          index) {
+                                        return GestureDetector(
+                                          child: Container(
+                                            color:  index== contactSelect
+                                                ? Colors.blue
+                                                : Colors.white,
+                                            child: Padding(
+                                              padding: const EdgeInsets.only(
+                                                  top: 3.0, left: 10.0),
+                                              child: Text(contacs[index]),
+                                            ),
+                                          ),
+                                          onTap: () {
+                                            setState(() {
+                                              contactSelect = index;
+
+                                            });
+
+
+                                          },
                                         );
                                       },
 
-                                  )
+                                    )
                                 ),
-                             ),
+                              ),
                             ],
                           ),
                         ),
@@ -406,9 +445,78 @@ class _newFactoryState extends State<newFactory> {
                                 ElevatedButton(
                                   child: Text(action),
                                   onPressed: () {
-                                    String nameCamp ="nombre de usuario";
-                                    bool repeat = false;
-                                   avoidRepeteatCamp(context,repeat, nameCamp,controllerName, factories, select);
+                                      setState(() {
+                                        bool repeat = false;
+                                        String  nameCamp = "nombre de usuario";
+                                        factories[select].contacts = contacs;
+
+                                        List<String> adrress1=controllerAdrress.text.split(",");
+                                        List<String> adrress2=controllerAdrress.text.split("-");
+                                        repeat=avoidRepeteatCamp(context,
+                                            repeat, nameCamp, controllerName,
+                                            factories, select);
+                                        print("object");
+                                        if(select ==- 1)
+                                        {
+
+                                          factories.add(Factory(
+                                              id:factories.length.toString(),
+                                              name: controllerName.text,
+                                              highDate: controllerHighDate.text,
+                                              thelephones:[controllerTelephone1.text,controllerTelephone2.text],
+                                              mail: controllerMail.text,
+                                              web: controllerWeb.text,
+                                              contacts:[],
+                                              address: {
+                                                'street':adrress1[0],
+                                                'number':adrress2[0],
+                                                'apartament': adrress2[1],
+                                                 'city' : controllerCity.text,
+                                                 'postalCode' : controllerPostalCode.text ,
+                                                  'province' : controllerProvince.text,
+                                              }
+                                          ));
+
+
+
+                                        }
+                                        else{
+
+                                          factories[select].name = controllerName.text;
+                                          factories[select].highDate = controllerHighDate.text;
+                                          factories[select].thelephones= [controllerTelephone1.text,controllerTelephone2.text];
+                                          factories[select].mail = controllerMail.text;
+                                          factories[select].web= controllerWeb.text;
+                                          factories[select].address['street']=adrress1[0];
+                                          factories[select].address['number']=adrress2[0];
+                                          factories[select].address['apartament']=adrress2[1];
+                                          factories[select].address['city']=controllerCity.text;
+                                          factories[select].address['postalCode']= controllerPostalCode.text ;
+                                         factories[select].address['province']= controllerProvince.text;
+
+                                        }
+
+
+                                          edit = false;
+
+
+
+                                        if (select == -1)
+                                        {
+
+                                          String action ='La empresa se ha dado de alta correctamente';
+                                          confirm(context,action);
+                                        }
+                                        else
+                                        {
+                                          String action ='La empresa se ha modificado correctamente';
+                                          confirm(context,action);
+                                        }
+
+
+
+                                        csvExportator(factories,select);
+                                      });
                                   },
                                 ),
                                 ElevatedButton(
@@ -432,6 +540,61 @@ class _newFactoryState extends State<newFactory> {
       ),
     );
   }
+}
+csvExportator(List<Factory> factories, int select) async {
+
+  File myFile = File('D:/ite.csv');
+
+  List<dynamic> associateList = [
+
+    for (int i = 0; i <factories.length;i++)
+    {
+
+         "id": factories[i].id,
+         "name": factories[i].name,
+         "highDate": factories[i].highDate,
+         "telephone1": factories[i].thelephones[0],
+         "telephone2": factories[i].thelephones[1],
+         "mail": factories[i].mail,
+         "web": factories[i].web,
+         "address": factories[i].allAdress(),
+         "city" : factories[i].address['city'],
+         "postalCode":factories[i].address['postalCode']!,
+         "province":factories[i].address['province']!,
+         "contacts" :factories[i].contacts,
+
+    },
+  ];
+
+
+
+  List<List<dynamic>> rows = [];
+  List<dynamic> row = [];
+
+
+  for (int i = 0; i < associateList.length; i++) {
+    List<dynamic> row = [];
+
+         row.add(associateList[i]["id"]);
+         row.add(associateList[i]["name"]);
+         row.add(associateList[i]["highDate"]);
+         row.add(associateList[i]["telephone1"]);
+         row.add(associateList[i]["telephone2"]);
+         row.add(associateList[i]["mail"]);
+         row.add(associateList[i]["web"]);
+         row.add(associateList[i]["address"]);
+         row.add(associateList[i]["city"]);
+         row.add(associateList[i]["postalCode"]);
+         row.add(associateList[i]["province"]);
+         row.add(associateList[i]["contacts"]);
+         rows.add(row);
+
+      }
+
+  String csv = const ListToCsvConverter().convert(rows);
+ // print(csv);
+ myFile.writeAsString(csv);
+
 
 
 }

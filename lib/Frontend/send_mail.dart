@@ -287,10 +287,10 @@ class _sendMailState extends State<sendMail> {
                                                                                 (int index) =>  DataRow(
                                                                                 cells: <DataCell>[
                                                                                   DataCell(
-                                                                                      Text(sendsDay[index].factory.name),
+                                                                                      Text(sendsDay[index].factory),
                                                                                   ),
                                                                                   DataCell(
-                                                                                     Text(sendsDay[index].factory.mail),
+                                                                                     Text(""),
                                                                                   ),
                                                                                 ]
                                                                             ),

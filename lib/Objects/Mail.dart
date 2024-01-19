@@ -1,7 +1,7 @@
 
 class Mail {
 
-   int id;
+   String id;
    String addrres;
    String company;
    String password;

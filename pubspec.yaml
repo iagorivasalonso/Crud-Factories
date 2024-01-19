@@ -40,6 +40,8 @@ dependencies:
   rflutter_alert: ^2.0.7
   adaptive_scrollbar: ^2.1.2
   dropdown_button2: ^2.3.9
+  csv: ^5.1.1
+  path_provider: ^2.1.1
 
 
 

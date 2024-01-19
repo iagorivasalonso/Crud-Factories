@@ -1,7 +1,11 @@
 
+import 'dart:io';
+
 import 'package:adaptive_scrollbar/adaptive_scrollbar.dart';
+import 'package:csv/csv.dart';
 import 'package:flutter/material.dart';
 
+import '../Alertdialogs/confirm.dart';
 import '../Objects/Mail.dart';
 
 class newMail extends StatefulWidget {
@@ -24,11 +28,11 @@ class _newMailState extends State<newMail> {
 
   late TextEditingController controllerMail = new TextEditingController();
   late TextEditingController controllerCompany = new TextEditingController();
-  late TextEditingController controllerPas1 = new TextEditingController();
-  late TextEditingController controllerPas2 = new TextEditingController();
+  late TextEditingController controllerPas = new TextEditingController();
+  late TextEditingController controllerPasVerificator = new TextEditingController();
   late List<Mail> mails;
   late int select;
-
+  bool edit = false;
 
   @override
   Widget build(BuildContext context) {
@@ -47,8 +51,10 @@ class _newMailState extends State<newMail> {
     }
     else
     {
-      controllerMail.text = mails[select].addrres;
-      controllerCompany.text = mails[select].company;
+
+        controllerMail.text = mails[select].addrres;
+        controllerCompany.text = mails[select].company;
+        controllerPas.text = mails[select].password;
 
       title = "Editar ";
       action = "Actualizar";
@@ -97,6 +103,9 @@ class _newMailState extends State<newMail> {
                                   decoration: InputDecoration(
                                       border: OutlineInputBorder(),
                                   ),
+                                  onChanged: (value){
+                                    edit = true;
+                                  },
                                 ),
                               ),
                             ],
@@ -115,6 +124,9 @@ class _newMailState extends State<newMail> {
                                   decoration: InputDecoration(
                                     border: OutlineInputBorder(),
                                   ),
+                                  onChanged: (value){
+                                    edit = true;
+                                  },
                                 ),
                               ),
                             ],
@@ -129,10 +141,13 @@ class _newMailState extends State<newMail> {
                                 width: 400,
                                 height: 40,
                                 child: TextField(
-                                  controller: controllerPas1,
+                                  controller: controllerPas,
                                   decoration: const InputDecoration(
                                     border: OutlineInputBorder(),
                                   ),
+                                  onChanged: (value){
+                                    edit = true;
+                                  },
                                 ),
                               ),
                             ],
@@ -147,11 +162,13 @@ class _newMailState extends State<newMail> {
                                 width: 400,
                                 height: 40,
                                 child: TextField(
-                                  controller: controllerPas2,
+                                  controller: controllerPasVerificator,
                                   decoration: const InputDecoration(
                                     border: OutlineInputBorder(),
                                   ),
-
+                                  onChanged: (value){
+                                    edit = true;
+                                  },
                                 ),
                               ),
                             ],
@@ -180,8 +197,31 @@ class _newMailState extends State<newMail> {
                                   child: Text(action),
                                   onPressed: () {
                                     setState(() {
-                                      print(controllerMail.text);
-                                      print(controllerCompany.text);
+
+
+                                      if(select == -1)
+                                       {
+                                         mails.add(Mail(
+                                             id: mails.length.toString(),
+                                             company:controllerMail.text,
+                                             addrres: controllerCompany.text,
+                                             password:controllerPas.text));
+
+                                         String action ='El correo se ha dado de alta correctamente';
+                                         confirm(context,action);
+                                       }
+                                       else
+                                       {
+                                         mails[select].addrres = controllerMail.text;
+                                         mails[select].company = controllerCompany.text;
+                                         mails[select].password = controllerPas.text;
+
+                                         String action ='El correo se ha modificado correctamente';
+                                         confirm(context,action);
+                                       }
+
+                                        csvExportator(mails,select);
+
                                     });
                                   },
                                 ),
@@ -204,5 +244,44 @@ class _newMailState extends State<newMail> {
       ),
     );
   }
+  csvExportator(List<Mail> mails, int select) async {
+
+    File myFile = File('D:/mails.csv');
+
+    List<dynamic> associateList = [
+
+      for (int i = 0; i <mails.length;i++)
+        {
+
+          "id": mails[i].id,
+          "addrres": mails[i].addrres,
+          "company": mails[i].company,
+          "password": mails[i].password
+
+        },
+    ];
+
+    List<List<dynamic>> rows = [];
+    List<dynamic> row = [];
+
+
+    for (int i = 0; i < associateList.length; i++) {
+      List<dynamic> row = [];
+
+      row.add(associateList[i]["id"]);
+      row.add(associateList[i]["addrres"]);
+      row.add(associateList[i]["company"]);
+      row.add(associateList[i]["password"]);
+      rows.add(row);
+
+    }
+
+    String csv = const ListToCsvConverter().convert(rows);
+   myFile.writeAsString(csv);
+
+
+  }
+
+
 
 }

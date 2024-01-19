@@ -1,4 +1,7 @@
+import 'dart:io';
+
 import 'package:adaptive_scrollbar/adaptive_scrollbar.dart';
+import 'package:csv/csv.dart';
 import 'package:flutter/material.dart';
 import '../Objects/lineSend.dart';
 
@@ -11,9 +14,10 @@ class newSend extends StatefulWidget {
   String filter;
   List<lineSend> line;
   String SeletedFilter;
+  List<String> dateSends;
 
 
-  newSend(this.sendsLine,this.select,this.selectCamp, this.filter,  this.line, this.SeletedFilter);
+  newSend(this.dateSends,this.sendsLine,this.select,this.selectCamp, this.filter,  this.line, this.SeletedFilter);
 
   @override
   State<newSend> createState() => _newSendState();
@@ -30,7 +34,7 @@ class _newSendState extends State<newSend> {
   double widthBar = 10.0;
 
   late TextEditingController controllerText = new TextEditingController();
-
+  List<TextEditingController> _controllersObserLine = [];
   List<String> columns = [];
   List<String> campsTable = [];
   int rows = 0;
@@ -41,13 +45,15 @@ class _newSendState extends State<newSend> {
   List<lineSend> listSend = [];
 
 
-  List<bool> Send= List.generate(88, (index) => false);
+  List<bool> Send = List.generate(88, (index) => false);
 
   @override
   Widget build(BuildContext context) {
 
-    List<TextEditingController> _controllersObserLine =[];
-    for (int i = 1; i < 75; i++) _controllersObserLine.add(TextEditingController());
+
+
+    for (int i = 1; i < 75; i++)
+      _controllersObserLine.add(TextEditingController());
 
 
     int select = widget.select;
@@ -56,25 +62,29 @@ class _newSendState extends State<newSend> {
     List<lineSend> line = widget.line;
     int cant = 0;
     String stringFactories = "";
-    String title ="" ;
-    String type =widget.SeletedFilter;
-    campsTable = ['Empresa', 'Observaciones', 'Estado' ,'Seleccionar'];
+    String title = "";
+    String typeList="";
+    String type = widget.SeletedFilter;
+
+    campsTable = ['Empresa', 'Observaciones', 'Estado', 'Seleccionar'];
+
 
     bool viewButoons = false;
 
-    if(select == -1)
-    {
+
+    if (select == -1) {
       title = "Nuevo ";
-      type= "Fecha ";
-      campsTable = ['Empresa', 'Observaciones', 'Estado' ,'Seleccionar'];
+      typeList = "empresas: ";
+      type = "Fecha ";
+      campsTable = ['Empresa', 'Observaciones', 'Estado', 'Seleccionar'];
       listSend = widget.sendsLine;
       cant = listSend.length;
       stringFactories = "Tiene $cant empresas en su base de datos";
       viewButoons = true;
     }
-    else
-    {
+    else {
       controllerText.text = "";
+
 
       title = "Ver ";
 
@@ -83,23 +93,21 @@ class _newSendState extends State<newSend> {
         type = "Fecha:  ";
         campsTable = ['Empresa', 'Observaciones', 'Estado'];
         listSend = widget.sendsLine;
+        type =widget.SeletedFilter;
+        controllerText.text = widget.dateSends[select];
+        typeList = "empresas: ";
 
-
-        if(controllerText.text=="") {
-          controllerText.text = line[0].date;
-          listSend = widget.sendsLine;
-        }
         cant= 0;
         listSend.clear();
-          for(int i = 0; i < line.length ; i++)
+        for(int i = 0; i < line.length ; i++)
+        {
+          if(controllerText.text  == line[i].date)
           {
-            if(controllerText.text  == line[i].date)
-            {
-              listSend.add(line[i]);
-              cant+=1;
-            }
-
+            listSend.add(line[i]);
+            cant+=1;
           }
+
+        }
 
         stringFactories = "Este dia se hicieron $cant envios";
       }
@@ -110,34 +118,27 @@ class _newSendState extends State<newSend> {
         type = "Empresa:  ";
         campsTable = ['Fecha', 'Observaciones', 'Estado'];
         listSend = widget.sendsLine;
-        if(controllerText.text=="") {
-          controllerText.text = line[0].factory.name;
-          listSend = widget.sendsLine;
-        }
+        controllerText.text = line[select].factory;
+        typeList = "envios: ";
 
-        if(selectCamp==" ")
-        {
-          controllerText.text = line[0].factory.name;
-          listSend = widget.sendsLine;
-        }
-        cant = listSend.length;
+
+        cant= 0;
+        listSend.clear();
+
         stringFactories = "A esta empresa se le hicieron $cant envios";
       }
 
 
       viewButoons = false;
-
     }
     bool selectable = true;
     int endTable = 0;
 
-    if(selectable == true)
-    {
+    if (selectable == true) {
       endTable = campsTable.length;
     }
-    else
-    {
-      endTable = campsTable.length-1;
+    else {
+      endTable = campsTable.length - 1;
     }
 
     return AdaptiveScrollbar(
@@ -161,18 +162,19 @@ class _newSendState extends State<newSend> {
                 width: 848,
                 child: Align(
                     alignment: Alignment.topLeft,
-                    child:  Padding(
-                      padding: const EdgeInsets.only(left: 30.0,top: 30.0),
+                    child: Padding(
+                      padding: const EdgeInsets.only(left: 30.0, top: 30.0),
                       child: Column(
                           children: [
                             Row(
                               children: [
                                 Text('$title Envio: ',
-                                  style: const TextStyle(fontWeight: FontWeight.bold),),
+                                  style: const TextStyle(
+                                      fontWeight: FontWeight.bold),),
                               ],
                             ),
                             Padding(
-                              padding: EdgeInsets.only(top:20.0),
+                              padding: EdgeInsets.only(top: 20.0),
                               child: Row(
                                 children: [
                                   Padding(
@@ -192,18 +194,20 @@ class _newSendState extends State<newSend> {
                                 ],
                               ),
                             ),
-                            const Padding(
-                              padding: EdgeInsets.only(top: 40.0),
+                            Padding(
+                              padding: const EdgeInsets.only(top: 40.0),
                               child: Row(
                                 children: [
-                                  Text('Selección de empresas: ',
-                                    style: TextStyle(fontWeight: FontWeight.bold),),
+                                  Text('Lista de $typeList',
+                                    style: const TextStyle(
+                                        fontWeight: FontWeight.bold),),
                                 ],
                               ),
                             ),
                             Padding(
-                              padding: const EdgeInsets.only(top: 40.0,left: 10.0),
-                              child:Scrollbar(
+                              padding: const EdgeInsets.only(
+                                  top: 40.0, left: 10.0),
+                              child: Scrollbar(
                                 controller: verticalScrollTable,
                                 child: Container(
                                   height: 250,
@@ -212,7 +216,7 @@ class _newSendState extends State<newSend> {
                                     scrollDirection: Axis.vertical,
                                     child: DataTable(
                                       columns: <DataColumn>[
-                                        for(int i=0 ; i < endTable; i++)
+                                        for(int i = 0; i < endTable; i++)
                                           DataColumn(
                                             label: SizedBox(
                                                 width: 110,
@@ -221,40 +225,53 @@ class _newSendState extends State<newSend> {
                                           ),
 
                                       ],
-                                      rows: List<DataRow>.generate(listSend.length,
-                                            (int index) =>  DataRow(
-                                            cells: <DataCell>[
-                                              for(int i=0 ; i < endTable; i++)
-                                                DataCell(
-                                                  campsTable[i] == "Empresa"
-                                                      ? Text(listSend[index].factory.name)
-                                                      : campsTable[i] == "Fecha"
-                                                      ? Text(listSend[index].date)
-                                                      : campsTable[i] == "Observaciones"
-                                                      ? Padding(
-                                                    padding: const EdgeInsets.all(8.0),
-                                                    child: TextField(
-                                                      controller: _controllersObserLine[index],
-                                                      decoration: InputDecoration(
-                                                        border: OutlineInputBorder(),
-                                                        labelText:listSend[index].observations,
-                                                      ),
+                                      rows: List<DataRow>.generate(
+                                        listSend.length,
+                                            (int index) =>
+                                            DataRow(
+                                                cells: <DataCell>[
+                                                  for(int i = 0; i <
+                                                      endTable; i++)
+                                                    DataCell(
+                                                      campsTable[i] == "Empresa"
+                                                          ? Text(listSend[index]
+                                                          .factory)
+                                                          : campsTable[i] ==
+                                                          "Fecha"
+                                                          ? Text(
+                                                          listSend[index].date)
+                                                          : campsTable[i] ==
+                                                          "Observaciones"
+                                                          ? Padding(
+                                                        padding: const EdgeInsets
+                                                            .all(8.0),
+                                                        child: TextField(
+                                                          controller: _controllersObserLine[index],
+                                                          decoration: InputDecoration(
+                                                            border: OutlineInputBorder(),
+                                                            labelText: listSend[index]
+                                                                .observations,
+                                                          ),
+                                                        ),
+                                                      )
+                                                          : campsTable[i] ==
+                                                          "Estado"
+                                                          ? Text(
+                                                          listSend[index].state)
+                                                          : campsTable[i] ==
+                                                          "Seleccionar"
+                                                          ? CheckboxListTile(
+                                                        value: Send[index],
+                                                        onChanged: (
+                                                            bool? value) {
+                                                          setState(() {
+                                                            Send[index] = value!;
+                                                          });
+                                                        },)
+                                                          : Text("Otro"),
                                                     ),
-                                                  )
-                                                      : campsTable[i] == "Estado"
-                                                      ? Text(listSend[index].state)
-                                                      : campsTable[i] == "Seleccionar"
-                                                      ? CheckboxListTile(
-                                                    value: Send[index],
-                                                    onChanged:  (bool? value) {
-                                                      setState(() {
-                                                        Send[index]= value!;
-                                                      });
-                                                    },)
-                                                      : Text("Otro"),
-                                                ),
-                                            ]
-                                        ),
+                                                ]
+                                            ),
                                       ),
                                     ),
                                   ),
@@ -264,34 +281,48 @@ class _newSendState extends State<newSend> {
                             Row(
                               children: [
                                 Padding(
-                                  padding: const EdgeInsets.only(top: 30.0,left: 50.0),
+                                  padding: const EdgeInsets.only(
+                                      top: 30.0, left: 50.0),
                                   child: Text(stringFactories),
                                 ),
                               ],
                             ),
                             if(viewButoons == true)
                               Padding(
-                                padding: const EdgeInsets.only( top: 70.0, left: 550.0),
+                                padding: const EdgeInsets.only(
+                                    top: 70.0, left: 550.0),
                                 child: Container(
                                   width: 200,
                                   child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    mainAxisAlignment: MainAxisAlignment
+                                        .spaceBetween,
                                     children: [
                                       ElevatedButton(
                                         child: const Text('Nuevo'),
                                         onPressed: () {
                                           setState(() {
 
-                                            for(int i = 0 ; i <listSend.length; i++) {
 
-                                              String factory = listSend[i].factory.name;
-                                              String observations = listSend[i].observations;
-                                              String state = listSend[i].state;
-                                              bool select = Send[i];
 
-                                              print('\nEmpresa: $factory \nObservations: $observations \nEstado: $state \nselect: $select');
-                                            }
+                                               String date ='19 de enero del 2024';
 
+
+                                               for(int i = 0 ; i <4; i++) {
+
+                                                 String factory = listSend[i].factory;
+                                                 String observations = listSend[i].observations;
+                                                 String state = listSend[i].state;
+                                                 bool select = Send[i];
+
+                                                 listSend.add(lineSend(date: date,
+                                                     factory: factory,
+                                                     observations: observations,
+                                                     state: state));
+
+                                               }
+
+
+                                            csvExportator(listSend);
                                           });
                                         },
                                       ),
@@ -314,6 +345,42 @@ class _newSendState extends State<newSend> {
       ),
     );
   }
+  csvExportator(List<lineSend> listSend) async {
 
+    File myFile = File('D:/lineSends.csv');
+
+    List<dynamic> associateList = [
+
+      for (int i = 0; i <listSend.length;i++)
+        {
+
+          "date": listSend[i].date,
+          "factory": listSend[i].factory,
+          "observations": listSend[i].observations,
+          "state": listSend[i].state
+
+        },
+    ];
+
+    List<List<dynamic>> rows = [];
+    List<dynamic> row = [];
+
+
+    for (int i = 0; i < associateList.length; i++) {
+      List<dynamic> row = [];
+      row.add(associateList[i]["date"]);
+      row.add(associateList[i]["factory"]);
+      row.add(associateList[i]["observations"]);
+      row.add(associateList[i]["state"]);
+      rows.add(row);
+     
+    }
+
+    String csv = const ListToCsvConverter().convert(rows);
+    print(csv);
+    myFile.writeAsString(csv);
+
+
+  }
 
 }

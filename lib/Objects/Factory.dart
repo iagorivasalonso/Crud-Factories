@@ -1,6 +1,5 @@
 class Factory {
-
-  int id;
+  String id;
   String name;
   String highDate;
   List<String> thelephones;
@@ -17,7 +16,8 @@ class Factory {
     required this.mail,
     required this.web,
     required this.address,
-    required this.contacts
+    required this.contacts,
+
   });
 
   @override
@@ -29,10 +29,12 @@ class Factory {
 
     String address1= address['street'].toString();
     String number= address['number'].toString();
+    String apartament = address['apartament']!;
 
-    String addressComplete=  '$address1, $number';
+    String addressComplete=  '$address1,$number-$apartament';
 
     return addressComplete;
 
   }
+
 }

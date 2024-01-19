@@ -3,7 +3,7 @@ import 'package:crud_factories/Objects/Factory.dart';
 class lineSend {
 
   String date;
-  Factory factory;
+  String factory;
   String observations;
   String state;
 
