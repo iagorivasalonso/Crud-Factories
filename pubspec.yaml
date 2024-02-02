@@ -42,6 +42,8 @@ dependencies:
   dropdown_button2: ^2.3.9
   csv: ^5.1.1
   path_provider: ^2.1.1
+  show_platform_date_picker: ^0.0.5
+  intl: ^0.18.0
 
 
 

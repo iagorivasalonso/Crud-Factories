@@ -1,8 +1,11 @@
 import 'dart:io';
-
+import 'package:crud_factories/Objects/Factory.dart';
+import 'package:intl/intl.dart';
+import 'package:show_platform_date_picker/show_platform_date_picker.dart';
 import 'package:adaptive_scrollbar/adaptive_scrollbar.dart';
 import 'package:csv/csv.dart';
 import 'package:flutter/material.dart';
+import '../Alertdialogs/confirm.dart';
 import '../Objects/lineSend.dart';
 
 
@@ -15,9 +18,10 @@ class newSend extends StatefulWidget {
   List<lineSend> line;
   String SeletedFilter;
   List<String> dateSends;
+  List<Factory> factories;
 
 
-  newSend(this.dateSends,this.sendsLine,this.select,this.selectCamp, this.filter,  this.line, this.SeletedFilter);
+  newSend(this.dateSends,this.sendsLine,this.select,this.selectCamp, this.filter,  this.line, this.SeletedFilter, this.factories);
 
   @override
   State<newSend> createState() => _newSendState();
@@ -39,14 +43,15 @@ class _newSendState extends State<newSend> {
   List<String> campsTable = [];
   int rows = 0;
   int rowsTable = 0;
+  int rowsType = -1;
   List<bool>selectable = [];
   List <bool> selectTable = [];
   List<lineSend> sends = [];
   List<lineSend> listSend = [];
-
+  String date="";
 
   List<bool> Send = List.generate(88, (index) => false);
-
+  DateTime seletedDate =DateTime.now();
   @override
   Widget build(BuildContext context) {
 
@@ -65,6 +70,7 @@ class _newSendState extends State<newSend> {
     String title = "";
     String typeList="";
     String type = widget.SeletedFilter;
+    List<Factory> factories = widget.factories;
 
     campsTable = ['Empresa', 'Observaciones', 'Estado', 'Seleccionar'];
 
@@ -78,8 +84,14 @@ class _newSendState extends State<newSend> {
       type = "Fecha ";
       campsTable = ['Empresa', 'Observaciones', 'Estado', 'Seleccionar'];
       listSend = widget.sendsLine;
-      cant = listSend.length;
-      stringFactories = "Tiene $cant empresas en su base de datos";
+      rowsType =factories.length;
+
+      if(controllerText.text.isEmpty)
+      {
+        controllerText.text=DateFormat('dd-MM-yyyy').format( DateTime.now());
+      }
+      rowsTable =factories.length;
+      stringFactories = "Tiene $rowsTable empresas en su base de datos";
       viewButoons = true;
     }
     else {
@@ -93,6 +105,7 @@ class _newSendState extends State<newSend> {
         type = "Fecha:  ";
         campsTable = ['Empresa', 'Observaciones', 'Estado'];
         listSend = widget.sendsLine;
+        rowsTable =listSend.length;
         type =widget.SeletedFilter;
         controllerText.text = widget.dateSends[select];
         typeList = "empresas: ";
@@ -108,7 +121,7 @@ class _newSendState extends State<newSend> {
           }
 
         }
-
+        rowsType =cant;
         stringFactories = "Este dia se hicieron $cant envios";
       }
 
@@ -138,8 +151,10 @@ class _newSendState extends State<newSend> {
       endTable = campsTable.length;
     }
     else {
-      endTable = campsTable.length - 1;
+      endTable = campsTable.length;// - 1;
     }
+
+    final ShowPlatformDatePicker platformDatePicker = ShowPlatformDatePicker(buildContext: context);
 
     return AdaptiveScrollbar(
       controller: verticalScroll,
@@ -186,11 +201,29 @@ class _newSendState extends State<newSend> {
                                     height: 40,
                                     child: TextField(
                                       controller: controllerText,
-                                      decoration: const InputDecoration(
-                                        border: OutlineInputBorder(),
+                                      decoration: InputDecoration(
+                                        border: const OutlineInputBorder(),
+                                        icon: select == -1
+                                              ? const Icon(Icons.calendar_today)
+                                              : null,
                                       ),
+                                      onTap: () async {
+                                        DateTime? dateSelected = await  platformDatePicker.showPlatformDatePicker(
+                                            context,
+                                            seletedDate,
+                                            DateTime(DateTime.now().year - 10),
+                                            DateTime(DateTime.now().year + 1),
+                                        );
+                                        setState(() {
+                                          date =DateFormat('dd-MM-yyyy').format(dateSelected!);
+                                          controllerText.text = date;
+                                        
+                                        });
+
+                                      },
                                     ),
                                   ),
+
                                 ],
                               ),
                             ),
@@ -225,52 +258,46 @@ class _newSendState extends State<newSend> {
                                           ),
 
                                       ],
-                                      rows: List<DataRow>.generate(
-                                        listSend.length,
-                                            (int index) =>
-                                            DataRow(
-                                                cells: <DataCell>[
-                                                  for(int i = 0; i <
-                                                      endTable; i++)
-                                                    DataCell(
-                                                      campsTable[i] == "Empresa"
-                                                          ? Text(listSend[index]
-                                                          .factory)
-                                                          : campsTable[i] ==
-                                                          "Fecha"
-                                                          ? Text(
-                                                          listSend[index].date)
-                                                          : campsTable[i] ==
-                                                          "Observaciones"
-                                                          ? Padding(
-                                                        padding: const EdgeInsets
-                                                            .all(8.0),
-                                                        child: TextField(
-                                                          controller: _controllersObserLine[index],
-                                                          decoration: InputDecoration(
-                                                            border: OutlineInputBorder(),
-                                                            labelText: listSend[index]
-                                                                .observations,
+                                       rows: List<DataRow>.generate(rowsType,
+                                          (int index) =>
+                                          DataRow(
+                                              cells: <DataCell>[
+                                                for(int i = 0; i < endTable; i++)
+                                                DataCell(
+                                                 campsTable[i] == "Empresa"
+                                                    ? select == -1
+                                                       ? Text(factories[i].name)
+                                                       : Text(listSend[index].factory)
+                                                 : campsTable[i] == "Fecha"
+                                                     ?  Text(listSend[index].date)
+                                                 : campsTable[i] == "Observaciones"
+                                                     ? Padding(
+                                                         padding: const EdgeInsets.all(8.0),
+                                                         child: TextField(
+                                                             controller: _controllersObserLine[index],
+                                                             decoration: InputDecoration(
+                                                               border: OutlineInputBorder(),
+                                                               labelText: select == -1
+                                                                   ? _controllersObserLine[index].text
+                                                                   : listSend[index].observations,
                                                           ),
-                                                        ),
-                                                      )
-                                                          : campsTable[i] ==
-                                                          "Estado"
-                                                          ? Text(
-                                                          listSend[index].state)
-                                                          : campsTable[i] ==
-                                                          "Seleccionar"
-                                                          ? CheckboxListTile(
-                                                        value: Send[index],
-                                                        onChanged: (
-                                                            bool? value) {
-                                                          setState(() {
+                                                   ),
+                                                 )
+                                                : campsTable[i] == "Estado"
+                                                     ? select == -1
+                                                           ? Text("estado")
+                                                           : Text(listSend[index].state)
+                                                : campsTable[i] =="Seleccionar"
+                                                     ? CheckboxListTile(
+                                                          value: Send[index],
+                                                            onChanged: (bool? value) {
+                                                                 setState(() {
                                                             Send[index] = value!;
                                                           });
-                                                        },)
-                                                          : Text("Otro"),
-                                                    ),
-                                                ]
+                                                         },)
+                                                 : Text("data")
+                                                ),
+                                              ]
                                             ),
                                       ),
                                     ),
@@ -278,57 +305,69 @@ class _newSendState extends State<newSend> {
                                 ),
                               ),
                             ),
-                            Row(
-                              children: [
-                                Padding(
-                                  padding: const EdgeInsets.only(
-                                      top: 30.0, left: 50.0),
-                                  child: Text(stringFactories),
-                                ),
-                              ],
+                            Padding(
+                              padding: const EdgeInsets.only(top: 30.0,left: 60.0),
+                              child: Align(
+                                  alignment: Alignment.topLeft,
+                                  child: Row(
+                                    children: [
+                                      Text(stringFactories),
+                                      Padding(
+                                        padding: const EdgeInsets.only(left: 350.0),
+                                        child: Text("Seleccionar todas"),
+                                      ),
+                                      Checkbox(
+                                        value: Send[0],
+                                        onChanged: (value) {
+                                          setState(() {
+                                            for(int i = 0; i<factories.length; i++)
+                                            Send[i] = value!;
+                                          });
+                                        },
+                                      )
+
+                                    ],
+                                  )
+                              ),
                             ),
                             if(viewButoons == true)
                               Padding(
-                                padding: const EdgeInsets.only(
-                                    top: 70.0, left: 550.0),
-                                child: Container(
+                                padding: const EdgeInsets.only(top: 70.0, left: 550.0),
+                                child: SizedBox(
                                   width: 200,
                                   child: Row(
-                                    mainAxisAlignment: MainAxisAlignment
-                                        .spaceBetween,
+                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                     children: [
                                       ElevatedButton(
                                         child: const Text('Nuevo'),
                                         onPressed: () {
                                           setState(() {
+                                            List<lineSend> sendSelected = [];
+                                            int allLines =0;
+                                            for(int i = 0; i < factories.length; i++)
+                                            {
+                                                if(Send[i] == true)
+                                                {
+                                                  line.add(lineSend(date: controllerText.text, factory: factories[i].name,  observations: _controllersObserLine[i].text, state:'Preparado'));
+                                                  allLines++;
+                                                  print(line);
+                                                }
+                                            }
 
+                                            String action ='El pedido contiene $allLines empresas';
+                                            confirm(context,action);
 
-
-                                               String date ='19 de enero del 2024';
-
-
-                                               for(int i = 0 ; i <4; i++) {
-
-                                                 String factory = listSend[i].factory;
-                                                 String observations = listSend[i].observations;
-                                                 String state = listSend[i].state;
-                                                 bool select = Send[i];
-
-                                                 listSend.add(lineSend(date: date,
-                                                     factory: factory,
-                                                     observations: observations,
-                                                     state: state));
-
-                                               }
-
-
-                                            csvExportator(listSend);
+                                          csvExportator(listSend);
                                           });
+
+
                                         },
                                       ),
                                       ElevatedButton(
                                         child: const Text('Cancelar'),
-                                        onPressed: () {},
+                                        onPressed: () {
+
+                                        },
                                       ),
                                     ],
                                   ),
@@ -373,7 +412,7 @@ class _newSendState extends State<newSend> {
       row.add(associateList[i]["observations"]);
       row.add(associateList[i]["state"]);
       rows.add(row);
-     
+
     }
 
     String csv = const ListToCsvConverter().convert(rows);
@@ -384,3 +423,4 @@ class _newSendState extends State<newSend> {
   }
 
 }
+

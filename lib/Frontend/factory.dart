@@ -1,6 +1,9 @@
 import 'package:adaptive_scrollbar/adaptive_scrollbar.dart';
+import 'package:crud_factories/Alertdialogs/campRepeat.dart';
 import 'package:csv/csv.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+import 'package:show_platform_date_picker/show_platform_date_picker.dart';
 import '../Alertdialogs/confirm.dart';
 import '../Functions/avoidRepeatCamp.dart';
 import '../Objects/Factory.dart';
@@ -23,7 +26,7 @@ class _newFactoryState extends State<newFactory> {
   final ScrollController horizontalScroll = ScrollController();
   final ScrollController verticalScroll = ScrollController();
 
-  bool actionDelete = false;
+  int select =-1;
 
   double widthBar = 10.0;
   TextEditingController controllerName = new TextEditingController();
@@ -45,12 +48,14 @@ class _newFactoryState extends State<newFactory> {
   int contactSelect = 0;
   bool edit = false;
   String id ="";
+  DateTime seletedDate =DateTime.now();
+  String date="";
 
   @override
   Widget build(BuildContext context) {
     List<Factory> factories = widget.factories;
 
-    int select = widget.select;
+    select = widget.select;
 
 
     String action = "actualizar";
@@ -106,6 +111,8 @@ class _newFactoryState extends State<newFactory> {
 
    }
 
+    final ShowPlatformDatePicker platformDatePicker = ShowPlatformDatePicker(buildContext: context);
+
     return AdaptiveScrollbar(
       controller: verticalScroll,
       width: widthBar,
@@ -153,7 +160,6 @@ class _newFactoryState extends State<newFactory> {
                                   decoration: const InputDecoration(
                                     border: OutlineInputBorder(),
                                   ),
-
                                 ),
                               ),
                             ],
@@ -166,13 +172,30 @@ class _newFactoryState extends State<newFactory> {
                             children: [
                               const Text('Fecha de alta: '),
                               SizedBox(
-                                width: 150,
+                                width: 200,
                                 height: 40,
                                 child: TextField(
                                   controller: controllerHighDate,
-                                  decoration: const InputDecoration(
-                                    border: OutlineInputBorder(),
+                                  decoration:  InputDecoration(
+                                    border: const OutlineInputBorder(),
+                                    icon: select == -1
+                                        ? const Icon(Icons.calendar_today)
+                                        : null,
                                   ),
+                                  onTap: () async {
+                                    DateTime? dateSelected = await  platformDatePicker.showPlatformDatePicker(
+                                      context,
+                                      seletedDate,
+                                      DateTime(DateTime.now().year - 10),
+                                      DateTime(DateTime.now().year + 1),
+                                    );
+                                    setState(() {
+                                      date =DateFormat('dd-MM-yyyy').format(dateSelected!);
+                                      controllerHighDate.text = date;
+
+                                    });
+
+                                  },
 
                                 ),
                               ),
@@ -359,7 +382,7 @@ class _newFactoryState extends State<newFactory> {
                                   child: Column(
                                     children: [
                                       ElevatedButton(
-                                        child: Text('>>'),
+                                        child: const Icon(Icons.add),
                                         onPressed: () {
                                           setState(() {
                                             contacs.add(controllerEmpleoyeeNew.text);
@@ -371,7 +394,7 @@ class _newFactoryState extends State<newFactory> {
                                         padding: const EdgeInsets.only(
                                             top: 12.0),
                                         child: ElevatedButton(
-                                          child: const Text('X'),
+                                          child: const Icon(Icons.delete),
                                           onPressed: () {
                                             setState(() {
                                               var delete = contacs[contactSelect];
@@ -446,76 +469,77 @@ class _newFactoryState extends State<newFactory> {
                                   child: Text(action),
                                   onPressed: () {
                                       setState(() {
-                                        bool repeat = false;
-                                        String  nameCamp = "nombre de usuario";
-                                        factories[select].contacts = contacs;
+                                        bool repeat=false;
+                                        List<String> campSearch=[];
 
-                                        List<String> adrress1=controllerAdrress.text.split(",");
-                                        List<String> adrress2=controllerAdrress.text.split("-");
-                                        repeat=avoidRepeteatCamp(context,
-                                            repeat, nameCamp, controllerName,
-                                            factories, select);
-                                        print("object");
-                                        if(select ==- 1)
+                                        for(int i = 0; i <factories.length; i++)
                                         {
-
-                                          factories.add(Factory(
-                                              id:factories.length.toString(),
-                                              name: controllerName.text,
-                                              highDate: controllerHighDate.text,
-                                              thelephones:[controllerTelephone1.text,controllerTelephone2.text],
-                                              mail: controllerMail.text,
-                                              web: controllerWeb.text,
-                                              contacts:[],
-                                              address: {
-                                                'street':adrress1[0],
-                                                'number':adrress2[0],
-                                                'apartament': adrress2[1],
-                                                 'city' : controllerCity.text,
-                                                 'postalCode' : controllerPostalCode.text ,
-                                                  'province' : controllerProvince.text,
-                                              }
-                                          ));
-
-
-
+                                            campSearch.add(factories[i].name);
                                         }
-                                        else{
+                                        bool repeat1=avoidRepeteatCamp(context, repeat,campSearch, controllerName, select);
 
-                                          factories[select].name = controllerName.text;
-                                          factories[select].highDate = controllerHighDate.text;
-                                          factories[select].thelephones= [controllerTelephone1.text,controllerTelephone2.text];
-                                          factories[select].mail = controllerMail.text;
-                                          factories[select].web= controllerWeb.text;
-                                          factories[select].address['street']=adrress1[0];
-                                          factories[select].address['number']=adrress2[0];
-                                          factories[select].address['apartament']=adrress2[1];
-                                          factories[select].address['city']=controllerCity.text;
-                                          factories[select].address['postalCode']= controllerPostalCode.text ;
-                                         factories[select].address['province']= controllerProvince.text;
-
-                                        }
-
-
-                                          edit = false;
-
-
-
-                                        if (select == -1)
+                                        if(repeat1 == true)
                                         {
-
-                                          String action ='La empresa se ha dado de alta correctamente';
-                                          confirm(context,action);
+                                          action ='El usuario ya se encuentra en la base de datos';
+                                          campRepeat(context,action);
                                         }
                                         else
                                         {
-                                          String action ='La empresa se ha modificado correctamente';
-                                          confirm(context,action);
+                                          String action ='';
+                                             factories[select].contacts = contacs;
+
+                                             List<String> adrress1=controllerAdrress.text.split(",");
+                                             List<String> adrress2=controllerAdrress.text.split("-");
+
+
+                                             if(select ==- 1)
+                                             {
+                                               factories.add(Factory(
+                                                     id:factories.length.toString(),
+                                                     name: controllerName.text,
+                                                     highDate: controllerHighDate.text,
+                                                     thelephones:[controllerTelephone1.text,controllerTelephone2.text],
+                                                     mail: controllerMail.text,
+                                                     web: controllerWeb.text,
+                                                     contacts:contacs,
+                                                     address: {
+                                                          'street':adrress1[0],
+                                                          'number':adrress2[0],
+                                                          'apartament': adrress2[1],
+                                                          'city' : controllerCity.text,
+                                                          'postalCode' : controllerPostalCode.text ,
+                                                          'province' : controllerProvince.text,
+                                                         }
+                                                      ));
+                                                         action ='La empresa se ha dado de alta correctamente';
+                                                         confirm(context,action);
+                                             }
+                                             else
+                                             {
+                                                  List<String>num=adrress2[0].split(",");
+
+                                                 factories[select].name = controllerName.text;
+                                                 factories[select].highDate = controllerHighDate.text;
+                                                 factories[select].thelephones= [controllerTelephone1.text,controllerTelephone2.text];
+                                                 factories[select].mail = controllerMail.text;
+                                                 factories[select].web= controllerWeb.text;
+                                                 factories[select].address['street']=adrress1[0];
+                                                 factories[select].address['number']=num[1];
+                                                 factories[select].address['apartament']=adrress2[1];
+                                                 factories[select].address['city']=controllerCity.text;
+                                                 factories[select].address['postalCode']= controllerPostalCode.text ;
+                                                 factories[select].address['province']= controllerProvince.text;
+
+                                                  action ='El usuario se ha modificado correctamente';
+                                                  confirm(context,action);
+
+                                             }
+                                             csvExportator(factories,select);
                                         }
 
 
 
-                                        csvExportator(factories,select);
+
                                       });
                                   },
                                 ),
@@ -557,10 +581,8 @@ csvExportator(List<Factory> factories, int select) async {
          "telephone2": factories[i].thelephones[1],
          "mail": factories[i].mail,
          "web": factories[i].web,
-         "address": factories[i].allAdress(),
-         "city" : factories[i].address['city'],
-         "postalCode":factories[i].address['postalCode']!,
-         "province":factories[i].address['province']!,
+         "address": factories[i].address,
+         "city" : factories[i],
          "contacts" :factories[i].contacts,
 
     },
@@ -592,8 +614,8 @@ csvExportator(List<Factory> factories, int select) async {
       }
 
   String csv = const ListToCsvConverter().convert(rows);
- // print(csv);
- myFile.writeAsString(csv);
+
+// myFile.writeAsString(csv);
 
 
 

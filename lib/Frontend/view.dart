@@ -631,7 +631,7 @@ class _viewState extends State<view> {
                       ? newFactory(factories, select)
                       : view == 'mail'
                       ? newMail(mails, select)
-                      :  newSend(datesSends,sendsDay,select,selectCamp,filterFactory,line,sendFilter)
+                      :newSend(datesSends,sendsDay,select,selectCamp,filterFactory,line,sendFilter,factories)
 
               ),
             ],

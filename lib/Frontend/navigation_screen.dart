@@ -153,9 +153,11 @@ class _NavigationScreenState extends State<NavigationScreen> {
                                                     case 0:
                                                       try {
                                                         factories.clear();
-                                                        file =new File('D:/ite.csv');
+                                                        file =new File('D:/factories.csv');
+
 
                                                         fileContent = await file.readAsLines();
+                                                        print(fileContent);
 
                                                         List<String> select;
                                                         List<String> select1;
@@ -192,10 +194,11 @@ class _NavigationScreenState extends State<NavigationScreen> {
                                                               },
                                                               contacts: select1));
                                                         }
+
+
                                                       } catch (Exeption) {
 
                                                       }
-
                                                       break;
 
                                                        case 1:
@@ -211,7 +214,7 @@ class _NavigationScreenState extends State<NavigationScreen> {
                                                               fileContent.length; i++) {
                                                             select = fileContent[i].split(",");
 
-                                                            mails.add(Mail(
+                                                              mails.add(Mail(
                                                                 id: select[0],
                                                                 company: select[2],
                                                                 addrres: select[1],
@@ -235,7 +238,6 @@ class _NavigationScreenState extends State<NavigationScreen> {
                                                         for (int i = 0; i <
                                                             fileContent.length; i++) {
                                                           select = fileContent[i].split(",");
-
 
                                                           line.add(lineSend(
                                                               date: select[0],
@@ -383,7 +385,6 @@ class _NavigationScreenState extends State<NavigationScreen> {
                     ),
                     onTap: (){
                       setState(() async {
-
 
                         if (itenSelection == 2 || itenSelection == 3)
                           itenSelect = itenSelection;

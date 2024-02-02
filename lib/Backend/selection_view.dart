@@ -10,8 +10,6 @@ import '../Frontend/conection.dart';
 import '../Frontend/view.dart';
 import '../Functions/avoidRepeatArray.dart';
 
-
-
 FuntionSeleted(int itenSelection, int subIten1Selection,int subIten2Selection, double mWidth, double mHeight, List<String> itens, List<Factory> factories, List<Mail> mails, List<lineSend> line) {
 
 
@@ -38,7 +36,7 @@ FuntionSeleted(int itenSelection, int subIten1Selection,int subIten2Selection, d
 
           if (subIten2Selection == 2) {
 
-            return newSend(datesSends, line, newdato, "", "", line, "");
+            return newSend(datesSends, line, newdato, "", "", line, "",factories);
           }
         }
 
