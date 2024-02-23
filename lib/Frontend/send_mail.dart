@@ -446,7 +446,7 @@ class _sendMailState extends State<sendMail> {
       final smtpServer = hotmail(username,password);
       final message = Message()
         ..from = Address(username, 'Your name')
-        ..recipients.add('iagorivas@gmail.com')
+        ..recipients.add(controllerMailFrom.text)
         ..subject = controllerSubject.text
         ..text = controllerMessage.text;
 
