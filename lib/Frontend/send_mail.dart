@@ -1,6 +1,13 @@
+
+import 'dart:convert';
+
 import 'package:adaptive_scrollbar/adaptive_scrollbar.dart';
+import 'package:crud_factories/Alertdialogs/confirm.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
+import 'package:mailer/mailer.dart';
+import 'package:mailer/smtp_server.dart';
+import '../Alertdialogs/campRepeat.dart';
 import '../Objects/Mail.dart';
 import '../Objects/lineSend.dart';
 
@@ -21,10 +28,16 @@ class sendMail extends StatefulWidget {
 
 class _sendMailState extends State<sendMail> {
 
+
   final ScrollController horizontalScroll = ScrollController();
   final ScrollController verticalScroll = ScrollController();
-
   final ScrollController verticalScrollTable = ScrollController();
+
+  late TextEditingController controllerMailTo = TextEditingController();
+  late TextEditingController controllerPass = TextEditingController();
+  late TextEditingController controllerMailFrom = TextEditingController();
+  late TextEditingController controllerSubject = TextEditingController();
+  late TextEditingController controllerMessage= TextEditingController();
 
   double widthBar = 10.0;
 
@@ -37,19 +50,19 @@ class _sendMailState extends State<sendMail> {
   List <bool> selectTable = [];
   List<lineSend> sends = [];
   List<lineSend> sendsDay = [];
-
   String? selectedSend;
   Mail? selectedMail;
   int cantFactories = 0;
 
+
   @override
   Widget build(BuildContext context) {
-
 
     List<String> datesSends = widget.datesSends;
     List<lineSend> lines = widget.line;
     List<Mail> mails = widget.mails;
     String itenDefaultMail =mails[0].addrres;
+
 
     return AdaptiveScrollbar(
       controller: verticalScroll,
@@ -69,8 +82,8 @@ class _sendMailState extends State<sendMail> {
               scrollDirection: Axis.horizontal,
               child: Container(
                 height: _value == 1
-                        ? 713
-                        : 973,
+                    ? 713
+                    : 973,
                 width: 880,
                 child: Align(
                   alignment: Alignment.topLeft,
@@ -85,7 +98,7 @@ class _sendMailState extends State<sendMail> {
                           ),
                         ],
                       ),
-                       Padding(
+                      Padding(
                         padding: const EdgeInsets.only(top: 20.0, bottom: 20.0, left: 30.0),
                         child: Row(
                           children: [
@@ -100,12 +113,14 @@ class _sendMailState extends State<sendMail> {
                                     hint:  Text(itenDefaultMail),
                                     items: mails.map((Mail itemMail) => DropdownMenuItem<Mail>(
                                       value:  itemMail,
-                                      child: Text( itemMail.addrres),
+                                      child: Text(itemMail.addrres),
                                     )).toList(),
                                     value: selectedMail,
                                     onChanged: (Mail? mailChoose) {
                                       setState(() {
-                                              selectedMail = mailChoose;
+                                        selectedMail=mailChoose;
+                                        controllerMailTo.text = mailChoose!.addrres;
+                                        controllerPass.text = mailChoose!.password;
                                       });
                                     },
                                     buttonStyleData: const ButtonStyleData(
@@ -182,145 +197,153 @@ class _sendMailState extends State<sendMail> {
                                 children: [
                                   Container(
                                     child: _value == 1
-                                        ? const Row(
-                                            children: [
-                                              Text("Enviar a:"),
-                                              Padding(
-                                                padding: EdgeInsets.only(left: 34.0),
-                                                child: SizedBox(
-                                                  width: 450,
-                                                  height: 40,
-                                                  child: TextField(
-                                                    decoration: InputDecoration(
-                                                      border: OutlineInputBorder(),
-                                                    ),
-                                                  ),
-                                                ),
+                                        ?  Row(
+                                      children: [
+                                        Text("Enviar a:"),
+                                        Padding(
+                                          padding: EdgeInsets.only(left: 34.0),
+                                          child: SizedBox(
+                                            width: 450,
+                                            height: 40,
+                                            child: TextField(
+                                              decoration: const InputDecoration(
+                                                border: OutlineInputBorder(),
                                               ),
-                                            ],
-                                          )
+                                              controller: controllerMailFrom,
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    )
                                         : Column(
+                                      children: [
+                                        Align(
+                                          alignment: Alignment.topLeft,
+                                          child: Column(
                                             children: [
-                                              Align(
-                                                alignment: Alignment.topLeft,
-                                                child: Column(
-                                                  children: [
-                                                    Row(
-                                                      children: [
-                                                         const Text("Seleccionar Envio: "),
-                                                        Padding(
-                                                          padding: const EdgeInsets.only(left: 20.0),
-                                                          child: DropdownButtonHideUnderline(
-                                                            child: DropdownButton2<String>(
-                                                              hint: const Text('Seleccionar envio',
-                                                              ),
-                                                              items: datesSends.map((String itemSend) => DropdownMenuItem<String>(
-                                                                        value:  itemSend,
-                                                                        child: Text( itemSend,
-                                                                          overflow: TextOverflow.ellipsis,
-                                                                        ),
-                                                                      ))
-                                                                  .toList(),
-                                                              value: selectedSend,
-                                                              onChanged: (String? dateChoose) {
-                                                                setState(() {
-                                                                  sendsDay.clear();
-                                                                  selectedSend = dateChoose;
-                                                                          for(int i = 0; i < lines.length; i++) {
-                                                                            if(lines[i].date==dateChoose) {
-                                                                              sendsDay.add(lines[i]);
-                                                                            }
-                                                                          }
-                                                                          cantFactories = sendsDay.length;
-                                                                          print(cantFactories);
+                                              Row(
+                                                children: [
+                                                  const Text("Seleccionar Envio: "),
+                                                  Padding(
+                                                    padding: const EdgeInsets.only(left: 20.0),
+                                                    child: DropdownButtonHideUnderline(
+                                                      child: DropdownButton2<String>(
+                                                        hint: const Text('Seleccionar envio',
+                                                        ),
+                                                        items: datesSends.map((String itemSend) => DropdownMenuItem<String>(
+                                                          value:  itemSend,
+                                                          child: Text( itemSend,
+                                                            overflow: TextOverflow.ellipsis,
+                                                          ),
+                                                        ))
+                                                            .toList(),
+                                                        value: selectedSend,
+                                                        onChanged: (String? dateChoose) {
+                                                          setState(() {
+                                                            sendsDay.clear();
+                                                            selectedSend = dateChoose;
 
-                                                                });
-                                                              },
-                                                              buttonStyleData: const ButtonStyleData(
-                                                                height: 50,
-                                                                width: 250,
-                                                                padding: EdgeInsets.only(left: 14, right: 14),
-                                                              ),
-                                                              dropdownStyleData: DropdownStyleData(
-                                                                maxHeight: 200,
-                                                                width: 220,
-                                                                scrollbarTheme: ScrollbarThemeData(
-                                                                  thickness: MaterialStateProperty.all(6),
-                                                                ),
-                                                              ),
-                                                            ),
+                                                            for(int i = 0; i < lines.length; i++) {
+                                                              if(lines[i].date==dateChoose) {
+                                                                sendsDay.add(lines[i]);
+                                                              }
+                                                            }
+
+                                                            cantFactories = sendsDay.length;
+
+                                                            for(int i = 0; i <sendsDay.length; i++)
+                                                            {
+
+                                                              print(sendsDay[i].factory);
+                                                            }
+                                                              ;
+                                                          });
+                                                        },
+                                                        buttonStyleData: const ButtonStyleData(
+                                                          height: 50,
+                                                          width: 250,
+                                                          padding: EdgeInsets.only(left: 14, right: 14),
+                                                        ),
+                                                        dropdownStyleData: DropdownStyleData(
+                                                          maxHeight: 200,
+                                                          width: 220,
+                                                          scrollbarTheme: ScrollbarThemeData(
+                                                            thickness: MaterialStateProperty.all(6),
                                                           ),
                                                         ),
-                                                      ],
+                                                      ),
                                                     ),
-                                                    Align(
-                                                      alignment:
-                                                          Alignment.topLeft,
-                                                      child: Padding(
-                                                        padding: const EdgeInsets.only(top: 20.0, left: 150.0),
-                                                        child: sendsDay.isNotEmpty
+                                                  ),
+                                                ],
+                                              ),
+                                              Align(
+                                                alignment:
+                                                Alignment.topLeft,
+                                                child: Padding(
+                                                    padding: const EdgeInsets.only(top: 20.0, left: 150.0),
+                                                    child: sendsDay.isNotEmpty
                                                         ?  Column(
-                                                          children: [
-                                                            Padding(
-                                                              padding: const EdgeInsets.only(left: 40.0),
-                                                              child: Row(
-                                                                children: [
-                                                                  SizedBox(
-                                                                    height: 200,
-                                                                    child: Scrollbar(
-                                                                      controller: verticalScrollTable,
-                                                                      child: SingleChildScrollView(
-                                                                        controller: verticalScrollTable,
-                                                                        scrollDirection: Axis.vertical,
-                                                                        child: DataTable(
-                                                                          columns: <DataColumn>[
-                                                                            for(int i=0 ; i < columnsTable.length; i++)
-                                                                              DataColumn(
-                                                                                label: SizedBox(
-                                                                                    width: 110,
-                                                                                    child: Text(columnsTable[i])
-                                                                                ),
-                                                                              ),
-
-                                                                          ],
-                                                                          rows: List<DataRow>.generate(sendsDay.length,
-                                                                                (int index) =>  DataRow(
-                                                                                cells: <DataCell>[
-                                                                                  DataCell(
-                                                                                      Text(sendsDay[index].factory),
-                                                                                  ),
-                                                                                  DataCell(
-                                                                                     Text(""),
-                                                                                  ),
-                                                                                ]
+                                                      children: [
+                                                        Padding(
+                                                          padding: const EdgeInsets.only(left: 40.0),
+                                                          child: Row(
+                                                            children: [
+                                                              SizedBox(
+                                                                height: 200,
+                                                                child: Scrollbar(
+                                                                  controller: verticalScrollTable,
+                                                                  child: SingleChildScrollView(
+                                                                    controller: verticalScrollTable,
+                                                                    scrollDirection: Axis.vertical,
+                                                                    child: DataTable(
+                                                                      columns: <DataColumn>[
+                                                                        for(int i=0 ; i < columnsTable.length; i++)
+                                                                          DataColumn(
+                                                                            label: SizedBox(
+                                                                                width: 110,
+                                                                                child: Text(columnsTable[i])
                                                                             ),
                                                                           ),
+
+                                                                      ],
+                                                                      rows: List<DataRow>.generate(sendsDay.length,
+                                                                            (int index) =>  DataRow(
+                                                                            cells: <DataCell>[
+                                                                              DataCell(
+                                                                                Text(sendsDay[index].factory),
+                                                                              ),
+                                                                              DataCell(
+                                                                                Text(""),
+                                                                              ),
+                                                                            ]
                                                                         ),
                                                                       ),
                                                                     ),
                                                                   ),
-                                                                ],
+                                                                ),
                                                               ),
-                                                            ),
-                                                            Row(
-                                                              children: [
-                                                                Padding(
-                                                                  padding: const EdgeInsets.only(top: 20.0),
-                                                                  child: Text("El envio tiene $cantFactories empresas"),
-                                                                )
-                                                              ],
-                                                            ),
+                                                            ],
+                                                          ),
+                                                        ),
+                                                        Row(
+                                                          children: [
+                                                            Padding(
+                                                              padding: const EdgeInsets.only(top: 20.0),
+                                                              child: Text("El envio tiene $cantFactories empresas"),
+                                                            )
                                                           ],
-                                                        )
-                                                        : const Text("no hay ningún envio seleccionado",
-                                                                       style: TextStyle(color: Colors.red),)
-                                                      ),
+                                                        ),
+                                                      ],
                                                     )
-                                                  ],
+                                                        : const Text("no hay ningún envio seleccionado",
+                                                      style: TextStyle(color: Colors.red),)
                                                 ),
-                                              ),
+                                              )
                                             ],
                                           ),
+                                        ),
+                                      ],
+                                    ),
                                   ),
                                 ],
                               ),
@@ -330,15 +353,16 @@ class _sendMailState extends State<sendMail> {
                               child: Row(
                                 children: [
                                   const Text('Asunto:'),
-                                  const Padding(
-                                    padding: EdgeInsets.only(left: 39.0),
+                                  Padding(
+                                    padding: const EdgeInsets.only(left: 39.0),
                                     child: SizedBox(
                                       width: 450,
                                       height: 40,
                                       child: TextField(
-                                        decoration: InputDecoration(
+                                        decoration: const InputDecoration(
                                           border: OutlineInputBorder(),
                                         ),
+                                        controller: controllerSubject,
                                       ),
                                     ),
                                   ),
@@ -360,8 +384,8 @@ class _sendMailState extends State<sendMail> {
                                 ),
                               ],
                             ),
-                            const Padding(
-                              padding: EdgeInsets.only(top: 20.0, left: 85.0),
+                            Padding(
+                              padding: const EdgeInsets.only(top: 20.0, left: 85.0),
                               child: Row(
                                 children: [
                                   SizedBox(
@@ -370,9 +394,10 @@ class _sendMailState extends State<sendMail> {
                                     child: TextField(
                                       maxLines: 20,
                                       minLines: 6,
-                                      decoration: InputDecoration(
+                                      decoration: const InputDecoration(
                                         border: OutlineInputBorder(),
                                       ),
+                                      controller: controllerMessage,
                                     ),
                                   ),
                                 ],
@@ -384,15 +409,15 @@ class _sendMailState extends State<sendMail> {
                                   padding: const EdgeInsets.only(left: 600.0, right: 30.0),
                                   child: ElevatedButton(
                                     child: const Text('Enviar'),
-                                    onPressed: () {
+                                    onPressed: sendingMail,
 
-                                      print(selectedMail);
-                                    },
                                   ),
                                 ),
                                 ElevatedButton(
                                   child: const Text('Cancelar'),
-                                  onPressed: () {},
+                                  onPressed: () {
+
+                                  },
                                 ),
                               ],
                             ),
@@ -408,5 +433,36 @@ class _sendMailState extends State<sendMail> {
         ),
       ),
     );
+  }
+  Future<void> sendingMail() async {
+
+    String action ="";
+    try {
+
+      String username = controllerMailTo.text;
+      Codec<String, String> stringToBase64 = utf8.fuse(base64);
+      String password = stringToBase64.decode(controllerPass.text);
+
+      final smtpServer = hotmail(username,password);
+      final message = Message()
+        ..from = Address(username, 'Your name')
+        ..recipients.add('iagorivas@gmail.com')
+        ..subject = controllerSubject.text
+        ..text = controllerMessage.text;
+
+      final sendReport = await send(message,smtpServer);
+      print('Message sent: ' + sendReport.toString());
+
+      action ='El email se ha enviado correctamente';
+      confirm(context,action);
+
+
+    } catch (e) {
+
+      action ='Error de autentificacion';
+      confirm(context,action);
+      print('${e.toString()}');
+    }
+
   }
 }

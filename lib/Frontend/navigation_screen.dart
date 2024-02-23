@@ -1,8 +1,11 @@
 import 'dart:io';
 
+import 'package:crud_factories/Backend/importFactories.dart';
+import 'package:crud_factories/Backend/importMails.dart';
 import 'package:flutter/material.dart';
-import '../Backend/selection_view.dart';
+import '../Backend/_selection_view.dart';
 import '../Alertdialogs/closeApp.dart';
+import '../Backend/importLines.dart';
 import '../Objects/Factory.dart';
 import '../Objects/Mail.dart';
 import '../Objects/lineSend.dart';
@@ -39,7 +42,6 @@ class _NavigationScreenState extends State<NavigationScreen> {
   Color cBackground = Colors.blue;
   Color cSelect = Colors.green;
   double posMenu = 0;
-  String allEmp="";
   List<String> fileContent =[];
   List<Factory> factories = [];
   List<Mail> mails =[];
@@ -151,50 +153,12 @@ class _NavigationScreenState extends State<NavigationScreen> {
 
                                                   switch(subIten1Selection) {
                                                     case 0:
+
+                                                      factories.clear();
+
                                                       try {
-                                                        factories.clear();
-                                                        file =new File('D:/factories.csv');
 
-
-                                                        fileContent = await file.readAsLines();
-                                                        print(fileContent);
-
-                                                        List<String> select;
-                                                        List<String> select1;
-                                                        String temp = "";
-
-                                                        for (int i = 0; i <fileContent.length; i++) {
-                                                          select =fileContent[i].split(",");
-
-                                                          List<String> telephones;
-                                                          telephones = [ select[3],select[4]];
-                                                          select1 = fileContent[i].split("[");
-                                                          allEmp = fileContent[1];
-                                                          temp = select1[1];
-                                                          select1 = temp.split("[");
-                                                          temp = temp.substring(0, temp.length - 2);
-                                                          select1 = temp.split(",");
-
-
-                                                          List<String>num = select[9].split(" ");
-                                                          factories.add(Factory(
-                                                              id: select[0],
-                                                              name: select[1],
-                                                              highDate: select[2],
-                                                              thelephones: telephones,
-                                                              mail: select[5],
-                                                              web: select[6],
-                                                              address: {
-                                                                'street': select[7].substring(1),
-                                                                'number': num[1],
-                                                                'apartament': num[7].substring(0, num[7].length - 3),
-                                                                'city': select[10],
-                                                                'postalCode': select[11],
-                                                                'province': select[12]
-                                                              },
-                                                              contacts: select1));
-                                                        }
-
+                                                        factories.add(importFactory(fileContent, factories));
 
                                                       } catch (Exeption) {
 
@@ -202,60 +166,31 @@ class _NavigationScreenState extends State<NavigationScreen> {
                                                       break;
 
                                                        case 1:
-                                                            mails.clear();
-                                                            try {
-                                                              file = new File('D:/mails.csv');
+                                                               mails.clear();
+                                                               try {
 
-                                                            fileContent = await file.readAsLines();
+                                                                   mails.add(importMail(fileContent, mails));
 
-                                                            List<String> select;
+                                                              } catch (Exeption) {
 
-                                                          for (int i = 0; i <
-                                                              fileContent.length; i++) {
-                                                            select = fileContent[i].split(",");
+                                                              }
 
-                                                              mails.add(Mail(
-                                                                id: select[0],
-                                                                company: select[2],
-                                                                addrres: select[1],
-                                                                password: select[3]));
-                                                          }
-                                                        } catch (Exeption) {
-
-                                                        }
-
-                                                        break;
+                                                       break;
 
                                                     case 2:
-                                                      line.clear();
-                                                      try {
-                                                        file = new File('D:/lineSends.csv');
+                                                              line.clear();
+                                                              try {
 
-                                                        fileContent = await file.readAsLines();
+                                                                  line.add(createLine(fileContent,line));
 
-                                                        List<String> select;
+                                                              } catch (Exeption) {
 
-                                                        for (int i = 0; i <
-                                                            fileContent.length; i++) {
-                                                          select = fileContent[i].split(",");
-
-                                                          line.add(lineSend(
-                                                              date: select[0],
-                                                              factory: select[1],
-                                                              observations: select[2],
-                                                              state: select[3]));
-                                                        }
-                                                      } catch (Exeption) {
-
-                                                      }
+                                                              }
 
                                                       break;
                                                       }
                                                   }
-
-
-
-
+                                                
                                                   itenSelect = itenSelection;
                                                   subIten1Select = subIten1Selection;
                                                   subIten2Select = subIten2Selection;
@@ -420,5 +355,7 @@ class _NavigationScreenState extends State<NavigationScreen> {
       ],
     );
   }
-
 }
+
+
+

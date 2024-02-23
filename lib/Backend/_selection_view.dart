@@ -23,7 +23,7 @@ FuntionSeleted(int itenSelection, int subIten1Selection,int subIten2Selection, d
     datesSends = avoidRepeteat(element);
 
     int newdato = -1;
-  print(itenSelection);
+
     switch (itenSelection) {
       case 0:
         if (subIten1Selection == 0) {

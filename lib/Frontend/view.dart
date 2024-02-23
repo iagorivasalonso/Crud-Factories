@@ -462,8 +462,6 @@ class _viewState extends State<view> {
                                                   factoryName.clear();
                                                   for(int i = 0; i <factories.length; i++)
                                                     factoryName.add(factories[i].name);
-
-
                                                 });
                                               },
                                               buttonStyleData: const ButtonStyleData(
@@ -591,24 +589,16 @@ class _viewState extends State<view> {
                                             {
                                               campSelect="";
                                               campSelect=datesSends[index];
-
-
-
                                             }
                                             if(selectedFilterSend == "Empresa")
                                             {
-
-
                                               for(int i = 0; i < line.length ; i++)
                                               {
                                                 if(campSelect == line[i].factory)
                                                 {
                                                   sendsDay.add(line[i]);
-
                                                 }
-
                                               }
-
                                             }
 
                                           });

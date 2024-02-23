@@ -6,16 +6,18 @@ bool avoidRepeteatCamp(BuildContext context, bool repeat,  List<String>campSearc
 
 
     for (int i = 0; i < campSearch.length; i++) {
+
       if (controllerName.text == campSearch[i])
       {
         repeat =true;
       }
-
+      else
+      {
+        repeat = false;
+      }
     }
 
-    if(controllerName.text==campSearch[select])
-    {
-       repeat = false;
-    }
+
+
   return repeat;
 }

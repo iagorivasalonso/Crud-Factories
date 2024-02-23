@@ -1,13 +1,11 @@
-import 'dart:io';
 import 'package:crud_factories/Objects/Factory.dart';
 import 'package:intl/intl.dart';
 import 'package:show_platform_date_picker/show_platform_date_picker.dart';
 import 'package:adaptive_scrollbar/adaptive_scrollbar.dart';
-import 'package:csv/csv.dart';
 import 'package:flutter/material.dart';
 import '../Alertdialogs/confirm.dart';
+import '../Backend/exportSends.dart';
 import '../Objects/lineSend.dart';
-
 
 class newSend extends StatefulWidget {
 
@@ -62,8 +60,6 @@ class _newSendState extends State<newSend> {
 
 
     int select = widget.select;
-    String selectCamp = widget.selectCamp;
-    String filter = widget.filter;
     List<lineSend> line = widget.line;
     int cant = 0;
     String stringFactories = "";
@@ -357,7 +353,7 @@ class _newSendState extends State<newSend> {
                                             String action ='El pedido contiene $allLines empresas';
                                             confirm(context,action);
 
-                                          csvExportator(listSend);
+                                           csvExportator(listSend);
                                           });
 
 
@@ -384,43 +380,7 @@ class _newSendState extends State<newSend> {
       ),
     );
   }
-  csvExportator(List<lineSend> listSend) async {
 
-    File myFile = File('D:/lineSends.csv');
-
-    List<dynamic> associateList = [
-
-      for (int i = 0; i <listSend.length;i++)
-        {
-
-          "date": listSend[i].date,
-          "factory": listSend[i].factory,
-          "observations": listSend[i].observations,
-          "state": listSend[i].state
-
-        },
-    ];
-
-    List<List<dynamic>> rows = [];
-    List<dynamic> row = [];
-
-
-    for (int i = 0; i < associateList.length; i++) {
-      List<dynamic> row = [];
-      row.add(associateList[i]["date"]);
-      row.add(associateList[i]["factory"]);
-      row.add(associateList[i]["observations"]);
-      row.add(associateList[i]["state"]);
-      rows.add(row);
-
-    }
-
-    String csv = const ListToCsvConverter().convert(rows);
-    print(csv);
-    myFile.writeAsString(csv);
-
-
-  }
 
 }
 
