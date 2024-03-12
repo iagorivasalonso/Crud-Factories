@@ -4,13 +4,12 @@ import '../Objects/Factory.dart';
 
 void csvExportator(List<Factory> factories, int select) async {
 
-  File myFile = File('D:/ite.csv');
+  File myFile = File('D:/factories.csv');
 
   List<dynamic> associateList = [
 
     for (int i = 0; i <factories.length;i++)
       {
-
         "id": factories[i].id,
         "name": factories[i].name,
         "highDate": factories[i].highDate,
@@ -18,10 +17,13 @@ void csvExportator(List<Factory> factories, int select) async {
         "telephone2": factories[i].thelephones[1],
         "mail": factories[i].mail,
         "web": factories[i].web,
-        "address": factories[i].address,
-        "city" : factories[i],
+        "address": factories[i].address['street'],
+        "number": factories[i].address['number'],
+        "apartament": factories[i].address['apartament'],
+        "city" : factories[i].address['city'],
+        "postalCode": factories[i].address['postalCode'],
+        "province" : factories[i].address['province'],
         "contacts" :factories[i].contacts,
-
       },
   ];
 
@@ -42,12 +44,13 @@ void csvExportator(List<Factory> factories, int select) async {
     row.add(associateList[i]["mail"]);
     row.add(associateList[i]["web"]);
     row.add(associateList[i]["address"]);
+    row.add(associateList[i]["number"]);
+    row.add(associateList[i]["apartament"]);
     row.add(associateList[i]["city"]);
     row.add(associateList[i]["postalCode"]);
     row.add(associateList[i]["province"]);
     row.add(associateList[i]["contacts"]);
     rows.add(row);
-
   }
 
   String csv = const ListToCsvConverter().convert(rows);

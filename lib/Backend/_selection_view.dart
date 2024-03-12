@@ -58,7 +58,7 @@ FuntionSeleted(int itenSelection, int subIten1Selection,int subIten2Selection, d
 
 
       case 2:
-        return sendMail(datesSends, line, mails);
+        return sendMail(datesSends,line,factories, mails);
 
       case 3:
         return conection();

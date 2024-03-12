@@ -1,14 +1,25 @@
 import 'package:flutter/material.dart';
 
 
- confirm(BuildContext  context, String action) async {
+error(BuildContext  context, String action, [format]) async {
 
   showDialog(
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title:  const Text('Confirmar'),
-          content: Text(action),
+          title:  const Text('Error'),
+          content: format != null
+                  ? Container(
+                     height: 45,
+                     child: Column(
+                       children: [
+                          Text(action),
+                         Text(format,
+                           style: TextStyle(fontStyle: FontStyle.italic),),
+                         ],
+            ),
+            )
+            :Text(action),
           actions: [
             Center(
               child:Padding(
@@ -19,8 +30,8 @@ import 'package:flutter/material.dart';
                   },
                   color: Colors.lightBlue,
                   child: Text('Aceptar',
-                         style: TextStyle(color: Colors.white)
-                         ),
+                      style: TextStyle(color: Colors.white)
+                  ),
                 ),
               ),
             ),
@@ -30,5 +41,4 @@ import 'package:flutter/material.dart';
       });
 
 }
-
 

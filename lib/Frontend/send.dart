@@ -4,7 +4,7 @@ import 'package:show_platform_date_picker/show_platform_date_picker.dart';
 import 'package:adaptive_scrollbar/adaptive_scrollbar.dart';
 import 'package:flutter/material.dart';
 import '../Alertdialogs/confirm.dart';
-import '../Backend/exportSends.dart';
+import '../Backend/exportLines.dart';
 import '../Objects/lineSend.dart';
 
 class newSend extends StatefulWidget {

@@ -10,12 +10,10 @@ void   csvExportator(List<lineSend> listSend) async {
 
     for (int i = 0; i <listSend.length;i++)
       {
-
         "date": listSend[i].date,
         "factory": listSend[i].factory,
         "observations": listSend[i].observations,
         "state": listSend[i].state
-
       },
   ];
 
@@ -30,11 +28,9 @@ void   csvExportator(List<lineSend> listSend) async {
     row.add(associateList[i]["observations"]);
     row.add(associateList[i]["state"]);
     rows.add(row);
-
   }
 
   String csv = const ListToCsvConverter().convert(rows);
   myFile.writeAsString(csv);
-
 
 }

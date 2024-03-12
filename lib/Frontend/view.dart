@@ -142,7 +142,7 @@ class _viewState extends State<view> {
 
       }
 
-      String strindDialog ='';
+      String stringDialog ='';
       bool noDat = false;
       var noDatfunction;
 
@@ -152,16 +152,16 @@ class _viewState extends State<view> {
 
         if(filter1=="Fecha")
         {
-          strindDialog = 'No se encuentra la fecha en nuestra base de datos';
+          stringDialog = 'No se encuentra la fecha en nuestra base de datos';
           noDat =true;
-          noDatfunction= noFind(context,noDat,strindDialog) ;
+          noDatfunction= noFind(context,noDat,stringDialog);
         }
 
         if(filter1=="Empresa")
         {
-          strindDialog = 'Esa empresa no pertenece a nuestra base de datos';
+          stringDialog = 'Esa empresa no pertenece a nuestra base de datos';
           noDat =true;
-          noDatfunction= noFind(context,noDat,strindDialog);
+          noDatfunction= noFind(context,noDat,stringDialog);
         }
       }
       if(resulFactories.length==0)
@@ -179,9 +179,9 @@ class _viewState extends State<view> {
           filter1 = 'La $filter1';
         }
 
-        strindDialog = '$filter1 no pertenece a nuestra base de datos';
+        stringDialog = '$filter1 no pertenece a nuestra base de datos';
         noDat =true;
-        noDatfunction= noFind(context,noDat,strindDialog);
+        noDatfunction= noFind(context,noDat,stringDialog);
       }
     }
     setState(() {

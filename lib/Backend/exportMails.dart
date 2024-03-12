@@ -17,7 +17,6 @@ void csvExportator(List<Mail> mails, int select) {
         "company": mails[i].company,
         "addrres": mails[i].addrres,
         "password": mails[i].password
-
     },
   ];
 
@@ -33,7 +32,6 @@ void csvExportator(List<Mail> mails, int select) {
     row.add(associateList[i]["addrres"]);
     row.add(associateList[i]["password"]);
     rows.add(row);
-
   }
 
   String csv = const ListToCsvConverter().convert(rows);

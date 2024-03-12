@@ -1,11 +1,11 @@
 import 'package:adaptive_scrollbar/adaptive_scrollbar.dart';
-import 'package:crud_factories/Alertdialogs/campRepeat.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:show_platform_date_picker/show_platform_date_picker.dart';
 import '../Alertdialogs/confirm.dart';
+import '../Alertdialogs/error.dart';
 import '../Backend/exportFactories.dart';
-import '../Functions/avoidRepeatCamp.dart';
+import '../Functions/validatorCamps.dart';
 import '../Objects/Factory.dart';
 
 
@@ -469,72 +469,117 @@ class _newFactoryState extends State<newFactory> {
                                   child: Text(action),
                                   onPressed: () {
                                       setState(() {
-                                        bool repeat=false;
-                                        List<String> campSearch=[];
 
-                                        for(int i = 0; i <factories.length; i++)
+
+                                        List <String> allKeys = [];
+                                        String nameCamp = "nombre";
+                                        for (int i = 0; i < factories.length; i++)
+                                          allKeys.add(factories[i].name);
+
+                                        String campOld = " ";
+
+                                        if(select != -1)
                                         {
-                                            campSearch.add(factories[i].name);
+                                          campOld = factories[select].name;
                                         }
-                                        bool repeat1=avoidRepeteatCamp(context, repeat,campSearch, controllerName, select);
-                                        print(repeat1);
 
-                                        if(repeat1 == true)
+                                        if(primaryKeyCorrect(controllerName.text,nameCamp,allKeys,campOld,context) ==true)
                                         {
-                                          action ='El usuario ya se encuentra en la base de datos';
-                                          campRepeat(context,action);
-                                        }
-                                        else
-                                        {
+                                          final telephone1 = controllerTelephone1.text.replaceAll(" ", "");
+                                          final telephone2 = controllerTelephone2.text.replaceAll(" ", "");
 
-                                             List<String> adrress1=controllerAdrress.text.split(",");
-                                             List<String> adrress2=controllerAdrress.text.split("-");
-                                             
+                                          if(telephoneCorrect(telephone1,context) == true)
+                                          {
+                                            if(telephone1.length != 9)
+                                            {
+                                              action ='El telefono debe de tener 9 digitos';
+                                              error(context,action);
 
-                                             if(select ==- 1)
-                                             {
+                                            }
+                                            else if(telephoneCorrect(telephone2,context) == true)
+                                            {
+                                              if(telephone2.length != 9)
+                                              {
+                                                action ='El telefono debe de tener 9 digitos';
+                                                error(context,action);
+                                              }
+                                              else if(mailCorrect(controllerMail.text) != true)
+                                              {
+                                                action ='No es un correo electronico valido';
+                                                error(context,action);
+                                              }
+                                              else if(webCorrect(controllerWeb.text) != true)
+                                              {
+                                                action ='No es una dirreccion web';
+                                                error(context,action);
+                                              }
+                                              else if(adrressCorrect(controllerAdrress.text) != true)
+                                              {
+                                                String action ='El fomato de la direccion debe de ser:';
+                                                String format =' calle, numero - apartamento';
+                                                error(context,action,format);
+                                              }
+                                              else if(postalCodeCorrect(controllerPostalCode.text,context) == true)
+                                              {
+                                                if(controllerPostalCode.text.length != 5)
+                                                {
+                                                  action ='El codigo postal debe de tener 5 digitos';
+                                                  error(context,action);
+                                                }
+                                                else{
 
-                                               factories.add(Factory(
-                                                     id:factories.length.toString(),
-                                                     name: controllerName.text,
-                                                     highDate: controllerHighDate.text,
-                                                     thelephones:[controllerTelephone1.text,controllerTelephone2.text],
-                                                     mail: controllerMail.text,
-                                                     web: controllerWeb.text,
-                                                     contacts:contacs,
-                                                     address: {
+                                                  List<String> adrress1 = controllerAdrress.text.split(",");
+                                                  List<String> adrress2 = controllerAdrress.text.split("-");
+                                                  List<String> num = adrress2[0].split(",");
+
+                                                  if(select == - 1)
+                                                  {
+
+                                                    factories.add(Factory(
+                                                        id:factories.length.toString(),
+                                                        name: controllerName.text,
+                                                        highDate: controllerHighDate.text,
+                                                        thelephones:[controllerTelephone1.text,controllerTelephone2.text],
+                                                        mail: controllerMail.text,
+                                                        web: controllerWeb.text,
+                                                        contacts:contacs,
+                                                        address: {
                                                           'street':adrress1[0],
-                                                          'number':adrress2[0],
-                                                          'apartament': adrress2[1],
+                                                          'number':num[1],
+                                                          'apartament':adrress2[1],
                                                           'city' : controllerCity.text,
                                                           'postalCode' : controllerPostalCode.text ,
                                                           'province' : controllerProvince.text,
-                                                         }
-                                                      ));
-                                                         action ='La empresa se ha dado de alta correctamente';
-                                                         confirm(context,action);
-                                             }
-                                             else
-                                             {
-                                                  List<String>num=adrress2[0].split(",");
+                                                        }
+                                                    ));
 
-                                                 factories[select].name = controllerName.text;
-                                                 factories[select].highDate = controllerHighDate.text;
-                                                 factories[select].thelephones= [controllerTelephone1.text,controllerTelephone2.text];
-                                                 factories[select].mail = controllerMail.text;
-                                                 factories[select].web= controllerWeb.text;
-                                                 factories[select].address['street']=adrress1[0];
-                                                 factories[select].address['number']=num[1];
-                                                 factories[select].address['apartament']=adrress2[1];
-                                                 factories[select].address['city']=controllerCity.text;
-                                                 factories[select].address['postalCode']= controllerPostalCode.text ;
-                                                 factories[select].address['province']= controllerProvince.text;
+                                                    action ='La empresa se ha dado de alta correctamente';
+                                                    confirm(context,action);
+                                                  }
+                                                  else
+                                                  {
 
-                                                  action ='El usuario se ha modificado correctamente';
-                                                  confirm(context,action);
+                                                    factories[select].name = controllerName.text;
+                                                    factories[select].highDate = controllerHighDate.text;
+                                                    factories[select].thelephones= [controllerTelephone1.text,controllerTelephone2.text];
+                                                    factories[select].mail = controllerMail.text;
+                                                    factories[select].web= controllerWeb.text;
+                                                    factories[select].address['street']=adrress1[0];
+                                                    factories[select].address['number']=num[1];
+                                                    factories[select].address['apartament']=adrress2[1];
+                                                    factories[select].address['city']=controllerCity.text;
+                                                    factories[select].address['postalCode']= controllerPostalCode.text ;
+                                                    factories[select].address['province']= controllerProvince.text;
 
-                                             }
-                                             csvExportator(factories,select);
+                                                    action ='El usuario se ha modificado correctamente';
+                                                    confirm(context,action);
+
+                                                  }
+                                                //  csvExportator(factories,select);
+                                                }
+                                              }
+                                            }
+                                          }
                                         }
 
 
@@ -542,7 +587,7 @@ class _newFactoryState extends State<newFactory> {
                                   },
                                 ),
                                 ElevatedButton(
-                                  child: const Text('Eliminar'),
+                                  child: const Text('Cancelar'),
                                   onPressed: () {
 
                                   },
@@ -563,3 +608,6 @@ class _newFactoryState extends State<newFactory> {
     );
   }
 }
+
+
+

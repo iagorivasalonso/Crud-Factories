@@ -1,10 +1,11 @@
 import 'dart:convert';
 import 'package:adaptive_scrollbar/adaptive_scrollbar.dart';
+import 'package:crud_factories/Alertdialogs/error.dart';
 import 'package:flutter/material.dart';
 import '../Alertdialogs/campRepeat.dart';
 import '../Alertdialogs/confirm.dart';
 import '../Backend/exportMails.dart';
-import '../Functions/avoidRepeatCamp.dart';
+import '../Functions/validatorCamps.dart';
 import '../Objects/Mail.dart';
 
 class newMail extends StatefulWidget {
@@ -51,6 +52,8 @@ class _newMailState extends State<newMail> {
     else {
       controllerMail.text = mails[select].addrres;
       controllerCompany.text = mails[select].company;
+      controllerPas.text ="";
+      controllerPasVerificator.text="";
 
       title = "Editar ";
       action = "Actualizar";
@@ -98,28 +101,6 @@ class _newMailState extends State<newMail> {
                                 height: 40,
                                 child: TextField(
                                   controller: controllerMail,
-                                  decoration: InputDecoration(
-                                    border: OutlineInputBorder(),
-                                  ),
-                                  onChanged: (value) {
-
-                                  },
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.only(
-                              left: 30, top: 20.0, bottom: 30.0),
-                          child: Row(
-                            children: [
-                              const Text('Compañia: '),
-                              SizedBox(
-                                width: 200,
-                                height: 40,
-                                child: TextField(
-                                  controller: controllerCompany,
                                   decoration: const InputDecoration(
                                     border: OutlineInputBorder(),
                                   ),
@@ -128,6 +109,7 @@ class _newMailState extends State<newMail> {
                             ],
                           ),
                         ),
+
                         Padding(
                           padding: const EdgeInsets.only(
                               left: 30, top: 20.0, bottom: 30.0),
@@ -138,7 +120,6 @@ class _newMailState extends State<newMail> {
                                 width: 400,
                                 height: 40,
                                 child: TextField(
-                                  //obscureText: true,
                                   controller: controllerPas,
                                   decoration: const InputDecoration(
                                     border: OutlineInputBorder(),
@@ -158,7 +139,6 @@ class _newMailState extends State<newMail> {
                                 width: 400,
                                 height: 40,
                                 child: TextField(
-                                  obscureText: true,
                                   controller: controllerPasVerificator,
                                   decoration: const InputDecoration(
                                     border: OutlineInputBorder(),
@@ -180,60 +160,60 @@ class _newMailState extends State<newMail> {
                                   onPressed: () {
                                     setState(() {
 
+                                      List <String> allKeys = [];
+                                      String nameCamp = "email";
+                                      for (int i = 0; i < mails.length; i++)
+                                        allKeys.add(mails[i].addrres);
 
-                                      bool repeat = false;
-                                      bool correctPass = false;
-                                      List<String> campSearch = [];
+                                      String campOld =  " ";
+                                      String pas1 = controllerPas.text;
+                                      String pas2 = controllerPasVerificator.text;
 
-                                      for (int i = 0; i < mails.length; i++) {
-                                        campSearch.add(mails[i].addrres);
+                                      if(select != -1)
+                                      {
+                                        campOld = mails[select].addrres;
                                       }
 
-                                      bool repeat1 = avoidRepeteatCamp(context, repeat, campSearch, controllerMail, select);
-                                      String encodedPass = " ";
-
-                                      if (repeat1 == true) {
-                                        action ='El correo electronico ya se encuentra en la base de datos';
-                                        campRepeat(context, action);
-                                      } else {
-
-                                        if (controllerPas.text == controllerPasVerificator.text) {
+                                      if(primaryKeyCorrect(controllerMail.text,nameCamp,allKeys,campOld,context) ==  true)
+                                      {
+                                        if(mailCorrect(controllerMail.text) != true)
+                                        {
+                                          action ='No es un correo electronico valido';
+                                          error(context,action);
+                                        }
+                                        else if(passwordCorrect(pas1, pas2, context) == true)
+                                        {
                                           Codec<String,  String> stringToBase64 = utf8.fuse(base64);
-                                          encodedPass = stringToBase64.encode(controllerPas.text);
+                                          String encodedPass = stringToBase64.encode(controllerPas.text);
 
-                                          correctPass = true;
-                                        }
-                                        else {
-                                          action =
-                                          'Las contraseñas no coinciden';
-                                          campRepeat(context, action);
+                                          List <String> separeAddrres = controllerMail.text.split("@");
+                                          List <String> extCompany = separeAddrres[1].split(".");
+                                          controllerCompany.text = extCompany[0];
 
-                                          correctPass = false;
+                                           if(select == -1)
+                                           {
+                                             mails.add(Mail(
+                                                 id: mails.length.toString(),
+                                                 company: controllerMail.text,
+                                                 addrres: controllerCompany.text,
+                                                 password: encodedPass
+                                             ));
+
+                                             String action = 'El correo se ha dado de alta correctamente';
+                                             confirm(context, action);
+                                           }
+                                           else
+                                           {
+                                             mails[select].addrres = controllerMail.text;
+                                             mails[select].company = controllerCompany.text;
+                                             mails[select].password = encodedPass;
+
+                                             String action = 'El correo se ha modificado correctamente';
+                                             confirm(context, action);
+                                           }
                                         }
                                       }
-
-
-                                      if (select == -1 && correctPass == true) {
-                                        mails.add(Mail(
-                                            id: mails.length.toString(),
-                                            company: controllerMail.text,
-                                            addrres: controllerCompany.text,
-                                            password: encodedPass
-                                        ));
-
-                                        String action = 'El correo se ha dado de alta correctamente';
-                                        confirm(context, action);
-
-                                      }else {
-                                        mails[select].addrres = controllerMail.text;
-                                        mails[select].company = controllerCompany.text;
-                                        mails[select].password = encodedPass;
-
-                                        String action = 'El correo se ha modificado correctamente';
-                                        confirm(context, action);
-                                      }
-
-                                      csvExportator(mails, select);
+                                     csvExportator(mails, select);
                                     });
                                   }
                                 ),
