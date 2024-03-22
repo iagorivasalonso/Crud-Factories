@@ -1,12 +1,16 @@
 import 'dart:io';
 import '../Objects/lineSend.dart';
 
-createLine(List<String> fileContent, List<lineSend> line) async {
+importLines(List<String> fileContent, List<lineSend> line) async {
 
   List<String> select =[];
 
+  if(fileContent.isEmpty)
+  {
     File file = new File('D:/lineSends.csv');
     fileContent = await file.readAsLines();
+  }
+
 
     for (int i = 0; i <fileContent.length; i++)
     {

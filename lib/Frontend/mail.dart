@@ -213,7 +213,7 @@ class _newMailState extends State<newMail> {
                                            }
                                         }
                                       }
-                                     csvExportator(mails, select);
+                                     csvExportatorMails(mails, select);
                                     });
                                   }
                                 ),

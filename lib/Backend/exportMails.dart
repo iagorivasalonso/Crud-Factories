@@ -3,7 +3,7 @@ import 'package:csv/csv.dart';
 
 import '../Objects/Mail.dart';
 
-void csvExportator(List<Mail> mails, int select) {
+void csvExportatorMails(List<Mail> mails, int select) {
 
 
   File myFile = File('D:/mails.csv');

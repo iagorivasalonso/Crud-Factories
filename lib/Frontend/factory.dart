@@ -516,7 +516,7 @@ class _newFactoryState extends State<newFactory> {
                                               else if(adrressCorrect(controllerAdrress.text) != true)
                                               {
                                                 String action ='El fomato de la direccion debe de ser:';
-                                                String format =' calle, numero - apartamento';
+                                                String format =' calle, numero';
                                                 error(context,action,format);
                                               }
                                               else if(postalCodeCorrect(controllerPostalCode.text,context) == true)
@@ -530,6 +530,16 @@ class _newFactoryState extends State<newFactory> {
 
                                                   List<String> adrress1 = controllerAdrress.text.split(",");
                                                   List<String> adrress2 = controllerAdrress.text.split("-");
+                                              String apartament='';
+
+                                                  if(controllerAdrress.text.contains("-"))
+                                                  {
+                                                    apartament = adrress2[1];
+                                                  }
+                                                  else
+                                                  {
+                                                    apartament='';
+                                                  }
                                                   List<String> num = adrress2[0].split(",");
 
                                                   if(select == - 1)
@@ -546,7 +556,7 @@ class _newFactoryState extends State<newFactory> {
                                                         address: {
                                                           'street':adrress1[0],
                                                           'number':num[1],
-                                                          'apartament':adrress2[1],
+                                                          'apartament':apartament,
                                                           'city' : controllerCity.text,
                                                           'postalCode' : controllerPostalCode.text ,
                                                           'province' : controllerProvince.text,
@@ -564,18 +574,18 @@ class _newFactoryState extends State<newFactory> {
                                                     factories[select].thelephones= [controllerTelephone1.text,controllerTelephone2.text];
                                                     factories[select].mail = controllerMail.text;
                                                     factories[select].web= controllerWeb.text;
-                                                    factories[select].address['street']=adrress1[0];
-                                                    factories[select].address['number']=num[1];
-                                                    factories[select].address['apartament']=adrress2[1];
-                                                    factories[select].address['city']=controllerCity.text;
-                                                    factories[select].address['postalCode']= controllerPostalCode.text ;
-                                                    factories[select].address['province']= controllerProvince.text;
+                                                    factories[select].address['street'] = adrress1[0];
+                                                    factories[select].address['number'] = num[1];
+                                                    factories[select].address['apartament'] = apartament;
+                                                    factories[select].address['city'] = controllerCity.text;
+                                                    factories[select].address['postalCode'] = controllerPostalCode.text ;
+                                                    factories[select].address['province'] = controllerProvince.text;
 
                                                     action ='El usuario se ha modificado correctamente';
                                                     confirm(context,action);
 
                                                   }
-                                                //  csvExportator(factories,select);
+                                                 csvExportatorFactories(factories,select);
                                                 }
                                               }
                                             }

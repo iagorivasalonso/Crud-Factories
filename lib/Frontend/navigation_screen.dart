@@ -181,7 +181,7 @@ class _NavigationScreenState extends State<NavigationScreen> {
                                                               line.clear();
                                                               try {
 
-                                                                  line.add(createLine(fileContent,line));
+                                                                  line.add(importLines(fileContent,line));
 
                                                               } catch (Exeption) {
 

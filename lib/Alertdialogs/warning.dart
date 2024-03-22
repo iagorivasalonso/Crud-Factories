@@ -1,21 +1,22 @@
+import 'package:crud_factories/Functions/validatorCamps.dart';
 import 'package:flutter/material.dart';
 
 Future<bool> warning(BuildContext  context,String nameCamp) async{
-  bool campEmpty = false;
 
-  showDialog(
+
+ bool campEmpty = await showDialog(
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
           title:  const Text('cuidado'),
-          content: Text('el $nameCamp está vacio'),
+          content: Text('el campo $nameCamp está vacio ¿Desea continuar?'),
           actions: [
             Padding(
               padding: const EdgeInsets.only(bottom: 10.0),
               child: MaterialButton(
                 onPressed: () {
 
-                  Navigator.of(context).pop(false);
+                  Navigator.of(context).pop(true);
                 },
                 color: Colors.lightBlue,
                 child: Text('Si',

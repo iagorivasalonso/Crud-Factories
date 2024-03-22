@@ -1,5 +1,6 @@
 
 import 'dart:convert';
+import 'dart:io';
 import 'package:adaptive_scrollbar/adaptive_scrollbar.dart';
 import 'package:crud_factories/Alertdialogs/confirm.dart';
 import 'package:crud_factories/Alertdialogs/error.dart';
@@ -7,6 +8,7 @@ import 'package:crud_factories/Alertdialogs/warning.dart';
 import 'package:crud_factories/Functions/validatorCamps.dart';
 import 'package:crud_factories/Objects/Factory.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:mailer/mailer.dart';
 import 'package:mailer/smtp_server.dart';
@@ -44,7 +46,7 @@ class _sendMailState extends State<sendMail> {
   late TextEditingController controllerMessage= TextEditingController();
 
   double widthBar = 10.0;
-
+  List<Attachment> atach=[];
   int _tMails = 1;
   List <String> columns = [];
   int rows = 0;
@@ -88,8 +90,8 @@ class _sendMailState extends State<sendMail> {
               scrollDirection: Axis.horizontal,
               child: Container(
                 height: _tMails == 1
-                    ? 713
-                    : 973,
+                    ? 743
+                    : 1003,
                 width: 880,
                 child: Align(
                   alignment: Alignment.topLeft,
@@ -278,7 +280,7 @@ class _sendMailState extends State<sendMail> {
                                                             for(int y= 0 ; y < selectedFactories.length; y++) {
                                                                    mailList.add(selectedFactories[y].mail);
                                                             }
-                                                            print(mailList);
+
 
                                                           });
                                                         },
@@ -372,7 +374,7 @@ class _sendMailState extends State<sendMail> {
                               ),
                             ),
                             Padding(
-                              padding: const EdgeInsets.only(top: 60.0, bottom: 60.0, right: 10.0),
+                              padding: const EdgeInsets.only(top: 60.0, right: 10.0),
                               child: Row(
                                 children: [
                                   const Text('Asunto:'),
@@ -393,19 +395,61 @@ class _sendMailState extends State<sendMail> {
                                     padding: const EdgeInsets.only(left: 100.0),
                                     child: ElevatedButton(
                                       child: const Text("Adjuntar"),
-                                      onPressed: () {},
+                                      onPressed: () {
+                                        setState(() {
+
+                                          _pickFile();
+
+                                        });
+
+                                      },
                                     ),
                                   ),
                                 ],
                               ),
                             ),
-                            const Row(
-                              children: [
-                                Text(
-                                  'Mensaje: ',
-                                  style: TextStyle(fontWeight: FontWeight.bold),
-                                ),
-                              ],
+                           if(atach.isNotEmpty)
+                           Padding(
+                             padding: const EdgeInsets.only(left: 90.0,top: 10.0),
+                             child: Align(
+                               alignment: Alignment.topLeft,
+                               child: Row(
+                                 children: [
+                                   Icon(Icons.attach_file_rounded),
+                                   SizedBox(
+                                     height: 30,
+                                     width: 450,
+                                     child: ListView.builder(
+                                       physics: const BouncingScrollPhysics(),
+                                       scrollDirection: Axis.horizontal,
+                                         itemCount: atach.length,
+                                        itemBuilder: (BuildContext context, index) {
+                                              return Padding(
+                                                padding: const EdgeInsets.all(2.0),
+                                                child: Container(
+                                                    height: 25,
+                                                     width: 90,
+                                                    color: Colors.black12,
+                                                    child: Text(atach[index].fileName!),
+                                                ),
+                                              );
+                                        }
+                                     ),
+                                   ),
+                                 ],
+                               ),
+                             ),
+                           ),
+                           const Padding(
+                              padding:  EdgeInsets.only(top: 40.0),
+                              child:  Row(
+                                children: [
+                                  Text(
+                                    'Mensaje: ',
+                                    style: TextStyle(fontWeight: FontWeight.bold),
+                                  ),
+                                ],
+                              ),
                             ),
                             Padding(
                               padding: const EdgeInsets.only(top: 20.0, left: 85.0),
@@ -432,9 +476,9 @@ class _sendMailState extends State<sendMail> {
                                   padding: const EdgeInsets.only(left: 600.0, right: 30.0),
                                   child: ElevatedButton(
                                     child: const Text('Enviar'),
-                                    onPressed: (){
+                                    onPressed: () async {
                                       String action ='';
-
+                                      int dat_correct = 2;
                                       if(mailCorrect(controllerMailFrom.text) != true)
                                       {
                                         action ='No es un correo electronico valido';
@@ -442,14 +486,39 @@ class _sendMailState extends State<sendMail> {
                                       }
                                       else
                                       {
-                                         sendingMail();
-                                      }
+                                        if(controllerSubject.text.isEmpty)
+                                        {
+                                          dat_correct=dat_correct-1;
 
+                                           bool  correct= await warning(context, "asunto");
+
+                                           if(correct)
+                                           {
+                                             dat_correct++;
+                                           }
+
+                                        }
+                                        if(controllerMessage.text.isEmpty)
+                                        {
+                                          dat_correct=dat_correct-1;
+
+                                          bool  correct= await warning(context, "mensaje");
+                                          if(correct)
+                                          {
+                                            dat_correct++;
+                                          }
+                                        }
+                                        if(dat_correct==2)
+                                          sendingMail();
+
+                                      }
                                     }
-                                      ),
-                                      ),
-                                      ElevatedButton(
-                                      child: const Text('Cancelar'),
+
+                                    ),
+
+                                ),
+                                ElevatedButton(
+                                  child: const Text('Cancelar'),
                                   onPressed: () {
                                   },
                                 ),
@@ -468,8 +537,28 @@ class _sendMailState extends State<sendMail> {
       ),
     );
   }
+  void _pickFile() async {
 
-  Future<void> sendingMail() async {
+
+
+    FilePickerResult? result =  await FilePicker.platform.pickFiles(
+      dialogTitle: 'Seleccionar archivo',
+      type: FileType.custom,
+      allowedExtensions: ['csv'],
+    );
+
+    if(result == null) return;
+
+    PlatformFile file = result.files.single;
+
+
+    File file1 =new File(file.path!);
+    print(file1);
+    atach.add(FileAttachment(file1));
+    }
+
+
+    Future<void> sendingMail() async {
 
     String action ="";
     bool sendToMail = false;
@@ -502,26 +591,30 @@ class _sendMailState extends State<sendMail> {
                String password = stringToBase64.decode(controllerPass.text);
                print(password);
 
+
+
+
                final message = Message()
                     ..from = Address(username, 'Your name')
                     ..recipients.add(controllerMailFrom.text)
                     ..ccRecipients.addAll(mailList)
                     ..subject = controllerSubject.text
-                    ..text = controllerMessage.text;
-
-               if(controllerCompany.text == "Gmail")
+                    ..text = controllerMessage.text
+                    ..attachments = atach;
+/*
+               if(controllerCompany.text == "gmail")
                {
                  final smtpServer = gmail(username,password);
                  final sendReport = await send(message,smtpServer);
                  print('Message sent: ' + sendReport.toString());
                }
-               else if (controllerCompany.text == "Hotmail")
+               else if (controllerCompany.text == "hotmail")
                {
                  final smtpServer = hotmail(username,password);
                  final sendReport = await send(message,smtpServer);
                  print('Message sent: ' + sendReport.toString());
                }
-
+*/
 
                action ='El email se ha enviado correctamente';
                confirm(context,action);

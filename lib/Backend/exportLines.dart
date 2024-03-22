@@ -2,19 +2,19 @@ import 'dart:io';
 import 'package:csv/csv.dart';
 import '../Objects/lineSend.dart';
 
-void   csvExportator(List<lineSend> listSend) async {
-
+void   csvExportatorLines(List<lineSend> listSend) async {
+print("object");
   File myFile = File('D:/lineSends.csv');
 
   List<dynamic> associateList = [
 
     for (int i = 0; i <listSend.length;i++)
-      {
+    {
         "date": listSend[i].date,
         "factory": listSend[i].factory,
         "observations": listSend[i].observations,
         "state": listSend[i].state
-      },
+    },
   ];
 
   List<List<dynamic>> rows = [];

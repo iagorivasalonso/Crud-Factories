@@ -6,8 +6,11 @@ importMail(List<String> fileContent, List<Mail> mails) async {
 
   List<String> select =[];
 
-  File file = new File('D:/mails.csv');
-  fileContent = await file.readAsLines();
+  if(fileContent.isEmpty)
+  {
+    File file =new File('D:/mails.csv');
+    fileContent = await file.readAsLines();
+  }
 
   for (int i = 0; i <fileContent.length; i++)
   {

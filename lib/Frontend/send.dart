@@ -18,7 +18,6 @@ class newSend extends StatefulWidget {
   List<String> dateSends;
   List<Factory> factories;
 
-
   newSend(this.dateSends,this.sendsLine,this.select,this.selectCamp, this.filter,  this.line, this.SeletedFilter, this.factories);
 
   @override
@@ -47,9 +46,11 @@ class _newSendState extends State<newSend> {
   List<lineSend> sends = [];
   List<lineSend> listSend = [];
   String date="";
-
-  List<bool> Send = List.generate(88, (index) => false);
+  bool allSelect = false;
+  List<bool> Send = List.generate(75, (index) => false);
   DateTime seletedDate =DateTime.now();
+  int rowsTrue=0;
+
   @override
   Widget build(BuildContext context) {
 
@@ -147,10 +148,18 @@ class _newSendState extends State<newSend> {
       endTable = campsTable.length;
     }
     else {
-      endTable = campsTable.length;// - 1;
+      endTable = campsTable.length;
     }
 
     final ShowPlatformDatePicker platformDatePicker = ShowPlatformDatePicker(buildContext: context);
+
+    for(int i = 0; i<Send.length; i++)
+    {
+      if(Send[i]==false)
+      {
+        allSelect = false;
+      }
+    }
 
     return AdaptiveScrollbar(
       controller: verticalScroll,
@@ -262,7 +271,7 @@ class _newSendState extends State<newSend> {
                                                 DataCell(
                                                  campsTable[i] == "Empresa"
                                                     ? select == -1
-                                                       ? Text(factories[i].name)
+                                                       ? Text(factories[index].name)
                                                        : Text(listSend[index].factory)
                                                  : campsTable[i] == "Fecha"
                                                      ?  Text(listSend[index].date)
@@ -288,7 +297,9 @@ class _newSendState extends State<newSend> {
                                                           value: Send[index],
                                                             onChanged: (bool? value) {
                                                                  setState(() {
-                                                            Send[index] = value!;
+
+                                                               Send[index] = value!;
+                                                               allSelect = true;
                                                           });
                                                          },)
                                                  : Text("data")
@@ -313,11 +324,19 @@ class _newSendState extends State<newSend> {
                                         child: Text("Seleccionar todas"),
                                       ),
                                       Checkbox(
-                                        value: Send[0],
+                                        value: allSelect,
                                         onChanged: (value) {
                                           setState(() {
-                                            for(int i = 0; i<factories.length; i++)
+
+                                          for(int i = 0 ; i<Send.length; i++)
+                                          {
                                             Send[i] = value!;
+                                          }
+                                          allSelect = value!;
+
+
+
+
                                           });
                                         },
                                       )
@@ -353,7 +372,7 @@ class _newSendState extends State<newSend> {
                                             String action ='El pedido contiene $allLines empresas';
                                             confirm(context,action);
 
-                                           csvExportator(listSend);
+                                           csvExportatorLines(listSend);
                                           });
 
 

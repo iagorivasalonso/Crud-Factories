@@ -31,7 +31,18 @@ class Factory {
     String number= address['number'].toString();
     String apartament = address['apartament']!;
 
-    String addressComplete=  '$address1,$number-$apartament';
+    String addressComplete='';
+
+     if(apartament=="")
+     {
+       addressComplete=  '$address1,$number';
+     }
+     else
+     {
+       addressComplete='$address1,$number-$apartament';
+     }
+
+
 
     return addressComplete;
 

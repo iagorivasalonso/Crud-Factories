@@ -12,7 +12,6 @@ import '../Functions/avoidRepeatArray.dart';
 
 FuntionSeleted(int itenSelection, int subIten1Selection,int subIten2Selection, double mWidth, double mHeight, List<String> itens, List<Factory> factories, List<Mail> mails, List<lineSend> line) {
 
-
   List<String> datesSends;
   List<String> element = [];
 
@@ -41,7 +40,7 @@ FuntionSeleted(int itenSelection, int subIten1Selection,int subIten2Selection, d
         }
 
         if (subIten1Selection == 1)
-          return newImport();
+          return newImport(factories, mails,line);
 
       case 1:
         String tView = '';
