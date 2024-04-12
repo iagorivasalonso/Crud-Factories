@@ -161,236 +161,246 @@ class _newSendState extends State<newSend> {
       }
     }
 
-    return AdaptiveScrollbar(
-      controller: verticalScroll,
-      width: widthBar,
-      child: AdaptiveScrollbar(
-        controller: horizontalScroll,
+    return Scaffold(
+      body: AdaptiveScrollbar(
+        controller: verticalScroll,
         width: widthBar,
-        position: ScrollbarPosition.bottom,
-        underSpacing: EdgeInsets.only(bottom: 8),
-        child: SingleChildScrollView(
-          controller: verticalScroll,
-          scrollDirection: Axis.vertical,
-          child: Container(
-            width: 2000,
-            child: SingleChildScrollView(
-              controller: horizontalScroll,
-              scrollDirection: Axis.horizontal,
-              child: Container(
-                height: 630,
-                width: 848,
-                child: Align(
-                    alignment: Alignment.topLeft,
-                    child: Padding(
-                      padding: const EdgeInsets.only(left: 30.0, top: 30.0),
-                      child: Column(
-                          children: [
-                            Row(
-                              children: [
-                                Text('$title Envio: ',
-                                  style: const TextStyle(
-                                      fontWeight: FontWeight.bold),),
-                              ],
-                            ),
-                            Padding(
-                              padding: EdgeInsets.only(top: 20.0),
-                              child: Row(
+        child: AdaptiveScrollbar(
+          controller: horizontalScroll,
+          width: widthBar,
+          position: ScrollbarPosition.bottom,
+          underSpacing: const EdgeInsets.only(bottom: 8),
+          child: SingleChildScrollView(
+            controller: verticalScroll,
+            scrollDirection: Axis.vertical,
+            child: SizedBox(
+              width: 2000,
+              child: SingleChildScrollView(
+                controller: horizontalScroll,
+                scrollDirection: Axis.horizontal,
+                child: SizedBox(
+                  height: 630,
+                  width: 830,
+                  child: Align(
+                      alignment: Alignment.topLeft,
+                      child: Padding(
+                        padding: const EdgeInsets.only(left: 30.0, top: 30.0),
+                        child: Column(
+                            children: [
+                              Row(
                                 children: [
-                                  Padding(
-                                    padding: const EdgeInsets.only(left: 20.0),
-                                    child: Text('$type:  '),
-                                  ),
-                                  SizedBox(
-                                    width: 300,
-                                    height: 40,
-                                    child: TextField(
-                                      controller: controllerText,
-                                      decoration: InputDecoration(
-                                        border: const OutlineInputBorder(),
-                                        icon: select == -1
-                                              ? const Icon(Icons.calendar_today)
-                                              : null,
-                                      ),
-                                      onTap: () async {
-                                        DateTime? dateSelected = await  platformDatePicker.showPlatformDatePicker(
-                                            context,
-                                            seletedDate,
-                                            DateTime(DateTime.now().year - 10),
-                                            DateTime(DateTime.now().year + 1),
-                                        );
-                                        setState(() {
-                                          date =DateFormat('dd-MM-yyyy').format(dateSelected!);
-                                          controllerText.text = date;
-                                        
-                                        });
-
-                                      },
-                                    ),
-                                  ),
-
-                                ],
-                              ),
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.only(top: 40.0),
-                              child: Row(
-                                children: [
-                                  Text('Lista de $typeList',
+                                  Text('$title Envio: ',
                                     style: const TextStyle(
                                         fontWeight: FontWeight.bold),),
                                 ],
                               ),
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.only(
-                                  top: 40.0, left: 10.0),
-                              child: Scrollbar(
-                                controller: verticalScrollTable,
-                                child: Container(
-                                  height: 250,
-                                  child: SingleChildScrollView(
-                                    controller: verticalScrollTable,
-                                    scrollDirection: Axis.vertical,
-                                    child: DataTable(
-                                      columns: <DataColumn>[
-                                        for(int i = 0; i < endTable; i++)
-                                          DataColumn(
-                                            label: SizedBox(
-                                                width: 110,
-                                                child: Text(campsTable[i])
-                                            ),
-                                          ),
+                              Padding(
+                                padding: EdgeInsets.only(top: 20.0),
+                                child: Row(
+                                  children: [
+                                    Padding(
+                                      padding: const EdgeInsets.only(left: 20.0),
+                                      child: Text('$type:  '),
+                                    ),
+                                    SizedBox(
+                                      width: 300,
+                                      height: 40,
+                                      child: TextField(
+                                        controller: controllerText,
+                                        decoration: InputDecoration(
+                                          border: const OutlineInputBorder(),
+                                          icon: select == -1
+                                                ? const Icon(Icons.calendar_today)
+                                                : null,
+                                        ),
+                                        onTap: () async {
+                                          DateTime? dateSelected = await  platformDatePicker.showPlatformDatePicker(
+                                              context,
+                                              seletedDate,
+                                              DateTime(DateTime.now().year - 10),
+                                              DateTime(DateTime.now().year + 1),
+                                          );
+                                          setState(() {
+                                            date =DateFormat('dd-MM-yyyy').format(dateSelected!);
+                                            controllerText.text = date;
 
-                                      ],
-                                       rows: List<DataRow>.generate(rowsType,
-                                          (int index) =>
-                                          DataRow(
-                                              cells: <DataCell>[
-                                                for(int i = 0; i < endTable; i++)
-                                                DataCell(
-                                                 campsTable[i] == "Empresa"
-                                                    ? select == -1
-                                                       ? Text(factories[index].name)
-                                                       : Text(listSend[index].factory)
-                                                 : campsTable[i] == "Fecha"
-                                                     ?  Text(listSend[index].date)
-                                                 : campsTable[i] == "Observaciones"
-                                                     ? Padding(
-                                                         padding: const EdgeInsets.all(8.0),
-                                                         child: TextField(
-                                                             controller: _controllersObserLine[index],
-                                                             decoration: InputDecoration(
-                                                               border: OutlineInputBorder(),
-                                                               labelText: select == -1
-                                                                   ? _controllersObserLine[index].text
-                                                                   : listSend[index].observations,
-                                                          ),
-                                                   ),
-                                                 )
-                                                : campsTable[i] == "Estado"
-                                                     ? select == -1
-                                                           ? Text("estado")
-                                                           : Text(listSend[index].state)
-                                                : campsTable[i] =="Seleccionar"
-                                                     ? CheckboxListTile(
-                                                          value: Send[index],
-                                                            onChanged: (bool? value) {
-                                                                 setState(() {
+                                          });
 
-                                                               Send[index] = value!;
-                                                               allSelect = true;
-                                                          });
-                                                         },)
-                                                 : Text("data")
-                                                ),
-                                              ]
+                                        },
+                                      ),
+                                    ),
+
+                                  ],
+                                ),
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.only(top: 40.0),
+                                child: Row(
+                                  children: [
+                                    Text('Lista de $typeList',
+                                      style: const TextStyle(
+                                          fontWeight: FontWeight.bold),),
+                                  ],
+                                ),
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.only(
+                                    top: 40.0, left: 10.0),
+                                child: Scrollbar(
+                                  controller: verticalScrollTable,
+                                  child: Container(
+                                    height: 250,
+                                    child: SingleChildScrollView(
+                                      controller: verticalScrollTable,
+                                      scrollDirection: Axis.vertical,
+                                      child: DataTable(
+                                        columns: <DataColumn>[
+                                          for(int i = 0; i < endTable; i++)
+                                            DataColumn(
+                                              label: SizedBox(
+                                                  width: 110,
+                                                  child: Text(campsTable[i])
+                                              ),
                                             ),
+
+                                        ],
+                                         rows: List<DataRow>.generate(rowsType,
+                                            (int index) =>
+                                            DataRow(
+                                                cells: <DataCell>[
+                                                  for(int i = 0; i < endTable; i++)
+                                                  DataCell(
+                                                   campsTable[i] == "Empresa"
+                                                      ? select == -1
+                                                         ? Text(factories[index].name)
+                                                         : Text(listSend[index].factory)
+                                                   : campsTable[i] == "Fecha"
+                                                       ?  Text(listSend[index].date)
+                                                   : campsTable[i] == "Observaciones"
+                                                       ? Padding(
+                                                           padding: const EdgeInsets.all(8.0),
+                                                           child: TextField(
+                                                               controller: _controllersObserLine[index],
+                                                               decoration: InputDecoration(
+                                                                 border: OutlineInputBorder(),
+                                                                 labelText: select == -1
+                                                                     ? _controllersObserLine[index].text
+                                                                     : listSend[index].observations,
+                                                            ),
+                                                     ),
+                                                   )
+                                                  : campsTable[i] == "Estado"
+                                                       ? select == -1
+                                                             ? Text("estado")
+                                                             : Text(listSend[index].state)
+                                                  : campsTable[i] =="Seleccionar"
+                                                       ? CheckboxListTile(
+                                                            value: Send[index],
+                                                              onChanged: (bool? value) {
+                                                                   setState(() {
+
+                                                                 Send[index] = value!;
+                                                                 allSelect = true;
+                                                            });
+                                                           },)
+                                                   : Text("data")
+                                                  ),
+                                                ]
+                                              ),
+                                        ),
                                       ),
                                     ),
                                   ),
                                 ),
                               ),
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.only(top: 30.0,left: 60.0),
-                              child: Align(
-                                  alignment: Alignment.topLeft,
-                                  child: Row(
-                                    children: [
-                                      Text(stringFactories),
-                                      Padding(
-                                        padding: const EdgeInsets.only(left: 350.0),
-                                        child: Text("Seleccionar todas"),
-                                      ),
-                                      Checkbox(
-                                        value: allSelect,
-                                        onChanged: (value) {
-                                          setState(() {
-
-                                          for(int i = 0 ; i<Send.length; i++)
-                                          {
-                                            Send[i] = value!;
-                                          }
-                                          allSelect = value!;
-
-
-
-
-                                          });
-                                        },
-                                      )
-
-                                    ],
-                                  )
-                              ),
-                            ),
-                            if(viewButoons == true)
                               Padding(
-                                padding: const EdgeInsets.only(top: 70.0, left: 550.0),
-                                child: SizedBox(
-                                  width: 200,
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      ElevatedButton(
-                                        child: const Text('Nuevo'),
-                                        onPressed: () {
-                                          setState(() {
-                                            List<lineSend> sendSelected = [];
-                                            int allLines =0;
-                                            for(int i = 0; i < factories.length; i++)
-                                            {
-                                                if(Send[i] == true)
-                                                {
-                                                  line.add(lineSend(date: controllerText.text, factory: factories[i].name,  observations: _controllersObserLine[i].text, state:'Preparado'));
-                                                  allLines++;
-                                                  print(line);
-                                                }
-                                            }
+                                padding: const EdgeInsets.only(top: 30.0,left: 60.0),
+                                child: Align(
+                                    alignment: Alignment.topLeft,
+                                    child: Row(
+                                      children: [
+                                        Column(
+                                          children: [
+                                            Text(stringFactories),
+                                          ],
+                                        ),
+                                        if(viewButoons == true)
+                                        Padding(
+                                          padding: const EdgeInsets.only(left: 350.0),
+                                          child: Row(
+                                            children: [
+                                              const  Text("Seleccionar todas"),
+                                              Checkbox(
+                                                value: allSelect,
+                                                onChanged: (value) {
+                                                  setState(() {
 
-                                            String action ='El pedido contiene $allLines empresas';
-                                            confirm(context,action);
+                                                    for(int i = 0 ; i<Send.length; i++)
+                                                    {
+                                                      Send[i] = value!;
+                                                    }
+                                                    allSelect = value!;
 
-                                           csvExportatorLines(listSend);
-                                          });
 
 
-                                        },
-                                      ),
-                                      ElevatedButton(
-                                        child: const Text('Cancelar'),
-                                        onPressed: () {
 
-                                        },
-                                      ),
-                                    ],
-                                  ),
+                                                  });
+                                                },
+                                              )
+                                            ],
+                                          ),
+                                        ),
+                                      ],
+                                    )
                                 ),
                               ),
-                          ]
-                      ),
-                    )
+                              if(viewButoons == true)
+                                Padding(
+                                  padding: const EdgeInsets.only(top: 70.0, left: 550.0),
+                                  child: SizedBox(
+                                    width: 200,
+                                    child: Row(
+                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        ElevatedButton(
+                                          child: const Text('Nuevo'),
+                                          onPressed: () {
+                                            setState(() {
+                                              List<lineSend> sendSelected = [];
+                                              int allLines =0;
+                                              for(int i = 0; i < factories.length; i++)
+                                              {
+                                                  if(Send[i] == true)
+                                                  {
+                                                    line.add(lineSend(date: controllerText.text, factory: factories[i].name,  observations: _controllersObserLine[i].text, state:'Preparado'));
+                                                    allLines++;
+                                                    print(line);
+                                                  }
+                                              }
+
+                                              String action ='El pedido contiene $allLines empresas';
+                                              confirm(context,action);
+
+                                             csvExportatorLines(listSend);
+                                            });
+
+
+                                          },
+                                        ),
+                                        ElevatedButton(
+                                          child: const Text('Cancelar'),
+                                          onPressed: () {
+
+                                          },
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                            ]
+                        ),
+                      )
+                  ),
                 ),
               ),
             ),

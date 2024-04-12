@@ -1,8 +1,7 @@
+import 'package:crud_factories/Frontend/app.dart';
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:window_manager/window_manager.dart';
 import 'Alertdialogs/closeApp.dart';
-import 'Frontend/navigation_screen.dart';
-import 'Objects/Factory.dart';
 
 
 void main() {
@@ -46,11 +45,9 @@ class _MyApp1State extends State<MyApp1> with WindowListener {
   @override
   Widget build(BuildContext context) {
 
-    List<Factory> factories = [];
-
     return const FluentApp(
       debugShowCheckedModeBanner: false,
-      home: NavigationScreen(),
+      home: App(),
     );
   }
   @override

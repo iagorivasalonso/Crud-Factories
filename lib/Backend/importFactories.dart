@@ -1,5 +1,4 @@
 import 'dart:io';
-
 import 'package:crud_factories/Objects/Factory.dart';
 
 importFactory(List<String> fileContent, List<Factory> factories) async {
@@ -8,6 +7,7 @@ importFactory(List<String> fileContent, List<Factory> factories) async {
 
  if(fileContent.isEmpty)
   {
+
     File file =new File('D:/factories.csv');
     fileContent = await file.readAsLines();
   }
@@ -50,7 +50,6 @@ importFactory(List<String> fileContent, List<Factory> factories) async {
         },
         contacts: allEmp));
   }
-
 
   return factories;
 }

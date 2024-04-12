@@ -49,184 +49,186 @@ class _newImportState extends State<newImport> {
     List<lineSend> linesNew = [];
 
     
-    return AdaptiveScrollbar(
-      controller: verticalScroll,
-      width: widthBar,
-      child: AdaptiveScrollbar(
-        controller: horizontalScroll,
+    return Scaffold(
+      body: AdaptiveScrollbar(
+        controller: verticalScroll,
         width: widthBar,
-        position: ScrollbarPosition.bottom,
-        underSpacing: EdgeInsets.only(bottom: 8),
-        child: SingleChildScrollView(
-          controller: verticalScroll,
-          scrollDirection: Axis.vertical,
-          child: Container(
-            width: 2000,
-            child: SingleChildScrollView(
-              controller: horizontalScroll,
-              scrollDirection: Axis.horizontal,
-              child: Container(
-                height: 400,
-                width: 736,
-                child: Align(
-                  alignment: Alignment.topLeft,
-                  child:  Padding(
-                    padding: const EdgeInsets.only(left: 30.0,top: 30.0),
-                    child: Column(
-                      children: [
-                        const Row(
-                          children: [
-                            Text('Importar datos: ',
-                              style: TextStyle(fontWeight: FontWeight.bold),),
-                          ],
-                        ),
-                        const Padding(
-                          padding: EdgeInsets.only(top: 15.00),
-                          child: Column(
+        child: AdaptiveScrollbar(
+          controller: horizontalScroll,
+          width: widthBar,
+          position: ScrollbarPosition.bottom,
+          underSpacing: EdgeInsets.only(bottom: 8),
+          child: SingleChildScrollView(
+            controller: verticalScroll,
+            scrollDirection: Axis.vertical,
+            child: Container(
+              width: 2000,
+              child: SingleChildScrollView(
+                controller: horizontalScroll,
+                scrollDirection: Axis.horizontal,
+                child: Container(
+                  height: 400,
+                  width: 736,
+                  child: Align(
+                    alignment: Alignment.topLeft,
+                    child:  Padding(
+                      padding: const EdgeInsets.only(left: 30.0,top: 30.0),
+                      child: Column(
+                        children: [
+                          const Row(
                             children: [
-                              Row(
-                                children: [
-                                  Text('Importar datos en formato CSV.'),
-                                ],
-                              ),
+                              Text('Importar datos: ',
+                                style: TextStyle(fontWeight: FontWeight.bold),),
                             ],
                           ),
-
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.only(top:80.0, bottom: 30.0),
-                          child: Row(
-                            children: [
-                              const Text('Ruta: '),
-                              SizedBox(
-                                width: 400,
-                                height: 40,
-                                child: TextField(
-                                  decoration:const InputDecoration(
-                                    border: OutlineInputBorder(),
-                                  ),
-                                  controller: controllerDatePicker,
-                                ),
-                              ),
-                              Padding(
-                                padding: const EdgeInsets.only(left: 40.0),
-                                child: ElevatedButton(
-                                  child: const Text('Examinar'),
-                                  onPressed: (){
-                                    _pickFile(controllerDatePicker,factoriesNew,mailsNew,linesNew);
-                                  },
-                                ),
-                              )
-                            ],
-                          ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.only(top: 130.0,left: 400),
-                          child: Container(
-                            width: 250,
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          const Padding(
+                            padding: EdgeInsets.only(top: 15.00),
+                            child: Column(
                               children: [
-                                ElevatedButton(
-                                  child: const Text('Importar datos'),
-                                  onPressed: () {
-                                    String current = '';
-                                    String action = '';
-
-                                    if(factoriesNew.isNotEmpty)
-                                    {
-                                          for(int i = 0; i < factories.length; i++)
-                                          {
-                                            if(i==0)
-                                            {
-                                              if(factories.isEmpty)
-                                                factories.add(factories[0]);
-                                            }
-                                              current = factories[i].name;
-
-                                              for(int x = 0; x < factoriesNew.length; x++) {
-                                                if (factoriesNew[x].name == current) {
-                                                    factoriesNew.removeAt(x);
-                                                }
-                                             }
-
-                                          }
-
-                                          for(int i = 0; i < factories.length; i++)
-                                          {
-                                             int id = i + 1;
-                                            factories[i].id = id.toString();
-                                          }
-
-                                          factories = factories + factoriesNew;
-
-                                          int cantImport = factoriesNew.length;
-                                          action ='se importaron $cantImport empresas correctamente';
-                                          confirm(context,action);
-
-
-                                          csvExportatorFactories(factories, -1);
-                                    }
-
-                                    if(mailsNew.isNotEmpty)
-                                    {
-                                      for(int i = 0; i < mails.length; i++)
-                                      {
-                                        if(i==0)
-                                        {
-                                          if(mails.isEmpty)
-                                            mails.add(mails[0]);
-                                        }
-                                        current = mails[i].addrres;
-
-                                        for(int x = 0; x < mailsNew.length; x++) {
-                                          if (mailsNew[x].addrres == current) {
-                                            mailsNew.removeAt(x);
-                                          }
-                                        }
-
-                                      }
-
-                                      for(int i = 0; i < mails.length; i++)
-                                      {
-                                        int id = i + 1;
-                                        mails[i].id = id.toString();
-                                      }
-
-                                      mails = mails + mailsNew;
-
-                                      int cantImport = mailsNew.length;
-                                      action ='se importaron $cantImport emails correctamente';
-                                      confirm(context,action);
-
-                                      csvExportatorMails(mails, -1);
-                                    }
-
-                                    if(linesNew.isNotEmpty)
-                                    {
-                                      int cantImport = linesNew.length;
-                                      action ='se importaron $cantImport lineas correctamente';
-                                      confirm(context,action);
-
-                                      lines = lines + linesNew;
-
-                                      csvExportatorLines(lines);
-                                    }
-
-
-                                  },
-                                ),
-                                ElevatedButton(
-                                  child: const Text('Cancelar'),
-                                  onPressed: () {
-
-                                  },
+                                Row(
+                                  children: [
+                                    Text('Importar datos en formato CSV.'),
+                                  ],
                                 ),
                               ],
                             ),
+
                           ),
-                        ),
-                      ],
+                          Padding(
+                            padding: const EdgeInsets.only(top:80.0, bottom: 30.0),
+                            child: Row(
+                              children: [
+                                const Text('Ruta: '),
+                                SizedBox(
+                                  width: 400,
+                                  height: 40,
+                                  child: TextField(
+                                    decoration:const InputDecoration(
+                                      border: OutlineInputBorder(),
+                                    ),
+                                    controller: controllerDatePicker,
+                                  ),
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.only(left: 40.0),
+                                  child: ElevatedButton(
+                                    child: const Text('Examinar'),
+                                    onPressed: (){
+                                      _pickFile(controllerDatePicker,factoriesNew,mailsNew,linesNew);
+                                    },
+                                  ),
+                                )
+                              ],
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.only(top: 130.0,left: 400),
+                            child: Container(
+                              width: 250,
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  ElevatedButton(
+                                    child: const Text('Importar datos'),
+                                    onPressed: () {
+                                      String current = '';
+                                      String action = '';
+
+                                      if(factoriesNew.isNotEmpty)
+                                      {
+                                            for(int i = 0; i < factories.length; i++)
+                                            {
+                                              if(i==0)
+                                              {
+                                                if(factories.isEmpty)
+                                                  factories.add(factories[0]);
+                                              }
+                                                current = factories[i].name;
+
+                                                for(int x = 0; x < factoriesNew.length; x++) {
+                                                  if (factoriesNew[x].name == current) {
+                                                      factoriesNew.removeAt(x);
+                                                  }
+                                               }
+
+                                            }
+
+                                            for(int i = 0; i < factories.length; i++)
+                                            {
+                                               int id = i + 1;
+                                              factories[i].id = id.toString();
+                                            }
+
+                                            factories = factories + factoriesNew;
+
+                                            int cantImport = factoriesNew.length;
+                                            action ='se importaron $cantImport empresas correctamente';
+                                            confirm(context,action);
+
+
+                                            csvExportatorFactories(factories, -1);
+                                      }
+
+                                      if(mailsNew.isNotEmpty)
+                                      {
+                                        for(int i = 0; i < mails.length; i++)
+                                        {
+                                          if(i==0)
+                                          {
+                                            if(mails.isEmpty)
+                                              mails.add(mails[0]);
+                                          }
+                                          current = mails[i].addrres;
+
+                                          for(int x = 0; x < mailsNew.length; x++) {
+                                            if (mailsNew[x].addrres == current) {
+                                              mailsNew.removeAt(x);
+                                            }
+                                          }
+
+                                        }
+
+                                        for(int i = 0; i < mails.length; i++)
+                                        {
+                                          int id = i + 1;
+                                          mails[i].id = id.toString();
+                                        }
+
+                                        mails = mails + mailsNew;
+
+                                        int cantImport = mailsNew.length;
+                                        action ='se importaron $cantImport emails correctamente';
+                                        confirm(context,action);
+
+                                        csvExportatorMails(mails, -1);
+                                      }
+
+                                      if(linesNew.isNotEmpty)
+                                      {
+                                        int cantImport = linesNew.length;
+                                        action ='se importaron $cantImport lineas correctamente';
+                                        confirm(context,action);
+
+                                        lines = lines + linesNew;
+
+                                        csvExportatorLines(lines);
+                                      }
+
+
+                                    },
+                                  ),
+                                  ElevatedButton(
+                                    child: const Text('Cancelar'),
+                                    onPressed: () {
+
+                                    },
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                 ),

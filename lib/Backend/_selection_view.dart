@@ -10,7 +10,7 @@ import '../Frontend/conection.dart';
 import '../Frontend/view.dart';
 import '../Functions/avoidRepeatArray.dart';
 
-FuntionSeleted(int itenSelection, int subIten1Selection,int subIten2Selection, double mWidth, double mHeight, List<String> itens, List<Factory> factories, List<Mail> mails, List<lineSend> line) {
+FuntionSeleted(int itenSelection, int subIten1Selection,int subIten2Selection, double mWidth, double mHeight, List<Factory> factories, List<Mail> mails, List<lineSend> line) {
 
   List<String> datesSends;
   List<String> element = [];
@@ -26,17 +26,16 @@ FuntionSeleted(int itenSelection, int subIten1Selection,int subIten2Selection, d
     switch (itenSelection) {
       case 0:
         if (subIten1Selection == 0) {
-          if (subIten2Selection == 0) {
+          if (subIten2Selection == 0)
             return newFactory(factories, newdato);
-          }
+
 
           if (subIten2Selection == 1)
             return newMail(mails, newdato);
 
-          if (subIten2Selection == 2) {
-
+          if (subIten2Selection == 2)
             return newSend(datesSends, line, newdato, "", "", line, "",factories);
-          }
+
         }
 
         if (subIten1Selection == 1)
@@ -57,10 +56,10 @@ FuntionSeleted(int itenSelection, int subIten1Selection,int subIten2Selection, d
 
 
       case 2:
-        return sendMail(datesSends,line,factories, mails);
-
-      case 3:
-        return conection();
+        if (subIten1Selection == 0)
+           return sendMail(datesSends,line,factories, mails);
+        if (subIten1Selection == 1)
+          return conection();
     }
 
 }

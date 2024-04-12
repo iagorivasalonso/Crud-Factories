@@ -271,7 +271,7 @@ class _viewState extends State<view> {
       mHeightList = mHeight - mHeightbutton;
     } else {
       mHeightbutton = 0;
-      mHeightList = mHeight;
+      mHeightList = mHeight-40;
     }
 
     if(view=="mail")
@@ -285,7 +285,7 @@ class _viewState extends State<view> {
             children: [
               SizedBox(
                   width: mWidthList,
-                  height: mHeight,
+                  height: mHeightList,
                   child: Container(
                     decoration: const BoxDecoration(
                         border: Border(
@@ -396,12 +396,11 @@ class _viewState extends State<view> {
                                     children: [
                                       Expanded(
                                         child: Padding(
-                                          padding: EdgeInsets.only(
-                                              top: 15.0, left: 40.0, right: 40.0),
+                                          padding: const EdgeInsets.only(top: 15.0, left: 40.0, right: 40.0),
                                           child:  TextField(
                                             controller: controllerSearchFactory,
                                             onChanged: (value) =>_runFilter(view, value, textFilterFactory, factoryFilter, factoryName),
-                                            decoration: InputDecoration(
+                                            decoration: const InputDecoration(
                                                 border: OutlineInputBorder(),
                                                 hintText: 'Buscar...'),
                                           ),
@@ -505,10 +504,11 @@ class _viewState extends State<view> {
                               ? Colors.cyan
                               : Colors.grey,
                           height: opSelected == 0
-                              ? mHeightList
-                              : opSelected == 1
-                              ? mHeightList-mHeightfilter
-                              : 10,
+                             ? mHeightList-mHeightbutton
+                         : opSelected == 1
+                              ? mHeightList - mHeightfilter - mHeightbutton
+                          : 10,
+
                           child: Row(
                             children: [
                               Expanded(

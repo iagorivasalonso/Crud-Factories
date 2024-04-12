@@ -61,7 +61,6 @@ class _sendMailState extends State<sendMail> {
   int cantFactories = 0;
 
 
-
   @override
   Widget build(BuildContext context) {
 
@@ -70,464 +69,510 @@ class _sendMailState extends State<sendMail> {
     List<Mail> mails = widget.mails;
     allFactories = widget.Factories;
 
-    String itenDefaultMail =mails[0].addrres;
-
-    return AdaptiveScrollbar(
-      controller: verticalScroll,
-      width: widthBar,
-      child: AdaptiveScrollbar(
-        controller: horizontalScroll,
+    return Scaffold(
+      body: AdaptiveScrollbar(
+        controller: verticalScroll,
         width: widthBar,
-        position: ScrollbarPosition.bottom,
-        underSpacing: EdgeInsets.only(bottom: 8),
-        child: SingleChildScrollView(
-          controller: verticalScroll,
-          scrollDirection: Axis.vertical,
-          child: Container(
-            width: 2000,
-            child: SingleChildScrollView(
-              controller: horizontalScroll,
-              scrollDirection: Axis.horizontal,
-              child: Container(
-                height: _tMails == 1
-                    ? 743
-                    : 1003,
-                width: 880,
-                child: Align(
-                  alignment: Alignment.topLeft,
-                  child: Padding(
-                    padding: const EdgeInsets.only(left: 30.0, top: 30.0),
-                    child: Column(children: [
-                      const Row(
-                        children: [
-                          Text(
-                            'Envio de emails: ',
-                            style: TextStyle(fontWeight: FontWeight.bold),
-                          ),
-                        ],
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(top: 20.0, bottom: 20.0, left: 30.0),
-                        child: Row(
+        child: AdaptiveScrollbar(
+          controller: horizontalScroll,
+          width: widthBar,
+          position: ScrollbarPosition.bottom,
+          underSpacing: EdgeInsets.only(bottom: 8),
+          child: SingleChildScrollView(
+            controller: verticalScroll,
+            scrollDirection: Axis.vertical,
+            child: Container(
+              width: 2000,
+              child: SingleChildScrollView(
+                controller: horizontalScroll,
+                scrollDirection: Axis.horizontal,
+                child: Container(
+                  height: _tMails == 1
+                      ? 770
+                      : 1003,
+                  width: 880,
+                  child: Align(
+                    alignment: Alignment.topLeft,
+                    child: Padding(
+                      padding: const EdgeInsets.only(left: 30.0, top: 30.0),
+                      child: Column(
                           children: [
-                            const Text('Remitente:'),
-                            SizedBox(
-                              width: 350,
-                              height: 40,
-                              child: Padding(
-                                padding: const EdgeInsets.only(left: 20.00),
-                                child: DropdownButtonHideUnderline(
-                                  child: DropdownButton2<Mail>(
-                                    hint:  Text(itenDefaultMail),
-                                    items: mails.map((Mail itemMail) => DropdownMenuItem<Mail>(
-                                      value:  itemMail,
-                                      child: Text(itemMail.addrres),
-                                    )).toList(),
-                                    value: selectedMail,
-                                    onChanged: (Mail? mailChoose) {
-                                      setState(() {
-                                        selectedMail=mailChoose;
-                                        controllerMailTo.text = mailChoose!.addrres;
-                                        controllerCompany.text = mailChoose!.company;
-                                        controllerPass.text = mailChoose!.password;
+                        const Row(
+                          children: [
+                            Text(
+                              'Envio de emails: ',
+                              style: TextStyle(fontWeight: FontWeight.bold),
+                            ),
+                          ],
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(top: 20.0, bottom: 20.0, left: 30.0),
+                          child: mails.isNotEmpty
+                            ? Row(
+                               children: [
+                                  const Text('Remitente:'),
+                                  SizedBox(
+                                    width: 350,
+                                    height: 40,
+                                    child: Padding(
+                                         padding: const EdgeInsets.only(left: 20.00),
+                                            child: DropdownButtonHideUnderline(
+                                                child: DropdownButton2<Mail>(
+                                                    hint:  Text(mails[0].addrres),
+                                                    items: mails.map((Mail itemMail) => DropdownMenuItem<Mail>(
+                                                      value:  itemMail,
+                                                      child: Text(itemMail.addrres),
+                                      )).toList(),
+                                      value: selectedMail,
+                                      onChanged: (Mail? mailChoose) {
+                                        setState(() {
+                                          selectedMail=mailChoose;
+                                          controllerMailTo.text = mailChoose!.addrres;
+                                          controllerCompany.text = mailChoose!.company;
+                                          controllerPass.text = mailChoose!.password;
 
-                                      });
-                                    },
-                                    buttonStyleData: const ButtonStyleData(
-                                      height: 50,
-                                      width: 250,
-                                      padding: EdgeInsets.only(left: 14, right: 14),
-                                    ),
-                                    dropdownStyleData: DropdownStyleData(
-                                      maxHeight: 200,
-                                      width: 300,
-                                      scrollbarTheme: ScrollbarThemeData(
-                                        thickness: MaterialStateProperty.all(6),
+                                        });
+                                      },
+                                      buttonStyleData: const ButtonStyleData(
+                                        height: 50,
+                                        width: 350,
+                                        padding: EdgeInsets.only(left: 14, right: 14),
+                                      ),
+                                      dropdownStyleData: DropdownStyleData(
+                                        maxHeight: 200,
+                                        width: 330,
+                                        scrollbarTheme: ScrollbarThemeData(
+                                          thickness: MaterialStateProperty.all(6),
+                                        ),
                                       ),
                                     ),
                                   ),
                                 ),
                               ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(top: 5.0, bottom: 30.0, left: 30.0),
-                        child: Column(
-                          children: [
-                            Row(
-                              children: [
-                                const Column(
-                                  children: [
-                                    Text('Para:'),
-                                  ],
-                                ),
-                                Row(
-                                  children: [
-                                    Padding(
-                                      padding: const EdgeInsets.only(left: 50.0),
-                                      child: Row(
-                                        children: [
-                                          Radio(
-                                              value: 1,
-                                              groupValue: _tMails,
-                                              onChanged: (value) {
-                                                setState(() {
-                                                  _tMails = 1;
-                                                });
-                                              }),
-                                          const Text('Un destinatario'),
-                                        ],
-                                      ),
-                                    ),
-                                    Padding(
-                                      padding: const EdgeInsets.only(left: 50.0),
-                                      child: Row(
-                                        children: [
-                                          Radio(
-                                              value: 2,
-                                              groupValue: _tMails,
-                                              onChanged: (value) {
-                                                setState(() {
-                                                  _tMails = 2;
-                                                });
-                                              }),
-                                          const Text('Varios destinatarios'),
-                                        ],
-                                      ),
-                                    ),
-                                  ],
-                                )
-                              ],
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.only(top: 30.0),
-                              child: Column(
-                                children: [
-                                  Container(
-                                    child: _tMails == 1
-                                        ?  Row(
+                            ],
+                          )
+                            : const Column(
+                                 children: [
+                                    Row(
                                       children: [
-                                        Text("Enviar a:"),
+                                        Text("Email:"),
                                         Padding(
-                                          padding: EdgeInsets.only(left: 34.0),
+                                          padding: EdgeInsets.only(left: 49.0),
                                           child: SizedBox(
                                             width: 450,
                                             height: 40,
                                             child: TextField(
-                                              decoration: const InputDecoration(
+                                              decoration: InputDecoration(
                                                 border: OutlineInputBorder(),
                                               ),
-                                              controller: controllerMailFrom,
+                                              //  controller: controllerMailFrom,
                                             ),
                                           ),
                                         ),
                                       ],
+                                    ),
+                                    Padding(
+                                      padding: EdgeInsets.only(top:40.0),
+                                      child: Row(
+                                        children: [
+                                          Text("Contraseña:"),
+                                          Padding(
+                                            padding: EdgeInsets.only(left: 13.0),
+                                            child: SizedBox(
+                                              width: 450,
+                                              height: 40,
+                                              child: TextField(
+                                                decoration: InputDecoration(
+                                                  border: OutlineInputBorder(),
+                                                ),
+                                                //  controller: controllerMailFrom,
+                                              ),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
                                     )
-                                        : Column(
-                                      children: [
-                                        Align(
-                                          alignment: Alignment.topLeft,
-                                          child: Column(
-                                            children: [
-                                              Row(
-                                                children: [
-                                                  const Text("Seleccionar Envio: "),
-                                                  Padding(
-                                                    padding: const EdgeInsets.only(left: 20.0),
-                                                    child: DropdownButtonHideUnderline(
-                                                      child: DropdownButton2<String>(
-                                                        hint: const Text('Seleccionar envio',
-                                                        ),
-                                                        items: datesSends.map((String itemSend) => DropdownMenuItem<String>(
-                                                          value:  itemSend,
-                                                          child: Text( itemSend,
-                                                            overflow: TextOverflow.ellipsis,
+
+                                 ],
+                              ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(top: 5.0, bottom: 30.0, left: 30.0),
+                          child: Column(
+                            children: [
+                              Row(
+                                children: [
+                                  const Column(
+                                    children: [
+                                      Text('Para:'),
+                                    ],
+                                  ),
+                                  Row(
+                                    children: [
+                                      Padding(
+                                        padding: const EdgeInsets.only(left: 50.0),
+                                        child: Row(
+                                          children: [
+                                            Radio(
+                                                value: 1,
+                                                groupValue: _tMails,
+                                                onChanged: (value) {
+                                                  setState(() {
+                                                    _tMails = 1;
+                                                  });
+                                                }),
+                                            const Text('Un destinatario'),
+                                          ],
+                                        ),
+                                      ),
+                                      Padding(
+                                        padding: const EdgeInsets.only(left: 50.0),
+                                        child: Row(
+                                          children: [
+                                            Radio(
+                                                value: 2,
+                                                groupValue: _tMails,
+                                                onChanged: (value) {
+                                                  setState(() {
+                                                    _tMails = 2;
+                                                  });
+                                                }),
+                                            const Text('Varios destinatarios'),
+                                          ],
+                                        ),
+                                      ),
+                                    ],
+                                  )
+                                ],
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.only(top: 30.0),
+                                child: Column(
+                                  children: [
+                                    Container(
+                                      child: _tMails == 1
+                                          ?  Row(
+                                        children: [
+                                          Text("Enviar a:"),
+                                          Padding(
+                                            padding: EdgeInsets.only(left: 34.0),
+                                            child: SizedBox(
+                                              width: 450,
+                                              height: 40,
+                                              child: TextField(
+                                                decoration: const InputDecoration(
+                                                  border: OutlineInputBorder(),
+                                                ),
+                                                controller: controllerMailFrom,
+                                              ),
+                                            ),
+                                          ),
+                                        ],
+                                      )
+                                          : Column(
+                                        children: [
+                                          Align(
+                                            alignment: Alignment.topLeft,
+                                            child: Column(
+                                              children: [
+                                                Row(
+                                                  children: [
+                                                    const Text("Seleccionar Envio: "),
+                                                    Padding(
+                                                      padding: const EdgeInsets.only(left: 20.0),
+                                                      child: DropdownButtonHideUnderline(
+                                                        child: DropdownButton2<String>(
+                                                          hint: const Text('Seleccionar envio',
                                                           ),
-                                                        ))
-                                                            .toList(),
-                                                        value: selectedSend,
-                                                        onChanged: (String? dateChoose) {
-                                                          setState(() {
-                                                            sendsDay.clear();
-                                                            mailList.clear();
-                                                            selectedSend = dateChoose;
+                                                          items: datesSends.map((String itemSend) => DropdownMenuItem<String>(
+                                                            value:  itemSend,
+                                                            child: Text( itemSend,
+                                                              overflow: TextOverflow.ellipsis,
+                                                            ),
+                                                          ))
+                                                              .toList(),
+                                                          value: selectedSend,
+                                                          onChanged: (String? dateChoose) {
+                                                            setState(() {
+                                                              sendsDay.clear();
+                                                              mailList.clear();
+                                                              selectedSend = dateChoose;
 
-                                                            for(int i = 0; i < lines.length; i++) {
-                                                              if(lines[i].date==dateChoose) {
-                                                                sendsDay.add(lines[i]);
-                                                              }
-                                                            }
-
-                                                            cantFactories = sendsDay.length;
-
-                                                            selectedFactories.clear();
-                                                            String nameFactory = " ";
-
-                                                            for(int i = 0; i <sendsDay.length; i++)
-                                                            {
-                                                                nameFactory=sendsDay[i].factory;
-                                                                for(int x = 0 ; x < allFactories.length; x++)
-                                                                {
-                                                                     if(nameFactory == allFactories[x].name)
-                                                                     {
-                                                                         selectedFactories.add(allFactories[x]);
-                                                                     }
+                                                              for(int i = 0; i < lines.length; i++) {
+                                                                if(lines[i].date==dateChoose) {
+                                                                  sendsDay.add(lines[i]);
                                                                 }
-                                                            }
+                                                              }
 
-                                                            for(int y= 0 ; y < selectedFactories.length; y++) {
-                                                                   mailList.add(selectedFactories[y].mail);
-                                                            }
+                                                              cantFactories = sendsDay.length;
+
+                                                              selectedFactories.clear();
+                                                              String nameFactory = " ";
+
+                                                              for(int i = 0; i <sendsDay.length; i++)
+                                                              {
+                                                                  nameFactory=sendsDay[i].factory;
+                                                                  for(int x = 0 ; x < allFactories.length; x++)
+                                                                  {
+                                                                       if(nameFactory == allFactories[x].name)
+                                                                       {
+                                                                           selectedFactories.add(allFactories[x]);
+                                                                       }
+                                                                  }
+                                                              }
+
+                                                              for(int y= 0 ; y < selectedFactories.length; y++) {
+                                                                     mailList.add(selectedFactories[y].mail);
+                                                              }
 
 
-                                                          });
-                                                        },
-                                                        buttonStyleData: const ButtonStyleData(
-                                                          height: 50,
-                                                          width: 250,
-                                                          padding: EdgeInsets.only(left: 14, right: 14),
-                                                        ),
-                                                        dropdownStyleData: DropdownStyleData(
-                                                          maxHeight: 200,
-                                                          width: 220,
-                                                          scrollbarTheme: ScrollbarThemeData(
-                                                            thickness: MaterialStateProperty.all(6),
+                                                            });
+                                                          },
+                                                          buttonStyleData: const ButtonStyleData(
+                                                            height: 50,
+                                                            width: 250,
+                                                            padding: EdgeInsets.only(left: 14, right: 14),
+                                                          ),
+                                                          dropdownStyleData: DropdownStyleData(
+                                                            maxHeight: 200,
+                                                            width: 220,
+                                                            scrollbarTheme: ScrollbarThemeData(
+                                                              thickness: MaterialStateProperty.all(6),
+                                                            ),
                                                           ),
                                                         ),
                                                       ),
                                                     ),
-                                                  ),
-                                                ],
-                                              ),
-                                              Align(
-                                                alignment:
-                                                Alignment.topLeft,
-                                                child: Padding(
-                                                    padding: const EdgeInsets.only(top: 20.0, left: 150.0),
-                                                    child: sendsDay.isNotEmpty
-                                                        ?  Column(
-                                                      children: [
-                                                        Padding(
-                                                          padding: const EdgeInsets.only(left: 40.0),
-                                                          child: Row(
-                                                            children: [
-                                                              SizedBox(
-                                                                height: 200,
-                                                                child: Scrollbar(
-                                                                  controller: verticalScrollTable,
-                                                                  child: SingleChildScrollView(
+                                                  ],
+                                                ),
+                                                Align(
+                                                  alignment:
+                                                  Alignment.topLeft,
+                                                  child: Padding(
+                                                      padding: const EdgeInsets.only(top: 20.0, left: 150.0),
+                                                      child: sendsDay.isNotEmpty
+                                                          ?  Column(
+                                                        children: [
+                                                          Padding(
+                                                            padding: const EdgeInsets.only(left: 40.0),
+                                                            child: Row(
+                                                              children: [
+                                                                SizedBox(
+                                                                  height: 200,
+                                                                  child: Scrollbar(
                                                                     controller: verticalScrollTable,
-                                                                    scrollDirection: Axis.vertical,
-                                                                    child: DataTable(
-                                                                      columns: <DataColumn>[
-                                                                        for(int i=0 ; i < columnsTable.length; i++)
-                                                                          DataColumn(
-                                                                            label: SizedBox(
-                                                                                width: 110,
-                                                                                child: Text(columnsTable[i])
+                                                                    child: SingleChildScrollView(
+                                                                      controller: verticalScrollTable,
+                                                                      scrollDirection: Axis.vertical,
+                                                                      child: DataTable(
+                                                                        columns: <DataColumn>[
+                                                                          for(int i=0 ; i < columnsTable.length; i++)
+                                                                            DataColumn(
+                                                                              label: SizedBox(
+                                                                                  width: 110,
+                                                                                  child: Text(columnsTable[i])
+                                                                              ),
                                                                             ),
-                                                                          ),
 
-                                                                      ],
-                                                                      rows: List<DataRow>.generate(selectedFactories.length,
-                                                                            (int index) =>  DataRow(
-                                                                            cells: <DataCell>[
-                                                                              DataCell(
-                                                                                Text(selectedFactories[index].name),
-                                                                              ),
-                                                                              DataCell(
-                                                                                Text(selectedFactories[index].mail),
-                                                                              ),
-                                                                            ]
+                                                                        ],
+                                                                        rows: List<DataRow>.generate(selectedFactories.length,
+                                                                              (int index) =>  DataRow(
+                                                                              cells: <DataCell>[
+                                                                                DataCell(
+                                                                                  Text(selectedFactories[index].name),
+                                                                                ),
+                                                                                DataCell(
+                                                                                  Text(selectedFactories[index].mail),
+                                                                                ),
+                                                                              ]
+                                                                          ),
                                                                         ),
                                                                       ),
                                                                     ),
                                                                   ),
                                                                 ),
-                                                              ),
+                                                              ],
+                                                            ),
+                                                          ),
+                                                          Row(
+                                                            children: [
+                                                              Padding(
+                                                                padding: const EdgeInsets.only(top: 20.0),
+                                                                child: Text("El envio tiene $cantFactories empresas"),
+                                                              )
                                                             ],
                                                           ),
-                                                        ),
-                                                        Row(
-                                                          children: [
-                                                            Padding(
-                                                              padding: const EdgeInsets.only(top: 20.0),
-                                                              child: Text("El envio tiene $cantFactories empresas"),
-                                                            )
-                                                          ],
-                                                        ),
-                                                      ],
-                                                    )
-                                                        : const Text("no hay ningún envio seleccionado",
-                                                      style: TextStyle(color: Colors.red),)
-                                                ),
-                                              )
-                                            ],
+                                                        ],
+                                                      )
+                                                          : const Text("no hay ningún envio seleccionado",
+                                                        style: TextStyle(color: Colors.red),)
+                                                  ),
+                                                )
+                                              ],
+                                            ),
                                           ),
-                                        ),
-                                      ],
+                                        ],
+                                      ),
                                     ),
-                                  ),
-                                ],
+                                  ],
+                                ),
                               ),
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.only(top: 60.0, right: 10.0),
-                              child: Row(
-                                children: [
-                                  const Text('Asunto:'),
-                                  Padding(
-                                    padding: const EdgeInsets.only(left: 39.0),
-                                    child: SizedBox(
-                                      width: 450,
-                                      height: 40,
+                              Padding(
+                                padding: const EdgeInsets.only(top: 60.0, right: 10.0),
+                                child: Row(
+                                  children: [
+                                    const Text('Asunto:'),
+                                    Padding(
+                                      padding: const EdgeInsets.only(left: 39.0),
+                                      child: SizedBox(
+                                        width: 450,
+                                        height: 40,
+                                        child: TextField(
+                                          decoration: const InputDecoration(
+                                            border: OutlineInputBorder(),
+                                          ),
+                                          controller: controllerSubject,
+                                        ),
+                                      ),
+                                    ),
+                                    Padding(
+                                      padding: const EdgeInsets.only(left: 100.0),
+                                      child: ElevatedButton(
+                                        child: const Text("Adjuntar"),
+                                        onPressed: () {
+                                          setState(() {
+
+                                            _pickFile();
+
+                                          });
+
+                                        },
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                             if(atach.isNotEmpty)
+                             Padding(
+                               padding: const EdgeInsets.only(left: 90.0,top: 10.0),
+                               child: Align(
+                                 alignment: Alignment.topLeft,
+                                 child: Row(
+                                   children: [
+                                     Icon(Icons.attach_file_rounded),
+                                     SizedBox(
+                                       height: 30,
+                                       width: 450,
+                                       child: ListView.builder(
+                                         physics: const BouncingScrollPhysics(),
+                                         scrollDirection: Axis.horizontal,
+                                           itemCount: atach.length,
+                                          itemBuilder: (BuildContext context, index) {
+                                                return Padding(
+                                                  padding: const EdgeInsets.all(2.0),
+                                                  child: Container(
+                                                      height: 25,
+                                                       width: 90,
+                                                      color: Colors.black12,
+                                                      child: Text(atach[index].fileName!),
+                                                  ),
+                                                );
+                                          }
+                                       ),
+                                     ),
+                                   ],
+                                 ),
+                               ),
+                             ),
+                             const Padding(
+                                padding:  EdgeInsets.only(top: 40.0),
+                                child:  Row(
+                                  children: [
+                                    Text(
+                                      'Mensaje: ',
+                                      style: TextStyle(fontWeight: FontWeight.bold),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.only(top: 20.0, left: 85.0),
+                                child: Row(
+                                  children: [
+                                    SizedBox(
+                                      width: 500,
+                                      height: 210,
                                       child: TextField(
+                                        maxLines: 20,
+                                        minLines: 6,
                                         decoration: const InputDecoration(
                                           border: OutlineInputBorder(),
                                         ),
-                                        controller: controllerSubject,
+                                        controller: controllerMessage,
                                       ),
                                     ),
-                                  ),
+                                  ],
+                                ),
+                              ),
+                              Row(
+                                children: [
                                   Padding(
-                                    padding: const EdgeInsets.only(left: 100.0),
+                                    padding: const EdgeInsets.only(left: 600.0, right: 30.0),
                                     child: ElevatedButton(
-                                      child: const Text("Adjuntar"),
-                                      onPressed: () {
-                                        setState(() {
-
-                                          _pickFile();
-
-                                        });
-
-                                      },
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                           if(atach.isNotEmpty)
-                           Padding(
-                             padding: const EdgeInsets.only(left: 90.0,top: 10.0),
-                             child: Align(
-                               alignment: Alignment.topLeft,
-                               child: Row(
-                                 children: [
-                                   Icon(Icons.attach_file_rounded),
-                                   SizedBox(
-                                     height: 30,
-                                     width: 450,
-                                     child: ListView.builder(
-                                       physics: const BouncingScrollPhysics(),
-                                       scrollDirection: Axis.horizontal,
-                                         itemCount: atach.length,
-                                        itemBuilder: (BuildContext context, index) {
-                                              return Padding(
-                                                padding: const EdgeInsets.all(2.0),
-                                                child: Container(
-                                                    height: 25,
-                                                     width: 90,
-                                                    color: Colors.black12,
-                                                    child: Text(atach[index].fileName!),
-                                                ),
-                                              );
-                                        }
-                                     ),
-                                   ),
-                                 ],
-                               ),
-                             ),
-                           ),
-                           const Padding(
-                              padding:  EdgeInsets.only(top: 40.0),
-                              child:  Row(
-                                children: [
-                                  Text(
-                                    'Mensaje: ',
-                                    style: TextStyle(fontWeight: FontWeight.bold),
-                                  ),
-                                ],
-                              ),
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.only(top: 20.0, left: 85.0),
-                              child: Row(
-                                children: [
-                                  SizedBox(
-                                    width: 500,
-                                    height: 210,
-                                    child: TextField(
-                                      maxLines: 20,
-                                      minLines: 6,
-                                      decoration: const InputDecoration(
-                                        border: OutlineInputBorder(),
-                                      ),
-                                      controller: controllerMessage,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                            Row(
-                              children: [
-                                Padding(
-                                  padding: const EdgeInsets.only(left: 600.0, right: 30.0),
-                                  child: ElevatedButton(
-                                    child: const Text('Enviar'),
-                                    onPressed: () async {
-                                      String action ='';
-                                      int dat_correct = 2;
-                                      if(mailCorrect(controllerMailFrom.text) != true)
-                                      {
-                                        action ='No es un correo electronico valido';
-                                        error(context,action);
-                                      }
-                                      else
-                                      {
-                                        if(controllerSubject.text.isEmpty)
+                                      child: const Text('Enviar'),
+                                      onPressed: () async {
+                                        String action ='';
+                                        int dat_correct = 2;
+                                        if(mailCorrect(controllerMailFrom.text) != true)
                                         {
-                                          dat_correct=dat_correct-1;
-
-                                           bool  correct= await warning(context, "asunto");
-
-                                           if(correct)
-                                           {
-                                             dat_correct++;
-                                           }
-
+                                          action ='No es un correo electronico valido';
+                                          error(context,action);
                                         }
-                                        if(controllerMessage.text.isEmpty)
+                                        else
                                         {
-                                          dat_correct=dat_correct-1;
-
-                                          bool  correct= await warning(context, "mensaje");
-                                          if(correct)
+                                          if(controllerSubject.text.isEmpty)
                                           {
-                                            dat_correct++;
+                                            dat_correct=dat_correct-1;
+
+                                             bool  correct= await warning(context, "asunto");
+
+                                             if(correct)
+                                             {
+                                               dat_correct++;
+                                             }
+
                                           }
+                                          if(controllerMessage.text.isEmpty)
+                                          {
+                                            dat_correct=dat_correct-1;
+
+                                            bool  correct= await warning(context, "mensaje");
+                                            if(correct)
+                                            {
+                                              dat_correct++;
+                                            }
+                                          }
+                                          if(dat_correct==2)
+                                            sendingMail();
+
                                         }
-                                        if(dat_correct==2)
-                                          sendingMail();
-
                                       }
-                                    }
 
-                                    ),
+                                      ),
 
-                                ),
-                                ElevatedButton(
-                                  child: const Text('Cancelar'),
-                                  onPressed: () {
-                                  },
-                                ),
-                              ],
-                            ),
-                          ],
+                                  ),
+                                  ElevatedButton(
+                                    child: const Text('Cancelar'),
+                                    onPressed: () {
+                                    },
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
                         ),
-                      ),
-                    ]),
+                      ]),
+                    ),
                   ),
                 ),
               ),
