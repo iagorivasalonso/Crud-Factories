@@ -107,7 +107,7 @@ class _newSendState extends State<newSend> {
 
         }
 
-
+        cant = lineSelected.length;
         stringFactories = "Este dia se hicieron $cant envios";
       }
 
@@ -429,7 +429,7 @@ class _newSendState extends State<newSend> {
                                               }
 
 
-                                             //csvExportatorLines(line);
+                                              csvExportatorLines(line);
                                               _controllersObserLine.clear();
                                               lineEdit = List.generate(line.length, (index) => false);
                                             });
