@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:adaptive_scrollbar/adaptive_scrollbar.dart';
 import 'package:crud_factories/Alertdialogs/confirm.dart';
+import 'package:crud_factories/Backend/data.dart';
 import 'package:crud_factories/Backend/exportLines.dart';
 import 'package:crud_factories/Backend/exportMails.dart';
 import 'package:crud_factories/Backend/importMails.dart';
@@ -16,11 +17,9 @@ import '../Objects/lineSend.dart';
 
 class newImport extends StatefulWidget {
 
-  List<Factory> factories;
-  List<Mail> mails;
-  List<lineSend> line;
+
   
-  newImport(this.factories, this.mails, this.line);
+
   
   @override
   State<newImport> createState() => _newImportState();
@@ -40,12 +39,9 @@ class _newImportState extends State<newImport> {
   
   @override
   Widget build(BuildContext context) {
-
-    List<Factory> factories = widget.factories;
     List<Factory> factoriesNew =[];
-    List<Mail> mails = widget.mails;
     List<Mail> mailsNew = [];
-    List<lineSend> lines = widget.line;
+
     List<lineSend> linesNew = [];
 
     
@@ -159,11 +155,16 @@ class _newImportState extends State<newImport> {
                                               factories[i].id = id.toString();
                                             }
 
-                                            factories = factories + factoriesNew;
 
+
+                                            for(int i = 0; i <factoriesNew.length; i++)
+                                            {
+                                                factories.add(factoriesNew[i]);
+                                            }
                                             int cantImport = factoriesNew.length;
                                             action ='se importaron $cantImport empresas correctamente';
                                             confirm(context,action);
+
 
 
                                             csvExportatorFactories(factories, -1);
@@ -194,12 +195,15 @@ class _newImportState extends State<newImport> {
                                           mails[i].id = id.toString();
                                         }
 
-                                        mails = mails + mailsNew;
+
 
                                         int cantImport = mailsNew.length;
                                         action ='se importaron $cantImport emails correctamente';
                                         confirm(context,action);
-
+                                        for(int i = 0; i <mailsNew.length; i++)
+                                        {
+                                          mails.add(mailsNew[i]);
+                                        }
                                         csvExportatorMails(mails, -1);
                                       }
 
@@ -209,18 +213,23 @@ class _newImportState extends State<newImport> {
                                         action ='se importaron $cantImport lineas correctamente';
                                         confirm(context,action);
 
-                                        lines = lines + linesNew;
+                                        for(int i = 0; i <linesNew.length; i++)
+                                        {
+                                          line.add(linesNew[i]);
+                                        }
 
-                                        csvExportatorLines(lines);
+                                        csvExportatorLines(line);
                                       }
 
 
                                     },
                                   ),
                                   ElevatedButton(
-                                    child: const Text('Cancelar'),
+                                    child: const Text('Borrar'),
                                     onPressed: () {
-
+                                          setState(() {
+                                            controllerDatePicker.text = "";
+                                          });
                                     },
                                   ),
                                 ],

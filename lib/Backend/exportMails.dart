@@ -14,8 +14,8 @@ void csvExportatorMails(List<Mail> mails, int select) {
     {
 
         "id": mails[i].id,
-        "company": mails[i].company,
         "addrres": mails[i].addrres,
+        "company": mails[i].company,
         "password": mails[i].password
     },
   ];
@@ -28,8 +28,8 @@ void csvExportatorMails(List<Mail> mails, int select) {
     List<dynamic> row = [];
 
     row.add(associateList[i]["id"]);
-    row.add(associateList[i]["company"]);
     row.add(associateList[i]["addrres"]);
+    row.add(associateList[i]["company"]);
     row.add(associateList[i]["password"]);
     rows.add(row);
   }

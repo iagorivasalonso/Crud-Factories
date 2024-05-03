@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:adaptive_scrollbar/adaptive_scrollbar.dart';
 import 'package:crud_factories/Alertdialogs/error.dart';
+import 'package:crud_factories/Backend/data.dart';
 import 'package:flutter/material.dart';
 import '../Alertdialogs/campRepeat.dart';
 import '../Alertdialogs/confirm.dart';
@@ -10,10 +11,9 @@ import '../Objects/Mail.dart';
 
 class newMail extends StatefulWidget {
 
-  List<Mail> mails;
-  int select;
+int select;
 
-  newMail(this.mails, this.select);
+  newMail(this.select);
 
 
   State<newMail> createState() => _newMailState();
@@ -31,33 +31,40 @@ class _newMailState extends State<newMail> {
   late TextEditingController controllerPas = new TextEditingController();
   late TextEditingController controllerPasVerificator = new TextEditingController();
 
-  late List<Mail> mails;
-  late int select;
+
 
 
 
   @override
   Widget build(BuildContext context) {
 
-    mails = widget.mails;
-    select = widget.select;
+    int select = widget.select;
 
-    String action = "";
-    String title = "";
-
-    if (select == -1) {
-      title = "Nuevo ";
-      action = "Crear";
-    }
-    else {
+    void campCharge(){
       controllerMail.text = mails[select].addrres;
       controllerCompany.text = mails[select].company;
       controllerPas.text ="";
       controllerPasVerificator.text="";
+    }
 
+    String action = "";
+    String action2 = "";
+    String title = "";
+
+    if (select == -1) {
+
+      title = "Nuevo ";
+      action = "Crear";
+      action2 = "Borrar";
+    }
+    else {
+   campCharge();
       title = "Editar ";
       action = "Actualizar";
+      action2 = "Deshacer";
     }
+
+
     return Scaffold(
       body: AdaptiveScrollbar(
         controller: verticalScroll,
@@ -122,6 +129,7 @@ class _newMailState extends State<newMail> {
                                   height: 40,
                                   child: TextField(
                                     controller: controllerPas,
+                                    obscureText: true,
                                     decoration: const InputDecoration(
                                       border: OutlineInputBorder(),
                                     ),
@@ -141,6 +149,7 @@ class _newMailState extends State<newMail> {
                                   height: 40,
                                   child: TextField(
                                     controller: controllerPasVerificator,
+                                    obscureText: true,
                                     decoration: const InputDecoration(
                                       border: OutlineInputBorder(),
                                     ),
@@ -219,9 +228,19 @@ class _newMailState extends State<newMail> {
                                     }
                                   ),
                                   ElevatedButton(
-                                    child: const Text('Cancelar'),
+                                    child: Text(action2),
                                     onPressed: () {
                                       setState(() {
+                                         if(select == -1)
+                                         {
+                                           controllerMail.text = "";
+                                           controllerPas.text = "";
+                                           controllerPasVerificator.text = "";
+                                         }
+                                         else
+                                         {
+                                             campCharge();
+                                         }
 
                                       });
                                     },
@@ -242,5 +261,9 @@ class _newMailState extends State<newMail> {
       ),
     );
   }
+
+
 }
+
+
 

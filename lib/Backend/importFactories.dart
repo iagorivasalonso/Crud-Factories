@@ -9,12 +9,13 @@ importFactory(List<String> fileContent, List<Factory> factories) async {
   {
 
     File file =new File('D:/factories.csv');
+
+    if(file.existsSync())
     fileContent = await file.readAsLines();
   }
 
  String tmp="";
-
-
+ 
  List <String> allEmp = [];
  if(allEmp.isNotEmpty)
  {

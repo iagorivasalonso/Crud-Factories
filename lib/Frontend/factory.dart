@@ -1,4 +1,5 @@
 import 'package:adaptive_scrollbar/adaptive_scrollbar.dart';
+import 'package:crud_factories/Backend/data.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:show_platform_date_picker/show_platform_date_picker.dart';
@@ -11,11 +12,11 @@ import '../Objects/Factory.dart';
 
 class newFactory extends StatefulWidget {
 
-  List<Factory> factories;
   int select;
+  newFactory(this.select);
 
 
-  newFactory(this.factories,this.select);
+
 
   @override
   State<newFactory> createState() => _newFactoryState();
@@ -26,7 +27,6 @@ class _newFactoryState extends State<newFactory> {
   final ScrollController horizontalScroll = ScrollController();
   final ScrollController verticalScroll = ScrollController();
 
-  int select =-1;
 
   double widthBar = 10.0;
 
@@ -52,13 +52,51 @@ class _newFactoryState extends State<newFactory> {
   DateTime seletedDate =DateTime.now();
   String date="";
 
+
+
   @override
   Widget build(BuildContext context) {
 
-     List<Factory> factories = widget.factories;
-     select = widget.select;
+    int select= widget.select;
 
+
+    void campCharge () {
+      id=factories[select].id;
+      controllerName.text = factories[select].name;
+      controllerHighDate.text = factories[select].highDate;
+      controllerTelephone1.text = factories[select].thelephones[0];
+      controllerTelephone2.text = factories[select].thelephones[1];
+      controllerMail.text = factories[select].mail;
+      controllerWeb.text = factories[select].web;
+
+      var address = factories[select].address['street']!;
+      var number = factories[select].address['number']!;
+      var apartament = factories[select].address['apartament']!;
+
+      String allAddress = "";
+
+      if (apartament == "") {
+        allAddress = '$address, $number ';
+      }
+      else {
+        allAddress = '$address, $number - $apartament';
+      }
+
+      controllerAdrress.text = allAddress!;
+      controllerCity.text = factories[select].address['city']!;
+      controllerPostalCode.text = factories[select].address['postalCode']!;
+      controllerProvince.text = factories[select].address['province']!;
+      contacs = factories[select].contacts;
+
+      if (contacs.isEmpty) {
+        for (int i = 0; i < factories[select].contacts.length; i++) {
+          contacs.add(factories[select].contacts[i]);
+        }
+      }
+
+    }
     String action = "actualizar";
+    String action2 = "";
     String title = "";
 
 
@@ -66,49 +104,16 @@ class _newFactoryState extends State<newFactory> {
     if (select == -1) {
       title = "Nueva ";
       action = "Crear";
+      action2 = "Borrar";
 
     }
     else {
       title = "Editar ";
 
-
-        id=factories[select].id;
-        controllerName.text = factories[select].name;
-        controllerHighDate.text = factories[select].highDate;
-        controllerTelephone1.text = factories[select].thelephones[0];
-        controllerTelephone2.text = factories[select].thelephones[1];
-        controllerMail.text = factories[select].mail;
-        controllerWeb.text = factories[select].web;
-
-        var address = factories[select].address['street']!;
-        var number = factories[select].address['number']!;
-        var apartament = factories[select].address['apartament']!;
-
-        String allAddress = "";
-
-        if (apartament == "") {
-          allAddress = '$address, $number ';
-        }
-        else {
-          allAddress = '$address, $number - $apartament';
-        }
-
-        controllerAdrress.text = allAddress!;
-        controllerCity.text = factories[select].address['city']!;
-        controllerPostalCode.text = factories[select].address['postalCode']!;
-        controllerProvince.text = factories[select].address['province']!;
-        contacs = widget.factories[select].contacts;
-
-        if (contacs.isEmpty) {
-          for (int i = 0; i < factories[select].contacts.length; i++) {
-            contacs.add(factories[select].contacts[i]);
-          }
-        }
-
-
+        campCharge();
 
      action = "Actualizar";
-
+      action2 = "Deshacer";
    }
 
     final ShowPlatformDatePicker platformDatePicker = ShowPlatformDatePicker(buildContext: context);
@@ -184,17 +189,20 @@ class _newFactoryState extends State<newFactory> {
                                           : null,
                                     ),
                                     onTap: () async {
-                                      DateTime? dateSelected = await  platformDatePicker.showPlatformDatePicker(
-                                        context,
-                                        seletedDate,
-                                        DateTime(DateTime.now().year - 10),
-                                        DateTime(DateTime.now().year + 1),
-                                      );
-                                      setState(() {
-                                        date =DateFormat('dd-MM-yyyy').format(dateSelected!);
-                                        controllerHighDate.text = date;
+                                      if(select == -1)
+                                      {
+                                             DateTime? dateSelected = await  platformDatePicker.showPlatformDatePicker(
+                                                context,
+                                                seletedDate,
+                                                DateTime(DateTime.now().year - 10),
+                                                DateTime(DateTime.now().year + 1),
+                                             );
+                                               setState(() {
+                                                  date =DateFormat('dd-MM-yyyy').format(dateSelected!);
+                                                  controllerHighDate.text = date;
+                                               });
 
-                                      });
+                                      }
 
                                     },
 
@@ -471,7 +479,6 @@ class _newFactoryState extends State<newFactory> {
                                     onPressed: () {
                                         setState(() {
 
-
                                           List <String> allKeys = [];
                                           String nameCamp = "nombre";
                                           for (int i = 0; i < factories.length; i++)
@@ -489,7 +496,13 @@ class _newFactoryState extends State<newFactory> {
                                             final telephone1 = controllerTelephone1.text.replaceAll(" ", "");
                                             final telephone2 = controllerTelephone2.text.replaceAll(" ", "");
 
-                                            if(telephoneCorrect(telephone1,context) == true)
+                                            if(dateCorrect(controllerHighDate.text) == false)
+                                            {
+                                              String action ='El fomato de la fecha debe de ser:';
+                                              String format ='DD-MM-AAAA';
+                                              error(context,action,format);
+                                            }
+                                            else if(telephoneCorrect(telephone1,context) == true)
                                             {
                                               if(telephone1.length != 9)
                                               {
@@ -531,7 +544,7 @@ class _newFactoryState extends State<newFactory> {
 
                                                     List<String> adrress1 = controllerAdrress.text.split(",");
                                                     List<String> adrress2 = controllerAdrress.text.split("-");
-                                                String apartament='';
+                                                    String apartament='';
 
                                                     if(controllerAdrress.text.contains("-"))
                                                     {
@@ -586,7 +599,7 @@ class _newFactoryState extends State<newFactory> {
                                                       confirm(context,action);
 
                                                     }
-                                                   csvExportatorFactories(factories,select);
+                                                 //  csvExportatorFactories(factories,select);
                                                   }
                                                 }
                                               }
@@ -598,9 +611,31 @@ class _newFactoryState extends State<newFactory> {
                                     },
                                   ),
                                   ElevatedButton(
-                                    child: const Text('Cancelar'),
+                                    child: Text(action2),
                                     onPressed: () {
-
+                                      if(select == -1)
+                                      {
+                                        controllerName.clear();
+                                        controllerHighDate.clear();
+                                        controllerTelephone1.clear();
+                                        controllerTelephone2.clear();
+                                        controllerMail.clear();
+                                        controllerWeb.clear();
+                                        controllerAdrress.clear();
+                                        controllerCity.clear();
+                                        controllerPostalCode.clear();
+                                        controllerProvince.clear();
+                                        controllerContacs.clear();
+                                        controllerEmpleoyee.clear();
+                                        setState(() {
+                                          contacs.clear();
+                                        });
+                                        controllerEmpleoyeeNew.clear();
+                                      }
+                                      else
+                                      {
+                                        campCharge();
+                                      }
                                     },
                                   ),
                                 ],

@@ -10,6 +10,7 @@ print("object");
 
     for (int i = 0; i <listSend.length;i++)
     {
+        "id": listSend[i].id,
         "date": listSend[i].date,
         "factory": listSend[i].factory,
         "observations": listSend[i].observations,
@@ -23,6 +24,7 @@ print("object");
 
   for (int i = 0; i < associateList.length; i++) {
     List<dynamic> row = [];
+    row.add(associateList[i]["id"]);
     row.add(associateList[i]["date"]);
     row.add(associateList[i]["factory"]);
     row.add(associateList[i]["observations"]);

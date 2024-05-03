@@ -9,6 +9,8 @@ importMail(List<String> fileContent, List<Mail> mails) async {
   if(fileContent.isEmpty)
   {
     File file =new File('D:/mails.csv');
+
+    if(file.existsSync())
     fileContent = await file.readAsLines();
   }
 
@@ -17,8 +19,8 @@ importMail(List<String> fileContent, List<Mail> mails) async {
     select = fileContent[i].split(",");
     mails.add(Mail(
         id: select[0],
-        company: select[1],
-        addrres: select[2],
+        addrres: select[1],
+        company: select[2],
         password: select[3]));
   }
 

@@ -5,6 +5,7 @@ import 'package:adaptive_scrollbar/adaptive_scrollbar.dart';
 import 'package:crud_factories/Alertdialogs/confirm.dart';
 import 'package:crud_factories/Alertdialogs/error.dart';
 import 'package:crud_factories/Alertdialogs/warning.dart';
+import 'package:crud_factories/Backend/data.dart';
 import 'package:crud_factories/Functions/validatorCamps.dart';
 import 'package:crud_factories/Objects/Factory.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
@@ -18,12 +19,7 @@ import '../Objects/lineSend.dart';
 
 class sendMail extends StatefulWidget {
 
-  List<String> datesSends;
-  List<lineSend> line;
-  List <Factory> Factories;
-  List<Mail> mails;
 
-  sendMail(this.datesSends,this.line,this.Factories,this.mails);
 
   @override
   State<sendMail> createState() => _sendMailState();
@@ -38,10 +34,10 @@ class _sendMailState extends State<sendMail> {
   final ScrollController verticalScroll = ScrollController();
   final ScrollController verticalScrollTable = ScrollController();
 
-  late TextEditingController controllerMailTo = TextEditingController();
+  late TextEditingController controllerMailFrom = TextEditingController();
   late TextEditingController controllerPass = TextEditingController();
   late TextEditingController controllerCompany = TextEditingController();
-  late TextEditingController controllerMailFrom = TextEditingController();
+  late TextEditingController controllerMailTo = TextEditingController();
   late TextEditingController controllerSubject = TextEditingController();
   late TextEditingController controllerMessage= TextEditingController();
 
@@ -59,15 +55,11 @@ class _sendMailState extends State<sendMail> {
   String? selectedSend;
   Mail? selectedMail;
   int cantFactories = 0;
+  bool mailSave = false;
 
 
   @override
   Widget build(BuildContext context) {
-
-    List<String> datesSends = widget.datesSends;
-    List<lineSend> lines = widget.line;
-    List<Mail> mails = widget.mails;
-    allFactories = widget.Factories;
 
     return Scaffold(
       body: AdaptiveScrollbar(
@@ -127,9 +119,11 @@ class _sendMailState extends State<sendMail> {
                                       onChanged: (Mail? mailChoose) {
                                         setState(() {
                                           selectedMail=mailChoose;
-                                          controllerMailTo.text = mailChoose!.addrres;
+                                          controllerMailFrom.text = mailChoose!.addrres;
                                           controllerCompany.text = mailChoose!.company;
                                           controllerPass.text = mailChoose!.password;
+
+                                          mailSave = true;
 
                                         });
                                       },
@@ -151,38 +145,40 @@ class _sendMailState extends State<sendMail> {
                               ),
                             ],
                           )
-                            : const Column(
+                            : Column(
                                  children: [
                                     Row(
                                       children: [
-                                        Text("Email:"),
+                                        const Text("Email:"),
                                         Padding(
-                                          padding: EdgeInsets.only(left: 49.0),
+                                          padding: const EdgeInsets.only(left: 49.0),
                                           child: SizedBox(
                                             width: 450,
                                             height: 40,
                                             child: TextField(
-                                              decoration: InputDecoration(
+                                              controller: controllerMailFrom,
+                                              decoration: const InputDecoration(
                                                 border: OutlineInputBorder(),
                                               ),
-                                              //  controller: controllerMailFrom,
                                             ),
                                           ),
                                         ),
                                       ],
                                     ),
                                     Padding(
-                                      padding: EdgeInsets.only(top:40.0),
+                                      padding: const EdgeInsets.only(top:40.0),
                                       child: Row(
                                         children: [
-                                          Text("Contraseña:"),
+                                          const Text("Contraseña:"),
                                           Padding(
-                                            padding: EdgeInsets.only(left: 13.0),
+                                            padding:const  EdgeInsets.only(left: 13.0),
                                             child: SizedBox(
                                               width: 450,
                                               height: 40,
                                               child: TextField(
-                                                decoration: InputDecoration(
+                                                controller: controllerPass,
+                                                obscureText: true,
+                                                decoration: const InputDecoration(
                                                   border: OutlineInputBorder(),
                                                 ),
                                                 //  controller: controllerMailFrom,
@@ -263,7 +259,7 @@ class _sendMailState extends State<sendMail> {
                                                 decoration: const InputDecoration(
                                                   border: OutlineInputBorder(),
                                                 ),
-                                                controller: controllerMailFrom,
+                                                controller: controllerMailTo,
                                               ),
                                             ),
                                           ),
@@ -284,7 +280,7 @@ class _sendMailState extends State<sendMail> {
                                                         child: DropdownButton2<String>(
                                                           hint: const Text('Seleccionar envio',
                                                           ),
-                                                          items: datesSends.map((String itemSend) => DropdownMenuItem<String>(
+                                                          items: dateSends.map((String itemSend) => DropdownMenuItem<String>(
                                                             value:  itemSend,
                                                             child: Text( itemSend,
                                                               overflow: TextOverflow.ellipsis,
@@ -298,9 +294,11 @@ class _sendMailState extends State<sendMail> {
                                                               mailList.clear();
                                                               selectedSend = dateChoose;
 
-                                                              for(int i = 0; i < lines.length; i++) {
-                                                                if(lines[i].date==dateChoose) {
-                                                                  sendsDay.add(lines[i]);
+                                                              for(int i = 0; i < line.length; i++) {
+
+                                                                if(line[i].date==dateChoose) {
+                                                                  sendsDay.add(line[i]);
+
                                                                 }
                                                               }
 
@@ -312,15 +310,16 @@ class _sendMailState extends State<sendMail> {
                                                               for(int i = 0; i <sendsDay.length; i++)
                                                               {
                                                                   nameFactory=sendsDay[i].factory;
-                                                                  for(int x = 0 ; x < allFactories.length; x++)
+                                                                  for(int x = 0 ; x < factories.length; x++)
                                                                   {
-                                                                       if(nameFactory == allFactories[x].name)
+                                                                       if(nameFactory == factories[x].name)
                                                                        {
-                                                                           selectedFactories.add(allFactories[x]);
+                                                                           selectedFactories.add(factories[x]);
                                                                        }
+
                                                                   }
                                                               }
-
+                                                              print(selectedFactories);
                                                               for(int y= 0 ; y < selectedFactories.length; y++) {
                                                                      mailList.add(selectedFactories[y].mail);
                                                               }
@@ -328,6 +327,7 @@ class _sendMailState extends State<sendMail> {
 
                                                             });
                                                           },
+                                                              
                                                           buttonStyleData: const ButtonStyleData(
                                                             height: 50,
                                                             width: 250,
@@ -379,7 +379,7 @@ class _sendMailState extends State<sendMail> {
                                                                               (int index) =>  DataRow(
                                                                               cells: <DataCell>[
                                                                                 DataCell(
-                                                                                  Text(selectedFactories[index].name),
+                                                                                  Text(mailList[index]),
                                                                                 ),
                                                                                 DataCell(
                                                                                   Text(selectedFactories[index].mail),
@@ -523,13 +523,14 @@ class _sendMailState extends State<sendMail> {
                                       onPressed: () async {
                                         String action ='';
                                         int dat_correct = 2;
-                                        if(mailCorrect(controllerMailFrom.text) != true)
+                                        if(mailCorrect(controllerMailTo.text) != true)
                                         {
                                           action ='No es un correo electronico valido';
                                           error(context,action);
                                         }
                                         else
                                         {
+
                                           if(controllerSubject.text.isEmpty)
                                           {
                                             dat_correct=dat_correct-1;
@@ -562,8 +563,18 @@ class _sendMailState extends State<sendMail> {
 
                                   ),
                                   ElevatedButton(
-                                    child: const Text('Cancelar'),
+                                    child: const Text('Reiniciar'),
                                     onPressed: () {
+                                      setState(() {
+                                        _tMails = 1;
+                                       controllerMailFrom.text = "";
+                                       controllerPass.text ="";
+                                       controllerCompany.text = "";
+                                       controllerMailTo.text = "";
+                                       atach.clear();
+                                       controllerSubject.text = "";
+                                       controllerMessage.text = "";
+                                      });
                                     },
                                   ),
                                 ],
@@ -589,7 +600,7 @@ class _sendMailState extends State<sendMail> {
     FilePickerResult? result =  await FilePicker.platform.pickFiles(
       dialogTitle: 'Seleccionar archivo',
       type: FileType.custom,
-      allowedExtensions: ['csv'],
+      allowedExtensions: ['csv','pdf'],
     );
 
     if(result == null) return;
@@ -598,8 +609,10 @@ class _sendMailState extends State<sendMail> {
 
 
     File file1 =new File(file.path!);
-    print(file1);
-    atach.add(FileAttachment(file1));
+
+    setState(() {
+      atach.add(FileAttachment(file1));
+    });
     }
 
 
@@ -609,7 +622,7 @@ class _sendMailState extends State<sendMail> {
     bool sendToMail = false;
      if(_tMails == 1)
      {
-         if(controllerMailFrom.text.isNotEmpty)
+         if(controllerMailTo.text.isNotEmpty)
          {
               sendToMail = true;
          }
@@ -631,22 +644,38 @@ class _sendMailState extends State<sendMail> {
      {
          try {
 
-               String username = controllerMailTo.text;
-               Codec<String, String> stringToBase64 = utf8.fuse(base64);
-               String password = stringToBase64.decode(controllerPass.text);
-               print(password);
 
+
+               String username = controllerMailFrom.text;
+               List <String> separeAddrres = controllerMailFrom.text.split("@");
+               List <String> extCompany = separeAddrres[1].split(".");
+               Codec<String, String> stringToBase64 = utf8.fuse(base64);
+               String password = "";
+
+               if(mailSave ==true)
+               {
+                 password = stringToBase64.decode(controllerPass.text);
+
+               }
+               else
+               {
+                 password = controllerPass.text;
+               }
+
+               print(password);
+               controllerCompany.text = extCompany[0];
 
 
 
                final message = Message()
                     ..from = Address(username, 'Your name')
-                    ..recipients.add(controllerMailFrom.text)
+                    ..recipients.add(controllerMailTo.text)
                     ..ccRecipients.addAll(mailList)
                     ..subject = controllerSubject.text
                     ..text = controllerMessage.text
                     ..attachments = atach;
-/*
+
+
                if(controllerCompany.text == "gmail")
                {
                  final smtpServer = gmail(username,password);
@@ -659,7 +688,7 @@ class _sendMailState extends State<sendMail> {
                  final sendReport = await send(message,smtpServer);
                  print('Message sent: ' + sendReport.toString());
                }
-*/
+
 
                action ='El email se ha enviado correctamente';
                confirm(context,action);

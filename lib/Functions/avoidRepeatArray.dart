@@ -11,22 +11,20 @@ List<String> avoidRepeteat(List<String> allElements) {
       disting = false;
     }
     else {
-      for(int x = 0; x<elementsDiferent.length; x++)
-      {
-        if(allElements[i]==elementsDiferent[x])
-        {
+      for (int x = 0; x < elementsDiferent.length; x++) {
+        if (allElements[i] == elementsDiferent[x]) {
           disting = true;
         }
-        else
-        {
+        else {
           disting = false;
         }
       }
+    }
       if(disting==false)
       {
         elementsDiferent.add(allElements[i]);
       }
-    }
+
   }
   return elementsDiferent;
 }

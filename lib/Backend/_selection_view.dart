@@ -1,3 +1,4 @@
+import 'package:crud_factories/Backend/data.dart';
 import 'package:crud_factories/Frontend/mail.dart';
 import 'package:crud_factories/Frontend/factory.dart';
 import 'package:crud_factories/Frontend/importData.dart';
@@ -10,36 +11,39 @@ import '../Frontend/conection.dart';
 import '../Frontend/view.dart';
 import '../Functions/avoidRepeatArray.dart';
 
-FuntionSeleted(int itenSelection, int subIten1Selection,int subIten2Selection, double mWidth, double mHeight, List<Factory> factories, List<Mail> mails, List<lineSend> line) {
+FuntionSeleted(int itenSelection, int subIten1Selection,int subIten2Selection, double mWidth, double mHeight) {
 
-  List<String> datesSends;
   List<String> element = [];
+  int select=-1;
 
     for (int i = 0; i < line.length; i++) {
       element.add(line[i].date);
     }
 
-    datesSends = avoidRepeteat(element);
 
+    dateSends = avoidRepeteat(element);
     int newdato = -1;
 
     switch (itenSelection) {
       case 0:
         if (subIten1Selection == 0) {
+
+           select = -1;
+
           if (subIten2Selection == 0)
-            return newFactory(factories, newdato);
+           return newFactory(select);
 
 
           if (subIten2Selection == 1)
-            return newMail(mails, newdato);
+           return newMail(select);
 
           if (subIten2Selection == 2)
-            return newSend(datesSends, line, newdato, "", "", line, "",factories);
+          return newSend( "", "", "",select);
 
         }
 
         if (subIten1Selection == 1)
-          return newImport(factories, mails,line);
+          return newImport();
 
       case 1:
         String tView = '';
@@ -52,12 +56,12 @@ FuntionSeleted(int itenSelection, int subIten1Selection,int subIten2Selection, d
         if (subIten1Selection == 2)
           tView = 'send';
 
-        return view(mWidth, mHeight, tView,  factories,  mails,  datesSends, line);
+        return view(tView);
 
 
       case 2:
         if (subIten1Selection == 0)
-           return sendMail(datesSends,line,factories, mails);
+           return sendMail();
         if (subIten1Selection == 1)
           return conection();
     }

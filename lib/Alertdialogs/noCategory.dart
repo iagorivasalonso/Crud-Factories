@@ -2,9 +2,9 @@
 import 'package:flutter/material.dart';
 
 
-Future<bool> noCategory(BuildContext  context, String array) async {
+Future<int> noCategory(BuildContext  context, String array) async {
 
-bool dato = await showDialog(
+int dato = await showDialog(
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
@@ -22,7 +22,7 @@ bool dato = await showDialog(
                       MaterialButton(
                         onPressed: () {
 
-                          Navigator.of(context).pop(true);
+                          Navigator.of(context).pop(1);
                         },
                         color: Colors.lightBlue,
                         child: const Text('Crear',
@@ -31,7 +31,7 @@ bool dato = await showDialog(
                       ),
                       MaterialButton(
                         onPressed: () {
-                          Navigator.of(context).pop(false);
+                          Navigator.of(context).pop(2);
                         },
                         color: Colors.lightBlue,
                         child: const Text('Importar',
@@ -40,7 +40,7 @@ bool dato = await showDialog(
                       ),
                       MaterialButton(
                         onPressed: () {
-                          Navigator.of(context).pop();
+                          Navigator.of(context).pop(3);
                         },
                         color: Colors.lightBlue,
                         child:const Text('Cancelar',

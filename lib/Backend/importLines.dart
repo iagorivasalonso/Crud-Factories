@@ -8,6 +8,8 @@ importLines(List<String> fileContent, List<lineSend> line) async {
   if(fileContent.isEmpty)
   {
     File file = new File('D:/lineSends.csv');
+
+    if(file.existsSync())
     fileContent = await file.readAsLines();
   }
 
@@ -16,10 +18,12 @@ importLines(List<String> fileContent, List<lineSend> line) async {
     {
       select = fileContent[i].split(",");
       line.add(lineSend(
-          date:select[0] ,
-          factory:select[1] ,
-          observations: select[2] ,
-          state: select[3] ));
+          id: select[0],
+          date:select[1],
+          factory:select[2] ,
+          observations: select[3] ,
+          state: select[4]));
+
     }
 
 

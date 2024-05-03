@@ -1,3 +1,4 @@
+import 'package:crud_factories/Backend/data.dart';
 import 'package:crud_factories/Objects/Factory.dart';
 import 'package:intl/intl.dart';
 import 'package:show_platform_date_picker/show_platform_date_picker.dart';
@@ -9,21 +10,17 @@ import '../Objects/lineSend.dart';
 
 class newSend extends StatefulWidget {
 
-  List<lineSend> sendsLine;
-  int select;
+
   String selectCamp;
   String filter;
-  List<lineSend> line;
   String SeletedFilter;
-  List<String> dateSends;
-  List<Factory> factories;
+  int select;
 
-  newSend(this.dateSends,this.sendsLine,this.select,this.selectCamp, this.filter,  this.line, this.SeletedFilter, this.factories);
+  newSend(this.selectCamp, this.filter,  this.SeletedFilter,this.select);
 
   @override
   State<newSend> createState() => _newSendState();
 }
-
 
 
 class _newSendState extends State<newSend> {
@@ -34,121 +31,109 @@ class _newSendState extends State<newSend> {
 
   double widthBar = 10.0;
 
-  late TextEditingController controllerText = new TextEditingController();
+  late TextEditingController controllerSearch = new TextEditingController();
   List<TextEditingController> _controllersObserLine = [];
-  List<String> columns = [];
   List<String> campsTable = [];
-  int rows = 0;
-  int rowsTable = 0;
-  int rowsType = -1;
-  List<bool>selectable = [];
-  List <bool> selectTable = [];
-  List<lineSend> sends = [];
-  List<lineSend> listSend = [];
+
+
   String date="";
   bool allSelect = false;
-  List<bool> Send = List.generate(75, (index) => false);
+  List<bool> Send = List.generate(factories.length, (index) => false);
+  List<bool> lineEdit = List.generate(line.length, (index) => false);
   DateTime seletedDate =DateTime.now();
-  int rowsTrue=0;
 
   @override
   Widget build(BuildContext context) {
 
-
-
-    for (int i = 1; i < 75; i++)
-      _controllersObserLine.add(TextEditingController());
-
-
-    int select = widget.select;
-    List<lineSend> line = widget.line;
     int cant = 0;
     String stringFactories = "";
     String title = "";
     String typeList="";
     String type = widget.SeletedFilter;
-    List<Factory> factories = widget.factories;
-
+    String action1 = "";
+    String action2 = "";
+    List<lineSend> lineSelected = [];
     campsTable = ['Empresa', 'Observaciones', 'Estado', 'Seleccionar'];
-
-
-    bool viewButoons = false;
-
+    List <String> campKey = [];
+    int idLine =-1;
+    int select=widget.select;
 
     if (select == -1) {
       title = "Nuevo ";
       typeList = "empresas: ";
       type = "Fecha ";
-      campsTable = ['Empresa', 'Observaciones', 'Estado', 'Seleccionar'];
-      listSend = widget.sendsLine;
-      rowsType =factories.length;
+      action1 = "Nuevo";
+      action2 = "Reiniciar";
 
-      if(controllerText.text.isEmpty)
+
+      if(controllerSearch.text.isEmpty)
       {
-        controllerText.text=DateFormat('dd-MM-yyyy').format( DateTime.now());
+        controllerSearch.text=DateFormat('dd-MM-yyyy').format( DateTime.now());
       }
-      rowsTable =factories.length;
-      stringFactories = "Tiene $rowsTable empresas en su base de datos";
-      viewButoons = true;
+
+
+      stringFactories = "Tieneempresas en su base de datos";
+
     }
     else {
-      controllerText.text = "";
 
-
+      action1 = "Guardar";
+      action2 = "Cancelar";
       title = "Ver ";
+
+
+      for (int i = 0; i < line.length; i++)
+      {
+        _controllersObserLine.add(TextEditingController());
+      }
 
       if(type== "Fecha")
       {
+
         type = "Fecha:  ";
         campsTable = ['Empresa', 'Observaciones', 'Estado'];
-        listSend = widget.sendsLine;
-        rowsTable =listSend.length;
-        type =widget.SeletedFilter;
-        controllerText.text = widget.dateSends[select];
-        typeList = "empresas: ";
+        controllerSearch.text = line[0].showFormatDate(dateSends[select]);
 
-        cant= 0;
-        listSend.clear();
-        for(int i = 0; i < line.length ; i++)
+          lineSelected.clear();
+
+        for (int i = 0; i < line.length; i++)
         {
-          if(controllerText.text  == line[i].date)
+          if(controllerSearch.text == line[0].showFormatDate(line[i].date))
           {
-            listSend.add(line[i]);
-            cant+=1;
+            lineSelected.add(line[i]);
+            campKey.add(line[i].factory);
+
           }
 
         }
-        rowsType =cant;
+
+
         stringFactories = "Este dia se hicieron $cant envios";
       }
 
-
+      typeList = "envios: ";
       if(type == "Empresa")
       {
         type = "Empresa:  ";
         campsTable = ['Fecha', 'Observaciones', 'Estado'];
-        listSend = widget.sendsLine;
-        controllerText.text = line[select].factory;
-        typeList = "envios: ";
+        controllerSearch.text = factories[select].name;
 
+        lineSelected.clear();
 
-        cant= 0;
-        listSend.clear();
+        for (int i = 0; i < line.length; i++)
+        {
+          if(controllerSearch.text == line[i].factory)
+          {
+            lineSelected.add(line[i]);
+            campKey.add(line[i].date);
 
+          }
+
+        }
+        cant = lineSelected.length;
         stringFactories = "A esta empresa se le hicieron $cant envios";
+
       }
-
-
-      viewButoons = false;
-    }
-    bool selectable = true;
-    int endTable = 0;
-
-    if (selectable == true) {
-      endTable = campsTable.length;
-    }
-    else {
-      endTable = campsTable.length;
     }
 
     final ShowPlatformDatePicker platformDatePicker = ShowPlatformDatePicker(buildContext: context);
@@ -206,25 +191,28 @@ class _newSendState extends State<newSend> {
                                       width: 300,
                                       height: 40,
                                       child: TextField(
-                                        controller: controllerText,
+                                        controller: controllerSearch,
                                         decoration: InputDecoration(
                                           border: const OutlineInputBorder(),
                                           icon: select == -1
-                                                ? const Icon(Icons.calendar_today)
-                                                : null,
+                                              ? const Icon(Icons.calendar_today)
+                                              : null,
                                         ),
                                         onTap: () async {
-                                          DateTime? dateSelected = await  platformDatePicker.showPlatformDatePicker(
-                                              context,
-                                              seletedDate,
-                                              DateTime(DateTime.now().year - 10),
-                                              DateTime(DateTime.now().year + 1),
-                                          );
-                                          setState(() {
-                                            date =DateFormat('dd-MM-yyyy').format(dateSelected!);
-                                            controllerText.text = date;
+                                          if(select == -1)
+                                          {
+                                               DateTime? dateSelected = await  platformDatePicker.showPlatformDatePicker(
+                                                    context,
+                                                    seletedDate,
+                                                    DateTime(DateTime.now().year - 10),
+                                                    DateTime(DateTime.now().year + 1),
+                                              );
+                                              setState(() {
+                                                 date =DateFormat('dd-MM-yyyy').format(dateSelected!);
+                                                 controllerSearch.text = date;
+                                            });
+                                          }
 
-                                          });
 
                                         },
                                       ),
@@ -254,61 +242,81 @@ class _newSendState extends State<newSend> {
                                       controller: verticalScrollTable,
                                       scrollDirection: Axis.vertical,
                                       child: DataTable(
-                                        columns: <DataColumn>[
-                                          for(int i = 0; i < endTable; i++)
-                                            DataColumn(
-                                              label: SizedBox(
-                                                  width: 110,
-                                                  child: Text(campsTable[i])
-                                              ),
-                                            ),
+                                        columns: List<DataColumn>.generate(campsTable.length, (index) =>
+                                          DataColumn(
+                                              label: Text(campsTable[index]))
+                                        ),
+                                        rows: select == -1
+                                        ? List<DataRow>.generate(factories.length, (indexRow) =>
+                                           DataRow(
+                                               cells: <DataCell>[
+                                                 DataCell(
+                                                   Text(factories[indexRow].name),
+                                                 ),
+                                                 DataCell(
+                                                     Padding(
+                                                       padding: const EdgeInsets.all(8.0),
+                                                       child: TextField(
+                                                         controller: _controllersObserLine[indexRow],
+                                                         decoration: InputDecoration(
+                                                           border: OutlineInputBorder(),
+                                                           labelText: _controllersObserLine[indexRow].text
+                                                         ),
+                                                         onChanged: (s){
+                                                           setState(() {
+                                                             lineEdit[indexRow]=true;
+                                                           });
 
-                                        ],
-                                         rows: List<DataRow>.generate(rowsType,
-                                            (int index) =>
-                                            DataRow(
-                                                cells: <DataCell>[
-                                                  for(int i = 0; i < endTable; i++)
-                                                  DataCell(
-                                                   campsTable[i] == "Empresa"
-                                                      ? select == -1
-                                                         ? Text(factories[index].name)
-                                                         : Text(listSend[index].factory)
-                                                   : campsTable[i] == "Fecha"
-                                                       ?  Text(listSend[index].date)
-                                                   : campsTable[i] == "Observaciones"
-                                                       ? Padding(
-                                                           padding: const EdgeInsets.all(8.0),
-                                                           child: TextField(
-                                                               controller: _controllersObserLine[index],
-                                                               decoration: InputDecoration(
-                                                                 border: OutlineInputBorder(),
-                                                                 labelText: select == -1
-                                                                     ? _controllersObserLine[index].text
-                                                                     : listSend[index].observations,
-                                                            ),
+                                                          },
+                                                       ),
                                                      ),
-                                                   )
-                                                  : campsTable[i] == "Estado"
-                                                       ? select == -1
-                                                             ? Text("estado")
-                                                             : Text(listSend[index].state)
-                                                  : campsTable[i] =="Seleccionar"
-                                                       ? CheckboxListTile(
-                                                            value: Send[index],
-                                                              onChanged: (bool? value) {
-                                                                   setState(() {
-
-                                                                 Send[index] = value!;
-                                                                 allSelect = true;
-                                                            });
-                                                           },)
-                                                   : Text("data")
+                                                 ),
+                                                 DataCell(
+                                                   Text("Preparado"),
+                                                 ),
+                                                 DataCell(
+                                                   CheckboxListTile(
+                                                     value: Send[indexRow],
+                                                     onChanged:( bool? value) {
+                                                          setState(() {
+                                                             Send[indexRow] = value!;
+                                                             allSelect = true;
+                                                          });
+                                                     },
+                                                   ),
+                                                 ),
+                                               ]
+                                           )
+                                        )
+                                        : List<DataRow>.generate(lineSelected.length, (indexRow) =>
+                                            DataRow(
+                                                cells:  <DataCell>[
+                                                  DataCell(
+                                                      Text(campKey[indexRow])
+                                                  ),
+                                                  DataCell(
+                                                    Padding(
+                                                      padding: const EdgeInsets.all(8.0),
+                                                      child: TextField(
+                                                        controller: _controllersObserLine[indexRow],
+                                                        decoration: InputDecoration(
+                                                            border: OutlineInputBorder(),
+                                                            labelText:lineSelected[indexRow].observations
+                                                        ),
+                                                        onChanged: (s){
+                                                          int idLine =int.parse( lineSelected[indexRow].id)-1;
+                                                          lineEdit[idLine]=true;
+                                                        },
+                                                      ),
+                                                    ),
+                                                  ),
+                                                  DataCell(
+                                                    Text(lineSelected[indexRow].state),
                                                   ),
                                                 ]
-                                              ),
+                                            )
                                         ),
-                                      ),
+                                      )
                                     ),
                                   ),
                                 ),
@@ -324,37 +332,33 @@ class _newSendState extends State<newSend> {
                                             Text(stringFactories),
                                           ],
                                         ),
-                                        if(viewButoons == true)
-                                        Padding(
-                                          padding: const EdgeInsets.only(left: 350.0),
-                                          child: Row(
-                                            children: [
-                                              const  Text("Seleccionar todas"),
-                                              Checkbox(
-                                                value: allSelect,
-                                                onChanged: (value) {
-                                                  setState(() {
+                                          if(select == -1)
+                                          Padding(
+                                            padding: const EdgeInsets.only(left: 350.0),
+                                            child: Row(
+                                              children: [
+                                                const  Text("Seleccionar todas"),
+                                                Checkbox(
+                                                  value: allSelect,
+                                                  onChanged: (value) {
+                                                    setState(() {
 
-                                                    for(int i = 0 ; i<Send.length; i++)
-                                                    {
-                                                      Send[i] = value!;
-                                                    }
-                                                    allSelect = value!;
+                                                      for(int i = 0 ; i<Send.length; i++)
+                                                      {
+                                                        Send[i] = value!;
+                                                      }
+                                                      allSelect = value!;
 
-
-
-
-                                                  });
-                                                },
-                                              )
-                                            ],
+                                                    });
+                                                  },
+                                                )
+                                              ],
+                                            ),
                                           ),
-                                        ),
                                       ],
                                     )
                                 ),
                               ),
-                              if(viewButoons == true)
                                 Padding(
                                   padding: const EdgeInsets.only(top: 70.0, left: 550.0),
                                   child: SizedBox(
@@ -363,33 +367,94 @@ class _newSendState extends State<newSend> {
                                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                       children: [
                                         ElevatedButton(
-                                          child: const Text('Nuevo'),
+                                          child: Text(action1),
                                           onPressed: () {
                                             setState(() {
-                                              List<lineSend> sendSelected = [];
-                                              int allLines =0;
-                                              for(int i = 0; i < factories.length; i++)
+                                              if(select == -1)
                                               {
+                                                int allLines =0;
+                                                for(int i = 0; i < factories.length; i++)
+                                                {
                                                   if(Send[i] == true)
                                                   {
-                                                    line.add(lineSend(date: controllerText.text, factory: factories[i].name,  observations: _controllersObserLine[i].text, state:'Preparado'));
+                                                    line.add(
+                                                        lineSend(
+                                                            id: "88",
+                                                            date: controllerSearch.text,
+                                                            factory: factories[i].name,
+                                                            observations: _controllersObserLine[i].text,
+                                                            state:'Preparado')
+                                                    );
                                                     allLines++;
-                                                    print(line);
                                                   }
+                                                }
+
+                                                String action ='El pedido contiene $allLines empresas';
+                                                confirm(context,action);
+                                              }
+                                              else
+                                              {
+                                                  int number = -1;
+                                                  int numberDay = 0;
+                                                  bool chargue = false;
+
+                                                  if(type=="Fecha:  ")
+                                                  {
+                                                    for(int i = 0; i < line.length; i++)
+                                                    {
+                                                      if(line[i].showFormatDate(line[i].date) == controllerSearch.text && chargue == false)
+                                                      {
+                                                        number= int.parse(line[i].id)-1;
+
+                                                        chargue = true;
+                                                      }
+                                                    }
+
+                                                    for(int i = number ; i < line.length; i++)
+                                                    {
+                                                      if(lineEdit[i]==true)
+                                                      {
+                                                        line[i].observations = _controllersObserLine[numberDay].text;
+                                                      }
+                                                      number++;
+                                                      numberDay++;
+                                                    }
+                                                  }
+                                                  else
+                                                  {
+
+
+                                                  }
+
                                               }
 
-                                              String action ='El pedido contiene $allLines empresas';
-                                              confirm(context,action);
 
-                                             csvExportatorLines(listSend);
+                                             //csvExportatorLines(line);
+                                              _controllersObserLine.clear();
+                                              lineEdit = List.generate(line.length, (index) => false);
                                             });
 
 
                                           },
                                         ),
                                         ElevatedButton(
-                                          child: const Text('Cancelar'),
+                                          child: Text(action2),
                                           onPressed: () {
+                                            setState(() {
+                                              if (select == -1)
+                                              {
+                                                for(int i = 0 ; i<factories.length; i++)
+                                                {
+                                                  Send[i] = false;
+                                                  _controllersObserLine[i].text="";
+                                                }
+                                              }
+                                              else
+                                              {
+
+                                              }
+
+                                            });
 
                                           },
                                         ),
@@ -409,6 +474,7 @@ class _newSendState extends State<newSend> {
       ),
     );
   }
+
 
 
 }

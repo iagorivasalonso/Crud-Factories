@@ -57,6 +57,14 @@ bool campEmpty(String camp) {
   return campValid;
 }
 
+bool dateCorrect( String date)
+{
+  print(date);
+   bool dateValid =  RegExp(r"^[0-3][1-9]+-[0-1][0-9]+-[0-9][0-9][0-9][0-9]").hasMatch(date);
+
+   print(dateValid);
+   return dateValid;
+}
 bool telephoneCorrect(String telephone, BuildContext context) {
 
   bool telephoneValid = RegExp(r"^[0-9,$]*$").hasMatch(telephone);
