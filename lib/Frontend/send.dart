@@ -1,15 +1,15 @@
+import 'package:crud_factories/Alertdialogs/confirm.dart';
+import 'package:crud_factories/Alertdialogs/error.dart';
 import 'package:crud_factories/Backend/data.dart';
-import 'package:crud_factories/Objects/Factory.dart';
+import 'package:crud_factories/Backend/exportLines.dart';
+import 'package:crud_factories/Objects/lineSend.dart';
 import 'package:intl/intl.dart';
 import 'package:show_platform_date_picker/show_platform_date_picker.dart';
 import 'package:adaptive_scrollbar/adaptive_scrollbar.dart';
 import 'package:flutter/material.dart';
-import '../Alertdialogs/confirm.dart';
-import '../Backend/exportLines.dart';
-import '../Objects/lineSend.dart';
+
 
 class newSend extends StatefulWidget {
-
 
   String selectCamp;
   String filter;
@@ -22,7 +22,6 @@ class newSend extends StatefulWidget {
   State<newSend> createState() => _newSendState();
 }
 
-
 class _newSendState extends State<newSend> {
 
   final ScrollController horizontalScroll = ScrollController();
@@ -34,7 +33,6 @@ class _newSendState extends State<newSend> {
   late TextEditingController controllerSearch = new TextEditingController();
   List<TextEditingController> _controllersObserLine = [];
   List<String> campsTable = [];
-
 
   String date="";
   bool allSelect = false;
@@ -55,7 +53,6 @@ class _newSendState extends State<newSend> {
     List<lineSend> lineSelected = [];
     campsTable = ['Empresa', 'Observaciones', 'Estado', 'Seleccionar'];
     List <String> campKey = [];
-    int idLine =-1;
     int select=widget.select;
 
     if (select == -1) {
@@ -78,7 +75,7 @@ class _newSendState extends State<newSend> {
     else {
 
       action1 = "Guardar";
-      action2 = "Cancelar";
+      action2 = "Deshacer";
       title = "Ver ";
 
 
@@ -304,8 +301,16 @@ class _newSendState extends State<newSend> {
                                                             labelText:lineSelected[indexRow].observations
                                                         ),
                                                         onChanged: (s){
-                                                          int idLine =int.parse( lineSelected[indexRow].id)-1;
-                                                          lineEdit[idLine]=true;
+
+                                                            if(type=="Fecha:  ")
+                                                            {
+                                                              int idLine =int.parse( lineSelected[indexRow].id)-1;
+                                                              lineEdit[idLine]=true;
+                                                            }
+                                                            else
+                                                            {
+                                                              lineEdit[indexRow]=true;
+                                                            }
                                                         },
                                                       ),
                                                     ),
@@ -379,7 +384,7 @@ class _newSendState extends State<newSend> {
                                                   {
                                                     line.add(
                                                         lineSend(
-                                                            id: "88",
+                                                            id: line.length.toString(),
                                                             date: controllerSearch.text,
                                                             factory: factories[i].name,
                                                             observations: _controllersObserLine[i].text,
@@ -397,36 +402,81 @@ class _newSendState extends State<newSend> {
                                                   int number = -1;
                                                   int numberDay = 0;
                                                   bool chargue = false;
+                                                  int allLinesModify = 0;
 
                                                   if(type=="Fecha:  ")
                                                   {
-                                                    for(int i = 0; i < line.length; i++)
-                                                    {
-                                                      if(line[i].showFormatDate(line[i].date) == controllerSearch.text && chargue == false)
-                                                      {
-                                                        number= int.parse(line[i].id)-1;
+                                                         for(int i = 0; i < line.length; i++)
+                                                         {
+                                                              if(line[i].showFormatDate(line[i].date) == controllerSearch.text && chargue == false)
+                                                              {
+                                                                   number= int.parse(line[i].id)-1;
+                                                                   chargue = true;
+                                                              }
+                                                         }
 
-                                                        chargue = true;
-                                                      }
-                                                    }
+                                                         for(int i = number ; i < line.length; i++)
+                                                         {
+                                                             if(lineEdit[i]==true)
+                                                             {
+                                                                line[i].observations = _controllersObserLine[numberDay].text;
+                                                                allLinesModify++;
+                                                             }
+                                                             number++;
+                                                             numberDay++;
+                                                         }
 
-                                                    for(int i = number ; i < line.length; i++)
-                                                    {
-                                                      if(lineEdit[i]==true)
-                                                      {
-                                                        line[i].observations = _controllersObserLine[numberDay].text;
-                                                      }
-                                                      number++;
-                                                      numberDay++;
-                                                    }
+
                                                   }
                                                   else
                                                   {
 
+                                                    for(int i = 0 ; i < lineSelected.length; i++)
+                                                    {
+                                                      if(lineEdit[i]==true)
+                                                      {
+                                                        lineSelected[i].observations = _controllersObserLine[i].text;
+                                                        allLinesModify++;
+                                                      }
+
+                                                    }
+                                                      List<lineSend> tmp = [];
+
+                                                      for(int i = 0 ; i < line.length; i++)
+                                                      {
+                                                          lineSend current = line[i];
+
+                                                           for(int x = 0 ; x < lineSelected.length; x++)
+                                                           {
+                                                                if(current == lineSelected[x])
+                                                                {
+                                                                   current = lineSelected[x];
+                                                                }
+                                                           }
+
+                                                          tmp.add(current);
+                                                      }
+
+                                                      line.clear();
+                                                      line = tmp;
 
                                                   }
 
+                                                  String action ='';
+                                                  if (allLinesModify == 0)
+                                                  {
+                                                    action ='no tiene ninguna linea a modificar';
+                                                    error(context, action);
+                                                  }
+                                                  else
+                                                  {
+                                                    action ='fueron modificadas $allLinesModify lineas';
+                                                    confirm(context,action);
+                                                  }
+
+
                                               }
+
 
 
                                               csvExportatorLines(line);
@@ -451,7 +501,14 @@ class _newSendState extends State<newSend> {
                                               }
                                               else
                                               {
+                                                for(int i = 0 ; i < lineSelected.length; i++)
+                                                {
+                                                  if(lineEdit[i]==true)
+                                                  {
+                                                     _controllersObserLine[i].text = lineSelected[i].observations;
+                                                  }
 
+                                                }
                                               }
 
                                             });
@@ -474,8 +531,6 @@ class _newSendState extends State<newSend> {
       ),
     );
   }
-
-
 
 }
 

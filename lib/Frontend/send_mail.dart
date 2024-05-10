@@ -8,24 +8,20 @@ import 'package:crud_factories/Alertdialogs/warning.dart';
 import 'package:crud_factories/Backend/data.dart';
 import 'package:crud_factories/Functions/validatorCamps.dart';
 import 'package:crud_factories/Objects/Factory.dart';
+import 'package:crud_factories/Objects/Mail.dart';
+import 'package:crud_factories/Objects/lineSend.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:mailer/mailer.dart';
 import 'package:mailer/smtp_server.dart';
-import '../Objects/Mail.dart';
-import '../Objects/lineSend.dart';
 
 
 class sendMail extends StatefulWidget {
 
-
-
   @override
   State<sendMail> createState() => _sendMailState();
 }
-
-
 
 class _sendMailState extends State<sendMail> {
 
@@ -319,7 +315,7 @@ class _sendMailState extends State<sendMail> {
 
                                                                   }
                                                               }
-                                                              print(selectedFactories);
+
                                                               for(int y= 0 ; y < selectedFactories.length; y++) {
                                                                      mailList.add(selectedFactories[y].mail);
                                                               }
@@ -523,6 +519,8 @@ class _sendMailState extends State<sendMail> {
                                       onPressed: () async {
                                         String action ='';
                                         int dat_correct = 2;
+
+                                        print(controllerCompany.text);
                                         if(mailCorrect(controllerMailTo.text) != true)
                                         {
                                           action ='No es un correo electronico valido';
@@ -595,8 +593,6 @@ class _sendMailState extends State<sendMail> {
   }
   void _pickFile() async {
 
-
-
     FilePickerResult? result =  await FilePicker.platform.pickFiles(
       dialogTitle: 'Seleccionar archivo',
       type: FileType.custom,
@@ -644,8 +640,6 @@ class _sendMailState extends State<sendMail> {
      {
          try {
 
-
-
                String username = controllerMailFrom.text;
                List <String> separeAddrres = controllerMailFrom.text.split("@");
                List <String> extCompany = separeAddrres[1].split(".");
@@ -662,13 +656,10 @@ class _sendMailState extends State<sendMail> {
                  password = controllerPass.text;
                }
 
-               print(password);
                controllerCompany.text = extCompany[0];
 
-
-
                final message = Message()
-                    ..from = Address(username, 'Your name')
+                    ..from = Address(username, separeAddrres[0])
                     ..recipients.add(controllerMailTo.text)
                     ..ccRecipients.addAll(mailList)
                     ..subject = controllerSubject.text

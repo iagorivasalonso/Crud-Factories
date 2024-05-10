@@ -1,8 +1,7 @@
-import 'package:crud_factories/Functions/validatorCamps.dart';
 import 'package:flutter/material.dart';
 
-Future<bool> warning(BuildContext  context,String nameCamp) async{
 
+Future<bool> warning(BuildContext  context,String nameCamp) async{
 
  bool campEmpty = await showDialog(
       context: context,

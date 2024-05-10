@@ -1,5 +1,6 @@
+import 'package:crud_factories/Alertdialogs/error.dart';
 import 'package:fluent_ui/fluent_ui.dart';
-import '../Alertdialogs/error.dart';
+
 
 bool primaryKeyCorrect(String camp, String nameCamp, List <String> allKeys, String campOld, BuildContext context) {
 
@@ -60,7 +61,7 @@ bool campEmpty(String camp) {
 bool dateCorrect( String date)
 {
   print(date);
-   bool dateValid =  RegExp(r"^[0-3][1-9]+-[0-1][0-9]+-[0-9][0-9][0-9][0-9]").hasMatch(date);
+   bool dateValid =  RegExp(r"^[0-3][0-9]+-[0-1][0-9]+-[0-9][0-9][0-9][0-9]").hasMatch(date);
 
    print(dateValid);
    return dateValid;

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 
 Future<bool> noFind(BuildContext  context, bool noDat, String strindDialog) async {
+
   showDialog(
       context: context,
       builder: (BuildContext context) {

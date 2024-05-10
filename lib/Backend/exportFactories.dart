@@ -1,11 +1,12 @@
 import 'dart:io';
+import 'package:crud_factories/Objects/Factory.dart';
 import 'package:csv/csv.dart';
-import '../Objects/Factory.dart';
+
 
 void csvExportatorFactories(List<Factory> factories, int select) async {
 
   File myFile = File('D:/factories.csv');
-print("dcfffEXPORT");
+
   List<dynamic> associateList = [
 
       for (int i = 0; i <factories.length;i++)

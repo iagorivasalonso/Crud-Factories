@@ -1,7 +1,7 @@
 import 'dart:io';
+import 'package:crud_factories/Objects/Mail.dart';
 import 'package:csv/csv.dart';
 
-import '../Objects/Mail.dart';
 
 void csvExportatorMails(List<Mail> mails, int select) {
 
@@ -35,6 +35,6 @@ void csvExportatorMails(List<Mail> mails, int select) {
   }
 
   String csv = const ListToCsvConverter().convert(rows);
-  print(csv);
+
   myFile.writeAsString(csv);
 }

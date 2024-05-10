@@ -28,7 +28,6 @@ class _AppState extends State<App> {
 
   }
 
-
   void chargueData(){
    factories.clear();
 
@@ -258,7 +257,7 @@ class _AppState extends State<App> {
                                 String array = "envios";
                                int dat = await noCategory(context, array);
 
-                               print(int);
+
                                 if(dat == 1)
                                 {
                                   setState(() {

@@ -1,6 +1,6 @@
 import 'dart:io';
 
-import '../Objects/Mail.dart';
+import 'package:crud_factories/Objects/Mail.dart';
 
 importMail(List<String> fileContent, List<Mail> mails) async {
 

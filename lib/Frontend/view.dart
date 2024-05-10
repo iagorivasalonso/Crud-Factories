@@ -1,14 +1,13 @@
+import 'package:crud_factories/Alertdialogs/noFind.dart';
 import 'package:crud_factories/Backend/data.dart';
 import 'package:crud_factories/Frontend/factory.dart';
 import 'package:crud_factories/Frontend/mail.dart';
 import 'package:crud_factories/Frontend/send.dart';
+import 'package:crud_factories/Objects/Factory.dart';
+import 'package:crud_factories/Widgets/defaultCard.dart';
+import 'package:crud_factories/Widgets/factoryCard.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
-import '../Alertdialogs/noFind.dart';
-import '../Objects/Factory.dart';
-import '../Objects/lineSend.dart';
-import '../Widgets/defaultCard.dart';
-import '../Widgets/factoryCard.dart';
 
 
 class view extends StatefulWidget {
@@ -329,7 +328,6 @@ class _viewState extends State<view> {
                                                factoryFilter=value.toString();
                                                filterFactory = value.toString();
                                                selectCamp=value.toString();
-
 
                                                 });
                                               },

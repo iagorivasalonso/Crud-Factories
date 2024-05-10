@@ -1,5 +1,6 @@
 import 'dart:io';
-import '../Objects/lineSend.dart';
+import 'package:crud_factories/Objects/lineSend.dart';
+
 
 importLines(List<String> fileContent, List<lineSend> line) async {
 

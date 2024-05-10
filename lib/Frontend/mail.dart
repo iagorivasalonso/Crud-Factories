@@ -1,13 +1,16 @@
 import 'dart:convert';
 import 'package:adaptive_scrollbar/adaptive_scrollbar.dart';
+import 'package:crud_factories/Alertdialogs/confirm.dart';
 import 'package:crud_factories/Alertdialogs/error.dart';
 import 'package:crud_factories/Backend/data.dart';
+import 'package:crud_factories/Backend/exportMails.dart';
+import 'package:crud_factories/Functions/validatorCamps.dart';
+import 'package:crud_factories/Objects/Mail.dart';
 import 'package:flutter/material.dart';
-import '../Alertdialogs/campRepeat.dart';
-import '../Alertdialogs/confirm.dart';
-import '../Backend/exportMails.dart';
-import '../Functions/validatorCamps.dart';
-import '../Objects/Mail.dart';
+import 'package:mailer/mailer.dart';
+import 'package:mailer/smtp_server/gmail.dart';
+import 'package:mailer/smtp_server/hotmail.dart';
+
 
 class newMail extends StatefulWidget {
 
@@ -63,7 +66,6 @@ class _newMailState extends State<newMail> {
       action = "Actualizar";
       action2 = "Deshacer";
     }
-
 
     return Scaffold(
       body: AdaptiveScrollbar(
@@ -159,7 +161,7 @@ class _newMailState extends State<newMail> {
                             ),
                           ),
                           Padding(
-                            padding: const EdgeInsets.only(left: 600),
+                            padding: const EdgeInsets.only(left: 600, top: 80),
                             child: SizedBox(
                               width: 200,
                               child: Row(
@@ -167,7 +169,9 @@ class _newMailState extends State<newMail> {
                                 children: [
                                   ElevatedButton(
                                     child: Text(action),
-                                    onPressed: () {
+                                    onPressed: () async {
+
+                                      final result = await testMail();
                                       setState(() {
 
                                         List <String> allKeys = [];
@@ -209,8 +213,7 @@ class _newMailState extends State<newMail> {
                                                    password: encodedPass
                                                ));
 
-                                               String action = 'El correo se ha dado de alta correctamente';
-                                               confirm(context, action);
+
                                              }
                                              else
                                              {
@@ -218,9 +221,31 @@ class _newMailState extends State<newMail> {
                                                mails[select].company = controllerCompany.text;
                                                mails[select].password = encodedPass;
 
-                                               String action = 'El correo se ha modificado correctamente';
-                                               confirm(context, action);
                                              }
+
+
+                                             if(result == true)
+                                             {
+                                               String action = '';
+
+                                               if(select == -1)
+                                               {
+                                                 action = 'El correo se ha dado de alta correctamente';
+                                                 confirm(context, action);
+                                               }
+                                               else
+                                               {
+                                                 action = 'El correo se ha modificado correctamente';
+                                                 confirm(context, action);
+                                               }
+
+                                             }
+                                             else
+                                             {
+                                                 action='Compruebe su usuario o contraseña';
+                                                 error(context, action);
+                                             }
+
                                           }
                                         }
                                        csvExportatorMails(mails, select);
@@ -229,8 +254,9 @@ class _newMailState extends State<newMail> {
                                   ),
                                   ElevatedButton(
                                     child: Text(action2),
-                                    onPressed: () {
+                                    onPressed: () async {
                                       setState(() {
+
                                          if(select == -1)
                                          {
                                            controllerMail.text = "";
@@ -242,7 +268,10 @@ class _newMailState extends State<newMail> {
                                              campCharge();
                                          }
 
+
                                       });
+
+
                                     },
                                   ),
                                 ],
@@ -261,7 +290,51 @@ class _newMailState extends State<newMail> {
       ),
     );
   }
+  Future<bool> testMail() async {
 
+    bool connectEmail = false;
+    String username = controllerMail.text;
+    String password = "";
+
+     if(controllerPas.text == controllerPasVerificator.text)
+     {
+       password = controllerPas.text;
+     }
+
+    List <String> separeAddrres = controllerMail.text.split("@");
+
+    try {
+
+      final message = Message()
+        ..from = Address(username,separeAddrres[0])
+        ..recipients.add(username)
+        ..subject = 'Prueba de conexion'
+        ..text = 'Esto es una prueba de conexion desde la aplicacion';
+
+
+      if(controllerCompany.text == "gmail")
+      {
+        final smtpServer = gmail(username,password);
+        final sendReport = await send(message,smtpServer);
+        print('Message sent: ' + sendReport.toString());
+      }
+      else if (controllerCompany.text == "hotmail")
+      {
+        final smtpServer = hotmail(username,password);
+        final sendReport = await send(message,smtpServer);
+        print('Message sent: ' + sendReport.toString());
+      }
+
+
+      connectEmail = true;
+
+    } catch (e) {
+      print('${e.toString()}');
+      connectEmail = false;
+    }
+
+    return connectEmail;
+  }
 
 }
 

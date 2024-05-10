@@ -2,9 +2,6 @@ import 'package:crud_factories/Objects/Factory.dart';
 import 'package:crud_factories/Objects/Mail.dart';
 import 'package:crud_factories/Objects/lineSend.dart';
 
-
-
-
 int itenSelect = -1;
 int itenSelection = 0;
 int subIten1Select = -1;

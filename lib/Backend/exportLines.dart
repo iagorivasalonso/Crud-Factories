@@ -1,9 +1,10 @@
 import 'dart:io';
+import 'package:crud_factories/Objects/lineSend.dart';
 import 'package:csv/csv.dart';
-import '../Objects/lineSend.dart';
+
 
 void   csvExportatorLines(List<lineSend> listSend) async {
-print("object");
+
   File myFile = File('D:/lineSends.csv');
 
   List<dynamic> associateList = [
