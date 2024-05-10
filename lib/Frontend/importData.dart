@@ -204,12 +204,13 @@ class _newImportState extends State<newImport> {
                                       if(linesNew.isNotEmpty)
                                       {
 
+                                        int cantImport = linesNew.length;
+
                                         for(int i = 0; i <linesNew.length; i++)
                                         {
                                           line.add(linesNew[i]);
                                         }
 
-                                        int cantImport = linesNew.length;
                                         action ='se importaron $cantImport lineas correctamente';
                                         confirm(context,action);
 
@@ -218,7 +219,6 @@ class _newImportState extends State<newImport> {
                                           int id = i + 1;
                                           line[i].id = id.toString();
                                         }
-
 
                                         csvExportatorLines(line);
                                       }
