@@ -77,7 +77,6 @@ class _newFactoryState extends State<newFactory> {
       else {
         allAddress = '$address, $number - $apartament';
       }
-
       controllerAdrress.text = allAddress!;
       controllerCity.text = factories[select].address['city']!;
       controllerPostalCode.text = factories[select].address['postalCode']!;
@@ -468,8 +467,11 @@ class _newFactoryState extends State<newFactory> {
                               child: Row(
                                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                 children: [
-                                  ElevatedButton(
-                                    child: Text(action),
+                                  MaterialButton(
+                                    color: Colors.lightBlue,
+                                    child: Text(action,
+                                        style: TextStyle(color: Colors.white)
+                                    ),
                                     onPressed: () {
                                         setState(() {
 
@@ -588,7 +590,7 @@ class _newFactoryState extends State<newFactory> {
                                                       factories[select].address['city'] = controllerCity.text;
                                                       factories[select].address['postalCode'] = controllerPostalCode.text ;
                                                       factories[select].address['province'] = controllerProvince.text;
-
+                                                      factories[select].contacts = contacs;
                                                       action ='El usuario se ha modificado correctamente';
                                                       confirm(context,action);
 
@@ -604,8 +606,11 @@ class _newFactoryState extends State<newFactory> {
                                         });
                                     },
                                   ),
-                                  ElevatedButton(
-                                    child: Text(action2),
+                                  MaterialButton(
+                                    color: Colors.lightBlue,
+                                    child: Text(action2,
+                                        style: TextStyle(color: Colors.white)
+                                    ),
                                     onPressed: () {
                                       if(select == -1)
                                       {

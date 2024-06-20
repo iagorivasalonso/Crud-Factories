@@ -2,7 +2,7 @@ import 'package:crud_factories/Alertdialogs/confirm.dart';
 import 'package:crud_factories/Alertdialogs/error.dart';
 import 'package:crud_factories/Backend/data.dart';
 import 'package:crud_factories/Backend/exportLines.dart';
-import 'package:crud_factories/Objects/lineSend.dart';
+import 'package:crud_factories/Objects/LineSend.dart';
 import 'package:intl/intl.dart';
 import 'package:show_platform_date_picker/show_platform_date_picker.dart';
 import 'package:adaptive_scrollbar/adaptive_scrollbar.dart';
@@ -50,7 +50,7 @@ class _newSendState extends State<newSend> {
     String type = widget.SeletedFilter;
     String action1 = "";
     String action2 = "";
-    List<lineSend> lineSelected = [];
+    List<LineSend> lineSelected = [];
     campsTable = ['Empresa', 'Observaciones', 'Estado', 'Seleccionar'];
     List <String> campKey = [];
     int select=widget.select;
@@ -63,13 +63,17 @@ class _newSendState extends State<newSend> {
       action2 = "Reiniciar";
 
 
+      for (int i = 0; i < factories.length; i++)
+      {
+        _controllersObserLine.add(TextEditingController());
+      }
       if(controllerSearch.text.isEmpty)
       {
         controllerSearch.text=DateFormat('dd-MM-yyyy').format( DateTime.now());
       }
 
 
-      stringFactories = "Tieneempresas en su base de datos";
+      stringFactories = "Tiene empresas en su base de datos";
 
     }
     else {
@@ -371,8 +375,11 @@ class _newSendState extends State<newSend> {
                                     child: Row(
                                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                       children: [
-                                        ElevatedButton(
-                                          child: Text(action1),
+                                        MaterialButton(
+                                          color: Colors.lightBlue,
+                                          child: Text(action1,
+                                          style: const TextStyle(color: Colors.white),
+                                          ),
                                           onPressed: () {
                                             setState(() {
                                               if(select == -1)
@@ -383,7 +390,7 @@ class _newSendState extends State<newSend> {
                                                   if(Send[i] == true)
                                                   {
                                                     line.add(
-                                                        lineSend(
+                                                        LineSend(
                                                             id: line.length.toString(),
                                                             date: controllerSearch.text,
                                                             factory: factories[i].name,
@@ -440,11 +447,11 @@ class _newSendState extends State<newSend> {
                                                       }
 
                                                     }
-                                                      List<lineSend> tmp = [];
+                                                      List<LineSend> tmp = [];
 
                                                       for(int i = 0 ; i < line.length; i++)
                                                       {
-                                                          lineSend current = line[i];
+                                                          LineSend current = line[i];
 
                                                            for(int x = 0 ; x < lineSelected.length; x++)
                                                            {
@@ -487,9 +494,12 @@ class _newSendState extends State<newSend> {
 
                                           },
                                         ),
-                                        ElevatedButton(
-                                          child: Text(action2),
-                                          onPressed: () {
+                                    MaterialButton(
+                                      color: Colors.lightBlue,
+                                      child: Text(action2,
+                                        style: const TextStyle(color: Colors.white),
+                                      ),
+                                      onPressed: () {
                                             setState(() {
                                               if (select == -1)
                                               {

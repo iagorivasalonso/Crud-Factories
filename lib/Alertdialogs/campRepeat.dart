@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(0)),
           title:  const Text('Campo Repetido'),
           content: Text(action),
           actions: [

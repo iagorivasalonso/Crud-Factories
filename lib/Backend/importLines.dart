@@ -1,10 +1,10 @@
 import 'dart:io';
-import 'package:crud_factories/Objects/lineSend.dart';
+import 'package:crud_factories/Objects/LineSend.dart';
 
 
-importLines(List<String> fileContent, List<lineSend> line) async {
+importLines(List<String> fileContent, List<LineSend> line) async {
 
-  List<String> select =[];
+  List<String> select = [];
 
   if(fileContent.isEmpty)
   {
@@ -14,11 +14,10 @@ importLines(List<String> fileContent, List<lineSend> line) async {
     fileContent = await file.readAsLines();
   }
 
-
     for (int i = 0; i <fileContent.length; i++)
     {
       select = fileContent[i].split(",");
-      line.add(lineSend(
+      line.add(LineSend(
           id: select[0],
           date:select[1],
           factory:select[2] ,

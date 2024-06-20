@@ -7,6 +7,7 @@ error(BuildContext  context, String action, [format]) async {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(0)),
           title:  const Text('Error'),
           content: format != null
                   ? Container(

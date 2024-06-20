@@ -6,6 +6,7 @@ void closeAlert(BuildContext  context) {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(0)),
           title: const Text('Salida de la aplicación'),
           content: const Text('¿Desea salir de la aplicación?'),
           actions: [

@@ -10,9 +10,8 @@ void csvExportatorMails(List<Mail> mails, int select) {
 
   List<dynamic> associateList = [
 
-    for (int i = 0; i <mails.length;i++)
+    for (int i = 0; i <mails.length; i++)
     {
-
         "id": mails[i].id,
         "addrres": mails[i].addrres,
         "company": mails[i].company,
@@ -21,7 +20,7 @@ void csvExportatorMails(List<Mail> mails, int select) {
   ];
 
   List<List<dynamic>> rows = [];
-  List<dynamic> row = [];
+
 
 
   for (int i = 0; i < associateList.length; i++) {

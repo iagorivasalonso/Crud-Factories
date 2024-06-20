@@ -9,6 +9,7 @@ Future<bool> noDat(BuildContext  context, String nameCamp) async {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(0)),
           title:  const Text('Error'),
           content: Text('el $nameCamp ya existe en nuestra base de datos'),
           actions: [

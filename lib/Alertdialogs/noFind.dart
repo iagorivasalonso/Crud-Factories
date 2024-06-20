@@ -3,10 +3,11 @@ import 'package:flutter/material.dart';
 
 Future<bool> noFind(BuildContext  context, bool noDat, String strindDialog) async {
 
-  showDialog(
+  noDat = await showDialog(
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(0)),
           title:  const Text('No encontrado'),
           content: Text(strindDialog),
           actions: [
@@ -16,10 +17,10 @@ Future<bool> noFind(BuildContext  context, bool noDat, String strindDialog) asyn
                 child: MaterialButton(
                   onPressed: () {
                     noDat = true;
-                    Navigator.of(context).pop(false);
+                    Navigator.of(context).pop(true);
                   },
                   color: Colors.lightBlue,
-                  child: Text('Aceptar',
+                  child: const Text('Aceptar',
                          style: TextStyle(color: Colors.white)
                          ),
                 ),

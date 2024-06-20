@@ -3,6 +3,7 @@ import 'package:crud_factories/Alertdialogs/error.dart';
 import 'package:crud_factories/Alertdialogs/noCategory.dart';
 import 'package:crud_factories/Backend/_selection_view.dart';
 import 'package:crud_factories/Backend/data.dart';
+import 'package:crud_factories/Backend/importConections.dart';
 import 'package:crud_factories/Backend/importFactories.dart';
 import 'package:crud_factories/Backend/importLines.dart';
 import 'package:crud_factories/Backend/importMails.dart';
@@ -29,8 +30,8 @@ class _AppState extends State<App> {
   }
 
   void chargueData(){
-   factories.clear();
 
+   factories.clear();
    try {
      factories.add(importFactory(fileContent, factories));
 
@@ -51,7 +52,16 @@ class _AppState extends State<App> {
    } catch (Exeption) {
 
    }
- }
+
+   conections.clear();
+   try {
+     conections.add(importConections(fileContent, conections));
+
+   } catch (Exeption) {
+
+   }
+
+  }
   @override
   Widget build(BuildContext context) {
     double mWidth = MediaQuery.of(context).size.width;
@@ -136,7 +146,6 @@ class _AppState extends State<App> {
 
                       }
                   ),
-
                   MenuButton(
                       text:  SizedBox(
                           width: wItem,

@@ -1,5 +1,5 @@
 
-class lineSend {
+class LineSend {
 
   String id;
   String date;
@@ -7,7 +7,7 @@ class lineSend {
   String observations;
   String state;
 
-  lineSend({
+  LineSend({
     required this.id,
     required this.date,
     required this.factory,
@@ -24,11 +24,8 @@ class lineSend {
   String showFormatDate (String date) {
 
     List <String> listMmonth =[' ','Enero','Febrero','Marzo','Abril','Mayo','Junio', 'Julio', 'Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
-    String dateFormat= " ";
     List <String> partDate= date.split("-");
-
-
-    String cifra = "";
+    String dateFormat= " ";
 
     int nMonth= int.parse(partDate[1]);
 

@@ -36,8 +36,6 @@ class _newMailState extends State<newMail> {
 
 
 
-
-
   @override
   Widget build(BuildContext context) {
 
@@ -167,8 +165,11 @@ class _newMailState extends State<newMail> {
                               child: Row(
                                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                 children: [
-                                  ElevatedButton(
-                                    child: Text(action),
+                                  MaterialButton(
+                                     color: Colors.lightBlue,
+                                    child: Text(action,
+                                        style: const TextStyle(color: Colors.white)
+                                    ),
                                     onPressed: () async {
 
                                       final result = await testMail();
@@ -252,8 +253,10 @@ class _newMailState extends State<newMail> {
                                       });
                                     }
                                   ),
-                                  ElevatedButton(
-                                    child: Text(action2),
+                                  MaterialButton(
+                                    color: Colors.lightBlue,
+                                    child: Text(action2,
+                                    style:  const TextStyle(color: Colors.white),),
                                     onPressed: () async {
                                       setState(() {
 

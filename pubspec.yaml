@@ -48,6 +48,7 @@ dependencies:
   mailer: ^6.1.0
   file_picker: ^6.2.0
   menu_bar: ^0.5.3
+  mysql1: ^0.20.0
 
 
 

@@ -15,26 +15,21 @@ importFactory(List<String> fileContent, List<Factory> factories) async {
     fileContent = await file.readAsLines();
   }
 
- String tmp="";
- 
- List <String> allEmp = [];
- if(allEmp.isNotEmpty)
- {
-   for (int i = 1; i <fileContent.length; i++) {
-
-      allEmp = fileContent[i].split("[");
-
-      tmp=allEmp[1].substring(0,allEmp[1].length-2);
-      allEmp=tmp.split(", ");
-
-   }
-
- }
 
 
-  for (int i = 0; i <fileContent.length; i++) {
+
+  for (int i = 0; i <fileContent.length; i++)
+  {
+    String tmp="";
+
+    List <String> allEmp = [];
 
     select = fileContent[i].split(",");
+    allEmp= fileContent[i].split("[");
+    tmp=allEmp[1].substring(0,allEmp[1].length-1);
+    allEmp=tmp.split(",");
+
+
     factories.add(Factory(
         id: select[0],
         name: select[1],

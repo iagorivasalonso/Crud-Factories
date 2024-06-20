@@ -1,9 +1,9 @@
 import 'dart:io';
-import 'package:crud_factories/Objects/lineSend.dart';
+import 'package:crud_factories/Objects/LineSend.dart';
 import 'package:csv/csv.dart';
 
 
-void   csvExportatorLines(List<lineSend> listSend) async {
+void   csvExportatorLines(List<LineSend> listSend) async {
 
   File myFile = File('D:/lineSends.csv');
 

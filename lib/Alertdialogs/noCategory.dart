@@ -7,6 +7,7 @@ int dato = await showDialog(
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(0)),
           title:  const Text('Error'),
           content: Text('No tiene $array  en la base de datos ¿Que desea hacer?'),
           actions: [

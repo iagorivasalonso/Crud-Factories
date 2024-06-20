@@ -7,6 +7,7 @@ Future<bool> warning(BuildContext  context,String nameCamp) async{
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(0)),
           title:  const Text('cuidado'),
           content: Text('el campo $nameCamp está vacio ¿Desea continuar?'),
           actions: [

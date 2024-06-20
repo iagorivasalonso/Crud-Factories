@@ -9,7 +9,7 @@ import 'package:crud_factories/Backend/data.dart';
 import 'package:crud_factories/Functions/validatorCamps.dart';
 import 'package:crud_factories/Objects/Factory.dart';
 import 'package:crud_factories/Objects/Mail.dart';
-import 'package:crud_factories/Objects/lineSend.dart';
+import 'package:crud_factories/Objects/LineSend.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
@@ -38,18 +38,19 @@ class _sendMailState extends State<sendMail> {
   late TextEditingController controllerMessage= TextEditingController();
 
   double widthBar = 10.0;
+
   List<Attachment> atach=[];
   int _tMails = 1;
   List <String> columns = [];
   int rows = 0;
   List <String> columnsTable = ['Empresa','Email'];
   List <String> mailList = [];
-  List <lineSend> sends = [];
-  List <lineSend> sendsDay = [];
+  List <LineSend> sends = [];
+  List <LineSend> sendsDay = [];
   List <Factory> allFactories = [];
   List <Factory> selectedFactories = [];
   String? selectedSend;
-  Mail? selectedMail;
+  Mail? selectedMail = mails[0];
   int cantFactories = 0;
   bool mailSave = false;
 
@@ -433,8 +434,10 @@ class _sendMailState extends State<sendMail> {
                                     ),
                                     Padding(
                                       padding: const EdgeInsets.only(left: 100.0),
-                                      child: ElevatedButton(
-                                        child: const Text("Adjuntar"),
+                                      child: MaterialButton(
+                                        color: Colors.lightBlue,
+                                        child: const Text('Adjuntar',
+                                          style: const TextStyle(color: Colors.white),),
                                         onPressed: () {
                                           setState(() {
 
@@ -514,13 +517,14 @@ class _sendMailState extends State<sendMail> {
                                 children: [
                                   Padding(
                                     padding: const EdgeInsets.only(left: 600.0, right: 30.0),
-                                    child: ElevatedButton(
-                                      child: const Text('Enviar'),
+                                    child: MaterialButton(
+                                      color: Colors.lightBlue,
+                                      child: const Text('Enviar',
+                                      style: const TextStyle(color: Colors.white),),
                                       onPressed: () async {
                                         String action ='';
                                         int dat_correct = 2;
 
-                                        print(controllerCompany.text);
                                         if(mailCorrect(controllerMailTo.text) != true)
                                         {
                                           action ='No es un correo electronico valido';
@@ -560,8 +564,10 @@ class _sendMailState extends State<sendMail> {
                                       ),
 
                                   ),
-                                  ElevatedButton(
-                                    child: const Text('Reiniciar'),
+                                  MaterialButton(
+                                    color: Colors.lightBlue,
+                                    child: const Text('Reiniciar',
+                                      style: const TextStyle(color: Colors.white),),
                                     onPressed: () {
                                       setState(() {
                                         _tMails = 1;

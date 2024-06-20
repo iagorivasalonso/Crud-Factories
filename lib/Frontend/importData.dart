@@ -1,16 +1,21 @@
 import 'dart:io';
 import 'package:adaptive_scrollbar/adaptive_scrollbar.dart';
 import 'package:crud_factories/Alertdialogs/confirm.dart';
+import 'package:crud_factories/Alertdialogs/error.dart';
+import 'package:crud_factories/Alertdialogs/noFind.dart';
 import 'package:crud_factories/Backend/data.dart';
+import 'package:crud_factories/Backend/exportConections.dart';
 import 'package:crud_factories/Backend/exportFactories.dart';
 import 'package:crud_factories/Backend/exportLines.dart';
 import 'package:crud_factories/Backend/exportMails.dart';
+import 'package:crud_factories/Backend/importConections.dart';
 import 'package:crud_factories/Backend/importFactories.dart';
 import 'package:crud_factories/Backend/importLines.dart';
 import 'package:crud_factories/Backend/importMails.dart';
+import 'package:crud_factories/Objects/Conection.dart';
 import 'package:crud_factories/Objects/Factory.dart';
 import 'package:crud_factories/Objects/Mail.dart';
-import 'package:crud_factories/Objects/lineSend.dart';
+import 'package:crud_factories/Objects/LineSend.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 
@@ -35,7 +40,8 @@ class _newImportState extends State<newImport> {
 
     List<Factory> factoriesNew =[];
     List<Mail> mailsNew = [];
-    List<lineSend> linesNew = [];
+    List<LineSend> linesNew = [];
+    List<Conection> conectionsNew = [];
     
     return Scaffold(
       body: AdaptiveScrollbar(
@@ -88,7 +94,7 @@ class _newImportState extends State<newImport> {
                               children: [
                                 const Text('Ruta: '),
                                 SizedBox(
-                                  width: 400,
+                                  width: 420,
                                   height: 40,
                                   child: TextField(
                                     decoration:const InputDecoration(
@@ -99,10 +105,13 @@ class _newImportState extends State<newImport> {
                                 ),
                                 Padding(
                                   padding: const EdgeInsets.only(left: 40.0),
-                                  child: ElevatedButton(
-                                    child: const Text('Examinar'),
+                                  child: MaterialButton(
+                                    color: Colors.lightBlue,
+                                    child: const Text('Examinar',
+                                      style: const TextStyle(color: Colors.white),
+                                    ),
                                     onPressed: (){
-                                      _pickFile(controllerDatePicker,factoriesNew,mailsNew,linesNew);
+                                      _pickFile(context, controllerDatePicker,factoriesNew,mailsNew,linesNew,conectionsNew);
                                     },
                                   ),
                                 )
@@ -116,9 +125,11 @@ class _newImportState extends State<newImport> {
                               child: Row(
                                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                 children: [
-                                  ElevatedButton(
-                                    child: const Text('Importar datos'),
-                                    onPressed: () {
+                                  MaterialButton(
+                                    color: Colors.lightBlue,
+                                    child: const Text('Importar datos',
+                                    style:  const TextStyle(color: Colors.white) ,),
+                                    onPressed: () async {
                                       String action = '';
                                       String current = '';
 
@@ -151,10 +162,16 @@ class _newImportState extends State<newImport> {
                                            }
 
                                         }
-
-                                        action ='se importaron $cantImport empresas correctamente';
-                                        confirm(context,action);
-
+                                      if(cantImport > 0)
+                                      {
+                                        action = 'se importaron $cantImport empresas correctamente';
+                                        confirm(context, action);
+                                      }
+                                      else
+                                      {
+                                        action = 'no hay ninguna empresa para importar';
+                                        confirm(context, action);
+                                      }
                                         for(int i = 0; i < factories.length; i++)
                                         {
                                           int id = i + 1;
@@ -189,8 +206,16 @@ class _newImportState extends State<newImport> {
 
                                         }
 
-                                        action ='se importaron $cantImport emails correctamente';
-                                        confirm(context,action);
+                                        if(cantImport > 0)
+                                        {
+                                          action ='se importaron $cantImport emails correctamente';
+                                          confirm(context,action);
+                                        }
+                                        else
+                                        {
+                                          action = 'no hay ningun email para importar';
+                                          confirm(context, action);
+                                        }
 
                                         for(int i = 0; i < mails.length; i++)
                                         {
@@ -205,14 +230,40 @@ class _newImportState extends State<newImport> {
                                       {
 
                                         int cantImport = linesNew.length;
-
-                                        for(int i = 0; i <linesNew.length; i++)
+                                        for(int i = 0; i < linesNew.length; i++)
                                         {
-                                          line.add(linesNew[i]);
+                                          current = linesNew[i].factory;
+                                          bool exist= false;
+                                          
+                                          for(int x = 0; x < factories.length; x++)
+                                          {
+                                               if(current == factories[x].name)
+                                               {
+                                                  exist = true;
+                                               }
+                                          }
+
+                                          if(exist == false)
+                                          {
+                                            cantImport -= 1 ;
+                                            String stringDialog ="La empresa $current no pertenece a nuestra base de datos";
+                                            
+                                            exist = await noFind(context, true, stringDialog);
+
+                                          }
                                         }
 
-                                        action ='se importaron $cantImport lineas correctamente';
-                                        confirm(context,action);
+                                        if(cantImport > 0)
+                                        {
+                                          action ='se importaron $cantImport lineas correctamente';
+                                          confirm(context,action);
+                                        }
+                                        else
+                                        {
+                                          action = 'no hay ninguna linea para importar';
+                                          confirm(context, action);
+                                        }
+
 
                                         for(int i = 0; i < line.length; i++)
                                         {
@@ -222,10 +273,55 @@ class _newImportState extends State<newImport> {
 
                                         csvExportatorLines(line);
                                       }
+
+                                      if(conectionsNew.isNotEmpty)
+                                      {
+                                        repeat = false;
+                                        int cantImport = conectionsNew.length;
+
+                                        for(int i = 0; i <conectionsNew.length; i++)
+                                        {
+                                          repeat = false;
+                                          current = conectionsNew[i].database;
+
+                                          for(int x = 0; x <conections.length; x++)
+                                          {
+                                            if(conections[x].database == current)
+                                            {
+                                              cantImport--;
+                                              repeat= true;
+                                            }
+                                          }
+                                          if(repeat == false)
+                                          {
+                                            conections.add(conectionsNew[i]);
+                                          }
+
+                                        }
+                                      if(cantImport > 0)
+                                      {
+                                        action = 'se importaron $cantImport conexiones correctamente';
+                                        confirm(context, action);
+                                      }
+                                      else
+                                      {
+                                        action = 'no hay ninguna conexion para importar';
+                                        confirm(context, action);
+                                      }
+                                        for(int i = 0; i < conections.length; i++)
+                                        {
+                                          int id = i + 1;
+                                          conections[i].id = id.toString();
+                                        }
+
+                                        csvExportatorConections(conections);
+                                      }
                                     },
                                   ),
-                                  ElevatedButton(
-                                    child: const Text('Borrar'),
+                                  MaterialButton(
+                                    color: Colors.lightBlue,
+                                    child: const Text('Borrar',
+                                        style: const TextStyle(color: Colors.white),),
                                     onPressed: () {
                                           setState(() {
                                             controllerDatePicker.text = "";
@@ -249,7 +345,7 @@ class _newImportState extends State<newImport> {
     );
   }
 }
-void _pickFile(TextEditingController controllerDatePicker,List<Factory> factories,  List<Mail> mails, List<lineSend> lines) async {
+void _pickFile(BuildContext context, TextEditingController controllerDatePicker,List<Factory> factories,  List<Mail> mails, List<LineSend> lines, List<Conection> conections) async {
 
 
   FilePickerResult? result =  await FilePicker.platform.pickFiles(
@@ -264,20 +360,23 @@ void _pickFile(TextEditingController controllerDatePicker,List<Factory> factorie
 
   controllerDatePicker.text =file.path!;
 
+  factories.clear();
+  mails.clear();
+  lines.clear();
+  conections.clear();
+
   File file1 =new File(file.path!);
   List<String> fileContent=[];
   fileContent = await file1.readAsLines();
   List <String> camps = [];
-
   for (int i = 0; i <fileContent.length; i++) {
 
     camps = fileContent[i].split(",");
-    print(camps);
   }
+
 
     if(camps.length>10)
     {
-
       try {
         factories.add(importFactory(fileContent, factories));
       } catch (Exeption) {
@@ -285,21 +384,17 @@ void _pickFile(TextEditingController controllerDatePicker,List<Factory> factorie
       }
 
     }
-    if(camps.length==4)
+    else if(camps.length==4)
     {
-      bool isNumber = RegExp(r"^[0-9,$]*$").hasMatch(camps[0]);
 
-      if(isNumber)
-      {
-
-        try {
-          mails.add(importMail(fileContent, mails));
-        } catch (Exeption) {
-
-        }
+      try {
+        mails.add(importMail(fileContent, mails));
+      } catch (Exeption) {
 
       }
-      else
+
+      }
+      else if(camps.length==5)
       {
 
         try {
@@ -309,9 +404,24 @@ void _pickFile(TextEditingController controllerDatePicker,List<Factory> factorie
         }
 
       }
+    else if(camps.length==6)
+    {
+
+      try {
+        conections.add(importConections(fileContent, conections));
+
+      } catch (Exeption) {
+
+      }
+
+    }
+      else
+      {
+        String action ="archivo no valido";
+        error(context, action);
+      }
 
   }
 
 
 
-}
