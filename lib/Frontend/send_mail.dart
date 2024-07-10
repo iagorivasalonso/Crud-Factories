@@ -58,6 +58,13 @@ class _sendMailState extends State<sendMail> {
   @override
   Widget build(BuildContext context) {
 
+    if (mails.isNotEmpty)
+    {
+      controllerMailFrom.text = mails[0].addrres;
+      controllerCompany.text = mails[0].company;
+      controllerPass.text =  mails[0].password;
+    }
+
     return Scaffold(
       body: AdaptiveScrollbar(
         controller: verticalScroll,
@@ -115,6 +122,7 @@ class _sendMailState extends State<sendMail> {
                                       value: selectedMail,
                                       onChanged: (Mail? mailChoose) {
                                         setState(() {
+
                                           selectedMail=mailChoose;
                                           controllerMailFrom.text = mailChoose!.addrres;
                                           controllerCompany.text = mailChoose!.company;
@@ -532,7 +540,6 @@ class _sendMailState extends State<sendMail> {
                                         }
                                         else
                                         {
-
                                           if(controllerSubject.text.isEmpty)
                                           {
                                             dat_correct=dat_correct-1;
@@ -554,10 +561,10 @@ class _sendMailState extends State<sendMail> {
                                             {
                                               dat_correct++;
                                             }
-                                          }
+                                          }/*
                                           if(dat_correct==2)
-                                            sendingMail();
-
+                                            sendingMail();*/
+                                                print(sendsDay);
                                         }
                                       }
 
@@ -644,6 +651,9 @@ class _sendMailState extends State<sendMail> {
 
      if(sendToMail == true)
      {
+       Codec<String, String> stringToBase64 = utf8.fuse(base64);
+       String password = stringToBase64.decode(controllerPass.text);
+       print(password);
          try {
 
                String username = controllerMailFrom.text;
@@ -686,9 +696,6 @@ class _sendMailState extends State<sendMail> {
                  print('Message sent: ' + sendReport.toString());
                }
 
-
-               action ='El email se ha enviado correctamente';
-               confirm(context,action);
 
          } catch (e) {
            action ='No configurado';

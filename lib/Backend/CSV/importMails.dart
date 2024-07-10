@@ -1,8 +1,7 @@
 import 'dart:io';
-
 import 'package:crud_factories/Objects/Mail.dart';
 
-importMail(List<String> fileContent, List<Mail> mails) async {
+csvImportMails(List<String> fileContent, List<Mail> mails) async {
 
   List<String> select =[];
 
@@ -19,8 +18,8 @@ importMail(List<String> fileContent, List<Mail> mails) async {
     select = fileContent[i].split(",");
     mails.add(Mail(
         id: select[0],
-        addrres: select[1],
         company: select[2],
+        addrres: select[1],
         password: select[3]));
   }
 

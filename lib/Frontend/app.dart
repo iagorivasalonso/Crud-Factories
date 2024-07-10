@@ -1,12 +1,11 @@
 import 'package:crud_factories/Alertdialogs/closeApp.dart';
 import 'package:crud_factories/Alertdialogs/error.dart';
 import 'package:crud_factories/Alertdialogs/noCategory.dart';
+import 'package:crud_factories/Alertdialogs/typeConnection.dart';
+import 'package:crud_factories/Backend/CSV/chargueData%20csv.dart';
+import 'package:crud_factories/Backend/CSV/importConections.dart';
 import 'package:crud_factories/Backend/_selection_view.dart';
 import 'package:crud_factories/Backend/data.dart';
-import 'package:crud_factories/Backend/importConections.dart';
-import 'package:crud_factories/Backend/importFactories.dart';
-import 'package:crud_factories/Backend/importLines.dart';
-import 'package:crud_factories/Backend/importMails.dart';
 import 'package:flutter/material.dart';
 import 'package:menu_bar/menu_bar.dart';
 
@@ -25,45 +24,34 @@ class _AppState extends State<App> {
     // TODO: implement initState
     super.initState();
 
-    chargueData();
+    chargueDataCSV();
 
+    conections.clear();
+
+    try {
+      conections.add(csvImportConections(fileContent, conections));
+
+    } catch (Exeption) {
+
+    }
+    WidgetsBinding.instance?.addPostFrameCallback((_) async {
+
+        bool SQLbd = await typeConection(context);
+
+        if(SQLbd == true)
+        {
+          setState(() {
+            itenSelect = 2;
+            subIten1Select = 1;
+          });
+        }
+
+    });
   }
 
-  void chargueData(){
-
-   factories.clear();
-   try {
-     factories.add(importFactory(fileContent, factories));
-
-   } catch (Exeption) {
-
-   }
-
-   mails.clear();
-   try {
-     mails.add(importMail(fileContent, mails));
-   } catch (Exeption) {
-
-   }
-
-   line.clear();
-   try {
-     line.add(importLines(fileContent, line));
-   } catch (Exeption) {
-
-   }
-
-   conections.clear();
-   try {
-     conections.add(importConections(fileContent, conections));
-
-   } catch (Exeption) {
-
-   }
-
-  }
   @override
   Widget build(BuildContext context) {
+
     double mWidth = MediaQuery.of(context).size.width;
     double mHeight = MediaQuery.of(context).size.height;
 
@@ -278,7 +266,6 @@ class _AppState extends State<App> {
 
                                 if(dat == 2)
                                 {
-
                                   setState(() {
                                     itenSelect = 0;
                                     subIten1Select = 1;
@@ -364,4 +351,6 @@ class _AppState extends State<App> {
       ),
     );
   }
+
+
 }

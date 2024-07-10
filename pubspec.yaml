@@ -43,7 +43,6 @@ dependencies:
   csv: ^5.1.1
   path_provider: ^2.1.1
   show_platform_date_picker: ^0.0.5
-  intl: ^0.18.0
   encrypt: ^5.0.3
   mailer: ^6.1.0
   file_picker: ^6.2.0

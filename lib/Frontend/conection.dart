@@ -1,8 +1,15 @@
 import 'package:adaptive_scrollbar/adaptive_scrollbar.dart';
 import 'package:crud_factories/Alertdialogs/confirm.dart';
 import 'package:crud_factories/Alertdialogs/confirmDelete.dart';
+import 'package:crud_factories/Alertdialogs/confirmEdit.dart';
+import 'package:crud_factories/Alertdialogs/error.dart';
+import 'package:crud_factories/Backend/CSV/chargueData%20csv.dart';
+import 'package:crud_factories/Backend/SQL/createTables.dart';
+import 'package:crud_factories/Backend/SQL/importFactories.dart';
+import 'package:crud_factories/Backend/SQL/importLines.dart';
+import 'package:crud_factories/Backend/SQL/importMail.dart';
 import 'package:crud_factories/Backend/data.dart';
-import 'package:crud_factories/Backend/exportConections.dart';
+import 'package:crud_factories/Backend/CSV/exportConections.dart';
 import 'package:crud_factories/Objects/Conection.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
@@ -29,15 +36,36 @@ class _conectionState extends State<conection> {
   late TextEditingController controllerUser = new TextEditingController();
   late TextEditingController controllerPas = new TextEditingController();
 
-  String BaseDateSelected ="Nuevo";
-  Conection? selectedConection = null;
+  Conection? selectedConection;
 
   bool modify= false;
   String action = "Nueva";
   int select = - 1;
+  bool editText = true;
 
   @override
   Widget build(BuildContext context) {
+
+    if(conn!=null)
+    {
+      action = "Desconectar";
+
+        for(int i = 0; i <conections.length; i++)
+        {
+           if(BaseDateSelected==conections[i].database)
+           {
+             selectedConection= conections[i];
+
+             controllerNameBD.text = conections[i].database;
+             controllerHost.text = conections[i].host;
+             controllerPort.text = conections[i].port;
+             controllerUser.text = conections[i].user;
+             controllerPas.text = conections[i].password;
+           }
+        }
+
+       editText = false;
+    }
 
     return Scaffold(
       body: AdaptiveScrollbar(
@@ -89,7 +117,7 @@ class _conectionState extends State<conection> {
                                       value: selectedConection,
                                       onChanged: (Conection? conectionChoose) {
                                         setState(() {
-                                          action = "Modificar";
+                                          action = "Conectar";
                                           select=int.parse(conectionChoose!.id)-1;
                                           selectedConection = conectionChoose;
                                           controllerNameBD.text = conectionChoose!.database;
@@ -128,6 +156,7 @@ class _conectionState extends State<conection> {
                                   height: 40,
                                   child: TextField(
                                     controller: controllerNameBD,
+                                    enabled: editText,
                                     decoration: const InputDecoration(
                                       border: OutlineInputBorder(),
                                     ),
@@ -150,6 +179,7 @@ class _conectionState extends State<conection> {
                                   height: 40,
                                   child: TextField(
                                     controller: controllerHost,
+                                    enabled: editText,
                                     decoration: const InputDecoration(
                                       border: OutlineInputBorder(),
                                     ),
@@ -168,6 +198,7 @@ class _conectionState extends State<conection> {
                                   height: 40,
                                   child: TextField(
                                     controller: controllerPort,
+                                    enabled: editText,
                                     decoration: const InputDecoration(
                                       border: OutlineInputBorder(),
                                     ),
@@ -190,6 +221,7 @@ class _conectionState extends State<conection> {
                                   height: 40,
                                   child: TextField(
                                     controller: controllerUser,
+                                    enabled: editText,
                                     decoration: const InputDecoration(
                                       border: OutlineInputBorder(),
                                     ),
@@ -208,6 +240,7 @@ class _conectionState extends State<conection> {
                                   height: 40,
                                   child: TextField(
                                     controller: controllerPas,
+                                    enabled: editText,
                                     decoration: const InputDecoration(
                                       border: OutlineInputBorder(),
                                     ),
@@ -233,84 +266,126 @@ class _conectionState extends State<conection> {
                                           style: TextStyle(color: Colors.white)
                                       ),
                                     onPressed: () async {
-                                       setState(()  {
+                                      if(action == "Desconectar")
+                                      {
+                                        setState(() {
+                                          editText = true;
+                                          action = "Conectar";
+                                        });
 
-                                               if(action == "Nueva")
-                                               {
-                                                     int idNew = conections.length +1;
+                                        String action1 ='Ha cerrado la conexion';
+                                        confirm(context,action1);
 
-                                                   conections.add(Conection(
-                                                      id: idNew.toString(),
-                                                      database: controllerNameBD.text,
-                                                      port: controllerPort.text,
-                                                      host: controllerHost.text,
-                                                      user: controllerUser.text,
-                                                      password: controllerPas.text
-                                                    ));
-                                                   String action ='La conexion se ha creado correctamente';
-                                                   confirm(context,action);
-                                               }
-                                               else
-                                               {
-                                                     if( modify == true)
-                                                     {
-                                                        conections[select].database = controllerNameBD.text;
-                                                        conections[select].port = controllerPort.text;
-                                                        conections[select].host = controllerHost.text;
-                                                        conections[select].user = controllerUser.text;
-                                                        conections[select].password = controllerPas.text;
+                                        conn = null;
 
-                                                       String action ='La conexion se ha modificado correctamente';
-                                                       confirm(context,action);
+                                        factories.clear();
+                                        mails.clear();
+                                        line.clear();
 
-                                                    }
-                                               }
+                                        chargueDataCSV();
+                                      }
+                                      else
+                                      {
+                                        setState(()  {
+                                          if(modify == true || controllerNameBD.text !="")
+                                          {
 
-                                       });
-                                       /*
-                                       var settings = ConnectionSettings(
-                                           host: 'localhost',
-                                           port: 3307,
-                                           user: 'root',
-                                           password:'usbw',
-                                           db:'bd_factories'
-                                       );
-                                       print(conn);
-                                      conn = await MySqlConnection.connect(settings);
+                                            if(action == "Nueva")
+                                            {
+                                              int idNew = conections.length +1;
+                                              conections.add(Conection(
+                                                  id: idNew.toString(),
+                                                  database: controllerNameBD.text,
+                                                  port: controllerPort.text,
+                                                  host: controllerHost.text,
+                                                  user: controllerUser.text,
+                                                  password: controllerPas.text
+                                              ));
+                                              String action1 ='La conexion se ha creado correctamente';
+                                              confirm(context,action1);
+                                              modify = false;
+                                            }
+                                            else
+                                            {
+                                              if( modify == true)
+                                              {
+                                                conections[select].database = controllerNameBD.text;
+                                                conections[select].port = controllerPort.text;
+                                                conections[select].host = controllerHost.text;
+                                                conections[select].user = controllerUser.text;
+                                                conections[select].password = controllerPas.text;
 
-                                       await conn.query('CREATE TABLE IF NOT EXISTS factories '
-                                           '(id int NOT NULL AUTO_INCREMENT PRIMARY KEY,'
-                                           ' name varchar(255) NOT NULL, '
-                                           ' date varchar(12) NOT NULL,'
-                                           ' telephone1 varchar(9) NOT NULL,'
-                                           ' telephone2 varchar(9) NOT NULL,'
-                                           ' email varchar(50) NOT NULL,'
-                                           ' web varchar(100) NOT NULL,'
-                                           ' address varchar(255) NOT NULL, '
-                                           ' number varchar(4) NOT NULL,'
-                                           ' apartament varchar(10) NOT NULL,'
-                                           ' city varchar(10) NOT NULL, '
-                                           ' postalcode varchar(5) NOT NULL, '
-                                           ' empleoyes varchar(4))'
-                                       );
+                                              }
+                                            }
+                                          }
+                                        });
+                                        bool edit = false;
 
-                                      await conn.query('CREATE TABLE IF NOT EXISTS mails '
-                                          '(id int NOT NULL AUTO_INCREMENT PRIMARY KEY,'
-                                          ' email varchar(255) NOT NULL, '
-                                          ' company varchar(12) NOT NULL,'
-                                          ' password varchar(100) NOT NULL)'
-                                      );
+                                        if( modify == true)
+                                        {
+                                          String action1 ='conexion';
+                                          edit = await confirmEdit(context,action1);
+                                        }
 
-                                       await conn.query('CREATE TABLE IF NOT EXISTS lineSends '
-                                           '(id int NOT NULL AUTO_INCREMENT PRIMARY KEY,'
-                                           ' date varchar(12) NOT NULL, '
-                                           ' factory varchar(255) NOT NULL,'
-                                           ' state varchar(20) NOT NULL,'
-                                           ' observations varchar(100) NOT NULL)'
-                                       );*/
-                                       print(conections);
-                                       csvExportatorConections(conections);
+                                        if(modify == false || edit ==true)
+                                        {
+                                          String host = controllerHost.text;
+                                          int port = int.parse(controllerPort.text);
+                                          String user = controllerUser.text;
+                                          String password = controllerPas.text;
+                                          String Bdata = controllerNameBD.text;
+                                          
+                                          try{
+                                            var settings = ConnectionSettings(
+                                                host: host,
+                                                port: port,
+                                                user: user,
+                                                password: password,
+                                                db: Bdata
+                                            );
+
+                                            conn = await MySqlConnection.connect(settings);
+
+                                            if(conn != null)
+                                            {
+                                              String action1 ='connectado a $Bdata';
+                                              confirm(context,action1);
+                                              BaseDateSelected= Bdata;
+
+                                              createSql();
+
+                                              factories.clear();
+                                              mails.clear();
+                                              line.clear();
+
+                                              sqlImportFactories();
+                                              sqlImportMails();
+                                              sqlImportLines();
+
+
+                                              setState(() {
+                                                editText = false;
+                                                action ="Desconectar";
+                                              });
+
+
+                                            }
+
+                                          } catch (SQLException){
+                                            String action1 ="no se pudo realizar la conexion";
+                                            error(context, action1);
+                                          }
+
+
+                                        }
+
+                                      }
+
+                                       //
+                                      csvExportatorConections(conections);
                                        modify = false;
+
+
                                     },
 
 

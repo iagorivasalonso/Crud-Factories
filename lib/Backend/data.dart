@@ -9,6 +9,7 @@ int subIten1Select = -1;
 int subIten2Select = -1;
 int subIten1Selection = -1;
 int subIten2Selection = -1;
+String BaseDateSelected ="Nuevo";
 var conn;
 
 List<Factory> factories = [];

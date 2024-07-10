@@ -2,7 +2,7 @@ import 'dart:io';
 import 'package:crud_factories/Objects/Factory.dart';
 
 
-importFactory(List<String> fileContent, List<Factory> factories) async {
+csvImportFactories(List<String> fileContent, List<Factory> factories) async {
 
   List<String> select =[];
 
@@ -26,7 +26,7 @@ importFactory(List<String> fileContent, List<Factory> factories) async {
 
     select = fileContent[i].split(",");
     allEmp= fileContent[i].split("[");
-    tmp=allEmp[1].substring(0,allEmp[1].length-1);
+    tmp=allEmp[1].substring(0,allEmp[1].length-2);
     allEmp=tmp.split(",");
 
 
@@ -40,7 +40,7 @@ importFactory(List<String> fileContent, List<Factory> factories) async {
         address: {
           'street': select[7],
           'number': select[8].replaceAll(" ",""),
-          'apartament': '',
+          'apartament': select[9],
           'city': select[10],
           'postalCode':select[11] ,
           'province': select[12]

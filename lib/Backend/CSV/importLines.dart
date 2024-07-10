@@ -2,7 +2,7 @@ import 'dart:io';
 import 'package:crud_factories/Objects/LineSend.dart';
 
 
-importLines(List<String> fileContent, List<LineSend> line) async {
+csvImportLines(List<String> fileContent, List<LineSend> line) async {
 
   List<String> select = [];
 

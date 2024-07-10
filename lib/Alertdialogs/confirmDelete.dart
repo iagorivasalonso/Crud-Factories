@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 
  confirmDelete(BuildContext  context, String action) async {
 
-   bool campEmpty = await showDialog(
+   bool regisDelete = await showDialog(
        context: context,
        builder: (BuildContext context) {
          return AlertDialog(
@@ -43,7 +43,7 @@ import 'package:flutter/material.dart';
        });
 
 
-   return campEmpty;
+   return regisDelete;
 }
 
 

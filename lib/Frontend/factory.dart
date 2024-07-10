@@ -1,7 +1,9 @@
 import 'package:adaptive_scrollbar/adaptive_scrollbar.dart';
 import 'package:crud_factories/Alertdialogs/error.dart';
+import 'package:crud_factories/Backend/SQL/createFactory.dart';
+import 'package:crud_factories/Backend/SQL/modifyFactory.dart';
 import 'package:crud_factories/Backend/data.dart';
-import 'package:crud_factories/Backend/exportFactories.dart';
+import 'package:crud_factories/Backend/CSV//exportFactories.dart';
 import 'package:crud_factories/Functions/validatorCamps.dart';
 import 'package:crud_factories/Objects/Factory.dart';
 import 'package:flutter/material.dart';
@@ -105,7 +107,7 @@ class _newFactoryState extends State<newFactory> {
 
         campCharge();
 
-     action = "Actualizar";
+      action = "Actualizar";
       action2 = "Deshacer";
    }
 
@@ -474,7 +476,7 @@ class _newFactoryState extends State<newFactory> {
                                     ),
                                     onPressed: () {
                                         setState(() {
-
+                                          List <Factory> current=[];
                                           List <String> allKeys = [];
                                           String nameCamp = "nombre";
                                           for (int i = 0; i < factories.length; i++)
@@ -554,9 +556,9 @@ class _newFactoryState extends State<newFactory> {
 
                                                     if(select == - 1)
                                                     {
-
-                                                      factories.add(Factory(
-                                                          id:factories.length.toString(),
+                                                      int idNew = factories.length+1;
+                                                      current.add(Factory(
+                                                          id:idNew.toString(),
                                                           name: controllerName.text,
                                                           highDate: controllerHighDate.text,
                                                           thelephones:[controllerTelephone1.text,controllerTelephone2.text],
@@ -595,7 +597,27 @@ class _newFactoryState extends State<newFactory> {
                                                       confirm(context,action);
 
                                                     }
-                                                   csvExportatorFactories(factories,select);
+
+
+                                                    if(conn != null)
+                                                    {
+                                                         if(select == -1)
+                                                         {
+                                                           sqlCeateFactory(current);
+                                                         }
+                                                         else
+                                                         {
+
+                                                           current.add(factories[select]);
+                                                           sqlModifyFActory(current);
+                                                         }
+                                                    }
+                                                    else
+                                                    {
+                                                      factories = factories + current;
+                                                      csvExportatorFactories(factories,select);
+                                                    }
+
                                                   }
                                                 }
                                               }

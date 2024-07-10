@@ -49,7 +49,7 @@ class _viewState extends State<view> {
   String? selectedSend;
   String factoryFilter = 'Nombre';
   String sendFilter = 'Fecha';
-  String filterFactory = 'e';
+  String filterFactory = '';
 
   String campfilter = " ";
 

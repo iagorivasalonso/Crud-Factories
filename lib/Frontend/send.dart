@@ -1,8 +1,11 @@
 import 'package:crud_factories/Alertdialogs/confirm.dart';
 import 'package:crud_factories/Alertdialogs/error.dart';
+import 'package:crud_factories/Backend/SQL/createLine.dart';
+import 'package:crud_factories/Backend/SQL/modifyLines.dart';
 import 'package:crud_factories/Backend/data.dart';
-import 'package:crud_factories/Backend/exportLines.dart';
+import 'package:crud_factories/Backend/CSV/exportLines.dart';
 import 'package:crud_factories/Objects/LineSend.dart';
+import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:intl/intl.dart';
 import 'package:show_platform_date_picker/show_platform_date_picker.dart';
 import 'package:adaptive_scrollbar/adaptive_scrollbar.dart';
@@ -32,8 +35,10 @@ class _newSendState extends State<newSend> {
 
   late TextEditingController controllerSearch = new TextEditingController();
   List<TextEditingController> _controllersObserLine = [];
-  List<String> campsTable = [];
+  List<TextEditingController> _controllerStateLine = [];
 
+  List<String> campsTable = [];
+  String filterSelected='';
   String date="";
   bool allSelect = false;
   List<bool> Send = List.generate(factories.length, (index) => false);
@@ -51,21 +56,23 @@ class _newSendState extends State<newSend> {
     String action1 = "";
     String action2 = "";
     List<LineSend> lineSelected = [];
-    campsTable = ['Empresa', 'Observaciones', 'Estado', 'Seleccionar'];
+
     List <String> campKey = [];
     int select=widget.select;
 
+
     if (select == -1) {
+
       title = "Nuevo ";
       typeList = "empresas: ";
       type = "Fecha ";
       action1 = "Nuevo";
       action2 = "Reiniciar";
-
-
+      campsTable = ['Empresa', 'Observaciones', 'Estado', 'Seleccionar'];
       for (int i = 0; i < factories.length; i++)
       {
         _controllersObserLine.add(TextEditingController());
+        _controllerStateLine.add(TextEditingController());
       }
       if(controllerSearch.text.isEmpty)
       {
@@ -73,7 +80,8 @@ class _newSendState extends State<newSend> {
       }
 
 
-      stringFactories = "Tiene empresas en su base de datos";
+      int cantFactory = factories.length;
+      stringFactories = "Tiene $cantFactory empresas en su base de datos";
 
     }
     else {
@@ -83,10 +91,6 @@ class _newSendState extends State<newSend> {
       title = "Ver ";
 
 
-      for (int i = 0; i < line.length; i++)
-      {
-        _controllersObserLine.add(TextEditingController());
-      }
 
       if(type== "Fecha")
       {
@@ -97,15 +101,31 @@ class _newSendState extends State<newSend> {
 
           lineSelected.clear();
 
+
         for (int i = 0; i < line.length; i++)
         {
           if(controllerSearch.text == line[0].showFormatDate(line[i].date))
           {
             lineSelected.add(line[i]);
             campKey.add(line[i].factory);
-
           }
 
+        }
+        for (int i = 0; i < lineSelected.length; i++)
+        {
+          _controllersObserLine.add(TextEditingController());
+          _controllerStateLine.add(TextEditingController());
+
+        }
+
+        int x =int.parse(lineSelected[0].id) -1 ;
+
+        for (int i = 0; i < lineSelected.length; i++)
+        {
+            _controllersObserLine[i].text=line[x].observations;
+            _controllerStateLine[i].text = line[x].state;
+
+            x++;
         }
 
         cant = lineSelected.length;
@@ -113,6 +133,7 @@ class _newSendState extends State<newSend> {
       }
 
       typeList = "envios: ";
+
       if(type == "Empresa")
       {
         type = "Empresa:  ";
@@ -129,8 +150,19 @@ class _newSendState extends State<newSend> {
             campKey.add(line[i].date);
 
           }
+        }
+
+        for (int i = 0; i < lineSelected.length; i++)
+        {
+          if(controllerSearch.text==lineSelected[i].factory)
+          {
+            _controllersObserLine[i].text=lineSelected[i].observations;
+             _controllerStateLine[i].text = lineSelected[i].state;
+          }
 
         }
+
+
         cant = lineSelected.length;
         stringFactories = "A esta empresa se le hicieron $cant envios";
 
@@ -146,7 +178,6 @@ class _newSendState extends State<newSend> {
         allSelect = false;
       }
     }
-
     return Scaffold(
       body: AdaptiveScrollbar(
         controller: verticalScroll,
@@ -189,7 +220,7 @@ class _newSendState extends State<newSend> {
                                       child: Text('$type:  '),
                                     ),
                                     SizedBox(
-                                      width: 300,
+                                      width: 500,
                                       height: 40,
                                       child: TextField(
                                         controller: controllerSearch,
@@ -245,7 +276,9 @@ class _newSendState extends State<newSend> {
                                       child: DataTable(
                                         columns: List<DataColumn>.generate(campsTable.length, (index) =>
                                           DataColumn(
-                                              label: Text(campsTable[index]))
+                                              label: Container(
+                                                width: 100,
+                                                  child: Text(campsTable[index])))
                                         ),
                                         rows: select == -1
                                         ? List<DataRow>.generate(factories.length, (indexRow) =>
@@ -261,7 +294,6 @@ class _newSendState extends State<newSend> {
                                                          controller: _controllersObserLine[indexRow],
                                                          decoration: InputDecoration(
                                                            border: OutlineInputBorder(),
-                                                           labelText: _controllersObserLine[indexRow].text
                                                          ),
                                                          onChanged: (s){
                                                            setState(() {
@@ -273,7 +305,18 @@ class _newSendState extends State<newSend> {
                                                      ),
                                                  ),
                                                  DataCell(
-                                                   Text("Preparado"),
+                                                   Padding(
+                                                     padding: const EdgeInsets.all(8.0),
+                                                     child: TextField(
+                                                       controller: _controllerStateLine[indexRow],
+                                                       decoration: InputDecoration(
+                                                         border: OutlineInputBorder(),
+                                                       ),
+                                                       onChanged: (s){
+                                                         lineEdit[indexRow]=true;
+                                                       },
+                                                     ),
+                                                   ),
                                                  ),
                                                  DataCell(
                                                    CheckboxListTile(
@@ -302,25 +345,26 @@ class _newSendState extends State<newSend> {
                                                         controller: _controllersObserLine[indexRow],
                                                         decoration: InputDecoration(
                                                             border: OutlineInputBorder(),
-                                                            labelText:lineSelected[indexRow].observations
                                                         ),
                                                         onChanged: (s){
-
-                                                            if(type=="Fecha:  ")
-                                                            {
-                                                              int idLine =int.parse( lineSelected[indexRow].id)-1;
-                                                              lineEdit[idLine]=true;
-                                                            }
-                                                            else
-                                                            {
-                                                              lineEdit[indexRow]=true;
-                                                            }
+                                                          lineEdit[indexRow]=true;
                                                         },
                                                       ),
                                                     ),
                                                   ),
                                                   DataCell(
-                                                    Text(lineSelected[indexRow].state),
+                                                    Padding(
+                                                      padding: const EdgeInsets.all(8.0),
+                                                      child: TextField(
+                                                        controller: _controllerStateLine[indexRow],
+                                                        decoration: InputDecoration(
+                                                            border: OutlineInputBorder(),
+                                                        ),
+                                                         onChanged: (s){
+                                                          lineEdit[indexRow]=true;
+                                                         },
+                                                      ),
+                                                    ),
                                                   ),
                                                 ]
                                             )
@@ -343,10 +387,13 @@ class _newSendState extends State<newSend> {
                                         ),
                                           if(select == -1)
                                           Padding(
-                                            padding: const EdgeInsets.only(left: 350.0),
+                                            padding: const EdgeInsets.only(left: 290.0),
                                             child: Row(
                                               children: [
-                                                const  Text("Seleccionar todas"),
+                                                const Padding(
+                                                  padding: EdgeInsets.only(right: 15.0),
+                                                  child: Text("Seleccionar todas"),
+                                                ),
                                                 Checkbox(
                                                   value: allSelect,
                                                   onChanged: (value) {
@@ -382,6 +429,8 @@ class _newSendState extends State<newSend> {
                                           ),
                                           onPressed: () {
                                             setState(() {
+                                              List <LineSend> current = [];
+                                              int idInit = line.length +1;
                                               if(select == -1)
                                               {
                                                 int allLines =0;
@@ -389,15 +438,17 @@ class _newSendState extends State<newSend> {
                                                 {
                                                   if(Send[i] == true)
                                                   {
-                                                    line.add(
+                                                    int idNew = idInit + current.length;
+
+                                                    current.add(
                                                         LineSend(
-                                                            id: line.length.toString(),
+                                                            id: idNew.toString(),
                                                             date: controllerSearch.text,
                                                             factory: factories[i].name,
                                                             observations: _controllersObserLine[i].text,
-                                                            state:'Preparado')
-                                                    );
-                                                    allLines++;
+                                                            state: _controllerStateLine[i].text)
+                                                      );
+                                                      allLines++;
                                                   }
                                                 }
 
@@ -406,94 +457,68 @@ class _newSendState extends State<newSend> {
                                               }
                                               else
                                               {
-                                                  int number = -1;
-                                                  int numberDay = 0;
-                                                  bool chargue = false;
-                                                  int allLinesModify = 0;
+                                                int allLinesModify=0;
 
-                                                  if(type=="Fecha:  ")
+                                                for(int i = 0; i <lineEdit.length; i++)
+                                                {
+                                                   if(lineEdit[i]==true)
+                                                   {
+                                                      allLinesModify++;
+                                                   }
+                                                }
+
+                                                String id='';
+                                                for (int i = 0; i < lineSelected.length; i++)
+                                                {
+
+                                                  id=lineSelected[i].id;
+                                                  for (int y = 0; y < lineSelected.length; y++)
                                                   {
-                                                         for(int i = 0; i < line.length; i++)
-                                                         {
-                                                              if(line[i].showFormatDate(line[i].date) == controllerSearch.text && chargue == false)
-                                                              {
-                                                                   number= int.parse(line[i].id)-1;
-                                                                   chargue = true;
-                                                              }
-                                                         }
-
-                                                         for(int i = number ; i < line.length; i++)
-                                                         {
-                                                             if(lineEdit[i]==true)
-                                                             {
-                                                                line[i].observations = _controllersObserLine[numberDay].text;
-                                                                allLinesModify++;
-                                                             }
-                                                             number++;
-                                                             numberDay++;
-                                                         }
-
-
-                                                  }
-                                                  else
-                                                  {
-
-                                                    for(int i = 0 ; i < lineSelected.length; i++)
+                                                    if(lineSelected[i].id == id)
                                                     {
-                                                      if(lineEdit[i]==true)
-                                                      {
-                                                        lineSelected[i].observations = _controllersObserLine[i].text;
-                                                        allLinesModify++;
-                                                      }
-
+                                                      lineSelected[i].state =_controllerStateLine[i].text;
+                                                      lineSelected[i].observations = _controllersObserLine[i].text;
                                                     }
-                                                      List<LineSend> tmp = [];
-
-                                                      for(int i = 0 ; i < line.length; i++)
-                                                      {
-                                                          LineSend current = line[i];
-
-                                                           for(int x = 0 ; x < lineSelected.length; x++)
-                                                           {
-                                                                if(current == lineSelected[x])
-                                                                {
-                                                                   current = lineSelected[x];
-                                                                }
-                                                           }
-
-                                                          tmp.add(current);
-                                                      }
-
-                                                      line.clear();
-                                                      line = tmp;
-
                                                   }
+                                                }
 
-                                                  String action ='';
-                                                  if (allLinesModify == 0)
-                                                  {
-                                                    action ='no tiene ninguna linea a modificar';
-                                                    error(context, action);
-                                                  }
-                                                  else
-                                                  {
-                                                    action ='fueron modificadas $allLinesModify lineas';
-                                                    confirm(context,action);
-                                                  }
-
-
+                                                String action ='';
+                                                if (allLinesModify == 0)
+                                                {
+                                                  action ='no tiene ninguna linea a modificar';
+                                                  error(context, action);
+                                                }
+                                                else
+                                                {
+                                                  action ='fueron modificadas $allLinesModify lineas';
+                                                  confirm(context,action);
+                                                }
                                               }
 
+                                              if (conn != null)
+                                              {
+                                                  if(select==-1)
+                                                  {
+                                                      sqlCreateLine(current);
+                                                  }
+                                                  else
+                                                  {
+                                                     sqlModifyLines(lineSelected);
+                                                  }
+                                              }
+                                              else
+                                              {
+                                                line = line + current;
+                                                csvExportatorLines(line);
+                                              }
 
-
-                                              csvExportatorLines(line);
-                                              _controllersObserLine.clear();
                                               lineEdit = List.generate(line.length, (index) => false);
                                             });
 
 
                                           },
                                         ),
+
                                     MaterialButton(
                                       color: Colors.lightBlue,
                                       child: Text(action2,

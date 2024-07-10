@@ -2,8 +2,11 @@ import 'dart:convert';
 import 'package:adaptive_scrollbar/adaptive_scrollbar.dart';
 import 'package:crud_factories/Alertdialogs/confirm.dart';
 import 'package:crud_factories/Alertdialogs/error.dart';
+import 'package:crud_factories/Backend/SQL/createMail.dart';
+import 'package:crud_factories/Backend/SQL/importMail.dart';
+import 'package:crud_factories/Backend/SQL/modifyMail.dart';
 import 'package:crud_factories/Backend/data.dart';
-import 'package:crud_factories/Backend/exportMails.dart';
+import 'package:crud_factories/Backend/CSV/exportMails.dart';
 import 'package:crud_factories/Functions/validatorCamps.dart';
 import 'package:crud_factories/Objects/Mail.dart';
 import 'package:flutter/material.dart';
@@ -171,10 +174,18 @@ class _newMailState extends State<newMail> {
                                         style: const TextStyle(color: Colors.white)
                                     ),
                                     onPressed: () async {
-
                                       final result = await testMail();
-                                      setState(() {
 
+                                      if(result == false)
+                                      {
+                                        String action="No se puede establecer conexion";
+                                        error(context, action);
+                                      }
+                                      else
+                                      {
+
+                                      setState(() {
+                                        List <Mail> current = [];
                                         List <String> allKeys = [];
                                         String nameCamp = "email";
                                         for (int i = 0; i < mails.length; i++)
@@ -203,14 +214,17 @@ class _newMailState extends State<newMail> {
 
                                             List <String> separeAddrres = controllerMail.text.split("@");
                                             List <String> extCompany = separeAddrres[1].split(".");
+
                                             controllerCompany.text = extCompany[0];
 
                                              if(select == -1)
                                              {
-                                               mails.add(Mail(
-                                                   id: mails.length.toString(),
-                                                   company: controllerMail.text,
-                                                   addrres: controllerCompany.text,
+
+                                               int idNew = mails.length+1;
+                                               current.add(Mail(
+                                                   id: idNew.toString(),
+                                                   company: controllerCompany.text,
+                                                   addrres: controllerMail.text,
                                                    password: encodedPass
                                                ));
 
@@ -246,11 +260,30 @@ class _newMailState extends State<newMail> {
                                                  action='Compruebe su usuario o contraseña';
                                                  error(context, action);
                                              }
-
                                           }
                                         }
-                                       csvExportatorMails(mails, select);
+
+                                        if(conn != null)
+                                        {
+                                             if(select==-1)
+                                             {
+                                               sqlCreateMail(current);
+                                             }
+                                             else
+                                             {
+                                               current.add(mails[select]);
+                                               sqlModifyMail(current);
+                                             }
+                                        }
+                                        else
+                                        {
+                                          mails = mails + current;
+                                          csvExportatorMails(mails);
+                                        }
+
                                       });
+                                      }
+
                                     }
                                   ),
                                   MaterialButton(
@@ -295,7 +328,7 @@ class _newMailState extends State<newMail> {
   }
   Future<bool> testMail() async {
 
-    bool connectEmail = false;
+    bool connectEmail = true;
     String username = controllerMail.text;
     String password = "";
 
@@ -317,6 +350,7 @@ class _newMailState extends State<newMail> {
 
       if(controllerCompany.text == "gmail")
       {
+
         final smtpServer = gmail(username,password);
         final sendReport = await send(message,smtpServer);
         print('Message sent: ' + sendReport.toString());
@@ -329,10 +363,8 @@ class _newMailState extends State<newMail> {
       }
 
 
-      connectEmail = true;
-
     } catch (e) {
-      print('${e.toString()}');
+      print(e);
       connectEmail = false;
     }
 
