@@ -36,16 +36,22 @@ class _AppState extends State<App> {
     }
     WidgetsBinding.instance?.addPostFrameCallback((_) async {
 
-        bool SQLbd = await typeConection(context);
 
-        if(SQLbd == true)
-        {
-          setState(() {
-            itenSelect = 2;
-            subIten1Select = 1;
-          });
+
+        try {
+
+          bool SQLbd = await typeConection(context);
+
+          if(SQLbd == true)
+          {
+            setState(() {
+              itenSelect = 2;
+              subIten1Select = 1;
+            });
+          }
+        } catch (Exeption) {
+
         }
-
     });
   }
 
@@ -104,6 +110,7 @@ class _AppState extends State<App> {
                                     width: wItem,
                                     child: const Text("Envio")),
                                 onTap: (){
+
                                   if(factories.isNotEmpty)
                                   {
                                     setState(() {
@@ -116,6 +123,12 @@ class _AppState extends State<App> {
                                   {
                                     String action ='No puede hacer el envio porque no tiene empresas en su base de datos';
                                     error(context,action);
+
+                                    setState(() {
+                                      itenSelect = -1;
+                                      subIten1Select = -1;
+                                      subIten2Select = -1;
+                                    });
                                   }
                                 }
                             ),
@@ -164,7 +177,6 @@ class _AppState extends State<App> {
                                     itenSelect = 1;
                                     subIten1Select = 0;
                                  });
-
                              }
                              else
                              {
@@ -179,8 +191,7 @@ class _AppState extends State<App> {
                                      subIten2Select = 0;
                                    });
                                  }
-
-                                 if(dat == 2)
+                                 else if(dat == 2)
                                  {
                                    setState(() {
                                      itenSelect = 0;
@@ -188,7 +199,14 @@ class _AppState extends State<App> {
                                      subIten2Select = 0;
                                    });
                                  }
-
+                                 else
+                                 {
+                                   setState(() {
+                                     itenSelect = -1;
+                                     subIten1Select = -1;
+                                     subIten2Select = -1;
+                                   });
+                                 }
 
                              }
 
@@ -221,8 +239,7 @@ class _AppState extends State<App> {
                                     subIten2Select = 1;
                                   });
                                 }
-
-                                if(dat == 2)
+                                else if(dat == 2)
                                 {
                                   setState(() {
                                     itenSelect = 0;
@@ -230,6 +247,14 @@ class _AppState extends State<App> {
                                     subIten2Select = 1;
                                   });
                                 }
+                                else
+                               {
+                                 setState(() {
+                                   itenSelect = -1;
+                                   subIten1Select = -1;
+                                   subIten2Select = -1;
+                                 });
+                               }
                               }
 
                       }
@@ -263,13 +288,20 @@ class _AppState extends State<App> {
                                     subIten2Select = 2;
                                   });
                                 }
-
-                                if(dat == 2)
+                                else if(dat == 2)
                                 {
                                   setState(() {
                                     itenSelect = 0;
                                     subIten1Select = 1;
                                     subIten2Select = 1;
+                                  });
+                                }
+                                else
+                                {
+                                  setState(() {
+                                    itenSelect = -1;
+                                    subIten1Select = -1;
+                                    subIten2Select = -1;
                                   });
                                 }
                               }

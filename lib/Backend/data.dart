@@ -9,6 +9,7 @@ int subIten1Select = -1;
 int subIten2Select = -1;
 int subIten1Selection = -1;
 int subIten2Selection = -1;
+
 String BaseDateSelected ="Nuevo";
 var conn;
 
@@ -17,5 +18,4 @@ List<Mail> mails =[];
 List<LineSend> line = [];
 List<String> fileContent =[];
 List<String> dateSends =[];
-List<LineSend> sendsDay = [];
 List<Conection> conections = [];

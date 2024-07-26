@@ -26,7 +26,7 @@ csvImportFactories(List<String> fileContent, List<Factory> factories) async {
 
     select = fileContent[i].split(",");
     allEmp= fileContent[i].split("[");
-    tmp=allEmp[1].substring(0,allEmp[1].length-2);
+    tmp=allEmp[1].substring(0,allEmp[1].length-1);
     allEmp=tmp.split(",");
 
 

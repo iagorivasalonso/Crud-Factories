@@ -17,7 +17,7 @@ import 'package:mailer/smtp_server/hotmail.dart';
 
 class newMail extends StatefulWidget {
 
-int select;
+  int select;
 
   newMail(this.select);
 
@@ -38,17 +38,15 @@ class _newMailState extends State<newMail> {
   late TextEditingController controllerPasVerificator = new TextEditingController();
 
 
-
   @override
   Widget build(BuildContext context) {
-
     int select = widget.select;
 
-    void campCharge(){
+    void campCharge() {
       controllerMail.text = mails[select].addrres;
       controllerCompany.text = mails[select].company;
-      controllerPas.text ="";
-      controllerPasVerificator.text="";
+      controllerPas.text = "";
+      controllerPasVerificator.text = "";
     }
 
     String action = "";
@@ -56,13 +54,12 @@ class _newMailState extends State<newMail> {
     String title = "";
 
     if (select == -1) {
-
       title = "Nuevo ";
       action = "Crear";
       action2 = "Borrar";
     }
     else {
-   campCharge();
+      campCharge();
       title = "Editar ";
       action = "Actualizar";
       action2 = "Deshacer";
@@ -166,148 +163,131 @@ class _newMailState extends State<newMail> {
                             child: SizedBox(
                               width: 200,
                               child: Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                mainAxisAlignment: MainAxisAlignment
+                                    .spaceBetween,
                                 children: [
                                   MaterialButton(
-                                     color: Colors.lightBlue,
-                                    child: Text(action,
-                                        style: const TextStyle(color: Colors.white)
-                                    ),
-                                    onPressed: () async {
-                                      final result = await testMail();
+                                      color: Colors.lightBlue,
+                                      child: Text(action,
+                                          style: const TextStyle(
+                                              color: Colors.white)
+                                      ),
+                                      onPressed: () async {
+                                        final result = await testMail();
 
-                                      if(result == false)
-                                      {
-                                        String action="No se puede establecer conexion";
-                                        error(context, action);
+                                        if (result == false) {
+                                          String action = "No se puede establecer conexion";
+                                          error(context, action);
+                                        }
+                                        else {
+                                          setState(() {
+                                            List <Mail> current = [];
+                                            List <String> allKeys = [];
+                                            String nameCamp = "email";
+                                            for (int i = 0; i < mails.length; i++)
+                                              allKeys.add(mails[i].addrres);
+
+                                            String campOld = mails[select].addrres;
+                                            String pas1 = controllerPas.text;
+                                            String pas2 = controllerPasVerificator.text;
+
+                                            if (select != -1) {
+                                              campOld = mails[select].addrres;
+                                            }
+
+                                            if (primaryKeyCorrect(controllerMail.text, nameCamp,allKeys, campOld, context) == true)
+                                            {
+                                              if (mailCorrect(controllerMail.text) != true)
+                                              {
+                                                action = 'No es un correo electronico valido';
+                                                error(context, action);
+                                              }
+                                              else if (passwordCorrect(pas1, pas2, context) == true)
+                                              {
+                                                Codec<String, String> stringToBase64 = utf8.fuse(base64);
+                                                String encodedPass = stringToBase64.encode(controllerPas.text);
+
+                                                List <String> separeAddrres = controllerMail.text.split("@");
+                                                List <String> extCompany = separeAddrres[1].split(".");
+
+                                                controllerCompany.text = extCompany[0];
+
+                                                if (select == -1) {
+                                                  int idNew = mails.length + 1;
+                                                  current.add(Mail(
+                                                      id: idNew.toString(),
+                                                      company: controllerCompany
+                                                          .text,
+                                                      addrres: controllerMail
+                                                          .text,
+                                                      password: encodedPass
+                                                  ));
+                                                }
+                                                else {
+                                                  mails[select].addrres =
+                                                      controllerMail.text;
+                                                  mails[select].company =
+                                                      controllerCompany.text;
+                                                  mails[select].password =
+                                                      encodedPass;
+                                                }
+
+
+                                                if (result == true) {
+                                                  String action = '';
+
+                                                  if (select == -1) {
+                                                    action =
+                                                    'El correo se ha dado de alta correctamente';
+                                                    confirm(context, action);
+                                                  }
+                                                  else {
+                                                    action =
+                                                    'El correo se ha modificado correctamente';
+                                                    confirm(context, action);
+                                                  }
+                                                }
+                                                else {
+                                                  action =
+                                                  'Compruebe su usuario o contraseña';
+                                                  error(context, action);
+                                                }
+                                              }
+                                            }
+
+                                            if (conn != null) {
+                                              if (select == -1) {
+                                                sqlCreateMail(current);
+                                              }
+                                              else {
+                                                current.add(mails[select]);
+                                                sqlModifyMail(current);
+                                              }
+                                            }
+                                            else {
+                                              mails = mails + current;
+                                              csvExportatorMails(mails);
+                                            }
+                                          });
+                                        }
                                       }
-                                      else
-                                      {
-
-                                      setState(() {
-                                        List <Mail> current = [];
-                                        List <String> allKeys = [];
-                                        String nameCamp = "email";
-                                        for (int i = 0; i < mails.length; i++)
-                                          allKeys.add(mails[i].addrres);
-
-                                        String campOld =  " ";
-                                        String pas1 = controllerPas.text;
-                                        String pas2 = controllerPasVerificator.text;
-
-                                        if(select != -1)
-                                        {
-                                          campOld = mails[select].addrres;
-                                        }
-
-                                        if(primaryKeyCorrect(controllerMail.text,nameCamp,allKeys,campOld,context) ==  true)
-                                        {
-                                          if(mailCorrect(controllerMail.text) != true)
-                                          {
-                                            action ='No es un correo electronico valido';
-                                            error(context,action);
-                                          }
-                                          else if(passwordCorrect(pas1, pas2, context) == true)
-                                          {
-                                            Codec<String,  String> stringToBase64 = utf8.fuse(base64);
-                                            String encodedPass = stringToBase64.encode(controllerPas.text);
-
-                                            List <String> separeAddrres = controllerMail.text.split("@");
-                                            List <String> extCompany = separeAddrres[1].split(".");
-
-                                            controllerCompany.text = extCompany[0];
-
-                                             if(select == -1)
-                                             {
-
-                                               int idNew = mails.length+1;
-                                               current.add(Mail(
-                                                   id: idNew.toString(),
-                                                   company: controllerCompany.text,
-                                                   addrres: controllerMail.text,
-                                                   password: encodedPass
-                                               ));
-
-
-                                             }
-                                             else
-                                             {
-                                               mails[select].addrres = controllerMail.text;
-                                               mails[select].company = controllerCompany.text;
-                                               mails[select].password = encodedPass;
-
-                                             }
-
-
-                                             if(result == true)
-                                             {
-                                               String action = '';
-
-                                               if(select == -1)
-                                               {
-                                                 action = 'El correo se ha dado de alta correctamente';
-                                                 confirm(context, action);
-                                               }
-                                               else
-                                               {
-                                                 action = 'El correo se ha modificado correctamente';
-                                                 confirm(context, action);
-                                               }
-
-                                             }
-                                             else
-                                             {
-                                                 action='Compruebe su usuario o contraseña';
-                                                 error(context, action);
-                                             }
-                                          }
-                                        }
-
-                                        if(conn != null)
-                                        {
-                                             if(select==-1)
-                                             {
-                                               sqlCreateMail(current);
-                                             }
-                                             else
-                                             {
-                                               current.add(mails[select]);
-                                               sqlModifyMail(current);
-                                             }
-                                        }
-                                        else
-                                        {
-                                          mails = mails + current;
-                                          csvExportatorMails(mails);
-                                        }
-
-                                      });
-                                      }
-
-                                    }
                                   ),
                                   MaterialButton(
                                     color: Colors.lightBlue,
                                     child: Text(action2,
-                                    style:  const TextStyle(color: Colors.white),),
+                                      style: const TextStyle(
+                                          color: Colors.white),),
                                     onPressed: () async {
                                       setState(() {
-
-                                         if(select == -1)
-                                         {
-                                           controllerMail.text = "";
-                                           controllerPas.text = "";
-                                           controllerPasVerificator.text = "";
-                                         }
-                                         else
-                                         {
-                                             campCharge();
-                                         }
-
-
+                                        if (select == -1) {
+                                          controllerMail.text = "";
+                                          controllerPas.text = "";
+                                          controllerPasVerificator.text = "";
+                                        }
+                                        else {
+                                          campCharge();
+                                        }
                                       });
-
-
                                     },
                                   ),
                                 ],
@@ -326,43 +306,38 @@ class _newMailState extends State<newMail> {
       ),
     );
   }
-  Future<bool> testMail() async {
 
+  Future<bool> testMail() async {
     bool connectEmail = true;
     String username = controllerMail.text;
     String password = "";
 
-     if(controllerPas.text == controllerPasVerificator.text)
-     {
-       password = controllerPas.text;
-     }
+    if (controllerPas.text == controllerPasVerificator.text) {
+      password = controllerPas.text;
+    }
 
     List <String> separeAddrres = controllerMail.text.split("@");
 
     try {
-
       final message = Message()
-        ..from = Address(username,separeAddrres[0])
+        ..from = Address(username, separeAddrres[0])
         ..recipients.add(username)
         ..subject = 'Prueba de conexion'
         ..text = 'Esto es una prueba de conexion desde la aplicacion';
 
 
-      if(controllerCompany.text == "gmail")
-      {
-
-        final smtpServer = gmail(username,password);
-        final sendReport = await send(message,smtpServer);
+      if (controllerCompany.text == "gmail") {
+        final smtpServer = gmail(username, password);
+        final sendReport = await send(message, smtpServer);
         print('Message sent: ' + sendReport.toString());
       }
-      else if (controllerCompany.text == "hotmail")
-      {
-        final smtpServer = hotmail(username,password);
-        final sendReport = await send(message,smtpServer);
+      else if (controllerCompany.text == "hotmail") {
+        final smtpServer = hotmail(username, password);
+        final sendReport = await send(message, smtpServer);
         print('Message sent: ' + sendReport.toString());
       }
-
-
+      String action ='Conexion establecida';
+      confirm(context,action);
     } catch (e) {
       print(e);
       connectEmail = false;
@@ -370,8 +345,4 @@ class _newMailState extends State<newMail> {
 
     return connectEmail;
   }
-
 }
-
-
-

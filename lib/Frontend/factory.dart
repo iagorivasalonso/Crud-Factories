@@ -478,7 +478,9 @@ class _newFactoryState extends State<newFactory> {
                                         setState(() {
                                           List <Factory> current=[];
                                           List <String> allKeys = [];
+
                                           String nameCamp = "nombre";
+
                                           for (int i = 0; i < factories.length; i++)
                                             allKeys.add(factories[i].name);
 
@@ -593,11 +595,11 @@ class _newFactoryState extends State<newFactory> {
                                                       factories[select].address['postalCode'] = controllerPostalCode.text ;
                                                       factories[select].address['province'] = controllerProvince.text;
                                                       factories[select].contacts = contacs;
+
                                                       action ='El usuario se ha modificado correctamente';
                                                       confirm(context,action);
 
                                                     }
-
 
                                                     if(conn != null)
                                                     {
@@ -607,7 +609,6 @@ class _newFactoryState extends State<newFactory> {
                                                          }
                                                          else
                                                          {
-
                                                            current.add(factories[select]);
                                                            sqlModifyFActory(current);
                                                          }
@@ -623,8 +624,6 @@ class _newFactoryState extends State<newFactory> {
                                               }
                                             }
                                           }
-
-
                                         });
                                     },
                                   ),

@@ -4,6 +4,7 @@ import 'package:crud_factories/Frontend/factory.dart';
 import 'package:crud_factories/Frontend/mail.dart';
 import 'package:crud_factories/Frontend/send.dart';
 import 'package:crud_factories/Objects/Factory.dart';
+import 'package:crud_factories/Objects/LineSend.dart';
 import 'package:crud_factories/Widgets/defaultCard.dart';
 import 'package:crud_factories/Widgets/factoryCard.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
@@ -29,6 +30,7 @@ class _viewState extends State<view> {
   List<String> filterList = [];
   List<String> filterListSends = ['Fecha', 'Empresa'];
   List<String> filterListFactories = ['Nombre','Dirrección','Telefono','Ciudad'];
+  List <LineSend> sendsDay = [];
 
   int opSelected = 0;
   String selectCamp = "";

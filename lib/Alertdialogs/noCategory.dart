@@ -29,13 +29,16 @@ int dato = await showDialog(
                             style: TextStyle(color: Colors.white)
                         ),
                       ),
-                      MaterialButton(
-                        onPressed: () {
-                          Navigator.of(context).pop(2);
-                        },
-                        color: Colors.lightBlue,
-                        child: const Text('Importar',
-                            style: TextStyle(color: Colors.white)
+                      Padding(
+                        padding: const EdgeInsets.only(left: 20.0, right: 20.0),
+                        child: MaterialButton(
+                          onPressed: () {
+                            Navigator.of(context).pop(2);
+                          },
+                          color: Colors.lightBlue,
+                          child: const Text('Importar',
+                              style: TextStyle(color: Colors.white)
+                          ),
                         ),
                       ),
                       MaterialButton(

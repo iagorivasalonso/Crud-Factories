@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 
 error(BuildContext  context, String action, [format]) async {
 
+  bool err = false;
+
   showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -10,7 +12,7 @@ error(BuildContext  context, String action, [format]) async {
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(0)),
           title:  const Text('Error'),
           content: format != null
-                  ? Container(
+                  ? SizedBox(
                      height: 45,
                      child: Column(
                        children: [
@@ -40,6 +42,6 @@ error(BuildContext  context, String action, [format]) async {
         );
 
       });
-
+     return err;
 }
 
