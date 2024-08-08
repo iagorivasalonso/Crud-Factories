@@ -2,19 +2,21 @@ import 'package:flutter/material.dart';
 
 typeConection (BuildContext  context,) async {
 
-  bool regisEdit = await showDialog(
+  bool registEdit = false;
+
+  registEdit = await showDialog(
+
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(0)),
           title:  const Text('Tipo de fuente'),
-          content: Text("Que tipo de base de datos desea utilizar"),
+          content: Text("¿Que tipo de base de datos desea utilizar?"),
           actions: [
             Padding(
               padding: const EdgeInsets.only(bottom: 10.0),
               child: MaterialButton(
                 onPressed: () {
-
                   Navigator.of(context).pop(true);
                 },
                 color: Colors.lightBlue,
@@ -42,6 +44,6 @@ typeConection (BuildContext  context,) async {
       });
 
 
-  return regisEdit;
+  return registEdit;
 }
 

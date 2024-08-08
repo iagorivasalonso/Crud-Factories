@@ -1,15 +1,18 @@
+import 'dart:io';
+
 import 'package:adaptive_scrollbar/adaptive_scrollbar.dart';
 import 'package:crud_factories/Alertdialogs/confirm.dart';
 import 'package:crud_factories/Alertdialogs/confirmDelete.dart';
 import 'package:crud_factories/Alertdialogs/confirmEdit.dart';
 import 'package:crud_factories/Alertdialogs/error.dart';
 import 'package:crud_factories/Backend/CSV/chargueData%20csv.dart';
-import 'package:crud_factories/Backend/SQL/createTables.dart';
+import 'package:crud_factories/Backend/SQL/manageSQl.dart';
 import 'package:crud_factories/Backend/SQL/importFactories.dart';
 import 'package:crud_factories/Backend/SQL/importLines.dart';
 import 'package:crud_factories/Backend/SQL/importMail.dart';
 import 'package:crud_factories/Backend/data.dart';
 import 'package:crud_factories/Backend/CSV/exportConections.dart';
+import 'package:crud_factories/Functions/validatorCamps.dart';
 import 'package:crud_factories/Objects/Conection.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
@@ -36,19 +39,31 @@ class _conectionState extends State<conection> {
   late TextEditingController controllerUser = new TextEditingController();
   late TextEditingController controllerPas = new TextEditingController();
 
-  Conection? selectedConection;
+
 
   bool modify= false;
-  String action = "Nueva";
+  String action0 = "Editar";
+  String action1 = "Nueva";
+  String action2 = "Eliminar";
   int select = - 1;
   bool editText = true;
+  bool serverConnected = false;
+  Conection? selectedConection;
+  String host = "";
+  int port = 0;
+  String user = "";
+  String password = "";
+  String bdName = "";
+  String nameBDOld = "";
+  bool conectNew = false;
+
 
   @override
   Widget build(BuildContext context) {
 
-    if(conn!=null)
+    if(conn != null && action0 == "Editar")
     {
-      action = "Desconectar";
+      action1 = "Desconectar";
 
         for(int i = 0; i <conections.length; i++)
         {
@@ -61,10 +76,10 @@ class _conectionState extends State<conection> {
              controllerPort.text = conections[i].port;
              controllerUser.text = conections[i].user;
              controllerPas.text = conections[i].password;
+             nameBDOld = conections[i].database;
+              editText = false;
            }
         }
-
-       editText = false;
     }
 
     return Scaffold(
@@ -103,50 +118,102 @@ class _conectionState extends State<conection> {
                             padding: EdgeInsets.only(top:20.0, bottom: 30.0,left: 20.0),
                             child: Row(
                               children: [
-                                Text('Base de datos: '),
-                                SizedBox(
-                                  width: 350,
-                                  height: 40,
-                                  child: DropdownButtonHideUnderline(
-                                    child: DropdownButton2<Conection>(
-                                      hint:  Text("Nueva"),
-                                      items: conections.map((Conection itemConection) => DropdownMenuItem<Conection>(
-                                        value:  itemConection,
-                                        child: Text(itemConection.database),
-                                      )).toList(),
-                                      value: selectedConection,
-                                      onChanged: (Conection? conectionChoose) {
-                                        setState(() {
-                                          action = "Conectar";
-                                          select=int.parse(conectionChoose!.id)-1;
-                                          selectedConection = conectionChoose;
-                                          controllerNameBD.text = conectionChoose!.database;
-                                          controllerHost.text = conectionChoose!.host;
-                                          controllerPort.text = conectionChoose!.port;
-                                          controllerUser.text = conectionChoose!.user;
-                                          controllerPas.text = conectionChoose!.password;
+                                Text('Conexion: '),
+                                Padding(
+                                  padding: const EdgeInsets.only(left: 20.0, right: 120.0),
+                                  child: SizedBox(
+                                    width: 350,
+                                    height: 40,
+                                    child: DropdownButtonHideUnderline(
+                                      child: DropdownButton2<Conection>(
+                                        hint:  Text("Nueva"),
+                                        items: conections.map((Conection itemConection) => DropdownMenuItem<Conection>(
+                                          value:  itemConection,
+                                          child: Text(itemConection.database),
+                                        )).toList(),
+                                        value: selectedConection,
+                                        onChanged: (Conection? conectionChoose) {
+                                          setState(() {
+                                            try{
 
-                                        });
-                                      },
-                                      buttonStyleData: const ButtonStyleData(
-                                        height: 50,
-                                        width: 350,
-                                        padding: EdgeInsets.only(left: 14, right: 14),
-                                      ),
-                                      dropdownStyleData: DropdownStyleData(
-                                        maxHeight: 200,
-                                        width: 330,
-                                        scrollbarTheme: ScrollbarThemeData(
-                                          thickness: MaterialStateProperty.all(6),
+                                              action1 = "Conectar";
+                                              select=int.parse(conectionChoose!.id)-1;
+                                              selectedConection = conectionChoose;
+                                              controllerNameBD.text = conectionChoose!.database;
+                                              controllerHost.text = conectionChoose!.host;
+                                              controllerPort.text = conectionChoose!.port;
+                                              controllerUser.text = conectionChoose!.user;
+                                              controllerPas.text = conectionChoose!.password;
+
+                                              host = controllerHost.text;
+                                              port = int.parse(controllerPort.text);
+                                              user = controllerUser.text;
+                                              password = controllerPas.text;
+                                              bdName = controllerNameBD.text;
+                                              nameBDOld = conectionChoose!.database;
+
+                                            }catch(exeption){
+                                              String err ="Conexion no valida";
+                                              error(context, err);
+                                            }
+
+
+
+                                          });
+                                        },
+                                        buttonStyleData: const ButtonStyleData(
+                                          height: 50,
+                                          width: 350,
+                                          padding: EdgeInsets.only(left: 14, right: 14),
+                                        ),
+                                        dropdownStyleData: DropdownStyleData(
+                                          maxHeight: 200,
+                                          width: 330,
+                                          scrollbarTheme: ScrollbarThemeData(
+                                            thickness: MaterialStateProperty.all(6),
+                                          ),
                                         ),
                                       ),
                                     ),
                                   ),
                                 ),
+                                MaterialButton(
+                                    color: Colors.lightBlue,
+                                    child: Text(action0,
+                                      style: TextStyle(color: Colors.white),),
+                                    onPressed: (){
+                                         setState(() {
+
+                                           if(conn != null)
+                                           {
+                                             if(action0=="Volver")
+                                             {
+                                               action0 = "Editar";
+                                               editText = false;
+                                               action1 = "Desconectar";
+                                               action2 = "Eliminar";
+                                             }
+                                             else
+                                             {
+                                                 action0 = "Volver";
+                                                 editText = true;
+                                                 action1 = "Guardar";
+                                                 action2 = "Cancelar";
+                                             }
+
+
+                                           }
+                                           else
+                                           {
+                                             String action1 ="No esta conectado a ninguna base de datos";
+                                             error(context, action1);
+                                           }
+                                       });
+                                    })
                               ],
                             ),
                           ),
-                         Padding(
+                          Padding(
                             padding: EdgeInsets.only(top:20.0, bottom: 30.0,left: 20.0),
                             child: Row(
                               children: [
@@ -160,10 +227,6 @@ class _conectionState extends State<conection> {
                                     decoration: const InputDecoration(
                                       border: OutlineInputBorder(),
                                     ),
-                                    onChanged: (s){
-                                      modify = true;
-
-                                    },
                                   ),
                                 ),
                               ],
@@ -183,10 +246,6 @@ class _conectionState extends State<conection> {
                                     decoration: const InputDecoration(
                                       border: OutlineInputBorder(),
                                     ),
-                                    onChanged: (s){
-                                      modify = true;
-
-                                    },
                                   ),
                                 ),
                                 const Padding(
@@ -202,10 +261,6 @@ class _conectionState extends State<conection> {
                                     decoration: const InputDecoration(
                                       border: OutlineInputBorder(),
                                     ),
-                                    onChanged: (s){
-                                      modify = true;
-
-                                    },
                                   ),
                                 ),
                               ],
@@ -225,10 +280,6 @@ class _conectionState extends State<conection> {
                                     decoration: const InputDecoration(
                                       border: OutlineInputBorder(),
                                     ),
-                                    onChanged: (s){
-                                      modify = true;
-
-                                    },
                                   ),
                                 ),
                                 const Padding(
@@ -244,10 +295,6 @@ class _conectionState extends State<conection> {
                                     decoration: const InputDecoration(
                                       border: OutlineInputBorder(),
                                     ),
-                                    onChanged: (s){
-                                      modify = true;
-
-                                    },
                                   ),
                                 ),
                               ],
@@ -262,165 +309,180 @@ class _conectionState extends State<conection> {
                                 children: [
                                   MaterialButton(
                                       color: Colors.lightBlue,
-                                      child: Text(action,
+                                      child: Text(action1,
                                           style: TextStyle(color: Colors.white)
                                       ),
                                     onPressed: () async {
-                                      if(action == "Desconectar")
-                                      {
-                                        setState(() {
-                                          editText = true;
-                                          action = "Conectar";
-                                        });
+                                        String bd_action = "";
+                                        String db = "";
 
-                                        String action1 ='Ha cerrado la conexion';
-                                        confirm(context,action1);
+                                        try{
 
-                                        conn = null;
 
-                                        factories.clear();
-                                        mails.clear();
-                                        line.clear();
+                                        host = controllerHost.text;
+                                        port = int.parse(controllerPort.text);
+                                        user = controllerUser.text;
+                                        password = controllerPas.text;
+                                        bdName = controllerNameBD.text;
 
-                                        chargueDataCSV();
-                                      }
-                                      else
-                                      {
-                                        setState(()  {
-                                          if(modify == true || controllerNameBD.text !="")
-                                          {
-
-                                            if(action == "Nueva")
-                                            {
-                                              int idNew = conections.length +1;
-                                              conections.add(Conection(
-                                                  id: idNew.toString(),
-                                                  database: controllerNameBD.text,
-                                                  port: controllerPort.text,
-                                                  host: controllerHost.text,
-                                                  user: controllerUser.text,
-                                                  password: controllerPas.text
-                                              ));
-                                              String action1 ='La conexion se ha creado correctamente';
-                                              confirm(context,action1);
-                                              modify = false;
-                                            }
-                                            else
-                                            {
-                                              if( modify == true)
-                                              {
-                                                conections[select].database = controllerNameBD.text;
-                                                conections[select].port = controllerPort.text;
-                                                conections[select].host = controllerHost.text;
-                                                conections[select].user = controllerUser.text;
-                                                conections[select].password = controllerPas.text;
-
-                                              }
-                                            }
-                                          }
-                                        });
-                                        bool edit = false;
-
-                                        if( modify == true)
+                                        if(action1 == "Desconectar")
                                         {
-                                          String action1 ='conexion';
-                                          edit = await confirmEdit(context,action1);
-                                        }
 
-                                        if(modify == false || edit ==true)
-                                        {
-                                          String host = controllerHost.text;
-                                          int port = int.parse(controllerPort.text);
-                                          String user = controllerUser.text;
-                                          String password = controllerPas.text;
-                                          String Bdata = controllerNameBD.text;
-                                          
-                                          try{
-                                            var settings = ConnectionSettings(
-                                                host: host,
-                                                port: port,
-                                                user: user,
-                                                password: password,
-                                                db: Bdata
-                                            );
-
-                                            conn = await MySqlConnection.connect(settings);
-
-                                            if(conn != null)
-                                            {
-                                              String action1 ='connectado a $Bdata';
-                                              confirm(context,action1);
-                                              BaseDateSelected= Bdata;
-
-                                              createSql();
-
-                                              factories.clear();
-                                              mails.clear();
-                                              line.clear();
-
-                                              sqlImportFactories();
-                                              sqlImportMails();
-                                              sqlImportLines();
-
-
-                                              setState(() {
-                                                editText = false;
-                                                action ="Desconectar";
-                                              });
-
-
-                                            }
-
-                                          } catch (SQLException){
-                                            String action1 ="no se pudo realizar la conexion";
-                                            error(context, action1);
-                                          }
-
+                                            bd_action = "Desconection";
+                                            db = "";
+                                            actionsDB(bd_action,db);
+                                            setState(() {
+                                               action1 = "Conectar";
+                                            });
 
                                         }
+                                        else if(action1 == "Nueva")
+                                        {
+                                             List <String> allKeys = [];
 
-                                      }
+                                             String nameCamp = "base de datos";
 
-                                       //
-                                      csvExportatorConections(conections);
-                                       modify = false;
+                                             for (int i = 0; i < conections.length; i++)
+                                             {
+                                               allKeys.add(conections[i].database);
+                                             }
 
 
+                                             String campOld = " ";
+
+                                             if(action1 != "Nueva")
+                                             {
+                                                campOld =conections[select].database;
+                                             }
+
+                                             if (primaryKeyCorrect(controllerNameBD.text, nameCamp,allKeys, campOld, context) == true)
+                                             {
+                                               if(action1 == "Nueva")
+                                               {
+                                                  int idNew = conections.length +1;
+                                                  conections.add(Conection(
+                                                     id: idNew.toString(),
+                                                     database: controllerNameBD.text,
+                                                     port: controllerPort.text,
+                                                     host: controllerHost.text,
+                                                     user: controllerUser.text,
+                                                     password: controllerPas.text
+                                                   ));
+                                                   String action1 ='La conexion se ha creado correctamente';
+                                                   confirm(context,action1);
+
+                                                   modify = false;
+
+                                                   ///create bd
+                                                     bd_action ="Nueva";
+                                                     db = "test";
+                                                     actionsDB(bd_action,db);
+
+                                                      setState(() {
+                                                        action1 ="Conectar";
+                                                      });
+
+
+                                               }
+                                               if(action1 == "Guardar")
+                                               {
+
+                                                   conections[select].database = controllerNameBD.text;
+                                                   conections[select].port = controllerPort.text;
+                                                   conections[select].host = controllerHost.text;
+                                                   conections[select].user = controllerUser.text;
+                                                   conections[select].password = controllerPas.text;
+
+                                                   bd_action ="Edition";
+                                                   db = nameBDOld;
+                                                  actionsDB(bd_action,db);
+
+
+                                               }
+                                            }
+                                        }
+                                        else if(action1 == "Guardar") {
+                                          bd_action = "Guardar";
+                                          db = controllerNameBD.text;
+                                          actionsDB(bd_action, db);
+                                        }
+                                        else if(action1 == "Conectar" || conn != null) {
+                                          bd_action = "Conection";
+                                          db = controllerNameBD.text;
+                                          actionsDB(bd_action, db);
+                                        }
+
+                                    }catch(Exception ){
+
+                                          String action="No pueden ir campos en blanco";
+                                          error(context, action);
+                                     }
                                     },
-
-
-
                                   ),
                                   MaterialButton(
                                     color: Colors.lightBlue,
-                                    child: const Text("Eliminar",
+                                    child:  Text(action2,
                                       style:  TextStyle(color: Colors.white),),
                                     onPressed: () async{
+                                      String err ="";
+                                        try{
 
-                                         if(action !=  "Nueva")
-                                         {
-                                           String action1="base de datos";
-                                           bool confirm = await confirmDelete(context, action1);
+                                          if(conn != null)
+                                          {
+                                            String nameBD = conections[select].database;
+                                            String action1="base de datos $nameBD";
+                                            bool confirm1 = await confirmDelete(context, action1);
 
-                                            if(confirm == true)
+
+                                            if(confirm1 == true)
                                             {
-                                              setState(() {
-                                                selectedConection=null;
-                                              });
 
-                                             conections.removeAt(select);
-                                             csvExportatorConections(conections);
-                                            }
+                                                 err = await deleteDB(context, nameBD,conn);
 
-                                         }
+                                                 if(err.isEmpty)
+                                                 {
+                                                      setState(() {
+                                                          selectedConection = null;
+                                                       });
 
-                                           controllerNameBD.text = "";
-                                           controllerPort.text = "";
-                                           controllerHost.text = "";
-                                           controllerUser.text = "";
-                                           controllerPas.text = "";
+                                                     conections.removeAt(select);
+                                                     for (int i = 0; i <conections.length; i++)
+                                                     {
+                                                         int idN = i + 1;
+                                                         conections[i].id = idN.toString();
+                                                     }
+                                                      action1 ='Se ha eliminado correctamente la conexion';
+                                                      confirm(context,action1);
+                                                 }
+
+                                              }
 
 
+
+
+                                          }
+                                          else
+                                          {
+                                            String action1 ="No esta conectado a ninguna base de datos";
+                                            error(context, action1);
+                                          }
+                                          setState(() {
+                                            conn = null;
+                                            action1 = "Nueva";
+
+                                            controllerNameBD.text = "";
+                                            controllerPort.text = "";
+                                            controllerHost.text = "";
+                                            controllerUser.text = "";
+                                            controllerPas.text = "";
+
+                                            editText = true;
+
+                                          });
+                                        }catch(Exeption ){
+                                          err= "no Se pudo eliminar";
+                                          error(context, err);
+                                        }
 
 
                                     },
@@ -443,4 +505,189 @@ class _conectionState extends State<conection> {
 
 
   }
+ actionsDB(String bd_action, String db) async {
+
+    var settings;
+    bool connect = true;
+
+    try {
+
+      settings = ConnectionSettings(
+        host: host,
+        port: port,
+        user: user,
+        password: password,
+        db: db,
+      );
+       conn = await MySqlConnection.connect(settings);
+
+    } on Exception catch( e){
+
+      if(bd_action == "Nueva" ||bd_action == "Conection")
+      {
+        serverConnect();
+      }
+
+
+      try{
+        conn = await MySqlConnection.connect(settings);
+
+      } catch(exeption){
+
+        if(bd_action == "Nueva" || bd_action == "Conection")
+        {
+          String err = "No hay conexion con el servidor";
+          error(context, err);
+        }
+
+      }
+
+
+    } catch(SQLExeption){
+
+        String type = "Error Sql";
+
+         if(SQLExeption.toString().contains("Unknown database"))
+         {
+               if(bd_action != "Guardar")
+               {
+                 type = "No  base de datos con el nombre $db";
+               }
+         }
+         if(SQLExeption.toString().contains("is not allowed to connect to this MySQL server"))
+         {
+             type = "No se pudo conectar con el servidor";
+         }
+         if(SQLExeption.toString().contains("SocketException: El equipo remoto rechazó la conexión de red."))
+         {
+            type ="El puerto no es correcto";
+         }
+        if(SQLExeption.toString().contains(" Access denied for user"))
+        {
+           type = "El usuario o la contraseña son incorrectos";
+        }
+        if(type.isNotEmpty)
+        {
+          error(context, type);
+        }
+
+    }
+
+       switch(bd_action)
+       {
+         case "Nueva":
+
+                 String err = await createDB(context, bdName,conn);
+                 conn = null;
+
+                 if(err.isEmpty)
+                 {
+                   setState(() {
+                     action1 = "Conectar";
+                   });
+                 }
+
+           break;
+
+         case "Desconection":
+
+            String action1 ='Ha cerrado la conexion';
+            confirm(context,action1);
+            editText = true;
+
+            conn = null;
+
+            factories.clear();
+            mails.clear();
+            line.clear();
+
+            chargueDataCSV();
+
+            setState(() {
+              action1 = "Conectar";
+            });
+
+          break;
+
+         case "Conection":
+
+           if(conn != null)
+           {
+             String action1 ='Esta conectado a $bdName';
+             BaseDateSelected= bdName;
+             csvExportatorConections(conections);
+             String err = await createTables(context);
+
+             if(err.isEmpty)
+             {
+               confirm(context,action1);
+               editText =false;
+
+               factories.clear();
+               mails.clear();
+               line.clear();
+
+               sqlImportFactories();
+               sqlImportMails();
+               sqlImportLines();
+
+               setState(() {
+                 action1 = "Conectar";
+               });
+             }
+
+           }
+           break;
+
+         case "Guardar":
+
+              String NameBDNew = controllerNameBD.text;
+              String err = await editDB(context,nameBDOld,NameBDNew);
+
+              int idSelect=-1;
+
+              for(int i = 0; i < conections.length; i++)
+              {
+                 if(nameBDOld == conections[i].database)
+                 {
+                    idSelect = i;
+                 }
+              }
+              if(err.isEmpty)
+              {
+                setState(() {
+                  conections[idSelect].database = NameBDNew;
+                  csvExportatorConections(conections);
+                });
+
+                String action1 = "La conexion fue modificada correctamente";
+                confirm(context,action1);
+
+                setState(() {
+                  action0 = "Editar";
+                  editText = false;
+                  action1 = "Desconectar";
+                  action2 = "Eliminar";
+                });
+              }
+
+           break;
+
+       }
+  }
 }
+
+serverConnect() async {
+
+    var executable = 'D:/';
+
+    if (Platform.isWindows) {
+      executable = 'D:/USBWebserver v8.5/8.5/usbwebserver';
+    }
+    final arguments = <String>[];
+    final process = await Process.start(
+        executable, arguments, runInShell: true);
+    await stdout.addStream(process.stdout);
+
+}
+

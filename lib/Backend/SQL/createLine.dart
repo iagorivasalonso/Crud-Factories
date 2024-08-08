@@ -18,7 +18,7 @@ Future<void> sqlCreateLine(List<LineSend> lines) async {
              'insert into lineSends (id,date,factory,state,observations) values (?,?,?,?,?)',
              [id,date,factory,state,observations]);
     }
-      sqlImportLines();
+
 
   } catch(SQLExeption){
 
