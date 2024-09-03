@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-
 Card factoryCard({
   required String name,
   String? address,
@@ -30,7 +29,8 @@ Card factoryCard({
               ),
               Row(
                 children: [
-                  Expanded(child: Text(address!,
+                  Expanded(
+                    child: Text(address!,
                    maxLines: 1,
                    overflow: TextOverflow.ellipsis,),
                   )
@@ -52,7 +52,8 @@ Card factoryCard({
                           ),
                         ],
                       ),),
-                    Expanded(child: Column(
+                    Expanded(
+                      child: Column(
                       children: [
                         Align(
                           alignment: Alignment.topRight,
