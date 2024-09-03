@@ -3,7 +3,6 @@ import 'package:fluent_ui/fluent_ui.dart';
 import 'package:window_manager/window_manager.dart';
 import 'Alertdialogs/closeApp.dart';
 
-
 void main() {
   runApp(MyApp());
 }
