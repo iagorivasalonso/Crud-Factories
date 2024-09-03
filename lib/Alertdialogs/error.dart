@@ -17,7 +17,7 @@ Future<bool> error(BuildContext  context, String action, [format]) async {
                 children: [
                   headAlert(title:"Error"),
                   Padding(
-                    padding:  EdgeInsets.only(left: 30,top: 25, bottom: 35),
+                    padding:  const EdgeInsets.only(left: 30,top: 25, bottom: 35),
                     child: format == null
                       ? Row(
                       children: [
@@ -36,11 +36,11 @@ Future<bool> error(BuildContext  context, String action, [format]) async {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       MaterialButton(
-                          child: const Text("Aceptar",style: const TextStyle(color: Colors.white),),
                           color: Colors.lightBlue,
                           onPressed:(){
                             Navigator.of(context).pop(false);
-                          }
+                          },
+                          child: const Text("Aceptar",style: const TextStyle(color: Colors.white),)
                       ),
                     ],
                   )

@@ -29,11 +29,11 @@ import 'package:flutter/material.dart';
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       MaterialButton(
-                          child: const Text("Aceptar",style: const TextStyle(color: Colors.white),),
                           color: Colors.lightBlue,
                           onPressed:(){
                             Navigator.of(context).pop(false);
-                          }
+                          },
+                          child: const Text("Aceptar",style:  TextStyle(color: Colors.white),)
                       ),
                     ],
                   )

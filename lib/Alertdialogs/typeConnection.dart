@@ -28,19 +28,19 @@ Future<bool> typeConection (BuildContext  context,) async {
                       Padding(
                         padding: const EdgeInsets.only(left: 90, right: 15),
                         child: MaterialButton(
-                            child: const Text("SQL",style: const TextStyle(color: Colors.white),),
                             color: Colors.lightBlue,
                             onPressed:() async {
                               Navigator.of(context).pop(true);
-                            }
+                            },
+                            child: const Text("SQL",style:  TextStyle(color: Colors.white),)
                         ),
                       ),
                       MaterialButton(
-                          child: const Text("CSV",style: const TextStyle(color: Colors.white),),
                           color: Colors.lightBlue,
                           onPressed:(){
                             Navigator.of(context).pop(false);
-                          }
+                          },
+                          child: const Text("CSV",style: TextStyle(color: Colors.white),)
                       ),
 
                     ],

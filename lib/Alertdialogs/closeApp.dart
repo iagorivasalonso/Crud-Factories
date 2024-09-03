@@ -30,8 +30,8 @@ void closeAlert(BuildContext  context) {
                         Padding(
                           padding: const EdgeInsets.only(left: 90, right: 15),
                           child: MaterialButton(
-                              child: const Text("Si",style: const TextStyle(color: Colors.white),),
                               color: Colors.lightBlue,
+                              child: const Text("Si",style: TextStyle(color: Colors.white),),
                               onPressed:() async {
                                 Navigator.of(context).pop(false);
                                 await windowManager.destroy();
@@ -39,11 +39,11 @@ void closeAlert(BuildContext  context) {
                            ),
                         ),
                         MaterialButton(
-                            child: const Text("No",style: const TextStyle(color: Colors.white),),
                             color: Colors.lightBlue,
                             onPressed:(){
                               Navigator.of(context).pop(false);
-                            }
+                            },
+                            child: const Text("No",style: TextStyle(color: Colors.white),)
                          ),
 
                       ],

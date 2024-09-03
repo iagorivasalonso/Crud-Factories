@@ -17,7 +17,7 @@ Future<int> noCategory(BuildContext  context, String array) async {
                 children: [
                   headAlert(title:"Error"),
                   Padding(
-                    padding:  EdgeInsets.only(left: 30,top: 25, bottom: 35),
+                    padding:  const EdgeInsets.only(left: 30,top: 25, bottom: 35),
                     child: Row(
                       children: [
                         Text('No tiene $array  en la base de datos ¿Que desea hacer?'),
@@ -29,29 +29,29 @@ Future<int> noCategory(BuildContext  context, String array) async {
                       Padding(
                         padding: const EdgeInsets.only(left: 90, right: 15),
                         child: MaterialButton(
-                            child: const Text("Crear",style: const TextStyle(color: Colors.white),),
                             color: Colors.lightBlue,
                             onPressed:() async {
                               Navigator.of(context).pop(1);
-                            }
+                            },
+                            child: const Text("Crear",style: TextStyle(color: Colors.white),)
                         ),
                       ),
                       Padding(
                         padding: const EdgeInsets.only(right: 15),
                         child: MaterialButton(
-                            child: const Text("Importar",style: const TextStyle(color: Colors.white),),
                             color: Colors.lightBlue,
                             onPressed:(){
                               Navigator.of(context).pop(2);
-                            }
+                            },
+                            child: const Text("Importar",style: TextStyle(color: Colors.white),)
                         ),
                       ),
                       MaterialButton(
-                          child: const Text("Cancelar",style: const TextStyle(color: Colors.white),),
                           color: Colors.lightBlue,
                           onPressed:(){
                             Navigator.of(context).pop(3);
-                          }
+                          },
+                          child: const Text("Cancelar",style: TextStyle(color: Colors.white),)
                       ),
                     ],
                   )

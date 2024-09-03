@@ -17,7 +17,7 @@ Future<bool> noFind(BuildContext  context, bool noDat, String strindDialog) asyn
                 children: [
                   headAlert(title:"Error"),
                   Padding(
-                    padding:  EdgeInsets.only(left: 30,top: 25, bottom: 35),
+                    padding:  const EdgeInsets.only(left: 30,top: 25, bottom: 35),
                     child: Row(
                       children: [
                         Text('$strindDialog no pertenece \n a nuestra base de datos'),
@@ -28,11 +28,11 @@ Future<bool> noFind(BuildContext  context, bool noDat, String strindDialog) asyn
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       MaterialButton(
-                          child: const Text("Aceptar",style: const TextStyle(color: Colors.white),),
                           color: Colors.lightBlue,
                           onPressed:(){
                             Navigator.of(context).pop(true);
-                          }
+                          },
+                          child: const Text("Aceptar",style: TextStyle(color: Colors.white),)
                       ),
                     ],
                   )

@@ -20,7 +20,7 @@ Future<bool> warning(BuildContext  context,String nameCamp) async{
                children: [
                  headAlert(title:"Cuidado"),
                  Padding(
-                   padding:  EdgeInsets.only(left: 30,top: 25, bottom: 35),
+                   padding:  const EdgeInsets.only(left: 30,top: 25, bottom: 35),
                    child: Row(
                      children: [
                        Text('el campo $nameCamp está vacio ¿Desea continuar?'),
@@ -32,19 +32,19 @@ Future<bool> warning(BuildContext  context,String nameCamp) async{
                      Padding(
                        padding: const EdgeInsets.only(left: 90, right: 15),
                        child: MaterialButton(
-                           child: const Text("Si",style: const TextStyle(color: Colors.white),),
                            color: Colors.lightBlue,
                            onPressed:() async {
                              Navigator.of(context).pop(true);
-                           }
+                           },
+                           child: const Text("Si",style: TextStyle(color: Colors.white),)
                        ),
                      ),
                      MaterialButton(
-                         child: const Text("No",style: const TextStyle(color: Colors.white),),
                          color: Colors.lightBlue,
                          onPressed:(){
                            Navigator.of(context).pop(false);
-                         }
+                         },
+                         child: const Text("No",style: TextStyle(color: Colors.white),)
                      ),
 
                    ],
