@@ -61,7 +61,51 @@ bool campEmpty(String camp) {
 bool dateCorrect( String date)
 {
    bool dateValid =  RegExp(r"^[0-3][0-9]+-[0-1][0-9]+-[0-9][0-9][0-9][0-9]").hasMatch(date);
+
+    if(dateValid == true)
+    {
+
+
+        if(date.length == 10)
+        {
+
+          List <String> partDate = date.split("-");
+
+          if(partDate.length == 3)
+          {
+            int dd = int.parse(partDate[0]);
+            int mm = int.parse(partDate[1]);
+            int aa = int.parse(partDate[2]);
+
+            if(dd > 31)
+            {
+              dateValid = false;
+            }
+            else if(mm > 12)
+            {
+              dateValid = false;
+            }
+            else if (aa > 9999)
+            {
+              dateValid = false;
+            }
+          }
+          else
+          {
+            dateValid = false;
+          }
+        }
+        else
+        {
+          dateValid = false;
+        }
+
+
+    }
+
    return dateValid;
+
+
 }
 bool telephoneCorrect(String telephone, BuildContext context) {
 
@@ -72,6 +116,18 @@ bool telephoneCorrect(String telephone, BuildContext context) {
     String action ='El telefono debe de ser numerico';
     error(context,action);
   }
+  else
+  {
+    if(telephone.trim().length!=9)
+    {
+      telephoneValid = false;
+      String action ='El telefono debe de tener 9 digitos';
+      error(context,action);
+
+    }
+  }
+
+
 
   return telephoneValid;
 }
@@ -132,6 +188,17 @@ bool postalCodeCorrect(String postalCode, BuildContext context) {
     String action ='El código postal debe de ser numerico';
     error(context,action);
   }
+  else
+  {
+    if(postalCode.trim().length!=5)
+    {
+      postalCodeValid = false;
+      String action ='El codigo postal debe de tener 5 digitos';
+      error(context,action);
+
+    }
+  }
+
 
   return postalCodeValid;
 }
