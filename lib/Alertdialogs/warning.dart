@@ -4,9 +4,6 @@ import 'package:flutter/material.dart';
 
 Future<bool> warning(BuildContext  context,String nameCamp) async{
 
-
-  Color Cexit = Colors.lightBlue;
-
  bool campEmpty = await showDialog(
      context: context,
      builder: (BuildContext context, ) {
