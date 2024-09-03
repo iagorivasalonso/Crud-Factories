@@ -318,7 +318,6 @@ class _conectionState extends State<conection> {
 
                                         try{
 
-
                                         host = controllerHost.text;
                                         port = int.parse(controllerPort.text);
                                         user = controllerUser.text;
@@ -441,9 +440,22 @@ class _conectionState extends State<conection> {
 
                                                  if(err.isEmpty)
                                                  {
+
                                                       setState(() {
-                                                          selectedConection = null;
-                                                       });
+                                                        conn = null;
+                                                        action1 = "Nueva";
+
+                                                        selectedConection = null;
+
+                                                        controllerNameBD.text = "";
+                                                        controllerPort.text = "";
+                                                        controllerHost.text = "";
+                                                        controllerUser.text = "";
+                                                        controllerPas.text = "";
+
+                                                        editText = true;
+
+                                                      });
 
                                                      conections.removeAt(select);
                                                      for (int i = 0; i <conections.length; i++)
@@ -457,28 +469,13 @@ class _conectionState extends State<conection> {
 
                                               }
 
-
-
-
                                           }
                                           else
                                           {
                                             String action1 ="No esta conectado a ninguna base de datos";
                                             error(context, action1);
                                           }
-                                          setState(() {
-                                            conn = null;
-                                            action1 = "Nueva";
 
-                                            controllerNameBD.text = "";
-                                            controllerPort.text = "";
-                                            controllerHost.text = "";
-                                            controllerUser.text = "";
-                                            controllerPas.text = "";
-
-                                            editText = true;
-
-                                          });
                                         }catch(Exeption ){
                                           err= "no Se pudo eliminar";
                                           error(context, err);
