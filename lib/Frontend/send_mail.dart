@@ -3,6 +3,8 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:adaptive_scrollbar/adaptive_scrollbar.dart';
 import 'package:crud_factories/Alertdialogs/confirm.dart';
+import 'package:crud_factories/Alertdialogs/confirmDelete.dart';
+import 'package:crud_factories/Alertdialogs/confirmEdit.dart';
 import 'package:crud_factories/Alertdialogs/error.dart';
 import 'package:crud_factories/Alertdialogs/warning.dart';
 import 'package:crud_factories/Backend/CSV/exportLines.dart';
@@ -54,8 +56,9 @@ class _sendMailState extends State<sendMail> {
   bool otherMail= false;
   Mail? selectedMail;
   int cantFactories = 0;
+  double marginBox = 0;
   bool mailSave = false;
-
+  String nameRoute = "";
 
   @override
   Widget build(BuildContext context) {
@@ -81,6 +84,7 @@ class _sendMailState extends State<sendMail> {
     }
 
 
+
     return Scaffold(
       body: AdaptiveScrollbar(
         controller: verticalScroll,
@@ -100,8 +104,8 @@ class _sendMailState extends State<sendMail> {
                 scrollDirection: Axis.horizontal,
                 child: Container(
                   height: isList == false
-                            ? 770
-                            : 955,
+                            ? 835
+                            : 1105,
                   width: 880,
                   child: Align(
                     alignment: Alignment.topLeft,
@@ -171,10 +175,8 @@ class _sendMailState extends State<sendMail> {
                                          style: TextStyle(color: Colors.white),),
                                        onPressed: () async {
 
-
                                          setState(() {
-
-                                         //  otherMail = true;
+                                          otherMail = true;
                                          });
 
                                        }
@@ -360,12 +362,12 @@ class _sendMailState extends State<sendMail> {
                                                               
                                                           buttonStyleData: const ButtonStyleData(
                                                             height: 50,
-                                                            width: 250,
+                                                            width: 200,
                                                             padding: EdgeInsets.only(left: 14, right: 14),
                                                           ),
                                                           dropdownStyleData: DropdownStyleData(
                                                             maxHeight: 200,
-                                                            width: 220,
+                                                            width: 200,
                                                             scrollbarTheme: ScrollbarThemeData(
                                                               thickness: MaterialStateProperty.all(6),
                                                             ),
@@ -472,9 +474,7 @@ class _sendMailState extends State<sendMail> {
                                           style:  TextStyle(color: Colors.white),),
                                         onPressed: () {
                                           setState(() {
-
                                             _pickFile();
-
                                           });
 
                                         },
@@ -489,29 +489,87 @@ class _sendMailState extends State<sendMail> {
                                padding: const EdgeInsets.only(left: 90.0,top: 10.0),
                                child: Align(
                                  alignment: Alignment.topLeft,
-                                 child: Row(
+                                 child: Column(
                                    children: [
-                                     Icon(Icons.attach_file_rounded),
-                                     SizedBox(
-                                       height: 30,
-                                       width: 450,
-                                       child: ListView.builder(
-                                         physics: const BouncingScrollPhysics(),
-                                         scrollDirection: Axis.horizontal,
-                                           itemCount: atach.length,
-                                          itemBuilder: (BuildContext context, index) {
-                                                return Padding(
-                                                  padding: const EdgeInsets.all(2.0),
-                                                  child: Container(
-                                                      height: 25,
-                                                       width: 90,
-                                                      color: Colors.black12,
-                                                      child: Text(atach[index].fileName!),
-                                                  ),
-                                                );
-                                          }
-                                       ),
+                                     Row(
+                                       children: [
+                                        const Icon(
+                                             Icons.attach_file_rounded,
+                                             size: 20,
+                                         ),
+                                         SizedBox(
+                                           height: 40,
+                                           width: 450,
+                                           child: ListView.builder(
+                                             physics: const BouncingScrollPhysics(),
+                                             scrollDirection: Axis.horizontal,
+                                               itemCount: atach.length,
+                                              itemBuilder: (BuildContext context, index) {
+                                                    return Padding(
+                                                      padding: const EdgeInsets.all(2.0),
+                                                      child: Container(
+                                                          width: 130,
+                                                          decoration: BoxDecoration(
+                                                             color: Colors.lightBlue[100], //light blue
+                                                             borderRadius: BorderRadius.circular(20.0)
+                                                            ),
+                                                          child: Padding(
+                                                            padding: const EdgeInsets.only(left: 10.0),
+                                                            child: Row(
+                                                              children: [
+                                                                Expanded(
+                                                                  child: MouseRegion(
+                                                                    child: Text(atach[index].fileName!,
+                                                                      maxLines: 1,
+                                                                      overflow: TextOverflow.ellipsis,),
+                                                                      onHover: (s){
+                                                                         setState(() {
+                                                                           nameRoute = atach[index].fileName!;
+                                                                           marginBox = 150.0 * index;
+                                                                         });
+
+                                                                     },
+                                                                    onExit: (s){
+                                                                      setState(() {
+                                                                        nameRoute = "";
+                                                                      });
+                                                                    },
+                                                                  ),
+                                                                ),
+                                                                IconButton(
+                                                                  icon: const Icon(Icons.close,size: 15.0),
+                                                                  onPressed: (){
+                                                                    setState(() {
+                                                                      atach.removeAt(index);
+                                                                    });
+                                                                  },
+                                                                )
+                                                              ],
+                                                            ),
+                                                          ),
+                                                          ),
+
+                                                    );
+                                              }
+                                           ),
+                                         ),
+
+                                       ],
                                      ),
+                                      Padding(
+                                       padding: const EdgeInsets.only(left: 40),
+                                       child: Row(
+                                         children: [
+                                            Padding(
+                                              padding: EdgeInsets.only( left: marginBox),
+                                              child: Text(" $nameRoute ",
+                                                   style: const TextStyle(backgroundColor: Colors.amberAccent),
+                                                 ),
+                                            ),
+
+                                         ],
+                                       ),
+                                     )
                                    ],
                                  ),
                                ),
@@ -660,6 +718,7 @@ class _sendMailState extends State<sendMail> {
                                       style: const TextStyle(color: Colors.white),),
                                     onPressed: () {
                                       setState(() {
+                                        confirmDelete(context, "demo");
                                         isList = false;
                                        controllerMailFrom.text = "";
                                        controllerPass.text ="";
