@@ -1,61 +1,64 @@
+import 'package:crud_factories/Widgets/headAlertDialog.dart';
 import 'package:flutter/material.dart';
 
 
 Future<int> noCategory(BuildContext  context, String array) async {
 
-int dato = await showDialog(
+  int dato = await showDialog(
       context: context,
       builder: (BuildContext context) {
-        return AlertDialog(
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(0)),
-          title:  const Text('Error'),
-          content: Text('No tiene $array  en la base de datos ¿Que desea hacer?'),
-          actions: [
-            Center(
-              child:Padding(
-                padding: const EdgeInsets.only(bottom: 10.0),
-                child: Padding(
-                  padding: const EdgeInsets.only(left: 60, right: 60.0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+       return StatefulBuilder(
+          builder: (BuildContext context, void Function(void Function()) setState) => Dialog(
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(0)),
+            child: SizedBox(
+              width: 450,
+              height: 175,
+              child: Column(
+                children: [
+                  headAlert(title:"Error"),
+                  Padding(
+                    padding:  EdgeInsets.only(left: 30,top: 25, bottom: 35),
+                    child: Row(
+                      children: [
+                        Text('No tiene $array  en la base de datos ¿Que desea hacer?'),
+                      ],
+                    ),
+                  ),
+                  Row(
                     children: [
-                      MaterialButton(
-                        onPressed: () {
-
-                          Navigator.of(context).pop(1);
-                        },
-                        color: Colors.lightBlue,
-                        child: const Text('Crear',
-                            style: TextStyle(color: Colors.white)
+                      Padding(
+                        padding: const EdgeInsets.only(left: 90, right: 15),
+                        child: MaterialButton(
+                            child: const Text("Crear",style: const TextStyle(color: Colors.white),),
+                            color: Colors.lightBlue,
+                            onPressed:() async {
+                              Navigator.of(context).pop(1);
+                            }
                         ),
                       ),
                       Padding(
-                        padding: const EdgeInsets.only(left: 20.0, right: 20.0),
+                        padding: const EdgeInsets.only(right: 15),
                         child: MaterialButton(
-                          onPressed: () {
-                            Navigator.of(context).pop(2);
-                          },
-                          color: Colors.lightBlue,
-                          child: const Text('Importar',
-                              style: TextStyle(color: Colors.white)
-                          ),
+                            child: const Text("Importar",style: const TextStyle(color: Colors.white),),
+                            color: Colors.lightBlue,
+                            onPressed:(){
+                              Navigator.of(context).pop(2);
+                            }
                         ),
                       ),
                       MaterialButton(
-                        onPressed: () {
-                          Navigator.of(context).pop(3);
-                        },
-                        color: Colors.lightBlue,
-                        child:const Text('Cancelar',
-                            style: TextStyle(color: Colors.white)
-                        ),
+                          child: const Text("Cancelar",style: const TextStyle(color: Colors.white),),
+                          color: Colors.lightBlue,
+                          onPressed:(){
+                            Navigator.of(context).pop(3);
+                          }
                       ),
                     ],
-                  ),
-                ),
+                  )
+                ],
               ),
             ),
-          ],
+          ),
         );
 
       });

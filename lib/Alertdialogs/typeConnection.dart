@@ -1,49 +1,59 @@
+import 'package:crud_factories/Widgets/headAlertDialog.dart';
 import 'package:flutter/material.dart';
 
-typeConection (BuildContext  context,) async {
+Future<bool> typeConection (BuildContext  context,) async {
 
-  bool registEdit = false;
-
-  registEdit = await showDialog(
-
+  bool tConnection  = await   showDialog(
       context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(0)),
-          title:  const Text('Tipo de fuente'),
-          content: Text("¿Que tipo de base de datos desea utilizar?"),
-          actions: [
-            Padding(
-              padding: const EdgeInsets.only(bottom: 10.0),
-              child: MaterialButton(
-                onPressed: () {
-                  Navigator.of(context).pop(true);
-                },
-                color: Colors.lightBlue,
-                child: Text('SQL',
-                    style: TextStyle(color: Colors.white)
-                ),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.only(bottom: 10.0),
-              child: MaterialButton(
-                onPressed: () {
+      builder: (BuildContext context, ) {
+        return StatefulBuilder(
+          builder: (BuildContext context, void Function(void Function()) setState) => Dialog(
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(0)),
+            child: SizedBox(
+              width: 340,
+              height: 175,
+              child: Column(
+                children: [
+                  headAlert(title:"Tipo de fuente"),
+                  const Padding(
+                    padding:  EdgeInsets.only(left: 30,top: 25, bottom: 35),
+                    child: Row(
+                      children: [
+                        Text("¿Que tipo de base de datos desea utilizar?")
+                      ],
+                    ),
+                  ),
+                  Row(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.only(left: 90, right: 15),
+                        child: MaterialButton(
+                            child: const Text("SQL",style: const TextStyle(color: Colors.white),),
+                            color: Colors.lightBlue,
+                            onPressed:() async {
+                              Navigator.of(context).pop(true);
+                            }
+                        ),
+                      ),
+                      MaterialButton(
+                          child: const Text("CSV",style: const TextStyle(color: Colors.white),),
+                          color: Colors.lightBlue,
+                          onPressed:(){
+                            Navigator.of(context).pop(false);
+                          }
+                      ),
 
-                  Navigator.of(context).pop(false);
-                },
-                color: Colors.lightBlue,
-                child: Text('CSV',
-                    style: TextStyle(color: Colors.white)
-                ),
+                    ],
+                  )
+                ],
               ),
             ),
-          ],
+          ),
         );
 
       });
 
 
-  return registEdit;
+  return tConnection;
 }
 
