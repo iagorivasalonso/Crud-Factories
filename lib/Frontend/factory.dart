@@ -1,4 +1,5 @@
 import 'package:adaptive_scrollbar/adaptive_scrollbar.dart';
+import 'package:crud_factories/Alertdialogs/create%20sector.dart';
 import 'package:crud_factories/Alertdialogs/error.dart';
 import 'package:crud_factories/Backend/SQL/createFactory.dart';
 import 'package:crud_factories/Backend/SQL/modifyFactory.dart';
@@ -6,6 +7,7 @@ import 'package:crud_factories/Backend/data.dart';
 import 'package:crud_factories/Backend/CSV//exportFactories.dart';
 import 'package:crud_factories/Functions/validatorCamps.dart';
 import 'package:crud_factories/Objects/Factory.dart';
+import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:show_platform_date_picker/show_platform_date_picker.dart';
@@ -34,6 +36,7 @@ class _newFactoryState extends State<newFactory> {
 
   late TextEditingController controllerName = new TextEditingController();
   late TextEditingController controllerHighDate = TextEditingController();
+  late TextEditingController controllerSector = TextEditingController();
   late TextEditingController controllerTelephone1 = TextEditingController();
   late TextEditingController controllerTelephone2 = TextEditingController();
   late TextEditingController controllerMail = TextEditingController();
@@ -47,21 +50,42 @@ class _newFactoryState extends State<newFactory> {
   late TextEditingController controllerEmpleoyeeNew = TextEditingController();
 
   List<String> contacs = [];
+  List<String> sectorsString = [];
   int contactSelect = 0;
   bool edit = false;
   String id ="";
   DateTime seletedDate =DateTime.now();
   String date="";
+  String sector = " ";
+  String? selectedSector;
+  String tmp = " ";
 
   @override
   Widget build(BuildContext context) {
 
     int select= widget.select;
 
+    sectorsString.clear();
+
+    sectorsString.add("Nuevo");
+
+    for(int i = 0; i < sectors.length; i++)
+    {
+        sectorsString.add(sectors[i].name);
+    }
     void campCharge () {
       id=factories[select].id;
       controllerName.text = factories[select].name;
       controllerHighDate.text = factories[select].highDate;
+      tmp =factories[select].sector;
+
+      for(int i = 0; i <sectors.length; i++)
+      {
+         if(tmp == sectors[i].id)
+         {
+           sector = sectors[i].name;
+         }
+      }
       controllerTelephone1.text = factories[select].thelephones[0];
       controllerTelephone2.text = factories[select].thelephones[1];
       controllerMail.text = factories[select].mail;
@@ -100,11 +124,10 @@ class _newFactoryState extends State<newFactory> {
       title = "Nueva ";
       action = "Crear";
       action2 = "Borrar";
-
+      sector = "Seleccionar";
     }
     else {
       title = "Editar ";
-
         campCharge();
 
       action = "Actualizar";
@@ -203,6 +226,61 @@ class _newFactoryState extends State<newFactory> {
 
                                   ),
                                 ),
+                                Padding(
+                                  padding: const EdgeInsets.only(left: 200.0),
+                                  child: const Text('Sector:'),
+                                ),
+                                SizedBox(
+                                  width: 200,
+                                  height: 40,
+                                  child: Padding(
+                                    padding: const EdgeInsets.only(left: 20.00),
+                                    child: DropdownButtonHideUnderline(
+                                      child: DropdownButton2<String>(
+                                        hint:  Text(sector),
+                                        items: sectorsString.map((String itemSector) => DropdownMenuItem<String>(
+                                          value:  itemSector,
+                                          child: Text(itemSector),
+                                        )).toList(),
+                                        value: selectedSector,
+                                        onChanged: (String? sectorChoose) {
+                                          setState(() {
+
+                                            selectedSector = sectorChoose;
+
+                                            if(sectorChoose == "Nuevo")
+                                            {
+                                              createSector(context);
+                                            }
+                                            else
+                                            {
+                                              for(int i = 0; i < sectors.length; i++)
+                                              {
+                                                if(sectorChoose==sectors[i].name)
+                                                {
+                                                  controllerSector.text = sectors[i].id;
+                                                }
+                                              }
+                                            }
+
+                                          });
+                                        },
+                                        buttonStyleData: const ButtonStyleData(
+                                          height: 50,
+                                          width: 200,
+                                          padding: EdgeInsets.only(left: 14, right: 14),
+                                        ),
+                                        dropdownStyleData: DropdownStyleData(
+                                          maxHeight: 200,
+                                          width: 180,
+                                          scrollbarTheme: ScrollbarThemeData(
+                                            thickness: MaterialStateProperty.all(6),
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ),
                               ],
                             ),
                           ),
@@ -215,8 +293,7 @@ class _newFactoryState extends State<newFactory> {
                             ],
                           ),
                           Padding(
-                            padding: const EdgeInsets.only(
-                                top: 20.0, bottom: 30.0, left: 20.0),
+                            padding: const EdgeInsets.only(top: 20.0, bottom: 30.0, left: 20.0),
                             child: Row(
                               children: [
                                 const Text('Telefono 1: '),
@@ -448,9 +525,7 @@ class _newFactoryState extends State<newFactory> {
                                             onTap: () {
                                               setState(() {
                                                 contactSelect = index;
-
                                               });
-
 
                                             },
                                           );
@@ -563,6 +638,7 @@ class _newFactoryState extends State<newFactory> {
                                                           id:idNew.toString(),
                                                           name: controllerName.text,
                                                           highDate: controllerHighDate.text,
+                                                          sector: controllerSector.text,
                                                           thelephones:[controllerTelephone1.text,controllerTelephone2.text],
                                                           mail: controllerMail.text,
                                                           web: controllerWeb.text,
@@ -574,7 +650,7 @@ class _newFactoryState extends State<newFactory> {
                                                             'city' : controllerCity.text,
                                                             'postalCode' : controllerPostalCode.text ,
                                                             'province' : controllerProvince.text,
-                                                          }
+                                                          },
                                                       ));
 
                                                       action ='La empresa se ha dado de alta correctamente';
@@ -585,6 +661,7 @@ class _newFactoryState extends State<newFactory> {
 
                                                       factories[select].name = controllerName.text;
                                                       factories[select].highDate = controllerHighDate.text;
+                                                      factories[select].sector = controllerSector.text;
                                                       factories[select].thelephones= [controllerTelephone1.text,controllerTelephone2.text];
                                                       factories[select].mail = controllerMail.text;
                                                       factories[select].web= controllerWeb.text;

@@ -2,6 +2,7 @@ class Factory {
   String id;
   String name;
   String highDate;
+  String sector;
   List<String> thelephones;
   String mail;
   String web;
@@ -12,6 +13,7 @@ class Factory {
     required this.id,
     required this.name,
     required this.highDate,
+    required this.sector,
     required this.thelephones,
     required this.mail,
     required this.web,
@@ -22,8 +24,9 @@ class Factory {
 
   @override
   String toString() {
-    return '\n Factory{\n id: $id,\n name: $name,\n highDate: $highDate,\n thelephones: $thelephones,\n mail: $mail,\n web: $web,\n address: $address,\n employees: $contacts}';
+    return 'Factory{id: $id, name: $name, highDate: $highDate, sector: $sector, thelephones: $thelephones, mail: $mail, web: $web, address: $address, contacts: $contacts}';
   }
+
 
   String allAdress() {
 
@@ -49,3 +52,4 @@ class Factory {
   }
 
 }
+

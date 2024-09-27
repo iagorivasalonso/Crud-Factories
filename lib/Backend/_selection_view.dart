@@ -22,19 +22,17 @@ FuntionSeleted(int itenSelection, int subIten1Selection,int subIten2Selection, d
     switch (itenSelection) {
       case 0:
         if (subIten1Selection == 0) {
-
-           select = -1;
+          select = -1;
 
           if (subIten2Selection == 0)
-           return newFactory(select);
+            return newFactory(select);
 
 
           if (subIten2Selection == 1)
-           return newMail(select);
+            return newMail(select);
 
           if (subIten2Selection == 2)
-          return newSend( "", "", "",select);
-
+            return newSend("", "", "", select);
         }
 
         if (subIten1Selection == 1)
@@ -44,7 +42,34 @@ FuntionSeleted(int itenSelection, int subIten1Selection,int subIten2Selection, d
         String tView = '';
 
         if (subIten1Selection == 0)
-          tView = 'factory';
+        {
+
+            tView = 'factory';
+
+            factoriesSector.clear();
+
+            String sector = subIten2Selection.toString();
+
+            if(subIten2Selection == 0)
+            {
+              for(int i = 0; i < factories.length;i++)
+              {
+                factoriesSector.add(factories[i]);
+              }
+            }
+            else
+            {
+              for(int i = 0; i < factories.length;i++)
+              {
+                if(factories[i].sector== sector)
+                {
+                  factoriesSector.add(factories[i]);
+                }
+              }
+            }
+
+
+        }
 
         if (subIten1Selection == 1)
           tView = 'mail';

@@ -53,6 +53,7 @@ class _AppState extends State<App> {
 
         }
     });
+
   }
 
   @override
@@ -166,6 +167,7 @@ class _AppState extends State<App> {
                   style: TextStyle(color:colorBar),)),
             submenu: SubMenu(
                 menuItems:[
+                  if(sectors.length==1)
                   MenuButton(
                       text: SizedBox(
                           width: wItem,
@@ -213,6 +215,46 @@ class _AppState extends State<App> {
 
                       }
                   ),
+                  if(sectors.length>1)
+                  MenuButton(
+                        text: SizedBox(
+                            width: wItem,
+                            child: const Text("Empresas")),
+                        submenu: SubMenu(
+                            menuItems:
+                              [
+                                MenuButton(
+                                    text: SizedBox(
+                                        width:  wItem,
+                                        child: Text("Todas")),
+                                    onTap: (){
+                                      setState(() {
+                                        itenSelect = 1;
+                                        subIten1Select = 0;
+                                        subIten2Select = 0;
+
+                                      });
+                                    }
+                                ),
+                                for(int i = 0 ; i < sectors.length; i++)
+                                MenuButton(
+                                    text: SizedBox(
+                                        width: sectors[i].name.length > 3
+                                               ? sectors[i].name.length * 8
+                                               : wItem,
+                                        child: Text(sectors[i].name)),
+                                    onTap: (){
+                                      setState(() {
+                                        itenSelect = 1;
+                                        subIten1Select = 0;
+                                        subIten2Select = i + 1;
+
+                                      });
+                                    }
+                                ),
+                              ]
+                        )
+                    ),
                   MenuButton(
                       text: SizedBox(
                           width: wItem,
