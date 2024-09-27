@@ -6,6 +6,7 @@ import 'package:crud_factories/Objects/Conection.dart';
 csvImportConections(List<String> fileContent, List<Conection> conection) async {
 
   List<String> select = [];
+
   if(fileContent.isEmpty)
   {
     File file = File('D:/conections.csv');
