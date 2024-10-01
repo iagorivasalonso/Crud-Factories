@@ -40,10 +40,10 @@ FuntionSeleted(int itenSelection, int subIten1Selection,int subIten2Selection, d
 
       case 1:
         String tView = '';
+        bool err = true;
 
         if (subIten1Selection == 0)
         {
-
             tView = 'factory';
 
             factoriesSector.clear();
@@ -52,6 +52,7 @@ FuntionSeleted(int itenSelection, int subIten1Selection,int subIten2Selection, d
 
             if(subIten2Selection == 0)
             {
+              err = false;
               for(int i = 0; i < factories.length;i++)
               {
                 factoriesSector.add(factories[i]);
@@ -64,11 +65,10 @@ FuntionSeleted(int itenSelection, int subIten1Selection,int subIten2Selection, d
                 if(factories[i].sector== sector)
                 {
                   factoriesSector.add(factories[i]);
+                  err = false;
                 }
               }
             }
-
-
         }
 
         if (subIten1Selection == 1)
@@ -76,7 +76,7 @@ FuntionSeleted(int itenSelection, int subIten1Selection,int subIten2Selection, d
         if (subIten1Selection == 2)
           tView = 'send';
 
-        return view(tView);
+        return view(tView,err);
 
 
       case 2:

@@ -1,11 +1,16 @@
+import 'package:crud_factories/Backend/CSV/exportLines.dart';
+import 'package:crud_factories/Backend/CSV/exportSectors.dart';
+import 'package:crud_factories/Backend/data.dart';
+import 'package:crud_factories/Objects/Sector.dart';
 import 'package:crud_factories/Widgets/headAlertDialog.dart';
 import 'package:flutter/material.dart';
 
 
-void createSector(BuildContext  context) async {
+Future<String> createSector(BuildContext  context) async {
+
   late TextEditingController controllerSector = TextEditingController();
 
-  showDialog(
+  String sector = await showDialog(
       context: context,
       builder: (BuildContext context) {
         return StatefulBuilder(
@@ -54,7 +59,7 @@ void createSector(BuildContext  context) async {
                           child: const Text("Aceptar",style: const TextStyle(color: Colors.white),),
                           color: Colors.lightBlue,
                           onPressed:(){
-                            print(controllerSector.text);
+                            Navigator.of(context).pop(controllerSector.text);
                            // Navigator.of(context).pop(false);
                           }
                       ),
@@ -66,6 +71,6 @@ void createSector(BuildContext  context) async {
           ),
         );
       });
-
+     return sector;
 }
 

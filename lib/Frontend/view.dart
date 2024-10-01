@@ -1,3 +1,4 @@
+import 'package:crud_factories/Alertdialogs/error.dart';
 import 'package:crud_factories/Alertdialogs/noFind.dart';
 import 'package:crud_factories/Backend/data.dart';
 import 'package:crud_factories/Frontend/factory.dart';
@@ -14,10 +15,9 @@ import 'package:flutter/material.dart';
 class view extends StatefulWidget {
 
   String tView;
+  bool err;
 
-
-
-  view(this.tView);
+  view(this.tView, this.err);
 
   @override
   State<view> createState() => _viewState();
@@ -175,7 +175,10 @@ class _viewState extends State<view> {
     double mHeiht = MediaQuery.of(context).size.height;
 
     String view = widget.tView;
+    bool err = widget.err;
+    
     double mWidthList = mWidth * 0.2;
+    
 
     if (mWidthList < 42.0)
       opSelected = 0;
@@ -233,351 +236,366 @@ class _viewState extends State<view> {
       mHeightList = mHeiht;
     }
 
+    if (view == "mail") {
+      mHeightList = mHeiht;
+    }
+
+    if (view == 'factory' && err == true)
+    {
+         WidgetsBinding.instance.addPostFrameCallback((_){
+
+             String action = "No tiene empresas en ese departamento";
+             error(context, action);
+
+          });
+     }
+
     return Scaffold(
-         body: Align(
-        alignment: Alignment.topLeft,
-        child: Row(
-          children: [
-             SizedBox(
-               width: mWidthList,
-               height: mHeightList,
-               child: Container(
-                 decoration: const BoxDecoration(
-                   border: Border(
-                      right: BorderSide(width: 5, color: Colors.grey),
-                   )
-                 ),
-                 child: Column(
+         body: err == false
+              ? Align(
+                  alignment: Alignment.topLeft,
+                  child: Row(
                    children: [
-                     if(view== 'factory' || view =='send')
-                       Row(
-                         children: [
-                           for (int index = 0; index < 2; index++)
-                             Expanded(
-                               child: GestureDetector(
-                                 child: Container(
-                                   height: mHeightbutton,
-                                   color: index == opSelected
-                                       ? Colors.lightGreen
-                                       : Colors.white,
-                                   child: Center(
-                                     child: Padding(
-                                       padding: const EdgeInsets.all(8.0),
-                                       child: Text(opSearch[index],
-                                           style: TextStyle(
-                                             fontWeight: FontWeight.bold,
-                                             color: index == opSelected
-                                                 ? Colors.white
-                                                 : Colors.black,
-                                           ),
-                                           maxLines: 1,
-                                           overflow: TextOverflow.ellipsis),
-                                     ),
+                     SizedBox(
+                         width: mWidthList,
+                         height: mHeightList,
+                         child: Container(
+                                decoration: const BoxDecoration(
+                                     border: Border(
+                                         right: BorderSide(width: 5, color: Colors.grey),
+                                     )
                                    ),
-                                 ),
-                                 onTap: () {
-                                   setState(() {
-                                     opSelected = index;
-                                    controllerSearchFactory.clear();
-                                   });
-                                 },
-                               ),
-                             ),
-                         ],
-                       ),
-                     if(view== 'factory')
-                       if (opSelected == 1)
-                         Container(
-                           color: Colors.greenAccent,
-                           height: mHeightfilter,
-                           child: Column(
-                             children: [
-                               Padding(
-                                 padding: const EdgeInsets.only(right: 15.0, top: 10.0),
-                                 child: Row(
-                                   children: [
-                                     const Padding(
-                                       padding: EdgeInsets.only(left: 10.0, right: 10.0),
-                                       child: Text(
-                                         "Filtrar por:",
-                                         maxLines: 1,
-                                         overflow: TextOverflow.ellipsis,
-                                       ),
-                                     ),
-                                     Expanded(
-                                       child: DropdownButtonHideUnderline(
-                                         child: DropdownButton2<String>(
-                                           isExpanded: true,
-                                           hint: Text(
-                                             filterFactory,
-                                             overflow: TextOverflow.ellipsis,
-                                           ),
-                                           items: filterList.map((String itemFactory) =>
-                                               DropdownMenuItem<String>(
-                                                 value: itemFactory,
-                                                 child: Text(
-                                                   itemFactory,
-                                                   overflow: TextOverflow
-                                                       .ellipsis,
-                                                 ),
-                                               ))
-                                               .toList(),
-                                           value:selectedFactory,
-                                           onChanged: (String? value) {
-                                           setState(() {
-
-                                               selectedFactory = value;
-                                               factoryFilter=value.toString();
-                                               filterFactory = value.toString();
-                                               selectCamp=value.toString();
-
-                                                });
-                                              },
-                                              buttonStyleData: const ButtonStyleData(
-                                                padding: EdgeInsets.only(left: 14, right: 14),
-                                              ),
-                                              dropdownStyleData: DropdownStyleData(
-                                                maxHeight: 130,
-                                                width: 140,
-                                                scrollbarTheme: ScrollbarThemeData(
-                                                  thickness: MaterialStateProperty.all(4),
-                                                ),
-                                              ),
-                                            ),
-                                          ),
-                                        )
-                                      ],
-                                    ),
-                                  ),
-                                  Row(
-                                    children: [
-                                      Expanded(
-                                        child: Padding(
-                                          padding: const EdgeInsets.only(top: 15.0, left: 40.0, right: 40.0),
-                                          child:  TextField(
-                                            controller: controllerSearchFactory,
-                                            onChanged: (value) =>_runFilter(view, value, textFilterFactory, factoryFilter, factoryName),
-                                            decoration: const InputDecoration(
-                                                border: OutlineInputBorder(),
-                                                hintText: 'Buscar...'),
-                                          ),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ],
-                              ),
-                            ),
-                        if(view== 'send')
-                          if (opSelected == 1)
-                            Container(
-                              color: Colors.greenAccent,
-                              height: mHeightfilter,
-                              child: Column(
-                                children: [
-                                  Padding(
-                                    padding: const EdgeInsets.only(right: 15.0, top: 10.0),
-                                    child: Row(
+                                   child: Column(
                                       children: [
-                                        const Padding(
-                                          padding: EdgeInsets.only(left: 10.0, right: 10.0),
-                                          child: Text(
-                                            "Filtrar por:",
-                                            maxLines: 1,
-                                            overflow: TextOverflow.ellipsis,
-                                          ),
-                                        ),
-                                        Expanded(
-                                          child: DropdownButtonHideUnderline(
-                                            child: DropdownButton2<String>(
-                                              isExpanded: true,
-                                              hint: Text(
-                                                sendFilter,
-                                                overflow: TextOverflow.ellipsis,
-                                              ),
-                                              items: filterList.map((String itemSend) =>
-                                                  DropdownMenuItem<String>(
-                                                    value: itemSend,
-                                                    child: Text(
-                                                      itemSend,
-                                                      overflow: TextOverflow
-                                                          .ellipsis,
+                                           if(view== 'factory' || view =='send')
+                                              Row(
+                                                  children: [
+                                                         for (int index = 0; index < 2; index++)
+                                                           Expanded(
+                                                              child: GestureDetector(
+                                                                  child: Container(
+                                                                    height: mHeightbutton,
+                                                                    color: index == opSelected
+                                                                      ? Colors.lightGreen
+                                                                      : Colors.white,
+                                                                   child: Center(
+                                                                      child: Padding(
+                                                                         padding: const EdgeInsets.all(8.0),
+                                                                           child: Text(opSearch[index],
+                                                                              style: TextStyle(
+                                                                                fontWeight: FontWeight.bold,
+                                                                               color: index == opSelected
+                                                                                        ? Colors.white
+                                                                                        : Colors.black,
+                                                                                ),
+                                                                                maxLines: 1,
+                                                                                overflow: TextOverflow.ellipsis),
+                                                                            ),
+                                                                          ),
+                                                                     ),
+                                                                    onTap: () {
+                                                                         setState(() {
+                                                                              opSelected = index;
+                                                                              controllerSearchFactory.clear();
+                                                                            });
+                                                                        },
+                                                                  ),
+                                                                ),
+                                                        ],
+                                             ),
+                                             if(view== 'factory')
+                                                   if (opSelected == 1)
+                                                      Container(
+                                                         color: Colors.greenAccent,
+                                                         height: mHeightfilter,
+                                                         child: Column(
+                                                             children: [
+                                                                    Padding(
+                                                                       padding: const EdgeInsets.only(right: 15.0, top: 10.0),
+                                                                       child: Row(
+                                                                         children: [
+                                                                             const Padding(
+                                                                              padding: EdgeInsets.only(left: 10.0, right: 10.0),
+                                                                                child: Text(
+                                                                                        "Filtrar por:",
+                                                                                         maxLines: 1,
+                                                                                         overflow: TextOverflow.ellipsis,
+                                                                                     ),
+                                                                                  ),
+                                                                                 Expanded(
+                                                                                   child: DropdownButtonHideUnderline(
+                                                                                     child: DropdownButton2<String>(
+                                                                                       isExpanded: true,
+                                                                                       hint: Text(
+                                                                                         filterFactory,
+                                                                                         overflow: TextOverflow.ellipsis,
+                                                                                       ),
+                                                                                       items: filterList.map((String itemFactory) =>
+                                                                                           DropdownMenuItem<String>(
+                                                                                             value: itemFactory,
+                                                                                             child: Text(
+                                                                                               itemFactory,
+                                                                                               overflow: TextOverflow
+                                                                                                   .ellipsis,
+                                                                                             ),
+                                                                                           ))
+                                                                                           .toList(),
+                                                                                       value:selectedFactory,
+                                                                                       onChanged: (String? value) {
+                                                                                       setState(() {
+
+                                                                                           selectedFactory = value;
+                                                                                           factoryFilter=value.toString();
+                                                                                           filterFactory = value.toString();
+                                                                                           selectCamp=value.toString();
+
+                                                                                            });
+                                                                                          },
+                                                                                          buttonStyleData: const ButtonStyleData(
+                                                                                            padding: EdgeInsets.only(left: 14, right: 14),
+                                                                                          ),
+                                                                                          dropdownStyleData: DropdownStyleData(
+                                                                                            maxHeight: 130,
+                                                                                            width: 140,
+                                                                                            scrollbarTheme: ScrollbarThemeData(
+                                                                                              thickness: MaterialStateProperty.all(4),
+                                                                                            ),
+                                                                                          ),
+                                                                                        ),
+                                                                                      ),
+                                                                                    )
+                                                                                   ],
+                                                                                 ),
+                                                                                ),
+                                                                                Row(
+                                                                                  children: [
+                                                                                    Expanded(
+                                                                                      child: Padding(
+                                                                                        padding: const EdgeInsets.only(top: 15.0, left: 40.0, right: 40.0),
+                                                                                        child:  TextField(
+                                                                                          controller: controllerSearchFactory,
+                                                                                          onChanged: (value) =>_runFilter(view, value, textFilterFactory, factoryFilter, factoryName),
+                                                                                          decoration: const InputDecoration(
+                                                                                              border: OutlineInputBorder(),
+                                                                                              hintText: 'Buscar...'),
+                                                                                        ),
+                                                                                      ),
+                                                                                    ),
+                                                                                  ],
+                                                                                ),
+                                                                               ],
+                                                                              ),
+                                                                           ),
+                                              if(view== 'send')
+                                                if (opSelected == 1)
+                                                  Container(
+                                                    color: Colors.greenAccent,
+                                                    height: mHeightfilter,
+                                                    child: Column(
+                                                      children: [
+                                                        Padding(
+                                                          padding: const EdgeInsets.only(right: 15.0, top: 10.0),
+                                                          child: Row(
+                                                            children: [
+                                                              const Padding(
+                                                                padding: EdgeInsets.only(left: 10.0, right: 10.0),
+                                                                child: Text(
+                                                                  "Filtrar por:",
+                                                                  maxLines: 1,
+                                                                  overflow: TextOverflow.ellipsis,
+                                                                ),
+                                                              ),
+                                                              Expanded(
+                                                                child: DropdownButtonHideUnderline(
+                                                                  child: DropdownButton2<String>(
+                                                                    isExpanded: true,
+                                                                    hint: Text(
+                                                                      sendFilter,
+                                                                      overflow: TextOverflow.ellipsis,
+                                                                    ),
+                                                                    items: filterList.map((String itemSend) =>
+                                                                        DropdownMenuItem<String>(
+                                                                          value: itemSend,
+                                                                          child: Text(
+                                                                            itemSend,
+                                                                            overflow: TextOverflow.ellipsis,
+                                                                          ),
+                                                                        ))
+                                                                        .toList(),
+                                                                    value:selectedSend,
+                                                                    onChanged: (String? value1) {
+                                                                      setState(() {
+
+                                                                        selectedSend = value1;
+                                                                        factoryFilter = value1.toString();
+                                                                        sendFilter= value1.toString();
+                                                                        selectCamp=value1.toString();
+                                                                        typefilter=sendFilter.toString();
+
+                                                                        factoryName.clear();
+
+                                                                        for(int i = 0; i <factories.length; i++)
+                                                                          factoryName.add(factories[i].name);
+                                                                      });
+                                                                     },
+                                                                    buttonStyleData: const ButtonStyleData(
+                                                                      padding: EdgeInsets.only(left: 14, right: 14),
+                                                                    ),
+                                                                    dropdownStyleData: DropdownStyleData(
+                                                                      maxHeight: 130,
+                                                                      width: 140,
+                                                                      scrollbarTheme: ScrollbarThemeData(
+                                                                        thickness: MaterialStateProperty.all(4),
+                                                                      ),
+                                                                    ),
+                                                                  ),
+                                                                ),
+                                                              )
+                                                            ],
+                                                          ),
+                                                        ),
+                                                        Row(
+                                                          children: [
+                                                            Expanded(
+                                                              child: Padding(
+                                                                padding: EdgeInsets.only(
+                                                                    top: 15.0, left: 40.0, right: 40.0),
+                                                                child:  TextField(
+                                                                  controller: controllerSearchSend,
+                                                                  onChanged: (value) => _runFilter(view, value, textFilterFactory, sendFilter, factoryName),
+                                                                  decoration: InputDecoration(
+                                                                      border: OutlineInputBorder(),
+                                                                      hintText: 'Buscar...'),
+                                                                ),
+                                                              ),
+                                                            ),
+                                                          ],
+                                                        ),
+                                                      ],
                                                     ),
-                                                  ))
-                                                  .toList(),
-                                              value:selectedSend,
-                                              onChanged: (String? value1) {
-                                                setState(() {
+                                                  ),
+                                                  Container(
+                                                                    color: view == 'factory'
+                                                                        ? Colors.cyan
+                                                                        : Colors.grey,
+                                                                    height: view == 'mail'
+                                                                        ?   mHeiht-40
+                                                                        : opSelected == 0
+                                                                        ? mHeightList-mHeightbutton
+                                                                        : opSelected == 1
+                                                                        ? mHeightList - mHeightfilter - mHeightbutton
+                                                                        : 10,
 
-                                                  selectedSend = value1;
-                                                  factoryFilter = value1.toString();
-                                                  sendFilter= value1.toString();
-                                                  selectCamp=value1.toString();
-                                                  typefilter=sendFilter.toString();
+                                                                    child: Row(
+                                                                      children: [
+                                                                        Expanded(
+                                                                            child: view == 'factory'
+                                                                                ? ListView.builder(
+                                                                              itemCount: resulFactories.length,
+                                                                              itemBuilder: (context, index) {
+                                                                                return Padding(
+                                                                                  padding: const EdgeInsets.only(
+                                                                                      left: 3.0, right: 9.0, top: 3.0),
+                                                                                  child: GestureDetector(
+                                                                                    child: factoryCard(
+                                                                                        name: resulFactories[index].name,
+                                                                                        address: resulFactories[index].allAdress(),
+                                                                                        telephone: resulFactories[index].thelephones[0],
+                                                                                        city: resulFactories[index].address['city']),
+                                                                                    onTap: () {
+                                                                                      setState(() {
+                                                                                        select = index;
+                                                                                      });
+                                                                                    },
+                                                                                  ),
+                                                                                );
+                                                                              },
+                                                                            )
+                                                                                : view == 'mail'
+                                                                                ? ListView.builder(
+                                                                              itemCount: mails.length,
+                                                                              itemBuilder: (context, index) {
+                                                                                return GestureDetector(
+                                                                                  child: defaultCard(
+                                                                                      title: mails[index].company,
+                                                                                      description: mails[index].addrres,
+                                                                                      color: index == cardSeleted
+                                                                                          ? Colors.white
+                                                                                          : Colors.grey),
+                                                                                  onTap: () {
+                                                                                    setState(() {
+                                                                                      cardSeleted = index;
+                                                                                      select = index;
+                                                                                    });
+                                                                                  },
+                                                                                );
+                                                                              },
+                                                                            )
+                                                                                : ListView.builder(
+                                                                              itemCount: result.length,
+                                                                              itemBuilder: (context, index) {
+                                                                                int nSend =index + 1;
+                                                                                String send ="Envio $nSend";
+                                                                                return  GestureDetector(
+                                                                                  child: defaultCard(
+                                                                                      title: selectedSend=="Empresa"
+                                                                                          ? result[index]
+                                                                                          : send ,
+                                                                                      description: selectedSend=="Empresa"
+                                                                                          ? ""
+                                                                                          : line[index].showFormatDate(result[index]),
+                                                                                      color: index == cardSeleted
+                                                                                          ? Colors.white
+                                                                                          : Colors.grey
+                                                                                  ),
+                                                                                  onTap: (){
+                                                                                    setState(() {
+                                                                                      sendsDay.clear();
+                                                                                      cardSeleted = index;
+                                                                                      select = index;
+                                                                                      selectCamp = result[select];
 
-                                                  factoryName.clear();
-                                                  for(int i = 0; i <factories.length; i++)
-                                                    factoryName.add(factories[i].name);
-                                                });
-                                              },
-                                              buttonStyleData: const ButtonStyleData(
-                                                padding: EdgeInsets.only(left: 14, right: 14),
-                                              ),
-                                              dropdownStyleData: DropdownStyleData(
-                                                maxHeight: 130,
-                                                width: 140,
-                                                scrollbarTheme: ScrollbarThemeData(
-                                                  thickness: MaterialStateProperty.all(4),
-                                                ),
-                                              ),
-                                            ),
-                                          ),
-                                        )
-                                      ],
-                                    ),
-                                  ),
-                                  Row(
-                                    children: [
-                                      Expanded(
-                                        child: Padding(
-                                          padding: EdgeInsets.only(
-                                              top: 15.0, left: 40.0, right: 40.0),
-                                          child:  TextField(
-                                            controller: controllerSearchSend,
-                                            onChanged: (value) => _runFilter(view, value, textFilterFactory, sendFilter, factoryName),
-                                            decoration: InputDecoration(
-                                                border: OutlineInputBorder(),
-                                                hintText: 'Buscar...'),
-                                          ),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ],
-                              ),
-                            ),
-                        Container(
-                          color: view == 'factory'
-                              ? Colors.cyan
-                              : Colors.grey,
-                          height: view == 'mail'
-                            ?   mHeiht-40
-                            : opSelected == 0
-                              ? mHeightList-mHeightbutton
-                              : opSelected == 1
-                              ? mHeightList - mHeightfilter - mHeightbutton
-                              : 10,
+                                                                                      if(selectedFilterSend== "Fecha")
+                                                                                      {
+                                                                                        selectCamp = "";
+                                                                                        selectCamp = dateSends[index];
+                                                                                      }
+                                                                                      if(selectedFilterSend == "Empresa")
+                                                                                      {
+                                                                                        for(int i = 0; i < line.length ; i++)
+                                                                                        {
+                                                                                          if(selectCamp == line[i].factory)
+                                                                                          {
+                                                                                            sendsDay.add(line[i]);
+                                                                                          }
+                                                                                        }
+                                                                                      }
 
-                          child: Row(
-                            children: [
-                              Expanded(
-                                  child: view == 'factory'
-                                      ? ListView.builder(
-                                             itemCount: resulFactories.length,
-                                             itemBuilder: (context, index) {
-                                             return Padding(
-                                                padding: const EdgeInsets.only(
-                                                      left: 3.0, right: 9.0, top: 3.0),
-                                                child: GestureDetector(
-                                                   child: factoryCard(
-                                                       name: resulFactories[index].name,
-                                                       address: resulFactories[index].allAdress(),
-                                                       telephone: resulFactories[index].thelephones[0],
-                                                       city: resulFactories[index].address['city']),
-                                                     onTap: () {
-                                                      setState(() {
-                                                          select = index;
-                                                     });
-                                                 },
-                                        ),
-                                      );
-                                    },
-                                  )
-                                      : view == 'mail'
-                                      ? ListView.builder(
-                                          itemCount: mails.length,
-                                          itemBuilder: (context, index) {
-                                          return GestureDetector(
-                                           child: defaultCard(
-                                                title: mails[index].company,
-                                                description: mails[index].addrres,
-                                                color: index == cardSeleted
-                                                  ? Colors.white
-                                                  : Colors.grey),
-                                                onTap: () {
-                                                   setState(() {
-                                                     cardSeleted = index;
-                                                     select = index;
-                                          });
-                                        },
-                                      );
-                                    },
-                                  )
-                                      : ListView.builder(
-                                           itemCount: result.length,
-                                           itemBuilder: (context, index) {
-                                            int nSend =index + 1;
-                                            String send ="Envio $nSend";
-                                            return  GestureDetector(
-                                              child: defaultCard(
-                                                title: selectedSend=="Empresa"
-                                                    ? result[index]
-                                                    : send ,
-                                                description: selectedSend=="Empresa"
-                                                    ? ""
-                                                    : line[index].showFormatDate(result[index]),
-                                                color: index == cardSeleted
-                                                    ? Colors.white
-                                                    : Colors.grey
-                                               ),
-                                               onTap: (){
-                                                 setState(() {
-                                                   sendsDay.clear();
-                                                   cardSeleted = index;
-                                                   select = index;
-                                                   selectCamp = result[select];
-
-                                                   if(selectedFilterSend== "Fecha")
-                                                   {
-                                                      selectCamp = "";
-                                                      selectCamp = dateSends[index];
-                                                   }
-                                                   if(selectedFilterSend == "Empresa")
-                                                   {
-                                                      for(int i = 0; i < line.length ; i++)
-                                                      {
-                                                         if(selectCamp == line[i].factory)
-                                                         {
-                                                             sendsDay.add(line[i]);
-                                                         }
-                                                      }
-                                                   }
-
-                                          });
-                                        },
-                                      );
-                                    },
-                                  )
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-                  )),
-
-              SizedBox(
-                  width: mWidthPanel,
-                  height: mHeiht,
-                  child: view == 'factory'
-                      ? newFactory(select)
-                      : view == 'mail'
-                      ? newMail(select)
-                      : newSend(selectCamp, filterFactory, sendFilter,select)
-
-              ),
-            ],
-          )),
+                                                                                    });
+                                                                                  },
+                                                                                );
+                                                                              },
+                                                                            )
+                                                                        ),
+                                                                      ],
+                                                                    ),
+                                                                  ),
+                                         ],
+                                       ),
+                                   )),
+                                  SizedBox(
+                                   width: mWidthPanel,
+                                   height: mHeiht,
+                                   child: view == 'factory'
+                                       ? newFactory(select)
+                                       : view == 'mail'
+                                       ? newMail(select)
+                                       : newSend(selectCamp, filterFactory, sendFilter,select)
+                                ),
+                             ],
+                  )
+              )
+              : null,
     );
   }
 

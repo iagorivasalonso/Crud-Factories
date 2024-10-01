@@ -1,12 +1,14 @@
 import 'package:adaptive_scrollbar/adaptive_scrollbar.dart';
 import 'package:crud_factories/Alertdialogs/create%20sector.dart';
 import 'package:crud_factories/Alertdialogs/error.dart';
+import 'package:crud_factories/Backend/CSV/exportSectors.dart';
 import 'package:crud_factories/Backend/SQL/createFactory.dart';
 import 'package:crud_factories/Backend/SQL/modifyFactory.dart';
 import 'package:crud_factories/Backend/data.dart';
 import 'package:crud_factories/Backend/CSV//exportFactories.dart';
 import 'package:crud_factories/Functions/validatorCamps.dart';
 import 'package:crud_factories/Objects/Factory.dart';
+import 'package:crud_factories/Objects/Sector.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -243,27 +245,33 @@ class _newFactoryState extends State<newFactory> {
                                           child: Text(itemSector),
                                         )).toList(),
                                         value: selectedSector,
-                                        onChanged: (String? sectorChoose) {
-                                          setState(() {
+                                        onChanged: (String? sectorChoose) async {
+                                               selectedSector = sectorChoose;
 
-                                            selectedSector = sectorChoose;
+                                               if(sectorChoose == "Nuevo")
+                                               {
+                                                    String sectorcreate =  await createSector(context);
+                                                         setState(() {
+                                                           int idNew = sectors.length + 1;
+                                                           sectors.add(Sector(
+                                                             id: idNew.toString(),
+                                                             name: sectorcreate,
+                                                           ));
 
-                                            if(sectorChoose == "Nuevo")
-                                            {
-                                              createSector(context);
-                                            }
-                                            else
-                                            {
-                                              for(int i = 0; i < sectors.length; i++)
-                                              {
-                                                if(sectorChoose==sectors[i].name)
-                                                {
-                                                  controllerSector.text = sectors[i].id;
-                                                }
-                                              }
-                                            }
+                                                           csvExportatorSectors(sectors);
+                                                         });
+                                               }
+                                               else
+                                               {
+                                                 for(int i = 0; i < sectors.length; i++)
+                                                 {
+                                                   if(sectorChoose==sectors[i].name)
+                                                   {
+                                                     controllerSector.text = sectors[i].id;
+                                                   }
+                                                 }
+                                               }
 
-                                          });
                                         },
                                         buttonStyleData: const ButtonStyleData(
                                           height: 50,
