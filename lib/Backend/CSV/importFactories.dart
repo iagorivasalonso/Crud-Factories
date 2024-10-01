@@ -6,7 +6,7 @@ csvImportFactories(List<String> fileContent, List<Factory> factories) async {
 
   List<String> select =[];
 
- if(fileContent.isEmpty)
+   if(fileContent.isEmpty)
   {
 
     File file =new File('D:/factories.csv');
@@ -34,16 +34,17 @@ csvImportFactories(List<String> fileContent, List<Factory> factories) async {
         id: select[0],
         name: select[1],
         highDate: select[2],
-        thelephones: [select[3],select[4]],
-        mail: select[5],
-        web: select[6],
+        sector: select[3],
+        thelephones: [select[4],select[5]],
+        mail: select[6],
+        web: select[7],
         address: {
-          'street': select[7],
-          'number': select[8].replaceAll(" ",""),
-          'apartament': select[9],
-          'city': select[10],
-          'postalCode':select[11] ,
-          'province': select[12]
+          'street': select[8],
+          'number': select[9].replaceAll(" ",""),
+          'apartament': select[10],
+          'city': select[11],
+          'postalCode':select[12] ,
+          'province': select[13]
         },
         contacts: allEmp));
   }

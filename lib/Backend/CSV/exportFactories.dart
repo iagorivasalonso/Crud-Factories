@@ -14,6 +14,7 @@ void csvExportatorFactories(List<Factory> factories, int select) async {
         "id": factories[i].id,
         "name": factories[i].name,
         "highDate": factories[i].highDate,
+        "sector": factories[i].sector,
         "telephone1": factories[i].thelephones[0],
         "telephone2": factories[i].thelephones[1],
         "mail": factories[i].mail,
@@ -40,6 +41,7 @@ void csvExportatorFactories(List<Factory> factories, int select) async {
     row.add(associateList[i]["id"]);
     row.add(associateList[i]["name"]);
     row.add(associateList[i]["highDate"]);
+    row.add(associateList[i]["sector"]);
     row.add(associateList[i]["telephone1"]);
     row.add(associateList[i]["telephone2"]);
     row.add(associateList[i]["mail"]);
