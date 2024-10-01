@@ -40,10 +40,11 @@ FuntionSeleted(int itenSelection, int subIten1Selection,int subIten2Selection, d
 
       case 1:
         String tView = '';
-        bool err = true;
+        bool err = false;
 
         if (subIten1Selection == 0)
         {
+          err = true;
             tView = 'factory';
 
             factoriesSector.clear();
