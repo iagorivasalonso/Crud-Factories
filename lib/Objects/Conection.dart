@@ -17,8 +17,4 @@ class Conection {
     required this.password
 });
 
-  @override
-  String toString() {
-    return 'Conection{database: $database, host: $host, port: $port, user: $user, password: $password}';
-  }
 }
