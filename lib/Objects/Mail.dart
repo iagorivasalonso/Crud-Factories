@@ -12,10 +12,4 @@ class Mail {
     required this.company,
     required this.password
 });
-
-   @override
-  String toString() {
-    return 'Mail{company: $company, addrres: $addrres, password: $password}';
-  }
-
 }

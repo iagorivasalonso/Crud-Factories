@@ -15,12 +15,6 @@ class LineSend {
     required this.state
   });
 
-
-  @override
-  String toString() {
-    return 'lineSend{id: $id date: $date, factory: $factory, observations: $observations, state: $state}';
-  }
-
   String showFormatDate(String date) {
     List <String> listMmonth = [
       ' ',
