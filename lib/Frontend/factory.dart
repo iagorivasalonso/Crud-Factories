@@ -24,9 +24,6 @@ class newFactory extends StatefulWidget {
   int select;
   newFactory(this.select);
 
-
-
-
   @override
   State<newFactory> createState() => _newFactoryState();
 }
