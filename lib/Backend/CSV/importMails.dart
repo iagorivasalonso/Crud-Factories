@@ -18,8 +18,8 @@ csvImportMails(List<String> fileContent, List<Mail> mails) async {
     select = fileContent[i].split(",");
     mails.add(Mail(
         id: select[0],
-        company: select[2],
         addrres: select[1],
+        company: select[2],
         password: select[3]));
   }
 
