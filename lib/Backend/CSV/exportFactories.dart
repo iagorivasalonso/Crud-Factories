@@ -25,7 +25,6 @@ void csvExportatorFactories(List<Factory> factories, int select) async {
         "city" : factories[i].address['city'],
         "postalCode": factories[i].address['postalCode'],
         "province" : factories[i].address['province'],
-        "contacts" :factories[i].contacts,
       },
   ];
 
@@ -52,7 +51,6 @@ void csvExportatorFactories(List<Factory> factories, int select) async {
     row.add(associateList[i]["city"]);
     row.add(associateList[i]["postalCode"]);
     row.add(associateList[i]["province"]);
-    row.add(associateList[i]["contacts"]);
     rows.add(row);
   }
 

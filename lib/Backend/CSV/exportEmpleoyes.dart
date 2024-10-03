@@ -1,18 +1,19 @@
-
 import 'dart:io';
-import 'package:crud_factories/Objects/Sector.dart';
+
+import 'package:crud_factories/Objects/Empleoye.dart';
 import 'package:csv/csv.dart';
 
-void csvExportatorSectors(List<Sector> sectors){
+void csvExportatorEmpleoyes(List<Empleoye> empleoyes){
 
-  File myFile = File('D:/sectors.csv');
+  File myFile = File('D:/empleoyes.csv');
 
   List<dynamic> associateList = [
 
-      for (int i = 0; i < sectors.length; i++)
+    for (int i = 0; i < empleoyes.length; i++)
       {
-        "id": sectors[i].id,
-        "name": sectors[i].name,
+        "id": empleoyes[i].id,
+        "name": empleoyes[i].name,
+        "idFactory": empleoyes[i].idFActory
       },
   ];
 
@@ -25,12 +26,10 @@ void csvExportatorSectors(List<Sector> sectors){
 
     row.add(associateList[i]["id"]);
     row.add(associateList[i]["name"]);
+    row.add(associateList[i]["idFactory"]);
     rows.add(row);
   }
 
   String csv = const ListToCsvConverter().convert(rows);
-
   myFile.writeAsString(csv);
 }
-
-

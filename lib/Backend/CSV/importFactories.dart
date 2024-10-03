@@ -20,15 +20,7 @@ csvImportFactories(List<String> fileContent, List<Factory> factories) async {
 
   for (int i = 0; i <fileContent.length; i++)
   {
-    String tmp="";
-
-    List <String> allEmp = [];
-
     select = fileContent[i].split(",");
-    allEmp= fileContent[i].split("[");
-    tmp=allEmp[1].substring(0,allEmp[1].length-1);
-    allEmp=tmp.split(",");
-
 
     factories.add(Factory(
         id: select[0],
@@ -45,8 +37,7 @@ csvImportFactories(List<String> fileContent, List<Factory> factories) async {
           'city': select[11],
           'postalCode':select[12] ,
           'province': select[13]
-        },
-        contacts: allEmp));
+        }));
   }
 
   return factories;
