@@ -1,4 +1,5 @@
 import 'package:crud_factories/Objects/Conection.dart';
+import 'package:crud_factories/Objects/Empleoye.dart';
 import 'package:crud_factories/Objects/Factory.dart';
 import 'package:crud_factories/Objects/Mail.dart';
 import 'package:crud_factories/Objects/LineSend.dart';
@@ -11,10 +12,10 @@ int subIten2Select = -1;
 
 String BaseDateSelected ="Nuevo";
 var conn;
-
+List<Sector> sectors = [];
 List<Factory> factories = [];
 List<Factory> factoriesSector = [];
-List<Sector> sectors = [];
+List<Empleoye> empleoyes = [];
 List<Mail> mails =[];
 List<LineSend> line = [];
 List<String> fileContent =[];

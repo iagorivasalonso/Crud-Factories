@@ -1,12 +1,14 @@
 import 'package:adaptive_scrollbar/adaptive_scrollbar.dart';
 import 'package:crud_factories/Alertdialogs/create%20sector.dart';
 import 'package:crud_factories/Alertdialogs/error.dart';
+import 'package:crud_factories/Backend/CSV/exportEmpleoyes.dart';
 import 'package:crud_factories/Backend/CSV/exportSectors.dart';
 import 'package:crud_factories/Backend/SQL/createFactory.dart';
 import 'package:crud_factories/Backend/SQL/modifyFactory.dart';
 import 'package:crud_factories/Backend/data.dart';
 import 'package:crud_factories/Backend/CSV//exportFactories.dart';
 import 'package:crud_factories/Functions/validatorCamps.dart';
+import 'package:crud_factories/Objects/Empleoye.dart';
 import 'package:crud_factories/Objects/Factory.dart';
 import 'package:crud_factories/Objects/Sector.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
@@ -51,8 +53,10 @@ class _newFactoryState extends State<newFactory> {
   late TextEditingController controllerEmpleoyee = TextEditingController();
   late TextEditingController controllerEmpleoyeeNew = TextEditingController();
 
-  List<String> contacs = [];
+  List<Empleoye> contacs = [];
+  List<String> idscontacsDelete = [];
   List<String> sectorsString = [];
+
   int contactSelect = 0;
   bool edit = false;
   String id ="";
@@ -99,24 +103,36 @@ class _newFactoryState extends State<newFactory> {
 
       String allAddress = "";
 
-      if (apartament == "") {
-        allAddress = '$address, $number ';
-      }
-      else {
-        allAddress = '$address, $number - $apartament';
-      }
+               if (apartament == "")
+               {
+                  allAddress = '$address, $number ';
+               }
+               else
+               {
+                   allAddress = '$address, $number - $apartament';
+               }
       controllerAdrress.text = allAddress!;
       controllerCity.text = factories[select].address['city']!;
       controllerPostalCode.text = factories[select].address['postalCode']!;
       controllerProvince.text = factories[select].address['province']!;
-      contacs = factories[select].contacts;
 
-      if (contacs.isEmpty) {
-        for (int i = 0; i < factories[select].contacts.length; i++) {
-          contacs.add(factories[select].contacts[i]);
-        }
-      }
 
+       int idFactory = select +1;
+
+          if(edit == false)
+         {
+            contacs.clear();
+         }
+              if (contacs.isEmpty && edit == false)
+              {
+                      for (int i = 0; i < empleoyes.length; i++)
+                      {
+                             if(empleoyes[i].idFActory == idFactory.toString())
+                              {
+                                 contacs.add(empleoyes[i]);
+                             }
+                      }
+              }
     }
     String action = "actualizar";
     String action2 = "";
@@ -474,7 +490,16 @@ class _newFactoryState extends State<newFactory> {
                                           child: const Icon(Icons.add),
                                           onPressed: () {
                                             setState(() {
-                                              contacs.add(controllerEmpleoyeeNew.text);
+
+                                              edit = true;
+                                              int idNew = empleoyes.length + 1;
+
+                                              contacs.add(Empleoye(
+                                                id: idNew.toString(),
+                                                name: controllerEmpleoyeeNew.text,
+                                                idFActory: id
+                                              ));
+
                                               controllerEmpleoyeeNew.text = "";
                                             });
                                           },
@@ -486,7 +511,11 @@ class _newFactoryState extends State<newFactory> {
                                             child: const Icon(Icons.delete),
                                             onPressed: () {
                                               setState(() {
-                                                var delete = contacs[contactSelect];
+
+                                                edit = true;
+                                                Empleoye delete = contacs[contactSelect];
+                                                idscontacsDelete.add(delete.id);
+
                                                 if (contacs[contactSelect] == delete) {
                                                   contacs.removeAt(contactSelect);
                                                   String action ='El empleado se ha quitado correctamente';
@@ -527,7 +556,7 @@ class _newFactoryState extends State<newFactory> {
                                               child: Padding(
                                                 padding: const EdgeInsets.only(
                                                     top: 3.0, left: 10.0),
-                                                child: Text(contacs[index]),
+                                                child: Text(contacs[index].name),
                                               ),
                                             ),
                                             onTap: () {
@@ -561,11 +590,12 @@ class _newFactoryState extends State<newFactory> {
                                         setState(() {
                                           List <Factory> current=[];
                                           List <String> allKeys = [];
-
+                                          edit = false;
                                           String nameCamp = "nombre";
 
-                                          for (int i = 0; i < factories.length; i++)
+                                          for (int i = 0; i < factories.length; i++) {
                                             allKeys.add(factories[i].name);
+                                          }
 
                                           String campOld = " ";
 
@@ -650,7 +680,6 @@ class _newFactoryState extends State<newFactory> {
                                                           thelephones:[controllerTelephone1.text,controllerTelephone2.text],
                                                           mail: controllerMail.text,
                                                           web: controllerWeb.text,
-                                                          contacts:contacs,
                                                           address: {
                                                             'street':adrress1[0],
                                                             'number':num[1],
@@ -660,7 +689,6 @@ class _newFactoryState extends State<newFactory> {
                                                             'province' : controllerProvince.text,
                                                           },
                                                       ));
-
                                                       action ='La empresa se ha dado de alta correctamente';
                                                       confirm(context,action);
                                                     }
@@ -678,8 +706,6 @@ class _newFactoryState extends State<newFactory> {
                                                       factories[select].address['apartament'] = apartament;
                                                       factories[select].address['city'] = controllerCity.text;
                                                       factories[select].address['postalCode'] = controllerPostalCode.text ;
-                                                      factories[select].address['province'] = controllerProvince.text;
-                                                      factories[select].contacts = contacs;
 
                                                       action ='El usuario se ha modificado correctamente';
                                                       confirm(context,action);
@@ -700,8 +726,29 @@ class _newFactoryState extends State<newFactory> {
                                                     }
                                                     else
                                                     {
-                                                      factories = factories + current;
-                                                      csvExportatorFactories(factories,select);
+                                                        factories = factories + current;
+                                                        csvExportatorFactories(factories,select);
+
+                                                         empleoyes = [
+                                                           ...{...empleoyes, ...contacs}
+                                                        ];
+
+                                                         String idCurrent= "";
+                                                         for(int i = 0; i <idscontacsDelete.length; i++)
+                                                         {
+                                                              idCurrent = idscontacsDelete[i];
+
+                                                              for(int y = 0; y< empleoyes.length;y++)
+                                                              {
+                                                                  if(idCurrent==empleoyes[y].id)
+                                                                  {
+                                                                     empleoyes.removeAt(y);
+                                                                  }
+                                                              }
+
+                                                         }
+                                                         print("object");
+                                                         csvExportatorEmpleoyes(empleoyes);
                                                     }
 
                                                   }

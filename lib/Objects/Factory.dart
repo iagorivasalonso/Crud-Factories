@@ -1,4 +1,5 @@
 class Factory {
+
   String id;
   String name;
   String highDate;
@@ -7,7 +8,7 @@ class Factory {
   String mail;
   String web;
   Map<String, String> address;
-  List<String> contacts;
+
 
   Factory ({
     required this.id,
@@ -18,15 +19,7 @@ class Factory {
     required this.mail,
     required this.web,
     required this.address,
-    required this.contacts,
-
   });
-
-  @override
-  String toString() {
-    return 'Factory{id: $id, name: $name, highDate: $highDate, sector: $sector, thelephones: $thelephones, mail: $mail, web: $web, address: $address, contacts: $contacts}';
-  }
-
 
   String allAdress() {
 
@@ -44,8 +37,6 @@ class Factory {
      {
        addressComplete='$address1,$number-$apartament';
      }
-
-
 
     return addressComplete;
 
