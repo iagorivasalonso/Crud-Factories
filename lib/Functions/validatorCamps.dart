@@ -53,8 +53,6 @@ bool campEmpty(String camp) {
     campValid = false;
   }
 
-
-
   return campValid;
 }
 
@@ -126,8 +124,6 @@ bool telephoneCorrect(String telephone, BuildContext context) {
 
     }
   }
-
-
 
   return telephoneValid;
 }
