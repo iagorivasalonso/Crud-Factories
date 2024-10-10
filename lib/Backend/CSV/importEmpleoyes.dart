@@ -20,7 +20,7 @@ csvImportEmpleoyes(List<String> fileContent, List<Empleoye> empleoyes) async {
     empleoyes.add(Empleoye(
         id: select[0],
         name: select[1],
-        idFActory: select[2],
+        idFactory: select[2],
     ));
   }
 

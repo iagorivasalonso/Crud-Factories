@@ -13,7 +13,7 @@ void csvExportatorEmpleoyes(List<Empleoye> empleoyes){
       {
         "id": empleoyes[i].id,
         "name": empleoyes[i].name,
-        "idFactory": empleoyes[i].idFActory
+        "idFactory": empleoyes[i].idFactory
       },
   ];
 
