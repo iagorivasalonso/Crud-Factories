@@ -6,6 +6,8 @@ import 'package:crud_factories/Alertdialogs/confirmDelete.dart';
 import 'package:crud_factories/Alertdialogs/confirmEdit.dart';
 import 'package:crud_factories/Alertdialogs/error.dart';
 import 'package:crud_factories/Backend/CSV/chargueData%20csv.dart';
+import 'package:crud_factories/Backend/SQL/importEmpleoye.dart';
+import 'package:crud_factories/Backend/SQL/importSector.dart';
 import 'package:crud_factories/Backend/SQL/manageSQl.dart';
 import 'package:crud_factories/Backend/SQL/importFactories.dart';
 import 'package:crud_factories/Backend/SQL/importLines.dart';
@@ -457,12 +459,7 @@ class _conectionState extends State<conection> {
 
                                                       });
 
-                                                     conections.removeAt(select);
-                                                     for (int i = 0; i <conections.length; i++)
-                                                     {
-                                                         int idN = i + 1;
-                                                         conections[i].id = idN.toString();
-                                                     }
+                                                      conections.removeAt(select);
                                                       action1 ='Se ha eliminado correctamente la conexion';
                                                       confirm(context,action1);
                                                  }
@@ -524,7 +521,6 @@ class _conectionState extends State<conection> {
       {
         serverConnect();
       }
-
 
       try{
         conn = await MySqlConnection.connect(settings);
@@ -594,7 +590,9 @@ class _conectionState extends State<conection> {
 
             conn = null;
 
+            sectors.clear();
             factories.clear();
+            empleoyes.clear();
             mails.clear();
             line.clear();
 
@@ -620,11 +618,15 @@ class _conectionState extends State<conection> {
                confirm(context,action1);
                editText =false;
 
+               sectors.clear();
                factories.clear();
+               empleoyes.clear();
                mails.clear();
                line.clear();
 
+               sqlImportSetors();
                sqlImportFactories();
+               sqlImportEmpleoyes();
                sqlImportMails();
                sqlImportLines();
 

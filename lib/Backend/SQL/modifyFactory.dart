@@ -10,6 +10,7 @@ Future<void> sqlModifyFActory(List<Factory> factories) async {
     String id = factories[0].id;
     String name = factories[0].name;
     String highDate = factories[0].highDate;
+    String sector = factories[0].sector;
     String telephone1 = factories[0].thelephones[0];
     String telephone2 = factories[0].thelephones[1];
     String mail = factories[0].mail;
@@ -20,9 +21,9 @@ Future<void> sqlModifyFActory(List<Factory> factories) async {
     String city = factories[0].address['city'].toString();
     String province = factories[0].address['province'].toString();
     String postalCode = factories[0].address['postalCode'].toString();
-    String empleoyes =factories[0].contacts.toString();
 
-    var result = await conn.query('update factories set name=?,highDate=?,telephone1=?,telephone2=?,mail=?,web=?,address=?,number=?,apartament=?,city=?,province=?,postalcode=?,empleoyes=? where id=?', [name,highDate, telephone1, telephone2,mail,web, address, number, apartament,city,province,postalCode,empleoyes, id]);
+
+    var result = await conn.query('update factories set name=?,highDate=?,sector=?,telephone1=?,telephone2=?,mail=?,web=?,address=?,number=?,apartament=?,city=?,province=?,postalcode=? where id=?', [name, highDate, sector, telephone1, telephone2, mail, web, address, number, apartament ,city, province, postalCode, id]);
 
 
   } catch(SQLExeption){
