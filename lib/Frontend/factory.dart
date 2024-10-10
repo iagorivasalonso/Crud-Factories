@@ -3,7 +3,10 @@ import 'package:crud_factories/Alertdialogs/create%20sector.dart';
 import 'package:crud_factories/Alertdialogs/error.dart';
 import 'package:crud_factories/Backend/CSV/exportEmpleoyes.dart';
 import 'package:crud_factories/Backend/CSV/exportSectors.dart';
+import 'package:crud_factories/Backend/SQL/createEmpleoye.dart';
 import 'package:crud_factories/Backend/SQL/createFactory.dart';
+import 'package:crud_factories/Backend/SQL/createSector.dart';
+import 'package:crud_factories/Backend/SQL/deleteEmpleoye.dart';
 import 'package:crud_factories/Backend/SQL/modifyFactory.dart';
 import 'package:crud_factories/Backend/data.dart';
 import 'package:crud_factories/Backend/CSV//exportFactories.dart';
@@ -50,7 +53,8 @@ class _newFactoryState extends State<newFactory> {
   late TextEditingController controllerEmpleoyee = TextEditingController();
   late TextEditingController controllerEmpleoyeeNew = TextEditingController();
 
-  List<Empleoye> contacs = [];
+  List<Empleoye> contacsCurrent = [];
+  List<Empleoye> contacsPreEdit = [];
   List<String> idscontacsDelete = [];
   List<String> sectorsString = [];
 
@@ -82,13 +86,15 @@ class _newFactoryState extends State<newFactory> {
       controllerHighDate.text = factories[select].highDate;
       tmp =factories[select].sector;
 
-      for(int i = 0; i <sectors.length; i++)
-      {
-         if(tmp == sectors[i].id)
-         {
-           sector = sectors[i].name;
-         }
-      }
+
+        for(int i = 0; i <sectors.length; i++)
+        {
+          if(tmp == sectors[i].id)
+          {
+            sector = sectors[i].name;
+          }
+        }
+
       controllerTelephone1.text = factories[select].thelephones[0];
       controllerTelephone2.text = factories[select].thelephones[1];
       controllerMail.text = factories[select].mail;
@@ -118,15 +124,17 @@ class _newFactoryState extends State<newFactory> {
 
           if(edit == false)
          {
-            contacs.clear();
+            contacsPreEdit.clear();
+            contacsCurrent.clear();
          }
-              if (contacs.isEmpty && edit == false)
+              if (contacsCurrent.isEmpty && edit == false)
               {
                       for (int i = 0; i < empleoyes.length; i++)
                       {
-                             if(empleoyes[i].idFActory == idFactory.toString())
-                              {
-                                 contacs.add(empleoyes[i]);
+                             if(empleoyes[i].idFactory == idFactory.toString())
+                             {
+                                 contacsPreEdit.add(empleoyes[i]);
+                                 contacsCurrent.add(empleoyes[i]);
                              }
                       }
               }
@@ -260,29 +268,64 @@ class _newFactoryState extends State<newFactory> {
                                         value: selectedSector,
                                         onChanged: (String? sectorChoose) async {
                                                selectedSector = sectorChoose;
+                                               setState(() {
+                                                 controllerSector.text =sectorChoose!;
+                                               });
+
 
                                                if(sectorChoose == "Nuevo")
                                                {
                                                     String sectorcreate =  await createSector(context);
-                                                         setState(() {
-                                                           int idNew = sectors.length + 1;
-                                                           sectors.add(Sector(
-                                                             id: idNew.toString(),
-                                                             name: sectorcreate,
-                                                           ));
+                                                    bool repeat = false;
 
-                                                           csvExportatorSectors(sectors);
-                                                         });
+                                                      for(int i = 0; i < sectors.length; i++)
+                                                      {
+                                                          if(sectorcreate == sectors[i].name)
+                                                          {
+                                                             repeat = true ;
+                                                          }
+
+                                                      }
+
+                                                      if(repeat == false)
+                                                      {
+                                                            setState(() {
+                                                              List<Sector> currentSector=[];
+                                                              int idNew = sectors.length + 1;
+                                                              currentSector.add(Sector(
+                                                                   id: idNew.toString(),
+                                                                   name: sectorcreate,
+                                                                ));
+
+                                                                sectors+=currentSector;
+                                                                if(conn != null)
+                                                                {
+                                                                   sqlCreateSector(currentSector);
+                                                                }
+                                                                else
+                                                                {
+                                                                    csvExportatorSectors(sectors);
+                                                                }
+
+                                                        });
+                                                      }
+                                                      else
+                                                      {
+                                                         action = "Ese departamento ya existe";
+                                                         error(context, action);
+                                                      }
+
                                                }
                                                else
                                                {
                                                  for(int i = 0; i < sectors.length; i++)
                                                  {
-                                                   if(sectorChoose==sectors[i].name)
-                                                   {
-                                                     controllerSector.text = sectors[i].id;
-                                                   }
-                                                 }
+                                                       if(sectorChoose==sectors[i].name)
+                                                       {
+                                                         controllerSector.text = sectors[i].id;
+                                                       }
+                                                     }
+
                                                }
 
                                         },
@@ -491,10 +534,10 @@ class _newFactoryState extends State<newFactory> {
                                               edit = true;
                                               int idNew = empleoyes.length + 1;
 
-                                              contacs.add(Empleoye(
+                                              contacsCurrent.add(Empleoye(
                                                 id: idNew.toString(),
                                                 name: controllerEmpleoyeeNew.text,
-                                                idFActory: id
+                                                idFactory: id
                                               ));
 
                                               controllerEmpleoyeeNew.text = "";
@@ -510,11 +553,11 @@ class _newFactoryState extends State<newFactory> {
                                               setState(() {
 
                                                 edit = true;
-                                                Empleoye delete = contacs[contactSelect];
+                                                Empleoye delete = contacsCurrent[contactSelect];
                                                 idscontacsDelete.add(delete.id);
 
-                                                if (contacs[contactSelect] == delete) {
-                                                  contacs.removeAt(contactSelect);
+                                                if (contacsCurrent[contactSelect] == delete) {
+                                                  contacsCurrent.removeAt(contactSelect);
                                                   String action ='El empleado se ha quitado correctamente';
                                                   confirm(context,action);
                                                 }
@@ -542,7 +585,7 @@ class _newFactoryState extends State<newFactory> {
                                       width: 250,
                                       height: 170,
                                       child: ListView.builder(
-                                        itemCount: contacs.length,
+                                        itemCount: contacsCurrent.length,
                                         itemBuilder: (BuildContext context,
                                             index) {
                                           return GestureDetector(
@@ -553,7 +596,7 @@ class _newFactoryState extends State<newFactory> {
                                               child: Padding(
                                                 padding: const EdgeInsets.only(
                                                     top: 3.0, left: 10.0),
-                                                child: Text(contacs[index].name),
+                                                child: Text(contacsCurrent[index].name),
                                               ),
                                             ),
                                             onTap: () {
@@ -612,6 +655,11 @@ class _newFactoryState extends State<newFactory> {
                                               String format ='DD-MM-AAAA';
                                               error(context,action,format);
                                             }
+                                            if(campEmpty(controllerSector.text) == true)
+                                            {
+                                              String action ='El sector no puede ir vacio';
+                                              error(context,action);
+                                            }
                                             else if(telephoneCorrect(telephone1,context) == true)
                                             {
                                               if(telephone1.length != 9)
@@ -666,6 +714,39 @@ class _newFactoryState extends State<newFactory> {
                                                     }
                                                     List<String> num = adrress2[0].split(",");
 
+                                                     if(conn != null)
+                                                     {
+
+                                                          Set<Empleoye> contacsPreEdit1 = contacsPreEdit.toSet();
+                                                          Set<Empleoye> contacsCurrent1 = contacsCurrent.toSet();
+
+                                                          Set<Empleoye> empleoyesNew = contacsCurrent1.difference(contacsPreEdit1);
+
+                                                          sqlCreateEmpleoye(empleoyesNew.toList());
+                                                          empleoyes.addAll(empleoyesNew);
+
+                                                          Set<Empleoye> empleoyesDelete = contacsPreEdit1.difference(contacsCurrent1);
+
+                                                          List<Empleoye> empleoyesDelete1 =empleoyesDelete.toList();
+                                                          sqlDeleteEmpleoye(empleoyesDelete1);
+
+                                                            String current = "";
+
+                                                            for(int i = 0; i < empleoyesDelete1.length; i++)
+                                                            {
+                                                               current = empleoyesDelete1[i].id;
+
+                                                                   for (int x = 0; x < empleoyes.length; x++)
+                                                                   {
+                                                                       if(current == empleoyes[i].id)
+                                                                       {
+                                                                           empleoyes.removeAt(x);
+                                                                       }
+                                                                   }
+                                                            }
+                                                          edit =true;
+
+                                                     }
                                                     if(select == - 1)
                                                     {
                                                       int idNew = factories.length+1;
@@ -720,32 +801,33 @@ class _newFactoryState extends State<newFactory> {
                                                            current.add(factories[select]);
                                                            sqlModifyFActory(current);
                                                          }
+
                                                     }
                                                     else
                                                     {
-                                                        factories = factories + current;
-                                                        csvExportatorFactories(factories,select);
+                                                      factories = factories + current;
+                                                      csvExportatorFactories(factories,select);
 
-                                                         empleoyes = [
-                                                           ...{...empleoyes, ...contacs}
-                                                        ];
+                                                      empleoyes = [
+                                                        ...{...empleoyes, ...contacsCurrent}
+                                                      ];
 
-                                                         String idCurrent= "";
-                                                         for(int i = 0; i <idscontacsDelete.length; i++)
-                                                         {
-                                                              idCurrent = idscontacsDelete[i];
+                                                      String idCurrent= "";
+                                                      for(int i = 0; i <idscontacsDelete.length; i++)
+                                                      {
+                                                        idCurrent = idscontacsDelete[i];
 
-                                                              for(int y = 0; y< empleoyes.length;y++)
-                                                              {
-                                                                  if(idCurrent==empleoyes[y].id)
-                                                                  {
-                                                                     empleoyes.removeAt(y);
-                                                                  }
-                                                              }
+                                                        for(int y = 0; y< empleoyes.length;y++)
+                                                        {
+                                                          if(idCurrent==empleoyes[y].id)
+                                                          {
+                                                            empleoyes.removeAt(y);
+                                                          }
+                                                        }
 
-                                                         }
-                                                         print("object");
-                                                         csvExportatorEmpleoyes(empleoyes);
+                                                      }
+
+                                                      csvExportatorEmpleoyes(empleoyes);
                                                     }
 
                                                   }
@@ -777,7 +859,7 @@ class _newFactoryState extends State<newFactory> {
                                         controllerContacs.clear();
                                         controllerEmpleoyee.clear();
                                         setState(() {
-                                          contacs.clear();
+                                          contacsCurrent.clear();
                                         });
                                         controllerEmpleoyeeNew.clear();
                                       }

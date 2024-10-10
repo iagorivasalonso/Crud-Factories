@@ -9,31 +9,27 @@ sqlImportFactories() async {
 
     for (var row in result) {
 
-
-      String  allEmp=row[13].toString();
-      List<String> emp=allEmp.split(",");
-
       factories.add(Factory(
           id: row[0].toString(),
           name: row[1],
           highDate: row[2],
-          thelephones: [row[3],row[4]],
-          mail: row[5],
-          web: row[6],
+          sector: row[3].toString(),
+          thelephones: [row[4],row[5]],
+          mail: row[6],
+          web: row[7],
           address: {
-            'street': row[7],
-            'number': row[8],
-            'apartament': row[9],
-            'city': row[10],
+            'street': row[8],
+            'number': row[9],
+            'apartament': row[10],
+            'city': row[11],
             'postalCode':row[12],
-            'province':row[11]
+            'province':row[13]
           },
-          contacts: emp
-
       ));
     }
   }catch(Exeption){
 
+    print(Exeption);
   }
 
 

@@ -7,6 +7,7 @@ class Factory {
   List<String> thelephones;
   String mail;
   String web;
+
   Map<String, String> address;
 
 
