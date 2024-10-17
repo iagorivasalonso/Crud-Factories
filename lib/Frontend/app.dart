@@ -167,23 +167,24 @@ class _AppState extends State<App> {
                   style: TextStyle(color:colorBar),)),
             submenu: SubMenu(
                 menuItems:[
-                  if(sectors.length==1)
-                  MenuButton(
-                      text: SizedBox(
-                          width: wItem,
-                          child: const Text("Empresas")),
-                      onTap: () async {
-                             if(factories.isNotEmpty)
-                             {
-                                 setState(() {
+                  if(sectors.length < 2 || factories.isEmpty)
+                    MenuButton(
+                        text: SizedBox(
+                            width: wItem,
+                            child: const Text("Empresas")),
+                            onTap: () async {
+                               if(factories.isNotEmpty)
+                               {
+                                  setState(() {
                                     itenSelect = 1;
                                     subIten1Select = 0;
-                                 });
-                             }
-                             else
-                             {
-                                String array = "empresas";
-                                int dat = await noCategory(context, array);
+                                    subIten2Select = 0;
+                                  });
+                               }
+                               else
+                               {
+                                 String array = "empresas";
+                                  int dat = await noCategory(context, array);
 
                                  if(dat == 1)
                                  {
@@ -193,7 +194,7 @@ class _AppState extends State<App> {
                                      subIten2Select = 0;
                                    });
                                  }
-                                 else if(dat == 2)
+                                 else
                                  {
                                    setState(() {
                                      itenSelect = 0;
@@ -201,47 +202,36 @@ class _AppState extends State<App> {
                                      subIten2Select = 0;
                                    });
                                  }
-                                 else
-                                 {
-                                   setState(() {
-                                     itenSelect = -1;
-                                     subIten1Select = -1;
-                                     subIten2Select = -1;
-                                   });
-                                 }
-
-                             }
-
-
-                      }
-                  ),
-                  if(sectors.length>1)
+                               }
+                            }
+                    ),
+                  if(sectors.length>1 && factories.isNotEmpty)
                   MenuButton(
                         text: SizedBox(
                             width: wItem,
                             child: const Text("Empresas")),
                         submenu: SubMenu(
                             menuItems:
-                              [
-                                MenuButton(
-                                    text: SizedBox(
-                                        width:  wItem,
-                                        child: Text("Todas")),
-                                    onTap: (){
-                                      setState(() {
-                                        itenSelect = 1;
-                                        subIten1Select = 0;
-                                        subIten2Select = 0;
+                            [
+                              MenuButton(
+                                  text: SizedBox(
+                                      width:  wItem,
+                                      child: Text("Todas")),
+                                  onTap: (){
+                                    setState(() {
+                                      itenSelect = 1;
+                                      subIten1Select = 0;
+                                      subIten2Select = 0;
 
-                                      });
-                                    }
-                                ),
-                                for(int i = 0 ; i < sectors.length; i++)
+                                    });
+                                  }
+                              ),
+                              for(int i = 0 ; i < sectors.length; i++)
                                 MenuButton(
                                     text: SizedBox(
                                         width: sectors[i].name.length > 3
-                                               ? sectors[i].name.length * 8
-                                               : wItem,
+                                            ? sectors[i].name.length * 8
+                                            : wItem,
                                         child: Text(sectors[i].name)),
                                     onTap: (){
                                       setState(() {
@@ -252,9 +242,10 @@ class _AppState extends State<App> {
                                       });
                                     }
                                 ),
-                              ]
+                            ]
                         )
                     ),
+
                   MenuButton(
                       text: SizedBox(
                           width: wItem,
