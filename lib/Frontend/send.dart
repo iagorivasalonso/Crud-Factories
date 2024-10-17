@@ -4,6 +4,7 @@ import 'package:crud_factories/Backend/SQL/createLine.dart';
 import 'package:crud_factories/Backend/SQL/modifyLines.dart';
 import 'package:crud_factories/Backend/data.dart';
 import 'package:crud_factories/Backend/CSV/exportLines.dart';
+import 'package:crud_factories/Functions/createId.dart';
 import 'package:crud_factories/Objects/LineSend.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:intl/intl.dart';
@@ -430,7 +431,20 @@ class _newSendState extends State<newSend> {
                                           onPressed: () {
                                             setState(() {
                                               List <LineSend> current = [];
-                                              int idInit = line.length +1;
+                                              String idNew = "";
+
+                                              if(line.isNotEmpty)
+                                              {
+                                                String idLast = line[line.length-1].id;
+                                                idNew = createId(idLast);
+                                              }
+                                              else
+                                              {
+                                                idNew ="1";
+                                              }
+
+                                              int idInit = int.parse(idNew);
+
                                               if(select == -1)
                                               {
                                                 int allLines =0;

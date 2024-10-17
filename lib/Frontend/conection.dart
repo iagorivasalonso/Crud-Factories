@@ -14,6 +14,7 @@ import 'package:crud_factories/Backend/SQL/importLines.dart';
 import 'package:crud_factories/Backend/SQL/importMail.dart';
 import 'package:crud_factories/Backend/data.dart';
 import 'package:crud_factories/Backend/CSV/exportConections.dart';
+import 'package:crud_factories/Functions/createId.dart';
 import 'package:crud_factories/Functions/validatorCamps.dart';
 import 'package:crud_factories/Objects/Conection.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
@@ -358,11 +359,22 @@ class _conectionState extends State<conection> {
 
                                              if (primaryKeyCorrect(controllerNameBD.text, nameCamp,allKeys, campOld, context) == true)
                                              {
+                                               String idNew = "";
+
                                                if(action1 == "Nueva")
                                                {
-                                                  int idNew = conections.length +1;
+                                                 if(conections.isNotEmpty)
+                                                 {
+                                                   String idLast = conections[conections.length-1].id;
+                                                   idNew = createId(idLast);
+                                                 }
+                                                 else
+                                                 {
+                                                   idNew ="1";
+                                                 }
+
                                                   conections.add(Conection(
-                                                     id: idNew.toString(),
+                                                     id: idNew,
                                                      database: controllerNameBD.text,
                                                      port: controllerPort.text,
                                                      host: controllerHost.text,

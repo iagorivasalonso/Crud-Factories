@@ -10,6 +10,7 @@ import 'package:crud_factories/Backend/SQL/deleteEmpleoye.dart';
 import 'package:crud_factories/Backend/SQL/modifyFactory.dart';
 import 'package:crud_factories/Backend/data.dart';
 import 'package:crud_factories/Backend/CSV//exportFactories.dart';
+import 'package:crud_factories/Functions/createId.dart';
 import 'package:crud_factories/Functions/validatorCamps.dart';
 import 'package:crud_factories/Objects/Empleoye.dart';
 import 'package:crud_factories/Objects/Factory.dart';
@@ -291,9 +292,20 @@ class _newFactoryState extends State<newFactory> {
                                                       {
                                                             setState(() {
                                                               List<Sector> currentSector=[];
-                                                              int idNew = sectors.length + 1;
+                                                              String idNew = "";
+
+                                                              if(sectors.isNotEmpty)
+                                                              {
+                                                                String idLast = sectors[sectors.length-1].id;
+                                                                idNew = createId(idLast);
+                                                              }
+                                                              else
+                                                              {
+                                                                idNew ="1";
+                                                              }
+
                                                               currentSector.add(Sector(
-                                                                   id: idNew.toString(),
+                                                                   id: idNew,
                                                                    name: sectorcreate,
                                                                 ));
 
@@ -533,10 +545,20 @@ class _newFactoryState extends State<newFactory> {
                                             setState(() {
 
                                               edit = true;
-                                              int idNew = empleoyes.length + 1;
+                                              String idNew = "";
+
+                                              if(empleoyes.isNotEmpty)
+                                              {
+                                                String idLast = empleoyes[empleoyes.length-1].id;
+                                                idNew = createId(idLast);
+                                              }
+                                              else
+                                              {
+                                                idNew ="1";
+                                              }
 
                                               contacsCurrent.add(Empleoye(
-                                                id: idNew.toString(),
+                                                id: idNew,
                                                 name: controllerEmpleoyeeNew.text,
                                                 idFactory: id
                                               ));
@@ -750,9 +772,20 @@ class _newFactoryState extends State<newFactory> {
                                                      }
                                                     if(select == - 1)
                                                     {
-                                                      int idNew = factories.length+1;
+                                                      String idNew = "";
+
+                                                      if(factories.isNotEmpty)
+                                                      {
+                                                        String idLast = factories[factories.length-1].id;
+                                                        idNew = createId(idLast);
+                                                      }
+                                                      else
+                                                      {
+                                                        idNew ="1";
+                                                      }
+
                                                       current.add(Factory(
-                                                          id:idNew.toString(),
+                                                          id: idNew,
                                                           name: controllerName.text,
                                                           highDate: controllerHighDate.text,
                                                           sector: controllerSector.text,
@@ -807,7 +840,7 @@ class _newFactoryState extends State<newFactory> {
                                                     else
                                                     {
                                                       factories = factories + current;
-                                                      csvExportatorFactories(factories,select);
+                                                      csvExportatorFactories(factories);
 
                                                       empleoyes = [
                                                         ...{...empleoyes, ...contacsCurrent}

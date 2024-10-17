@@ -21,6 +21,7 @@ import 'package:crud_factories/Backend/CSV/importConections.dart';
 import 'package:crud_factories/Backend/CSV/importFactories.dart';
 import 'package:crud_factories/Backend/CSV/importLines.dart';
 import 'package:crud_factories/Backend/CSV/importMails.dart';
+import 'package:crud_factories/Functions/createId.dart';
 import 'package:crud_factories/Objects/Conection.dart';
 import 'package:crud_factories/Objects/Empleoye.dart';
 import 'package:crud_factories/Objects/Factory.dart';
@@ -141,7 +142,7 @@ class _newImportState extends State<newImport> {
                                   MaterialButton(
                                     color: Colors.lightBlue,
                                     child: const Text('Importar datos',
-                                    style:  const TextStyle(color: Colors.white) ,),
+                                      style:  const TextStyle(color: Colors.white) ,),
                                     onPressed: () async {
 
                                       String action = '';
@@ -152,367 +153,382 @@ class _newImportState extends State<newImport> {
 
                                       if(sectorsNew.isNotEmpty)
                                       {
-                                           repeat = false;
-                                           cantImport = sectorsNew.length;
+                                        repeat = false;
 
-                                               for(int i = 0; i < sectorsNew.length; i++)
-                                               {
-                                                     repeat = false;
-                                                     current = sectorsNew[i].name;
+                                        for(int i = 0; i < sectorsNew.length; i++)
+                                        {
+                                          repeat = false;
+                                          current = sectorsNew[i].name;
 
-                                                     for (int i = 0; i < sectors.length; i++)
-                                                     {
-                                                          if(sectors[i].name == current)
-                                                          {
-                                                              repeat = true;
-                                                              cantImport--;
-                                                          }
+                                          for (int i = 0; i < sectors.length; i++)
+                                          {
+                                            if(sectors[i].name == current)
+                                            {
+                                              repeat = true;
+                                            }
 
-                                                          if(repeat == false)
-                                                          {
-                                                              sectors.add(sectorsNew[i]);
-                                                          }
-                                                     }
-                                                     if(cantImport > 0)
-                                                     {
-                                                       action ='se importaron $cantImport sectors correctamente';
-                                                       confirm(context,action);
-                                                     }
-                                                     else
-                                                     {
-                                                       action = 'no hay ningun sector para importar';
-                                                       confirm(context, action);
-                                                     }
-                                                     int cant = sectors.length;
+                                          }
+                                            if(repeat == false)
+                                            {
+                                              if(sectors.isNotEmpty)
+                                              {
+                                                String idLast = sectors[sectors.length-1].id;
+                                                sectorsNew[i].id = createId(idLast);
+                                              }
+                                              else
+                                              {
+                                                sectorsNew[i].id ="1";
+                                              }
 
-                                                     for(int i = 0; i <sectorsNew.length; i++)
-                                                     {
-                                                       int idNew = cant +i;
-                                                       sectorsNew[i].id = idNew.toString();
-                                                     }
-                                                     if(conn != null)
-                                                     {
-                                                         sqlCreateSector(sectorsNew);
-                                                     }
-                                                     else
-                                                     {
-                                                       csvExportatorSectors(sectors);
-                                                     }
-                                               }
+                                              cantImport++;
+                                              sectors.add(sectorsNew[i]);
+                                            }
+
+                                          if(cantImport > 0)
+                                          {
+                                            action ='se importaron $cantImport sectors correctamente';
+                                            confirm(context,action);
+                                          }
+                                          else
+                                          {
+                                            action = 'no hay ningun sector para importar';
+                                            confirm(context, action);
+                                          }
+                                
+                                          if(conn != null)
+                                          {
+                                            sqlCreateSector(sectorsNew);
+                                          }
+                                          else
+                                          {
+                                            csvExportatorSectors(sectors);
+                                          }
+                                        }
                                       }
 
                                       if(empleoyesNew.isNotEmpty)
                                       {
 
+                                        for(int i = 0; i < empleoyesNew.length; i++)
+                                        {
+                                          current = empleoyesNew[i].idFactory;
+                                          bool repeat = false;
 
-                                              for(int i = 0; i < empleoyesNew.length; i++)
+                                          for(int x = 0; x < factories.length; x++)
+                                          {
+                                            if(current == factories[x].id)
+                                            {
+
+                                              repeat = true;
+                                            }
+                                          }
+
+                                          if(repeat == false)
+                                          {
+                                            empleoyesNew.removeAt(i);
+                                            String stringDialog ="El empleado $current no pertenece a la empresa";
+                                            repeat = await noFind(context, true, stringDialog);
+                                          }
+                                        }
+
+                                        for(int i = 0; i < empleoyesNew.length; i++)
+                                        {
+                                          repeat = false;
+                                          current = empleoyesNew[i].name;
+                                          current1 = empleoyesNew[i].idFactory;
+
+                                          if(line.isNotEmpty)
+                                          {
+                                            for(int x = 0; x <empleoyes.length; x++)
+                                            {
+                                              if(empleoyes[x].name == current  && empleoyes[x].idFactory == current1)
                                               {
-                                                current = empleoyesNew[i].idFactory;
-                                                bool exist = false;
-
-                                                      for(int x = 0; x < factories.length; x++)
-                                                      {
-                                                            if(current == factories[x].id)
-                                                            {
-                                                              cantImport += 1;
-                                                              exist = true;
-                                                            }
-                                                      }
-
-                                                      if(exist == false)
-                                                      {
-                                                        empleoyesNew.removeAt(i);
-                                                        cantImport--;
-                                                        String stringDialog ="El empleado $current no pertenece a la empresa";
-                                                        exist = await noFind(context, true, stringDialog);
-                                                      }
+                                                repeat = true;
                                               }
+                                            }
+                                          }
 
-                                              for(int i = 0; i < empleoyesNew.length; i++)
-                                              {
-                                                repeat = false;
-                                                current = empleoyesNew[i].name;
-                                                current1 = empleoyesNew[i].idFactory;
+                                          if(repeat == false)
+                                          {
+                                            if(empleoyes.isNotEmpty)
+                                            {
+                                              String idLast = empleoyes[empleoyes.length-1].id;
+                                              empleoyesNew[i].id = createId(idLast);
+                                            }
+                                            else
+                                            {
+                                              empleoyesNew[i].id ="1";
+                                            }
 
-                                                if(line.isNotEmpty)
-                                                {
-                                                  for(int x = 0; x <empleoyes.length; x++)
-                                                  {
-                                                    if(empleoyes[x].name == current  && empleoyes[x].idFactory == current1)
-                                                    {
-                                                      repeat = true;
-                                                      cantImport--;
-                                                    }
-                                                  }
-                                                }
+                                            cantImport++;
+                                            empleoyes.add(empleoyesNew[i]);
+                                          }
 
+                                        }
 
-                                                if(repeat == false)
-                                                {
-                                                  int tmp = empleoyes.length + 1;
-                                                  empleoyesNew[i].id = tmp.toString();
-                                                  empleoyes.add(empleoyesNew[i]);
-                                                }
+                                        if(cantImport > 0)
+                                        {
+                                          action ='se importaron $cantImport empleados correctamente';
+                                          confirm(context,action);
+                                        }
+                                        else
+                                        {
+                                          action = 'no hay ningun empleado para importar';
+                                          confirm(context, action);
+                                        }
 
-                                              }
-
-                                              if(cantImport > 0)
-                                              {
-                                                action ='se importaron $cantImport empleados correctamente';
-                                                confirm(context,action);
-                                              }
-                                              else
-                                              {
-                                                action = 'no hay ningun empleado para importar';
-                                                confirm(context, action);
-                                              }
-
-
-
-                                              if(conn != null)
-                                              {
-                                                 sqlCreateEmpleoye(empleoyesNew);
-                                              }
-                                              else
-                                              {
-                                                csvExportatorEmpleoyes(empleoyes);
-                                              }
+                                        if(conn != null)
+                                        {
+                                          sqlCreateEmpleoye(empleoyesNew);
+                                        }
+                                        else
+                                        {
+                                          csvExportatorEmpleoyes(empleoyes);
+                                        }
 
                                       }
                                       if(mailsNew.isNotEmpty)
                                       {
+                                        for(int i = 0; i <mailsNew.length; i++)
+                                        {
                                           repeat = false;
-                                          cantImport = mailsNew.length;
+                                          current = mailsNew[i].addrres;
 
-                                                  for(int i = 0; i <mailsNew.length; i++)
-                                                  {
-                                                        repeat = false;
-                                                        current = mailsNew[i].addrres;
+                                          for(int x = 0; x <mails.length; x++)
+                                          {
+                                            if(mails[x].addrres == current)
+                                            {
+                                              repeat = true;
+                                            }
+                                          }
 
-                                                             for(int x = 0; x <mails.length; x++)
-                                                             {
-                                                                 if(mails[x].addrres == current)
-                                                                 {
-                                                                    repeat = true;
-                                                                    cantImport--;
-                                                                 }
-                                                             }
+                                          if(repeat == false)
+                                          {
+                                            if(mails.isNotEmpty)
+                                            {
+                                              String idLast = mails[mails.length-1].id;
+                                              mailsNew[i].id = createId(idLast);
+                                            }
+                                            else
+                                            {
+                                              mailsNew[i].id ="1";
+                                            }
 
-                                                            if(repeat == false)
-                                                            {
-                                                              mails.add(mailsNew[i]);
-                                                            }
+                                            cantImport++;
+                                            mails.add(mailsNew[i]);
+                                          }
 
-                                                  }
-                                                  if(cantImport > 0)
-                                                  {
-                                                    action ='se importaron $cantImport emails correctamente';
-                                                    confirm(context,action);
-                                                  }
-                                                  else
-                                                  {
-                                                     action = 'no hay ningun email para importar';
-                                                     confirm(context, action);
-                                                  }
-                                                  int cant = mails.length;
+                                        }
+                                        if(cantImport > 0)
+                                        {
+                                          action ='se importaron $cantImport emails correctamente';
+                                          confirm(context,action);
+                                        }
+                                        else
+                                        {
+                                          action = 'no hay ningun email para importar';
+                                          confirm(context, action);
+                                        }
 
-                                                  for(int i = 0; i <mailsNew.length; i++)
-                                                  {
-                                                    int idNew = cant +i;
-                                                    mailsNew[i].id = idNew.toString();
-                                                  }
-                                                  if(conn != null)
-                                                  {
-                                                       sqlCreateMail(mailsNew);
-                                                  }
-                                                  else
-                                                  {
-                                                    csvExportatorMails(mails);
-                                                  }
+
+                                        if(conn != null)
+                                        {
+                                          sqlCreateMail(mailsNew);
+                                        }
+                                        else
+                                        {
+                                          csvExportatorMails(mails);
+                                        }
                                       }
                                       if(linesNew.isNotEmpty)
                                       {
-                                          cantImport = linesNew.length;
 
-                                                  for(int i = 0; i < linesNew.length; i++)
-                                                  {
-                                                            current = linesNew[i].factory;
-                                                            bool exist = false;
+                                        for(int i = 0; i < linesNew.length; i++)
+                                        {
+                                          current = linesNew[i].factory;
+                                          repeat = false;
 
-                                                                  for(int x = 0; x < factories.length; x++)
-                                                                  {
-                                                                       if(current == factories[x].name)
-                                                                       {
-                                                                          exist = true;
-                                                                       }
-                                                                  }
-
-                                                                  if(exist == false)
-                                                                  {
-                                                                    linesNew.removeAt(i);
-                                                                    cantImport--;
-                                                                    String stringDialog ="La empresa $current no perdatos";
-                                                                    exist = await noFind(context, true, stringDialog);
-                                                                  }
-                                                            }
-                                                  cantImport = linesNew.length;
-
-                                                  for(int i = 0; i < linesNew.length; i++)
-                                                  {
-                                                      repeat = false;
-                                                      current = linesNew[i].date;
-                                                      current1 = linesNew[i].factory;
-
-                                                      if(line.isNotEmpty)
-                                                      {
-                                                           for(int x = 0; x <line.length; x++)
-                                                           {
-                                                               if(line[x].date == current  && line[x].factory == current1)
-                                                               {
-                                                                    repeat = true;
-                                                                    cantImport--;
-                                                               }
-                                                          }
-                                                      }
-
-
-                                                      if(repeat == false)
-                                                      {
-                                                        int tmp = line.length + 1;
-                                                        linesNew[i].id = tmp.toString();
-                                                        line.add(linesNew[i]);
-                                                      }
-
-                                                  }
-
-                                          if(cantImport > 0)
+                                          for(int x = 0; x < factories.length; x++)
                                           {
-                                            action ='se importaron $cantImport lineas correctamente';
-                                            confirm(context,action);
-                                          }
-                                          else
-                                          {
-                                            action = 'no hay ninguna linea para importar';
-                                            confirm(context, action);
+                                            if(current == factories[x].name)
+                                            {
+                                              repeat = true;
+                                            }
                                           }
 
-
-
-                                          if(conn != null)
+                                          if(repeat == false)
                                           {
-                                            sqlCreateLine(linesNew);
+                                            linesNew.removeAt(i);
+                                            String stringDialog ="La empresa $current no perdatos";
+                                            repeat = await noFind(context, true, stringDialog);
                                           }
-                                          else
+                                        }
+                                        for(int i = 0; i < linesNew.length; i++)
+                                        {
+                                          repeat = false;
+                                          current = linesNew[i].date;
+                                          current1 = linesNew[i].factory;
+
+                                          if(line.isNotEmpty)
                                           {
-                                            csvExportatorLines(line);
+                                            for(int x = 0; x <line.length; x++)
+                                            {
+                                              if(line[x].date == current  && line[x].factory == current1)
+                                              {
+                                                repeat = true;
+                                              }
+                                            }
                                           }
+
+                                          if(repeat == false)
+                                          {
+                                            if(line.isNotEmpty)
+                                            {
+                                              String idLast = line[line.length-1].id;
+                                              linesNew[i].id = createId(idLast);
+                                            }
+                                            else
+                                            {
+                                              linesNew[i].id ="1";
+                                            }
+                                            cantImport++;
+                                            line.add(linesNew[i]);
+                                          }
+
+                                        }
+
+                                        if(cantImport > 0)
+                                        {
+                                          action ='se importaron $cantImport lineas correctamente';
+                                          confirm(context,action);
+                                        }
+                                        else
+                                        {
+                                          action = 'no hay ninguna linea para importar';
+                                          confirm(context, action);
+                                        }
+
+                                        if(conn != null)
+                                        {
+                                          sqlCreateLine(linesNew);
+                                        }
+                                        else
+                                        {
+                                          csvExportatorLines(line);
+                                        }
                                       }
                                       if(conectionsNew.isNotEmpty)
                                       {
-                                        cantImport = conectionsNew.length;
-                                           repeat = false;
+                                        repeat = false;
 
-                                             for(int i = 0; i <conectionsNew.length; i++)
-                                             {
-                                                    repeat = false;
-                                                    current = conectionsNew[i].database;
+                                        for(int i = 0; i <conectionsNew.length; i++)
+                                        {
+                                          repeat = false;
+                                          current = conectionsNew[i].database;
 
-                                                      for(int x = 0; x <conections.length; x++)
-                                                      {
-                                                          if(conections[x].database == current)
-                                                          {
-                                                             repeat= true;
-                                                             cantImport--;
-                                                          }
-                                                      }
-                                                      if(repeat == false)
-                                                      {
-                                                           conections.add(conectionsNew[i]);
-                                                      }
+                                          for(int x = 0; x <conections.length; x++)
+                                          {
+                                            if(conections[x].database == current)
+                                            {
+                                              repeat= true;
+                                            }
+                                          }
+                                          if(repeat == false)
+                                          {
+                                              if(conections.isNotEmpty)
+                                              {
+                                                String idLast = conections[conections.length-1].id;
+                                                conectionsNew[i].id = createId(idLast);
+                                              }
+                                              else
+                                              {
+                                                conectionsNew[i].id ="1";
+                                              }
 
-                                                }
+                                              cantImport++;
+                                              conections.add(conectionsNew[i]);
+                                          }
 
-                                                if(cantImport > 0)
-                                                {
-                                                     action = 'se importaron $cantImport conexiones correctamente';
-                                                     confirm(context, action);
-                                                }
-                                                else
-                                                {
-                                                    action = 'no hay ninguna conexion para importar';
-                                                    confirm(context, action);
-                                                 }
+                                        }
 
-                                                  int cant = conections.length + 1;
+                                        if(cantImport > 0)
+                                        {
+                                          action = 'se importaron $cantImport conexiones correctamente';
+                                          confirm(context, action);
+                                        }
+                                        else
+                                        {
+                                          action = 'no hay ninguna conexion para importar';
+                                          confirm(context, action);
+                                        }
 
-                                                for(int i = 0; i < conectionsNew.length; i++)
-                                                {
-                                                    int id = i + cant;
-                                                    conectionsNew[i].id = id.toString();
-                                                }
-                                              csvExportatorConections(conections);
+                                        csvExportatorConections(conections);
                                       }
                                       if(factoriesNew.isNotEmpty)
                                       {
-                                            repeat = false;
-                                            cantImport = factoriesNew.length;
-                                                  for(int i = 0; i <factoriesNew.length; i++)
-                                                  {
-                                                    repeat = false;
-                                                    current = factoriesNew[i].name;
+                                        repeat = false;
 
-                                                    for(int x = 0; x <factories.length; x++)
-                                                    {
-                                                      if(factories[x].name == current)
-                                                      {
-                                                        repeat= true;
-                                                        cantImport--;
-                                                      }
+                                        for(int i = 0; i <factoriesNew.length; i++)
+                                        {
+                                          repeat = false;
+                                          current = factoriesNew[i].name;
 
-                                                    }
-
-                                                    if(repeat == false)
-                                                    {
-                                                      factories.add(factoriesNew[i]);
-                                                    }
-
-                                            }
-                                            if(cantImport > 0)
+                                          for(int x = 0; x <factories.length; x++)
+                                          {
+                                            if(factories[x].name == current)
                                             {
-                                              action = 'se importaron $cantImport empresas correctamente';
-                                              confirm(context, action);
-                                            }
-                                            else
-                                            {
-                                              action = 'no hay ninguna empresa para importar';
-                                              confirm(context, action);
+                                              repeat= true;
                                             }
 
-                                            if(conn != null)
-                                            {
-                                              sqlCeateFactory(factoriesNew);
-                                            }
-                                            else
-                                            {
-                                              for(int i = 0; i < factories.length; i++)
-                                              {
-                                                int id = i + 1;
-                                                factories[i].id = id.toString();
-                                              }
+                                          }
 
-                                              csvExportatorFactories(factories, -1);
+                                          if(repeat == false)
+                                          {
+                                             if(factories.isNotEmpty)
+                                             {
+                                              String idLast = factories[factories.length-1].id;
+                                              factoriesNew[i].id = createId(idLast);
                                             }
+                                             else
+                                             {
+                                              factoriesNew[i].id ="1";
+                                            }
+
+                                            cantImport++;
+                                            factories.add(factoriesNew[i]);
+                                          }
+
+                                        }
+                                        if(cantImport > 0)
+                                        {
+                                          action = 'se importaron $cantImport empresas correctamente';
+                                          confirm(context, action);
+                                        }
+                                        else
+                                        {
+                                          action = 'no hay ninguna empresa para importar';
+                                          confirm(context, action);
+                                        }
+
+                                        if(conn != null)
+                                        {
+                                          sqlCeateFactory(factoriesNew);
+                                        }
+                                        else
+                                        {
+                                          csvExportatorFactories(factories);
+                                        }
                                       }
                                     },
                                   ),
                                   MaterialButton(
                                     color: Colors.lightBlue,
                                     child: const Text('Borrar',
-                                        style: const TextStyle(color: Colors.white),),
+                                      style: const TextStyle(color: Colors.white),),
                                     onPressed: () {
-                                          setState(() {
-                                            controllerDatePicker.text = "";
-                                          });
+                                      setState(() {
+                                        controllerDatePicker.text = "";
+                                      });
                                     },
                                   ),
                                 ],
@@ -532,6 +548,7 @@ class _newImportState extends State<newImport> {
     );
   }
 }
+
 
 void _pickFile(BuildContext context, TextEditingController controllerDatePicker,List<Sector> sectors, List<Factory> factories, List<Empleoye> empleoyes, List<Mail> mails, List<LineSend> lines, List<Conection> conections) async {
 
@@ -560,10 +577,12 @@ void _pickFile(BuildContext context, TextEditingController controllerDatePicker,
   fileContent = await file1.readAsLines();
   List <String> camps = [];
 
+
   for (int i = 0; i <fileContent.length; i++)
   {
     camps = fileContent[i].split(",");
   }
+
      if(camps.length==2)
     {
 
@@ -573,7 +592,7 @@ void _pickFile(BuildContext context, TextEditingController controllerDatePicker,
 
          }
     }
-    if(camps.length==3)
+    else if(camps.length==3)
     {
 
       try {

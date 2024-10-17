@@ -7,6 +7,7 @@ import 'package:crud_factories/Backend/SQL/importMail.dart';
 import 'package:crud_factories/Backend/SQL/modifyMail.dart';
 import 'package:crud_factories/Backend/data.dart';
 import 'package:crud_factories/Backend/CSV/exportMails.dart';
+import 'package:crud_factories/Functions/createId.dart';
 import 'package:crud_factories/Functions/validatorCamps.dart';
 import 'package:crud_factories/Objects/Mail.dart';
 import 'package:flutter/material.dart';
@@ -212,44 +213,53 @@ class _newMailState extends State<newMail> {
 
                                                 controllerCompany.text = extCompany[0];
 
-                                                if (select == -1) {
-                                                  int idNew = mails.length + 1;
+                                                if (select == -1)
+                                                {
+                                                  String idNew = "";
+
+                                                  if(mails.isNotEmpty)
+                                                  {
+                                                    String idLast = mails[mails.length-1].id;
+                                                    idNew = createId(idLast);
+                                                  }
+                                                  else
+                                                  {
+                                                    idNew ="1";
+                                                  }
+                                                  
                                                   current.add(Mail(
-                                                      id: idNew.toString(),
-                                                      company: controllerCompany
-                                                          .text,
-                                                      addrres: controllerMail
-                                                          .text,
+                                                      id: idNew,
+                                                      company: controllerCompany.text,
+                                                      addrres: controllerMail.text,
                                                       password: encodedPass
                                                   ));
                                                 }
-                                                else {
-                                                  mails[select].addrres =
-                                                      controllerMail.text;
-                                                  mails[select].company =
-                                                      controllerCompany.text;
-                                                  mails[select].password =
-                                                      encodedPass;
+                                                else
+                                                {
+                                                  mails[select].addrres = controllerMail.text;
+                                                  mails[select].company = controllerCompany.text;
+                                                  mails[select].password = encodedPass;
                                                 }
 
 
-                                                if (result == true) {
+                                                if (result == true)
+                                                {
                                                   String action = '';
 
-                                                  if (select == -1) {
-                                                    action =
-                                                    'El correo se ha dado de alta correctamente';
+                                                  if (select == -1)
+                                                  {
+                                                    action = 'El correo se ha dado de alta correctamente';
                                                     confirm(context, action);
                                                   }
-                                                  else {
-                                                    action =
-                                                    'El correo se ha modificado correctamente';
+                                                  else
+                                                  {
+                                                    action = 'El correo se ha modificado correctamente';
                                                     confirm(context, action);
                                                   }
                                                 }
-                                                else {
-                                                  action =
-                                                  'Compruebe su usuario o contraseña';
+                                                else
+                                                {
+                                                  action = 'Compruebe su usuario o contraseña';
                                                   error(context, action);
                                                 }
                                               }
