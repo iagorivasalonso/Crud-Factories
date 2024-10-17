@@ -109,11 +109,11 @@ class _newFactoryState extends State<newFactory> {
 
                if (apartament == "")
                {
-                  allAddress = '$address, $number ';
+                  allAddress = '$address,$number';
                }
                else
                {
-                   allAddress = '$address, $number - $apartament';
+                   allAddress = '$address,$number-$apartament';
                }
       controllerAdrress.text = allAddress!;
       controllerCity.text = factories[select].address['city']!;

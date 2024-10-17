@@ -32,7 +32,7 @@ csvImportFactories(List<String> fileContent, List<Factory> factories) async {
         web: select[7],
         address: {
           'street': select[8],
-          'number': select[9].replaceAll(" ",""),
+          'number': select[9],
           'apartament': select[10],
           'city': select[11],
           'postalCode':select[12] ,
