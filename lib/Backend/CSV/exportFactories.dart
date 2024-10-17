@@ -3,7 +3,7 @@ import 'package:crud_factories/Objects/Factory.dart';
 import 'package:csv/csv.dart';
 
 
-void csvExportatorFactories(List<Factory> factories, int select) async {
+void csvExportatorFactories(List<Factory> factories) async {
 
   File myFile = File('D:/factories.csv');
 
