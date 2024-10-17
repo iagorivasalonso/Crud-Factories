@@ -49,18 +49,18 @@ class _newSendState extends State<newSend> {
   @override
   Widget build(BuildContext context) {
 
+    String type = widget.SeletedFilter;
+    String selectCamp = widget.selectCamp;
+    int select = widget.select;
     int cant = 0;
     String stringFactories = "";
     String title = "";
     String typeList="";
-    String type = widget.SeletedFilter;
     String action1 = "";
     String action2 = "";
     List<LineSend> lineSelected = [];
 
     List <String> campKey = [];
-    int select=widget.select;
-
 
     if (select == -1) {
 
@@ -70,6 +70,7 @@ class _newSendState extends State<newSend> {
       action1 = "Nuevo";
       action2 = "Reiniciar";
       campsTable = ['Empresa', 'Observaciones', 'Estado', 'Seleccionar'];
+
       for (int i = 0; i < factories.length; i++)
       {
         _controllersObserLine.add(TextEditingController());
@@ -98,20 +99,39 @@ class _newSendState extends State<newSend> {
 
         type = "Fecha:  ";
         campsTable = ['Empresa', 'Observaciones', 'Estado'];
-        controllerSearch.text = line[0].showFormatDate(dateSends[select]);
+
 
           lineSelected.clear();
 
+         if(selectCamp.isEmpty)
+         {
 
-        for (int i = 0; i < line.length; i++)
-        {
-          if(controllerSearch.text == line[0].showFormatDate(line[i].date))
-          {
-            lineSelected.add(line[i]);
-            campKey.add(line[i].factory);
-          }
+           controllerSearch.text = line[0].showFormatDate(line[0].date);
 
-        }
+           for (int i = 0; i < line.length; i++)
+           {
+             if(controllerSearch.text == line[0].showFormatDate(line[i].date))
+             {
+               lineSelected.add(line[i]);
+               campKey.add(line[i].factory);
+             }
+
+           }
+         }
+         else
+         {
+           controllerSearch.text = line[0].showFormatDate(selectCamp);
+
+           for (int i = 0; i < line.length; i++)
+           {
+             if(controllerSearch.text == line[0].showFormatDate(line[i].date))
+             {
+               lineSelected.add(line[i]);
+               campKey.add(line[i].factory);
+             }
+
+           }
+         }
         for (int i = 0; i < lineSelected.length; i++)
         {
           _controllersObserLine.add(TextEditingController());
@@ -139,7 +159,7 @@ class _newSendState extends State<newSend> {
       {
         type = "Empresa:  ";
         campsTable = ['Fecha', 'Observaciones', 'Estado'];
-        controllerSearch.text = factories[select].name;
+        controllerSearch.text = selectCamp;
 
         lineSelected.clear();
 
@@ -162,7 +182,6 @@ class _newSendState extends State<newSend> {
           }
 
         }
-
 
         cant = lineSelected.length;
         stringFactories = "A esta empresa se le hicieron $cant envios";
