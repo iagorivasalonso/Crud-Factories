@@ -32,11 +32,11 @@ class Factory {
 
      if(apartament=="")
      {
-       addressComplete=  '$address1,$number';
+       addressComplete=  '$address1, $number';
      }
      else
      {
-       addressComplete='$address1,$number-$apartament';
+       addressComplete='$address1, $number - $apartament';
      }
 
     return addressComplete;
