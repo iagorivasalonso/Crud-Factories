@@ -23,10 +23,16 @@ Future<String> createTables(BuildContext context) async {
   String err ="";
 
     try {
+           await conn.query('CREATE TABLE IF NOT EXISTS sectors '
+                  '(id int NOT NULL AUTO_INCREMENT PRIMARY KEY,'
+                  ' sector varchar(50) NOT NULL)'
+           );
+
             await conn.query('CREATE TABLE IF NOT EXISTS factories '
                 '(id int NOT NULL AUTO_INCREMENT PRIMARY KEY,'
                 ' name varchar(255) NOT NULL, '
                 ' highDate varchar(12) NOT NULL,'
+                ' sector int(11) NOT NULL,'
                 ' telephone1 varchar(9) NOT NULL,'
                 ' telephone2 varchar(9) NOT NULL,'
                 ' mail varchar(50) NOT NULL,'
@@ -37,7 +43,7 @@ Future<String> createTables(BuildContext context) async {
                 ' city varchar(10) NOT NULL, '
                 ' province varchar(10) NOT NULL, '
                 ' postalcode varchar(5) NOT NULL, '
-                ' empleoyes varchar(255))'
+                ' FOREIGN KEY fk_sectors(sector) REFERENCES sectors(id))'
             );
 
             await conn.query('CREATE TABLE IF NOT EXISTS lineSends '
@@ -56,6 +62,8 @@ Future<String> createTables(BuildContext context) async {
             );
 
     }catch(SQLException){
+
+      print(SQLException);
       String err= "No se pudieron crear las tablas de la base de datos";
       error(context, err);
     }
