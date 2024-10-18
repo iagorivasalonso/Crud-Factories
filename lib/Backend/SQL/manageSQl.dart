@@ -46,6 +46,13 @@ Future<String> createTables(BuildContext context) async {
                 ' FOREIGN KEY fk_sectors(sector) REFERENCES sectors(id))'
             );
 
+           await conn.query('CREATE TABLE IF NOT EXISTS empleoyes '
+               '(id int NOT NULL AUTO_INCREMENT PRIMARY KEY,'
+               ' name varchar(50) NOT NULL,'
+               ' idFactory int(11) NOT NULL,'
+               ' FOREIGN KEY fk_empleoyes(idFactory) REFERENCES factories(id))'
+           );
+
             await conn.query('CREATE TABLE IF NOT EXISTS lineSends '
                 '(id int NOT NULL AUTO_INCREMENT PRIMARY KEY,'
                 ' date varchar(12) NOT NULL, '
