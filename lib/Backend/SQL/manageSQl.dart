@@ -102,9 +102,11 @@ Future<String> createTables(BuildContext context) async {
    try {
 
         await conn.query('CREATE DATABASE $nameBDnew');
-        await conn.query('RENAME TABLE $nameBD.factories TO $nameBDnew.factories ');
+        await conn.query('RENAME TABLE $nameBD.sectors TO $nameBDnew.sectors');
+        await conn.query('RENAME TABLE $nameBD.factories TO $nameBDnew.factories');
+        await conn.query('RENAME TABLE $nameBD.empleoyes TO $nameBDnew.empleoyes');
         await conn.query('RENAME TABLE $nameBD.lineSends TO $nameBDnew.lineSends');
-        await conn.query('RENAME TABLE $nameBD.mails TO $nameBDnew.mails ');
+        await conn.query('RENAME TABLE $nameBD.mails TO $nameBDnew.mails');
         await conn.query('DROP DATABASE $nameBD');
 
    }catch(SQLException){
