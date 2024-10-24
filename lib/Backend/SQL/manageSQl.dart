@@ -98,22 +98,42 @@ Future<String> createTables(BuildContext context) async {
  Future<String> editDB(BuildContext context, String nameBD, String nameBDnew) async {
 
    String err="";
+   var showTablesVar = await conn.query('SHOW TABLES');
+   String sTablesLine = showTablesVar.toString();
+   String tmp= sTablesLine.substring(1,sTablesLine.length-1);
+
+   List<String> allLine = tmp.split(":");
+   List<String> nameTables = [];
+
+   for(int i = 0; i < allLine.length; i++)
+   {
+     if(i%2 == 0)
+     {
+       List<String> allLine2 =allLine[i].split("}");
+       nameTables.add(allLine2[0]);
+     }
+
+   }
+   nameTables.removeAt(0);
 
    try {
 
-        await conn.query('CREATE DATABASE $nameBDnew');
-        await conn.query('RENAME TABLE $nameBD.sectors TO $nameBDnew.sectors');
-        await conn.query('RENAME TABLE $nameBD.factories TO $nameBDnew.factories');
-        await conn.query('RENAME TABLE $nameBD.empleoyes TO $nameBDnew.empleoyes');
-        await conn.query('RENAME TABLE $nameBD.lineSends TO $nameBDnew.lineSends');
-        await conn.query('RENAME TABLE $nameBD.mails TO $nameBDnew.mails');
-        await conn.query('DROP DATABASE $nameBD');
+     await conn.query('CREATE DATABASE $nameBDnew');
+
+     for(int i = 0; i < nameTables.length; i++)
+     {
+         String nameTable = nameTables[i];
+        await conn.query('RENAME TABLE $nameBD.$nameTable TO $nameBDnew.$nameTable');
+     }
+
+     await conn.query('DROP DATABASE $nameBD');
 
    }catch(SQLException){
 
-           err = "Error al modificar el nombre ";
-           error(context, err);
+     err = "Error al modificar el nombre ";
+     error(context, err);
    }
+
 
    return err;
  }

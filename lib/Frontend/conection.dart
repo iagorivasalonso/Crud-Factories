@@ -327,18 +327,7 @@ class _conectionState extends State<conection> {
                                         password = controllerPas.text;
                                         bdName = controllerNameBD.text;
 
-                                        if(action1 == "Desconectar")
-                                        {
-
-                                            bd_action = "Desconection";
-                                            db = "";
-                                            actionsDB(bd_action,db);
-                                            setState(() {
-                                               action1 = "Conectar";
-                                            });
-
-                                        }
-                                        else if(action1 == "Nueva")
+                                        if(action1 == "Nueva")
                                         {
                                              List <String> allKeys = [];
 
@@ -419,11 +408,19 @@ class _conectionState extends State<conection> {
                                           db = controllerNameBD.text;
                                           actionsDB(bd_action, db);
                                         }
-                                        else if(action1 == "Conectar" || conn != null) {
+
+                                       if(conn != null)
+                                       {
+                                            bd_action = "Desconection";
+                                            db = "";
+                                           actionsDB(bd_action,db);
+                                       }
+                                       else
+                                       {
                                           bd_action = "Conection";
                                           db = controllerNameBD.text;
                                           actionsDB(bd_action, db);
-                                        }
+                                       }
 
                                     }catch(Exception ){
 
@@ -442,41 +439,44 @@ class _conectionState extends State<conection> {
 
                                           if(conn != null)
                                           {
-                                            String nameBD = conections[select].database;
-                                            String action1="base de datos $nameBD";
-                                            bool confirm1 = await confirmDelete(context, action1);
+                                               if(action2 == "Eliminar")
+                                               {
+                                                 String nameBD = conections[select].database;
+                                                 String action1="base de datos $nameBD";
+                                                 bool confirm1 = await confirmDelete(context, action1);
 
 
-                                            if(confirm1 == true)
-                                            {
-
-                                                 err = await deleteDB(context, nameBD,conn);
-
-                                                 if(err.isEmpty)
+                                                 if(confirm1 == true)
                                                  {
 
-                                                      setState(() {
-                                                        conn = null;
-                                                        action1 = "Nueva";
+                                                   err = await deleteDB(context, nameBD,conn);
 
-                                                        selectedConection = null;
+                                                   if(err.isEmpty)
+                                                   {
 
-                                                        controllerNameBD.text = "";
-                                                        controllerPort.text = "";
-                                                        controllerHost.text = "";
-                                                        controllerUser.text = "";
-                                                        controllerPas.text = "";
+                                                     setState(() {
+                                                       conn = null;
+                                                       action1 = "Nueva";
 
-                                                        editText = true;
+                                                       selectedConection = null;
 
-                                                      });
+                                                       controllerNameBD.text = "";
+                                                       controllerPort.text = "";
+                                                       controllerHost.text = "";
+                                                       controllerUser.text = "";
+                                                       controllerPas.text = "";
 
-                                                      conections.removeAt(select);
-                                                      action1 ='Se ha eliminado correctamente la conexion';
-                                                      confirm(context,action1);
+                                                       editText = true;
+
+                                                     });
+
+                                                     conections.removeAt(select);
+                                                     action1 ='Se ha eliminado correctamente la conexion';
+                                                     confirm(context,action1);
+                                                   }
+
                                                  }
-
-                                              }
+                                               }
 
                                           }
                                           else
@@ -535,6 +535,7 @@ class _conectionState extends State<conection> {
       }
 
       try{
+        sleep(Duration(seconds:5));
         conn = await MySqlConnection.connect(settings);
 
       } catch(exeption){
@@ -596,10 +597,9 @@ class _conectionState extends State<conection> {
 
          case "Desconection":
 
-            String action1 ='Ha cerrado la conexion';
-            confirm(context,action1);
+            String action ='Ha cerrado la conexion';
+            confirm(context,action);
             editText = true;
-
             conn = null;
 
             sectors.clear();
@@ -608,11 +608,13 @@ class _conectionState extends State<conection> {
             mails.clear();
             line.clear();
 
-            chargueDataCSV();
-
             setState(() {
               action1 = "Conectar";
             });
+
+            chargueDataCSV();
+
+
 
           break;
 
@@ -673,11 +675,12 @@ class _conectionState extends State<conection> {
 
                 String action1 = "La conexion fue modificada correctamente";
                 confirm(context,action1);
+                conn = null;
 
                 setState(() {
                   action0 = "Editar";
                   editText = false;
-                  action1 = "Desconectar";
+                  action1 = "Conectar";
                   action2 = "Eliminar";
                 });
               }
@@ -698,7 +701,6 @@ serverConnect() async {
     final arguments = <String>[];
     final process = await Process.start(
         executable, arguments, runInShell: true);
-    await stdout.addStream(process.stdout);
 
 }
 

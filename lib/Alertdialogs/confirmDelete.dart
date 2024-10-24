@@ -20,7 +20,7 @@ Future<bool> confirmDelete(BuildContext  context, String action) async {
                      padding:  const EdgeInsets.only(left: 30,top: 25, bottom: 35),
                      child: Row(
                        children: [
-                         Text("Desea eliminar la $action"),
+                         Text("¿Desea eliminar la $action ?"),
 
                        ],
                      ),
