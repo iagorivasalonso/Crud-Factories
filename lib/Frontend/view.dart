@@ -56,8 +56,8 @@ class _viewState extends State<view> {
   TextEditingController controllerSearchFactory = new TextEditingController();
   TextEditingController controllerSearchSend = new TextEditingController();
 
-  void _runFilter(String view, String enteredKeyboard, String filter,
-      String filter1, List<String> factoryName) {
+
+  Future<void> _runFilter(String view, String enteredKeyboard, String filter, String filter1, List<String> factoryName) async {
     if (filter1 == "Nombre") {
       filterFactory = "Nombre";
     }
@@ -123,16 +123,33 @@ class _viewState extends State<view> {
       bool noDat = false;
       var noDatfunction;
 
-      if (result.isEmpty) {
+      if (view =="factory" && resulFactories.isEmpty)
+      {
 
-
-        if (filter1 == "Empresa") {
           stringDialog = 'Esa empresa no pertenece a nuestra base de datos';
           noDat = true;
           noDatfunction = noFind(context, noDat, stringDialog);
+
+
+        filter1 = filter1.toLowerCase();
+
+        if (filter1 == "nombre" || filter1 == "telefono") {
+          filter1 = 'El $filter1';
         }
+
+        if (filter1 == "dirrección" || filter1 == "ciudad") {
+          filter1 = 'La $filter1';
+        }
+
       }
-      if (resulFactories.length == 0) {
+      if (view =="send"  && result.isEmpty)
+      {
+
+        stringDialog = 'No tenemos ningún envio en esa fecha';
+        noDat = true;
+        noDatfunction = noFind(context, noDat, stringDialog);
+
+
         filter1 = filter1.toLowerCase();
 
         if (filter1 == "nombre" || filter1 == "telefono") {
@@ -168,9 +185,9 @@ class _viewState extends State<view> {
 
     String view = widget.tView;
     bool err = widget.err;
-    
+
     double mWidthList = mWidth * 0.2;
-    
+
 
     if (mWidthList < 42.0)
       opSelected = 0;
@@ -241,6 +258,8 @@ class _viewState extends State<view> {
 
           });
      }
+
+
 
     return Scaffold(
          body: err == false
@@ -340,7 +359,7 @@ class _viewState extends State<view> {
                                                                                            factoryFilter=value.toString();
                                                                                            filterFactory = value.toString();
                                                                                            selectCamp=value.toString();
-print(selectCamp);
+
                                                                                             });
                                                                                           },
                                                                                           buttonStyleData: const ButtonStyleData(
@@ -421,9 +440,7 @@ print(selectCamp);
                                                                         selectedSend = value1;
                                                                         factoryFilter = value1.toString();
                                                                         sendFilter= value1.toString();
-                                                                        selectCamp = value1.toString();
                                                                         typefilter = sendFilter.toString();
-
                                                                         factoryName.clear();
 
                                                                         for(int i = 0; i <factories.length; i++)
