@@ -44,9 +44,8 @@ class _sendMailState extends State<sendMail> {
   double widthBar = 10.0;
 
   List<Attachment> atach=[];
-  bool isList = false;
+
   List <String> columns = [];
-  int rows = 0;
   List <String> columnsTable = ['Empresa','Email'];
   List <LineSend> sends = [];
   List <LineSend> sendsDay = [];
@@ -54,10 +53,12 @@ class _sendMailState extends State<sendMail> {
   List <Factory> selectedFactories = [];
   String? selectedSend;
   bool otherMail= false;
+  bool mailSave = false;
+  bool isList = false;
   Mail? selectedMail;
   int cantFactories = 0;
   double marginBox = 0;
-  bool mailSave = false;
+
   String nameRoute = "";
 
   @override

@@ -41,6 +41,7 @@ class _newMailState extends State<newMail> {
 
   @override
   Widget build(BuildContext context) {
+
     int select = widget.select;
 
     void campCharge() {

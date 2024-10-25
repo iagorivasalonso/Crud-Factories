@@ -44,20 +44,25 @@ class _conectionState extends State<conection> {
 
 
 
-  bool modify= false;
+  int select = - 1;
   String action0 = "Editar";
   String action1 = "Nueva";
   String action2 = "Eliminar";
-  int select = - 1;
-  bool editText = true;
-  bool serverConnected = false;
-  Conection? selectedConection;
+
+  String bdName = "";
   String host = "";
   int port = 0;
   String user = "";
   String password = "";
-  String bdName = "";
   String nameBDOld = "";
+  bool serverConnected = false;
+  bool editText = true;
+  bool modify= false;
+  Conection? selectedConection;
+
+
+
+
   bool conectNew = false;
 
 

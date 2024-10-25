@@ -59,10 +59,11 @@ class _newFactoryState extends State<newFactory> {
   List<String> idscontacsDelete = [];
   List<String> sectorsString = [];
 
+  DateTime seletedDate =DateTime.now();
+
   int contactSelect = 0;
   bool edit = false;
   String id ="";
-  DateTime seletedDate =DateTime.now();
   String date="";
   String sector = " ";
   String? selectedSector;

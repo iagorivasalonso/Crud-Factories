@@ -52,15 +52,17 @@ class _newSendState extends State<newSend> {
     String type = widget.SeletedFilter;
     String selectCamp = widget.selectCamp;
     int select = widget.select;
+
+    List<LineSend> lineSelected = [];
+    List <String> campKey = [];
+
     int cant = 0;
     String stringFactories = "";
     String title = "";
     String typeList="";
     String action1 = "";
     String action2 = "";
-    List<LineSend> lineSelected = [];
 
-    List <String> campKey = [];
 
     if (select == -1) {
 

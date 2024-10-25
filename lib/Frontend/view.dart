@@ -26,24 +26,25 @@ class view extends StatefulWidget {
 @override
 class _viewState extends State<view> {
 
+
+  List<Factory> campSearchFactory = [];
+  List<Factory> resulFactories = [];
+  List<String> campSearch = [];
+  List<String> result = [];
+  List<String> factoryName = [];
   List<String> opSearch = ['Todos', 'Filtrar'];
   List<String> filterList = [];
   List<String> filterListSends = ['Fecha', 'Empresa'];
   List<String> filterListFactories = ['Nombre','Dirrección','Telefono','Ciudad'];
   List <LineSend> sendsDay = [];
 
-  int opSelected = 0;
-  String selectCamp = "";
-  int cardSeleted = 0;
-  String textFilterFactory = ' ';
   int select = 0;
+  int opSelected = 0;
+  int cardSeleted = 0;
 
-  List<String> campSearch = [];
-  List<Factory> campSearchFactory = [];
-  List<Factory> resulFactories = [];
+  String selectCamp = "";
+  String textFilterFactory = ' ';
   String textFilterSend = "";
-  List<String> result = [];
-  List<String> factoryName = [];
   String? selectedFilterSend = 'Fecha';
   String typefilter = "";
   String? selectedFactory;
@@ -355,10 +356,7 @@ class _viewState extends State<view> {
                                                                                        onChanged: (String? value) {
                                                                                        setState(() {
 
-                                                                                           selectedFactory = value;
-                                                                                           factoryFilter=value.toString();
-                                                                                           filterFactory = value.toString();
-                                                                                           selectCamp=value.toString();
+                                                                                             selectedFactory = value;
 
                                                                                             });
                                                                                           },
