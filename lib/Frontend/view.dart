@@ -153,27 +153,19 @@ class _viewState extends State<view> {
 
         filter1 = filter1.toLowerCase();
 
-        if (filter1 == "nombre" || filter1 == "telefono") {
-          filter1 = 'El $filter1';
-        }
-
-        if (filter1 == "dirrección" || filter1 == "ciudad") {
-          filter1 = 'La $filter1';
-        }
-
       }
     }
     setState(() {
 
       if (view == "send" && filter1 == "Fecha") {
-        dateSends = result;
+        result = dateSends;
       }
 
       if (view == "send" && filter1 == "Empresa") {
-        factoryName = result;
+            result = factoryName;
       }
       if (view == "factory") {
-        campSearchFactory = resulFactories;
+        resulFactories = campSearchFactory;
       }
     });
   }
@@ -222,6 +214,7 @@ class _viewState extends State<view> {
         result = factoryName;
       }
       else {
+        print(dateSends);
         result = dateSends;
       }
     }
