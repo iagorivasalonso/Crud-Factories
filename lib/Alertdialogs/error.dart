@@ -4,8 +4,9 @@ import 'package:flutter/material.dart';
 
 Future<bool> error(BuildContext  context, String action, [format]) async {
 
-  bool err = await showDialog(
+  bool? err = await showDialog(
       context: context,
+      barrierDismissible: true,
       builder: (BuildContext context) {
         return StatefulBuilder(
           builder: (BuildContext context, void Function(void Function()) setState) => Dialog(
@@ -50,7 +51,8 @@ Future<bool> error(BuildContext  context, String action, [format]) async {
           ),
         );
 
-      });
-     return err;
+      },
+    );
+     return err ?? false;
 }
 

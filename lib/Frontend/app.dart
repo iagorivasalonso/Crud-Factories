@@ -38,8 +38,6 @@ class _AppState extends State<App> {
 
 
 
-        try {
-
           bool SQLbd = await typeConection(context);
 
           if(SQLbd == true)
@@ -49,9 +47,7 @@ class _AppState extends State<App> {
               subIten1Select = 1;
             });
           }
-        } catch (Exeption) {
 
-        }
     });
 
   }

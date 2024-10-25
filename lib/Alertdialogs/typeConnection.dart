@@ -3,8 +3,9 @@ import 'package:flutter/material.dart';
 
 Future<bool> typeConection (BuildContext  context,) async {
 
-  bool tConnection  = await   showDialog(
+  bool? tConnection  = await   showDialog(
       context: context,
+      barrierDismissible: true,
       builder: (BuildContext context, ) {
         return StatefulBuilder(
           builder: (BuildContext context, void Function(void Function()) setState) => Dialog(
@@ -54,6 +55,6 @@ Future<bool> typeConection (BuildContext  context,) async {
       });
 
 
-  return tConnection;
+  return tConnection ?? false;
 }
 

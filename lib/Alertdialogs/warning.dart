@@ -4,8 +4,9 @@ import 'package:flutter/material.dart';
 
 Future<bool> warning(BuildContext  context,String nameCamp) async{
 
- bool campEmpty = await showDialog(
+ bool? campEmpty = await showDialog(
      context: context,
+     barrierDismissible: true,
      builder: (BuildContext context, ) {
        return StatefulBuilder(
          builder: (BuildContext context, void Function(void Function()) setState) => Dialog(
@@ -54,5 +55,5 @@ Future<bool> warning(BuildContext  context,String nameCamp) async{
 
      });
 
-  return campEmpty;
+  return campEmpty ?? false;
 }
