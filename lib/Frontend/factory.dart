@@ -123,7 +123,7 @@ class _newFactoryState extends State<newFactory> {
 
        int idFactory = select +1;
 
-          if(edit == false)
+         if(edit == false)
          {
             contacsPreEdit.clear();
             contacsCurrent.clear();
