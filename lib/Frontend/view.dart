@@ -4,6 +4,7 @@ import 'package:crud_factories/Backend/data.dart';
 import 'package:crud_factories/Frontend/factory.dart';
 import 'package:crud_factories/Frontend/mail.dart';
 import 'package:crud_factories/Frontend/send.dart';
+import 'package:crud_factories/Functions/avoidRepeatArray.dart';
 import 'package:crud_factories/Objects/Factory.dart';
 import 'package:crud_factories/Objects/LineSend.dart';
 import 'package:crud_factories/Widgets/defaultCard.dart';
@@ -26,53 +27,51 @@ class view extends StatefulWidget {
 @override
 class _viewState extends State<view> {
 
-
-  List<Factory> campSearchFactory = [];
-  List<Factory> resulFactories = [];
-  List<String> campSearch = [];
-  List<String> result = [];
-  List<String> factoryName = [];
   List<String> opSearch = ['Todos', 'Filtrar'];
   List<String> filterList = [];
   List<String> filterListSends = ['Fecha', 'Empresa'];
   List<String> filterListFactories = ['Nombre','Dirrección','Telefono','Ciudad'];
   List <LineSend> sendsDay = [];
 
-  int select = 0;
-  int opSelected = 0;
-  int cardSeleted = 0;
 
   String selectCamp = "";
   String textFilterFactory = ' ';
+  int select = 0;
+  int cardSeleted = 0;
+  int opSelected = 0;
+  List<String> campSearch = [];
+  List<Factory> campSearchFactory = [];
+  List<Factory> resulFactories = [];
   String textFilterSend = "";
+  List<String> result = [];
+  List<String> factoryName = [];
   String? selectedFilterSend = 'Fecha';
-  String typefilter = "";
   String? selectedFactory;
   String? selectedSend;
-  String factoryFilter = 'Nombre';
-  String sendFilter = 'Fecha';
+
   String filterFactory = '';
 
 
-  TextEditingController controllerSearchFactory = new TextEditingController();
   TextEditingController controllerSearchSend = new TextEditingController();
 
 
-  Future<void> _runFilter(String view, String enteredKeyboard, String filter, String filter1, List<String> factoryName) async {
-    if (filter1 == "Nombre") {
+  Future<void> _runFilter(String view, String enteredKeyboard, String filter, List<String> factoryName, [String? filterFactory]) async {
+
+
+    if (filter == "Nombre") {
       filterFactory = "Nombre";
     }
 
-    if (filter1 == "") {
-      filter1 = "Fecha";
+    if (filter == "") {
+      filter = "Fecha";
     }
 
     if (enteredKeyboard.isEmpty) {
-      if (view == "send" && filter1 == "Fecha") {
+      if (view == "send" && selectedFilterSend == "Fecha") {
         result = dateSends;
       }
 
-      if (view == "send" && filter1 == "Empresa") {
+      if (view == "send" && selectedFilterSend == "Empresa") {
         result = factoryName;
       }
       if (view == 'factory') {
@@ -80,20 +79,20 @@ class _viewState extends State<view> {
       }
     }
     else {
-      if (filter1 == "Fecha") {
+      if (selectedFilterSend == "Fecha") {
         result = dateSends.where((item) =>
             item.toLowerCase().contains(enteredKeyboard.toLowerCase()))
             .toList();
       }
 
-      if (filter1 == "Empresa") {
+      if (selectedFilterSend == "Empresa") {
         result = factoryName.where((item) =>
             item.toLowerCase().contains(enteredKeyboard.toLowerCase()))
             .toList();
       }
 
       if (view == "factory") {
-        switch (filter1) {
+        switch (filterFactory) {
           case "Nombre":
             resulFactories = factoriesSector.where((element) =>
                 element.name.toLowerCase().contains(
@@ -132,14 +131,14 @@ class _viewState extends State<view> {
           noDatfunction = noFind(context, noDat, stringDialog);
 
 
-        filter1 = filter1.toLowerCase();
+        //  selectedFilterSend = selectedFilterSend.toLowerCase();
 
-        if (filter1 == "nombre" || filter1 == "telefono") {
-          filter1 = 'El $filter1';
+        if (filter == "nombre" || filter == "telefono") {
+          filter = 'El $filter';
         }
 
-        if (filter1 == "dirrección" || filter1 == "ciudad") {
-          filter1 = 'La $filter1';
+        if (filter == "dirrección" || filter == "ciudad") {
+          filter = 'La $filter';
         }
 
       }
@@ -151,21 +150,21 @@ class _viewState extends State<view> {
         noDatfunction = noFind(context, noDat, stringDialog);
 
 
-        filter1 = filter1.toLowerCase();
+     //   filter1 = filter1.toLowerCase();
 
       }
     }
     setState(() {
 
-      if (view == "send" && filter1 == "Fecha") {
-        result = dateSends;
+      if (view == "send" && filter== "Fecha") {
+        dateSends = result;
       }
-
-      if (view == "send" && filter1 == "Empresa") {
-            result = factoryName;
+      if (view == "send" && filter == "Empresa") {
+        factoryName = result;
       }
       if (view == "factory") {
-        resulFactories = campSearchFactory;
+
+        campSearchFactory = resulFactories;
       }
     });
   }
@@ -196,29 +195,50 @@ class _viewState extends State<view> {
     }
 
 
+
     if (view == "factory") {
       filterList = filterListFactories;
+
     }
 
     if (view == "send") {
       filterList = filterListSends;
     }
 
-    if (controllerSearchFactory.text == "") {
+    if (controllerSearchSend.text == "") {
       if (view == 'factory')
         resulFactories = factoriesSector;
     }
 
     if (controllerSearchSend.text == "") {
-      if (view == "send" && factoryFilter == "Empresa") {
+
+
+      if (view == "send" && selectedFilterSend == "Empresa")
+      {
         result = factoryName;
       }
-      else {
-        print(dateSends);
+
+      if (view == "send" && selectedFilterSend == "Fecha")
+      {
         result = dateSends;
       }
     }
 
+
+    if(selectCamp.isEmpty)
+    {
+
+            if (view == "send" && selectedFilterSend == "Empresa")
+            {
+              selectCamp = factoryName[0];
+            }
+
+            if (view == "send" && selectedFilterSend == "Fecha")
+            {
+              selectCamp = result[0];
+            }
+
+    }
 
 
     double mWidthPanel = mWidth - mWidthList;
@@ -252,9 +272,7 @@ class _viewState extends State<view> {
 
           });
      }
-
-
-
+    
     return Scaffold(
          body: err == false
               ? Align(
@@ -301,7 +319,7 @@ class _viewState extends State<view> {
                                                                     onTap: () {
                                                                          setState(() {
                                                                               opSelected = index;
-                                                                              controllerSearchFactory.clear();
+                                                                              controllerSearchSend.clear();
                                                                             });
                                                                         },
                                                                   ),
@@ -348,10 +366,10 @@ class _viewState extends State<view> {
                                                                                        value:selectedFactory,
                                                                                        onChanged: (String? value) {
                                                                                        setState(() {
-
-                                                                                             selectedFactory = value;
-
-                                                                                            });
+                                                                                                selectedFactory = value;
+                                                                                                filterFactory = value.toString();
+                                                                                                controllerSearchSend.clear();
+                                                                                       });
                                                                                           },
                                                                                           buttonStyleData: const ButtonStyleData(
                                                                                             padding: EdgeInsets.only(left: 14, right: 14),
@@ -375,8 +393,8 @@ class _viewState extends State<view> {
                                                                                       child: Padding(
                                                                                         padding: const EdgeInsets.only(top: 15.0, left: 40.0, right: 40.0),
                                                                                         child:  TextField(
-                                                                                          controller: controllerSearchFactory,
-                                                                                          onChanged: (value) =>_runFilter(view, value, textFilterFactory, factoryFilter, factoryName),
+                                                                                          controller: controllerSearchSend,
+                                                                                          onChanged: (value) =>_runFilter(view, value, textFilterFactory, factoryName,filterFactory),
                                                                                           decoration: const InputDecoration(
                                                                                               border: OutlineInputBorder(),
                                                                                               hintText: 'Buscar...'),
@@ -412,7 +430,7 @@ class _viewState extends State<view> {
                                                                   child: DropdownButton2<String>(
                                                                     isExpanded: true,
                                                                     hint: Text(
-                                                                      sendFilter,
+                                                                      selectedFilterSend!,
                                                                       overflow: TextOverflow.ellipsis,
                                                                     ),
                                                                     items: filterList.map((String itemSend) =>
@@ -424,20 +442,25 @@ class _viewState extends State<view> {
                                                                           ),
                                                                         ))
                                                                         .toList(),
-                                                                    value:selectedSend,
+                                                                    value:selectedFilterSend,
                                                                     onChanged: (String? value1) {
                                                                       setState(() {
+                                                                        controllerSearchSend.clear();
 
-                                                                        selectedSend = value1;
-                                                                        factoryFilter = value1.toString();
-                                                                        sendFilter= value1.toString();
-                                                                        typefilter = sendFilter.toString();
+                                                                        selectedFilterSend=value1;
+                                                                        selectCamp="";
+                                                                        cardSeleted = 0;
                                                                         factoryName.clear();
 
-                                                                        for(int i = 0; i <factories.length; i++)
+                                                                        List <String> tmp = [];
+
+
+                                                                        for(int i = 0; i <line.length; i++)
                                                                         {
-                                                                          factoryName.add(factories[i].name);
+                                                                          tmp.add(line[i].factory);
                                                                         }
+                                                                        factoryName = avoidRepeteat(tmp);
+
 
                                                                       });
                                                                      },
@@ -465,7 +488,7 @@ class _viewState extends State<view> {
                                                                     top: 15.0, left: 40.0, right: 40.0),
                                                                 child:  TextField(
                                                                   controller: controllerSearchSend,
-                                                                  onChanged: (value) => _runFilter(view, value, textFilterFactory, sendFilter, factoryName),
+                                                                  onChanged: (value) => _runFilter(view, value, textFilterFactory, factoryName),
                                                                   decoration: InputDecoration(
                                                                       border: OutlineInputBorder(),
                                                                       hintText: 'Buscar...'),
@@ -541,12 +564,12 @@ class _viewState extends State<view> {
                                                                 String send ="Envio $nSend";
                                                                 return  GestureDetector(
                                                                   child: defaultCard(
-                                                                      title: selectedSend=="Empresa"
+                                                                      title: selectedSend=="Fecha"
                                                                           ? result[index]
                                                                           : send ,
                                                                       description: selectedSend=="Empresa"
                                                                           ? ""
-                                                                          : line[index].showFormatDate(result[index]),
+                                                                          : result[index],
                                                                       color: index == cardSeleted
                                                                           ? Colors.white
                                                                           : Colors.grey
@@ -593,7 +616,7 @@ class _viewState extends State<view> {
                                        ? newFactory(select)
                                        : view == 'mail'
                                        ? newMail(select)
-                                       : newSend(selectCamp, filterFactory, sendFilter,select)
+                                       : newSend(selectCamp, filterFactory, selectedFilterSend!,select)
                                 ),
                              ],
                   )

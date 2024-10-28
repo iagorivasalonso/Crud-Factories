@@ -17,10 +17,10 @@ class newSend extends StatefulWidget {
 
   String selectCamp;
   String filter;
-  String SeletedFilter;
+  String SeletedFilterSend;
   int select;
 
-  newSend(this.selectCamp, this.filter,  this.SeletedFilter,this.select);
+  newSend(this.selectCamp, this.filter,  this.SeletedFilterSend,this.select);
 
   @override
   State<newSend> createState() => _newSendState();
@@ -49,7 +49,7 @@ class _newSendState extends State<newSend> {
   @override
   Widget build(BuildContext context) {
 
-    String type = widget.SeletedFilter;
+    String type = widget.SeletedFilterSend;
     String selectCamp = widget.selectCamp;
     int select = widget.select;
 
@@ -105,23 +105,6 @@ class _newSendState extends State<newSend> {
 
           lineSelected.clear();
 
-         if(selectCamp.isEmpty)
-         {
-
-           controllerSearch.text = line[0].showFormatDate(line[0].date);
-
-           for (int i = 0; i < line.length; i++)
-           {
-             if(controllerSearch.text == line[0].showFormatDate(line[i].date))
-             {
-               lineSelected.add(line[i]);
-               campKey.add(line[i].factory);
-             }
-
-           }
-         }
-         else
-         {
            controllerSearch.text = line[0].showFormatDate(selectCamp);
 
            for (int i = 0; i < line.length; i++)
@@ -133,7 +116,7 @@ class _newSendState extends State<newSend> {
              }
 
            }
-         }
+
         for (int i = 0; i < lineSelected.length; i++)
         {
           _controllersObserLine.add(TextEditingController());
