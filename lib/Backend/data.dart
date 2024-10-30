@@ -5,13 +5,8 @@ import 'package:crud_factories/Objects/Mail.dart';
 import 'package:crud_factories/Objects/LineSend.dart';
 import 'package:crud_factories/Objects/Sector.dart';
 
-int itenSelect = -1;
-int itenSelection = 0;
-int subIten1Select = -1;
-int subIten2Select = -1;
 
-String BaseDateSelected ="Nuevo";
-var conn;
+
 List<Sector> sectors = [];
 List<Factory> factories = [];
 List<Factory> factoriesSector = [];
@@ -21,3 +16,12 @@ List<LineSend> line = [];
 List<String> fileContent =[];
 List<String> dateSends =[];
 List<Conection> conections = [];
+
+
+var conn;
+int itenSelect = -1;
+int itenSelection = 0;
+int subIten1Select = -1;
+int subIten2Select = -1;
+
+String BaseDateSelected ="Nuevo";
