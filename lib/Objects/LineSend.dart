@@ -47,3 +47,15 @@ class LineSend {
     return dateFormat;
   }
 }
+
+class cardSend {
+
+  String title;
+  String description;
+
+  cardSend({
+    required this.title,
+    required this.description
+});
+
+}
