@@ -32,18 +32,18 @@ class _viewState extends State<view> {
   List<String> filterListSends = ['Fecha', 'Empresa'];
   List<String> filterListFactories = ['Nombre','Dirrección','Telefono','Ciudad'];
   List <LineSend> sendsDay = [];
-
-
+  List <cardSend> allCards = [];
   String selectCamp = "";
   String textFilterFactory = ' ';
   int select = 0;
-  int cardSeleted = 0;
+  int cardIndex = 0;
   int opSelected = 0;
   List<String> campSearch = [];
-  List<Factory> campSearchFactory = [];
+  List<Factory> allFactories = [];
   List<Factory> resulFactories = [];
   String textFilterSend = "";
-  List<String> result = [];
+  List<cardSend> allSend = [];
+  List<cardSend> resultSend = [];
   List<String> factoryName = [];
   String? selectedFilterSend = 'Fecha';
   String? selectedFactory;
@@ -66,33 +66,32 @@ class _viewState extends State<view> {
       filter = "Fecha";
     }
 
-    if (enteredKeyboard.isEmpty) {
-      if (view == "send" && selectedFilterSend == "Fecha") {
-        result = dateSends;
-      }
-
-      if (view == "send" && selectedFilterSend == "Empresa") {
-        result = factoryName;
-      }
-      if (view == 'factory') {
+    if (enteredKeyboard.isEmpty && view == 'factory')
+    {
         resulFactories = factories;
-      }
     }
     else {
-      if (selectedFilterSend == "Fecha") {
-        result = dateSends.where((item) =>
-            item.toLowerCase().contains(enteredKeyboard.toLowerCase()))
-            .toList();
+
+      if (selectedFilterSend == "Fecha")
+      {
+        resultSend = allCards.where((card) {
+          final descriptFormat = line[0].showFormatDate(card.description).toLowerCase();
+          final textSearch = enteredKeyboard.toLowerCase();
+          return descriptFormat.contains(textSearch);
+        }).toList();
       }
 
-      if (selectedFilterSend == "Empresa") {
-        result = factoryName.where((item) =>
-            item.toLowerCase().contains(enteredKeyboard.toLowerCase()))
-            .toList();
+      if (selectedFilterSend == "Empresa")
+      {
+          resultSend = allCards.where((element) =>
+              element.title.toLowerCase().contains(enteredKeyboard.toLowerCase()))
+              .toList();
       }
 
-      if (view == "factory") {
-        switch (filterFactory) {
+      if (view == "factory")
+      {
+        switch (filterFactory)
+        {
           case "Nombre":
             resulFactories = factoriesSector.where((element) =>
                 element.name.toLowerCase().contains(
@@ -130,9 +129,6 @@ class _viewState extends State<view> {
           noDat = true;
           noDatfunction = noFind(context, noDat, stringDialog);
 
-
-        //  selectedFilterSend = selectedFilterSend.toLowerCase();
-
         if (filter == "nombre" || filter == "telefono") {
           filter = 'El $filter';
         }
@@ -142,29 +138,34 @@ class _viewState extends State<view> {
         }
 
       }
-      if (view =="send"  && result.isEmpty)
+      if (view =="send"  && resultSend.isEmpty)
       {
+          if(selectedFilterSend == "Fecha")
+          {
+            stringDialog = 'No tenemos ningún envio en esa fecha';
+            noDat = true;
+          }
+          else
+          {
+            stringDialog = 'Esa empresa no pertenece a nuestra base de datos';
+            noDat = true;
+          }
 
-        stringDialog = 'No tenemos ningún envio en esa fecha';
-        noDat = true;
         noDatfunction = noFind(context, noDat, stringDialog);
 
 
-     //   filter1 = filter1.toLowerCase();
 
       }
     }
     setState(() {
 
-      if (view == "send" && filter== "Fecha") {
-        dateSends = result;
+      if (view == "send")
+      {
+        allSend = resultSend;
       }
-      if (view == "send" && filter == "Empresa") {
-        factoryName = result;
-      }
-      if (view == "factory") {
-
-        campSearchFactory = resulFactories;
+      if (view == "factory")
+      {
+        allFactories = resulFactories;
       }
     });
   }
@@ -179,8 +180,6 @@ class _viewState extends State<view> {
     bool err = widget.err;
 
     double mWidthList = mWidth * 0.2;
-
-
     if (mWidthList < 42.0)
       opSelected = 0;
 
@@ -202,44 +201,19 @@ class _viewState extends State<view> {
     }
 
     if (view == "send") {
+
       filterList = filterListSends;
+
+       if(selectCamp.isEmpty)
+       {
+         selectCamp = chargueList(0);
+       }
     }
 
     if (controllerSearchSend.text == "") {
       if (view == 'factory')
         resulFactories = factoriesSector;
     }
-
-    if (controllerSearchSend.text == "") {
-
-
-      if (view == "send" && selectedFilterSend == "Empresa")
-      {
-        result = factoryName;
-      }
-
-      if (view == "send" && selectedFilterSend == "Fecha")
-      {
-        result = dateSends;
-      }
-    }
-
-
-    if(selectCamp.isEmpty)
-    {
-
-            if (view == "send" && selectedFilterSend == "Empresa")
-            {
-              selectCamp = factoryName[0];
-            }
-
-            if (view == "send" && selectedFilterSend == "Fecha")
-            {
-              selectCamp = result[0];
-            }
-
-    }
-
 
     double mWidthPanel = mWidth - mWidthList;
 
@@ -272,6 +246,7 @@ class _viewState extends State<view> {
 
           });
      }
+
     
     return Scaffold(
          body: err == false
@@ -445,22 +420,23 @@ class _viewState extends State<view> {
                                                                     value:selectedFilterSend,
                                                                     onChanged: (String? value1) {
                                                                       setState(() {
+
                                                                         controllerSearchSend.clear();
-
                                                                         selectedFilterSend=value1;
-                                                                        selectCamp="";
-                                                                        cardSeleted = 0;
-                                                                        factoryName.clear();
+                                                                        controllerSearchSend.text="";
+                                                                        allCards.clear();
+                                                                        chargueList(0);
+                                                                        select = 0;
 
-                                                                        List <String> tmp = [];
 
-
-                                                                        for(int i = 0; i <line.length; i++)
+                                                                        if(selectedFilterSend == "Fecha")
                                                                         {
-                                                                          tmp.add(line[i].factory);
+                                                                          selectCamp = resultSend[0].description;
                                                                         }
-                                                                        factoryName = avoidRepeteat(tmp);
-
+                                                                        if(selectedFilterSend == "Empresa")
+                                                                        {
+                                                                          selectCamp =resultSend[0].title;
+                                                                        }
 
                                                                       });
                                                                      },
@@ -545,12 +521,12 @@ class _viewState extends State<view> {
                                                                   child: defaultCard(
                                                                       title: mails[index].company,
                                                                       description: mails[index].addrres,
-                                                                      color: index == cardSeleted
+                                                                      color: index == cardIndex
                                                                           ? Colors.white
                                                                           : Colors.grey),
                                                                   onTap: () {
                                                                     setState(() {
-                                                                      cardSeleted = index;
+                                                                      cardIndex = index;
                                                                       select = index;
                                                                     });
                                                                   },
@@ -558,43 +534,33 @@ class _viewState extends State<view> {
                                                               },
                                                             )
                                                                 : ListView.builder(
-                                                              itemCount: result.length,
+                                                              itemCount: resultSend.length,
                                                               itemBuilder: (context, index) {
-                                                                int nSend =index + 1;
-                                                                String send ="Envio $nSend";
+                                                                String cantSend = resultSend[index].description;
                                                                 return  GestureDetector(
                                                                   child: defaultCard(
-                                                                      title: selectedSend=="Fecha"
-                                                                          ? result[index]
-                                                                          : send ,
-                                                                      description: selectedSend=="Empresa"
-                                                                          ? ""
-                                                                          : result[index],
-                                                                      color: index == cardSeleted
+                                                                      title: resultSend[index].title,
+                                                                      description:selectedFilterSend == "Fecha"
+                                                                          ? line[0].showFormatDate(resultSend[index].description)
+                                                                          : "Envios: $cantSend",
+                                                                      color: index == cardIndex
                                                                           ? Colors.white
                                                                           : Colors.grey
                                                                   ),
                                                                   onTap: (){
                                                                     setState(() {
-                                                                      sendsDay.clear();
-                                                                      cardSeleted = index;
-                                                                      select = index;
-                                                                      selectCamp = result[select];
 
-                                                                      if(selectedFilterSend== "Fecha")
+                                                                      sendsDay.clear();
+                                                                      cardIndex = index;
+                                                                      select = index;
+
+                                                                      if(selectedFilterSend == "Fecha")
                                                                       {
-                                                                        selectCamp = "";
-                                                                        selectCamp = result[index];
+                                                                        selectCamp = resultSend[select].description;
                                                                       }
                                                                       if(selectedFilterSend == "Empresa")
                                                                       {
-                                                                        for(int i = 0; i < line.length ; i++)
-                                                                        {
-                                                                          if(selectCamp == line[i].factory)
-                                                                          {
-                                                                            sendsDay.add(line[i]);
-                                                                          }
-                                                                        }
+                                                                        selectCamp =resultSend[select].title;
                                                                       }
 
                                                                     });
@@ -609,6 +575,7 @@ class _viewState extends State<view> {
                                          ],
                                        ),
                                    )),
+
                                   SizedBox(
                                    width: mWidthPanel,
                                    height: mHeiht,
@@ -623,6 +590,72 @@ class _viewState extends State<view> {
               )
               : null,
     );
+
+
+  }
+
+String chargueList(int cardIndex) {
+
+    List <String> tmp = [];
+    String cardSeleted = "";
+    allCards.clear();
+
+
+    if(selectedFilterSend == "Fecha")
+    {
+
+      for(int i = 0; i <dateSends.length; i++)
+      {
+        int numSend = i + 1;
+        String titleSend = 'Envio $numSend';
+        allCards.add(cardSend(
+            title: titleSend ,
+            description: dateSends[i])
+        );
+      }
+
+
+    }
+    resultSend = allCards;
+
+
+    if(selectedFilterSend == "Empresa")
+    {
+
+      for(int i = 0; i <line.length; i++)
+      {
+        tmp.add(line[i].factory);
+      }
+
+      factoryName = avoidRepeteat(tmp);
+
+
+      int cant =0;
+
+      for(int i = 0; i < factoryName.length; i++)
+      {
+        String current = factoryName[i];
+        cant = 0;
+
+        for(int y = 0; y < line.length; y++)
+        {
+          if(line[y].factory == current)
+          {
+            cant++;
+          }
+        }
+
+        allCards.add(
+            cardSend(
+                title: current,
+                description: cant.toString()
+            )
+        );
+      }
+
+    }
+    cardSeleted = allCards[0].description;
+   return cardSeleted;
   }
 
 }
