@@ -63,13 +63,12 @@ class _newFactoryState extends State<newFactory> {
   DateTime seletedDate =DateTime.now();
 
   int contactSelect = 0;
-  bool edit = false;
   String id ="";
   String date="";
   String sector = " ";
   String? selectedSector;
   String tmp = " ";
-
+  String allAddress = "";
   @override
   Widget build(BuildContext context) {
 
@@ -83,64 +82,69 @@ class _newFactoryState extends State<newFactory> {
     {
         sectorsString.add(sectors[i].name);
     }
+
     void campCharge () {
-      id=factories[select].id;
-      controllerName.text = factories[select].name;
-      controllerHighDate.text = factories[select].highDate;
-      tmp = factories[select].sector;
-      controllerSector.text = tmp;
 
-        for(int i = 0; i <sectors.length; i++)
-        {
-          if(tmp == sectors[i].id)
-          {
-            sector = sectors[i].name;
-          }
-        }
+      if(saveChanges == false)
+      {
+            id = factories[select].id;
+            controllerName.text = factories[select].name;
+            controllerHighDate.text = factories[select].highDate;
+            tmp = factories[select].sector;
+            controllerSector.text = tmp;
 
-      controllerTelephone1.text = factories[select].thelephones[0];
-      controllerTelephone2.text = factories[select].thelephones[1];
-      controllerMail.text = factories[select].mail;
-      controllerWeb.text = factories[select].web;
+            for(int i = 0; i <sectors.length; i++)
+            {
+              if(tmp == sectors[i].id)
+              {
+                sector = sectors[i].name;
+              }
+            }
 
-      var address = factories[select].address['street']!;
-      var number = factories[select].address['number']!;
-      var apartament = factories[select].address['apartament']!;
+            controllerTelephone1.text = factories[select].thelephones[0];
+            controllerTelephone2.text = factories[select].thelephones[1];
+            controllerMail.text = factories[select].mail;
+            controllerWeb.text = factories[select].web;
 
-      String allAddress = "";
-
-               if (apartament == "")
-               {
-                  allAddress = '$address,$number';
-               }
-               else
-               {
-                   allAddress = '$address,$number-$apartament';
-               }
-      controllerAdrress.text = allAddress!;
-      controllerCity.text = factories[select].address['city']!;
-      controllerPostalCode.text = factories[select].address['postalCode']!;
-      controllerProvince.text = factories[select].address['province']!;
+            var address = factories[select].address['street']!;
+            var number = factories[select].address['number']!;
+            var apartament = factories[select].address['apartament']!;
 
 
-       int idFactory = select +1;
 
-         if(edit == false)
-         {
+            if (apartament == "")
+            {
+              allAddress = '$address,$number';
+            }
+            else
+            {
+              allAddress = '$address,$number-$apartament';
+            }
+            controllerAdrress.text = allAddress!;
+            controllerCity.text = factories[select].address['city']!;
+            controllerPostalCode.text = factories[select].address['postalCode']!;
+            controllerProvince.text = factories[select].address['province']!;
+
+
+            int idFactory = select +1;
+
+
             contacsPreEdit.clear();
             contacsCurrent.clear();
-         }
-              if (contacsCurrent.isEmpty && edit == false)
+
+
+
+            for (int i = 0; i < empleoyes.length; i++)
+            {
+              if(empleoyes[i].idFactory == idFactory.toString())
               {
-                      for (int i = 0; i < empleoyes.length; i++)
-                      {
-                             if(empleoyes[i].idFactory == idFactory.toString())
-                             {
-                                 contacsPreEdit.add(empleoyes[i]);
-                                 contacsCurrent.add(empleoyes[i]);
-                             }
-                      }
+                contacsPreEdit.add(empleoyes[i]);
+                contacsCurrent.add(empleoyes[i]);
               }
+            }
+
+      }
+
     }
     String action = "actualizar";
     String action2 = "";
@@ -210,6 +214,21 @@ class _newFactoryState extends State<newFactory> {
                                     decoration: const InputDecoration(
                                       border: OutlineInputBorder(),
                                     ),
+                                    onChanged: (s) {
+                                        if(saveChanges == false && select != -1)
+                                        {
+                                           if(controllerName.text == factories[select].name)
+                                           {
+                                              saveChanges = false;
+                                           }
+                                           else
+                                           {
+                                             saveChanges = true;
+                                           }
+
+                                        }
+
+                                    },
                                   ),
                                 ),
                               ],
@@ -232,6 +251,19 @@ class _newFactoryState extends State<newFactory> {
                                           ? const Icon(Icons.calendar_today)
                                           : null,
                                     ),
+                                    onChanged: (s) {
+                                      if(saveChanges == false && select != -1)
+                                      {
+                                        if(controllerHighDate.text == factories[select].highDate)
+                                        {
+                                          saveChanges = false;
+                                        }
+                                        else
+                                        {
+                                          saveChanges = true;
+                                        }
+                                      }
+                                    },
                                     onTap: () async {
                                       if(select == -1)
                                       {
@@ -249,12 +281,11 @@ class _newFactoryState extends State<newFactory> {
                                       }
 
                                     },
-
                                   ),
                                 ),
-                                Padding(
-                                  padding: const EdgeInsets.only(left: 200.0),
-                                  child: const Text('Sector:'),
+                                const Padding(
+                                  padding: EdgeInsets.only(left: 200.0),
+                                  child: Text('Sector:'),
                                 ),
                                 SizedBox(
                                   width: 200,
@@ -270,11 +301,16 @@ class _newFactoryState extends State<newFactory> {
                                         )).toList(),
                                         value: selectedSector,
                                         onChanged: (String? sectorChoose) async {
+
+                                                if(saveChanges == false && select != -1)
+                                                {
+                                                    saveChanges = true;
+                                                }
+
                                                selectedSector = sectorChoose;
                                                setState(() {
                                                  controllerSector.text =sectorChoose!;
                                                });
-
 
                                                if(sectorChoose == "Nuevo")
                                                {
@@ -384,6 +420,19 @@ class _newFactoryState extends State<newFactory> {
                                     decoration: const InputDecoration(
                                       border: OutlineInputBorder(),
                                     ),
+                                    onChanged: (s) {
+                                      if(saveChanges == false && select != -1)
+                                      {
+                                        if(controllerTelephone1.text == factories[select].thelephones[0])
+                                        {
+                                          saveChanges = false;
+                                        }
+                                        else
+                                        {
+                                          saveChanges = true;
+                                        }
+                                      }
+                                    },
                                   ),
                                 ),
                                 const Padding(
@@ -398,6 +447,19 @@ class _newFactoryState extends State<newFactory> {
                                     decoration: const InputDecoration(
                                       border: OutlineInputBorder(),
                                     ),
+                                    onChanged: (s) {
+                                      if(saveChanges == false && select != -1)
+                                      {
+                                        if(controllerTelephone2.text == factories[select].thelephones[1])
+                                        {
+                                          saveChanges = false;
+                                        }
+                                        else
+                                        {
+                                          saveChanges = true;
+                                        }
+                                      }
+                                    },
                                   ),
                                 ),
                               ],
@@ -417,6 +479,19 @@ class _newFactoryState extends State<newFactory> {
                                     decoration: const InputDecoration(
                                       border: OutlineInputBorder(),
                                     ),
+                                    onChanged: (s) {
+                                      if(saveChanges == false && select != -1)
+                                      {
+                                        if(controllerMail.text == factories[select].mail)
+                                        {
+                                          saveChanges = false;
+                                        }
+                                        else
+                                        {
+                                          saveChanges = true;
+                                        }
+                                      }
+                                    },
                                   ),
                                 ),
                                 const Padding(
@@ -431,6 +506,19 @@ class _newFactoryState extends State<newFactory> {
                                     decoration: const InputDecoration(
                                       border: OutlineInputBorder(),
                                     ),
+                                    onChanged: (s) {
+                                      if(saveChanges == false && select != -1)
+                                      {
+                                        if(controllerWeb.text == factories[select].web)
+                                        {
+                                          saveChanges = false;
+                                        }
+                                        else
+                                        {
+                                          saveChanges = true;
+                                        }
+                                      }
+                                    },
                                   ),
                                 ),
                               ],
@@ -450,6 +538,19 @@ class _newFactoryState extends State<newFactory> {
                                     decoration: const InputDecoration(
                                       border: OutlineInputBorder(),
                                     ),
+                                    onChanged: (s) {
+                                      if(saveChanges == false && select != -1)
+                                      {
+                                        if(controllerAdrress.text == allAddress)
+                                        {
+                                          saveChanges = false;
+                                        }
+                                        else
+                                        {
+                                          saveChanges = true;
+                                        }
+                                      }
+                                    },
                                   ),
                                 ),
                               ],
@@ -469,6 +570,19 @@ class _newFactoryState extends State<newFactory> {
                                     decoration: const InputDecoration(
                                       border: OutlineInputBorder(),
                                     ),
+                                    onChanged: (s) {
+                                      if(saveChanges == false && select != -1)
+                                      {
+                                        if(controllerCity.text == factories[select].address['city']!)
+                                        {
+                                          saveChanges = false;
+                                        }
+                                        else
+                                        {
+                                          saveChanges = true;
+                                        }
+                                      }
+                                    },
                                   ),
                                 ),
                                 const Padding(
@@ -483,6 +597,19 @@ class _newFactoryState extends State<newFactory> {
                                     decoration: const InputDecoration(
                                       border: OutlineInputBorder(),
                                     ),
+                                    onChanged: (s) {
+                                      if(saveChanges == false && select != -1)
+                                      {
+                                        if(controllerPostalCode.text == factories[select].address['postalCode']!)
+                                        {
+                                          saveChanges = false;
+                                        }
+                                        else
+                                        {
+                                          saveChanges = true;
+                                        }
+                                      }
+                                    },
                                   ),
                                 ),
                               ],
@@ -502,6 +629,19 @@ class _newFactoryState extends State<newFactory> {
                                     decoration: const InputDecoration(
                                       border: OutlineInputBorder(),
                                     ),
+                                    onChanged: (s) {
+                                      if(saveChanges == false && select != -1)
+                                      {
+                                        if(controllerProvince.text == factories[select].address['province']!)
+                                        {
+                                          saveChanges = false;
+                                        }
+                                        else
+                                        {
+                                          saveChanges = true;
+                                        }
+                                      }
+                                    },
                                   ),
                                 ),
                               ],
@@ -546,7 +686,7 @@ class _newFactoryState extends State<newFactory> {
                                           onPressed: () {
                                             setState(() {
 
-                                              edit = true;
+                                              saveChanges = true;
                                               String idNew = "";
 
                                               if(empleoyes.isNotEmpty)
@@ -575,17 +715,19 @@ class _newFactoryState extends State<newFactory> {
                                           child: ElevatedButton(
                                             child: const Icon(Icons.delete),
                                             onPressed: () {
-                                              setState(() {
 
-                                                edit = true;
+                                              setState(() {
+                                                saveChanges = true;
+
                                                 Empleoye delete = contacsCurrent[contactSelect];
                                                 idscontacsDelete.add(delete.id);
 
-                                                if (contacsCurrent[contactSelect] == delete) {
-                                                  contacsCurrent.removeAt(contactSelect);
-                                                  String action ='El empleado se ha quitado correctamente';
-                                                  confirm(context,action);
-                                                }
+                                                    if (contacsCurrent[contactSelect] == delete)
+                                                    {
+                                                        contacsCurrent.removeAt(contactSelect);
+                                                        String action ='El empleado se ha quitado correctamente';
+                                                        confirm(context,action);
+                                                    }
                                                 });
                                               },
 
@@ -641,7 +783,7 @@ class _newFactoryState extends State<newFactory> {
                           ),
                           Padding(
                             padding: const EdgeInsets.only(left: 550.0),
-                            child: Container(
+                            child: SizedBox(
                               width: 200,
                               child: Row(
                                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -655,7 +797,6 @@ class _newFactoryState extends State<newFactory> {
                                         setState(() {
                                           List <Factory> current=[];
                                           List <String> allKeys = [];
-                                          edit = false;
                                           String nameCamp = "nombre";
 
                                           for (int i = 0; i < factories.length; i++) {
@@ -723,7 +864,8 @@ class _newFactoryState extends State<newFactory> {
                                                     action ='El codigo postal debe de tener 5 digitos';
                                                     error(context,action);
                                                   }
-                                                  else{
+                                                  else
+                                                  {
 
                                                     List<String> adrress1 = controllerAdrress.text.split(",");
                                                     List<String> adrress2 = controllerAdrress.text.split("-");
@@ -769,7 +911,6 @@ class _newFactoryState extends State<newFactory> {
                                                                        }
                                                                    }
                                                             }
-                                                          edit =true;
 
                                                      }
                                                     if(select == - 1)
@@ -808,22 +949,25 @@ class _newFactoryState extends State<newFactory> {
                                                     }
                                                     else
                                                     {
+                                                          if(saveChanges == true)
+                                                          {
+                                                                factories[select].name = controllerName.text;
+                                                                factories[select].highDate = controllerHighDate.text;
+                                                                factories[select].sector = controllerSector.text;
+                                                                factories[select].thelephones= [controllerTelephone1.text,controllerTelephone2.text];
+                                                                factories[select].mail = controllerMail.text;
+                                                                factories[select].web= controllerWeb.text;
+                                                                factories[select].address['street'] = adrress1[0];
+                                                                factories[select].address['number'] = num[1];
+                                                                factories[select].address['apartament'] = apartament;
+                                                                factories[select].address['city'] = controllerCity.text;
+                                                                factories[select].address['postalCode'] = controllerPostalCode.text ;
 
-                                                      factories[select].name = controllerName.text;
-                                                      factories[select].highDate = controllerHighDate.text;
-                                                      factories[select].sector = controllerSector.text;
-                                                      factories[select].thelephones= [controllerTelephone1.text,controllerTelephone2.text];
-                                                      factories[select].mail = controllerMail.text;
-                                                      factories[select].web= controllerWeb.text;
-                                                      factories[select].address['street'] = adrress1[0];
-                                                      factories[select].address['number'] = num[1];
-                                                      factories[select].address['apartament'] = apartament;
-                                                      factories[select].address['city'] = controllerCity.text;
-                                                      factories[select].address['postalCode'] = controllerPostalCode.text ;
+                                                                action ='El usuario se ha modificado correctamente';
+                                                                confirm(context,action);
+                                                                saveChanges = false;
 
-                                                      action ='El usuario se ha modificado correctamente';
-                                                      confirm(context,action);
-
+                                                          }
                                                     }
 
                                                     if(conn != null)
@@ -862,8 +1006,8 @@ class _newFactoryState extends State<newFactory> {
                                                         }
 
                                                       }
-
                                                       csvExportatorEmpleoyes(empleoyes);
+
                                                     }
 
                                                   }
@@ -901,6 +1045,7 @@ class _newFactoryState extends State<newFactory> {
                                       }
                                       else
                                       {
+                                        saveChanges = false;
                                         campCharge();
                                       }
                                     },

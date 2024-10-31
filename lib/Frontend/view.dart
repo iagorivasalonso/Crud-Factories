@@ -1,5 +1,6 @@
 import 'package:crud_factories/Alertdialogs/error.dart';
 import 'package:crud_factories/Alertdialogs/noFind.dart';
+import 'package:crud_factories/Alertdialogs/warning.dart';
 import 'package:crud_factories/Backend/data.dart';
 import 'package:crud_factories/Frontend/factory.dart';
 import 'package:crud_factories/Frontend/mail.dart';
@@ -504,10 +505,26 @@ class _viewState extends State<view> {
                                                                         address: resulFactories[index].allAdress(),
                                                                         telephone: resulFactories[index].thelephones[0],
                                                                         city: resulFactories[index].address['city']),
-                                                                    onTap: () {
-                                                                      setState(() {
-                                                                        select = int.parse(resulFactories[index].id) - 1;
-                                                                      });
+                                                                    onTap: () async{
+
+                                                                        if (saveChanges == false)
+                                                                        {
+                                                                          setState(() {
+                                                                            select = int.parse(resulFactories[index].id) - 1;
+                                                                          });
+                                                                        }
+                                                                        else
+                                                                        {
+                                                                          saveChanges =! await changesNoSave();
+
+                                                                          if(saveChanges == false)
+                                                                          {
+                                                                            setState(() {
+                                                                              select = int.parse(resulFactories[index].id) - 1;
+                                                                            });
+                                                                          }
+                                                                        }
+
                                                                     },
                                                                   ),
                                                                 );
@@ -524,11 +541,27 @@ class _viewState extends State<view> {
                                                                       color: index == cardIndex
                                                                           ? Colors.white
                                                                           : Colors.grey),
-                                                                  onTap: () {
-                                                                    setState(() {
-                                                                      cardIndex = index;
-                                                                      select = index;
-                                                                    });
+                                                                  onTap: () async {
+
+                                                                      if (saveChanges == false)
+                                                                      {
+                                                                        setState(() {
+                                                                          cardIndex = index;
+                                                                          select = index;
+                                                                        });
+                                                                      }
+                                                                      else
+                                                                      {
+                                                                        saveChanges =! await changesNoSave();
+
+                                                                        if(saveChanges == false)
+                                                                        {
+                                                                          setState(() {
+                                                                            cardIndex = index;
+                                                                            select = index;
+                                                                          });
+                                                                        }
+                                                                      }
                                                                   },
                                                                 );
                                                               },
@@ -656,6 +689,15 @@ String chargueList(int cardIndex) {
     }
     cardSeleted = allCards[0].description;
    return cardSeleted;
+  }
+
+  Future<bool> changesNoSave() async {
+
+    String mensaje = 'Todos los cambios se perderan ¿Desea continuar?';
+    bool changes = await warning(context, mensaje);
+
+
+     return changes;
   }
 
 }

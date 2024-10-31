@@ -45,10 +45,13 @@ class _newMailState extends State<newMail> {
     int select = widget.select;
 
     void campCharge() {
-      controllerMail.text = mails[select].addrres;
-      controllerCompany.text = mails[select].company;
-      controllerPas.text = "";
-      controllerPasVerificator.text = "";
+          if(saveChanges == false)
+          {
+              controllerMail.text = mails[select].addrres;
+              controllerCompany.text = mails[select].company;
+              controllerPas.text = "";
+              controllerPasVerificator.text = "";
+          }
     }
 
     String action = "";
@@ -114,6 +117,19 @@ class _newMailState extends State<newMail> {
                                     decoration: const InputDecoration(
                                       border: OutlineInputBorder(),
                                     ),
+                                    onChanged: (s){
+                                      if(saveChanges == false && select != -1)
+                                      {
+                                        if(controllerMail.text == mails[select].addrres)
+                                        {
+                                          saveChanges = false;
+                                        }
+                                        else
+                                        {
+                                          saveChanges = true;
+                                        }
+                                      }
+                                    },
                                   ),
                                 ),
                               ],
@@ -260,9 +276,14 @@ class _newMailState extends State<newMail> {
                                                             }
                                                             else
                                                             {
-                                                              mails[select].addrres = controllerMail.text;
-                                                              mails[select].company = controllerCompany.text;
-                                                              mails[select].password = encodedPass;
+                                                                 if(saveChanges == true)
+                                                                 {
+                                                                     mails[select].addrres = controllerMail.text;
+                                                                     mails[select].company = controllerCompany.text;
+                                                                     mails[select].password = encodedPass;
+
+                                                                     saveChanges = false;
+                                                                 }
                                                             }
 
 
@@ -321,6 +342,7 @@ class _newMailState extends State<newMail> {
                                           controllerPasVerificator.text = "";
                                         }
                                         else {
+                                          saveChanges = false;
                                           campCharge();
                                         }
                                       });
