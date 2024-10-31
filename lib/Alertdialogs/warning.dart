@@ -2,7 +2,7 @@ import 'package:crud_factories/Widgets/headAlertDialog.dart';
 import 'package:flutter/material.dart';
 
 
-Future<bool> warning(BuildContext  context,String nameCamp) async{
+Future<bool> warning(BuildContext  context,String action) async{
 
  bool? campEmpty = await showDialog(
      context: context,
@@ -21,7 +21,7 @@ Future<bool> warning(BuildContext  context,String nameCamp) async{
                    padding:  const EdgeInsets.only(left: 30,top: 25, bottom: 35),
                    child: Row(
                      children: [
-                       Text('el campo $nameCamp está vacio ¿Desea continuar?'),
+                       Text(action),
                      ],
                    ),
                  ),

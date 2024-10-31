@@ -665,11 +665,14 @@ class _sendMailState extends State<sendMail> {
 
                                         if(validMailTo == true && validMailFrom == true)
                                         {
+                                          String action1="";
+
                                           if(controllerSubject.text.isEmpty)
                                           {
                                             dat_correct=dat_correct-1;
 
-                                             bool  correct= await warning(context, "asunto");
+                                             action1 ='el campo asunto está vacio ¿Desea continuar?';
+                                             bool  correct= await warning(context, action1);
 
                                              if(correct)
                                              {
@@ -681,7 +684,8 @@ class _sendMailState extends State<sendMail> {
                                           {
                                             dat_correct=dat_correct-1;
 
-                                            bool  correct= await warning(context, "mensaje");
+                                            action1 ='el campo mensaje está vacio ¿Desea continuar?';
+                                            bool  correct= await warning(context, action1);
 
                                             if(correct)
                                             {
