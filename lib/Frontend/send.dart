@@ -178,7 +178,7 @@ class _newSendState extends State<newSend> {
 
     for(int i = 0; i<Send.length; i++)
     {
-      if(Send[i]==false)
+      if(Send[i] == false)
       {
         allSelect = false;
       }
@@ -353,6 +353,18 @@ class _newSendState extends State<newSend> {
                                                         ),
                                                         onChanged: (s){
                                                           lineEdit[indexRow]=true;
+
+                                                          if(saveChanges == false)
+                                                          {
+                                                              if(_controllersObserLine[indexRow].text == lineSelected[indexRow].observations)
+                                                              {
+                                                                saveChanges = false;
+                                                              }
+                                                              else
+                                                              {
+                                                                saveChanges = true;
+                                                              }
+                                                          }
                                                         },
                                                       ),
                                                     ),
@@ -367,6 +379,18 @@ class _newSendState extends State<newSend> {
                                                         ),
                                                          onChanged: (s){
                                                           lineEdit[indexRow]=true;
+
+                                                          if(saveChanges == false)
+                                                          {
+                                                            if(_controllerStateLine[indexRow].text == lineSelected[indexRow].state)
+                                                            {
+                                                              saveChanges = false;
+                                                            }
+                                                            else
+                                                            {
+                                                              saveChanges = true;
+                                                            }
+                                                          }
                                                          },
                                                       ),
                                                     ),
@@ -475,30 +499,36 @@ class _newSendState extends State<newSend> {
                                               }
                                               else
                                               {
-                                                int allLinesModify=0;
+                                                  int allLinesModify=0;
 
-                                                for(int i = 0; i <lineEdit.length; i++)
-                                                {
-                                                   if(lineEdit[i]==true)
-                                                   {
-                                                      allLinesModify++;
-                                                   }
-                                                }
-
-                                                String id='';
-                                                for (int i = 0; i < lineSelected.length; i++)
-                                                {
-
-                                                  id=lineSelected[i].id;
-                                                  for (int y = 0; y < lineSelected.length; y++)
+                                                  if(saveChanges == true)
                                                   {
-                                                    if(lineSelected[i].id == id)
-                                                    {
-                                                      lineSelected[i].state =_controllerStateLine[i].text;
-                                                      lineSelected[i].observations = _controllersObserLine[i].text;
-                                                    }
+                                                      for(int i = 0; i <lineEdit.length; i++)
+                                                      {
+                                                        if(lineEdit[i]==true)
+                                                        {
+                                                          allLinesModify++;
+                                                        }
+                                                      }
+
+                                                      String id='';
+                                                      for (int i = 0; i < lineSelected.length; i++)
+                                                      {
+
+                                                        id=lineSelected[i].id;
+                                                        for (int y = 0; y < lineSelected.length; y++)
+                                                        {
+                                                          if(lineSelected[i].id == id)
+                                                          {
+                                                            lineSelected[i].state =_controllerStateLine[i].text;
+                                                            lineSelected[i].observations = _controllersObserLine[i].text;
+                                                          }
+                                                        }
+                                                      }
+
+                                                      saveChanges = false;
                                                   }
-                                                }
+
 
                                                 String action ='';
                                                 if (allLinesModify == 0)
@@ -546,23 +576,24 @@ class _newSendState extends State<newSend> {
                                             setState(() {
                                               if (select == -1)
                                               {
-                                                for(int i = 0 ; i<factories.length; i++)
-                                                {
-                                                  Send[i] = false;
-                                                  _controllersObserLine[i].text="";
-                                                }
+                                                  for(int i = 0 ; i<factories.length; i++)
+                                                  {
+                                                    Send[i] = false;
+                                                    _controllersObserLine[i].text="";
+                                                  }
                                               }
                                               else
                                               {
-                                                for(int i = 0 ; i < lineSelected.length; i++)
-                                                {
-                                                  if(lineEdit[i]==true)
-                                                  {
-                                                     _controllersObserLine[i].text = lineSelected[i].observations;
-                                                  }
 
+                                                  for(int i = 0 ; i < lineSelected.length; i++)
+                                                  {
+                                                    if(lineEdit[i]==true)
+                                                    {
+                                                       _controllersObserLine[i].text = lineSelected[i].observations;
+                                                    }
+
+                                                  }
                                                 }
-                                              }
 
                                             });
 

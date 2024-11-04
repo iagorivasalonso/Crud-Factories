@@ -580,12 +580,31 @@ class _viewState extends State<view> {
                                                                           ? Colors.white
                                                                           : Colors.grey
                                                                   ),
-                                                                  onTap: (){
-                                                                    setState(() {
+                                                                  onTap: () async {
 
-                                                                      sendsDay.clear();
-                                                                      cardIndex = index;
-                                                                      select = index;
+                                                                      if (saveChanges == false)
+                                                                      {
+                                                                        setState(() {
+                                                                          sendsDay.clear();
+                                                                          cardIndex = index;
+                                                                          select = index;
+
+                                                                        });
+                                                                      }
+                                                                      else
+                                                                      {
+                                                                        saveChanges =! await changesNoSave();
+
+                                                                        if(saveChanges == false)
+                                                                        {
+                                                                          setState(() {
+                                                                            sendsDay.clear();
+                                                                            cardIndex = index;
+                                                                            select = index;
+
+                                                                          });
+                                                                        }
+                                                                      }
 
                                                                       if(selectedFilterSend == "Fecha")
                                                                       {
@@ -596,7 +615,7 @@ class _viewState extends State<view> {
                                                                         selectCamp =resultSend[select].title;
                                                                       }
 
-                                                                    });
+
                                                                   },
                                                                 );
                                                               },
