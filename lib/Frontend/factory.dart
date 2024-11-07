@@ -215,16 +215,31 @@ class _newFactoryState extends State<newFactory> {
                                       border: OutlineInputBorder(),
                                     ),
                                     onChanged: (s) {
-                                        if(saveChanges == false && select != -1)
+
+                                        if(saveChanges == false)
                                         {
-                                           if(controllerName.text == factories[select].name)
-                                           {
+                                          if(select != -1)
+                                          {
+                                            if(controllerName.text == factories[select].name)
+                                            {
                                               saveChanges = false;
-                                           }
-                                           else
-                                           {
-                                             saveChanges = true;
-                                           }
+                                            }
+                                            else
+                                            {
+                                              saveChanges = true;
+                                            }
+                                          }
+                                          else
+                                          {
+                                              if(controllerName.text.isEmpty)
+                                              {
+                                                   saveChanges = false;
+                                              }
+                                              else
+                                              {
+                                                  saveChanges = true;
+                                              }
+                                          }
 
                                         }
 
@@ -965,10 +980,11 @@ class _newFactoryState extends State<newFactory> {
 
                                                                 action ='El usuario se ha modificado correctamente';
                                                                 confirm(context,action);
-                                                                saveChanges = false;
+
 
                                                           }
                                                     }
+                                                    saveChanges = false;
 
                                                     if(conn != null)
                                                     {
@@ -1045,9 +1061,9 @@ class _newFactoryState extends State<newFactory> {
                                       }
                                       else
                                       {
-                                        saveChanges = false;
                                         campCharge();
                                       }
+                                      saveChanges = false;
                                     },
                                   ),
                                 ],

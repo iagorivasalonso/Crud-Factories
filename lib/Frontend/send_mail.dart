@@ -200,6 +200,16 @@ class _sendMailState extends State<sendMail> {
                                               decoration: const InputDecoration(
                                                 border: OutlineInputBorder(),
                                               ),
+                                              onChanged: (s){
+                                                if(controllerMailFrom.text.isEmpty)
+                                                {
+                                                  saveChanges = false;
+                                                }
+                                                else
+                                                {
+                                                  saveChanges = true;
+                                                }
+                                              },
                                             ),
                                           ),
                                         ),
@@ -221,7 +231,16 @@ class _sendMailState extends State<sendMail> {
                                                 decoration: const InputDecoration(
                                                   border: OutlineInputBorder(),
                                                 ),
-                                                //  controller: controllerMailFrom,
+                                                onChanged: (s){
+                                                  if(controllerPass.text.isEmpty)
+                                                  {
+                                                    saveChanges = false;
+                                                  }
+                                                  else
+                                                  {
+                                                    saveChanges = true;
+                                                  }
+                                                },
                                               ),
                                             ),
                                           ),
@@ -271,6 +290,7 @@ class _sendMailState extends State<sendMail> {
                                                 onChanged: (value) {
                                                   setState(() {
                                                     isList = true;
+                                                    saveChanges = false;
                                                   });
                                                 }),
                                             const Text('Varios destinatarios'),
@@ -300,6 +320,16 @@ class _sendMailState extends State<sendMail> {
                                                   border: OutlineInputBorder(),
                                                 ),
                                                 controller: controllerMailTo,
+                                                onChanged: (s){
+                                                   if(controllerMailTo.text.isEmpty)
+                                                   {
+                                                     saveChanges = false;
+                                                   }
+                                                   else
+                                                   {
+                                                     saveChanges = true;
+                                                   }
+                                                },
                                               ),
                                             ),
                                           ),
@@ -464,6 +494,16 @@ class _sendMailState extends State<sendMail> {
                                             border: OutlineInputBorder(),
                                           ),
                                           controller: controllerSubject,
+                                          onChanged: (s) {
+                                            if(controllerSubject.text.isEmpty)
+                                            {
+                                              saveChanges = false;
+                                            }
+                                            else
+                                            {
+                                              saveChanges = true;
+                                            }
+                                          },
                                         ),
                                       ),
                                     ),
@@ -600,6 +640,16 @@ class _sendMailState extends State<sendMail> {
                                           border: OutlineInputBorder(),
                                         ),
                                         controller: controllerMessage,
+                                        onChanged: (s) {
+                                          if(controllerMessage.text.isEmpty)
+                                          {
+                                            saveChanges = false;
+                                          }
+                                          else
+                                          {
+                                            saveChanges = true;
+                                          }
+                                        },
                                       ),
                                     ),
                                   ],
@@ -707,6 +757,7 @@ class _sendMailState extends State<sendMail> {
                                                 password = controllerPass.text;
                                               }
 
+                                           saveChanges = false;
                                            sendingMail(username,password);
                                           }
 
@@ -723,8 +774,8 @@ class _sendMailState extends State<sendMail> {
                                       style: const TextStyle(color: Colors.white),),
                                     onPressed: () {
                                       setState(() {
-                                        confirmDelete(context, "demo");
                                         isList = false;
+                                        saveChanges = false;
                                        controllerMailFrom.text = "";
                                        controllerPass.text ="";
                                        controllerMailTo.text = "";

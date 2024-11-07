@@ -165,8 +165,6 @@ class _conectionState extends State<conection> {
                                               error(context, err);
                                             }
 
-
-
                                           });
                                         },
                                         buttonStyleData: const ButtonStyleData(
@@ -254,6 +252,33 @@ class _conectionState extends State<conection> {
                                     decoration: const InputDecoration(
                                       border: OutlineInputBorder(),
                                     ),
+                                    onChanged: (s) {
+                                      if(saveChanges == false)
+                                      {
+                                        if(select != -1)
+                                        {
+                                          if(controllerHost.text == conections[select].host)
+                                          {
+                                            saveChanges = false;
+                                          }
+                                          else
+                                          {
+                                            saveChanges = true;
+                                          }
+                                        }
+                                        else
+                                        {
+                                          if(controllerHost.text.isEmpty)
+                                          {
+                                            saveChanges = false;
+                                          }
+                                          else
+                                          {
+                                            saveChanges = true;
+                                          }
+                                        }
+                                      }
+                                    },
                                   ),
                                 ),
                                 const Padding(
@@ -269,6 +294,33 @@ class _conectionState extends State<conection> {
                                     decoration: const InputDecoration(
                                       border: OutlineInputBorder(),
                                     ),
+                                    onChanged: (s) {
+                                      if(saveChanges == false)
+                                      {
+                                        if(select != -1)
+                                        {
+                                          if(controllerPort.text == conections[select].port)
+                                          {
+                                            saveChanges = false;
+                                          }
+                                          else
+                                          {
+                                            saveChanges = true;
+                                          }
+                                        }
+                                        else
+                                        {
+                                          if(controllerPort.text.isEmpty)
+                                          {
+                                            saveChanges = false;
+                                          }
+                                          else
+                                          {
+                                            saveChanges = true;
+                                          }
+                                        }
+                                      }
+                                    },
                                   ),
                                 ),
                               ],
@@ -288,6 +340,33 @@ class _conectionState extends State<conection> {
                                     decoration: const InputDecoration(
                                       border: OutlineInputBorder(),
                                     ),
+                                    onChanged: (s) {
+                                      if(saveChanges == false)
+                                      {
+                                        if(select != -1)
+                                        {
+                                          if(controllerUser.text == conections[select].user)
+                                          {
+                                            saveChanges = false;
+                                          }
+                                          else
+                                          {
+                                            saveChanges = true;
+                                          }
+                                        }
+                                        else
+                                        {
+                                          if(controllerUser.text.isEmpty)
+                                          {
+                                            saveChanges = false;
+                                          }
+                                          else
+                                          {
+                                            saveChanges = true;
+                                          }
+                                        }
+                                      }
+                                    },
                                   ),
                                 ),
                                 const Padding(
@@ -303,6 +382,33 @@ class _conectionState extends State<conection> {
                                     decoration: const InputDecoration(
                                       border: OutlineInputBorder(),
                                     ),
+                                    onChanged: (s) {
+                                      if(saveChanges == false)
+                                      {
+                                        if(select != -1)
+                                        {
+                                          if(controllerPas.text == conections[select].password)
+                                          {
+                                            saveChanges = false;
+                                          }
+                                          else
+                                          {
+                                            saveChanges = true;
+                                          }
+                                        }
+                                        else
+                                        {
+                                          if(controllerPas.text.isEmpty)
+                                          {
+                                            saveChanges = false;
+                                          }
+                                          else
+                                          {
+                                            saveChanges = true;
+                                          }
+                                        }
+                                      }
+                                    },
                                   ),
                                 ),
                               ],
@@ -426,7 +532,7 @@ class _conectionState extends State<conection> {
                                           db = controllerNameBD.text;
                                           actionsDB(bd_action, db);
                                        }
-
+                                       saveChanges = false;
                                     }catch(Exception ){
 
                                           String action="No pueden ir campos en blanco";
@@ -489,7 +595,7 @@ class _conectionState extends State<conection> {
                                             String action1 ="No esta conectado a ninguna base de datos";
                                             error(context, action1);
                                           }
-
+                                          saveChanges = false;
                                         }catch(Exeption ){
                                           err= "no Se pudo eliminar";
                                           error(context, err);

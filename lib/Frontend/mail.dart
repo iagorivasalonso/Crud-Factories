@@ -118,16 +118,31 @@ class _newMailState extends State<newMail> {
                                       border: OutlineInputBorder(),
                                     ),
                                     onChanged: (s){
-                                      if(saveChanges == false && select != -1)
+                                      if(saveChanges == false)
                                       {
-                                        if(controllerMail.text == mails[select].addrres)
-                                        {
-                                          saveChanges = false;
-                                        }
-                                        else
-                                        {
-                                          saveChanges = true;
-                                        }
+                                            if(select != -1)
+                                            {
+                                                if(controllerMail.text == mails[select].addrres)
+                                                {
+                                                    saveChanges = false;
+                                                }
+                                                else
+                                                {
+                                                   saveChanges = true;
+                                                }
+                                            }
+                                            else
+                                            {
+                                                if(controllerMail.text.isEmpty)
+                                                {
+                                                   saveChanges = false;
+                                                }
+                                                else
+                                                {
+                                                    saveChanges = true;
+                                                }
+                                            }
+
                                       }
                                     },
                                   ),
@@ -282,10 +297,9 @@ class _newMailState extends State<newMail> {
                                                                      mails[select].company = controllerCompany.text;
                                                                      mails[select].password = encodedPass;
 
-                                                                     saveChanges = false;
                                                                  }
                                                             }
-
+                                                            saveChanges = false;
 
                                                             if (result == true)
                                                             {
@@ -342,9 +356,9 @@ class _newMailState extends State<newMail> {
                                           controllerPasVerificator.text = "";
                                         }
                                         else {
-                                          saveChanges = false;
                                           campCharge();
                                         }
+                                        saveChanges = false;
                                       });
                                     },
                                   ),

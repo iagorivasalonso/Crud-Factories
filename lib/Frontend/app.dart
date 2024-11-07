@@ -6,6 +6,7 @@ import 'package:crud_factories/Backend/CSV/chargueData%20csv.dart';
 import 'package:crud_factories/Backend/CSV/importConections.dart';
 import 'package:crud_factories/Backend/_selection_view.dart';
 import 'package:crud_factories/Backend/data.dart';
+import 'package:crud_factories/Functions/changesNoSave.dart';
 import 'package:flutter/material.dart';
 import 'package:menu_bar/menu_bar.dart';
 
@@ -81,12 +82,29 @@ class _AppState extends State<App> {
                                 text: SizedBox(
                                     width:wItem,
                                     child: const Text("Empresa")),
-                                onTap: (){
-                                  setState(() {
-                                    itenSelect = 0;
-                                    subIten1Select = 0;
-                                    subIten2Select = 0;
-                                  });
+                                onTap: () async {
+
+                                    if (saveChanges == false)
+                                    {
+                                      setState(() {
+                                        itenSelect = 0;
+                                        subIten1Select = 0;
+                                        subIten2Select = 0;
+                                      });
+                                    }
+                                    else
+                                    {
+                                      saveChanges =! await changesNoSave(context);
+
+                                      if(saveChanges == false)
+                                      {
+                                        setState(() {
+                                          itenSelect = 0;
+                                          subIten1Select = 0;
+                                          subIten2Select = 0;
+                                        });
+                                      }
+                                    }
 
                                 }
                             ),
@@ -94,39 +112,75 @@ class _AppState extends State<App> {
                                 text: SizedBox(
                                     width: wItem,
                                     child: const Text("Email")),
-                                onTap: (){
-                                  setState(() {
-                                    itenSelect = 0;
-                                    subIten1Select = 0;
-                                    subIten2Select = 1;
-                                  });
+                                onTap: () async {
+
+                                  if (saveChanges == false)
+                                  {
+                                    setState(() {
+                                      itenSelect = 0;
+                                      subIten1Select = 0;
+                                      subIten2Select = 1;
+                                    });
+                                  }
+                                  else
+                                  {
+                                    saveChanges =! await changesNoSave(context);
+
+                                    if(saveChanges == false)
+                                    {
+                                      setState(() {
+                                        itenSelect = 0;
+                                        subIten1Select = 0;
+                                        subIten2Select = 1;
+                                      });
+                                    }
+                                  }
+
                                 }
                             ),
                             MenuButton(
                                 text: SizedBox(
                                     width: wItem,
                                     child: const Text("Envio")),
-                                onTap: (){
+                                onTap: () async {
 
-                                  if(factories.isNotEmpty)
-                                  {
-                                    setState(() {
-                                      itenSelect = 0;
-                                      subIten1Select = 0;
-                                      subIten2Select = 2;
-                                    });
-                                  }
-                                  else
-                                  {
-                                    String action ='No puede hacer el envio porque no tiene empresas en su base de datos';
-                                    error(context,action);
+                                 bool go = false;
+                                 if (saveChanges == false)
+                                 {
+                                   go = true;
+                                 }
+                                 else
+                                 {
+                                   saveChanges =! await changesNoSave(context);
 
-                                    setState(() {
-                                      itenSelect = -1;
-                                      subIten1Select = -1;
-                                      subIten2Select = -1;
-                                    });
-                                  }
+                                   if(saveChanges == false)
+                                   {
+                                     go = true;
+                                   }
+                                 }
+                                 if(go == true)
+                                 {
+                                   if(factories.isNotEmpty)
+                                   {
+                                     setState(() {
+                                       itenSelect = 0;
+                                       subIten1Select = 0;
+                                       subIten2Select = 2;
+                                     });
+                                   }
+                                   else
+                                   {
+                                     String action ='No puede hacer el envio porque no tiene empresas en su base de datos';
+                                     error(context,action);
+
+                                     setState(() {
+                                       itenSelect = -1;
+                                       subIten1Select = -1;
+                                       subIten2Select = -1;
+                                     });
+                                   }
+                                 }
+
                                 }
                             ),
                           ]
@@ -136,11 +190,29 @@ class _AppState extends State<App> {
                       text: SizedBox(
                           width: wItem,
                           child: const Text("Importar")),
-                      onTap: (){
-                        setState(() {
-                          itenSelect = 0;
-                          subIten1Select = 1;
-                        });
+                      onTap: () async {
+
+                        if (saveChanges == false)
+                        {
+                          setState(() {
+                            itenSelect = 0;
+                            subIten1Select = 1;
+                            subIten2Select = -1;
+                          });
+                        }
+                        else
+                        {
+                          saveChanges =! await changesNoSave(context);
+
+                          if(saveChanges == false)
+                          {
+                            setState(() {
+                              itenSelect = 0;
+                              subIten1Select = 1;
+                              subIten2Select = -1;
+                            });
+                          }
+                        }
 
                       }
                   ),
@@ -169,36 +241,55 @@ class _AppState extends State<App> {
                             width: wItem,
                             child: const Text("Empresas")),
                             onTap: () async {
-                               if(factories.isNotEmpty)
-                               {
+
+                              bool go = false;
+                              if (saveChanges == false)
+                              {
+                                go = true;
+                              }
+                              else
+                              {
+                                saveChanges =! await changesNoSave(context);
+
+                                if(saveChanges == false)
+                                {
+                                  go = true;
+                                }
+                              }
+                              if(go == true)
+                              {
+                                if(factories.isNotEmpty)
+                                {
                                   setState(() {
                                     itenSelect = 1;
                                     subIten1Select = 0;
                                     subIten2Select = 0;
                                   });
-                               }
-                               else
-                               {
-                                 String array = "empresas";
+                                }
+                                else
+                                {
+                                  String array = "empresas";
                                   int dat = await noCategory(context, array);
 
-                                 if(dat == 1)
-                                 {
-                                   setState(() {
-                                     itenSelect = 0;
-                                     subIten1Select = 0;
-                                     subIten2Select = 0;
-                                   });
-                                 }
-                                 else
-                                 {
-                                   setState(() {
-                                     itenSelect = 0;
-                                     subIten1Select = 1;
-                                     subIten2Select = 0;
-                                   });
-                                 }
-                               }
+                                  if(dat == 1)
+                                  {
+                                    setState(() {
+                                      itenSelect = 0;
+                                      subIten1Select = 0;
+                                      subIten2Select = 0;
+                                    });
+                                  }
+                                  else
+                                  {
+                                    setState(() {
+                                      itenSelect = 0;
+                                      subIten1Select = 1;
+                                      subIten2Select = 0;
+                                    });
+                                  }
+                                }
+                              }
+
                             }
                     ),
                   if(sectors.length>1 && factories.isNotEmpty)
@@ -213,13 +304,28 @@ class _AppState extends State<App> {
                                   text: SizedBox(
                                       width:  wItem,
                                       child: Text("Todas")),
-                                  onTap: (){
-                                    setState(() {
-                                      itenSelect = 1;
-                                      subIten1Select = 0;
-                                      subIten2Select = 0;
+                                  onTap: () async {
+                                    if (saveChanges == false)
+                                    {
+                                      setState(() {
+                                        itenSelect = 1;
+                                        subIten1Select = 0;
+                                        subIten2Select = 0;
+                                      });
+                                    }
+                                    else
+                                    {
+                                      saveChanges =! await changesNoSave(context);
 
-                                    });
+                                      if(saveChanges == false)
+                                      {
+                                        setState(() {
+                                          itenSelect = 1;
+                                          subIten1Select = 0;
+                                          subIten2Select = 0;
+                                        });
+                                      }
+                                    }
                                   }
                               ),
                               for(int i = 0 ; i < sectors.length; i++)
@@ -248,43 +354,62 @@ class _AppState extends State<App> {
                           child: const Text("Emails")),
                       onTap: () async {
 
-                              if(mails.isNotEmpty)
+                               bool go = false;
+                              if (saveChanges == false)
                               {
-                                setState(() {
-                                  itenSelect = 1;
-                                  subIten1Select = 1;
-                                });
+                                go = true;
                               }
                               else
                               {
-                                String array = "emails";
-                                int dat = await noCategory(context, array);
+                                saveChanges =! await changesNoSave(context);
 
-                                if(dat == 1)
+                                if(saveChanges == false)
                                 {
-                                  setState(() {
-                                    itenSelect = 0;
-                                    subIten1Select = 0;
-                                    subIten2Select = 1;
-                                  });
+                                  go = true;
                                 }
-                                else if(dat == 2)
+                              }
+
+                              if(go == true)
+                              {
+                                if(mails.isNotEmpty)
                                 {
                                   setState(() {
-                                    itenSelect = 0;
+                                    itenSelect = 1;
                                     subIten1Select = 1;
-                                    subIten2Select = 1;
                                   });
                                 }
                                 else
-                               {
-                                 setState(() {
-                                   itenSelect = -1;
-                                   subIten1Select = -1;
-                                   subIten2Select = -1;
-                                 });
-                               }
+                                {
+                                  String array = "emails";
+                                  int dat = await noCategory(context, array);
+
+                                  if(dat == 1)
+                                  {
+                                    setState(() {
+                                      itenSelect = 0;
+                                      subIten1Select = 0;
+                                      subIten2Select = 1;
+                                    });
+                                  }
+                                  else if(dat == 2)
+                                  {
+                                    setState(() {
+                                      itenSelect = 0;
+                                      subIten1Select = 1;
+                                      subIten2Select = 1;
+                                    });
+                                  }
+                                  else
+                                  {
+                                    setState(() {
+                                      itenSelect = -1;
+                                      subIten1Select = -1;
+                                      subIten2Select = -1;
+                                    });
+                                  }
+                                }
                               }
+
 
                       }
                   ),
@@ -294,52 +419,72 @@ class _AppState extends State<App> {
                           child: const Text("Envios")
                       ),
                       onTap: () async {
-                           if(line.isNotEmpty)
-                           {
-                             setState(() {
-                               itenSelect = 1;
-                               subIten1Select = 2;
-                             });
-                           }
-                           else
-                           {
-                              if(factories.isNotEmpty)
+
+                            bool go = false;
+                            if (saveChanges == false)
+                            {
+                              go = true;
+                            }
+                            else
+                            {
+                              saveChanges =! await changesNoSave(context);
+
+                              if(saveChanges == false)
                               {
-                                String array = "envios";
-                               int dat = await noCategory(context, array);
+                                go = true;
+                              }
+                            }
+
+                             if(go == true)
+                             {
+                               if(line.isNotEmpty)
+                               {
+                                 setState(() {
+                                   itenSelect = 1;
+                                   subIten1Select = 2;
+                                 });
+                               }
+                               else
+                               {
+                                 if(factories.isNotEmpty)
+                                 {
+                                   String array = "envios";
+                                   int dat = await noCategory(context, array);
 
 
-                                if(dat == 1)
-                                {
-                                  setState(() {
-                                    itenSelect = 0;
-                                    subIten1Select = 0;
-                                    subIten2Select = 2;
-                                  });
-                                }
-                                else if(dat == 2)
-                                {
-                                  setState(() {
-                                    itenSelect = 0;
-                                    subIten1Select = 1;
-                                    subIten2Select = 1;
-                                  });
-                                }
-                                else
-                                {
-                                  setState(() {
-                                    itenSelect = -1;
-                                    subIten1Select = -1;
-                                    subIten2Select = -1;
-                                  });
-                                }
-                              }
-                              else
-                              {
-                                String action ='No puede hacer el envio porque no tiene empresas en su base de datos';
-                                error(context,action);
-                              }
-                           }
+                                   if(dat == 1)
+                                   {
+                                     setState(() {
+                                       itenSelect = 0;
+                                       subIten1Select = 0;
+                                       subIten2Select = 2;
+                                     });
+                                   }
+                                   else if(dat == 2)
+                                   {
+                                     setState(() {
+                                       itenSelect = 0;
+                                       subIten1Select = 1;
+                                       subIten2Select = 1;
+                                     });
+                                   }
+                                   else
+                                   {
+                                     setState(() {
+                                       itenSelect = -1;
+                                       subIten1Select = -1;
+                                       subIten2Select = -1;
+                                     });
+                                   }
+                                 }
+                                 else
+                                 {
+                                   String action ='No puede hacer el envio porque no tiene empresas en su base de datos';
+                                   error(context,action);
+                                 }
+                               }
+                             }
+
 
                       }
                   ),
@@ -357,27 +502,60 @@ class _AppState extends State<App> {
                       text: SizedBox(
                           width: wItemMax,
                           child: const Text("Envio de emails")),
-                      onTap: (){
+                      onTap: () async {
                         if(mails.isEmpty)
                         {
                           String action ='No tiene emails registrados';
                           error(context,action);
                         }
-                        setState(() {
-                          itenSelect = 2;
-                          subIten1Select = 0;
-                        });
+
+                        if (saveChanges == false)
+                        {
+                          setState(() {
+                            itenSelect = 2;
+                            subIten1Select = 0;
+                          });
+                        }
+                        else
+                        {
+                          saveChanges =! await changesNoSave(context);
+
+                          if(saveChanges == false)
+                          {
+                            setState(() {
+                              itenSelect = 2;
+                              subIten1Select = 0;
+                            });
+                          }
+                        }
+
                       }
                   ),
                   MenuButton(
                       text: SizedBox(
                           width: wItemMax,
                           child: const Text("Conexion BD")),
-                      onTap: (){
-                        setState(() {
-                          itenSelect = 2;
-                          subIten1Select = 1;
-                        });
+                      onTap: () async {
+
+                        if (saveChanges == false)
+                        {
+                          setState(() {
+                            itenSelect = 2;
+                            subIten1Select = 1;
+                          });
+                        }
+                        else
+                        {
+                          saveChanges =! await changesNoSave(context);
+
+                          if(saveChanges == false)
+                          {
+                            setState(() {
+                              itenSelect = 2;
+                              subIten1Select = 1;
+                            });
+                          }
+                        }
                       }
                   ),
                 ]

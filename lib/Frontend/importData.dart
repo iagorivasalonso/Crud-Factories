@@ -602,7 +602,7 @@ void _pickFile(BuildContext context, TextEditingController controllerDatePicker,
   {
     camps = fileContent[i].split(";");
   }
-  print(camps.length);
+
      if(camps.length==2)
     {
 

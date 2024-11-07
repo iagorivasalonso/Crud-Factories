@@ -6,6 +6,7 @@ import 'package:crud_factories/Frontend/factory.dart';
 import 'package:crud_factories/Frontend/mail.dart';
 import 'package:crud_factories/Frontend/send.dart';
 import 'package:crud_factories/Functions/avoidRepeatArray.dart';
+import 'package:crud_factories/Functions/changesNoSave.dart';
 import 'package:crud_factories/Objects/Factory.dart';
 import 'package:crud_factories/Objects/LineSend.dart';
 import 'package:crud_factories/Widgets/defaultCard.dart';
@@ -515,7 +516,7 @@ class _viewState extends State<view> {
                                                                         }
                                                                         else
                                                                         {
-                                                                          saveChanges =! await changesNoSave();
+                                                                          saveChanges =! await changesNoSave(context);
 
                                                                           if(saveChanges == false)
                                                                           {
@@ -552,7 +553,7 @@ class _viewState extends State<view> {
                                                                       }
                                                                       else
                                                                       {
-                                                                        saveChanges =! await changesNoSave();
+                                                                        saveChanges =! await changesNoSave(context);
 
                                                                         if(saveChanges == false)
                                                                         {
@@ -562,6 +563,7 @@ class _viewState extends State<view> {
                                                                           });
                                                                         }
                                                                       }
+
                                                                   },
                                                                 );
                                                               },
@@ -593,7 +595,7 @@ class _viewState extends State<view> {
                                                                       }
                                                                       else
                                                                       {
-                                                                        saveChanges =! await changesNoSave();
+                                                                        saveChanges =! await changesNoSave(context);
 
                                                                         if(saveChanges == false)
                                                                         {
@@ -614,7 +616,6 @@ class _viewState extends State<view> {
                                                                       {
                                                                         selectCamp =resultSend[select].title;
                                                                       }
-
 
                                                                   },
                                                                 );
@@ -708,15 +709,6 @@ String chargueList(int cardIndex) {
     }
     cardSeleted = allCards[0].description;
    return cardSeleted;
-  }
-
-  Future<bool> changesNoSave() async {
-
-    String mensaje = 'Todos los cambios se perderan ¿Desea continuar?';
-    bool changes = await warning(context, mensaje);
-
-
-     return changes;
   }
 
 }

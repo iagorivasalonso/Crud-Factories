@@ -303,6 +303,7 @@ class _newSendState extends State<newSend> {
                                                          onChanged: (s){
                                                            setState(() {
                                                              lineEdit[indexRow]=true;
+                                                             saveChanges = true;
                                                            });
 
                                                           },
@@ -319,6 +320,7 @@ class _newSendState extends State<newSend> {
                                                        ),
                                                        onChanged: (s){
                                                          lineEdit[indexRow]=true;
+                                                         saveChanges = true;
                                                        },
                                                      ),
                                                    ),
@@ -330,6 +332,7 @@ class _newSendState extends State<newSend> {
                                                           setState(() {
                                                              Send[indexRow] = value!;
                                                              allSelect = true;
+                                                             saveChanges = true;
                                                           });
                                                      },
                                                    ),
@@ -526,10 +529,10 @@ class _newSendState extends State<newSend> {
                                                         }
                                                       }
 
-                                                      saveChanges = false;
+
                                                   }
 
-
+                                                  saveChanges = false;
                                                 String action ='';
                                                 if (allLinesModify == 0)
                                                 {
