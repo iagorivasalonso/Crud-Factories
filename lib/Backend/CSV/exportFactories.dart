@@ -8,7 +8,6 @@ void csvExportatorFactories(List<Factory> factories) async {
   File myFile = File('D:/factories.csv');
 
   List<dynamic> associateList = [
-
       for (int i = 0; i <factories.length;i++)
       {
         "id": factories[i].id,
@@ -28,13 +27,10 @@ void csvExportatorFactories(List<Factory> factories) async {
       },
   ];
 
-
-
   List<List<dynamic>> rows = [];
-  List<dynamic> row = [];
-
 
   for (int i = 0; i < associateList.length; i++) {
+
     List<dynamic> row = [];
 
     row.add(associateList[i]["id"]);
@@ -54,7 +50,7 @@ void csvExportatorFactories(List<Factory> factories) async {
     rows.add(row);
   }
 
-  String csv = const ListToCsvConverter().convert(rows);
+  String csv = const ListToCsvConverter(fieldDelimiter: ';').convert(rows);
   myFile.writeAsString(csv);
 
 }

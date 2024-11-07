@@ -8,7 +8,6 @@ void  csvExportatorLines(List<LineSend> listSend) async {
   File myFile = File('D:/lineSends.csv');
 
   List<dynamic> associateList = [
-
     for (int i = 0; i <listSend.length;i++)
     {
         "id": listSend[i].id,
@@ -20,11 +19,11 @@ void  csvExportatorLines(List<LineSend> listSend) async {
   ];
 
   List<List<dynamic>> rows = [];
-  List<dynamic> row = [];
-
 
   for (int i = 0; i < associateList.length; i++) {
+
     List<dynamic> row = [];
+
     row.add(associateList[i]["id"]);
     row.add(associateList[i]["date"]);
     row.add(associateList[i]["factory"]);
@@ -33,7 +32,6 @@ void  csvExportatorLines(List<LineSend> listSend) async {
     rows.add(row);
   }
 
-  String csv = const ListToCsvConverter().convert(rows);
+  String csv = const ListToCsvConverter(fieldDelimiter: ';').convert(rows);
   myFile.writeAsString(csv);
-
 }

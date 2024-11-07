@@ -23,6 +23,7 @@ void csvExportatorConections(List<Conection> conections) {
   List<List<dynamic>> rows = [];
 
   for (int i = 0; i < associateList.length; i++) {
+
     List<dynamic> row = [];
 
     row.add(associateList[i]["id"]);
@@ -34,6 +35,6 @@ void csvExportatorConections(List<Conection> conections) {
     rows.add(row);
   }
 
-  String csv = const ListToCsvConverter().convert(rows);
+  String csv = const ListToCsvConverter(fieldDelimiter: ';').convert(rows);
   myFile.writeAsString(csv);
 }

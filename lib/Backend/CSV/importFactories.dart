@@ -1,33 +1,28 @@
+import 'dart:convert';
 import 'dart:io';
 import 'package:crud_factories/Objects/Factory.dart';
 
 
 csvImportFactories(List<String> fileContent, List<Factory> factories) async {
 
-  List<String> select =[];
+  try {
+    final file = File('D:/factories.csv');
+    final content = await file.readAsString(encoding: utf8);
 
-   if(fileContent.isEmpty)
-  {
+    final lines = const LineSplitter().convert(content);
 
-    File file =new File('D:/factories.csv');
+    List<String> select = [];
 
-    if(file.existsSync())
-    fileContent = await file.readAsLines();
-  }
+    for (int i = 0; i < lines.length; i++) {
 
+      select = lines[i].split(";");
 
-
-
-  for (int i = 0; i <fileContent.length; i++)
-  {
-    select = fileContent[i].split(",");
-
-    factories.add(Factory(
+      factories.add(Factory(
         id: select[0],
         name: select[1],
         highDate: select[2],
         sector: select[3],
-        thelephones: [select[4],select[5]],
+        thelephones: [select[4], select[5]],
         mail: select[6],
         web: select[7],
         address: {
@@ -35,9 +30,13 @@ csvImportFactories(List<String> fileContent, List<Factory> factories) async {
           'number': select[9],
           'apartament': select[10],
           'city': select[11],
-          'postalCode':select[12] ,
-          'province': select[13]
-        }));
+          'postalCode': select[12],
+          'province': select[13],
+        },
+      ));
+    }
+  } catch (e) {
+    print('Error reading CSV file factories: $e');
   }
 
   return factories;

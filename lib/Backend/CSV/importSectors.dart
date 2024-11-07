@@ -1,26 +1,35 @@
+import 'dart:convert';
 import 'dart:io';
-
 import 'package:crud_factories/Objects/Sector.dart';
 
 csvImportSectors(List<String> fileContent, List<Sector> sectors) async{
 
-  List<String> select =[];
+  try {
+    File file = File('D:/sectors.csv');
 
-  if(fileContent.isEmpty)
-  {
-    File file = new File('D:/sectors.csv');
+    final content = await file.readAsString(encoding: utf8);
 
-    if(file.existsSync())
-      fileContent = await file.readAsLines();
+    final lines = const LineSplitter().convert(content);
+
+    List<String> select = [];
+
+    for (int i = 0; i < lines.length; i++) {
+
+      select = lines[i].split(";");
+      sectors.add(Sector(
+          id: select[0],
+          name: select[1]
+      ));
+    }
+
+  } catch (e) {
+    print('Error reading CSV file sectors: $e');
   }
 
-  for (int i = 0; i < fileContent.length; i++) {
-    select = fileContent[i].split(",");
-    sectors.add(Sector(
-        id: select[0],
-        name: select[1]));
-  }
+
+
+
+
 
     return sectors;
-
 }

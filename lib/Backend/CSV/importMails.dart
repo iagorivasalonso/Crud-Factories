@@ -1,27 +1,29 @@
+import 'dart:convert';
 import 'dart:io';
 import 'package:crud_factories/Objects/Mail.dart';
 
 csvImportMails(List<String> fileContent, List<Mail> mails) async {
 
-  List<String> select =[];
+  try {
+    final file = File('D:/mails.csv');
+    final content = await file.readAsString(encoding: utf8);
 
-  if(fileContent.isEmpty)
-  {
-    File file =new File('D:/mails.csv');
+    final lines = const LineSplitter().convert(content);
 
-    if(file.existsSync())
-    fileContent = await file.readAsLines();
+    List<String> select = [];
+
+    for (int i = 0; i < lines.length; i++) {
+
+      select = lines[i].split(";");
+      mails.add(Mail(
+          id: select[0],
+          addrres: select[1],
+          company: select[2],
+          password: select[3]));
+
+    }
+  } catch (e) {
+    print('Error reading CSV file mails: $e');
   }
-
-  for (int i = 0; i <fileContent.length; i++)
-  {
-    select = fileContent[i].split(",");
-    mails.add(Mail(
-        id: select[0],
-        addrres: select[1],
-        company: select[2],
-        password: select[3]));
-  }
-
   return mails;
 }

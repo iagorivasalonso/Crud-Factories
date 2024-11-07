@@ -1,27 +1,25 @@
 
+import 'dart:convert';
 import 'dart:io';
-
 import 'package:crud_factories/Objects/Conection.dart';
 
-csvImportConections(List<String> fileContent, List<Conection> conection) async {
+csvImportConections(List<String> fileContent, List<Conection> conections) async {
 
-  List<String> select = [];
+  try {
+    final File file = File('D:/conections.csv');
+    final content = await file.readAsString(encoding: latin1);
 
-  if(fileContent.isEmpty)
-  {
-    File file = File('D:/conections.csv');
+    final lines = const LineSplitter().convert(content);
 
-    if(file.existsSync())
-      fileContent = await file.readAsLines();
-  }
+    List<String> select = [];
 
-  for (int i = 0; i <fileContent.length; i++)
-  {
-    select = fileContent[i].split(",");
+    for (int i = 0; i < lines.length; i++) {
+
+      select = lines[i].split(";");
 
     if(select.length == 6)
     {
-      conection.add(Conection(
+      conections.add(Conection(
           id: select[0],
           database: select[1],
           host: select[2],
@@ -30,7 +28,9 @@ csvImportConections(List<String> fileContent, List<Conection> conection) async {
           password: select[5]
       ));
     }
-
-
   }
+  } catch (e) {
+    print('Error reading CSV file conections: $e');
+  }
+  return conections;
 }

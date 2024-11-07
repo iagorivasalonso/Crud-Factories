@@ -5,11 +5,9 @@ import 'package:csv/csv.dart';
 
 void csvExportatorMails(List<Mail> mails) {
 
-
   File myFile = File('D:/mails.csv');
 
   List<dynamic> associateList = [
-
     for (int i = 0; i <mails.length; i++)
     {
         "id": mails[i].id,
@@ -21,9 +19,8 @@ void csvExportatorMails(List<Mail> mails) {
 
   List<List<dynamic>> rows = [];
 
-
-
   for (int i = 0; i < associateList.length; i++) {
+
     List<dynamic> row = [];
 
     row.add(associateList[i]["id"]);
@@ -33,7 +30,6 @@ void csvExportatorMails(List<Mail> mails) {
     rows.add(row);
   }
 
-  String csv = const ListToCsvConverter().convert(rows);
-
+  String csv = const ListToCsvConverter(fieldDelimiter: ';').convert(rows);
   myFile.writeAsString(csv);
 }

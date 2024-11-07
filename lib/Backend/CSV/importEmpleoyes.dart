@@ -1,27 +1,30 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:crud_factories/Objects/Empleoye.dart';
 
 csvImportEmpleoyes(List<String> fileContent, List<Empleoye> empleoyes) async {
 
-  List<String> select =[];
+  try {
+    File file = File('D:/empleoyes.csv');
+    final content = await file.readAsString(encoding: utf8);
 
-  if(fileContent.isEmpty)
-  {
-    File file =new File('D:/empleoyes.csv');
+    final lines = const LineSplitter().convert(content);
 
-    if(file.existsSync())
-      fileContent = await file.readAsLines();
-  }
+    List<String> select = [];
 
-  for (int i = 0; i <fileContent.length; i++)
-  {
-    select = fileContent[i].split(",");
-    empleoyes.add(Empleoye(
+    for (int i = 0; i < lines.length; i++) {
+
+      select = lines[i].split(";");
+
+      empleoyes.add(Empleoye(
         id: select[0],
         name: select[1],
         idFactory: select[2],
-    ));
+      ));
+    }
+  } catch (e) {
+    print('Error reading CSV file empleoye: $e');
   }
 
   return empleoyes;

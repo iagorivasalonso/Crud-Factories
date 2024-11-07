@@ -8,7 +8,6 @@ void csvExportatorEmpleoyes(List<Empleoye> empleoyes){
   File myFile = File('D:/empleoyes.csv');
 
   List<dynamic> associateList = [
-
     for (int i = 0; i < empleoyes.length; i++)
       {
         "id": empleoyes[i].id,
@@ -19,9 +18,8 @@ void csvExportatorEmpleoyes(List<Empleoye> empleoyes){
 
   List<List<dynamic>> rows = [];
 
-
-
   for (int i = 0; i < associateList.length; i++) {
+
     List<dynamic> row = [];
 
     row.add(associateList[i]["id"]);
@@ -30,6 +28,6 @@ void csvExportatorEmpleoyes(List<Empleoye> empleoyes){
     rows.add(row);
   }
 
-  String csv = const ListToCsvConverter().convert(rows);
+  String csv = const ListToCsvConverter(fieldDelimiter: ';').convert(rows);
   myFile.writeAsString(csv);
 }

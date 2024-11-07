@@ -1,32 +1,31 @@
+import 'dart:convert';
 import 'dart:io';
 import 'package:crud_factories/Objects/LineSend.dart';
 
 
-csvImportLines(List<String> fileContent, List<LineSend> line) async {
+csvImportLines(List<String> fileContent, List<LineSend> line ) async {
 
-  List<String> select = [];
+  try {
+    File file = File('D:/lineSends.csv');
+    final content = await file.readAsString(encoding: utf8);
 
-  if(fileContent.isEmpty)
-  {
-    File file = new File('D:/lineSends.csv');
+    final lines1 = const LineSplitter().convert(content);
 
-    if(file.existsSync())
-    fileContent = await file.readAsLines();
-  }
+    List<String> select = [];
 
-    for (int i = 0; i <fileContent.length; i++)
-    {
-      select = fileContent[i].split(",");
+    for (int i = 0; i < lines1.length; i++) {
+
+      select = lines1[i].split(";");
+
       line.add(LineSend(
           id: select[0],
           date:select[1],
           factory:select[2] ,
           observations: select[3] ,
           state: select[4]));
-
     }
-
-
-
+  } catch (e) {
+    print('Error reading CSV file lines: $e');
+  }
   return line;
 }
