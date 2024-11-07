@@ -466,7 +466,27 @@ class _newImportState extends State<newImport> {
                                       }
                                       if(factoriesNew.isNotEmpty)
                                       {
-                                        repeat = false;
+                                        print(factoriesNew.length);
+                                        for(int i = 0; i < factoriesNew.length; i++)
+                                        {
+                                          current = factoriesNew[i].sector;
+                                          repeat = false;
+
+                                          for(int x = 0; x < sectors.length; x++)
+                                          {
+                                            if(current == sectors[x].id)
+                                            {
+                                              repeat = true;
+                                            }
+                                          }
+
+                                          if(repeat == false)
+                                          {
+                                            factoriesNew.removeAt(i);
+                                            String stringDialog ="no existe el sector";
+                                            repeat = await noFind(context, true, stringDialog);
+                                          }
+                                        }
 
                                         for(int i = 0; i <factoriesNew.length; i++)
                                         {
@@ -580,9 +600,9 @@ void _pickFile(BuildContext context, TextEditingController controllerDatePicker,
 
   for (int i = 0; i <fileContent.length; i++)
   {
-    camps = fileContent[i].split(",");
+    camps = fileContent[i].split(";");
   }
-
+  print(camps.length);
      if(camps.length==2)
     {
 
@@ -631,14 +651,13 @@ void _pickFile(BuildContext context, TextEditingController controllerDatePicker,
       }
 
      }
-     else if(camps.length==14)
+     else if(camps.length==15)
      {
         try {
           factories.add(csvImportFactories(fileContent, factories));
        } catch (Exeption) {
 
          }
-
      }
      else
      {
