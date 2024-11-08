@@ -48,10 +48,9 @@ class _viewState extends State<view> {
   List<cardSend> resultSend = [];
   List<String> factoryName = [];
   String? selectedFilterSend = 'Fecha';
+  String filterFactory = 'Nombre';
   String? selectedFactory;
   String? selectedSend;
-
-  String filterFactory = '';
 
 
   TextEditingController controllerSearchSend = new TextEditingController();
