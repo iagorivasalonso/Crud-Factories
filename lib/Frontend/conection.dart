@@ -520,7 +520,7 @@ class _conectionState extends State<conection> {
                                           actionsDB(bd_action, db);
                                         }
 
-                                       if(conn != null)
+                                       if(conn != null && action0 != "Volver")
                                        {
                                             bd_action = "Desconection";
                                             db = "";
