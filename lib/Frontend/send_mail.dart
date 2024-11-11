@@ -343,7 +343,7 @@ class _sendMailState extends State<sendMail> {
                                               children: [
                                                 Row(
                                                   children: [
-                                                    const Text("Seleccionar Envio: "),
+                                                    const Text("Seleccionar envio: "),
                                                     Padding(
                                                       padding: const EdgeInsets.only(left: 20.0),
                                                       child: DropdownButtonHideUnderline(
