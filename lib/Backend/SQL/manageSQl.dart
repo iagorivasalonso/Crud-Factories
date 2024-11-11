@@ -50,7 +50,8 @@ Future<String> createTables(BuildContext context) async {
         '(id int NOT NULL AUTO_INCREMENT PRIMARY KEY,'
         ' name varchar(50) NOT NULL,'
         ' idFactory int(11) NOT NULL,'
-        ' FOREIGN KEY fk_empleoyes(idFactory) REFERENCES factories(id))'
+        ' FOREIGN KEY fk_empleoyes(idFactory) REFERENCES factories(id)'
+        ' ON DELETE CASCADE)'
     );
 
     await conn.query('CREATE TABLE IF NOT EXISTS lineSends '
