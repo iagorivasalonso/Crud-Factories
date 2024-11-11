@@ -841,39 +841,33 @@ class _newFactoryState extends State<newFactory> {
                                               String action ='El sector no puede ir vacio';
                                               error(context,action);
                                             }
-                                            else if(telephoneCorrect(telephone1,context) == true)
+                                            else if(telephoneCorrect(telephone1,context) == false)
                                             {
-                                              if(telephone1.length != 9)
-                                              {
-                                                action ='El telefono debe de tener 9 digitos';
-                                                error(context,action);
+                                                
 
-                                              }
-                                              else if(telephoneCorrect(telephone2,context) == true)
-                                              {
-                                                if(telephone2.length != 9)
-                                                {
-                                                  action ='El telefono debe de tener 9 digitos';
-                                                  error(context,action);
-                                                }
-                                                else if(mailCorrect(controllerMail.text) != true)
-                                                {
-                                                  action ='No es un correo electronico valido';
-                                                  error(context,action);
-                                                }
-                                                else if(webCorrect(controllerWeb.text) != true)
-                                                {
-                                                  action ='No es una dirreccion web';
-                                                  error(context,action);
-                                                }
-                                                else if(adrressCorrect(controllerAdrress.text) != true)
-                                                {
+                                            }
+                                            else if(telephoneCorrect(telephone2,context) == true)
+                                            {
+                                           
+                                            }
+                                            else if(mailCorrect(controllerMail.text) != true)
+                                            {
+                                                action ='No es un correo electronico valido';
+                                                error(context,action);
+                                            }
+                                            else if(webCorrect(controllerWeb.text) != true)
+                                            {
+                                              action ='No es una dirreccion web';
+                                              error(context,action);
+                                            }
+                                            else if(adrressCorrect(controllerAdrress.text) != true)
+                                            {
                                                   String action ='El fomato de la direccion debe de ser:';
                                                   String format =' calle, numero';
                                                   error(context,action,format);
-                                                }
-                                                else if(postalCodeCorrect(controllerPostalCode.text,context) == true)
-                                                {
+                                            }
+                                            else if(postalCodeCorrect(controllerPostalCode.text,context) == true)
+                                            {
                                                   if(controllerPostalCode.text.length != 5)
                                                   {
                                                     action ='El codigo postal debe de tener 5 digitos';
@@ -898,7 +892,6 @@ class _newFactoryState extends State<newFactory> {
 
                                                      if(conn != null)
                                                      {
-
                                                           Set<Empleoye> contacsPreEdit1 = contacsPreEdit.toSet();
                                                           Set<Empleoye> contacsCurrent1 = contacsCurrent.toSet();
 
@@ -985,7 +978,7 @@ class _newFactoryState extends State<newFactory> {
                                                           }
                                                     }
                                                     saveChanges = false;
-
+/*
                                                     if(conn != null)
                                                     {
                                                          if(select == -1)
@@ -1025,12 +1018,12 @@ class _newFactoryState extends State<newFactory> {
                                                       csvExportatorEmpleoyes(empleoyes);
 
                                                     }
-
+*/
                                                   }
                                                 }
                                               }
-                                            }
-                                          }
+
+
                                         });
                                     },
                                   ),

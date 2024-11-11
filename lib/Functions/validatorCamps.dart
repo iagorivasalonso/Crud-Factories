@@ -107,22 +107,31 @@ bool dateCorrect( String date)
 }
 bool telephoneCorrect(String telephone, BuildContext context) {
 
-  bool telephoneValid = RegExp(r"^[0-9,$]*$").hasMatch(telephone);
+  bool telephoneValid = false;
 
-  if(telephoneValid != true)
+  if(telephone.isEmpty)
   {
-    String action ='El telefono debe de ser numerico';
-    error(context,action);
+
   }
   else
   {
-    if(telephone.trim().length!=9)
-    {
-      telephoneValid = false;
-      String action ='El telefono debe de tener 9 digitos';
-      error(context,action);
+    telephoneValid = RegExp(r"^[0-9,$]*$").hasMatch(telephone);
 
+    if(telephoneValid != true)
+    {
+      String action ='El telefono debe de ser numerico';
+      error(context,action);
     }
+    else
+    {
+      if(telephone.trim().length!=9)
+      {
+        telephoneValid = false;
+        String action ='El telefono debe de tener 9 digitos';
+        error(context,action);
+
+      }
+    };
   }
 
   return telephoneValid;
@@ -130,7 +139,7 @@ bool telephoneCorrect(String telephone, BuildContext context) {
 
 bool mailCorrect(String email) {
 
-  final bool mailValid = RegExp(r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+").hasMatch(email);
+  final bool mailValid = RegExp(r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+(-.*)?$").hasMatch(email);
 
   return mailValid;
 }
@@ -145,7 +154,7 @@ bool webCorrect(String web) {
 bool adrressCorrect(String adrress) {
 
   final adrress1 = adrress.replaceAll(" ", "");
-  final bool adrressValid =RegExp(r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+,[0-9a-zA-Z]+").hasMatch(adrress1);
+  final bool adrressValid =RegExp(r"^[a-zA-Z0-9áéíóúÁÉÍÓÚñÑ.!#$%&'*+-/=?^_`{|}~]+,[0-9a-zA-ZáéíóúÁÉÍÓÚñÑ]+").hasMatch(adrress1);
 
   return adrressValid;
 }
