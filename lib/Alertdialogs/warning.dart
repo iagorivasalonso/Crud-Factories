@@ -12,7 +12,7 @@ Future<bool> warning(BuildContext  context,String action) async{
          builder: (BuildContext context, void Function(void Function()) setState) => Dialog(
            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(0)),
            child: SizedBox(
-             width: 350,
+             width: 380,
              height: 175,
              child: Column(
                children: [
@@ -28,7 +28,7 @@ Future<bool> warning(BuildContext  context,String action) async{
                  Row(
                    children: [
                      Padding(
-                       padding: const EdgeInsets.only(left: 90, right: 15),
+                       padding: const EdgeInsets.only(left: 100, right: 15),
                        child: MaterialButton(
                            color: Colors.lightBlue,
                            onPressed:() async {

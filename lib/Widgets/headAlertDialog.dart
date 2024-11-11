@@ -25,7 +25,16 @@ Container headAlert({
                 icon: const Icon(Icons.close),
                 color: Colors.white,
                 onPressed: (){
-                  Navigator.of(context).pop(false);
+
+                  if(title == "Error categoria")
+                  {
+                     Navigator.of(context).pop(3);
+                  }
+                 else
+                 {
+                   Navigator.of(context).pop(false);
+                 }
+
                 },
               ),
             ),

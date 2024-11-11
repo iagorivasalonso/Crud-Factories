@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 
 Future<int> noCategory(BuildContext  context, String array) async {
 
-  int dato = await showDialog(
+  int? dato = await showDialog(
       context: context,
       builder: (BuildContext context) {
        return StatefulBuilder(
@@ -15,7 +15,7 @@ Future<int> noCategory(BuildContext  context, String array) async {
               height: 175,
               child: Column(
                 children: [
-                  headAlert(title:"Error"),
+                  headAlert(title:"Error categoria"),
                   Padding(
                     padding:  const EdgeInsets.only(left: 30,top: 25, bottom: 35),
                     child: Row(
@@ -62,7 +62,7 @@ Future<int> noCategory(BuildContext  context, String array) async {
         );
 
       });
-  return dato;
+  return  dato ?? -3;
 }
 
 

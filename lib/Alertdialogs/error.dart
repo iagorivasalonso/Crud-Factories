@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 
 Future<bool> error(BuildContext  context, String action, [format]) async {
 
+  double WidthDialog = action.length.toDouble();
+
   bool? err = await showDialog(
       context: context,
       barrierDismissible: true,
@@ -12,7 +14,9 @@ Future<bool> error(BuildContext  context, String action, [format]) async {
           builder: (BuildContext context, void Function(void Function()) setState) => Dialog(
             shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(0)),
             child: SizedBox(
-              width: 400,
+              width: WidthDialog > 53.0
+                  ? 450
+                  : 400,
               height: 175,
               child: Column(
                 children: [
