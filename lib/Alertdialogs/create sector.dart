@@ -1,6 +1,5 @@
-import 'package:crud_factories/Alertdialogs/confirm.dart';
+
 import 'package:crud_factories/Alertdialogs/error.dart';
-import 'package:crud_factories/Backend/CSV/exportLines.dart';
 import 'package:crud_factories/Backend/CSV/exportSectors.dart';
 import 'package:crud_factories/Backend/SQL/createSector.dart';
 import 'package:crud_factories/Backend/SQL/modifySector.dart';

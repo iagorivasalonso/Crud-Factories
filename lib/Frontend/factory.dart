@@ -329,71 +329,18 @@ class _newFactoryState extends State<newFactory> {
 
                                                if(sectorChoose == "Nuevo")
                                                {
-                                                    String sectorcreate =  await createSector(context);
-                                                    bool repeat = false;
 
-                                                      for(int i = 0; i < sectors.length; i++)
-                                                      {
-                                                          if(sectorcreate == sectors[i].name)
-                                                          {
-                                                             repeat = true ;
-                                                          }
+                                                     String modif = "nuevo";
+                                                     bool create = await createSector(context,modif);
 
-                                                      }
-
-                                                      if(repeat == false)
-                                                      {
-                                                            setState(() {
-                                                              List<Sector> currentSector=[];
-                                                              String idNew = "";
-
-                                                              if(sectors.isNotEmpty)
-                                                              {
-                                                                String idLast = sectors[sectors.length-1].id;
-                                                                idNew = createId(idLast);
-                                                              }
-                                                              else
-                                                              {
-                                                                idNew ="1";
-                                                              }
-
-                                                              currentSector.add(Sector(
-                                                                   id: idNew,
-                                                                   name: sectorcreate,
-                                                                ));
-
-                                                                sectors+=currentSector;
-
-                                                                if(conn != null)
-                                                                {
-                                                                   sqlCreateSector(currentSector);
-                                                                }
-                                                                else
-                                                                {
-                                                                    csvExportatorSectors(sectors);
-                                                                }
-
-                                                        });
-                                                      }
-                                                      else
-                                                      {
-                                                         action = "Ese departamento ya existe";
-                                                         error(context, action);
-                                                      }
-
-                                               }
-                                               else
-                                               {
-                                                 for(int i = 0; i < sectors.length; i++)
-                                                 {
-                                                       if(sectorChoose==sectors[i].name)
+                                                       if(create == true)
                                                        {
-                                                         controllerSector.text = sectors[i].id;
+                                                           setState((){
+                                                               String action = 'El sector se ha creado correctamente';
+                                                               confirm(context, action);
+                                                           });
                                                        }
-                                                     }
-
                                                }
-
                                         },
                                         buttonStyleData: const ButtonStyleData(
                                           height: 50,
