@@ -1,4 +1,6 @@
 import 'package:crud_factories/Alertdialogs/closeApp.dart';
+import 'package:crud_factories/Alertdialogs/confirm.dart';
+import 'package:crud_factories/Alertdialogs/create%20sector.dart';
 import 'package:crud_factories/Alertdialogs/error.dart';
 import 'package:crud_factories/Alertdialogs/noCategory.dart';
 import 'package:crud_factories/Alertdialogs/typeConnection.dart';
@@ -6,6 +8,7 @@ import 'package:crud_factories/Backend/CSV/chargueData%20csv.dart';
 import 'package:crud_factories/Backend/CSV/importConections.dart';
 import 'package:crud_factories/Backend/_selection_view.dart';
 import 'package:crud_factories/Backend/data.dart';
+import 'package:crud_factories/Frontend/adminSector.dart';
 import 'package:crud_factories/Functions/changesNoSave.dart';
 import 'package:flutter/material.dart';
 import 'package:menu_bar/menu_bar.dart';
@@ -235,13 +238,40 @@ class _AppState extends State<App> {
                   style: TextStyle(color:colorBar),)),
             submenu: SubMenu(
                 menuItems:[
+                  MenuButton(
+                      text: SizedBox(
+                          width: wItem,
+                          child: const Text("Sectores")),
+                      onTap: () async {
+                              if(sectors.isNotEmpty)
+                              {
+                                setState(() {
+                                  adminSector(context);
+                                });
+                              }
+                              else
+                              {
+                                String modif = "nuevo";
+                                bool create = await createSector(context,modif);
+
+                                if(create == true)
+                                {
+                                  setState((){
+                                    String action = 'El sector se ha creado correctamente';
+                                    confirm(context, action);
+                                  });
+                                }
+                              }
+
+
+                      }
+                  ),
                   if(sectors.length < 2 || factories.isEmpty)
                     MenuButton(
                         text: SizedBox(
                             width: wItem,
                             child: const Text("Empresas")),
                             onTap: () async {
-
                               bool go = false;
                               if (saveChanges == false)
                               {
@@ -258,6 +288,7 @@ class _AppState extends State<App> {
                               }
                               if(go == true)
                               {
+
                                 if(factories.isNotEmpty)
                                 {
                                   setState(() {
@@ -413,6 +444,8 @@ class _AppState extends State<App> {
 
                       }
                   ),
+
+                  if(sectors.length<2)
                   MenuButton(
                       text: SizedBox(
                           width: wItem,
@@ -479,8 +512,8 @@ class _AppState extends State<App> {
                                  }
                                  else
                                  {
-                                   String action ='No puede hacer el envio porque no tiene empresas en su base de datos';
-                                   error(context,action);
+                                   String array ="envios";
+                                   await noCategory(context, array);
                                  }
                                }
                              }
@@ -488,6 +521,63 @@ class _AppState extends State<App> {
 
                       }
                   ),
+                  if(sectors.length>1)
+                    MenuButton(
+                        text: SizedBox(
+                            width: wItem,
+                            child: const Text("Envios")
+                        ),
+                        submenu:SubMenu(
+                            menuItems:
+                            [
+                              MenuButton(
+                                  text: SizedBox(
+                                      width:  wItem,
+                                      child: Text("Todos")),
+                                  onTap: () async {
+                                    if (saveChanges == false)
+                                    {
+                                      setState(() {
+                                        itenSelect = 1;
+                                        subIten1Select = 2;
+                                        subIten2Select = 0;
+                                      });
+                                    }
+                                    else
+                                    {
+                                      saveChanges =! await changesNoSave(context);
+
+                                      if(saveChanges == false)
+                                      {
+                                        setState(() {
+                                          itenSelect = 1;
+                                          subIten1Select = 2;
+                                          subIten2Select = 0;
+                                        });
+                                      }
+                                    }
+                                  }
+                              ),
+                              for(int i = 0 ; i < sectors.length; i++)
+                                MenuButton(
+                                    text: SizedBox(
+                                        width: sectors[i].name.length > 3
+                                            ? sectors[i].name.length * 8
+                                            : wItem,
+                                        child: Text(sectors[i].name)),
+                                    onTap: (){
+                                      setState(() {
+                                        itenSelect = 1;
+                                        subIten1Select = 2;
+                                        subIten2Select = i + 1;
+
+                                      });
+                                    }
+                                ),
+                            ]
+                        ) ,
+
+                    ),
 
                 ]
             )
