@@ -174,6 +174,7 @@ class _viewState extends State<view> {
   @override
   Widget build(BuildContext context) {
 
+
     double mWidth = MediaQuery.of(context).size.width;
     double mHeiht = MediaQuery.of(context).size.height;
 
@@ -655,7 +656,6 @@ String chargueList(int cardIndex) {
 
     if(selectedFilterSend == "Fecha")
     {
-
       for(int i = 0; i <dateSends.length; i++)
       {
         int numSend = i + 1;
