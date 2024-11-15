@@ -76,7 +76,7 @@ class _viewState extends State<view> {
       if (selectedFilterSend == "Fecha")
       {
         resultSend = allCards.where((card) {
-          final descriptFormat = line[0].showFormatDate(card.description).toLowerCase();
+          final descriptFormat = lineSector[0].showFormatDate(card.description).toLowerCase();
           final textSearch = enteredKeyboard.toLowerCase();
           return descriptFormat.contains(textSearch);
         }).toList();
@@ -576,7 +576,7 @@ class _viewState extends State<view> {
                                                                   child: defaultCard(
                                                                       title: resultSend[index].title,
                                                                       description:selectedFilterSend == "Fecha"
-                                                                          ? line[0].showFormatDate(resultSend[index].description)
+                                                                          ? lineSector[0].showFormatDate(resultSend[index].description)
                                                                           : "Envios: $cantSend",
                                                                       color: index == cardIndex
                                                                           ? Colors.white
@@ -674,9 +674,9 @@ String chargueList(int cardIndex) {
     if(selectedFilterSend == "Empresa")
     {
 
-      for(int i = 0; i <line.length; i++)
+      for(int i = 0; i <lineSector.length; i++)
       {
-        tmp.add(line[i].factory);
+        tmp.add(lineSector[i].factory);
       }
 
       factoryName = avoidRepeteat(tmp);
@@ -689,9 +689,9 @@ String chargueList(int cardIndex) {
         String current = factoryName[i];
         cant = 0;
 
-        for(int y = 0; y < line.length; y++)
+        for(int y = 0; y < lineSector.length; y++)
         {
-          if(line[y].factory == current)
+          if(lineSector[y].factory == current)
           {
             cant++;
           }

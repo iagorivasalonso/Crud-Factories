@@ -470,7 +470,7 @@ class _AppState extends State<App> {
 
                              if(go == true)
                              {
-                               if(line.isNotEmpty)
+                               if(lineSector.isNotEmpty)
                                {
                                  setState(() {
                                    itenSelect = 1;

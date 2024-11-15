@@ -1,6 +1,5 @@
 import 'package:crud_factories/Backend/data.dart';
 import 'package:crud_factories/Objects/LineSend.dart';
-import 'package:mysql1/src/single_connection.dart';
 
 
 sqlImportLines() async {
@@ -11,7 +10,7 @@ sqlImportLines() async {
 
     for (var row in result) {
 
-      line.add(LineSend(
+      allLines.add(LineSend(
           id: row[0].toString(),
           date: row[1],
           factory: row[2],

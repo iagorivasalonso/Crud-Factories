@@ -363,10 +363,10 @@ class _sendMailState extends State<sendMail> {
                                                               sendsDay.clear();
                                                               selectedSend = dateChoose;
 
-                                                              for(int i = 0; i < line.length; i++) {
+                                                              for(int i = 0; i < lineSector.length; i++) {
 
-                                                                if(line[i].date==dateChoose) {
-                                                                  sendsDay.add(line[i]);
+                                                                if(lineSector[i].date==dateChoose) {
+                                                                  sendsDay.add(lineSector[i]);
 
                                                                 }
                                                               }
@@ -933,7 +933,7 @@ class _sendMailState extends State<sendMail> {
                       }
                       else
                       {
-                        csvExportatorLines(line);
+                        csvExportatorLines(lineSector);
                       }
                     }
 

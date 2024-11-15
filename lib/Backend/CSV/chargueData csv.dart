@@ -37,9 +37,9 @@ void chargueDataCSV(){
 
   }
 
-  line.clear();
+  allLines.clear();
   try {
-    line.add(csvImportLines(fileContent, line));
+    allLines.add(csvImportLines(fileContent, allLines));
   } catch (Exeption) {
 
   }

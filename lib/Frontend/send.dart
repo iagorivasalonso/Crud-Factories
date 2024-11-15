@@ -43,7 +43,7 @@ class _newSendState extends State<newSend> {
   String date="";
   bool allSelect = false;
   List<bool> Send = List.generate(factories.length, (index) => false);
-  List<bool> lineEdit = List.generate(line.length, (index) => false);
+  List<bool> lineEdit = List.generate(lineSector.length, (index) => false);
   DateTime seletedDate =DateTime.now();
 
   @override
@@ -95,26 +95,23 @@ class _newSendState extends State<newSend> {
       title = "Ver ";
 
 
-
       if(type== "Fecha")
       {
 
         type = "Fecha:  ";
         campsTable = ['Empresa', 'Observaciones', 'Estado'];
 
-
           lineSelected.clear();
 
-           controllerSearch.text = line[0].showFormatDate(selectCamp);
+           controllerSearch.text = lineSector[0].showFormatDate(selectCamp);
 
-           for (int i = 0; i < line.length; i++)
+           for (int i = 0; i < lineSector.length; i++)
            {
-             if(controllerSearch.text == line[0].showFormatDate(line[i].date))
+             if(controllerSearch.text == lineSector[0].showFormatDate(lineSector[i].date))
              {
-               lineSelected.add(line[i]);
-               campKey.add(line[i].factory);
+               lineSelected.add(lineSector[i]);
+               campKey.add(lineSector[i].factory);
              }
-
            }
 
         for (int i = 0; i < lineSelected.length; i++)
@@ -124,12 +121,12 @@ class _newSendState extends State<newSend> {
 
         }
 
-        int x =int.parse(lineSelected[0].id) -1 ;
+        int x =0;
 
         for (int i = 0; i < lineSelected.length; i++)
         {
-            _controllersObserLine[i].text=line[x].observations;
-            _controllerStateLine[i].text = line[x].state;
+            _controllersObserLine[i].text=lineSector[x].observations;
+            _controllerStateLine[i].text = lineSector[x].state;
 
             x++;
         }
@@ -137,7 +134,7 @@ class _newSendState extends State<newSend> {
         cant = lineSelected.length;
         stringFactories = "Este dia se hicieron $cant envios";
       }
-
+      
       typeList = "envios: ";
 
       if(type == "Empresa")
@@ -148,12 +145,12 @@ class _newSendState extends State<newSend> {
 
         lineSelected.clear();
 
-        for (int i = 0; i < line.length; i++)
+        for (int i = 0; i < lineSector.length; i++)
         {
-          if(controllerSearch.text == line[i].factory)
+          if(controllerSearch.text == lineSector[i].factory)
           {
-            lineSelected.add(line[i]);
-            campKey.add(line[i].date);
+            lineSelected.add(lineSector[i]);
+            campKey.add(lineSector[i].date);
 
           }
         }
@@ -464,9 +461,9 @@ class _newSendState extends State<newSend> {
                                               List <LineSend> current = [];
                                               String idNew = "";
 
-                                              if(line.isNotEmpty)
+                                              if(lineSector.isNotEmpty)
                                               {
-                                                String idLast = line[line.length-1].id;
+                                                String idLast = lineSector[lineSector.length-1].id;
                                                 idNew = createId(idLast);
                                               }
                                               else
@@ -559,11 +556,11 @@ class _newSendState extends State<newSend> {
                                               }
                                               else
                                               {
-                                                line = line + current;
-                                                csvExportatorLines(line);
+                                                lineSector = lineSector + current;
+                                                csvExportatorLines(lineSector);
                                               }
 
-                                              lineEdit = List.generate(line.length, (index) => false);
+                                              lineEdit = List.generate(lineSector.length, (index) => false);
                                             });
 
 

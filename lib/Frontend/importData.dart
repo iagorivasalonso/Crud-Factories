@@ -237,7 +237,7 @@ class _newImportState extends State<newImport> {
                                                   current = empleoyesNew[i].name;
                                                   current1 = empleoyesNew[i].idFactory;
 
-                                                  if(line.isNotEmpty)
+                                                  if(lineSector.isNotEmpty)
                                                   {
                                                     for(int x = 0; x <empleoyes.length; x++)
                                                     {
@@ -375,11 +375,11 @@ class _newImportState extends State<newImport> {
                                                 current = linesNew[i].date;
                                                 current1 = linesNew[i].factory;
 
-                                                if(line.isNotEmpty)
+                                                if(lineSector.isNotEmpty)
                                                 {
-                                                  for(int x = 0; x <line.length; x++)
+                                                  for(int x = 0; x <lineSector.length; x++)
                                                   {
-                                                    if(line[x].date == current  && line[x].factory == current1)
+                                                    if(lineSector[x].date == current  && lineSector[x].factory == current1)
                                                     {
                                                       repeat = true;
                                                     }
@@ -388,9 +388,9 @@ class _newImportState extends State<newImport> {
 
                                                 if(repeat == false)
                                                 {
-                                                  if(line.isNotEmpty)
+                                                  if(lineSector.isNotEmpty)
                                                   {
-                                                    String idLast = line[line.length-1].id;
+                                                    String idLast = lineSector[lineSector.length-1].id;
                                                     linesNew[i].id = createId(idLast);
                                                   }
                                                   else
@@ -398,7 +398,7 @@ class _newImportState extends State<newImport> {
                                                     linesNew[i].id ="1";
                                                   }
                                                   cantImport++;
-                                                  line.add(linesNew[i]);
+                                                  lineSector.add(linesNew[i]);
                                                 }
 
                                               }
@@ -420,7 +420,7 @@ class _newImportState extends State<newImport> {
                                               }
                                               else
                                               {
-                                                csvExportatorLines(line);
+                                                csvExportatorLines(lineSector);
                                               }
                                         }
                                         else
@@ -609,7 +609,7 @@ void _pickFile(BuildContext context, TextEditingController controllerDatePicker,
   factories.clear();
   empleoyes.clear();
   mails.clear();
-  line.clear();
+  lineSector.clear();
   conections.clear();
 
   File file1 =new File(file.path!);
@@ -653,7 +653,7 @@ void _pickFile(BuildContext context, TextEditingController controllerDatePicker,
     {
 
         try {
-          line.add(csvImportLines(fileContent, line));
+          lineSector.add(csvImportLines(fileContent, lineSector));
         } catch (Exeption) {
 
         }

@@ -13,11 +13,9 @@ FuntionSeleted(int itenSelection, int subIten1Selection,int subIten2Selection, d
   List<String> element = [];
   int select=-1;
 
-    for (int i = 0; i < line.length; i++) {
-      element.add(line[i].date);
-    }
 
-    dateSends = avoidRepeteat(element);
+
+
 
     switch (itenSelection) {
       case 0:
@@ -42,7 +40,7 @@ FuntionSeleted(int itenSelection, int subIten1Selection,int subIten2Selection, d
         String tView = '';
         bool err = false;
 
-        if (subIten1Selection == 0)
+        if (subIten1Selection == 0 || subIten1Selection == 2)
         {
             err = true;
             tView = 'factory';
@@ -75,7 +73,57 @@ FuntionSeleted(int itenSelection, int subIten1Selection,int subIten2Selection, d
         if (subIten1Selection == 1)
           tView = 'mail';
         if (subIten1Selection == 2)
+        {
+          err = true;
           tView = 'send';
+
+            if(subIten2Selection==0)
+            {
+                lineSector.clear();
+                err = false;
+
+                for(int i = 0; i < allLines.length; i++)
+                {
+                  lineSector.add(allLines[i]);
+                }
+            }
+            else
+            {
+                lineSector.clear();
+                String factoryCurrent ="";
+                bool exist = false;
+                err= false;
+
+                for(int i = 0; i < allLines.length; i++)
+                {
+                    factoryCurrent = allLines[i].factory;
+                    exist = false;
+
+                          for(int y = 0; y <factoriesSector.length; y++)
+                          {
+                               if(factoriesSector[y].name == factoryCurrent)
+                               {
+                                 exist = true;
+                               }
+                          }
+
+                    if(exist == true)
+                    {
+                      lineSector.add(allLines[i]);
+                    }
+
+                }
+
+            }
+
+            for (int i = 0; i < lineSector.length; i++)
+            {
+              element.add(lineSector[i].date);
+            }
+
+            dateSends = avoidRepeteat(element);
+        }
+
 
         return view(tView,err);
 
