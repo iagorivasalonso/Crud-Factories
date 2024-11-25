@@ -10,6 +10,8 @@ import 'package:flutter/material.dart';
 
 Future<void> adminSector(BuildContext context) async {
 
+  double mWidth = 400;
+
   return showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -17,14 +19,14 @@ Future<void> adminSector(BuildContext context) async {
           builder: (BuildContext context, void Function(void Function()) setState) => Dialog(
             shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(0)),
             child: SizedBox(
-              width: 400,
+              width: mWidth,
               height: 350,
               child: Row(
                 children: [
                   Column(
                     children: [
                       SizedBox(
-                        width: 400,
+                        width: mWidth,
                           child: headAlert(title:"Manejo Sectores")),
                       Padding(
                         padding: const EdgeInsets.only(top: 20.0),
