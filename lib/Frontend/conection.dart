@@ -3,7 +3,6 @@ import 'dart:io';
 import 'package:adaptive_scrollbar/adaptive_scrollbar.dart';
 import 'package:crud_factories/Alertdialogs/confirm.dart';
 import 'package:crud_factories/Alertdialogs/confirmDelete.dart';
-import 'package:crud_factories/Alertdialogs/confirmEdit.dart';
 import 'package:crud_factories/Alertdialogs/error.dart';
 import 'package:crud_factories/Backend/CSV/chargueData%20csv.dart';
 import 'package:crud_factories/Backend/SQL/importEmpleoye.dart';
@@ -59,7 +58,7 @@ class _conectionState extends State<conection> {
   bool editText = true;
   bool modify= false;
   Conection? selectedConection;
-
+  String BaseDateSelected = "Nuevo";
 
 
 
@@ -192,22 +191,20 @@ class _conectionState extends State<conection> {
 
                                         if(conn != null)
                                         {
-                                          if(action0=="Volver")
-                                          {
-                                            action0 = "Editar";
-                                            editText = false;
-                                            action1 = "Desconectar";
-                                            action2 = "Eliminar";
-                                          }
-                                          else
-                                          {
-                                            action0 = "Volver";
-                                            editText = true;
-                                            action1 = "Guardar";
-                                            action2 = "Cancelar";
-                                          }
-
-
+                                              if(action0=="Volver")
+                                              {
+                                                action0 = "Editar";
+                                                editText = false;
+                                                action1 = "Desconectar";
+                                                action2 = "Eliminar";
+                                              }
+                                              else
+                                              {
+                                                action0 = "Volver";
+                                                editText = true;
+                                                action1 = "Guardar";
+                                                action2 = "Cancelar";
+                                              }
                                         }
                                         else
                                         {
