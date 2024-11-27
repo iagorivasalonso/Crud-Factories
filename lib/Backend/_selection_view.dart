@@ -7,6 +7,7 @@ import 'package:crud_factories/Frontend/send.dart';
 import 'package:crud_factories/Frontend/send_mail.dart';
 import 'package:crud_factories/Frontend/view.dart';
 import 'package:crud_factories/Functions/avoidRepeatArray.dart';
+import 'package:crud_factories/Objects/LineSend.dart';
 
 FuntionSeleted(int itenSelection, int subIten1Selection,int subIten2Selection, double mWidth, double mHeight) {
 
@@ -77,22 +78,36 @@ FuntionSeleted(int itenSelection, int subIten1Selection,int subIten2Selection, d
           err = true;
           tView = 'send';
 
-            if(subIten2Selection==0)
+            if(subIten2Selection == 0)
             {
                 lineSector.clear();
                 err = false;
+                String lineFactory ="";
 
                 for(int i = 0; i < allLines.length; i++)
                 {
+                   lineFactory = allLines[i].factory;
+
+                   for(int y = 0; y < factoriesSector.length; y++)
+                   {
+                        if(factoriesSector[y].name==lineFactory)
+                        {
+                          allLines[i].sector = factoriesSector[y].sector;
+                        }
+
+
+                   }
                   lineSector.add(allLines[i]);
                 }
+
             }
             else
             {
                 lineSector.clear();
                 String factoryCurrent ="";
                 bool exist = false;
-                err= false;
+                err = false;
+                String sFactory = "";
 
                 for(int i = 0; i < allLines.length; i++)
                 {
@@ -104,14 +119,15 @@ FuntionSeleted(int itenSelection, int subIten1Selection,int subIten2Selection, d
                                if(factoriesSector[y].name == factoryCurrent)
                                {
                                  exist = true;
+                                 sFactory = factoriesSector[y].sector;
                                }
                           }
 
                     if(exist == true)
                     {
-                      lineSector.add(allLines[i]);
+                        allLines[i].sector = sFactory;
+                        lineSector.add(allLines[i]);
                     }
-
                 }
 
             }

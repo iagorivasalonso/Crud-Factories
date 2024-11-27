@@ -4,13 +4,16 @@ class LineSend {
   String id;
   String date;
   String factory;
+  String? sector; //  Atributo opcional
   String observations;
   String state;
+
 
   LineSend({
     required this.id,
     required this.date,
     required this.factory,
+    this.sector,
     required this.observations,
     required this.state
   });
@@ -45,6 +48,11 @@ class LineSend {
     dateFormat = "$day de $month del $year";
 
     return dateFormat;
+  }
+
+  @override
+  String toString() {
+    return 'LineSend{id: $id, date: $date, factory: $factory, sector: $sector, observations: $observations, state: $state}';
   }
 }
 

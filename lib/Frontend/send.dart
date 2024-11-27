@@ -5,7 +5,9 @@ import 'package:crud_factories/Backend/SQL/modifyLines.dart';
 import 'package:crud_factories/Backend/data.dart';
 import 'package:crud_factories/Backend/CSV/exportLines.dart';
 import 'package:crud_factories/Functions/createId.dart';
+import 'package:crud_factories/Objects/Factory.dart';
 import 'package:crud_factories/Objects/LineSend.dart';
+import 'package:crud_factories/Objects/Sector.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:intl/intl.dart';
 import 'package:show_platform_date_picker/show_platform_date_picker.dart';
@@ -36,15 +38,19 @@ class _newSendState extends State<newSend> {
 
   late TextEditingController controllerSearch = new TextEditingController();
   List<TextEditingController> _controllersObserLine = [];
+  List<TextEditingController> _controllersSectorLine = [];
   List<TextEditingController> _controllerStateLine = [];
 
   List<String> campsTable = [];
   String filterSelected='';
   String date="";
+  int cantFactory = 0;
   bool allSelect = false;
   List<bool> Send = List.generate(factories.length, (index) => false);
   List<bool> lineEdit = List.generate(lineSector.length, (index) => false);
   DateTime seletedDate =DateTime.now();
+  String? selectedSector;
+  String stringFactories = "";
 
   @override
   Widget build(BuildContext context) {
@@ -55,14 +61,15 @@ class _newSendState extends State<newSend> {
 
     List<LineSend> lineSelected = [];
     List <String> campKey = [];
+    List <String> sectorsString =[];
 
     int cant = 0;
-    String stringFactories = "";
+
     String title = "";
     String typeList="";
     String action1 = "";
     String action2 = "";
-
+    String sectorView = " ";
 
     if (select == -1) {
 
@@ -71,10 +78,17 @@ class _newSendState extends State<newSend> {
       type = "Fecha ";
       action1 = "Nuevo";
       action2 = "Reiniciar";
-      campsTable = ['Empresa', 'Observaciones', 'Estado', 'Seleccionar'];
+
+      sectorsString.add("Todos");
+
+      for(int i = 0; i < sectors.length; i++)
+      {
+        sectorsString.add(sectors[i].name);
+      }
 
       for (int i = 0; i < factories.length; i++)
       {
+        _controllersSectorLine.add(TextEditingController());
         _controllersObserLine.add(TextEditingController());
         _controllerStateLine.add(TextEditingController());
       }
@@ -83,23 +97,47 @@ class _newSendState extends State<newSend> {
         controllerSearch.text=DateFormat('dd-MM-yyyy').format( DateTime.now());
       }
 
-
-      int cantFactory = factories.length;
-      stringFactories = "Tiene $cantFactory empresas en su base de datos";
-
+          if(selectedSector == null)
+          {
+             campsTable = ['Empresa', 'Observaciones', 'Estado', 'Seleccionar'];
+             cantFactory = factories.length;
+             stringFactories = "Tiene $cantFactory empresas en su base de datos";
+          }
     }
-    else {
+    else
+    {
 
       action1 = "Guardar";
       action2 = "Deshacer";
       title = "Ver ";
 
+      int selected = 0;
+      if (subIten2Select != 0)
+      {
+          for(int i = 0; i < sectors.length; i++)
+          {
+            selected = i + 1;
+            if(lineSector[0].sector == selected.toString())
+            {
+               sectorView = sectors[i].name;
+            }
+          }
+      }
 
-      if(type== "Fecha")
+      if(type == "Fecha")
       {
 
         type = "Fecha:  ";
-        campsTable = ['Empresa', 'Observaciones', 'Estado'];
+
+            if(subIten2Select == 0)
+            {
+                campsTable = ['Empresa', 'Sector', 'Observaciones', 'Estado'];
+            }
+            else
+            {
+                 campsTable = ['Empresa', 'Observaciones', 'Estado'];
+            }
+
 
           lineSelected.clear();
 
@@ -114,25 +152,29 @@ class _newSendState extends State<newSend> {
              }
            }
 
-        for (int i = 0; i < lineSelected.length; i++)
-        {
-          _controllersObserLine.add(TextEditingController());
-          _controllerStateLine.add(TextEditingController());
+          for (int i = 0; i < lineSelected.length; i++)
+          {
+            _controllersObserLine.add(TextEditingController());
+            _controllerStateLine.add(TextEditingController());
+            _controllersSectorLine.add(TextEditingController());
+          }
 
-        }
+          for (int i = 0; i < lineSelected.length; i++)
+          {
+              _controllersObserLine[i].text = lineSelected[i].observations;
+              _controllerStateLine[i].text = lineSelected[i].state;
+              int sectorfactory = 0;
 
-        int x =0;
+              if(lineSelected[i].sector!=null)
+              {
+                sectorfactory = int.parse(lineSelected[i].sector!)-1;
+                _controllersSectorLine[i].text = sectors[sectorfactory].name;
+              }
 
-        for (int i = 0; i < lineSelected.length; i++)
-        {
-            _controllersObserLine[i].text=lineSector[x].observations;
-            _controllerStateLine[i].text = lineSector[x].state;
+          }
 
-            x++;
-        }
-
-        cant = lineSelected.length;
-        stringFactories = "Este dia se hicieron $cant envios";
+          cant = lineSelected.length;
+          stringFactories = "Este dia se hicieron $cant envios";
       }
       
       typeList = "envios: ";
@@ -198,7 +240,9 @@ class _newSendState extends State<newSend> {
                 controller: horizontalScroll,
                 scrollDirection: Axis.horizontal,
                 child: SizedBox(
-                  height: 630,
+                  height: select == -1
+                      ? 710
+                      : 630,
                   width: 830,
                   child: Align(
                       alignment: Alignment.topLeft,
@@ -208,7 +252,11 @@ class _newSendState extends State<newSend> {
                             children: [
                               Row(
                                 children: [
-                                  Text('$title Envio: ',
+                                  Text('$title Envio  ',
+                                    style: const TextStyle(
+                                        fontWeight: FontWeight.bold),),
+                                  if(itenSelect == 1 && subIten2Select != 0 )
+                                  Text('de $sectorView:  ',
                                     style: const TextStyle(
                                         fontWeight: FontWeight.bold),),
                                 ],
@@ -255,6 +303,96 @@ class _newSendState extends State<newSend> {
                                   ],
                                 ),
                               ),
+                              if(select == -1)
+                              Padding(
+                                padding: const EdgeInsets.only( top: 30.0),
+                                child: DropdownButtonHideUnderline(
+                                  child: Row(
+                                    children: [
+                                      const Padding(
+                                        padding: EdgeInsets.only(left: 20.0, right: 30.0),
+                                        child: Text("Sector: "),
+                                      ),
+                                      DropdownButton2<String>(
+                                        hint:  Text("Todos"),
+                                        items: sectorsString.map((String itemSector) => DropdownMenuItem<String>(
+                                          value:  itemSector,
+                                          child: Text(itemSector),
+                                        )).toList(),
+                                        value: selectedSector,
+                                        onChanged: (String? sectorChoose) {
+                                          setState(() {
+                                              selectedSector = sectorChoose!;
+                                              factoriesSector.clear();
+                                              if (selectedSector == "Todos")
+                                              {
+                                                campsTable = ['Empresa', 'Sector', 'Observaciones', 'Estado', 'Seleccionar'];
+
+
+                                                for(int i = 0; i < factories.length;i++)
+                                                {
+                                                  factoriesSector.add(factories[i]);
+                                                }
+
+                                                ///List<Factory> tmp = [];
+
+                                                for(int i = 0; i < factories.length;i++)
+                                                {
+                                                   print(factories[i].sector);
+                                                }
+
+
+                                                cantFactory = factoriesSector.length;
+                                                stringFactories = "Tiene $cantFactory empresas en su base de datos";
+                                              }
+                                              else
+                                              {
+                                                campsTable = ['Empresa', 'Observaciones', 'Estado', 'Seleccionar'];
+
+                                                int  sSelected = 0;
+                                                for(int i = 0; i <sectors.length; i++)
+                                                {
+                                                   if(sectors[i].name == selectedSector)
+                                                   {
+                                                      sSelected = i;
+                                                   }
+                                                }
+                                                 int factoriesSelected = sSelected + 1;
+
+                                                for(int i = 0; i < factories.length;i++)
+                                                {
+                                                  if(factories[i].sector == factoriesSelected.toString())
+                                                  {
+                                                    factoriesSector.add(factories[i]);
+                                                  }
+                                                }
+
+
+
+                                                cantFactory = factoriesSector.length;
+                                                stringFactories = "Tiene $cantFactory empresas en su base de datos";
+                                              }
+
+
+                                          });
+                                        },
+                                        buttonStyleData: const ButtonStyleData(
+                                          height: 50,
+                                          width: 220,
+                                          padding: EdgeInsets.only(left: 14, right: 14),
+                                        ),
+                                        dropdownStyleData: DropdownStyleData(
+                                          maxHeight: 200,
+                                          width: 200,
+                                          scrollbarTheme: ScrollbarThemeData(
+                                            thickness: MaterialStateProperty.all(6),
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
                               Padding(
                                 padding: const EdgeInsets.only(top: 40.0),
                                 child: Row(
@@ -270,7 +408,7 @@ class _newSendState extends State<newSend> {
                                     top: 40.0, left: 10.0),
                                 child: Scrollbar(
                                   controller: verticalScrollTable,
-                                  child: Container(
+                                  child: SizedBox(
                                     height: 250,
                                     child: SingleChildScrollView(
                                       controller: verticalScrollTable,
@@ -278,17 +416,22 @@ class _newSendState extends State<newSend> {
                                       child: DataTable(
                                         columns: List<DataColumn>.generate(campsTable.length, (index) =>
                                           DataColumn(
-                                              label: Container(
+                                              label: SizedBox(
                                                 width: 100,
                                                   child: Text(campsTable[index])))
                                         ),
                                         rows: select == -1
-                                        ? List<DataRow>.generate(factories.length, (indexRow) =>
+                                        ? List<DataRow>.generate(factoriesSector.length, (indexRow) =>
+
                                            DataRow(
                                                cells: <DataCell>[
                                                  DataCell(
-                                                   Text(factories[indexRow].name),
+                                                   Text(factoriesSector[indexRow].name),
                                                  ),
+                                                 if(selectedSector=="Todos")
+                                                   DataCell(
+                                                     Text(sectors[int.parse(factoriesSector[indexRow].sector)-1].name),
+                                                   ),
                                                  DataCell(
                                                      Padding(
                                                        padding: const EdgeInsets.all(8.0),
@@ -343,6 +486,10 @@ class _newSendState extends State<newSend> {
                                                   DataCell(
                                                       Text(campKey[indexRow])
                                                   ),
+                                                  if(subIten2Select == 0 && type == "Fecha:  ")
+                                                    DataCell(
+                                                        Text(_controllersSectorLine[indexRow].text)
+                                                    ),
                                                   DataCell(
                                                     Padding(
                                                       padding: const EdgeInsets.all(8.0),
