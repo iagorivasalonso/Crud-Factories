@@ -49,7 +49,7 @@ class _newSendState extends State<newSend> {
   List<bool> Send = List.generate(factories.length, (index) => false);
   List<bool> lineEdit = List.generate(lineSector.length, (index) => false);
   DateTime seletedDate =DateTime.now();
-  String? selectedSector;
+  String? selectedSector = "Todos";
   String stringFactories = "";
 
   @override
@@ -97,11 +97,20 @@ class _newSendState extends State<newSend> {
         controllerSearch.text=DateFormat('dd-MM-yyyy').format( DateTime.now());
       }
 
-          if(selectedSector == null)
+          if(selectedSector == "Todos")
           {
-             campsTable = ['Empresa', 'Observaciones', 'Estado', 'Seleccionar'];
-             cantFactory = factories.length;
-             stringFactories = "Tiene $cantFactory empresas en su base de datos";
+            campsTable = ['Empresa', 'Sector', 'Observaciones', 'Estado', 'Seleccionar'];
+
+            factoriesSector.clear();
+
+            for(int i = 0; i < factories.length;i++)
+            {
+              factoriesSector.add(factories[i]);
+            }
+
+
+            cantFactory = factoriesSector.length;
+            stringFactories = "Tiene $cantFactory empresas en su base de datos";
           }
     }
     else
@@ -332,13 +341,6 @@ class _newSendState extends State<newSend> {
                                                 for(int i = 0; i < factories.length;i++)
                                                 {
                                                   factoriesSector.add(factories[i]);
-                                                }
-
-                                                ///List<Factory> tmp = [];
-
-                                                for(int i = 0; i < factories.length;i++)
-                                                {
-                                                   print(factories[i].sector);
                                                 }
 
 
