@@ -5,9 +5,7 @@ import 'package:crud_factories/Backend/SQL/modifyLines.dart';
 import 'package:crud_factories/Backend/data.dart';
 import 'package:crud_factories/Backend/CSV/exportLines.dart';
 import 'package:crud_factories/Functions/createId.dart';
-import 'package:crud_factories/Objects/Factory.dart';
 import 'package:crud_factories/Objects/LineSend.dart';
-import 'package:crud_factories/Objects/Sector.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:intl/intl.dart';
 import 'package:show_platform_date_picker/show_platform_date_picker.dart';
@@ -51,6 +49,7 @@ class _newSendState extends State<newSend> {
   DateTime seletedDate =DateTime.now();
   String? selectedSector = "Todos";
   String stringFactories = "";
+  List<String> stateSends = [];
 
   @override
   Widget build(BuildContext context) {
@@ -119,6 +118,7 @@ class _newSendState extends State<newSend> {
       action1 = "Guardar";
       action2 = "Deshacer";
       title = "Ver ";
+      stateSends = ['Preparado', 'Enviado', 'Respondio'];
 
       int selected = 0;
       if (subIten2Select != 0)
@@ -170,8 +170,12 @@ class _newSendState extends State<newSend> {
 
           for (int i = 0; i < lineSelected.length; i++)
           {
-              _controllersObserLine[i].text = lineSelected[i].observations;
-              _controllerStateLine[i].text = lineSelected[i].state;
+              if(saveChanges == false)
+              {
+                _controllersObserLine[i].text = lineSelected[i].observations;
+                _controllerStateLine[i].text = lineSelected[i].state;
+              }
+
               int sectorfactory = 0;
 
               if(lineSelected[i].sector!=null)
@@ -424,7 +428,6 @@ class _newSendState extends State<newSend> {
                                         ),
                                         rows: select == -1
                                         ? List<DataRow>.generate(factoriesSector.length, (indexRow) =>
-
                                            DataRow(
                                                cells: <DataCell>[
                                                  DataCell(
@@ -520,27 +523,42 @@ class _newSendState extends State<newSend> {
                                                   ),
                                                   DataCell(
                                                     Padding(
-                                                      padding: const EdgeInsets.all(8.0),
-                                                      child: TextField(
-                                                        controller: _controllerStateLine[indexRow],
-                                                        decoration: InputDecoration(
+                                                      padding: const EdgeInsets.all(1.0),
+                                                      child: SizedBox(
+                                                        height: 40,
+                                                        child: DropdownButtonFormField<String>(
+                                                          value: stateSends.contains(_controllerStateLine[indexRow].text)
+                                                              ? _controllerStateLine[indexRow].text
+                                                              : stateSends.isNotEmpty
+                                                              ? stateSends[0]
+                                                              : null,
+                                                          decoration: InputDecoration(
                                                             border: OutlineInputBorder(),
-                                                        ),
-                                                         onChanged: (s){
-                                                          lineEdit[indexRow]=true;
+                                                          ),
+                                                          items: stateSends.map((option) {
+                                                            return DropdownMenuItem<String>(
+                                                              value: option,
+                                                              child: Text(option, style: TextStyle(fontSize: 12),),
+                                                            );
+                                                          }).toList(),
+                                                          onChanged: (newValue) {
+                                                            setState(() {
 
-                                                          if(saveChanges == false)
-                                                          {
-                                                            if(_controllerStateLine[indexRow].text == lineSelected[indexRow].state)
-                                                            {
-                                                              saveChanges = false;
-                                                            }
-                                                            else
-                                                            {
-                                                              saveChanges = true;
-                                                            }
-                                                          }
-                                                         },
+                                                              _controllerStateLine[indexRow].text = newValue!;
+
+                                                              lineEdit[indexRow] = true;
+
+                                                              if(saveChanges == false) {
+                                                                if (_controllerStateLine[indexRow].text == lineSelected[indexRow].state) {
+                                                                  saveChanges = false;
+                                                                } else {
+                                                                  saveChanges = true;
+                                                                }
+                                                              }
+                                                            });
+
+                                                          },
+                                                        ),
                                                       ),
                                                     ),
                                                   ),
@@ -648,6 +666,7 @@ class _newSendState extends State<newSend> {
                                               }
                                               else
                                               {
+
                                                   int allLinesModify=0;
 
                                                   if(saveChanges == true)
@@ -665,8 +684,10 @@ class _newSendState extends State<newSend> {
                                                       {
 
                                                         id=lineSelected[i].id;
+
                                                         for (int y = 0; y < lineSelected.length; y++)
                                                         {
+
                                                           if(lineSelected[i].id == id)
                                                           {
                                                             lineSelected[i].state =_controllerStateLine[i].text;
@@ -739,6 +760,7 @@ class _newSendState extends State<newSend> {
                                                     if(lineEdit[i]==true)
                                                     {
                                                        _controllersObserLine[i].text = lineSelected[i].observations;
+                                                       _controllerStateLine[i].text = lineSelected[i].state;
                                                     }
 
                                                   }
@@ -764,6 +786,6 @@ class _newSendState extends State<newSend> {
       ),
     );
   }
-
 }
+
 
