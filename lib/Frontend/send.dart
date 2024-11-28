@@ -256,7 +256,7 @@ class _newSendState extends State<newSend> {
                   height: select == -1
                       ? 710
                       : 630,
-                  width: 830,
+                  width: 900,
                   child: Align(
                       alignment: Alignment.topLeft,
                       child: Padding(
@@ -410,8 +410,7 @@ class _newSendState extends State<newSend> {
                                 ),
                               ),
                               Padding(
-                                padding: const EdgeInsets.only(
-                                    top: 40.0, left: 10.0),
+                                padding: const EdgeInsets.only(top: 40.0, left: 90.0),
                                 child: Scrollbar(
                                   controller: verticalScrollTable,
                                   child: SizedBox(
@@ -583,7 +582,7 @@ class _newSendState extends State<newSend> {
                                         ),
                                           if(select == -1)
                                           Padding(
-                                            padding: const EdgeInsets.only(left: 290.0),
+                                            padding: const EdgeInsets.only(left: 350.0),
                                             child: Row(
                                               children: [
                                                 const Padding(
