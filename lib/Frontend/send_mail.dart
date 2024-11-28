@@ -122,137 +122,161 @@ class _sendMailState extends State<sendMail> {
                             ),
                           ],
                         ),
-                        Padding(
-                          padding: const EdgeInsets.only(top: 20.0, bottom: 20.0, left: 30.0),
-                          child: otherMail == false
-                            ? Row(
-                               children: [
-                                  const Text('Remitente:'),
-                                  SizedBox(
-                                    width: 350,
-                                    height: 40,
-                                    child: Padding(
-                                         padding: const EdgeInsets.only(left: 20.00),
-                                            child: DropdownButtonHideUnderline(
-                                                child: DropdownButton2<Mail>(
-                                                    hint:  Text(mails[0].addrres),
-                                                    items: mails.map((Mail itemMail) => DropdownMenuItem<Mail>(
-                                                      value:  itemMail,
-                                                      child: Text(itemMail.addrres),
-                                      )).toList(),
-                                      value: selectedMail,
-                                      onChanged: (Mail? mailChoose) {
-                                        setState(() {
+                        Row(
+                          children: [
+                            Column(
+                              children: [
+                                Padding(
+                                  padding: const EdgeInsets.only(top: 20.0, bottom: 20.0, left: 30.0),
+                                  child: otherMail == false
+                                    ? Row(
+                                       children: [
+                                          const Text('Remitente:'),
+                                          Padding(
+                                            padding: const EdgeInsets.only(right: 120.0),
+                                            child: SizedBox(
+                                              width: 350,
+                                              height: 40,
+                                              child: Padding(
+                                                   padding: const EdgeInsets.only(left: 20.00),
+                                                      child: DropdownButtonHideUnderline(
+                                                          child: DropdownButton2<Mail>(
+                                                              hint:  Text(mails[0].addrres),
+                                                              items: mails.map((Mail itemMail) => DropdownMenuItem<Mail>(
+                                                                value:  itemMail,
+                                                                child: Text(itemMail.addrres),
+                                                )).toList(),
+                                                value: selectedMail,
+                                                onChanged: (Mail? mailChoose) {
+                                                  setState(() {
 
-                                          selectedMail=mailChoose;
-                                          controllerMailFrom.text = mailChoose!.addrres;
-                                          controllerPass.text = mailChoose!.password;
+                                                    selectedMail=mailChoose;
+                                                    controllerMailFrom.text = mailChoose!.addrres;
+                                                    controllerPass.text = mailChoose!.password;
 
-                                          mailSave = true;
+                                                    mailSave = true;
 
-                                        });
-                                      },
-                                      buttonStyleData: const ButtonStyleData(
-                                        height: 50,
-                                        width: 350,
-                                        padding: EdgeInsets.only(left: 14, right: 14),
+                                                  });
+                                                },
+                                                buttonStyleData: const ButtonStyleData(
+                                                  height: 50,
+                                                  width: 350,
+                                                  padding: EdgeInsets.only(left: 14, right: 14),
+                                                ),
+                                                dropdownStyleData: DropdownStyleData(
+                                                  maxHeight: 200,
+                                                  width: 330,
+                                                  scrollbarTheme: ScrollbarThemeData(
+                                                    thickness: MaterialStateProperty.all(6),
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                                                                    ),
+                                                                                  ),
+                                          ),
+                                    ],
+                                  )
+                                    : Row(
+                                         children: [
+                                            Row(
+                                              children: [
+                                                const Text("Email:"),
+                                                Padding(
+                                                  padding: const EdgeInsets.only(left: 49.0),
+                                                  child: SizedBox(
+                                                    width: 450,
+                                                    height: 40,
+                                                    child: TextField(
+                                                      controller: controllerMailFrom,
+                                                      decoration: const InputDecoration(
+                                                        border: OutlineInputBorder(),
+                                                      ),
+                                                      onChanged: (s){
+                                                        if(controllerMailFrom.text.isEmpty)
+                                                        {
+                                                          saveChanges = false;
+                                                        }
+                                                        else
+                                                        {
+                                                          saveChanges = true;
+                                                        }
+                                                      },
+                                                    ),
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+
+
+                                         ],
                                       ),
-                                      dropdownStyleData: DropdownStyleData(
-                                        maxHeight: 200,
-                                        width: 330,
-                                        scrollbarTheme: ScrollbarThemeData(
-                                          thickness: MaterialStateProperty.all(6),
+                                ),
+                              ],
+                            ),
+                            if(mails.isNotEmpty)
+                            Column(
+                              children: [
+                                Padding(
+                                  padding: const EdgeInsets.only(top: 20.0, bottom: 20.0, left: 100.0),
+                                  child:  Row(
+                                    children: [
+                                      MaterialButton(
+                                          color: Colors.lightBlue,
+                                          child: otherMail == false
+                                                 ? const Text("Otro" ,
+                                                      style: TextStyle(color: Colors.white),)
+                                                 : const Text("Volver" ,
+                                                            style: TextStyle(color: Colors.white),),
+                                          onPressed: () async {
+                                            setState(() {
+                                              otherMail =! otherMail;
+                                            });
+
+                                          }
+                                      )
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                        if(otherMail==true)
+                        Padding(
+                              padding: const EdgeInsets.only(top: 35.0, left: 30.0),
+                              child: Row(
+                                children: [
+                                  const Text('Contraseña:'),
+                                  Padding(
+                                    padding: const EdgeInsets.only(left: 10.0),
+                                    child: SizedBox(
+                                      width: 350,
+                                      height: 40,
+                                      child: TextField(
+                                        controller: controllerPass,
+                                        obscureText: true,
+                                        decoration: const InputDecoration(
+                                          border: OutlineInputBorder(),
                                         ),
+                                        onChanged: (s) {
+                                          if(controllerSubject.text.isEmpty)
+                                          {
+                                            saveChanges = false;
+                                          }
+                                          else
+                                          {
+                                            saveChanges = true;
+                                          }
+                                        },
                                       ),
                                     ),
                                   ),
-                                ),
+                                ],
                               ),
-                                  Padding(
-                                   padding: const EdgeInsets.only(left: 220.0),
-                                   child: MaterialButton(
-                                       color: Colors.lightBlue,
-                                       child: const Text("Otro" ,
-                                         style: TextStyle(color: Colors.white),),
-                                       onPressed: () async {
-
-                                         setState(() {
-                                          otherMail = true;
-                                         });
-
-                                       }
-                                   ),
-                                 )
-                            ],
-                          )
-                            : Column(
-                                 children: [
-                                    Row(
-                                      children: [
-                                        const Text("Email:"),
-                                        Padding(
-                                          padding: const EdgeInsets.only(left: 49.0),
-                                          child: SizedBox(
-                                            width: 450,
-                                            height: 40,
-                                            child: TextField(
-                                              controller: controllerMailFrom,
-                                              decoration: const InputDecoration(
-                                                border: OutlineInputBorder(),
-                                              ),
-                                              onChanged: (s){
-                                                if(controllerMailFrom.text.isEmpty)
-                                                {
-                                                  saveChanges = false;
-                                                }
-                                                else
-                                                {
-                                                  saveChanges = true;
-                                                }
-                                              },
-                                            ),
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                    Padding(
-                                      padding: const EdgeInsets.only(top:40.0),
-                                      child: Row(
-                                        children: [
-                                          const Text("Contraseña:"),
-                                          Padding(
-                                            padding:const  EdgeInsets.only(left: 13.0),
-                                            child: SizedBox(
-                                              width: 250,
-                                              height: 40,
-                                              child: TextField(
-                                                controller: controllerPass,
-                                                obscureText: true,
-                                                decoration: const InputDecoration(
-                                                  border: OutlineInputBorder(),
-                                                ),
-                                                onChanged: (s){
-                                                  if(controllerPass.text.isEmpty)
-                                                  {
-                                                    saveChanges = false;
-                                                  }
-                                                  else
-                                                  {
-                                                    saveChanges = true;
-                                                  }
-                                                },
-                                              ),
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-
-                                 ],
-                              ),
-                        ),
+                            ),
                         Padding(
-                          padding: const EdgeInsets.only(top: 5.0, bottom: 30.0, left: 30.0),
+                          padding: const EdgeInsets.only(top: 30.0, bottom: 30.0, left: 30.0),
                           child: Column(
                             children: [
                               Row(
