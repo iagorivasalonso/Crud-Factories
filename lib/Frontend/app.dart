@@ -66,6 +66,9 @@ class _AppState extends State<App> {
     double wItemMax= 120;
     Color colorBar =Colors.white;
 
+
+
+
     List<BarButton> _menuBarButtons() {
       return [
         BarButton (
@@ -252,7 +255,8 @@ class _AppState extends State<App> {
                               else
                               {
                                 String modif = "nuevo";
-                                bool create = await createSector(context,modif);
+
+                                bool create = await createSector(context,modif,);
 
                                 if(create == true)
                                 {
@@ -262,8 +266,6 @@ class _AppState extends State<App> {
                                   });
                                 }
                               }
-
-
                       }
                   ),
                   if(sectors.length < 2 || factories.isEmpty)
@@ -653,7 +655,8 @@ class _AppState extends State<App> {
         ),
       ];
     }
-    return MaterialApp(
+    return mHeight>50.0
+    ? MaterialApp(
       theme: ThemeData(
           menuTheme: const MenuThemeData(
             style: MenuStyle(
@@ -661,22 +664,25 @@ class _AppState extends State<App> {
             ),
           )
       ),
-      home: mHeight> 40
-        ? MenuBarWidget(
+      home: MenuBarWidget(
         barButtons: _menuBarButtons(),
         barStyle: const MenuStyle(
           backgroundColor: MaterialStatePropertyAll(Color(0xca0347f3)),
         ),
         child:Container(
           width: mWidth,
-          height: mHeight,
-          color: Colors.white,
+          height:  mHeight,
+            color: Colors.white,
           child:  FuntionSeleted(itenSelect, subIten1Select, subIten2Select,mWidth, mHeight)
         ),
       )
-      : Container(
+
+    )
+        :Container(
+        width: mWidth,
+        height:  mHeight,
         color: Colors.white,
-      ),
+        child:  FuntionSeleted(itenSelect, subIten1Select, subIten2Select,mWidth, mHeight)
     );
   }
 
