@@ -21,34 +21,57 @@ Future<bool> error(BuildContext  context, String action, [format]) async {
               child: Column(
                 children: [
                   headAlert(title:"Error"),
-                  Padding(
-                    padding:  const EdgeInsets.only(left: 30,top: 25, bottom: 35),
-                    child: format == null
-                      ? Row(
-                      children: [
-                        Text(action),
-                      ],
-                    )
-                    :Row(
-                      children: [
-                        Text('$action '),
-                        Text(format)
+                  Expanded(
+                    child: Padding(
+                      padding:  const EdgeInsets.only(left: 25,right: 15 ,top: 25, bottom: 15),
+                      child: format == null
+                        ? Row(
+                        children: [
+                          Expanded(
+                            child: Text(action,
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,),
+                          ),
+                        ],
+                      )
+                      :Row(
+                        children: [
+                          Expanded(
+                            child: Text(action,
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,),
+                          ),
 
+                          Expanded(
+                            child: Text(format,
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  Expanded(
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: Padding(
+                            padding: const EdgeInsets.only(left: 150, right: 150),
+                            child: MaterialButton(
+                              color: Colors.lightBlue,
+                              child: const Text(
+                                "Aceptar",
+                                style: TextStyle(color: Colors.white),
+                              ),
+                              onPressed: () async {
+                                Navigator.of(context).pop(false);
+                              },
+                            ),
+                          ),
+                        ),
                       ],
                     ),
                   ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      MaterialButton(
-                          color: Colors.lightBlue,
-                          onPressed:(){
-                            Navigator.of(context).pop(false);
-                          },
-                          child: const Text("Aceptar",style: const TextStyle(color: Colors.white),)
-                      ),
-                    ],
-                  )
                 ],
               ),
             ),

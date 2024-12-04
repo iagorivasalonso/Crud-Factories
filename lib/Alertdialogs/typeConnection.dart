@@ -16,35 +16,45 @@ Future<bool> typeConection (BuildContext  context,) async {
               child: Column(
                 children: [
                   headAlert(title:"Tipo de fuente"),
-                  const Padding(
-                    padding:  EdgeInsets.only(left: 30,top: 25, bottom: 35),
-                    child: Row(
-                      children: [
-                        Text("¿Que tipo de base de datos desea utilizar?")
-                      ],
+                  const Expanded(
+                    child: Padding(
+                      padding:  EdgeInsets.only(left: 25,top: 25, bottom: 15),
+                      child: Text("¿Que tipo de base de datos desea utilizar?",
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,),
                     ),
                   ),
-                  Row(
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.only(left: 90, right: 15),
-                        child: MaterialButton(
-                            color: Colors.lightBlue,
-                            onPressed:() async {
-                              Navigator.of(context).pop(true);
-                            },
-                            child: const Text("SQL",style:  TextStyle(color: Colors.white),)
-                        ),
-                      ),
-                      MaterialButton(
-                          color: Colors.lightBlue,
-                          onPressed:(){
-                            Navigator.of(context).pop(false);
-                          },
-                          child: const Text("CSV",style: TextStyle(color: Colors.white),)
-                      ),
 
-                    ],
+                  Expanded(
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: Padding(
+                            padding: const EdgeInsets.only(left: 70, right: 15),
+                            child: MaterialButton(
+                                color: Colors.lightBlue,
+                                onPressed:() async {
+                                  Navigator.of(context).pop(true);
+                                },
+                                child: const Text("SQL",style:  TextStyle(color: Colors.white),)
+                            ),
+                          ),
+                        ),
+                        Expanded(
+                          child: Padding(
+                            padding: const EdgeInsets.only(left: 5, right: 78),
+                            child: MaterialButton(
+                                color: Colors.lightBlue,
+                                onPressed:(){
+                                  Navigator.of(context).pop(false);
+                                },
+                                child: const Text("CSV",style: TextStyle(color: Colors.white),)
+                            ),
+                          ),
+                        ),
+
+                      ],
+                    ),
                   )
                 ],
               ),

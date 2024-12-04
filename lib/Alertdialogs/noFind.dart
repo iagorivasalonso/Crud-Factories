@@ -15,29 +15,34 @@ Future<bool> noFind(BuildContext context, bool noDat, String stringDialog) async
             height: 190,
             child: Column(
               children: [
-                headAlert(title: "Error"), // Supongo que este es tu encabezado personalizado
-                Padding(
-                  padding: const EdgeInsets.only(left: 30, top: 25, bottom: 35),
-                  child: Row(
-                    children: [
-                      Text(stringDialog), // Este es el mensaje de error o advertencia
-                    ],
+                headAlert(title: "Error"),
+                Expanded(child: Padding(
+                    padding: const EdgeInsets.only(left: 30, top: 25, bottom: 15),
+                    child:  Text(stringDialog,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,),
                   ),
                 ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    MaterialButton(
-                      color: Colors.lightBlue,
-                      onPressed: () {
-                        Navigator.of(context).pop(false);
-                      },
-                      child: const Text(
-                        "Aceptar",
-                        style: TextStyle(color: Colors.white),
+                Expanded(
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: Padding(
+                          padding:  const EdgeInsets.only(left: 170, right: 170),
+                          child: MaterialButton(
+                            color: Colors.lightBlue,
+                            onPressed: () {
+                              Navigator.of(context).pop(false);
+                            },
+                            child: const Text(
+                              "Aceptar",
+                              style: TextStyle(color: Colors.white),
+                            ),
+                          ),
+                        ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 )
               ],
             ),
