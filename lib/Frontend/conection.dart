@@ -594,7 +594,7 @@ class _conectionState extends State<conection> {
                                         }
                                         saveChanges = false;
                                       }catch(Exeption ){
-                                        err= "no Se pudo eliminar";
+                                        err= "no se pudo eliminar";
                                         error(context, err);
                                       }
 
