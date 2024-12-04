@@ -3,7 +3,22 @@ import 'package:fluent_ui/fluent_ui.dart';
 import 'package:window_manager/window_manager.dart';
 import 'Alertdialogs/closeApp.dart';
 
-void main() {
+void main() async {
+
+  WidgetsFlutterBinding.ensureInitialized();
+
+
+  await windowManager.ensureInitialized();
+
+  WindowOptions windowOptions = WindowOptions(
+    size: const Size(800, 600),
+    center: true,
+    title: "Mi aplicación",
+  );
+  windowManager.waitUntilReadyToShow(windowOptions, () async {
+    await windowManager.show();
+    await windowManager.focus();
+  });
   runApp(MyApp());
 }
 

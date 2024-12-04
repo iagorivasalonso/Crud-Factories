@@ -36,7 +36,7 @@ dependencies:
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   fluent_ui: ^4.6.2
-  window_manager: ^0.3.5
+  window_manager: ^0.3.6
   rflutter_alert: ^2.0.7
   adaptive_scrollbar: ^2.1.2
   dropdown_button2: ^2.3.9
