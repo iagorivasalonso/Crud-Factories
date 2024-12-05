@@ -59,9 +59,12 @@ class _newImportState extends State<newImport> {
     List<LineSend> linesNew = [];
     List<Conection> conectionsNew = [];
 
-    for(int i = 0; i < factories.length; i++)
+    if(idEndList == 0)
     {
-       idEndList = int.parse(factories[i].id);
+      for(int i = 0; i < factories.length; i++)
+      {
+        idEndList = int.parse(factories[i].id);
+      }
     }
 
     return Scaffold(
