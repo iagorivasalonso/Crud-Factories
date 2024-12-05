@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 import 'package:adaptive_scrollbar/adaptive_scrollbar.dart';
 import 'package:crud_factories/Alertdialogs/confirm.dart';
@@ -45,7 +46,8 @@ class _newImportState extends State<newImport> {
   TextEditingController controllerDatePicker = new TextEditingController();
 
   double widthBar = 10.0;
-  String? selectedValue;
+  String? campsedValue;
+  int idEndList = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -56,6 +58,11 @@ class _newImportState extends State<newImport> {
     List<Mail> mailsNew = [];
     List<LineSend> linesNew = [];
     List<Conection> conectionsNew = [];
+
+    for(int i = 0; i < factories.length; i++)
+    {
+       idEndList = int.parse(factories[i].id);
+    }
 
     return Scaffold(
       body: AdaptiveScrollbar(
@@ -194,7 +201,7 @@ class _newImportState extends State<newImport> {
                                             action = 'no hay ningun sector para importar';
                                             confirm(context, action);
                                           }
-                                
+
                                           if(conn != null)
                                           {
                                             sqlCreateSector(sectorsNew);
@@ -260,9 +267,13 @@ class _newImportState extends State<newImport> {
                                                       empleoyesNew[i].id ="1";
                                                     }
 
+                                                    int idFactEmp = int.parse(empleoyesNew[i].idFactory)+idEndList;
+                                                    empleoyesNew[i].idFactory = idFactEmp.toString();
+
                                                     cantImport++;
                                                     empleoyes.add(empleoyesNew[i]);
                                                   }
+
 
                                                 }
 
@@ -530,6 +541,7 @@ class _newImportState extends State<newImport> {
 
                                                   cantImport++;
                                                   factories.add(factoriesNew[i]);
+
                                                 }
 
                                               }
@@ -590,7 +602,7 @@ class _newImportState extends State<newImport> {
 }
 
 
-void _pickFile(BuildContext context, TextEditingController controllerDatePicker,List<Sector> sectors, List<Factory> factories, List<Empleoye> empleoyes, List<Mail> mails, List<LineSend> lines, List<Conection> conections) async {
+void _pickFile(BuildContext context, TextEditingController controllerDatePicker,List<Sector> sectors, List<Factory> factories, List<Empleoye> empleoyes, List<Mail> mails, List<LineSend> line, List<Conection> conections) async {
 
 
   FilePickerResult? result =  await FilePicker.platform.pickFiles(
@@ -614,19 +626,30 @@ void _pickFile(BuildContext context, TextEditingController controllerDatePicker,
 
   File file1 =new File(file.path!);
   List<String> fileContent=[];
-  fileContent = await file1.readAsLines();
+  final content = await file1.readAsString(encoding: utf8);
+
+  final lines = const LineSplitter().convert(content);
+
   List <String> camps = [];
 
-
-  for (int i = 0; i <fileContent.length; i++)
+  for(int i = 0; i < lines.length; i++)
   {
-    camps = fileContent[i].split(";");
+    camps = lines[i].split(";");
   }
 
-     if(camps.length==2)
+    if(camps.length==2)
     {
        try {
-         sectors.add(csvImportSectors(fileContent, sectors));
+
+          for(int i = 0; i < lines.length; i++)
+          {
+            camps = lines[i].split(";");
+            sectors.add(Sector(
+                id: camps[0],
+                name: camps[1]
+            ));
+          }
+
          } catch (Exeption) {
 
          }
@@ -635,25 +658,55 @@ void _pickFile(BuildContext context, TextEditingController controllerDatePicker,
     {
 
       try {
-             empleoyes.add(csvImportEmpleoyes(fileContent, empleoyes));
+
+              for(int i = 0; i < lines.length; i++)
+              {
+                camps = lines[i].split(";");
+                empleoyes.add(Empleoye(
+                  id: camps[0],
+                  name: camps[1],
+                  idFactory: camps[2],
+                ));
+              }
+           
           } catch (Exeption) {
 
         }
     }
     else if(camps.length==4)
     {
-
-      try {
-        mails.add(csvImportMails(fileContent, mails));
-      } catch (Exeption) {
-
-      }
+            try{
+                    for(int i = 0; i < lines.length; i++)
+                    {
+                      camps = lines[i].split(";");
+                      mails.add(Mail(
+                          id: camps[0],
+                          addrres: camps[1],
+                          company: camps[2],
+                          password: camps[3]));
+                    }
+      
+          } catch (Exeption) {
+      
+        }
     }
     else if(camps.length==5)
     {
 
         try {
-          lineSector.add(csvImportLines(fileContent, lineSector));
+
+          for(int i = 0; i < lines.length; i++)
+          {
+            camps = lines[i].split(";");
+            line.add(LineSend(
+                id: camps[0],
+                date:camps[1],
+                factory:camps[2] ,
+                observations: camps[3] ,
+                state: camps[4])
+                );
+          }
+         
         } catch (Exeption) {
 
         }
@@ -663,8 +716,20 @@ void _pickFile(BuildContext context, TextEditingController controllerDatePicker,
     {
 
       try {
-        conections.add(csvImportConections(fileContent, conections));
 
+        for(int i = 0; i < lines.length; i++)
+        {
+          camps = lines[i].split(";");
+          conections.add(Conection(
+              id: camps[0],
+              database: camps[1],
+              host: camps[2],
+              port: camps[3],
+              user: camps[4],
+              password: camps[5]
+          ));
+        }
+        
       } catch (Exeption) {
 
       }
@@ -674,8 +739,26 @@ void _pickFile(BuildContext context, TextEditingController controllerDatePicker,
      else if(camps.length==14)
      {
         try {
-          factories.add(csvImportFactories(fileContent, factories));
-
+          for(int i = 0; i < lines.length; i++) {
+            camps = lines[i].split(";");
+            factories.add(Factory(
+              id: camps[0],
+              name: camps[1],
+              highDate: camps[2],
+              sector: camps[3],
+              thelephones: [camps[4], camps[5]],
+              mail: camps[6],
+              web: camps[7],
+              address: {
+                'street': camps[8],
+                'number': camps[9],
+                'apartament': camps[10],
+                'city': camps[11],
+                'postalCode': camps[12],
+                'province': camps[13],
+              },
+            ));
+          }
        } catch (Exeption) {
 
          }
@@ -687,6 +770,8 @@ void _pickFile(BuildContext context, TextEditingController controllerDatePicker,
      }
 
   }
+
+
 
 
 
