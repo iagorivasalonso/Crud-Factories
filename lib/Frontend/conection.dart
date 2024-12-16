@@ -58,10 +58,6 @@ class _conectionState extends State<conection> {
   bool editText = true;
   bool modify= false;
   Conection? selectedConection;
-  String BaseDateSelected = "Nuevo";
-
-
-
   bool conectNew = false;
 
 
@@ -74,6 +70,7 @@ class _conectionState extends State<conection> {
 
       for(int i = 0; i <conections.length; i++)
       {
+
         if(BaseDateSelected==conections[i].database)
         {
           selectedConection= conections[i];

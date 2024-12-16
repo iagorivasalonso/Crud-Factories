@@ -18,6 +18,7 @@ List<Conection> conections = [];
 
 var conn;
 
+String BaseDateSelected = "Nuevo";
 int itenSelect = -1;
 int itenSelection = 0;
 int subIten1Select = -1;
