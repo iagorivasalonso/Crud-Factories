@@ -30,7 +30,7 @@ Future<int> noCategory(BuildContext  context, String array) async {
                       children: [
                         Expanded(
                           child: Padding(
-                            padding: const EdgeInsets.only(left: 70),
+                            padding: const EdgeInsets.only(left: 30),
                             child: MaterialButton(
                                 color: Colors.lightBlue,
                                 onPressed:() async {
@@ -42,7 +42,7 @@ Future<int> noCategory(BuildContext  context, String array) async {
                         ),
                         Expanded(
                           child: Padding(
-                            padding: const EdgeInsets.only(left: 40),
+                            padding: const EdgeInsets.only(left: 25),
                             child: MaterialButton(
                                 color: Colors.lightBlue,
                                 onPressed:(){
@@ -54,7 +54,7 @@ Future<int> noCategory(BuildContext  context, String array) async {
                         ),
                         Expanded(
                           child: Padding(
-                            padding:const EdgeInsets.only(left: 40, right: 15),
+                            padding:const EdgeInsets.only(left: 25, right: 25),
                             child: MaterialButton(
                                 color: Colors.lightBlue,
                                 onPressed:(){
