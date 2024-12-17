@@ -58,21 +58,20 @@ Future<void> adminSector(BuildContext context) async {
                               IconButton(
                                 icon: Icon(Icons.delete, color: Colors.red),
                                 onPressed: () async {
+
                                   String action1 = "¿Realmente desea eliminar el sector?";
                                   bool correct = await warning(context, action1);
                                   String search = sectors[index].name;
                                   String idSupr = "";
 
-                                  for (int i = 0; i < sectors.length; i++) {
-                                    if (search == sectors[i].name) {
-                                      idSupr = sectors[i].id;
-                                    }
-                                  }
+                                  if (correct)
+                                  {
 
-                                  if (correct) {
-                                    if (sectors.length == 1) {
+                                    if (sectors.length == 1)
+                                    {
                                       Navigator.of(context).pop(false);
                                     }
+
                                     setState(() {
                                       sectors.removeAt(index);
                                       String action = 'El sector se ha quitado correctamente';
@@ -80,10 +79,22 @@ Future<void> adminSector(BuildContext context) async {
                                     });
                                   }
 
-                                  if (conn != null) {
+                                  if (conn != null)
+                                  {
+
+                                    for (int i = 0; i < sectors.length; i++)
+                                    {
+                                      if (search == sectors[i].name)
+                                      {
+                                        idSupr = sectors[i].id;
+                                      }
+                                    }
+
                                     sqlDeleteSector(idSupr);
-                                  } else {
-                                    csvExportatorSectors(sectors);
+                                  }
+                                  else
+                                  {
+                                     csvExportatorSectors(sectors);
                                   }
                                 },
                               ),
