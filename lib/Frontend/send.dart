@@ -118,7 +118,7 @@ class _newSendState extends State<newSend> {
       action1 = "Guardar";
       action2 = "Deshacer";
       title = "Ver ";
-      stateSends = ['Preparado', 'Enviado', 'Respondio'];
+      stateSends = ['Enviado','En curso','Devuelto','Respondio'];
 
       int selected = 0;
       if (subIten2Select != 0)
