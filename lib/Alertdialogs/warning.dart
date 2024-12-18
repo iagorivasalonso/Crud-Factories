@@ -13,7 +13,9 @@ Future<bool> warning(BuildContext  context,String action) async{
            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(0)),
            child: SizedBox(
              width: 380,
-             height: 175,
+             height: action.length > 60
+                     ? 230
+                     : 175,
              child: Column(
                children: [
                  headAlert(title:"Cuidado"),
@@ -21,7 +23,7 @@ Future<bool> warning(BuildContext  context,String action) async{
                    child: Padding(
                      padding:  const EdgeInsets.only(left: 25,top: 25, bottom: 15),
                      child: Text(action,
-                       maxLines: 1,
+                       maxLines: 2,
                        overflow: TextOverflow.ellipsis,),
                    ),
                  ),
