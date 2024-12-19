@@ -741,7 +741,7 @@ class _conectionState extends State<conection> {
             factories.clear();
             empleoyes.clear();
             mails.clear();
-            lineSector.clear();
+            allLines.clear();
 
             sqlImportSetors();
             sqlImportFactories();
