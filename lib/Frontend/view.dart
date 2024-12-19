@@ -1,6 +1,12 @@
 import 'package:crud_factories/Alertdialogs/error.dart';
 import 'package:crud_factories/Alertdialogs/noFind.dart';
 import 'package:crud_factories/Alertdialogs/warning.dart';
+import 'package:crud_factories/Backend/CSV/exportEmpleoyes.dart';
+import 'package:crud_factories/Backend/CSV/exportFactories.dart';
+import 'package:crud_factories/Backend/CSV/exportLines.dart';
+import 'package:crud_factories/Backend/CSV/exportMails.dart';
+import 'package:crud_factories/Backend/SQL/deleteFactory.dart';
+import 'package:crud_factories/Backend/SQL/deleteMail.dart';
 import 'package:crud_factories/Backend/data.dart';
 import 'package:crud_factories/Frontend/factory.dart';
 import 'package:crud_factories/Frontend/mail.dart';
@@ -32,14 +38,16 @@ class _viewState extends State<view> {
   List<String> opSearch = ['Todos', 'Filtrar'];
   List<String> filterList = [];
   List<String> filterListSends = ['Fecha', 'Empresa'];
-  List<String> filterListFactories = ['Nombre','Dirrección','Telefono','Ciudad'];
+  List<String> filterListFactories = ['Nombre','Dirección','Telefono','Ciudad'];
   List <LineSend> sendsDay = [];
   List <cardSend> allCards = [];
   String selectCamp = "";
   String textFilterFactory = ' ';
+  String filterFactory = 'Nombre';
   int select = 0;
   int cardIndex = 0;
   int opSelected = 0;
+  bool suprLines = false;
   List<String> campSearch = [];
   List<Factory> allFactories = [];
   List<Factory> resulFactories = [];
@@ -48,10 +56,8 @@ class _viewState extends State<view> {
   List<cardSend> resultSend = [];
   List<String> factoryName = [];
   String? selectedFilterSend = 'Fecha';
-  String filterFactory = 'Nombre';
   String? selectedFactory;
   String? selectedSend;
-
 
   TextEditingController controllerSearchSend = new TextEditingController();
 
@@ -180,7 +186,6 @@ class _viewState extends State<view> {
 
     String view = widget.tView;
     bool err = widget.err;
-
     double mWidthList = mWidth * 0.2;
     if (mWidthList < 42.0)
       opSelected = 0;
@@ -249,7 +254,9 @@ class _viewState extends State<view> {
           });
      }
 
-    
+     factories = List.from(resulFactories); // Copia de la lista
+
+
     return Scaffold(
          body: err == false
               ? Align(
@@ -489,7 +496,6 @@ class _viewState extends State<view> {
                                                         : opSelected == 1
                                                         ? mHeightList - mHeightfilter - mHeightbutton
                                                         : 10,
-
                                                        child: Row(
                                                       children: [
                                                         Expanded(
@@ -497,21 +503,116 @@ class _viewState extends State<view> {
                                                                 ? ListView.builder(
                                                               itemCount: resulFactories.length,
                                                               itemBuilder: (context, index) {
-                                                                return Padding(
-                                                                  padding: const EdgeInsets.only(
-                                                                      left: 3.0, right: 9.0, top: 3.0),
+                                                                return Dismissible(
+                                                                  key: Key(resulFactories[index].name),
+                                                                  confirmDismiss: (direction) async {
+                                                                    String action1 = "¿Realmente desea eliminar la empresa?";
+                                                                    return await warning(context, action1);
+                                                                  },
+                                                                  onDismissed: (direction) async {
+
+                                                                    if(view == 'factory')
+                                                                    {
+                                                                      String idSupr = resulFactories[index].id;
+
+                                                                      setState(() {
+                                                                        resulFactories.removeAt(index);
+                                                                      });
+
+                                                                      if (conn != null)
+                                                                      {
+                                                                        sqlDeleteFactory(idSupr);
+                                                                      }
+                                                                      else
+                                                                      {
+                                                                        csvExportatorFactories(factories);
+
+                                                                        empleoyes.removeWhere((empleoye) => empleoye.idFactory == idSupr);
+                                                                        csvExportatorEmpleoyes(empleoyes);
+                                                                      }
+                                                                    }
+
+                                                                  },
+                                                                  child: Padding(
+                                                                    padding: const EdgeInsets.only(
+                                                                        left: 3.0, right: 9.0, top: 3.0),
+                                                                    child: GestureDetector(
+                                                                      child: factoryCard(
+                                                                          name: resulFactories[index].name,
+                                                                          address: resulFactories[index].allAdress(),
+                                                                          telephone: resulFactories[index].thelephones[0],
+                                                                          city: resulFactories[index].address['city']),
+                                                                      onTap: () async{
+
+                                                                          if (saveChanges == false)
+                                                                          {
+                                                                            setState(() {
+                                                                              select = int.parse(resulFactories[index].id) - 1;
+                                                                            });
+                                                                          }
+                                                                          else
+                                                                          {
+                                                                            saveChanges =! await changesNoSave(context);
+
+                                                                            if(saveChanges == false)
+                                                                            {
+                                                                              setState(() {
+                                                                                select = int.parse(resulFactories[index].id) - 1;
+                                                                              });
+                                                                            }
+                                                                          }
+
+                                                                      },
+                                                                    ),
+                                                                  ),
+                                                                );
+                                                              },
+                                                            )
+                                                                : view == 'mail'
+                                                                ? ListView.builder(
+                                                              itemCount: mails.length,
+                                                              itemBuilder: (context, index) {
+                                                                return Dismissible(
+                                                                  key: Key(mails[index].addrres),
+                                                                  confirmDismiss: (direction) async {
+                                                                    String action1 = "¿Realmente desea eliminar el email?";
+                                                                    return await warning(context, action1);
+                                                                  },
+                                                                  onDismissed:  (direction){
+
+                                                                    if(view == "mail")
+                                                                    {
+                                                                      String idSupr = mails[index].id;
+
+                                                                      setState(() {
+                                                                        mails.removeAt(index);
+                                                                      });
+
+                                                                      if (conn != null)
+                                                                      {
+                                                                        sqlDeleteMail(idSupr);
+                                                                      }
+                                                                      else
+                                                                      {
+                                                                        csvExportatorMails(mails);
+                                                                      }
+                                                                    }
+
+                                                                  },
                                                                   child: GestureDetector(
-                                                                    child: factoryCard(
-                                                                        name: resulFactories[index].name,
-                                                                        address: resulFactories[index].allAdress(),
-                                                                        telephone: resulFactories[index].thelephones[0],
-                                                                        city: resulFactories[index].address['city']),
-                                                                    onTap: () async{
+                                                                    child: defaultCard(
+                                                                        title: mails[index].company,
+                                                                        description: mails[index].addrres,
+                                                                        color: index == cardIndex
+                                                                            ? Colors.white
+                                                                            : Colors.grey),
+                                                                    onTap: () async {
 
                                                                         if (saveChanges == false)
                                                                         {
                                                                           setState(() {
-                                                                            select = int.parse(resulFactories[index].id) - 1;
+                                                                            cardIndex = index;
+                                                                            select = index;
                                                                           });
                                                                         }
                                                                         else
@@ -521,7 +622,8 @@ class _viewState extends State<view> {
                                                                           if(saveChanges == false)
                                                                           {
                                                                             setState(() {
-                                                                              select = int.parse(resulFactories[index].id) - 1;
+                                                                              cardIndex = index;
+                                                                              select = index;
                                                                             });
                                                                           }
                                                                         }
@@ -531,93 +633,120 @@ class _viewState extends State<view> {
                                                                 );
                                                               },
                                                             )
-                                                                : view == 'mail'
-                                                                ? ListView.builder(
-                                                              itemCount: mails.length,
-                                                              itemBuilder: (context, index) {
-                                                                return GestureDetector(
-                                                                  child: defaultCard(
-                                                                      title: mails[index].company,
-                                                                      description: mails[index].addrres,
-                                                                      color: index == cardIndex
-                                                                          ? Colors.white
-                                                                          : Colors.grey),
-                                                                  onTap: () async {
-
-                                                                      if (saveChanges == false)
-                                                                      {
-                                                                        setState(() {
-                                                                          cardIndex = index;
-                                                                          select = index;
-                                                                        });
-                                                                      }
-                                                                      else
-                                                                      {
-                                                                        saveChanges =! await changesNoSave(context);
-
-                                                                        if(saveChanges == false)
-                                                                        {
-                                                                          setState(() {
-                                                                            cardIndex = index;
-                                                                            select = index;
-                                                                          });
-                                                                        }
-                                                                      }
-
-                                                                  },
-                                                                );
-                                                              },
-                                                            )
                                                                 : ListView.builder(
                                                               itemCount: resultSend.length,
-                                                              itemBuilder: (context, index) {
-                                                                String cantSend = resultSend[index].description;
-                                                                return  GestureDetector(
-                                                                  child: defaultCard(
-                                                                      title: resultSend[index].title,
-                                                                      description:selectedFilterSend == "Fecha"
-                                                                          ? lineSector[0].showFormatDate(resultSend[index].description)
-                                                                          : "Envios: $cantSend",
-                                                                      color: index == cardIndex
-                                                                          ? Colors.white
-                                                                          : Colors.grey
-                                                                  ),
-                                                                  onTap: () async {
+                                                              itemBuilder: (context, indexL) {
+                                                                String cantSend = resultSend[indexL].description;
+                                                                return  Dismissible(
+                                                                  key: Key(resultSend[indexL].title),
+                                                                  confirmDismiss: (direction) async {
+                                                                     if(view=="send")
+                                                                     {
+                                                                       String action1 = "Solo puedes eliminar las  lineas que  \n fueron devueltas ¿Desea eliminar?";
+                                                                       suprLines = await warning(context, action1);
 
-                                                                      if (saveChanges == false)
-                                                                      {
-                                                                        setState(() {
-                                                                          sendsDay.clear();
-                                                                          cardIndex = index;
-                                                                          select = index;
+                                                                       String campKey = " ";
+                                                                       List<String> idsDelete = [];
+                                                                       if(suprLines == true)
+                                                                       {
+                                                                         if(selectedFilterSend == "Fecha")
+                                                                         {
+                                                                           campKey = resultSend[indexL].description;
 
-                                                                        });
-                                                                      }
-                                                                      else
-                                                                      {
-                                                                        saveChanges =! await changesNoSave(context);
+                                                                           for(int i = 0; i <lineSector.length; i++)
+                                                                           {
+                                                                             if(lineSector[i].date == campKey && lineSector[i].state == "Devuelto" )
+                                                                             {
+                                                                               idsDelete.add(lineSector[i].id);
+                                                                             }
+                                                                           }
 
-                                                                        if(saveChanges == false)
+                                                                         }
+                                                                         else
+                                                                         {
+                                                                           campKey = resultSend[indexL].title;
+
+                                                                           for(int i = 0; i <lineSector.length; i++)
+                                                                           {
+                                                                             if( campKey == lineSector[i].factory  && lineSector[i].state == "Devuelto" )
+                                                                             {
+                                                                               idsDelete.add(lineSector[i].id);
+                                                                             }
+                                                                           }
+                                                                         }
+
+                                                                         for(int i = 0; i < idsDelete.length;i++)
+                                                                         {
+                                                                           lineSector.removeWhere((line) => line.id == idsDelete[i]);
+                                                                         }
+
+                                                                         setState(() {
+
+                                                                         });
+
+                                                                       }
+                                                                       print(idsDelete);
+                                                                       if (conn != null)
+                                                                       {
+
+                                                                         //  sqlDeleteLines(idSupr);
+                                                                       }
+                                                                       else
+                                                                       {
+                                                                           csvExportatorLines(lineSector);
+                                                                       }
+
+                                                                     }
+
+                                                                     return false;
+                                                                  },
+                                                                  child: GestureDetector(
+                                                                    child: defaultCard(
+                                                                        title: resultSend[indexL].title,
+                                                                        description:selectedFilterSend == "Fecha"
+                                                                            ? lineSector[0].showFormatDate(resultSend[indexL].description)
+                                                                            : "Envios: $cantSend",
+                                                                        color: indexL == cardIndex
+                                                                            ? Colors.white
+                                                                            : Colors.grey
+                                                                    ),
+                                                                    onTap: () async {
+
+                                                                        if (saveChanges == false)
                                                                         {
                                                                           setState(() {
                                                                             sendsDay.clear();
-                                                                            cardIndex = index;
-                                                                            select = index;
+                                                                            cardIndex = indexL;
+                                                                            select = indexL;
 
                                                                           });
                                                                         }
-                                                                      }
+                                                                        else
+                                                                        {
+                                                                          saveChanges =! await changesNoSave(context);
 
-                                                                      if(selectedFilterSend == "Fecha")
-                                                                      {
-                                                                        selectCamp = resultSend[select].description;
-                                                                      }
-                                                                      if(selectedFilterSend == "Empresa")
-                                                                      {
-                                                                        selectCamp =resultSend[select].title;
-                                                                      }
+                                                                          if(saveChanges == false)
+                                                                          {
+                                                                            setState(() {
+                                                                              sendsDay.clear();
+                                                                              cardIndex = indexL;
+                                                                              select = indexL;
 
-                                                                  },
+                                                                            });
+                                                                          }
+                                                                        }
+
+                                                                        if(selectedFilterSend == "Fecha")
+                                                                        {
+                                                                          selectCamp = resultSend[select].description;
+                                                                        }
+                                                                        if(selectedFilterSend == "Empresa")
+                                                                        {
+                                                                          selectCamp =resultSend[select].title;
+                                                                        }
+
+                                                                    },
+                                                                  ),
                                                                 );
                                                               },
                                                             )
