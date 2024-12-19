@@ -57,7 +57,7 @@ class _newFactoryState extends State<newFactory> {
 
   List<Empleoye> contacsCurrent = [];
   List<Empleoye> contacsPreEdit = [];
-  List<String> idscontacsDelete = [];
+  List<String> idsDelete = [];
   List<String> sectorsString = [];
 
   DateTime seletedDate =DateTime.now();
@@ -682,7 +682,7 @@ class _newFactoryState extends State<newFactory> {
                                                 saveChanges = true;
 
                                                 Empleoye delete = contacsCurrent[contactSelect];
-                                                idscontacsDelete.add(delete.id);
+                                                idsDelete.add(delete.id);
 
                                                     if (contacsCurrent[contactSelect] == delete)
                                                     {
@@ -949,9 +949,9 @@ class _newFactoryState extends State<newFactory> {
                                                       ];
 
                                                       String idCurrent= "";
-                                                      for(int i = 0; i <idscontacsDelete.length; i++)
+                                                      for(int i = 0; i <idsDelete.length; i++)
                                                       {
-                                                        idCurrent = idscontacsDelete[i];
+                                                        idCurrent = idsDelete[i];
 
                                                         for(int y = 0; y< empleoyes.length;y++)
                                                         {
