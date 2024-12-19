@@ -325,7 +325,7 @@ class _AppState extends State<App> {
 
                             }
                     ),
-                  if(sectors.length>1 && factories.isNotEmpty)
+                  if(sectors.length > 1 && factories.isNotEmpty)
                   MenuButton(
                         text: SizedBox(
                             width: wItem,
@@ -446,8 +446,7 @@ class _AppState extends State<App> {
 
                       }
                   ),
-
-                  if(sectors.length<2)
+                  if(sectors.length < 2 || allLines.isEmpty)
                   MenuButton(
                       text: SizedBox(
                           width: wItem,
@@ -523,8 +522,8 @@ class _AppState extends State<App> {
 
                       }
                   ),
-                  if(sectors.length>1)
-                    MenuButton(
+                  if(sectors.length > 1 && allLines.isNotEmpty)
+                   MenuButton(
                         text: SizedBox(
                             width: wItem,
                             child: const Text("Envios")
