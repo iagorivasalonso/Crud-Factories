@@ -229,11 +229,6 @@ class _viewState extends State<view> {
       mHeightList = mHeiht;
     }
 
-    if (view == "mail") {
-      mHeightList = mHeiht;
-    }
-
-
     if (view == 'factory' && err == true) {
 
       WidgetsBinding.instance.addPostFrameCallback((_) {
