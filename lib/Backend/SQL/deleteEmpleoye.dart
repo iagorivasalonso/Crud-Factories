@@ -8,10 +8,10 @@ Future<void> sqlDeleteEmpleoye(List<Empleoye> empleoyesDelete) async {
     String id = " ";
 
        for (int i = 0; i<empleoyesDelete.length; i++)
-      {
+       {
            id = empleoyesDelete[i].id;
           var result = await conn.query('delete from empleoyes where id=? ',[id]);
-      }
+       }
 
   } catch(SQLExeption) {
 
