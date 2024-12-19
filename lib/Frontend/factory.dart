@@ -7,7 +7,7 @@ import 'package:crud_factories/Backend/CSV/exportSectors.dart';
 import 'package:crud_factories/Backend/SQL/createEmpleoye.dart';
 import 'package:crud_factories/Backend/SQL/createFactory.dart';
 import 'package:crud_factories/Backend/SQL/createSector.dart';
-import 'package:crud_factories/Backend/SQL/deleteEmpleoye.dart';
+import 'package:crud_factories/Backend/SQL/deleteEmpleoyes.dart';
 import 'package:crud_factories/Backend/SQL/modifyFactory.dart';
 import 'package:crud_factories/Backend/data.dart';
 import 'package:crud_factories/Backend/CSV//exportFactories.dart';
@@ -850,7 +850,7 @@ class _newFactoryState extends State<newFactory> {
                                                           Set<Empleoye> empleoyesDelete = contacsPreEdit1.difference(contacsCurrent1);
 
                                                           List<Empleoye> empleoyesDelete1 =empleoyesDelete.toList();
-                                                          sqlDeleteEmpleoye(empleoyesDelete1);
+                                                          sqlDeleteEmpleoyes(empleoyesDelete1);
 
                                                             String current = "";
 

@@ -1,7 +1,7 @@
 import 'package:crud_factories/Backend/data.dart';
 import 'package:crud_factories/Objects/Empleoye.dart';
 
-Future<void> sqlDeleteEmpleoye(List<Empleoye> empleoyesDelete) async {
+Future<void> sqlDeleteEmpleoyes(List<Empleoye> empleoyesDelete) async {
 
   try{
 
