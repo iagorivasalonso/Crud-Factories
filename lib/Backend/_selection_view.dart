@@ -106,7 +106,6 @@ FuntionSeleted(int itenSelection, int subIten1Selection,int subIten2Selection, d
                 lineSector.clear();
                 String factoryCurrent ="";
                 bool exist = false;
-                err = false;
                 String sFactory = "";
 
                 for(int i = 0; i < allLines.length; i++)
@@ -120,6 +119,7 @@ FuntionSeleted(int itenSelection, int subIten1Selection,int subIten2Selection, d
                                {
                                  exist = true;
                                  sFactory = factoriesSector[y].sector;
+                                 err = false;
                                }
                           }
 
