@@ -1,3 +1,6 @@
+import 'dart:io';
+
+import 'package:crud_factories/Alertdialogs/confirm.dart';
 import 'package:crud_factories/Alertdialogs/error.dart';
 import 'package:crud_factories/Alertdialogs/noFind.dart';
 import 'package:crud_factories/Alertdialogs/warning.dart';
@@ -253,6 +256,7 @@ print(err);
       });
     if (view == 'factory' )
     {
+
       if(factories.isEmpty)
       {
         setState(() {
@@ -559,8 +563,7 @@ print(err);
                                         key: Key(resulFactories[index].name),
                                         confirmDismiss: (direction) async {
                                           String action1 = "¿Realmente desea eliminar la empresa?";
-                                          return await warning(
-                                              context, action1);
+                                          return await warning(context, action1);
                                         },
                                         onDismissed: (direction) async {
                                           if (view == 'factory')
@@ -571,14 +574,21 @@ print(err);
                                             {
                                                  if(factories[i].id==idSupr)
                                                  {
-                                                   setState(() {
-                                                     factories.removeAt(i);
-                                                   });
+                                                   String name = factories[i].name;
+                                                   String action = 'La empresa $name se ha \n borrado correctamente';
+                                                   bool delete = await confirm(context, action);
+                                                   factories.removeAt(i);
                                                  }
                                             }
 
+                                              if(factories.isEmpty)
+                                              {
+                                                setState(() {
 
-                                            if (conn != null) {
+                                                });
+                                              }
+                                            if (conn != null)
+                                            {
                                               sqlDeleteFactory(idSupr);
                                             }
                                             else {
@@ -586,6 +596,7 @@ print(err);
                                               empleoyes.removeWhere((empleoye) => empleoye.idFactory == idSupr);
                                               csvExportatorEmpleoyes(empleoyes);
                                             }
+
                                           }
                                         },
                                         child: Padding(
@@ -637,10 +648,12 @@ print(err);
                                           return await warning(
                                               context, action1);
                                         },
-                                        onDismissed: (direction) {
+                                        onDismissed: (direction) async {
                                           if (view == "mail") {
                                             String idSupr = mails[index].id;
-
+                                            String name = mails[index].addrres;
+                                            String action = 'El email $name se ha \n borrado correctamente';
+                                            bool delete = await confirm(context, action);
                                             setState(() {
                                               mails.removeAt(index);
                                             });
@@ -726,6 +739,9 @@ print(err);
                                                 }
                                               }
 
+                                              int cantLines = idsDelete.length;
+                                              String action = ' se han eliminado $cantLines  correctamente';
+                                              bool delete = await confirm(context, action);
                                               for (int l = 0; l < idsDelete.length; l++)
                                               {
                                                 lineSector.removeWhere((line) => line.id == idsDelete[l]);
