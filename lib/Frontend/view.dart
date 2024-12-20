@@ -167,6 +167,7 @@ class _viewState extends State<view> {
   }
 
   @override
+  @override
   Widget build(BuildContext context) {
     double mWidth = MediaQuery
         .of(context)
@@ -178,7 +179,7 @@ class _viewState extends State<view> {
         .height;
 
     String view = widget.tView;
-    bool err = widget.err;
+    bool err = false;
     double mWidthList = mWidth * 0.2;
     if (mWidthList < 42.0)
       opSelected = 0;
@@ -193,7 +194,7 @@ class _viewState extends State<view> {
       mWidthList = mWidth * 0.8;
     }
 
-
+print(err);
     if (view == "factory") {
       filterList = filterListFactories;
     }
@@ -229,31 +230,72 @@ class _viewState extends State<view> {
       mHeightList = mHeiht;
     }
 
-    if (view == 'factory' && err == true) {
+
+
 
       WidgetsBinding.instance.addPostFrameCallback((_) {
-        String action = "No tiene empresas en ese departamento";
-        error(context, action);
+
+        String action="";
+        if(widget.err== true)
+        {
+              if (view == 'factory' )
+              {
+                action = "No tiene empresas en ese departamento";
+              }
+
+              if (view == 'send')
+              {
+                  action = "No tiene envios en ese departamento";
+              }
+
+
+        }
       });
+    if (view == 'factory' )
+    {
+      factories = List.from(resulFactories); // Copia de la lista
+
+      if(factories.isEmpty)
+      {
+        setState(() {
+          err = true;
+        });
+      }
+
+    }
+    if (view == 'mail' )
+    {
+      if(mails.isEmpty)
+      {
+        setState(() {
+          err = true;
+        });
+      }
     }
 
-    if (view == 'send' && err == true) {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
 
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        String action = "No tiene envios en ese departamento";
-        error(context, action);
-      });
-    }
+      String action="";
 
+          if (view == 'mail' && mails.isEmpty)
+          {
+            action = "No tiene emails en su base de datos";
+            error(context, action);
+          }
 
-    factories = List.from(resulFactories); // Copia de la lista
-
+          if(view == 'factory' && factories.isEmpty)
+          {
+            action = "No tiene empresas en ese departamento";
+            error(context, action);
+          }
+    });
     return Scaffold(
-      body: err == false
+      body: widget.err== false
           ? Align(
           alignment: Alignment.topLeft,
           child: Row(
             children: [
+              if(err==false)
               SizedBox(
                   width: mWidthList,
                   height: mHeightList,
@@ -566,8 +608,7 @@ class _viewState extends State<view> {
                                                 });
                                               }
                                               else {
-                                                saveChanges =
-                                                !await changesNoSave(context);
+                                                saveChanges = !await changesNoSave(context);
 
                                                 if (saveChanges == false) {
                                                   setState(() {
@@ -678,7 +719,7 @@ class _viewState extends State<view> {
                                                 {
                                                   if (campKey == lineSector[i].factory && lineSector[i].state =="Devuelto")
                                                   {
-                                                       idsDelete.add(lineSector[i].id);
+                                                    idsDelete.add(lineSector[i].id);
                                                   }
                                                 }
                                               }
@@ -695,7 +736,7 @@ class _viewState extends State<view> {
 
                                             if (conn != null)
                                             {
-                                                sqlDeleteLines(idsDelete);
+                                              sqlDeleteLines(idsDelete);
                                             }
                                             else
                                             {
@@ -755,7 +796,7 @@ class _viewState extends State<view> {
                       ],
                     ),
                   )),
-
+              if(err==false)
               SizedBox(
                   width: mWidthPanel,
                   height: mHeiht,
@@ -825,4 +866,8 @@ class _viewState extends State<view> {
     cardSeleted = allCards[0].description;
     return cardSeleted;
   }
+
+
+
+
 }
