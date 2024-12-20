@@ -556,9 +556,9 @@ print(err);
                                   child: view == 'factory'
                                       ? ListView.builder(
                                     itemCount: resulFactories.length,
-                                    itemBuilder: (context, indexF) {
+                                    itemBuilder: (context, index) {
                                       return Dismissible(
-                                        key: Key(resulFactories[indexF].name),
+                                        key: Key(resulFactories[index].name),
                                         confirmDismiss: (direction) async {
                                           String action1 = "¿Realmente desea eliminar la empresa?";
                                           return await warning(
@@ -566,11 +566,11 @@ print(err);
                                         },
                                         onDismissed: (direction) async {
                                           if (view == 'factory') {
-                                            String idSupr = resulFactories[indexF]
+                                            String idSupr = resulFactories[index]
                                                 .id;
 
                                             setState(() {
-                                              resulFactories.removeAt(indexF);
+                                              resulFactories.removeAt(index);
                                             });
 
                                             if (conn != null) {
@@ -591,19 +591,19 @@ print(err);
                                               left: 3.0, right: 9.0, top: 3.0),
                                           child: GestureDetector(
                                             child: factoryCard(
-                                                name: resulFactories[indexF]
+                                                name: resulFactories[index]
                                                     .name,
-                                                address: resulFactories[indexF]
+                                                address: resulFactories[index]
                                                     .allAdress(),
-                                                telephone: resulFactories[indexF]
+                                                telephone: resulFactories[index]
                                                     .thelephones[0],
-                                                city: resulFactories[indexF]
+                                                city: resulFactories[index]
                                                     .address['city']),
                                             onTap: () async {
                                               if (saveChanges == false) {
                                                 setState(() {
                                                   select = int.parse(
-                                                      resulFactories[indexF]
+                                                      resulFactories[index]
                                                           .id) - 1;
                                                 });
                                               }
@@ -613,7 +613,7 @@ print(err);
                                                 if (saveChanges == false) {
                                                   setState(() {
                                                     select = int.parse(
-                                                        resulFactories[indexF]
+                                                        resulFactories[index]
                                                             .id) - 1;
                                                   });
                                                 }
@@ -684,11 +684,11 @@ print(err);
                                   )
                                       : ListView.builder(
                                     itemCount: resultSend.length,
-                                    itemBuilder: (context, indexL) {
-                                      String cantSend = resultSend[indexL]
+                                    itemBuilder: (context, index) {
+                                      String cantSend = resultSend[index]
                                           .description;
                                       return Dismissible(
-                                        key: Key(resultSend[indexL].title),
+                                        key: Key(resultSend[index].title),
                                         confirmDismiss: (direction) async {
                                           if (view == "send") {
                                             String action1 = "Solo puedes eliminar las  lineas que  \n fueron devueltas ¿Desea eliminar?";
@@ -701,7 +701,7 @@ print(err);
 
                                               if (selectedFilterSend == "Fecha") {
 
-                                                campKey = resultSend[indexL].description;
+                                                campKey = resultSend[index].description;
 
                                                 for (int i = 0; i < lineSector.length; i++)
                                                 {
@@ -713,7 +713,7 @@ print(err);
                                               }
                                               else
                                               {
-                                                campKey = resultSend[indexL].title;
+                                                campKey = resultSend[index].title;
 
                                                 for (int i = 0; i < lineSector.length; i++)
                                                 {
@@ -748,13 +748,13 @@ print(err);
                                         },
                                         child: GestureDetector(
                                           child: defaultCard(
-                                              title: resultSend[indexL].title,
+                                              title: resultSend[index].title,
                                               description: selectedFilterSend ==
                                                   "Fecha"
                                                   ? lineSector[0].showFormatDate(
-                                                  resultSend[indexL].description)
+                                                  resultSend[index].description)
                                                   : "Envios: $cantSend",
-                                              color: indexL == cardIndex
+                                              color: index == cardIndex
                                                   ? Colors.white
                                                   : Colors.grey
                                           ),
@@ -762,8 +762,8 @@ print(err);
                                             if (saveChanges == false) {
                                               setState(() {
                                                 sendsDay.clear();
-                                                cardIndex = indexL;
-                                                select = indexL;
+                                                cardIndex = index;
+                                                select = index;
                                               });
                                             }
                                             else {
@@ -772,8 +772,8 @@ print(err);
                                               if (saveChanges == false) {
                                                 setState(() {
                                                   sendsDay.clear();
-                                                  cardIndex = indexL;
-                                                  select = indexL;
+                                                  cardIndex = index;
+                                                  select = index;
                                                 });
                                               }
                                             }
