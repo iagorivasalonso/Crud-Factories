@@ -2,9 +2,9 @@ import 'package:crud_factories/Widgets/headAlertDialog.dart';
 import 'package:flutter/material.dart';
 
 
- void confirm(BuildContext  context, String action) async {
+Future<bool> confirm(BuildContext  context, String action) async {
 
-   showDialog(
+  bool? err = await showDialog(
        context: context,
        builder: (BuildContext context, ) {
          return StatefulBuilder(
@@ -12,17 +12,20 @@ import 'package:flutter/material.dart';
              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(0)),
              child: SizedBox(
                  width:  320,
-                 height: 175,
+                 height: action.length > 60
+                     ? 230
+                     : 175,
                  child: Column(
                      children: [
                        headAlert(title:"Confirmar"),
                        Expanded(child: Padding(
-                         padding: const EdgeInsets.only(left: 25,right: 15 ,top: 25, bottom: 15),
+                         padding: const EdgeInsets.only(left: 25,right: 15, top:15),
                          child: Text(action,
-                           maxLines: 1,
+                           maxLines: 2,
                            overflow: TextOverflow.ellipsis,),
                        ),
                        ),
+
                        Expanded(
                          child: Row(
                            children: [
@@ -51,6 +54,6 @@ import 'package:flutter/material.dart';
          );
 
        });
-
+   return err ?? false;
 }
 
