@@ -253,8 +253,6 @@ print(err);
       });
     if (view == 'factory' )
     {
-      factories = List.from(resulFactories); // Copia de la lista
-
       if(factories.isEmpty)
       {
         setState(() {
@@ -565,23 +563,27 @@ print(err);
                                               context, action1);
                                         },
                                         onDismissed: (direction) async {
-                                          if (view == 'factory') {
-                                            String idSupr = resulFactories[index]
-                                                .id;
+                                          if (view == 'factory')
+                                          {
+                                            String idSupr = resulFactories[index].id;
 
-                                            setState(() {
-                                              resulFactories.removeAt(index);
-                                            });
+                                            for(int i = 0; i <factories.length; i++)
+                                            {
+                                                 if(factories[i].id==idSupr)
+                                                 {
+                                                   setState(() {
+                                                     factories.removeAt(i);
+                                                   });
+                                                 }
+                                            }
+
 
                                             if (conn != null) {
                                               sqlDeleteFactory(idSupr);
                                             }
                                             else {
                                               csvExportatorFactories(factories);
-
-                                              empleoyes.removeWhere((
-                                                  empleoye) =>
-                                              empleoye.idFactory == idSupr);
+                                              empleoyes.removeWhere((empleoye) => empleoye.idFactory == idSupr);
                                               csvExportatorEmpleoyes(empleoyes);
                                             }
                                           }
