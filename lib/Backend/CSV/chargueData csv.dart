@@ -16,9 +16,9 @@ void chargueDataCSV(){
 
   }
 
-  factories.clear();
+  allFactories.clear();
   try {
-    factories.add(csvImportFactories(fileContent, factories));
+    allFactories.add(csvImportFactories(fileContent, allFactories));
   } catch (Exeption) {
 
   }

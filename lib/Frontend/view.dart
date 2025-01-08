@@ -82,7 +82,7 @@ class _viewState extends State<view> {
     }
 
     if (enteredKeyboard.isEmpty && view == 'factory') {
-      resulFactories = factories;
+      resulFactories = allFactories;
     }
     else {
       if (selectedFilterSend == "Fecha") {
@@ -257,14 +257,13 @@ print(err);
     if (view == 'factory' )
     {
 
-      if(factories.isEmpty)
+      if(allactories.isEmpty)
       {
         setState(() {
           err = true;
         });
       }
 
-    }
     if (view == 'mail' )
     {
       if(mails.isEmpty)
@@ -285,344 +284,335 @@ print(err);
             error(context, action);
           }
 
-          if(view == 'factory' && factories.isEmpty)
+          if(view == 'factory' && allFactories.isEmpty)
           {
             action = "No tiene empresas en ese departamento";
             error(context, action);
           }
     });
+
     return Scaffold(
-      body: widget.err== false
+      body: widget.err == false
           ? Align(
           alignment: Alignment.topLeft,
           child: Row(
             children: [
               if(err==false)
-              SizedBox(
-                  width: mWidthList,
-                  height: mHeightList,
-                  child: Container(
-                    decoration: const BoxDecoration(
-                        border: Border(
-                          right: BorderSide(width: 5, color: Colors.grey),
-                        )
-                    ),
-                    child: Column(
-                      children: [
-                        if(view == 'factory' || view == 'send')
-                          Row(
-                            children: [
-                              for (int index = 0; index < 2; index++)
-                                Expanded(
-                                  child: GestureDetector(
-                                    child: Container(
-                                      height: mHeightbutton,
-                                      color: index == opSelected
-                                          ? Colors.lightGreen
-                                          : Colors.white,
-                                      child: Center(
-                                        child: Padding(
-                                          padding: const EdgeInsets.all(8.0),
-                                          child: Text(opSearch[index],
-                                              style: TextStyle(
-                                                fontWeight: FontWeight.bold,
-                                                color: index == opSelected
-                                                    ? Colors.white
-                                                    : Colors.black,
-                                              ),
+                SizedBox(
+                    width: mWidthList,
+                    height: mHeightList,
+                    child: Container(
+                      decoration: const BoxDecoration(
+                          border: Border(
+                            right: BorderSide(width: 5, color: Colors.grey),
+                          )
+                      ),
+                      child: Column(
+                        children: [
+                          if(view == 'factory' || view == 'send')
+                            Row(
+                              children: [
+                                for (int index = 0; index < 2; index++)
+                                  Expanded(
+                                    child: GestureDetector(
+                                      child: Container(
+                                        height: mHeightbutton,
+                                        color: index == opSelected
+                                            ? Colors.lightGreen
+                                            : Colors.white,
+                                        child: Center(
+                                          child: Padding(
+                                            padding: const EdgeInsets.all(8.0),
+                                            child: Text(opSearch[index],
+                                                style: TextStyle(
+                                                  fontWeight: FontWeight.bold,
+                                                  color: index == opSelected
+                                                      ? Colors.white
+                                                      : Colors.black,
+                                                ),
+                                                maxLines: 1,
+                                                overflow: TextOverflow.ellipsis),
+                                          ),
+                                        ),
+                                      ),
+                                      onTap: () {
+                                        setState(() {
+                                          opSelected = index;
+                                          controllerSearchSend.clear();
+                                        });
+                                      },
+                                    ),
+                                  ),
+                              ],
+                            ),
+                          if(view == 'factory')
+                            if (opSelected == 1)
+                              Container(
+                                color: Colors.greenAccent,
+                                height: mHeightfilter,
+                                child: Column(
+                                  children: [
+                                    Padding(
+                                      padding: const EdgeInsets.only(
+                                          right: 15.0, top: 10.0),
+                                      child: Row(
+                                        children: [
+                                          const Padding(
+                                            padding: EdgeInsets.only(
+                                                left: 10.0, right: 10.0),
+                                            child: Text(
+                                              "Filtrar por:",
                                               maxLines: 1,
-                                              overflow: TextOverflow.ellipsis),
-                                        ),
+                                              overflow: TextOverflow.ellipsis,
+                                            ),
+                                          ),
+                                          Expanded(
+                                            child: DropdownButtonHideUnderline(
+                                              child: DropdownButton2<String>(
+                                                isExpanded: true,
+                                                hint: Text(
+                                                  filterFactory,
+                                                  overflow: TextOverflow.ellipsis,
+                                                ),
+                                                items: filterList.map((
+                                                    String itemFactory) =>
+                                                    DropdownMenuItem<String>(
+                                                      value: itemFactory,
+                                                      child: Text(
+                                                        itemFactory,
+                                                        overflow: TextOverflow
+                                                            .ellipsis,
+                                                      ),
+                                                    ))
+                                                    .toList(),
+                                                value: selectedFactory,
+                                                onChanged: (String? value) {
+                                                  setState(() {
+                                                    selectedFactory = value;
+                                                    filterFactory = value.toString();
+                                                    controllerSearchSend.clear();
+                                                  });
+                                                },
+                                                buttonStyleData: const ButtonStyleData(
+                                                  padding: EdgeInsets.only(
+                                                      left: 14, right: 14),
+                                                ),
+                                                dropdownStyleData: DropdownStyleData(
+                                                  maxHeight: 130,
+                                                  width: 140,
+                                                  scrollbarTheme: ScrollbarThemeData(
+                                                    thickness: MaterialStateProperty
+                                                        .all(4),
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                          )
+                                        ],
                                       ),
                                     ),
-                                    onTap: () {
-                                      setState(() {
-                                        opSelected = index;
-                                        controllerSearchSend.clear();
-                                      });
-                                    },
-                                  ),
+                                    Row(
+                                      children: [
+                                        Expanded(
+                                          child: Padding(
+                                            padding: const EdgeInsets.only(
+                                                top: 15.0,
+                                                left: 40.0,
+                                                right: 40.0),
+                                            child: TextField(
+                                              controller: controllerSearchSend,
+                                              onChanged: (value) => _runFilter(
+                                                  view, value, textFilterFactory,
+                                                  factoryName, filterFactory),
+                                              decoration: const InputDecoration(
+                                                  border: OutlineInputBorder(),
+                                                  hintText: 'Buscar...'),
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ],
                                 ),
-                            ],
-                          ),
-                        if(view == 'factory')
-                          if (opSelected == 1)
-                            Container(
-                              color: Colors.greenAccent,
-                              height: mHeightfilter,
-                              child: Column(
-                                children: [
-                                  Padding(
-                                    padding: const EdgeInsets.only(
-                                        right: 15.0, top: 10.0),
-                                    child: Row(
-                                      children: [
-                                        const Padding(
-                                          padding: EdgeInsets.only(
-                                              left: 10.0, right: 10.0),
-                                          child: Text(
-                                            "Filtrar por:",
-                                            maxLines: 1,
-                                            overflow: TextOverflow.ellipsis,
+                              ),
+                          if(view == 'send')
+                            if (opSelected == 1)
+                              Container(
+                                color: Colors.greenAccent,
+                                height: mHeightfilter,
+                                child: Column(
+                                  children: [
+                                    Padding(
+                                      padding: const EdgeInsets.only(
+                                          right: 15.0, top: 10.0),
+                                      child: Row(
+                                        children: [
+                                          const Padding(
+                                            padding: EdgeInsets.only(
+                                                left: 10.0, right: 10.0),
+                                            child: Text(
+                                              "Filtrar por:",
+                                              maxLines: 1,
+                                              overflow: TextOverflow.ellipsis,
+                                            ),
                                           ),
-                                        ),
-                                        Expanded(
-                                          child: DropdownButtonHideUnderline(
-                                            child: DropdownButton2<String>(
-                                              isExpanded: true,
-                                              hint: Text(
-                                                filterFactory,
-                                                overflow: TextOverflow.ellipsis,
-                                              ),
-                                              items: filterList.map((
-                                                  String itemFactory) =>
-                                                  DropdownMenuItem<String>(
-                                                    value: itemFactory,
-                                                    child: Text(
-                                                      itemFactory,
-                                                      overflow: TextOverflow
-                                                          .ellipsis,
-                                                    ),
-                                                  ))
-                                                  .toList(),
-                                              value: selectedFactory,
-                                              onChanged: (String? value) {
-                                                setState(() {
-                                                  selectedFactory = value;
-                                                  filterFactory = value.toString();
-                                                  controllerSearchSend.clear();
-                                                });
-                                              },
-                                              buttonStyleData: const ButtonStyleData(
-                                                padding: EdgeInsets.only(
-                                                    left: 14, right: 14),
-                                              ),
-                                              dropdownStyleData: DropdownStyleData(
-                                                maxHeight: 130,
-                                                width: 140,
-                                                scrollbarTheme: ScrollbarThemeData(
-                                                  thickness: MaterialStateProperty
-                                                      .all(4),
+                                          Expanded(
+                                            child: DropdownButtonHideUnderline(
+                                              child: DropdownButton2<String>(
+                                                isExpanded: true,
+                                                hint: Text(
+                                                  selectedFilterSend!,
+                                                  overflow: TextOverflow.ellipsis,
+                                                ),
+                                                items: filterList.map((
+                                                    String itemSend) =>
+                                                    DropdownMenuItem<String>(
+                                                      value: itemSend,
+                                                      child: Text(
+                                                        itemSend,
+                                                        overflow: TextOverflow
+                                                            .ellipsis,
+                                                      ),
+                                                    ))
+                                                    .toList(),
+                                                value: selectedFilterSend,
+                                                onChanged: (String? value1) {
+                                                  setState(() {
+                                                    controllerSearchSend.clear();
+                                                    selectedFilterSend = value1;
+                                                    controllerSearchSend.text =
+                                                    "";
+                                                    allCards.clear();
+                                                    chargueList(0);
+                                                    select = 0;
+
+
+                                                    if (selectedFilterSend ==
+                                                        "Fecha") {
+                                                      selectCamp = resultSend[0]
+                                                          .description;
+                                                    }
+                                                    if (selectedFilterSend ==
+                                                        "Empresa") {
+                                                      selectCamp =
+                                                          resultSend[0].title;
+                                                    }
+                                                  });
+                                                },
+                                                buttonStyleData: const ButtonStyleData(
+                                                  padding: EdgeInsets.only(
+                                                      left: 14, right: 14),
+                                                ),
+                                                dropdownStyleData: DropdownStyleData(
+                                                  maxHeight: 130,
+                                                  width: 140,
+                                                  scrollbarTheme: ScrollbarThemeData(
+                                                    thickness: MaterialStateProperty
+                                                        .all(4),
+                                                  ),
                                                 ),
                                               ),
                                             ),
-                                          ),
-                                        )
-                                      ],
-                                    ),
-                                  ),
-                                  Row(
-                                    children: [
-                                      Expanded(
-                                        child: Padding(
-                                          padding: const EdgeInsets.only(
-                                              top: 15.0,
-                                              left: 40.0,
-                                              right: 40.0),
-                                          child: TextField(
-                                            controller: controllerSearchSend,
-                                            onChanged: (value) => _runFilter(
-                                                view, value, textFilterFactory,
-                                                factoryName, filterFactory),
-                                            decoration: const InputDecoration(
-                                                border: OutlineInputBorder(),
-                                                hintText: 'Buscar...'),
-                                          ),
-                                        ),
+                                          )
+                                        ],
                                       ),
-                                    ],
-                                  ),
-                                ],
-                              ),
-                            ),
-                        if(view == 'send')
-                          if (opSelected == 1)
-                            Container(
-                              color: Colors.greenAccent,
-                              height: mHeightfilter,
-                              child: Column(
-                                children: [
-                                  Padding(
-                                    padding: const EdgeInsets.only(
-                                        right: 15.0, top: 10.0),
-                                    child: Row(
+                                    ),
+                                    Row(
                                       children: [
-                                        const Padding(
-                                          padding: EdgeInsets.only(
-                                              left: 10.0, right: 10.0),
-                                          child: Text(
-                                            "Filtrar por:",
-                                            maxLines: 1,
-                                            overflow: TextOverflow.ellipsis,
-                                          ),
-                                        ),
                                         Expanded(
-                                          child: DropdownButtonHideUnderline(
-                                            child: DropdownButton2<String>(
-                                              isExpanded: true,
-                                              hint: Text(
-                                                selectedFilterSend!,
-                                                overflow: TextOverflow.ellipsis,
-                                              ),
-                                              items: filterList.map((
-                                                  String itemSend) =>
-                                                  DropdownMenuItem<String>(
-                                                    value: itemSend,
-                                                    child: Text(
-                                                      itemSend,
-                                                      overflow: TextOverflow
-                                                          .ellipsis,
-                                                    ),
-                                                  ))
-                                                  .toList(),
-                                              value: selectedFilterSend,
-                                              onChanged: (String? value1) {
-                                                setState(() {
-                                                  controllerSearchSend.clear();
-                                                  selectedFilterSend = value1;
-                                                  controllerSearchSend.text =
-                                                  "";
-                                                  allCards.clear();
-                                                  chargueList(0);
-                                                  select = 0;
-
-
-                                                  if (selectedFilterSend ==
-                                                      "Fecha") {
-                                                    selectCamp = resultSend[0]
-                                                        .description;
-                                                  }
-                                                  if (selectedFilterSend ==
-                                                      "Empresa") {
-                                                    selectCamp =
-                                                        resultSend[0].title;
-                                                  }
-                                                });
-                                              },
-                                              buttonStyleData: const ButtonStyleData(
-                                                padding: EdgeInsets.only(
-                                                    left: 14, right: 14),
-                                              ),
-                                              dropdownStyleData: DropdownStyleData(
-                                                maxHeight: 130,
-                                                width: 140,
-                                                scrollbarTheme: ScrollbarThemeData(
-                                                  thickness: MaterialStateProperty
-                                                      .all(4),
-                                                ),
-                                              ),
+                                          child: Padding(
+                                            padding: EdgeInsets.only(
+                                                top: 15.0,
+                                                left: 40.0,
+                                                right: 40.0),
+                                            child: TextField(
+                                              controller: controllerSearchSend,
+                                              onChanged: (value) => _runFilter(
+                                                  view, value, textFilterFactory,
+                                                  factoryName),
+                                              decoration: InputDecoration(
+                                                  border: OutlineInputBorder(),
+                                                  hintText: 'Buscar...'),
                                             ),
                                           ),
-                                        )
+                                        ),
                                       ],
                                     ),
-                                  ),
-                                  Row(
-                                    children: [
-                                      Expanded(
-                                        child: Padding(
-                                          padding: EdgeInsets.only(
-                                              top: 15.0,
-                                              left: 40.0,
-                                              right: 40.0),
-                                          child: TextField(
-                                            controller: controllerSearchSend,
-                                            onChanged: (value) => _runFilter(
-                                                view, value, textFilterFactory,
-                                                factoryName),
-                                            decoration: InputDecoration(
-                                                border: OutlineInputBorder(),
-                                                hintText: 'Buscar...'),
-                                          ),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ],
+                                  ],
+                                ),
                               ),
-                            ),
-                        Container(
-                          color: view == 'factory'
-                              ? Colors.cyan
-                              : Colors.grey,
-                          height: view == 'mail'
-                              ? mHeiht - 40
-                              : opSelected == 0
-                              ? mHeightList - mHeightbutton
-                              : opSelected == 1
-                              ? mHeightList - mHeightfilter - mHeightbutton
-                              : 10,
-                          child: Row(
-                            children: [
-                              Expanded(
-                                  child: view == 'factory'
-                                      ? ListView.builder(
-                                    itemCount: resulFactories.length,
-                                    itemBuilder: (context, index) {
-                                      return Dismissible(
-                                        key: Key(resulFactories[index].name),
-                                        confirmDismiss: (direction) async {
-                                          String action1 = "¿Realmente desea eliminar la empresa?";
-                                          return await warning(context, action1);
-                                        },
-                                        onDismissed: (direction) async {
-                                          if (view == 'factory')
-                                          {
-                                            String idSupr = resulFactories[index].id;
-
-                                            for(int i = 0; i <factories.length; i++)
+                          Container(
+                            color: view == 'factory'
+                                ? Colors.cyan
+                                : Colors.grey,
+                            height: view == 'mail'
+                                ? mHeiht - 40
+                                : opSelected == 0
+                                ? mHeightList - mHeightbutton
+                                : opSelected == 1
+                                ? mHeightList - mHeightfilter - mHeightbutton
+                                : 10,
+                            child: Row(
+                              children: [
+                                Expanded(
+                                    child: view == 'factory'
+                                        ? ListView.builder(
+                                      itemCount: resulFactories.length,
+                                      itemBuilder: (context, index) {
+                                        return Dismissible(
+                                          key: Key(resulFactories[index].name),
+                                          confirmDismiss: (direction) async {
+                                            String action1 = "¿Realmente desea eliminar la empresa?";
+                                            return await warning(context, action1);
+                                          },
+                                          onDismissed: (direction) async {
+                                            if (view == 'factory')
                                             {
-                                                 if(factories[i].id==idSupr)
-                                                 {
-                                                   String name = factories[i].name;
-                                                   String action = 'La empresa $name se ha \n borrado correctamente';
-                                                   bool delete = await confirm(context, action);
-                                                   factories.removeAt(i);
-                                                 }
-                                            }
+                                              String idSupr = resulFactories[index].id;
 
-                                              if(factories.isEmpty)
+                                              for(int i = 0; i <allFactories.length; i++)
+                                              {
+                                                if(allFactories[i].id==idSupr)
+                                                {
+                                                  String name = allFactories[i].name;
+                                                  String action = 'La empresa $name se ha \n borrado correctamente';
+                                                  bool delete = await confirm(context, action);
+                                                  allFactories.removeAt(i);
+                                                }
+                                              }
+
+                                              if(allFactories.isEmpty)
                                               {
                                                 setState(() {
 
                                                 });
                                               }
-                                            if (conn != null)
-                                            {
-                                              sqlDeleteFactory(idSupr);
-                                            }
-                                            else {
-                                              csvExportatorFactories(factories);
-                                              empleoyes.removeWhere((empleoye) => empleoye.idFactory == idSupr);
-                                              csvExportatorEmpleoyes(empleoyes);
-                                            }
-
-                                          }
-                                        },
-                                        child: Padding(
-                                          padding: const EdgeInsets.only(
-                                              left: 3.0, right: 9.0, top: 3.0),
-                                          child: GestureDetector(
-                                            child: factoryCard(
-                                                name: resulFactories[index]
-                                                    .name,
-                                                address: resulFactories[index]
-                                                    .allAdress(),
-                                                telephone: resulFactories[index]
-                                                    .thelephones[0],
-                                                city: resulFactories[index]
-                                                    .address['city']),
-                                            onTap: () async {
-                                              if (saveChanges == false) {
-                                                setState(() {
-                                                  select = int.parse(
-                                                      resulFactories[index]
-                                                          .id) - 1;
-                                                });
+                                              if (conn != null)
+                                              {
+                                                sqlDeleteFactory(idSupr);
                                               }
                                               else {
-                                                saveChanges = !await changesNoSave(context);
+                                                csvExportatorFactories(allFactories);
+                                                empleoyes.removeWhere((empleoye) => empleoye.idFactory == idSupr);
+                                                csvExportatorEmpleoyes(empleoyes);
+                                              }
 
+                                            }
+                                          },
+                                          child: Padding(
+                                            padding: const EdgeInsets.only(
+                                                left: 3.0, right: 9.0, top: 3.0),
+                                            child: GestureDetector(
+                                              child: factoryCard(
+                                                  name: resulFactories[index]
+                                                      .name,
+                                                  address: resulFactories[index]
+                                                      .allAdress(),
+                                                  telephone: resulFactories[index]
+                                                      .thelephones[0],
+                                                  city: resulFactories[index]
+                                                      .address['city']),
+                                              onTap: () async {
                                                 if (saveChanges == false) {
                                                   setState(() {
                                                     select = int.parse(
@@ -630,163 +620,163 @@ print(err);
                                                             .id) - 1;
                                                   });
                                                 }
-                                              }
-                                            },
+                                                else {
+                                                  saveChanges = !await changesNoSave(context);
+
+                                                  if (saveChanges == false) {
+                                                    setState(() {
+                                                      select = int.parse(
+                                                          resulFactories[index]
+                                                              .id) - 1;
+                                                    });
+                                                  }
+                                                }
+                                              },
+                                            ),
                                           ),
-                                        ),
-                                      );
-                                    },
-                                  )
-                                      : view == 'mail'
-                                      ? ListView.builder(
-                                    itemCount: mails.length,
-                                    itemBuilder: (context, index) {
-                                      return Dismissible(
-                                        key: Key(mails[index].addrres),
-                                        confirmDismiss: (direction) async {
-                                          String action1 = "¿Realmente desea eliminar el email?";
-                                          return await warning(
-                                              context, action1);
-                                        },
-                                        onDismissed: (direction) async {
-                                          if (view == "mail") {
-                                            String idSupr = mails[index].id;
-                                            String name = mails[index].addrres;
-                                            String action = 'El email $name se ha \n borrado correctamente';
-                                            bool delete = await confirm(context, action);
-                                            setState(() {
-                                              mails.removeAt(index);
-                                            });
-
-                                            if (conn != null) {
-                                              sqlDeleteMail(idSupr);
-
-                                            }
-                                            else {
-                                              csvExportatorMails(mails);
-                                            }
-                                          }
-                                        },
-                                        child: GestureDetector(
-                                          child: defaultCard(
-                                              title: mails[index].company,
-                                              description: mails[index].addrres,
-                                              color: index == cardIndex
-                                                  ? Colors.white
-                                                  : Colors.grey),
-                                          onTap: () async {
-                                            if (saveChanges == false) {
+                                        );
+                                      },
+                                    )
+                                        : view == 'mail'
+                                        ? ListView.builder(
+                                      itemCount: mails.length,
+                                      itemBuilder: (context, index) {
+                                        return Dismissible(
+                                          key: Key(mails[index].addrres),
+                                          confirmDismiss: (direction) async {
+                                            String action1 = "¿Realmente desea eliminar el email?";
+                                            return await warning(
+                                                context, action1);
+                                          },
+                                          onDismissed: (direction) async {
+                                            if (view == "mail") {
+                                              String idSupr = mails[index].id;
+                                              String name = mails[index].addrres;
+                                              String action = 'El email $name se ha \n borrado correctamente';
+                                              bool delete = await confirm(context, action);
                                               setState(() {
-                                                cardIndex = index;
-                                                select = index;
+                                                mails.removeAt(index);
                                               });
-                                            }
-                                            else {
-                                              saveChanges =
-                                              !await changesNoSave(context);
 
+                                              if (conn != null) {
+                                                sqlDeleteMail(idSupr);
+
+                                              }
+                                              else {
+                                                csvExportatorMails(mails);
+                                              }
+                                            }
+                                          },
+                                          child: GestureDetector(
+                                            child: defaultCard(
+                                                title: mails[index].company,
+                                                description: mails[index].addrres,
+                                                color: index == cardIndex
+                                                    ? Colors.white
+                                                    : Colors.grey),
+                                            onTap: () async {
                                               if (saveChanges == false) {
                                                 setState(() {
                                                   cardIndex = index;
                                                   select = index;
                                                 });
                                               }
-                                            }
-                                          },
-                                        ),
-                                      );
-                                    },
-                                  )
-                                      : ListView.builder(
-                                    itemCount: resultSend.length,
-                                    itemBuilder: (context, index) {
-                                      String cantSend = resultSend[index]
-                                          .description;
-                                      return Dismissible(
-                                        key: Key(resultSend[index].title),
-                                        confirmDismiss: (direction) async {
-                                          if (view == "send") {
-                                            String action1 = "Solo puedes eliminar las  lineas que  \n fueron devueltas ¿Desea eliminar?";
-                                            suprLines = await warning(context, action1);
+                                              else {
+                                                saveChanges =
+                                                !await changesNoSave(context);
 
-                                            String campKey = " ";
-                                            List<String> idsDelete = [];
-                                            if (suprLines == true)
-                                            {
+                                                if (saveChanges == false) {
+                                                  setState(() {
+                                                    cardIndex = index;
+                                                    select = index;
+                                                  });
+                                                }
+                                              }
+                                            },
+                                          ),
+                                        );
+                                      },
+                                    )
+                                        : ListView.builder(
+                                      itemCount: resultSend.length,
+                                      itemBuilder: (context, index) {
+                                        String cantSend = resultSend[index]
+                                            .description;
+                                        return Dismissible(
+                                          key: Key(resultSend[index].title),
+                                          confirmDismiss: (direction) async {
+                                            if (view == "send") {
+                                              String action1 = "Solo puedes eliminar las  lineas que  \n fueron devueltas ¿Desea eliminar?";
+                                              suprLines = await warning(context, action1);
 
-                                              if (selectedFilterSend == "Fecha") {
+                                              String campKey = " ";
+                                              List<String> idsDelete = [];
+                                              if (suprLines == true)
+                                              {
 
-                                                campKey = resultSend[index].description;
+                                                if (selectedFilterSend == "Fecha") {
 
-                                                for (int i = 0; i < lineSector.length; i++)
-                                                {
-                                                  if (lineSector[i].date == campKey && lineSector[i].state =="Devuelto")
+                                                  campKey = resultSend[index].description;
+
+                                                  for (int i = 0; i < lineSector.length; i++)
                                                   {
-                                                    idsDelete.add(lineSector[i].id);
+                                                    if (lineSector[i].date == campKey && lineSector[i].state =="Devuelto")
+                                                    {
+                                                      idsDelete.add(lineSector[i].id);
+                                                    }
                                                   }
                                                 }
+                                                else
+                                                {
+                                                  campKey = resultSend[index].title;
+
+                                                  for (int i = 0; i < lineSector.length; i++)
+                                                  {
+                                                    if (campKey == lineSector[i].factory && lineSector[i].state =="Devuelto")
+                                                    {
+                                                      idsDelete.add(lineSector[i].id);
+                                                    }
+                                                  }
+                                                }
+
+                                                int cantLines = idsDelete.length;
+                                                String action = ' se han eliminado $cantLines  correctamente';
+                                                bool delete = await confirm(context, action);
+                                                for (int l = 0; l < idsDelete.length; l++)
+                                                {
+                                                  lineSector.removeWhere((line) => line.id == idsDelete[l]);
+                                                }
+
+                                                setState(() {
+
+                                                });
+                                              }
+
+                                              if (conn != null)
+                                              {
+                                                sqlDeleteLines(idsDelete);
                                               }
                                               else
                                               {
-                                                campKey = resultSend[index].title;
-
-                                                for (int i = 0; i < lineSector.length; i++)
-                                                {
-                                                  if (campKey == lineSector[i].factory && lineSector[i].state =="Devuelto")
-                                                  {
-                                                    idsDelete.add(lineSector[i].id);
-                                                  }
-                                                }
+                                                csvExportatorLines(lineSector);
                                               }
-
-                                              int cantLines = idsDelete.length;
-                                              String action = ' se han eliminado $cantLines  correctamente';
-                                              bool delete = await confirm(context, action);
-                                              for (int l = 0; l < idsDelete.length; l++)
-                                              {
-                                                lineSector.removeWhere((line) => line.id == idsDelete[l]);
-                                              }
-
-                                              setState(() {
-
-                                              });
                                             }
 
-                                            if (conn != null)
-                                            {
-                                              sqlDeleteLines(idsDelete);
-                                            }
-                                            else
-                                            {
-                                              csvExportatorLines(lineSector);
-                                            }
-                                          }
-
-                                          return false;
-                                        },
-                                        child: GestureDetector(
-                                          child: defaultCard(
-                                              title: resultSend[index].title,
-                                              description: selectedFilterSend ==
-                                                  "Fecha"
-                                                  ? lineSector[0].showFormatDate(
-                                                  resultSend[index].description)
-                                                  : "Envios: $cantSend",
-                                              color: index == cardIndex
-                                                  ? Colors.white
-                                                  : Colors.grey
-                                          ),
-                                          onTap: () async {
-                                            if (saveChanges == false) {
-                                              setState(() {
-                                                sendsDay.clear();
-                                                cardIndex = index;
-                                                select = index;
-                                              });
-                                            }
-                                            else {
-                                              saveChanges = !await changesNoSave(context);
-
+                                            return false;
+                                          },
+                                          child: GestureDetector(
+                                            child: defaultCard(
+                                                title: resultSend[index].title,
+                                                description: selectedFilterSend ==
+                                                    "Fecha"
+                                                    ? lineSector[0].showFormatDate(
+                                                    resultSend[index].description)
+                                                    : "Envios: $cantSend",
+                                                color: index == cardIndex
+                                                    ? Colors.white
+                                                    : Colors.grey
+                                            ),
+                                            onTap: () async {
                                               if (saveChanges == false) {
                                                 setState(() {
                                                   sendsDay.clear();
@@ -794,37 +784,47 @@ print(err);
                                                   select = index;
                                                 });
                                               }
-                                            }
+                                              else {
+                                                saveChanges = !await changesNoSave(context);
 
-                                            if (selectedFilterSend == "Fecha") {
-                                              selectCamp = resultSend[select].description;
-                                            }
-                                            if (selectedFilterSend == "Empresa") {
-                                              selectCamp = resultSend[select].title;
-                                            }
-                                          },
-                                        ),
-                                      );
-                                    },
-                                  )
-                              ),
-                            ],
+                                                if (saveChanges == false) {
+                                                  setState(() {
+                                                    sendsDay.clear();
+                                                    cardIndex = index;
+                                                    select = index;
+                                                  });
+                                                }
+                                              }
+
+                                              if (selectedFilterSend == "Fecha") {
+                                                selectCamp = resultSend[select].description;
+                                              }
+                                              if (selectedFilterSend == "Empresa") {
+                                                selectCamp = resultSend[select].title;
+                                              }
+                                            },
+                                          ),
+                                        );
+                                      },
+                                    )
+                                ),
+                              ],
+                            ),
                           ),
-                        ),
-                      ],
-                    ),
-                  )),
+                        ],
+                      ),
+                    )),
               if(err==false)
-              SizedBox(
-                  width: mWidthPanel,
-                  height: mHeiht,
-                  child: view == 'factory'
-                      ? newFactory(select)
-                      : view == 'mail'
-                      ? newMail(select)
-                      : newSend(
-                      selectCamp, filterFactory, selectedFilterSend!, select)
-              ),
+                SizedBox(
+                    width: mWidthPanel,
+                    height: mHeiht,
+                    child: view == 'factory'
+                        ? newFactory(select)
+                        : view == 'mail'
+                        ? newMail(select)
+                        : newSend(
+                        selectCamp, filterFactory, selectedFilterSend!, select)
+                ),
             ],
           )
       )

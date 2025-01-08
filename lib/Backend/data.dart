@@ -6,7 +6,7 @@ import 'package:crud_factories/Objects/LineSend.dart';
 import 'package:crud_factories/Objects/Sector.dart';
 
 List<Sector> sectors = [];
-List<Factory> factories = [];
+List<Factory> allFactories = [];
 List<Factory> factoriesSector = [];
 List<Empleoye> empleoyes = [];
 List<Mail> mails =[];

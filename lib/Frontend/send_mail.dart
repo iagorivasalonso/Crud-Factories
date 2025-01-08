@@ -399,11 +399,11 @@ class _sendMailState extends State<sendMail> {
                                                               {
                                                                 nameFactory=sendsDay[i].factory;
 
-                                                                for(int x = 0 ; x < factories.length; x++)
+                                                                for(int x = 0 ; x < allFactories.length; x++)
                                                                 {
-                                                                  if(nameFactory == factories[x].name)
+                                                                  if(nameFactory == allFactories[x].name)
                                                                   {
-                                                                    selectedFactories.add(factories[x]);
+                                                                    selectedFactories.add(allFactories[x]);
                                                                   }
 
                                                                 }
@@ -897,11 +897,11 @@ class _sendMailState extends State<sendMail> {
                         late Factory current;
 
 
-                        for(int i = 0; i < factories.length; i++)
+                        for(int i = 0; i < allFactories.length; i++)
                         {
-                            if(currentSend == factories[i].name)
+                            if(currentSend == allFactories[i].name)
                             {
-                               current = factories[i];
+                               current = allFactories[i];
                             }
                         }
 

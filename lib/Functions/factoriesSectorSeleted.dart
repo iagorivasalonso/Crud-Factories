@@ -8,18 +8,18 @@ List<Factory> factoriesSectorSeleted(String subIten2Selection) {
 
   if(subIten2Selection == 0.toString())
   {
-    for(int i = 0; i <factories.length; i++)
+    for(int i = 0; i <allFactories.length; i++)
     {
-      factoriesSector.add(factories[i]);
+      factoriesSector.add(allFactories[i]);
     }
   }
   else
   {
-    for(int i = 0; i <factories.length; i++)
+    for(int i = 0; i <allFactories.length; i++)
     {
-      if(factories[i].sector == subIten2Selection)
+      if(allFactories[i].sector == subIten2Selection)
       {
-        factoriesSector.add(factories[i]);
+        factoriesSector.add(allFactories[i]);
       }
     }
   }

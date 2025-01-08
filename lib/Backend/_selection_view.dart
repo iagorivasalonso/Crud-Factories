@@ -52,19 +52,20 @@ FuntionSeleted(int itenSelection, int subIten1Selection,int subIten2Selection, d
 
             if(subIten2Selection == 0)
             {
-              err = false;
-              for(int i = 0; i < factories.length;i++)
+              factoriesSector.clear();
+
+              for(int i = 0; i < allFactories.length;i++)
               {
-                factoriesSector.add(factories[i]);
+                factoriesSector.add(allFactories[i]);
               }
             }
             else
             {
-              for(int i = 0; i < factories.length;i++)
+              for(int i = 0; i < allFactories.length;i++)
               {
-                if(factories[i].sector== sector)
+                if(allFactories[i].sector== sector)
                 {
-                  factoriesSector.add(factories[i]);
+                  factoriesSector.add(allFactories[i]);
                   err = false;
                 }
               }
@@ -81,7 +82,6 @@ FuntionSeleted(int itenSelection, int subIten1Selection,int subIten2Selection, d
             if(subIten2Selection == 0)
             {
                 lineSector.clear();
-                err = false;
                 String lineFactory ="";
 
                 for(int i = 0; i < allLines.length; i++)
@@ -93,6 +93,7 @@ FuntionSeleted(int itenSelection, int subIten1Selection,int subIten2Selection, d
                         if(factoriesSector[y].name==lineFactory)
                         {
                           allLines[i].sector = factoriesSector[y].sector;
+                          err = false;
                         }
 
 
@@ -119,7 +120,6 @@ FuntionSeleted(int itenSelection, int subIten1Selection,int subIten2Selection, d
                                {
                                  exist = true;
                                  sFactory = factoriesSector[y].sector;
-                                 err = false;
                                }
                           }
 

@@ -9,7 +9,7 @@ sqlImportFactories() async {
 
     for (var row in result) {
 
-      factories.add(Factory(
+      allFactories.add(Factory(
           id: row[0].toString(),
           name: row[1],
           highDate: row[2],

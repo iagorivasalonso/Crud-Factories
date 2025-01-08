@@ -61,9 +61,9 @@ class _newImportState extends State<newImport> {
 
     if(idEndList == 0)
     {
-      for(int i = 0; i < factories.length; i++)
+      for(int i = 0; i < allFactories.length; i++)
       {
-        idEndList = int.parse(factories[i].id);
+        idEndList = int.parse(allFactories[i].id);
       }
     }
 
@@ -218,16 +218,16 @@ class _newImportState extends State<newImport> {
 
                                       if(empleoyesNew.isNotEmpty)
                                       {
-                                          if(factories.isNotEmpty)
+                                          if(allFactories.isNotEmpty)
                                           {
                                                 for(int i = 0; i < empleoyesNew.length; i++)
                                                 {
                                                   current = empleoyesNew[i].idFactory;
                                                   bool repeat = false;
 
-                                                  for(int x = 0; x < factories.length; x++)
+                                                  for(int x = 0; x < allFactories.length; x++)
                                                   {
-                                                    if(current == factories[x].id)
+                                                    if(current == allFactories[x].id)
                                                     {
                                                       repeat = true;
                                                     }
@@ -361,16 +361,16 @@ class _newImportState extends State<newImport> {
                                       }
                                       if(linesNew.isNotEmpty)
                                       {
-                                         if(factories.isNotEmpty)
+                                         if(allFactories.isNotEmpty)
                                          {
                                               for(int i = 0; i < linesNew.length; i++)
                                               {
                                                 current = linesNew[i].factory;
                                                 repeat = false;
 
-                                                for(int x = 0; x < factories.length; x++)
+                                                for(int x = 0; x < allFactories.length; x++)
                                                 {
-                                                  if(current == factories[x].name)
+                                                  if(current == allFactories[x].name)
                                                   {
                                                     repeat = true;
                                                   }
@@ -521,9 +521,9 @@ class _newImportState extends State<newImport> {
                                                 repeat = false;
                                                 current = factoriesNew[i].name;
 
-                                                for(int x = 0; x <factories.length; x++)
+                                                for(int x = 0; x <allFactories.length; x++)
                                                 {
-                                                  if(factories[x].name == current)
+                                                  if(allFactories[x].name == current)
                                                   {
                                                     repeat= true;
                                                   }
@@ -532,9 +532,9 @@ class _newImportState extends State<newImport> {
 
                                                 if(repeat == false)
                                                 {
-                                                  if(factories.isNotEmpty)
+                                                  if(allFactories.isNotEmpty)
                                                   {
-                                                    String idLast = factories[factories.length-1].id;
+                                                    String idLast = allFactories[allFactories.length-1].id;
                                                     factoriesNew[i].id = createId(idLast);
                                                   }
                                                   else
@@ -543,7 +543,7 @@ class _newImportState extends State<newImport> {
                                                   }
 
                                                   cantImport++;
-                                                  factories.add(factoriesNew[i]);
+                                                  allFactories.add(factoriesNew[i]);
 
                                                 }
 
@@ -565,7 +565,7 @@ class _newImportState extends State<newImport> {
                                               }
                                               else
                                               {
-                                                csvExportatorFactories(factories);
+                                                csvExportatorFactories(allFactories);
                                               }
                                           }
                                           else

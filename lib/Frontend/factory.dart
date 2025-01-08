@@ -87,10 +87,10 @@ class _newFactoryState extends State<newFactory> {
 
       if(saveChanges == false)
       {
-            id = factories[select].id;
-            controllerName.text = factories[select].name;
-            controllerHighDate.text = factories[select].highDate;
-            tmp = factories[select].sector;
+            id = allFactories[select].id;
+            controllerName.text = allFactories[select].name;
+            controllerHighDate.text = allFactories[select].highDate;
+            tmp = allFactories[select].sector;
             controllerSector.text = tmp;
 
             for(int i = 0; i <sectors.length; i++)
@@ -101,14 +101,14 @@ class _newFactoryState extends State<newFactory> {
               }
             }
 
-            controllerTelephone1.text = factories[select].thelephones[0];
-            controllerTelephone2.text = factories[select].thelephones[1];
-            controllerMail.text = factories[select].mail;
-            controllerWeb.text = factories[select].web;
+            controllerTelephone1.text = allFactories[select].thelephones[0];
+            controllerTelephone2.text = allFactories[select].thelephones[1];
+            controllerMail.text = allFactories[select].mail;
+            controllerWeb.text = allFactories[select].web;
 
-            var address = factories[select].address['street']!;
-            var number = factories[select].address['number']!;
-            var apartament = factories[select].address['apartament']!;
+            var address = allFactories[select].address['street']!;
+            var number = allFactories[select].address['number']!;
+            var apartament = allFactories[select].address['apartament']!;
 
 
 
@@ -121,9 +121,9 @@ class _newFactoryState extends State<newFactory> {
               allAddress = '$address,$number-$apartament';
             }
             controllerAdrress.text = allAddress!;
-            controllerCity.text = factories[select].address['city']!;
-            controllerPostalCode.text = factories[select].address['postalCode']!;
-            controllerProvince.text = factories[select].address['province']!;
+            controllerCity.text = allFactories[select].address['city']!;
+            controllerPostalCode.text = allFactories[select].address['postalCode']!;
+            controllerProvince.text = allFactories[select].address['province']!;
 
 
             int idFactory = select +1;
@@ -220,7 +220,7 @@ class _newFactoryState extends State<newFactory> {
                                         {
                                           if(select != -1)
                                           {
-                                            if(controllerName.text == factories[select].name)
+                                            if(controllerName.text == allFactories[select].name)
                                             {
                                               saveChanges = false;
                                             }
@@ -269,7 +269,7 @@ class _newFactoryState extends State<newFactory> {
                                     onChanged: (s) {
                                       if(saveChanges == false && select != -1)
                                       {
-                                        if(controllerHighDate.text == factories[select].highDate)
+                                        if(controllerHighDate.text == allFactories[select].highDate)
                                         {
                                           saveChanges = false;
                                         }
@@ -385,7 +385,7 @@ class _newFactoryState extends State<newFactory> {
                                     onChanged: (s) {
                                       if(saveChanges == false && select != -1)
                                       {
-                                        if(controllerTelephone1.text == factories[select].thelephones[0])
+                                        if(controllerTelephone1.text == allFactories[select].thelephones[0])
                                         {
                                           saveChanges = false;
                                         }
@@ -412,7 +412,7 @@ class _newFactoryState extends State<newFactory> {
                                     onChanged: (s) {
                                       if(saveChanges == false && select != -1)
                                       {
-                                        if(controllerTelephone2.text == factories[select].thelephones[1])
+                                        if(controllerTelephone2.text == allFactories[select].thelephones[1])
                                         {
                                           saveChanges = false;
                                         }
@@ -444,7 +444,7 @@ class _newFactoryState extends State<newFactory> {
                                     onChanged: (s) {
                                       if(saveChanges == false && select != -1)
                                       {
-                                        if(controllerMail.text == factories[select].mail)
+                                        if(controllerMail.text == allFactories[select].mail)
                                         {
                                           saveChanges = false;
                                         }
@@ -471,7 +471,7 @@ class _newFactoryState extends State<newFactory> {
                                     onChanged: (s) {
                                       if(saveChanges == false && select != -1)
                                       {
-                                        if(controllerWeb.text == factories[select].web)
+                                        if(controllerWeb.text == allFactories[select].web)
                                         {
                                           saveChanges = false;
                                         }
@@ -535,7 +535,7 @@ class _newFactoryState extends State<newFactory> {
                                     onChanged: (s) {
                                       if(saveChanges == false && select != -1)
                                       {
-                                        if(controllerCity.text == factories[select].address['city']!)
+                                        if(controllerCity.text == allFactories[select].address['city']!)
                                         {
                                           saveChanges = false;
                                         }
@@ -562,7 +562,7 @@ class _newFactoryState extends State<newFactory> {
                                     onChanged: (s) {
                                       if(saveChanges == false && select != -1)
                                       {
-                                        if(controllerPostalCode.text == factories[select].address['postalCode']!)
+                                        if(controllerPostalCode.text == allFactories[select].address['postalCode']!)
                                         {
                                           saveChanges = false;
                                         }
@@ -594,7 +594,7 @@ class _newFactoryState extends State<newFactory> {
                                     onChanged: (s) {
                                       if(saveChanges == false && select != -1)
                                       {
-                                        if(controllerProvince.text == factories[select].address['province']!)
+                                        if(controllerProvince.text == allFactories[select].address['province']!)
                                         {
                                           saveChanges = false;
                                         }
@@ -761,15 +761,15 @@ class _newFactoryState extends State<newFactory> {
                                           List <String> allKeys = [];
                                           String nameCamp = "nombre";
 
-                                          for (int i = 0; i < factories.length; i++) {
-                                            allKeys.add(factories[i].name);
+                                          for (int i = 0; i < allFactories.length; i++) {
+                                            allKeys.add(allFactories[i].name);
                                           }
 
                                           String campOld = " ";
 
                                           if(select != -1)
                                           {
-                                            campOld = factories[select].name;
+                                            campOld = allFactories[select].name;
                                           }
 
                                           if(primaryKeyCorrect(controllerName.text,nameCamp,allKeys,campOld,context) ==true)
@@ -790,12 +790,12 @@ class _newFactoryState extends State<newFactory> {
                                             }
                                             else if(telephoneCorrect(telephone1,context) == false)
                                             {
-                                                
+
 
                                             }
                                             else if(telephoneCorrect(telephone2,context) == true)
                                             {
-                                           
+
                                             }
                                             else if(mailCorrect(controllerMail.text) != true)
                                             {
@@ -872,9 +872,9 @@ class _newFactoryState extends State<newFactory> {
                                                     {
                                                       String idNew = "";
 
-                                                      if(factories.isNotEmpty)
+                                                      if(allFactories.isNotEmpty)
                                                       {
-                                                        String idLast = factories[factories.length-1].id;
+                                                        String idLast = allFactories[allFactories.length-1].id;
                                                         idNew = createId(idLast);
                                                       }
                                                       else
@@ -906,17 +906,17 @@ class _newFactoryState extends State<newFactory> {
                                                     {
                                                           if(saveChanges == true)
                                                           {
-                                                                factories[select].name = controllerName.text;
-                                                                factories[select].highDate = controllerHighDate.text;
-                                                                factories[select].sector = controllerSector.text;
-                                                                factories[select].thelephones= [controllerTelephone1.text,controllerTelephone2.text];
-                                                                factories[select].mail = controllerMail.text;
-                                                                factories[select].web= controllerWeb.text;
-                                                                factories[select].address['street'] = adrress1[0];
-                                                                factories[select].address['number'] = num[1];
-                                                                factories[select].address['apartament'] = apartament;
-                                                                factories[select].address['city'] = controllerCity.text;
-                                                                factories[select].address['postalCode'] = controllerPostalCode.text ;
+                                                            allFactories[select].name = controllerName.text;
+                                                            allFactories[select].highDate = controllerHighDate.text;
+                                                            allFactories[select].sector = controllerSector.text;
+                                                            allFactories[select].thelephones= [controllerTelephone1.text,controllerTelephone2.text];
+                                                            allFactories[select].mail = controllerMail.text;
+                                                            allFactories[select].web= controllerWeb.text;
+                                                            allFactories[select].address['street'] = adrress1[0];
+                                                            allFactories[select].address['number'] = num[1];
+                                                            allFactories[select].address['apartament'] = apartament;
+                                                            allFactories[select].address['city'] = controllerCity.text;
+                                                            allFactories[select].address['postalCode'] = controllerPostalCode.text ;
 
                                                                 action ='El usuario se ha modificado correctamente';
                                                                 confirm(context,action);
@@ -934,15 +934,15 @@ class _newFactoryState extends State<newFactory> {
                                                          }
                                                          else
                                                          {
-                                                           current.add(factories[select]);
+                                                           current.add(allFactories[select]);
                                                            sqlModifyFActory(current);
                                                          }
 
                                                     }
                                                     else
                                                     {
-                                                      factories = factories + current;
-                                                      csvExportatorFactories(factories);
+                                                      allFactories = allFactories + current;
+                                                      csvExportatorFactories(allFactories);
 
                                                       empleoyes = [
                                                         ...{...empleoyes, ...contacsCurrent}

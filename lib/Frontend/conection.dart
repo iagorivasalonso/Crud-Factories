@@ -708,10 +708,10 @@ class _conectionState extends State<conection> {
         conn = null;
 
         sectors.clear();
-        factories.clear();
+        allFactories.clear();
         empleoyes.clear();
         mails.clear();
-        lineSector.clear();
+        allLines.clear();
 
         setState(() {
           action1 = "Conectar";
@@ -738,7 +738,7 @@ class _conectionState extends State<conection> {
             editText =false;
 
             sectors.clear();
-            factories.clear();
+            allFactories.clear();
             empleoyes.clear();
             mails.clear();
             allLines.clear();

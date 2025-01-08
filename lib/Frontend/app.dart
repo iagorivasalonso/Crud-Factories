@@ -166,7 +166,7 @@ class _AppState extends State<App> {
                                  }
                                  if(go == true)
                                  {
-                                   if(factories.isNotEmpty)
+                                   if(allFactories.isNotEmpty)
                                    {
                                      setState(() {
                                        itenSelect = 0;
@@ -268,7 +268,7 @@ class _AppState extends State<App> {
                               }
                       }
                   ),
-                  if(sectors.length < 2 || factories.isEmpty)
+                  if(sectors.length < 2 || allFactories.isEmpty)
                     MenuButton(
                         text: SizedBox(
                             width: wItem,
@@ -291,7 +291,7 @@ class _AppState extends State<App> {
                               if(go == true)
                               {
 
-                                if(factories.isNotEmpty)
+                                if(allFactories.isNotEmpty)
                                 {
                                   setState(() {
                                     itenSelect = 1;
@@ -325,7 +325,7 @@ class _AppState extends State<App> {
 
                             }
                     ),
-                  if(sectors.length > 1 && factories.isNotEmpty)
+                  if(sectors.length > 1 && allFactories.isNotEmpty)
                   MenuButton(
                         text: SizedBox(
                             width: wItem,
@@ -480,7 +480,7 @@ class _AppState extends State<App> {
                                }
                                else
                                {
-                                 if(factories.isNotEmpty)
+                                 if(allFactories.isNotEmpty)
                                  {
                                    String array = "envios";
                                    int dat = await noCategory(context, array);

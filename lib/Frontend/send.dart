@@ -44,7 +44,7 @@ class _newSendState extends State<newSend> {
   String date="";
   int cantFactory = 0;
   bool allSelect = false;
-  List<bool> Send = List.generate(factories.length, (index) => false);
+  List<bool> Send = List.generate(allFactories.length, (index) => false);
   List<bool> lineEdit = List.generate(lineSector.length, (index) => false);
   DateTime seletedDate =DateTime.now();
   String? selectedSector = "Todos";
@@ -85,7 +85,7 @@ class _newSendState extends State<newSend> {
         sectorsString.add(sectors[i].name);
       }
 
-      for (int i = 0; i < factories.length; i++)
+      for (int i = 0; i < allFactories.length; i++)
       {
         _controllersSectorLine.add(TextEditingController());
         _controllersObserLine.add(TextEditingController());
@@ -102,9 +102,9 @@ class _newSendState extends State<newSend> {
 
             factoriesSector.clear();
 
-            for(int i = 0; i < factories.length;i++)
+            for(int i = 0; i < allFactories.length;i++)
             {
-              factoriesSector.add(factories[i]);
+              factoriesSector.add(allFactories[i]);
             }
 
 
@@ -342,9 +342,9 @@ class _newSendState extends State<newSend> {
                                                 campsTable = ['Empresa', 'Sector', 'Observaciones', 'Estado', 'Seleccionar'];
 
 
-                                                for(int i = 0; i < factories.length;i++)
+                                                for(int i = 0; i < allFactories.length;i++)
                                                 {
-                                                  factoriesSector.add(factories[i]);
+                                                  factoriesSector.add(allFactories[i]);
                                                 }
 
 
@@ -365,11 +365,11 @@ class _newSendState extends State<newSend> {
                                                 }
                                                  int factoriesSelected = sSelected + 1;
 
-                                                for(int i = 0; i < factories.length;i++)
+                                                for(int i = 0; i < allFactories.length;i++)
                                                 {
-                                                  if(factories[i].sector == factoriesSelected.toString())
+                                                  if(allFactories[i].sector == factoriesSelected.toString())
                                                   {
-                                                    factoriesSector.add(factories[i]);
+                                                    factoriesSector.add(allFactories[i]);
                                                   }
                                                 }
 
@@ -642,7 +642,7 @@ class _newSendState extends State<newSend> {
                                               if(select == -1)
                                               {
                                                 int allLines =0;
-                                                for(int i = 0; i < factories.length; i++)
+                                                for(int i = 0; i < allFactories.length; i++)
                                                 {
                                                   if(Send[i] == true)
                                                   {
@@ -652,7 +652,7 @@ class _newSendState extends State<newSend> {
                                                         LineSend(
                                                             id: idNew.toString(),
                                                             date: controllerSearch.text,
-                                                            factory: factories[i].name,
+                                                            factory: allFactories[i].name,
                                                             observations: _controllersObserLine[i].text,
                                                             state: _controllerStateLine[i].text)
                                                       );
@@ -745,7 +745,7 @@ class _newSendState extends State<newSend> {
                                             setState(() {
                                               if (select == -1)
                                               {
-                                                  for(int i = 0 ; i<factories.length; i++)
+                                                  for(int i = 0 ; i<allFactories.length; i++)
                                                   {
                                                     Send[i] = false;
                                                     _controllersObserLine[i].text="";
