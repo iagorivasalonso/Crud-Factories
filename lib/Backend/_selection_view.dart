@@ -57,13 +57,14 @@ FuntionSeleted(int itenSelection, int subIten1Selection,int subIten2Selection, d
               for(int i = 0; i < allFactories.length;i++)
               {
                 factoriesSector.add(allFactories[i]);
+                err = false;
               }
             }
             else
             {
               for(int i = 0; i < allFactories.length;i++)
               {
-                if(allFactories[i].sector== sector)
+                if(allFactories[i].sector == sector)
                 {
                   factoriesSector.add(allFactories[i]);
                   err = false;
@@ -120,6 +121,7 @@ FuntionSeleted(int itenSelection, int subIten1Selection,int subIten2Selection, d
                                {
                                  exist = true;
                                  sFactory = factoriesSector[y].sector;
+                                 err = false;
                                }
                           }
 

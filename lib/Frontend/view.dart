@@ -197,7 +197,6 @@ class _viewState extends State<view> {
       mWidthList = mWidth * 0.8;
     }
 
-print(err);
     if (view == "factory") {
       filterList = filterListFactories;
     }
@@ -205,7 +204,7 @@ print(err);
     if (view == "send") {
       filterList = filterListSends;
 
-      if (selectCamp.isEmpty && err == false) {
+      if (selectCamp.isEmpty && widget.err == false) {
         selectCamp = chargueList(0);
       }
     }
@@ -235,34 +234,23 @@ print(err);
 
 
 
+    WidgetsBinding.instance.addPostFrameCallback((_) {
 
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-
-        String action="";
-        if(widget.err== true)
-        {
-              if (view == 'factory' )
-              {
-                action = "No tiene empresas en ese departamento";
-              }
-
-              if (view == 'send')
-              {
-                  action = "No tiene envios en ese departamento";
-              }
-
-
-        }
-      });
-    if (view == 'factory' )
-    {
-
-      if(allactories.isEmpty)
+      String action="";
+      if(widget.err== true)
       {
-        setState(() {
-          err = true;
-        });
+        if (view == 'factory' )
+        {
+          action = "No tiene empresas en ese departamento";
+        }
+
+        if (view == 'send')
+        {
+          action = "No tiene envios en ese departamento";
+        }
       }
+    });
+
 
     if (view == 'mail' )
     {
@@ -278,21 +266,27 @@ print(err);
 
       String action="";
 
-          if (view == 'mail' && mails.isEmpty)
-          {
-            action = "No tiene emails en su base de datos";
-            error(context, action);
-          }
+      if (view == 'mail' && mails.isEmpty)
+      {
+        action = "No tiene emails en su base de datos";
+        error(context, action);
+      }
 
-          if(view == 'factory' && allFactories.isEmpty)
-          {
-            action = "No tiene empresas en ese departamento";
-            error(context, action);
-          }
+      if(view == 'factory' && factoriesSector.isEmpty)
+      {
+        action = "No tiene empresas en ese departamento";
+        error(context, action);
+      }
+
+      if(view == 'send' && lineSector.isEmpty)
+      {
+        action = "No tiene lineas en ese departamento";
+        error(context, action);
+      }
     });
 
     return Scaffold(
-      body: widget.err == false
+      body: widget.err== false
           ? Align(
           alignment: Alignment.topLeft,
           child: Row(
