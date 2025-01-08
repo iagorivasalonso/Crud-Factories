@@ -338,6 +338,7 @@ class _AppState extends State<App> {
                                       width:  wItem,
                                       child: Text("Todas")),
                                   onTap: () async {
+                                    controllerSearchSend.clear();
                                     if (saveChanges == false)
                                     {
                                       setState(() {
@@ -369,6 +370,7 @@ class _AppState extends State<App> {
                                             : wItem,
                                         child: Text(sectors[i].name)),
                                     onTap: (){
+                                      controllerSearchSend.clear();
                                       setState(() {
                                         itenSelect = 1;
                                         subIten1Select = 0;
@@ -536,6 +538,7 @@ class _AppState extends State<App> {
                                       width:  wItem,
                                       child: Text("Todos")),
                                   onTap: () async {
+                                    controllerSearchSend.clear();
                                     if (saveChanges == false)
                                     {
                                       setState(() {
@@ -567,6 +570,7 @@ class _AppState extends State<App> {
                                             : wItem,
                                         child: Text(sectors[i].name)),
                                     onTap: (){
+                                      controllerSearchSend.clear();
                                       setState(() {
                                         itenSelect = 1;
                                         subIten1Select = 2;

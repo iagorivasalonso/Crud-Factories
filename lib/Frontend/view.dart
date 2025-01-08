@@ -68,9 +68,6 @@ class _viewState extends State<view> {
   String? selectedFactory;
   String? selectedSend;
 
-  TextEditingController controllerSearchSend = new TextEditingController();
-
-
   Future<void> _runFilter(String view, String enteredKeyboard, String filter,
       List<String> factoryName, [String? filterFactory]) async {
     if (filter == "Nombre") {
