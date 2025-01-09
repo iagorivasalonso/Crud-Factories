@@ -5,7 +5,7 @@ import 'package:csv/csv.dart';
 
 void  csvExportatorLines(List<LineSend> listSend) async {
 
-  File myFile = File('D:/lineSends.csv');
+  File myFile = File('D:/lines.csv');
 
   List<dynamic> associateList = [
     for (int i = 0; i <listSend.length;i++)

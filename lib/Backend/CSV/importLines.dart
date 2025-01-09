@@ -6,7 +6,7 @@ import 'package:crud_factories/Objects/LineSend.dart';
 csvImportLines(List<String> fileContent, List<LineSend> line ) async {
 
   try {
-    File file = File('D:/lineSends.csv');
+    File file = File('D:/lines.csv');
     final content = await file.readAsString(encoding: utf8);
 
     final lines1 = const LineSplitter().convert(content);
