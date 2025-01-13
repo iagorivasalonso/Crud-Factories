@@ -32,8 +32,6 @@ class _AppState extends State<App> {
 
     WidgetsBinding.instance?.addPostFrameCallback((_) async {
 
-
-
           bool SQLbd = await typeConection(context);
 
           if(SQLbd == true)
@@ -43,7 +41,6 @@ class _AppState extends State<App> {
               subIten1Select = 1;
             });
           }
-
     });
 
   }
