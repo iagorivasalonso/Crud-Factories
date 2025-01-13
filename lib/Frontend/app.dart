@@ -30,14 +30,6 @@ class _AppState extends State<App> {
 
     chargueDataCSV();
 
-    conections.clear();
-
-    try {
-      conections.add(csvImportConections(fileContent, conections));
-
-    } catch (Exeption) {
-
-    }
     WidgetsBinding.instance?.addPostFrameCallback((_) async {
 
 
