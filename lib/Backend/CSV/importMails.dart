@@ -1,12 +1,13 @@
 import 'dart:convert';
 import 'dart:io';
+import 'package:crud_factories/Backend/data.dart';
 import 'package:crud_factories/Objects/Mail.dart';
 
 csvImportMails(List<String> fileContent, List<Mail> mails) async {
 
   try {
-    final file = File('D:/mails.csv');
-    final content = await file.readAsString(encoding: utf8);
+
+    final content = await fMails.readAsString(encoding: utf8);
 
     final lines = const LineSplitter().convert(content);
 

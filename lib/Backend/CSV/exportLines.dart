@@ -1,11 +1,10 @@
 import 'dart:io';
+import 'package:crud_factories/Backend/data.dart';
 import 'package:crud_factories/Objects/LineSend.dart';
 import 'package:csv/csv.dart';
 
 
 void  csvExportatorLines(List<LineSend> listSend) async {
-
-  File myFile = File('D:/lines.csv');
 
   List<dynamic> associateList = [
     for (int i = 0; i <listSend.length;i++)
@@ -33,5 +32,5 @@ void  csvExportatorLines(List<LineSend> listSend) async {
   }
 
   String csv = const ListToCsvConverter(fieldDelimiter: ';').convert(rows);
-  myFile.writeAsString(csv);
+  fLines.writeAsString(csv);
 }

@@ -1,13 +1,13 @@
 import 'dart:convert';
 import 'dart:io';
+import 'package:crud_factories/Backend/data.dart';
 import 'package:crud_factories/Objects/Sector.dart';
 
 csvImportSectors(List<String> fileContent, List<Sector> sectors) async{
 
   try {
-    File file = File('D:/sectors.csv');
 
-    final content = await file.readAsString(encoding: utf8);
+    final content = await fSectors.readAsString(encoding: utf8);
 
     final lines = const LineSplitter().convert(content);
 

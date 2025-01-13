@@ -1,11 +1,12 @@
 
 import 'dart:io';
+import 'package:crud_factories/Backend/data.dart';
 import 'package:crud_factories/Objects/Sector.dart';
 import 'package:csv/csv.dart';
 
 void csvExportatorSectors(List<Sector> sectors){
 
-  File myFile = File('D:/sectors.csv');
+
 
   List<dynamic> associateList = [
       for (int i = 0; i < sectors.length; i++)
@@ -27,7 +28,7 @@ void csvExportatorSectors(List<Sector> sectors){
   }
 
   String csv = const ListToCsvConverter(fieldDelimiter: ';').convert(rows);
-  myFile.writeAsString(csv);
+  fSectors.writeAsString(csv);
 }
 
 

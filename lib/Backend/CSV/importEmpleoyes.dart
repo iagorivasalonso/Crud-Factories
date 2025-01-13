@@ -1,13 +1,14 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:crud_factories/Backend/data.dart';
 import 'package:crud_factories/Objects/Empleoye.dart';
 
 csvImportEmpleoyes(List<String> fileContent, List<Empleoye> empleoyes) async {
 
   try {
-    File file = File('D:/empleoyes.csv');
-    final content = await file.readAsString(encoding: utf8);
+
+    final content = await fEmpleoyes.readAsString(encoding: utf8);
 
     final lines = const LineSplitter().convert(content);
 

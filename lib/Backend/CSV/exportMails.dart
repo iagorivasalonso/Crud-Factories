@@ -1,11 +1,9 @@
-import 'dart:io';
+import 'package:crud_factories/Backend/data.dart';
 import 'package:crud_factories/Objects/Mail.dart';
 import 'package:csv/csv.dart';
 
 
 void csvExportatorMails(List<Mail> mails) {
-
-  File myFile = File('D:/mails.csv');
 
   List<dynamic> associateList = [
     for (int i = 0; i <mails.length; i++)
@@ -31,5 +29,5 @@ void csvExportatorMails(List<Mail> mails) {
   }
 
   String csv = const ListToCsvConverter(fieldDelimiter: ';').convert(rows);
-  myFile.writeAsString(csv);
+  fMails.writeAsString(csv);
 }

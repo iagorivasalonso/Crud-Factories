@@ -1,17 +1,17 @@
-import 'dart:io';
+
 
 import 'package:crud_factories/Backend/data.dart';
-import 'package:crud_factories/Objects/Empleoye.dart';
+import 'package:crud_factories/Objects/RouteCSV.dart';
 import 'package:csv/csv.dart';
 
-void csvExportatorEmpleoyes(List<Empleoye> empleoyes){
+void csvExportatorRoutes(List<RouteCSV> routes){
 
   List<dynamic> associateList = [
-    for (int i = 0; i < empleoyes.length; i++)
+    for (int i = 0; i < routes.length; i++)
       {
-        "id": empleoyes[i].id,
-        "name": empleoyes[i].name,
-        "idFactory": empleoyes[i].idFactory
+        "id": routes[i].id,
+        "name": routes[i].name,
+        "route": routes[i].route
       },
   ];
 
@@ -23,10 +23,10 @@ void csvExportatorEmpleoyes(List<Empleoye> empleoyes){
 
     row.add(associateList[i]["id"]);
     row.add(associateList[i]["name"]);
-    row.add(associateList[i]["idFactory"]);
+    row.add(associateList[i]["route"]);
     rows.add(row);
   }
 
   String csv = const ListToCsvConverter(fieldDelimiter: ';').convert(rows);
-  fEmpleoyes.writeAsString(csv);
+  fRoutes.writeAsString(csv);
 }

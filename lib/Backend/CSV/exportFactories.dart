@@ -1,11 +1,10 @@
 import 'dart:io';
+import 'package:crud_factories/Backend/data.dart';
 import 'package:crud_factories/Objects/Factory.dart';
 import 'package:csv/csv.dart';
 
 
 void csvExportatorFactories(List<Factory> factories) async {
-
-  File myFile = File('D:/factories.csv');
 
   List<dynamic> associateList = [
       for (int i = 0; i <factories.length;i++)
@@ -51,6 +50,6 @@ void csvExportatorFactories(List<Factory> factories) async {
   }
 
   String csv = const ListToCsvConverter(fieldDelimiter: ';').convert(rows);
-  myFile.writeAsString(csv);
+  fFactories.writeAsString(csv);
 
 }

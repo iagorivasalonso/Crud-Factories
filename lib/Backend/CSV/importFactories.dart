@@ -1,12 +1,13 @@
 import 'dart:convert';
 import 'dart:io';
+import 'package:crud_factories/Backend/data.dart';
 import 'package:crud_factories/Objects/Factory.dart';
 
 
 csvImportFactories(List<String> fileContent, List<Factory> factories) async {
 
   try {
-    final file = File('D:/factories.csv');
+    final file = File(routesManage[2].route);
     final content = await file.readAsString(encoding: utf8);
 
     final lines = const LineSplitter().convert(content);

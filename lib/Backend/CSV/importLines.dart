@@ -1,13 +1,13 @@
 import 'dart:convert';
 import 'dart:io';
+import 'package:crud_factories/Backend/data.dart';
 import 'package:crud_factories/Objects/LineSend.dart';
 
 
 csvImportLines(List<String> fileContent, List<LineSend> line ) async {
 
   try {
-    File file = File('D:/lines.csv');
-    final content = await file.readAsString(encoding: utf8);
+    final content = await fLines.readAsString(encoding: utf8);
 
     final lines1 = const LineSplitter().convert(content);
 
