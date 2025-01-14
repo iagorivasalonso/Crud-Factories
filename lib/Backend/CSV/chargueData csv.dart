@@ -26,60 +26,64 @@ Future<void> chargueDataCSV() async {
 
   }
 
-  sectors.clear();
-  fSectors = File(routesManage[1].route);
+    if(routesManage.isNotEmpty)
+    {
+              sectors.clear();
+              fSectors = File(routesManage[1].route);
 
-  try {
-    sectors.add(csvImportSectors(fileContent,sectors));
-  } catch (Exeption) {
+              try {
+                sectors.add(await csvImportSectors(fileContent,sectors));
+              } catch (Exeption) {
 
-  }
+              }
 
-  allFactories.clear();
-  fFactories = File(routesManage[2].route);
+              allFactories.clear();
+              fFactories = File(routesManage[2].route);
 
-  try {
-    allFactories.add(csvImportFactories(fileContent, allFactories));
-  } catch (Exeption) {
+              try {
+                allFactories.add(csvImportFactories(fileContent, allFactories));
+              } catch (Exeption) {
 
-  }
+              }
 
-  empleoyes.clear();
-  fEmpleoyes = File(routesManage[3].route);
+              empleoyes.clear();
+              fEmpleoyes = File(routesManage[3].route);
 
-  try{
-     empleoyes.add(csvImportEmpleoyes(fileContent, empleoyes));
-  } catch (Exeption) {
+              try{
+                empleoyes.add(csvImportEmpleoyes(fileContent, empleoyes));
+              } catch (Exeption) {
 
-}
+              }
 
-  allLines.clear();
-  fLines = File(routesManage[4].route);
+              allLines.clear();
+              fLines = File(routesManage[4].route);
 
-  try {
-    allLines.add(csvImportLines(fileContent, allLines));
-  } catch (Exeption) {
+              try {
+                allLines.add(csvImportLines(fileContent, allLines));
+              } catch (Exeption) {
 
-  }
-  mails.clear();
-  fMails = File(routesManage[5].route);
+              }
+              mails.clear();
+              fMails = File(routesManage[5].route);
 
-  try {
-    mails.add(csvImportMails(fileContent, mails));
-  } catch (Exeption) {
+              try {
+                mails.add(csvImportMails(fileContent, mails));
+              } catch (Exeption) {
 
-  }
+              }
 
-  conections.clear();
-  fConections = File(routesManage[6].route);
+              conections.clear();
+              fConections = File(routesManage[6].route);
 
-  try {
-    conections.add(await csvImportConections(fileContent, conections));
+              try {
+                conections.add(await csvImportConections(fileContent, conections));
 
-  } catch (Exeption) {
+              } catch (Exeption) {
 
-  }
+              }
 
-  fServer =routesManage[7].route;
+              fServer =routesManage[7].route;
+    }
+
 }
 

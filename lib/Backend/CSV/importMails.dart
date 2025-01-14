@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:io';
 import 'package:crud_factories/Backend/data.dart';
 import 'package:crud_factories/Objects/Mail.dart';
 
@@ -8,23 +7,33 @@ csvImportMails(List<String> fileContent, List<Mail> mails) async {
   try {
 
     final content = await fMails.readAsString(encoding: utf8);
-
     final lines = const LineSplitter().convert(content);
 
-    List<String> select = [];
+    for (int i = 0; i < lines.length; i++)
+    {
+      List<String> select  = lines[i].split(";");
 
-    for (int i = 0; i < lines.length; i++) {
-
-      select = lines[i].split(";");
-      mails.add(Mail(
-          id: select[0],
-          addrres: select[1],
-          company: select[2],
-          password: select[3]));
-
+          mails.add(Mail(
+              id: select[0].trim(),
+              addrres: select[1].trim(),
+              company: select[2].trim(),
+              password: select[3].trim()
+          ));
     }
+
   } catch (e) {
-    print('Error reading CSV file mails: $e');
+    if(e.toString().contains("El sistema no puede encontrar el archivo especificado"))
+    {
+      print("no se encuentra archivo de emails");
+    }
+    else
+    {
+      if(e.toString().contains("Invalid value"))
+      {
+        print("error de formato de archivo de emails");
+      }
+    }
   }
+
   return mails;
 }

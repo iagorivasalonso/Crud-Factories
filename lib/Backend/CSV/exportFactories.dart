@@ -1,12 +1,11 @@
-import 'dart:io';
 import 'package:crud_factories/Backend/data.dart';
 import 'package:crud_factories/Objects/Factory.dart';
 import 'package:csv/csv.dart';
 
-
 void csvExportatorFactories(List<Factory> factories) async {
 
   List<dynamic> associateList = [
+
       for (int i = 0; i <factories.length;i++)
       {
         "id": factories[i].id,
@@ -28,28 +27,27 @@ void csvExportatorFactories(List<Factory> factories) async {
 
   List<List<dynamic>> rows = [];
 
-  for (int i = 0; i < associateList.length; i++) {
+  for (int i = 0; i < associateList.length; i++)
+  {
+      List<dynamic> row = [];
 
-    List<dynamic> row = [];
-
-    row.add(associateList[i]["id"]);
-    row.add(associateList[i]["name"]);
-    row.add(associateList[i]["highDate"]);
-    row.add(associateList[i]["sector"]);
-    row.add(associateList[i]["telephone1"]);
-    row.add(associateList[i]["telephone2"]);
-    row.add(associateList[i]["mail"]);
-    row.add(associateList[i]["web"]);
-    row.add(associateList[i]["address"]);
-    row.add(associateList[i]["number"]);
-    row.add(associateList[i]["apartament"]);
-    row.add(associateList[i]["city"]);
-    row.add(associateList[i]["postalCode"]);
-    row.add(associateList[i]["province"]);
-    rows.add(row);
+      row.add(associateList[i]["id"]);
+      row.add(associateList[i]["name"]);
+      row.add(associateList[i]["highDate"]);
+      row.add(associateList[i]["sector"]);
+      row.add(associateList[i]["telephone1"]);
+      row.add(associateList[i]["telephone2"]);
+      row.add(associateList[i]["mail"]);
+      row.add(associateList[i]["web"]);
+      row.add(associateList[i]["address"]);
+      row.add(associateList[i]["number"]);
+      row.add(associateList[i]["apartament"]);
+      row.add(associateList[i]["city"]);
+      row.add(associateList[i]["postalCode"]);
+      row.add(associateList[i]["province"]);
+      rows.add(row);
   }
 
   String csv = const ListToCsvConverter(fieldDelimiter: ';').convert(rows);
   fFactories.writeAsString(csv);
-
 }

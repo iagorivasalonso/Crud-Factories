@@ -1,5 +1,3 @@
-
-
 import 'package:crud_factories/Backend/data.dart';
 import 'package:crud_factories/Objects/RouteCSV.dart';
 import 'package:csv/csv.dart';
@@ -7,7 +5,8 @@ import 'package:csv/csv.dart';
 void csvExportatorRoutes(List<RouteCSV> routes){
 
   List<dynamic> associateList = [
-    for (int i = 0; i < routes.length; i++)
+
+      for (int i = 0; i < routes.length; i++)
       {
         "id": routes[i].id,
         "name": routes[i].name,
@@ -17,8 +16,8 @@ void csvExportatorRoutes(List<RouteCSV> routes){
 
   List<List<dynamic>> rows = [];
 
-  for (int i = 0; i < associateList.length; i++) {
-
+  for (int i = 0; i < associateList.length; i++)
+  {
     List<dynamic> row = [];
 
     row.add(associateList[i]["id"]);

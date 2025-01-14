@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:crud_factories/Backend/data.dart';
 import 'package:crud_factories/Objects/Empleoye.dart';
 import 'package:csv/csv.dart';
@@ -7,7 +5,8 @@ import 'package:csv/csv.dart';
 void csvExportatorEmpleoyes(List<Empleoye> empleoyes){
 
   List<dynamic> associateList = [
-    for (int i = 0; i < empleoyes.length; i++)
+
+      for (int i = 0; i < empleoyes.length; i++)
       {
         "id": empleoyes[i].id,
         "name": empleoyes[i].name,
@@ -17,14 +16,14 @@ void csvExportatorEmpleoyes(List<Empleoye> empleoyes){
 
   List<List<dynamic>> rows = [];
 
-  for (int i = 0; i < associateList.length; i++) {
+  for (int i = 0; i < associateList.length; i++)
+  {
+        List<dynamic> row = [];
 
-    List<dynamic> row = [];
-
-    row.add(associateList[i]["id"]);
-    row.add(associateList[i]["name"]);
-    row.add(associateList[i]["idFactory"]);
-    rows.add(row);
+        row.add(associateList[i]["id"]);
+        row.add(associateList[i]["name"]);
+        row.add(associateList[i]["idFactory"]);
+        rows.add(row);
   }
 
   String csv = const ListToCsvConverter(fieldDelimiter: ';').convert(rows);

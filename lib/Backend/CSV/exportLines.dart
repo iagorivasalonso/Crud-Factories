@@ -1,12 +1,11 @@
-import 'dart:io';
 import 'package:crud_factories/Backend/data.dart';
 import 'package:crud_factories/Objects/LineSend.dart';
 import 'package:csv/csv.dart';
 
-
 void  csvExportatorLines(List<LineSend> listSend) async {
 
   List<dynamic> associateList = [
+
     for (int i = 0; i <listSend.length;i++)
     {
         "id": listSend[i].id,
@@ -19,8 +18,8 @@ void  csvExportatorLines(List<LineSend> listSend) async {
 
   List<List<dynamic>> rows = [];
 
-  for (int i = 0; i < associateList.length; i++) {
-
+  for (int i = 0; i < associateList.length; i++)
+  {
     List<dynamic> row = [];
 
     row.add(associateList[i]["id"]);
