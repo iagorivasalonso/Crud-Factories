@@ -8,7 +8,7 @@ import 'package:crud_factories/Backend/CSV/chargueData%20csv.dart';
 import 'package:crud_factories/Backend/CSV/importConections.dart';
 import 'package:crud_factories/Backend/_selection_view.dart';
 import 'package:crud_factories/Backend/data.dart';
-import 'package:crud_factories/Frontend/adminSector.dart';
+import 'package:crud_factories/Frontend/adminSectors.dart';
 import 'package:crud_factories/Functions/changesNoSave.dart';
 import 'package:flutter/material.dart';
 import 'package:menu_bar/menu_bar.dart';
@@ -238,7 +238,7 @@ class _AppState extends State<App> {
                               if(sectors.isNotEmpty)
                               {
                                 setState(() {
-                                  adminSector(context);
+                                  adminSectors(context);
                                 });
                               }
                               else
