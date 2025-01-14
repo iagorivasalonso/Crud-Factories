@@ -6,7 +6,7 @@ Future<bool> confirm(BuildContext  context, String action) async {
 
   bool? err = await showDialog(
        context: context,
-       builder: (BuildContext context, ) {
+       builder: (BuildContext context) {
          return StatefulBuilder(
            builder: (BuildContext context, void Function(void Function()) setState) => Dialog(
              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(0)),
