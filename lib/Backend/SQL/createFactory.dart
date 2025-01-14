@@ -3,7 +3,6 @@ import 'package:crud_factories/Objects/Factory.dart';
 
 Future<void> sqlCeateFactory(List<Factory> factories) async {
 
-
    try{
 
        for(int i = 0; i < factories.length; i++)

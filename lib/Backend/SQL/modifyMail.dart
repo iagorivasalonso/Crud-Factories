@@ -12,8 +12,6 @@ Future<void> sqlModifyMail(List<Mail> mail) async {
 
     var result = await conn.query('update mails set company=?,mail=?,password=? where id=?', [company,email,password, id]);
 
-
-
   } catch(SQLExeption){
 
   }

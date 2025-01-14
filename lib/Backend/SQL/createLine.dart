@@ -1,4 +1,3 @@
-import 'package:crud_factories/Backend/SQL/importLines.dart';
 import 'package:crud_factories/Backend/data.dart';
 import 'package:crud_factories/Objects/LineSend.dart';
 
@@ -18,7 +17,6 @@ Future<void> sqlCreateLine(List<LineSend> lines) async {
              'insert into lineSends (id,date,factory,state,observations) values (?,?,?,?,?)',
              [id,date,factory,state,observations]);
     }
-
 
   } catch(SQLExeption){
 

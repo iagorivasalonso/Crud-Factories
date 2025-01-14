@@ -1,9 +1,7 @@
-
 import 'package:crud_factories/Backend/data.dart';
 import 'package:crud_factories/Objects/Sector.dart';
 
 Future<void> sqlCreateSector(List<Sector> sectors) async {
-
 
   try{
 
@@ -18,7 +16,7 @@ Future<void> sqlCreateSector(List<Sector> sectors) async {
     }
 
   } catch(SQLExeption) {
-    print(SQLExeption);
+
   }
 }
 

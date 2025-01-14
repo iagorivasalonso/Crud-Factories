@@ -8,8 +8,8 @@ sqlImportLines() async {
 
     var result = await conn.query('select * from linesends');
 
-    for (var row in result) {
-
+    for (var row in result)
+    {
       allLines.add(LineSend(
           id: row[0].toString(),
           date: row[1],

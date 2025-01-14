@@ -10,8 +10,6 @@ Future<void> sqlModifySector(List<Sector> sectors) async {
 
    var result = await conn.query('update sectors set sector=? where id=?', [name, id]);
 
-
-
   } catch(SQLExeption) {
     
   }

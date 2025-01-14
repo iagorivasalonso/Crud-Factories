@@ -17,6 +17,6 @@ Future<void> sqlCreateEmpleoye(List<Empleoye> empleoyes) async {
     }
 
   } catch(SQLExeption) {
-    print(SQLExeption);
+
   }
 }

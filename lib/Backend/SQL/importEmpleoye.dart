@@ -6,7 +6,6 @@ sqlImportEmpleoyes() async {
   try {
     var result = await conn.query('select * from empleoyes');
 
-
     for (var row in result) {
       empleoyes.add(Empleoye(
         id: row[0].toString(),

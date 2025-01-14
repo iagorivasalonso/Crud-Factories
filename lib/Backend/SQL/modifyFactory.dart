@@ -1,11 +1,9 @@
-import 'package:crud_factories/Backend/SQL/importFactories.dart';
 import 'package:crud_factories/Backend/data.dart';
 import 'package:crud_factories/Objects/Factory.dart';
 
 Future<void> sqlModifyFActory(List<Factory> factories) async {
 
   try{
-
 
     String id = factories[0].id;
     String name = factories[0].name;
@@ -22,12 +20,9 @@ Future<void> sqlModifyFActory(List<Factory> factories) async {
     String province = factories[0].address['province'].toString();
     String postalCode = factories[0].address['postalCode'].toString();
 
-
     var result = await conn.query('update factories set name=?,highDate=?,sector=?,telephone1=?,telephone2=?,mail=?,web=?,address=?,number=?,apartament=?,city=?,province=?,postalcode=? where id=?', [name, highDate, sector, telephone1, telephone2, mail, web, address, number, apartament ,city, province, postalCode, id]);
 
-
   } catch(SQLExeption){
-
 
   }
 }

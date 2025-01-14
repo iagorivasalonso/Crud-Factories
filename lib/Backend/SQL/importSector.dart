@@ -19,7 +19,4 @@ sqlImportSetors() async {
 
   }
 
-
-
-
 }

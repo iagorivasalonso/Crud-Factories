@@ -1,9 +1,7 @@
-import 'package:crud_factories/Backend/SQL/importMail.dart';
 import 'package:crud_factories/Backend/data.dart';
 import 'package:crud_factories/Objects/Mail.dart';
 
 Future<void> sqlCreateMail(List<Mail> mails) async {
-
 
   try{
 
@@ -18,7 +16,6 @@ Future<void> sqlCreateMail(List<Mail> mails) async {
            'insert into mails (id,company,email,password) values (?,?,?,?)',
            [id,company,email,password]);
     }
-    sqlImportMails();
 
   } catch(SQLExeption){
 

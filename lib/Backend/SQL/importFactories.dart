@@ -7,8 +7,8 @@ sqlImportFactories() async {
 
     var result = await conn.query('select * from factories');
 
-    for (var row in result) {
-
+    for (var row in result)
+    {
       allFactories.add(Factory(
           id: row[0].toString(),
           name: row[1],

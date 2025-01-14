@@ -18,7 +18,6 @@ Future<void> sqlModifyLines(List<LineSend> lineSelected) async {
         var result = await conn.query('update linesends set date=?,factory=?, observations=?,  state=? where id=?', [date, factory, observations,state, id]);
       }
 
-
   } catch(SQLExeption){
 
   }
