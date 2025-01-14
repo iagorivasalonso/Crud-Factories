@@ -5,7 +5,6 @@ import 'package:crud_factories/Alertdialogs/error.dart';
 import 'package:crud_factories/Alertdialogs/noCategory.dart';
 import 'package:crud_factories/Alertdialogs/typeConnection.dart';
 import 'package:crud_factories/Backend/CSV/chargueData%20csv.dart';
-import 'package:crud_factories/Backend/CSV/importConections.dart';
 import 'package:crud_factories/Backend/_selection_view.dart';
 import 'package:crud_factories/Backend/data.dart';
 import 'package:crud_factories/Frontend/adminSectors.dart';
@@ -28,7 +27,7 @@ class _AppState extends State<App> {
     // TODO: implement initState
     super.initState();
 
-    chargueDataCSV();
+     chargueDataCSV();
 
     WidgetsBinding.instance?.addPostFrameCallback((_) async {
 
@@ -191,7 +190,7 @@ class _AppState extends State<App> {
                         {
                           setState(() {
                             itenSelect = 0;
-                            subIten1Select = 1;
+                            subIten1Select = 2;
                             subIten2Select = -1;
                           });
                         }
@@ -203,7 +202,7 @@ class _AppState extends State<App> {
                           {
                             setState(() {
                               itenSelect = 0;
-                              subIten1Select = 1;
+                              subIten1Select = 2;
                               subIten2Select = -1;
                             });
                           }
@@ -284,7 +283,7 @@ class _AppState extends State<App> {
                                 {
                                   setState(() {
                                     itenSelect = 1;
-                                    subIten1Select = 0;
+                                    subIten1Select = 1;
                                     subIten2Select = 0;
                                   });
                                 }
@@ -297,7 +296,7 @@ class _AppState extends State<App> {
                                   {
                                     setState(() {
                                       itenSelect = 0;
-                                      subIten1Select = 0;
+                                      subIten1Select = 1;
                                       subIten2Select = 0;
                                     });
                                   }
@@ -305,7 +304,7 @@ class _AppState extends State<App> {
                                   {
                                     setState(() {
                                       itenSelect = 0;
-                                      subIten1Select = 1;
+                                      subIten1Select = 2;
                                       subIten2Select = 0;
                                     });
                                   }
@@ -332,7 +331,7 @@ class _AppState extends State<App> {
                                     {
                                       setState(() {
                                         itenSelect = 1;
-                                        subIten1Select = 0;
+                                        subIten1Select = 1;
                                         subIten2Select = 0;
                                       });
                                     }
@@ -344,7 +343,7 @@ class _AppState extends State<App> {
                                       {
                                         setState(() {
                                           itenSelect = 1;
-                                          subIten1Select = 0;
+                                          subIten1Select = 1;
                                           subIten2Select = 0;
                                         });
                                       }
@@ -362,7 +361,7 @@ class _AppState extends State<App> {
                                       controllerSearchSend.clear();
                                       setState(() {
                                         itenSelect = 1;
-                                        subIten1Select = 0;
+                                        subIten1Select = 1;
                                         subIten2Select = i + 1;
 
                                       });
@@ -399,7 +398,7 @@ class _AppState extends State<App> {
                                 {
                                   setState(() {
                                     itenSelect = 1;
-                                    subIten1Select = 1;
+                                    subIten1Select = 2;
                                   });
                                 }
                                 else
@@ -419,7 +418,7 @@ class _AppState extends State<App> {
                                   {
                                     setState(() {
                                       itenSelect = 0;
-                                      subIten1Select = 1;
+                                      subIten1Select = 2;
                                       subIten2Select = 1;
                                     });
                                   }
@@ -466,7 +465,7 @@ class _AppState extends State<App> {
                                {
                                  setState(() {
                                    itenSelect = 1;
-                                   subIten1Select = 2;
+                                   subIten1Select = 3;
                                  });
                                }
                                else
@@ -482,16 +481,17 @@ class _AppState extends State<App> {
                                      setState(() {
                                        itenSelect = 0;
                                        subIten1Select = 0;
-                                       subIten2Select = 2;
+                                       subIten2Select = 3;
                                      });
                                    }
                                    else if(dat == 2)
                                    {
                                      setState(() {
                                        itenSelect = 0;
-                                       subIten1Select = 1;
+                                       subIten1Select = 2;
                                        subIten2Select = 1;
                                      });
+
                                    }
                                    else
                                    {
@@ -532,7 +532,7 @@ class _AppState extends State<App> {
                                     {
                                       setState(() {
                                         itenSelect = 1;
-                                        subIten1Select = 2;
+                                        subIten1Select = 3;
                                         subIten2Select = 0;
                                       });
                                     }
@@ -544,7 +544,7 @@ class _AppState extends State<App> {
                                       {
                                         setState(() {
                                           itenSelect = 1;
-                                          subIten1Select = 2;
+                                          subIten1Select = 3;
                                           subIten2Select = 0;
                                         });
                                       }
@@ -562,7 +562,7 @@ class _AppState extends State<App> {
                                       controllerSearchSend.clear();
                                       setState(() {
                                         itenSelect = 1;
-                                        subIten1Select = 2;
+                                        subIten1Select = 3;
                                         subIten2Select = i + 1;
 
                                       });

@@ -34,14 +34,14 @@ FuntionSeleted(int itenSelection, int subIten1Selection,int subIten2Selection, d
             return newSend("", "", "", select);
         }
 
-        if (subIten1Selection == 1)
+        if (subIten1Selection == 2)
           return newImport();
 
       case 1:
         String tView = '';
         bool err = false;
 
-        if (subIten1Selection == 0 || subIten1Selection == 2)
+        if (subIten1Selection == 1 || subIten1Selection == 3)
         {
             err = true;
             tView = 'factory';
@@ -73,9 +73,9 @@ FuntionSeleted(int itenSelection, int subIten1Selection,int subIten2Selection, d
             }
         }
 
-        if (subIten1Selection == 1)
-          tView = 'mail';
         if (subIten1Selection == 2)
+          tView = 'mail';
+        if (subIten1Selection == 3)
         {
           err = true;
           tView = 'send';
