@@ -238,7 +238,7 @@ class _AppState extends State<App> {
                               if(sectors.isNotEmpty)
                               {
                                 setState(() {
-                                  adminSectors(context);
+                                  adminSector(context);
                                 });
                               }
                               else

@@ -8,7 +8,7 @@ import 'package:crud_factories/Widgets/headAlertDialog.dart';
 import 'package:flutter/material.dart';
 
 
-Future<void> adminSectors(BuildContext context) async {
+Future<void> adminSector(BuildContext context) async {
 
   double mWidth = 400;
 
