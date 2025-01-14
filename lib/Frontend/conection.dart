@@ -11,6 +11,7 @@ import 'package:crud_factories/Backend/SQL/manageSQl.dart';
 import 'package:crud_factories/Backend/SQL/importFactories.dart';
 import 'package:crud_factories/Backend/SQL/importLines.dart';
 import 'package:crud_factories/Backend/SQL/importMail.dart';
+import 'package:crud_factories/Backend/SQL/serverConected.dart';
 import 'package:crud_factories/Backend/data.dart';
 import 'package:crud_factories/Backend/CSV/exportConections.dart';
 import 'package:crud_factories/Functions/createId.dart';
@@ -796,19 +797,3 @@ class _conectionState extends State<conection> {
   }
 }
 
-serverConnect() async {
-
-  var executable ='';
-
-
-  if (Platform.isWindows) {
-
-    executable = routesManage[7].route;
-
-  }
-
-  final arguments = <String>[];
-  final process = await Process.start(
-      executable, arguments, runInShell: true);
-
-}
