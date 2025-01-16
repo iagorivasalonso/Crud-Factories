@@ -1,6 +1,3 @@
-
-import 'dart:io';
-
 import 'package:crud_factories/Backend/data.dart';
 import 'package:crud_factories/Widgets/headAlertDialog.dart';
 import 'package:file_picker/file_picker.dart';
@@ -8,6 +5,17 @@ import 'package:flutter/material.dart';
 
 void adminRoutes(BuildContext context) {
 
+  List<TextEditingController> _controllerNameRoute = [];
+  List<TextEditingController> _controllerRoute = [];
+
+  for(int i = 0; i <routesManage.length; i++)
+  {
+      _controllerNameRoute.add(TextEditingController());
+      _controllerRoute.add(TextEditingController());
+      _controllerNameRoute[i].text = routesManage[i].name;
+      _controllerRoute[i].text = routesManage[i].route;
+
+  }
   showDialog(
     context: context,
     barrierDismissible: false,
@@ -44,15 +52,16 @@ void adminRoutes(BuildContext context) {
                                         child: Padding(
                                           padding: const EdgeInsets.only(left: 18.0),
                                           child: Text(
-                                              routesManage[index].name,
+                                              _controllerNameRoute[index].text,
                                               maxLines: 1,
                                               overflow: TextOverflow.ellipsis,
                                             ),
                                         ),
                                       ),
-                                     const Expanded(
+                                     Expanded(
                                         flex: 3,
                                         child: TextField(
+                                          controller: _controllerRoute[index],
                                           decoration: InputDecoration(
                                             border: OutlineInputBorder(),
                                           ),
@@ -66,7 +75,7 @@ void adminRoutes(BuildContext context) {
                                             color: Colors.lightBlue,
                                             onPressed: () async {
                                               setState(() {
-
+                                                _pickFile(_controllerRoute[index]);
                                               });
                                             },
                                             child: const Text(
@@ -131,4 +140,20 @@ void adminRoutes(BuildContext context) {
     },
   );
 }
+  void _pickFile(TextEditingController controllerRoute) async {
 
+  FilePickerResult? result =  await FilePicker.platform.pickFiles(
+    dialogTitle: 'Seleccionar archivo',
+    type: FileType.custom,
+    allowedExtensions: ['csv','pdf'],
+  );
+
+  if(result == null) return;
+
+  PlatformFile file = result.files.single;
+
+
+  controllerRoute.text = file.path!;
+
+
+}
