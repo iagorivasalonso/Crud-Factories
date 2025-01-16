@@ -7,6 +7,7 @@ import 'package:crud_factories/Alertdialogs/typeConnection.dart';
 import 'package:crud_factories/Backend/CSV/chargueData%20csv.dart';
 import 'package:crud_factories/Backend/_selection_view.dart';
 import 'package:crud_factories/Backend/data.dart';
+import 'package:crud_factories/Frontend/adminRoutes.dart';
 import 'package:crud_factories/Frontend/adminSectors.dart';
 import 'package:crud_factories/Functions/changesNoSave.dart';
 import 'package:flutter/material.dart';
@@ -179,6 +180,18 @@ class _AppState extends State<App> {
                             ),
                           ]
                       )
+                  ),
+                  MenuButton(
+                      text: SizedBox(
+                          width: wItem,
+                          child: const Text("Rutas")),
+                      onTap: () async {
+
+                        setState(() {
+                          adminRoutes(context);
+                        });
+
+                      }
                   ),
                   MenuButton(
                       text: SizedBox(

@@ -1,4 +1,5 @@
 import 'package:crud_factories/Backend/data.dart';
+import 'package:crud_factories/Frontend/adminRoutes.dart';
 import 'package:crud_factories/Frontend/conection.dart';
 import 'package:crud_factories/Frontend/mail.dart';
 import 'package:crud_factories/Frontend/factory.dart';
@@ -7,7 +8,6 @@ import 'package:crud_factories/Frontend/send.dart';
 import 'package:crud_factories/Frontend/send_mail.dart';
 import 'package:crud_factories/Frontend/view.dart';
 import 'package:crud_factories/Functions/avoidRepeatArray.dart';
-import 'package:crud_factories/Objects/LineSend.dart';
 
 FuntionSeleted(int itenSelection, int subIten1Selection,int subIten2Selection, double mWidth, double mHeight) {
 
@@ -34,8 +34,11 @@ FuntionSeleted(int itenSelection, int subIten1Selection,int subIten2Selection, d
             return newSend("", "", "", select);
         }
 
+
+
         if (subIten1Selection == 2)
           return newImport();
+
 
       case 1:
         String tView = '';
