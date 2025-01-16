@@ -1,9 +1,5 @@
-
-import 'dart:io';
-
 import 'package:crud_factories/Backend/data.dart';
 import 'package:crud_factories/Widgets/headAlertDialog.dart';
-import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 
 void adminRoutes(BuildContext context) {
@@ -14,18 +10,18 @@ void adminRoutes(BuildContext context) {
     builder: (BuildContext context) {
       return SingleChildScrollView(
         child: Padding(
-          padding: const EdgeInsets.only(top: 100.0),
+          padding: const EdgeInsets.only(top: 80.0),
           child: StatefulBuilder(
              builder: ((BuildContext context, void Function(void Function()) setState) => Dialog(
                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(0)),
                child: SizedBox(
-                 height: 300,
+                 height: 400,
                  width: 500,
                  child: Column(
                    children: [
                      headAlert(title:"Selector de rutas"),
                    SizedBox(
-                     height: 200,
+                     height: 300,
                      width: 500,
                      child: Padding(
                        padding: const EdgeInsets.only(top: 20.0, bottom: 20.0),
