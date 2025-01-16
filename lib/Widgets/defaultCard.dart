@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 Card defaultCard({
    required String title,
    required String description,
-  required Color color,
+   required Color color,
 }){
 
    return Card(
