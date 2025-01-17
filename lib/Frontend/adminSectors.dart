@@ -17,7 +17,6 @@ Future<void> adminSector(BuildContext context) async {
     builder: (BuildContext context) {
 
       final screenWith = MediaQuery.of(context).size.width;
-      final screenHeight = MediaQuery.of(context).size.height;
 
       return StatefulBuilder(
         builder: (BuildContext context, void Function(void Function()) setState) => Dialog(
@@ -28,9 +27,9 @@ Future<void> adminSector(BuildContext context) async {
             child: Column(
               children: [
                 headAlert(title: "Manejo Sectores"),
-                if(screenHeight>105.0)
                 const SizedBox(height: 60),
                 Flexible(
+                  flex: 1,
                   child: Padding(
                     padding: const EdgeInsets.only(left: 30.0, right: 30.0),
                     child: ListView.builder(
@@ -162,7 +161,5 @@ Future<void> adminSector(BuildContext context) async {
       );
     },
   );
-
-
 
 }

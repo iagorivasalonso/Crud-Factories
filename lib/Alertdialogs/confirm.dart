@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 
 Future<bool> confirm(BuildContext  context, String action) async {
 
-  bool? err = await showDialog(
+  bool? conf = await showDialog(
        context: context,
        builder: (BuildContext context) {
          return StatefulBuilder(
@@ -54,6 +54,6 @@ Future<bool> confirm(BuildContext  context, String action) async {
          );
 
        });
-   return err ?? false;
+   return conf ?? false;
 }
 
