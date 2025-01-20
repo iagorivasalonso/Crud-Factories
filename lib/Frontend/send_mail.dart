@@ -169,9 +169,9 @@ class _sendMailState extends State<sendMail> {
                                                 ),
                                               ),
                                             ),
-                                                                                    ),
-                                                                                  ),
-                                          ),
+                                           ),
+                                         ),
+                                       ),
                                     ],
                                   )
                                     : Row(
