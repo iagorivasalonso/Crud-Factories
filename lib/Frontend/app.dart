@@ -22,24 +22,48 @@ class App extends StatefulWidget {
 
 class _AppState extends State<App> {
 
-
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
 
-     chargueDataCSV();
-
     WidgetsBinding.instance?.addPostFrameCallback((_) async {
+
 
           bool SQLbd = await typeConection(context);
 
+          await chargueDataCSV();
+
           if(SQLbd == true)
           {
+
+            if (routesManage.isEmpty)
+            {
+              String action = "No se encontro archivo de rutas";
+              await error(context, action);
+
+              setState(() {
+                adminRoutes(context,SQLbd);
+              });
+            }
+
             setState(() {
               itenSelect = 2;
               subIten1Select = 1;
             });
+          }
+          else
+          {
+
+              if (routesManage.isEmpty)
+              {
+                String action = "No se encontro archivo de rutas";
+                await error(context, action);
+
+                setState(() {
+                  adminRoutes(context);
+                });
+              }
           }
     });
 
@@ -186,7 +210,6 @@ class _AppState extends State<App> {
                           width: wItem,
                           child: const Text("Rutas")),
                       onTap: () async {
-
                         setState(() {
                           adminRoutes(context);
                         });

@@ -6,12 +6,38 @@ import 'package:crud_factories/Widgets/headAlertDialog.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 
-Future<bool> adminRoutes(BuildContext context) async {
+Future<bool> adminRoutes(BuildContext context, [bool? sqLbd]) async {
+
+  List <String> nameRoutes = ['Routes', 'Conections', 'serverSql', 'Sectors', 'Factories', 'Empleoyes', 'Lines', 'Mails'];
 
   List<TextEditingController> _controllerNameRoute = [];
   List<TextEditingController> _controllerRoute = [];
 
-  campCharge(_controllerNameRoute,_controllerRoute);
+  bool onlySql = false;
+
+  if(sqLbd!= null)
+  {
+    onlySql = true;
+  }
+  
+  for(int i = 0; i <nameRoutes!.length; i++)
+  {
+    _controllerNameRoute.add(TextEditingController());
+    _controllerRoute.add(TextEditingController());
+  }
+
+  if(routesManage.isEmpty)
+  {
+    for(int i = 0; i <nameRoutes.length; i++)
+    {
+      _controllerNameRoute[i].text = nameRoutes[i];
+      _controllerRoute[i].text = " ";
+    }
+  }
+  else
+  {
+    campCharge(_controllerNameRoute,_controllerRoute);
+  }
 
   bool? ruta = await showDialog(
     context: context,
@@ -21,76 +47,132 @@ Future<bool> adminRoutes(BuildContext context) async {
            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(0)),
            child: SingleChildScrollView(
              child: SizedBox(
-               height: 400,
+               height: 500,
                width: 500,
                child: Column(
                  children: [
                    headAlert(title:"Selector de rutas"),
-                 SizedBox(
-                   height: 300,
-                   width: 500,
-                   child: Padding(
-                     padding: const EdgeInsets.only(top: 20.0, bottom: 20.0),
-                     child: ListView.builder(
-                       itemCount: routesManage.length,
-                       itemBuilder: (BuildContext context, int index) {
-                         return Padding(
-                           padding: const EdgeInsets.only(left: 16.0, right: 16.0, top: 8.0, bottom: 8.0),
-                           child: Row(
-                             children: [
-                              Expanded(
-                                child: Row(
-                                  children: [
-                                    Expanded(
-                                      flex: 1,
-                                      child: Padding(
-                                        padding: const EdgeInsets.only(left: 18.0),
-                                        child: Text(
-                                            _controllerNameRoute[index].text,
-                                            maxLines: 1,
-                                            overflow: TextOverflow.ellipsis,
-                                          ),
-                                      ),
-                                    ),
-                                   Expanded(
-                                      flex: 3,
-                                      child: TextField(
-                                        controller: _controllerRoute[index],
-                                        decoration: InputDecoration(
-                                          border: OutlineInputBorder(),
-                                        ),
-                                      ),
-                                    ),
-                                    Expanded(
-                                      flex: 1,
-                                      child: Padding(
-                                        padding: const EdgeInsets.only(left: 18.0),
-                                        child: MaterialButton(
-                                          color: Colors.lightBlue,
-                                          onPressed: () async {
-                                            setState(() {
-                                              _pickFile(_controllerRoute[index]);
-                                            });
-                                          },
-                                          child: const Text(
-                                            "Examinar",
-                                            maxLines: 1,
-                                            overflow: TextOverflow.ellipsis,
-                                            style: TextStyle(color: Colors.white),
-                                          ),
-                                        ),
-                                      ),
-                                    )
-                                  ],
-                                ),
+                 Padding(
+                   padding: const EdgeInsets.only(top: 40.0, left: 20.0),
+                   child: Row(
+                      children: [
+                          Column(
+                            children: [
+                              Row(
+                                children: [
+                                  Padding(
+                                    padding: const EdgeInsets.only(left: 20.0),
+                                    child: Text("Todas"),
+                                  ),
+                                  Radio(
+                                      value: false,
+                                      groupValue: onlySql,
+                                      onChanged: (value) {
+                                        setState(() {
+                                          onlySql = false;
+                                        });
+                                      }),
+                                ],
                               ),
 
-                             ],
-                           ),
-                         );
-                       },
-                     ),
+                            ],
+                          ),
+                          Column(
+                          children: [
+                            Row(
+                              children: [
+                                Padding(
+                                  padding: const EdgeInsets.only(left: 20.0),
+                                  child: Text("SQL"),
+                                ),
+                                Radio(
+                                    value: true,
+                                    groupValue: onlySql,
+                                    onChanged: (value) {
+                                      setState(() {
+                                        onlySql = true;
+                                      });
+                                    }),
+
+                              ],
+                            ),
+
+                          ],
+                        )
+                      ],
                    ),
+                 ),
+                 Row(
+                   children: [
+                     SizedBox(
+                       height: 300,
+                       width: 500,
+                       child: Padding(
+                         padding: const EdgeInsets.only(top: 20.0, bottom: 20.0),
+                         child: ListView.builder(
+                           itemCount: onlySql ==  true
+                                      ? 3
+                                      : nameRoutes.length,
+                           itemBuilder: (BuildContext context, int index) {
+                             return Padding(
+                               padding: const EdgeInsets.only(left: 16.0, right: 16.0, top: 8.0, bottom: 8.0),
+                               child: Row(
+                                 children: [
+                                  Expanded(
+                                    child: Row(
+                                      children: [
+                                        Expanded(
+                                          flex: 1,
+                                          child: Padding(
+                                            padding: const EdgeInsets.only(left: 18.0),
+                                            child: Text(
+                                                _controllerNameRoute[index].text,
+                                                maxLines: 1,
+                                                overflow: TextOverflow.ellipsis,
+                                              ),
+                                          ),
+                                        ),
+                                       Expanded(
+                                          flex: 3,
+                                          child: TextField(
+                                            controller: _controllerRoute[index],
+                                            decoration: InputDecoration(
+                                              border: OutlineInputBorder(),
+                                            ),
+                                          ),
+                                        ),
+                                        Expanded(
+                                          flex: 1,
+                                          child: Padding(
+                                            padding: const EdgeInsets.only(left: 18.0),
+                                            child: MaterialButton(
+                                              color: Colors.lightBlue,
+                                              onPressed: () async {
+                                                setState(() {
+                                                  _pickFile(_controllerRoute[index]);
+                                                });
+                                              },
+                                              child: const Text(
+                                                "Examinar",
+                                                maxLines: 1,
+                                                overflow: TextOverflow.ellipsis,
+                                                style: TextStyle(color: Colors.white),
+                                              ),
+                                            ),
+                                          ),
+                                        )
+                                      ],
+                                    ),
+                                  ),
+                     
+                                 ],
+                               ),
+                             );
+                           },
+                         ),
+                       ),
+                     ),
+                   ],
                  ),
 
                  Expanded(
@@ -163,13 +245,9 @@ void campCharge(List<TextEditingController> _controllerNameRoute, List<TextEditi
 
   for(int i = 0; i <routesManage.length; i++)
   {
-    _controllerNameRoute.add(TextEditingController());
-    _controllerRoute.add(TextEditingController());
     _controllerNameRoute[i].text = routesManage[i].name;
     _controllerRoute[i].text = routesManage[i].route;
-
   }
-
 }
   void _pickFile(TextEditingController controllerRoute) async {
 
@@ -183,8 +261,6 @@ void campCharge(List<TextEditingController> _controllerNameRoute, List<TextEditi
 
   PlatformFile file = result.files.single;
 
-
   controllerRoute.text = file.path!;
-
 
 }
