@@ -13,7 +13,7 @@ Future<bool> warning(BuildContext  context,String action) async{
            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(0)),
            child: SizedBox(
              width: 380,
-             height: action.length > 60
+             height: action.length > 59
                      ? 230
                      : 175,
              child: Column(
