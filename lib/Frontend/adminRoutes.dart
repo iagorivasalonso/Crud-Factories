@@ -55,16 +55,16 @@ Future<bool> adminRoutes(BuildContext context, [bool? sqLbd]) async {
                  Expanded(
                      child: Align(
                        alignment: Alignment.topLeft,
-                       child: SizedBox(
-                         width: 300,
-                         child: Padding(
-                           padding: const EdgeInsets.only(top: 40.0),
+                       child: Padding(
+                         padding: const EdgeInsets.only(top: 40.0),
+                         child: SizedBox(
+                           width: 310,
                            child: Row(
                              children: [
                                Expanded(
-                                 flex:3,
+                                 flex:2,
                                  child: Padding(
-                                   padding: const EdgeInsets.only(left: 40.0,right: 20.0),
+                                   padding: const EdgeInsets.only(left: 40.0),
                                    child: Text("Fuente",
                                      maxLines: 1,
                                      overflow: TextOverflow.ellipsis,
@@ -72,36 +72,54 @@ Future<bool> adminRoutes(BuildContext context, [bool? sqLbd]) async {
                                  ),
                                ),
                                Expanded(
-                                 child: Text("Todas",
-                                   maxLines: 1,
-                                   overflow: TextOverflow.ellipsis,
+                                 flex: 1,
+                                 child: Row(
+                                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                   children: [
+                                     Expanded(
+                                       child: Text("Todas",
+                                         maxLines: 1,
+                                         overflow: TextOverflow.ellipsis,
+                                       ),
+                                     ),
+                                     Expanded(
+                                       child: Radio(
+                                           value: false,
+                                           groupValue: onlySql,
+                                           onChanged: (value) {
+                                             setState(() {
+                                               onlySql = false;
+                                             });
+                                           }),
+                                     ),
+                                   ],
                                  ),
                                ),
                                Expanded(
-                                   child: Radio(
-                                       value: false,
-                                       groupValue: onlySql,
-                                       onChanged: (value) {
-                                         setState(() {
-                                           onlySql = false;
-                                         });
-                                       }),
-                               ),
-                               Expanded(
-                                 child: Text("Sql",
-                                   maxLines: 1,
-                                   overflow: TextOverflow.ellipsis,
+                                 child: Row(
+                                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                   children: [
+                                     Expanded(
+                                       child: Padding(
+                                         padding: const EdgeInsets.only(left: 10),
+                                         child: Text("SQL",
+                                           maxLines: 1,
+                                           overflow: TextOverflow.ellipsis,
+                                         ),
+                                       ),
+                                     ),
+                                     Expanded(
+                                       child: Radio(
+                                           value: true,
+                                           groupValue: onlySql,
+                                           onChanged: (value) {
+                                             setState(() {
+                                               onlySql = true;
+                                             });
+                                           }),
+                                     ),
+                                   ],
                                  ),
-                               ),
-                               Expanded(
-                                 child:   Radio(
-                                     value: true,
-                                     groupValue: onlySql,
-                                     onChanged: (value) {
-                                       setState(() {
-                                         onlySql = true;
-                                       });
-                                     }),
                                ),
                              ],
                            ),
