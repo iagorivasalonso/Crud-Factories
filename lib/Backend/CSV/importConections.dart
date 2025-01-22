@@ -25,13 +25,13 @@ csvImportConections(List<String> fileContent, List<Conection> conections) async 
   } catch (e) {
     if(e.toString().contains("El sistema no puede encontrar el archivo especificado"))
     {
-      print("no se encuentra archivo de conexiones");
+      errorFiles.add("no se encuentra archivo de conexiones");
     }
     else
     {
       if(e.toString().contains("Invalid value"))
       {
-        print("error de formato de archivo de conexiones");
+        errorFiles.add("error de formato de archivo de conexiones");
       }
     }
   }

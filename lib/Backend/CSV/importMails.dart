@@ -24,13 +24,13 @@ csvImportMails(List<String> fileContent, List<Mail> mails) async {
   } catch (e) {
     if(e.toString().contains("El sistema no puede encontrar el archivo especificado"))
     {
-      print("no se encuentra archivo de emails");
+      errorFiles.add("no se encuentra archivo de emails");
     }
     else
     {
       if(e.toString().contains("Invalid value"))
       {
-        print("error de formato de archivo de emails");
+        errorFiles.add("error de formato de archivo de emails");
       }
     }
   }

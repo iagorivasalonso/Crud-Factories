@@ -25,13 +25,13 @@ csvImportLines(List<String> fileContent, List<LineSend> line ) async {
   } catch (e) {
     if(e.toString().contains("El sistema no puede encontrar el archivo especificado"))
     {
-      print("no se encuentra archivo de lineas");
+      errorFiles.add("no se encuentra archivo de lineas");
     }
     else
     {
       if(e.toString().contains("Invalid value"))
       {
-        print("error de formato de archivo de lineas");
+        errorFiles.add("error de formato de archivo de lineas");
       }
     }
   }
