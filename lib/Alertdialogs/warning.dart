@@ -14,7 +14,7 @@ Future<bool> warning(BuildContext  context,String action) async{
            child: SizedBox(
              width: 380,
              height: action.length > 59
-                     ? 230
+                     ? 240
                      : 175,
              child: Column(
                children: [
