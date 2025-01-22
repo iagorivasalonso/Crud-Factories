@@ -22,13 +22,13 @@ csvImportSectors(List<String> fileContent, List<Sector> sectors) async {
   } catch (e) {
     if(e.toString().contains("El sistema no puede encontrar el archivo especificado"))
     {
-      print("no se encuentra archivo de sectores");
+      errorFiles.add("no se encuentra archivo de sectores");
     }
     else
     {
       if(e.toString().contains("Invalid value"))
       {
-        print("error de formato de archivo de sectores");
+        errorFiles.add("error de formato de archivo de sectores");
       }
     }
   }
