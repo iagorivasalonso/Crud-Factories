@@ -1,4 +1,5 @@
 import 'package:crud_factories/Alertdialogs/confirm.dart';
+import 'package:crud_factories/Backend/CSV/chargueData%20csv.dart';
 import 'package:crud_factories/Backend/CSV/exportRoutes.dart';
 import 'package:crud_factories/Backend/data.dart';
 import 'package:crud_factories/Objects/RouteCSV.dart';
@@ -6,21 +7,28 @@ import 'package:crud_factories/Widgets/headAlertDialog.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 
-Future<bool> adminRoutes(BuildContext context, [bool? sqLbd]) async {
-
-  List <String> nameRoutes = ['Routes', 'Conections', 'serverSql', 'Sectors', 'Factories', 'Empleoyes', 'Lines', 'Mails'];
+Future<bool> adminRoutes(BuildContext context, [bool? sqlBd]) async {
 
   List<TextEditingController> _controllerNameRoute = [];
   List<TextEditingController> _controllerRoute = [];
 
   bool onlySql = false;
 
-  if(sqLbd!= null)
+  if(sqlBd == true)
   {
     onlySql = true;
   }
-  
-  for(int i = 0; i <nameRoutes!.length; i++)
+
+  if(onlySql == false)
+  {
+    currentRoutes = allRoutes;
+  }
+  else
+  {
+     currentRoutes = SQLRoutes;
+  }
+
+  for(int i = 0; i <allRoutes!.length; i++)
   {
     _controllerNameRoute.add(TextEditingController());
     _controllerRoute.add(TextEditingController());
@@ -28,9 +36,9 @@ Future<bool> adminRoutes(BuildContext context, [bool? sqLbd]) async {
 
   if(routesManage.isEmpty)
   {
-    for(int i = 0; i <nameRoutes.length; i++)
+    for(int i = 0; i <allRoutes.length; i++)
     {
-      _controllerNameRoute[i].text = nameRoutes[i];
+      _controllerNameRoute[i].text = allRoutes[i];
       _controllerRoute[i].text = " ";
     }
   }
@@ -89,6 +97,7 @@ Future<bool> adminRoutes(BuildContext context, [bool? sqLbd]) async {
                                            onChanged: (value) {
                                              setState(() {
                                                onlySql = false;
+                                               currentRoutes = allRoutes;
                                              });
                                            }),
                                      ),
@@ -115,6 +124,7 @@ Future<bool> adminRoutes(BuildContext context, [bool? sqLbd]) async {
                                            onChanged: (value) {
                                              setState(() {
                                                onlySql = true;
+                                               currentRoutes = SQLRoutes;
                                              });
                                            }),
                                      ),
@@ -136,9 +146,7 @@ Future<bool> adminRoutes(BuildContext context, [bool? sqLbd]) async {
                          child: Padding(
                            padding: const EdgeInsets.only(top: 20.0, bottom: 20.0),
                            child: ListView.builder(
-                             itemCount: onlySql ==  true
-                                        ? 3
-                                        : nameRoutes.length,
+                             itemCount: currentRoutes.length,
                              itemBuilder: (BuildContext context, int index) {
                                return Padding(
                                  padding: const EdgeInsets.only(left: 16.0, right: 16.0, top: 8.0, bottom: 8.0),
@@ -215,7 +223,7 @@ Future<bool> adminRoutes(BuildContext context, [bool? sqLbd]) async {
 
                                     int idNew = -1;
 
-                                    for(int i = 0; i < routesManage.length; i++)
+                                    for(int i = 0; i < currentRoutes.length; i++)
                                     {
                                       idNew = i + 1;
 
@@ -225,11 +233,13 @@ Future<bool> adminRoutes(BuildContext context, [bool? sqLbd]) async {
                                           route: _controllerRoute[i].text
                                       ));
                                     }
+
                                      String action = 'Las rutas se han guardado correctamente';
-                                     bool conf = await confirm(context, action);
+                                      await confirm(context, action);
 
                                      setState((){
                                        csvExportatorRoutes(routesNew);
+                                       chargueDataCSV();
                                        Navigator.of(context).pop(true);
                                      });
                                  },
@@ -272,7 +282,7 @@ void campCharge(List<TextEditingController> _controllerNameRoute, List<TextEditi
 
   for(int i = 0; i <routesManage.length; i++)
   {
-    _controllerNameRoute[i].text = routesManage[i].name;
+     _controllerNameRoute[i].text = routesManage[i].name;
     _controllerRoute[i].text = routesManage[i].route;
   }
 }
