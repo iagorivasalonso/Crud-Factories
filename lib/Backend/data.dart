@@ -19,10 +19,14 @@ List<LineSend> lineSector = [];
 List<Conection> conections = [];
 List<dynamic> routesCSV = [];
 List<RouteCSV> routesManage = [];
-List<String> fileContent =[];
-List<String> dateSends =[];
+List<String> fileContent = [];
+List<String> errorFiles =[];
+List<String> dateSends = [];
 TextEditingController controllerSearchSend = TextEditingController();
 
+List <String> SQLRoutes = [];
+List <String> allRoutes = [];
+List <String> currentRoutes = [];
 var conn;
 
 String BaseDateSelected = "Nuevo";

@@ -2,14 +2,17 @@ import 'package:crud_factories/Alertdialogs/closeApp.dart';
 import 'package:crud_factories/Alertdialogs/confirm.dart';
 import 'package:crud_factories/Alertdialogs/create%20sector.dart';
 import 'package:crud_factories/Alertdialogs/error.dart';
+import 'package:crud_factories/Alertdialogs/errorList.dart';
 import 'package:crud_factories/Alertdialogs/noCategory.dart';
 import 'package:crud_factories/Alertdialogs/typeConnection.dart';
+import 'package:crud_factories/Alertdialogs/warning.dart';
 import 'package:crud_factories/Backend/CSV/chargueData%20csv.dart';
 import 'package:crud_factories/Backend/_selection_view.dart';
 import 'package:crud_factories/Backend/data.dart';
 import 'package:crud_factories/Frontend/adminRoutes.dart';
 import 'package:crud_factories/Frontend/adminSectors.dart';
 import 'package:crud_factories/Functions/changesNoSave.dart';
+import 'package:crud_factories/Objects/RouteCSV.dart';
 import 'package:flutter/material.dart';
 import 'package:menu_bar/menu_bar.dart';
 
@@ -29,43 +32,84 @@ class _AppState extends State<App> {
 
     WidgetsBinding.instance?.addPostFrameCallback((_) async {
 
+          String action = "";
+          List<RouteCSV> routesCurrent = [];
 
-          bool SQLbd = await typeConection(context);
+          bool isChargue = await chargueDataCSV();
+          bool sqlBd = await typeConection(context);
 
-          await chargueDataCSV();
-
-          if(SQLbd == true)
+          if (sqlBd == true)
           {
+                String name = '';
 
-            if (routesManage.isEmpty)
-            {
-              String action = "No se encontro archivo de rutas";
-              await error(context, action);
+                for(int i = 0; i < routesManage.length; i++)
+                {
+                   name = routesManage[i].name;
 
-              setState(() {
-                adminRoutes(context,SQLbd);
-              });
-            }
+                   for (int y = 0; y < SQLRoutes.length; y++)
+                   {
+                      if(SQLRoutes[y] == name)
+                      {
+                        routesCurrent.add(routesManage[i]);
+                      }
+                   }
+                }
 
-            setState(() {
-              itenSelect = 2;
-              subIten1Select = 1;
-            });
+                setState(() {
+                  itenSelect = 2;
+                  subIten1Select = 1;
+                });
           }
           else
           {
-
-              if (routesManage.isEmpty)
-              {
-                String action = "No se encontro archivo de rutas";
-                await error(context, action);
-
-                setState(() {
-                  adminRoutes(context);
-                });
-              }
+             routesCurrent = routesManage;
           }
-    });
+
+
+          if (isChargue == true)
+          {
+               bool fileFail = false;
+
+               for(int i = 0; i < routesCurrent.length; i++)
+               {
+                   if(routesCurrent[i].route.isEmpty)
+                   {
+                        fileFail = true;
+                   }
+               }
+
+               if(fileFail == true)
+               {
+                    action = "No tienes completo el archivo de rutas \n ¿Desea completarlo?";
+                    bool rutesComplete = await warning(context, action);
+
+                    if(rutesComplete == true)
+                    {
+                      setState(() {
+                        adminRoutes(context,sqlBd);
+                      });
+                    }
+               }
+          }
+
+          if(errorFiles.isNotEmpty)
+          {
+               if(errorFiles.length > 1)
+               {
+                 errors(context, errorFiles);
+               }
+               else
+               {
+                  String action = errorFiles[0];
+                  await error(context, action);
+
+                  setState(() {
+                    adminRoutes(context,sqlBd);
+                  });
+               }
+
+          }
+     });
 
   }
 
@@ -78,8 +122,6 @@ class _AppState extends State<App> {
     double wItem= 80;
     double wItemMax= 120;
     Color colorBar =Colors.white;
-
-
 
 
     List<BarButton> _menuBarButtons() {
