@@ -3,7 +3,7 @@ import 'package:crud_factories/Widgets/headAlertDialog.dart';
 import 'package:flutter/material.dart';
 
 Future<bool> errors(BuildContext context, List<String> errorFiles) async {
-  double heightAlert = errorFiles.length * 26.0;
+  double heightAlert = errorFiles.length * 28.0;
 
   bool? err = await showDialog(
     context: context,
@@ -14,12 +14,12 @@ Future<bool> errors(BuildContext context, List<String> errorFiles) async {
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(0)),
           child: SizedBox(
             width: 400,
-            height: 150 + heightAlert,
+            height: 200 + heightAlert,
             child: Column(
               children: [
                 headAlert(title: "Error"),
                 Expanded(
-                  flex: 4,
+                  flex: 3,
                   child: Padding(
                     padding: const EdgeInsets.only(top: 40.0,left: 60.0),
                     child: ListView.builder(
