@@ -16,6 +16,8 @@ Future<bool> chargueDataCSV() async {
   routesManage.clear();
   bool isCorrect = true;
 
+  allRoutes = ['Routes', 'Conections', 'serverSql', 'Sectors', 'Factories', 'Empleoyes', 'Lines', 'Mails'];
+  SQLRoutes = ['Routes', 'Conections', 'serverSql'];
 
   if (routesManage.isEmpty)
   {
@@ -32,9 +34,6 @@ Future<bool> chargueDataCSV() async {
 
   if (await filePathRoutes.exists())
   {
-
-    allRoutes = ['Routes', 'Conections', 'serverSql', 'Sectors', 'Factories', 'Empleoyes', 'Lines', 'Mails'];
-    SQLRoutes = ['Routes', 'Conections', 'serverSql'];
 
      if(routesManage.isNotEmpty)
      {
