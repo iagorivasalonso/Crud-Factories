@@ -243,7 +243,7 @@ class _newMailState extends State<newMail> {
                                                         for (int i = 0; i < mails.length; i++)
                                                           allKeys.add(mails[i].addrres);
 
-                                                        String campOld = mails[select].addrres;
+                                                        String campOld = "";
                                                         String pas1 = controllerPas.text;
                                                         String pas2 = controllerPasVerificator.text;
 
