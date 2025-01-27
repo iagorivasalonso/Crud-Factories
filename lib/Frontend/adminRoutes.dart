@@ -39,7 +39,18 @@ Future<bool> adminRoutes(BuildContext context, [bool? sqlBd]) async {
     for(int i = 0; i <allRoutes.length; i++)
     {
       _controllerNameRoute[i].text = allRoutes[i];
-      _controllerRoute[i].text = " ";
+
+         if(i == 0)
+         {
+            String tmp = fRoutes.toString();
+            List<String> partRoute = tmp.split("\'");
+            _controllerRoute[i].text = partRoute[1];
+         }
+         else
+         {
+           _controllerRoute[i].text = " ";
+         }
+
     }
   }
   else
@@ -69,7 +80,7 @@ Future<bool> adminRoutes(BuildContext context, [bool? sqlBd]) async {
                            width: 310,
                            child: Row(
                              children: [
-                               Expanded(
+                               const Expanded(
                                  flex:2,
                                  child: Padding(
                                    padding: const EdgeInsets.only(left: 40.0),
@@ -84,7 +95,7 @@ Future<bool> adminRoutes(BuildContext context, [bool? sqlBd]) async {
                                  child: Row(
                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                    children: [
-                                     Expanded(
+                                    const Expanded(
                                        child: Text("Todas",
                                          maxLines: 1,
                                          overflow: TextOverflow.ellipsis,
@@ -108,9 +119,9 @@ Future<bool> adminRoutes(BuildContext context, [bool? sqlBd]) async {
                                  child: Row(
                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                    children: [
-                                     Expanded(
+                                     const Expanded(
                                        child: Padding(
-                                         padding: const EdgeInsets.only(left: 10),
+                                         padding: EdgeInsets.only(left: 10),
                                          child: Text("SQL",
                                            maxLines: 1,
                                            overflow: TextOverflow.ellipsis,
@@ -170,7 +181,7 @@ Future<bool> adminRoutes(BuildContext context, [bool? sqlBd]) async {
                                             flex: 3,
                                             child: TextField(
                                               controller: _controllerRoute[index],
-                                              decoration: InputDecoration(
+                                              decoration: const InputDecoration(
                                                 border: OutlineInputBorder(),
                                               ),
                                             ),
