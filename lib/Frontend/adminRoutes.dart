@@ -302,7 +302,7 @@ void campCharge(List<TextEditingController> _controllerNameRoute, List<TextEditi
   FilePickerResult? result =  await FilePicker.platform.pickFiles(
     dialogTitle: 'Seleccionar archivo',
     type: FileType.custom,
-    allowedExtensions: ['csv','pdf'],
+    allowedExtensions:  ['csv','exe'],
   );
 
   if(result == null) return;
