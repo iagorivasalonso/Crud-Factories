@@ -126,7 +126,7 @@ Future<bool> createSector(BuildContext  context, String modif) async {
                                     }
                                     else
                                     {
-                                      String action = "Ese departamento ya existe";
+                                      String action = "Ese sector ya existe";
                                       error(context, action);
                                     }
                                   }
@@ -142,7 +142,6 @@ Future<bool> createSector(BuildContext  context, String modif) async {
                                        }
                                     }
 
-
                                     if(conn != null)
                                     {
                                       sqlModifySector(currentSector);
@@ -151,8 +150,6 @@ Future<bool> createSector(BuildContext  context, String modif) async {
                                     {
                                       csvExportatorSectors(sectors);
                                     }
-
-
                                   }
 
                                   Navigator.of(context).pop(true);
