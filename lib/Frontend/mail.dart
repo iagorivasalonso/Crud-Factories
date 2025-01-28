@@ -206,7 +206,7 @@ class _newMailState extends State<newMail> {
                                               color: Colors.white)
                                       ),
                                       onPressed: () async {
-
+                                        List <Mail> current = [];
                                         String action = "";
 
                                         if(controllerMail.text.isEmpty)
@@ -237,7 +237,6 @@ class _newMailState extends State<newMail> {
                                                  else
                                                  {
                                                       setState(() {
-                                                        List <Mail> current = [];
                                                         List <String> allKeys = [];
                                                         String nameCamp = "email";
                                                         for (int i = 0; i < mails.length; i++)
@@ -300,44 +299,29 @@ class _newMailState extends State<newMail> {
                                                                  }
                                                             }
                                                             saveChanges = false;
-
-                                                            if (result == true)
-                                                            {
-
-
-                                                              if (select == -1)
-                                                              {
-                                                                action = 'El correo se ha dado de alta correctamente';
-                                                                confirm(context, action);
-                                                              }
-                                                              else
-                                                              {
-                                                                action = 'El correo se ha modificado correctamente';
-                                                                confirm(context, action);
-                                                              }
-                                                            }
-                                                            else
-                                                            {
-                                                              action = 'Compruebe su usuario o contraseña';
-                                                              error(context, action);
-                                                            }
                                                           }
-                                                        }
-
-                                                        if (conn != null) {
-                                                          if (select == -1) {
-                                                            sqlCreateMail(current);
-                                                          }
-                                                          else {
-                                                            current.add(mails[select]);
-                                                            sqlModifyMail(current);
-                                                          }
-                                                        }
-                                                        else {
-                                                          mails = mails + current;
-                                                          csvExportatorMails(mails);
                                                         }
                                                       });
+
+                                                        if (result == true)
+                                                        {
+                                                          if (select == -1)
+                                                          {
+                                                            action = 'El correo se ha dado de alta correctamente';
+                                                            confirm(context, action);
+                                                          }
+                                                          else
+                                                          {
+                                                            action = 'El correo se ha modificado correctamente';
+                                                            confirm(context, action);
+                                                          }
+                                                        }
+                                                        else
+                                                        {
+                                                          action = 'Compruebe su usuario o contraseña';
+                                                          error(context, action);
+                                                        }
+
                                                  }
                                         }
 
@@ -380,7 +364,7 @@ class _newMailState extends State<newMail> {
   }
 
   Future<bool> testMail() async {
-    bool connectEmail = true;
+    bool connectEmail = false;
     String username = controllerMail.text;
     String password = "";
 
@@ -408,8 +392,7 @@ class _newMailState extends State<newMail> {
         final sendReport = await send(message, smtpServer);
         print('Message sent: ' + sendReport.toString());
       }
-      String action ='Conexion establecida';
-      confirm(context,action);
+
     } catch (e) {
       print(e);
       connectEmail = false;
