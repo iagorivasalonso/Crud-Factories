@@ -1,7 +1,7 @@
 import 'package:crud_factories/Widgets/headAlertDialog.dart';
 import 'package:flutter/material.dart';
 
-Future<bool> typeConection (BuildContext  context,) async {
+Future<bool> typeConection (BuildContext  context) async {
 
   bool? tConnection  = await   showDialog(
       context: context,
