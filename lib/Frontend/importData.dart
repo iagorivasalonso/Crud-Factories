@@ -205,8 +205,7 @@ class _newImportState extends State<newImport> {
                                           }
                                           else
                                           {
-                                              bool correct = await csvExportatorSectors(sectors);
-
+                                              await csvExportatorSectors(sectors);
                                           }
 
                                       }
@@ -292,8 +291,7 @@ class _newImportState extends State<newImport> {
                                                 }
                                                 else
                                                 {
-                                                  bool correct = await csvExportatorEmpleoyes(empleoyes);
-                                                  print(correct);
+                                                     await csvExportatorEmpleoyes(empleoyes);
                                                 }
                                           }
                                           else
@@ -352,8 +350,7 @@ class _newImportState extends State<newImport> {
                                         }
                                         else
                                         {
-                                          bool correct = await  csvExportatorMails(mails);
-                                          print(correct);
+                                            await  csvExportatorMails(mails);
                                         }
                                       }
                                       if(linesNew.isNotEmpty)
@@ -431,8 +428,7 @@ class _newImportState extends State<newImport> {
                                               }
                                               else
                                               {
-                                                bool correct = await  csvExportatorLines(lineSector);
-                                                print(correct);
+                                                   await  csvExportatorLines(lineSector);;
                                               }
                                         }
                                         else
@@ -487,8 +483,8 @@ class _newImportState extends State<newImport> {
                                           confirm(context, action);
                                         }
 
-                                        bool correct = await csvExportatorConections(conections);
-                                        print(correct);
+                                        await csvExportatorConections(conections);
+
                                       }
                                       if(factoriesNew.isNotEmpty)
                                       {
@@ -564,8 +560,7 @@ class _newImportState extends State<newImport> {
                                               }
                                               else
                                               {
-                                                bool correct = await csvExportatorFactories(allFactories);
-                                                print(correct);
+                                                await csvExportatorFactories(allFactories);
                                               }
                                           }
                                           else
