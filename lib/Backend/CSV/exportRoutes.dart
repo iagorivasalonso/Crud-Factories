@@ -2,7 +2,9 @@ import 'package:crud_factories/Backend/data.dart';
 import 'package:crud_factories/Objects/RouteCSV.dart';
 import 'package:csv/csv.dart';
 
-void csvExportatorRoutes(List<RouteCSV> routes){
+Future<bool> csvExportatorRoutes(List<RouteCSV> routes) async {
+
+  bool err = false;
 
   List<dynamic> associateList = [
 
@@ -27,5 +29,15 @@ void csvExportatorRoutes(List<RouteCSV> routes){
   }
 
   String csv = const ListToCsvConverter(fieldDelimiter: ';').convert(rows);
-  fRoutes.writeAsString(csv);
+
+  if(await fRoutes.exists())
+  {
+    fRoutes.writeAsString(csv);
+  }
+  else
+  {
+     err = true;
+  }
+
+  return err;
 }

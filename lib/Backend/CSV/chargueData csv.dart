@@ -83,7 +83,15 @@ Future<bool> chargueDataCSV() async {
 
        }
 
-       fServer = routesManage[2].route;
+       try {
+
+         dynamic routeServer = routesManage[2].route;
+
+         fServer = File(routeServer);
+
+       } catch (Exeption) {
+
+       }
 
 
 

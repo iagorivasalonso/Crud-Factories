@@ -622,9 +622,10 @@ class _newSendState extends State<newSend> {
                                           child: Text(action1,
                                           style: const TextStyle(color: Colors.white),
                                           ),
-                                          onPressed: () {
+                                          onPressed: () async {
+                                            List <LineSend> current = [];
+
                                             setState(() {
-                                              List <LineSend> current = [];
                                               String idNew = "";
 
                                               if(lineSector.isNotEmpty)
@@ -666,7 +667,7 @@ class _newSendState extends State<newSend> {
                                               else
                                               {
 
-                                                  int allLinesModify=0;
+                                                  int allLinesModify = 0;
 
                                                   if(saveChanges == true)
                                                   {
@@ -698,8 +699,9 @@ class _newSendState extends State<newSend> {
 
                                                   }
 
-                                                  saveChanges = false;
+                                                saveChanges = false;
                                                 String action ='';
+
                                                 if (allLinesModify == 0)
                                                 {
                                                   action ='no tiene ninguna linea a modificar';
@@ -711,28 +713,37 @@ class _newSendState extends State<newSend> {
                                                   confirm(context,action);
                                                 }
                                               }
-
-                                              if (conn != null)
+                                              lineEdit = List.generate(lineSector.length, (index) => false);
+                                            });
+                                            if (conn != null)
+                                            {
+                                              if(select==-1)
                                               {
-                                                  if(select==-1)
-                                                  {
-                                                      sqlCreateLine(current);
-                                                  }
-                                                  else
-                                                  {
-                                                     sqlModifyLines(lineSelected);
-                                                  }
+                                                sqlCreateLine(current);
                                               }
                                               else
                                               {
-                                                lineSector = lineSector + current;
-                                                csvExportatorLines(lineSector);
+                                                sqlModifyLines(lineSelected);
                                               }
+                                            }
+                                            else
+                                            {
+                                              lineSector = lineSector + current;
 
-                                              lineEdit = List.generate(lineSector.length, (index) => false);
-                                            });
 
+                                              bool errorExp = await csvExportatorLines(lineSector);
 
+                                              if(errorExp == false)
+                                              {
+                                                String action = 'Las lineas se han guardado correctamente';
+                                                await confirm(context, action);
+                                              }
+                                              else
+                                              {
+                                                String action = 'No existe archivo de lineas';
+                                                error(context, action);
+                                              }
+                                            }
                                           },
                                         ),
 

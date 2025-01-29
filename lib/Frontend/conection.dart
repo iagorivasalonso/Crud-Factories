@@ -635,9 +635,18 @@ class _conectionState extends State<conection> {
 
     } on Exception catch( e){
 
-      if(bd_action == "Nueva" ||bd_action == "Conection")
+      if(bd_action == "Nueva" ||  bd_action == "Conection")
       {
-        serverConnect();
+            if(await fServer.exists())
+            {
+              serverConnect();
+            }
+            else
+            {
+                String action = 'No tiene ningún servidor conectado';
+                error(context, action);
+            }
+
       }
 
       try{
@@ -730,7 +739,19 @@ class _conectionState extends State<conection> {
         {
           String action1 ='Esta conectado a $bdName';
           BaseDateSelected= bdName;
-          csvExportatorConections(conections);
+
+          bool errorExp = await csvExportatorConections(conections);
+
+          if(errorExp == false)
+          {
+            String action = 'La conexion se ha guardado correctamente';
+            await confirm(context, action);
+          }
+          else
+          {
+            String action = 'No existe archivo de conexiones';
+            error(context, action);
+          }
           String err = await createTables(context);
 
           if(err.isEmpty)

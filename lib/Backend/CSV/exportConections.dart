@@ -2,7 +2,9 @@ import 'package:crud_factories/Backend/data.dart';
 import 'package:crud_factories/Objects/Conection.dart';
 import 'package:csv/csv.dart';
 
-void csvExportatorConections(List<Conection> conections) {
+Future<bool> csvExportatorConections(List<Conection> conections) async {
+
+  bool err = false;
 
   List<dynamic> associateList = [
 
@@ -34,4 +36,15 @@ void csvExportatorConections(List<Conection> conections) {
 
   String csv = const ListToCsvConverter(fieldDelimiter: ';').convert(rows);
   fConections.writeAsString(csv);
+
+  if(await fConections.exists())
+  {
+    fConections.writeAsString(csv);
+  }
+  else
+  {
+    err = true;
+  }
+
+  return err;
 }

@@ -2,7 +2,9 @@ import 'package:crud_factories/Backend/data.dart';
 import 'package:crud_factories/Objects/Empleoye.dart';
 import 'package:csv/csv.dart';
 
-void csvExportatorEmpleoyes(List<Empleoye> empleoyes){
+Future<bool> csvExportatorEmpleoyes(List<Empleoye> empleoyes) async {
+
+  bool err = false;
 
   List<dynamic> associateList = [
 
@@ -27,5 +29,15 @@ void csvExportatorEmpleoyes(List<Empleoye> empleoyes){
   }
 
   String csv = const ListToCsvConverter(fieldDelimiter: ';').convert(rows);
-  fEmpleoyes.writeAsString(csv);
+
+  if(await fEmpleoyes.exists())
+  {
+     fEmpleoyes.writeAsString(csv);
+  }
+  else
+  {
+     err = true;
+  }
+
+  return err;
 }

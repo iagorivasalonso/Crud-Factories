@@ -7,6 +7,7 @@ import 'package:crud_factories/Alertdialogs/noCategory.dart';
 import 'package:crud_factories/Alertdialogs/typeConnection.dart';
 import 'package:crud_factories/Alertdialogs/warning.dart';
 import 'package:crud_factories/Backend/CSV/chargueData%20csv.dart';
+import 'package:crud_factories/Backend/CSV/exportSectors.dart';
 import 'package:crud_factories/Backend/_selection_view.dart';
 import 'package:crud_factories/Backend/data.dart';
 import 'package:crud_factories/Frontend/adminRoutes.dart';
@@ -322,14 +323,25 @@ class _AppState extends State<App> {
                               {
                                 String modif = "nuevo";
 
-                                bool create = await createSector(context,modif,);
+                                bool create = await createSector(context,modif);
 
                                 if(create == true)
                                 {
-                                  setState((){
+
+                                  bool errorExp = await csvExportatorSectors(sectors);
+
+                                  String action ="";
+
+                                  if(errorExp == false)
+                                  {
                                     String action = 'El sector se ha creado correctamente';
-                                    confirm(context, action);
-                                  });
+                                    await confirm(context, action);
+                                  }
+                                  else
+                                  {
+                                    String action = 'No existe archivo de sectores';
+                                    error(context, action);
+                                  }
                                 }
                               }
                       }

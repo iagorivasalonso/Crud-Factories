@@ -3,10 +3,8 @@ import 'package:crud_factories/Alertdialogs/confirm.dart';
 import 'package:crud_factories/Alertdialogs/create%20sector.dart';
 import 'package:crud_factories/Alertdialogs/error.dart';
 import 'package:crud_factories/Backend/CSV/exportEmpleoyes.dart';
-import 'package:crud_factories/Backend/CSV/exportSectors.dart';
 import 'package:crud_factories/Backend/SQL/createEmpleoye.dart';
 import 'package:crud_factories/Backend/SQL/createFactory.dart';
-import 'package:crud_factories/Backend/SQL/createSector.dart';
 import 'package:crud_factories/Backend/SQL/deleteEmpleoyes.dart';
 import 'package:crud_factories/Backend/SQL/modifyFactory.dart';
 import 'package:crud_factories/Backend/data.dart';
@@ -15,7 +13,6 @@ import 'package:crud_factories/Functions/createId.dart';
 import 'package:crud_factories/Functions/validatorCamps.dart';
 import 'package:crud_factories/Objects/Empleoye.dart';
 import 'package:crud_factories/Objects/Factory.dart';
-import 'package:crud_factories/Objects/Sector.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -755,223 +752,21 @@ class _newFactoryState extends State<newFactory> {
                                     child: Text(action,
                                         style: TextStyle(color: Colors.white)
                                     ),
-                                    onPressed: () {
-                                        setState(() {
-                                          List <Factory> current=[];
-                                          List <String> allKeys = [];
-                                          String nameCamp = "nombre";
-
-                                          for (int i = 0; i < allFactories.length; i++) {
-                                            allKeys.add(allFactories[i].name);
-                                          }
-
-                                          String campOld = " ";
-
-                                          if(select != -1)
-                                          {
-                                            campOld = allFactories[select].name;
-                                          }
-
-                                          if(primaryKeyCorrect(controllerName.text,nameCamp,allKeys,campOld,context) ==true)
-                                          {
-                                            final telephone1 = controllerTelephone1.text.replaceAll(" ", "");
-                                            final telephone2 = controllerTelephone2.text.replaceAll(" ", "");
-
-                                            if(dateCorrect(controllerHighDate.text) == false)
-                                            {
-                                              String action ='El fomato de la fecha debe de ser:';
-                                              String format ='DD-MM-AAAA';
-                                              error(context,action,format);
-                                            }
-                                            if(campEmpty(controllerSector.text) == true)
-                                            {
-                                              String action ='El sector no puede ir vacio';
-                                              error(context,action);
-                                            }
-                                            else if(telephoneCorrect(telephone1,context) == false)
-                                            {
+                                    onPressed: () async {
 
 
-                                            }
-                                            else if(telephoneCorrect(telephone2,context) == true)
-                                            {
+                                        bool errorExp = await csvExportatorFactories(allFactories);
 
-                                            }
-                                            else if(mailCorrect(controllerMail.text) != true)
-                                            {
-                                                action ='No es un correo electronico valido';
-                                                error(context,action);
-                                            }
-                                            else if(webCorrect(controllerWeb.text) != true)
-                                            {
-                                              action ='No es una dirreccion web';
-                                              error(context,action);
-                                            }
-                                            else if(adrressCorrect(controllerAdrress.text) != true)
-                                            {
-                                                  String action ='El fomato de la direccion debe de ser:';
-                                                  String format =' calle, numero';
-                                                  error(context,action,format);
-                                            }
-                                            else if(postalCodeCorrect(controllerPostalCode.text,context) == true)
-                                            {
-                                                  if(controllerPostalCode.text.length != 5)
-                                                  {
-                                                    action ='El codigo postal debe de tener 5 digitos';
-                                                    error(context,action);
-                                                  }
-                                                  else
-                                                  {
-
-                                                    List<String> adrress1 = controllerAdrress.text.split(",");
-                                                    List<String> adrress2 = controllerAdrress.text.split("-");
-                                                    String apartament='';
-
-                                                    if(controllerAdrress.text.contains("-"))
-                                                    {
-                                                      apartament = adrress2[1];
-                                                    }
-                                                    else
-                                                    {
-                                                      apartament='';
-                                                    }
-                                                    List<String> num = adrress2[0].split(",");
-
-                                                     if(conn != null)
-                                                     {
-                                                          Set<Empleoye> contacsPreEdit1 = contacsPreEdit.toSet();
-                                                          Set<Empleoye> contacsCurrent1 = contacsCurrent.toSet();
-
-                                                          Set<Empleoye> empleoyesNew = contacsCurrent1.difference(contacsPreEdit1);
-
-                                                          sqlCreateEmpleoye(empleoyesNew.toList());
-                                                          empleoyes.addAll(empleoyesNew);
-
-                                                          Set<Empleoye> empleoyesDelete = contacsPreEdit1.difference(contacsCurrent1);
-
-                                                          List<Empleoye> empleoyesDelete1 =empleoyesDelete.toList();
-                                                          sqlDeleteEmpleoyes(empleoyesDelete1);
-
-                                                            String current = "";
-
-                                                            for(int i = 0; i < empleoyesDelete1.length; i++)
-                                                            {
-                                                               current = empleoyesDelete1[i].id;
-
-                                                                   for (int x = 0; x < empleoyes.length; x++)
-                                                                   {
-                                                                       if(current == empleoyes[i].id)
-                                                                       {
-                                                                           empleoyes.removeAt(x);
-                                                                       }
-                                                                   }
-                                                            }
-
-                                                     }
-                                                    if(select == - 1)
-                                                    {
-                                                      String idNew = "";
-
-                                                      if(allFactories.isNotEmpty)
-                                                      {
-                                                        String idLast = allFactories[allFactories.length-1].id;
-                                                        idNew = createId(idLast);
-                                                      }
-                                                      else
-                                                      {
-                                                        idNew ="1";
-                                                      }
-
-                                                      current.add(Factory(
-                                                          id: idNew,
-                                                          name: controllerName.text,
-                                                          highDate: controllerHighDate.text,
-                                                          sector: controllerSector.text,
-                                                          thelephones:[controllerTelephone1.text,controllerTelephone2.text],
-                                                          mail: controllerMail.text,
-                                                          web: controllerWeb.text,
-                                                          address: {
-                                                            'street':adrress1[0],
-                                                            'number':num[1],
-                                                            'apartament':apartament,
-                                                            'city' : controllerCity.text,
-                                                            'postalCode' : controllerPostalCode.text ,
-                                                            'province' : controllerProvince.text,
-                                                          },
-                                                      ));
-                                                      action ='La empresa se ha dado de alta correctamente';
-                                                      confirm(context,action);
-                                                    }
-                                                    else
-                                                    {
-                                                          if(saveChanges == true)
-                                                          {
-                                                            allFactories[select].name = controllerName.text;
-                                                            allFactories[select].highDate = controllerHighDate.text;
-                                                            allFactories[select].sector = controllerSector.text;
-                                                            allFactories[select].thelephones= [controllerTelephone1.text,controllerTelephone2.text];
-                                                            allFactories[select].mail = controllerMail.text;
-                                                            allFactories[select].web= controllerWeb.text;
-                                                            allFactories[select].address['street'] = adrress1[0];
-                                                            allFactories[select].address['number'] = num[1];
-                                                            allFactories[select].address['apartament'] = apartament;
-                                                            allFactories[select].address['city'] = controllerCity.text;
-                                                            allFactories[select].address['postalCode'] = controllerPostalCode.text ;
-
-                                                                action ='El usuario se ha modificado correctamente';
-                                                                confirm(context,action);
-
-
-                                                          }
-                                                    }
-                                                    saveChanges = false;
-
-                                                    if(conn != null)
-                                                    {
-                                                         if(select == -1)
-                                                         {
-                                                           sqlCeateFactory(current);
-                                                         }
-                                                         else
-                                                         {
-                                                           current.add(allFactories[select]);
-                                                           sqlModifyFActory(current);
-                                                         }
-
-                                                    }
-                                                    else
-                                                    {
-                                                      allFactories = allFactories + current;
-                                                      csvExportatorFactories(allFactories);
-
-                                                      empleoyes = [
-                                                        ...{...empleoyes, ...contacsCurrent}
-                                                      ];
-
-                                                      String idCurrent= "";
-                                                      for(int i = 0; i <idsDelete.length; i++)
-                                                      {
-                                                        idCurrent = idsDelete[i];
-
-                                                        for(int y = 0; y< empleoyes.length;y++)
-                                                        {
-                                                          if(idCurrent==empleoyes[y].id)
-                                                          {
-                                                            empleoyes.removeAt(y);
-                                                          }
-                                                        }
-
-                                                      }
-                                                      csvExportatorEmpleoyes(empleoyes);
-
-                                                    }
-
-                                                  }
-                                                }
-                                              }
-
-
-                                        });
+                                        if(errorExp == false)
+                                        {
+                                          String action = 'Las empresas se han guardado correctamente';
+                                          await confirm(context, action);
+                                        }
+                                        else
+                                        {
+                                          String action = 'No existe archivo de empresas';
+                                          error(context, action);
+                                        }
                                     },
                                   ),
                                   MaterialButton(

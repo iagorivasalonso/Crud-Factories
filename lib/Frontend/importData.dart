@@ -153,7 +153,7 @@ class _newImportState extends State<newImport> {
                                       String current = '';
                                       String current1 = '';
                                       bool repeat = false;
-                                      int cantImport=0;
+                                      int cantImport = 0;
 
                                       if(sectorsNew.isNotEmpty)
                                       {
@@ -205,7 +205,8 @@ class _newImportState extends State<newImport> {
                                           }
                                           else
                                           {
-                                            csvExportatorSectors(sectors);
+                                              bool correct = await csvExportatorSectors(sectors);
+
                                           }
 
                                       }
@@ -291,7 +292,8 @@ class _newImportState extends State<newImport> {
                                                 }
                                                 else
                                                 {
-                                                  csvExportatorEmpleoyes(empleoyes);
+                                                  bool correct = await csvExportatorEmpleoyes(empleoyes);
+                                                  print(correct);
                                                 }
                                           }
                                           else
@@ -350,7 +352,8 @@ class _newImportState extends State<newImport> {
                                         }
                                         else
                                         {
-                                          csvExportatorMails(mails);
+                                          bool correct = await  csvExportatorMails(mails);
+                                          print(correct);
                                         }
                                       }
                                       if(linesNew.isNotEmpty)
@@ -428,7 +431,8 @@ class _newImportState extends State<newImport> {
                                               }
                                               else
                                               {
-                                                csvExportatorLines(lineSector);
+                                                bool correct = await  csvExportatorLines(lineSector);
+                                                print(correct);
                                               }
                                         }
                                         else
@@ -483,7 +487,8 @@ class _newImportState extends State<newImport> {
                                           confirm(context, action);
                                         }
 
-                                        csvExportatorConections(conections);
+                                        bool correct = await csvExportatorConections(conections);
+                                        print(correct);
                                       }
                                       if(factoriesNew.isNotEmpty)
                                       {
@@ -559,7 +564,8 @@ class _newImportState extends State<newImport> {
                                               }
                                               else
                                               {
-                                                csvExportatorFactories(allFactories);
+                                                bool correct = await csvExportatorFactories(allFactories);
+                                                print(correct);
                                               }
                                           }
                                           else

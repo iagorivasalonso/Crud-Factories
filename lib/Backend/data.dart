@@ -43,5 +43,4 @@ File fEmpleoyes = File("");
 File fLines = File("");
 File fMails = File("");
 File fConections = File("");
-
-var fServer;
+File fServer = File("");

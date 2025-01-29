@@ -2,7 +2,9 @@ import 'package:crud_factories/Backend/data.dart';
 import 'package:crud_factories/Objects/Factory.dart';
 import 'package:csv/csv.dart';
 
-void csvExportatorFactories(List<Factory> factories) async {
+Future<bool> csvExportatorFactories(List<Factory> factories) async {
+
+  bool err = false;
 
   List<dynamic> associateList = [
 
@@ -49,5 +51,15 @@ void csvExportatorFactories(List<Factory> factories) async {
   }
 
   String csv = const ListToCsvConverter(fieldDelimiter: ';').convert(rows);
-  fFactories.writeAsString(csv);
+
+  if(await fFactories.exists())
+  {
+    fFactories.writeAsString(csv);
+  }
+  else
+  {
+    err = true;
+  }
+
+  return err;
 }
