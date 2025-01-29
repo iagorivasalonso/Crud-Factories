@@ -247,9 +247,9 @@ Future<bool> adminRoutes(BuildContext context, [bool? sqlBd]) async {
 
                                       String action = 'Las rutas se han guardado correctamente';
                                       await confirm(context, action);
-
-                                      csvExportatorRoutes(routesNew);
                                       chargueDataCSV();
+                                      csvExportatorRoutes(routesNew);
+
 
                                       setState((){
                                        Navigator.of(context).pop(true);

@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:crud_factories/Backend/data.dart';
 import 'package:crud_factories/Objects/RouteCSV.dart';
 import 'package:csv/csv.dart';
@@ -30,14 +32,10 @@ Future<bool> csvExportatorRoutes(List<RouteCSV> routes) async {
 
   String csv = const ListToCsvConverter(fieldDelimiter: ';').convert(rows);
 
-  if(await fRoutes.exists())
+  if(await fRoutes.exists()!)
   {
-    fRoutes.writeAsString(csv);
+    fRoutes = File('D:/routes.csv');
   }
-  else
-  {
-     err = true;
-  }
-
+  fRoutes.writeAsString(csv);
   return err;
 }
