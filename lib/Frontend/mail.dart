@@ -309,15 +309,20 @@ class _newMailState extends State<newMail> {
   }
 
   Future<bool> testMail() async {
+
     bool connectEmail = false;
     String username = controllerMail.text;
     String password = "";
+    String company = " ";
 
     if (controllerPas.text == controllerPasVerificator.text) {
       password = controllerPas.text;
     }
 
-    List <String> separeAddrres = controllerMail.text.split("@");
+    List <String> separeAddrres = username.split("@");
+    List <String> extCompany = separeAddrres[1].split(".");
+
+    company = extCompany[0];
 
     try {
       final message = Message()
@@ -327,12 +332,12 @@ class _newMailState extends State<newMail> {
         ..text = 'Esto es una prueba de conexion desde la aplicacion';
 
 
-      if (controllerCompany.text == "gmail") {
+      if (company == "gmail") {
         final smtpServer = gmail(username, password);
         final sendReport = await send(message, smtpServer);
         print('Message sent: ' + sendReport.toString());
       }
-      else if (controllerCompany.text == "hotmail") {
+      else if (company == "hotmail") {
         final smtpServer = hotmail(username, password);
         final sendReport = await send(message, smtpServer);
         print('Message sent: ' + sendReport.toString());
