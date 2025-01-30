@@ -330,7 +330,6 @@ class _AppState extends State<App> {
 
                                   bool errorExp = await csvExportatorSectors(sectors);
 
-                                  String action ="";
 
                                   if(errorExp == false)
                                   {
