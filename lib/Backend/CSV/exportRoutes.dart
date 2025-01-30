@@ -34,8 +34,9 @@ Future<bool> csvExportatorRoutes(List<RouteCSV> routes) async {
 
   if(await fRoutes.exists()!)
   {
-    fRoutes = File('D:/routes.csv');
+    fRoutes = File(routeFirst);
   }
   fRoutes.writeAsString(csv);
+
   return err;
 }

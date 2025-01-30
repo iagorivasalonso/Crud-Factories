@@ -21,7 +21,11 @@ Future<bool> chargueDataCSV() async {
 
   if (routesManage.isEmpty)
   {
-    fRoutes = File('D:/routes.csv');
+    Directory currentDir = Directory.current;
+    Directory parentDir = currentDir.parent;
+
+    routeFirst = '${parentDir.path}routes.csv';
+    fRoutes = File(routeFirst);
   }
 
   final filePathRoutes = fRoutes;
