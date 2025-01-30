@@ -14,19 +14,21 @@ Future<bool> warning(BuildContext  context,String action) async{
            child: SizedBox(
              width: 380,
              height: action.length > 59
-                     ? 240
+                     ? 220
                      : 175,
              child: Column(
                children: [
                  headAlert(title:"Cuidado"),
                  Expanded(
                    child: Padding(
-                     padding:  const EdgeInsets.only(left: 25,top: 25, bottom: 15),
+                     padding:  const EdgeInsets.only(left: 25,top: 25),
                      child: Text(action,
                        maxLines: 2,
                        overflow: TextOverflow.ellipsis,),
                    ),
                  ),
+                 if(action.length >59)
+                 SizedBox(height: 25,),
                  Expanded(
                    child: Row(
                      children: [
