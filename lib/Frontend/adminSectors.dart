@@ -44,13 +44,12 @@ Future<void> adminSector(BuildContext context) async {
                               IconButton(
                                 icon: Icon(Icons.edit, color: Colors.blue),
                                 onPressed: () async {
-                                  String modif = sectors[index].name;
-                                  bool? create = await createSector(context, modif);
 
-                                  if (create == true) {
+                                  String modif = sectors[index].name;
+                                  bool? mod = await createSector(context, modif);
+
+                                  if (mod == true) {
                                     setState(() {});
-                                    String action = 'El sector se ha editado correctamente';
-                                    confirm(context, action);
                                   }
                                 },
                               ),
@@ -121,16 +120,13 @@ Future<void> adminSector(BuildContext context) async {
                            ),
                            onPressed: () async {
                              String modif = "nuevo";
-                             bool create = await createSector(context,modif);
+                             bool create = await createSector(context, modif);
 
-                             if(create == true)
-                             {
-                               setState((){
-                                 String action = 'El sector se ha creado correctamente';
-                                 confirm(context, action);
-                               });
+                             if (create == true) {
+                               setState(() {});
                              }
-                           },
+
+                           }
                          ),
                        ),
                      ),

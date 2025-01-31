@@ -1,4 +1,5 @@
 
+import 'package:crud_factories/Alertdialogs/confirm.dart';
 import 'package:crud_factories/Alertdialogs/error.dart';
 import 'package:crud_factories/Backend/CSV/exportSectors.dart';
 import 'package:crud_factories/Backend/SQL/createSector.dart';
@@ -76,22 +77,24 @@ Future<bool> createSector(BuildContext  context, String modif) async {
                             child: MaterialButton(
                                 child: const Text("Aceptar",style: const TextStyle(color: Colors.white),),
                                 color: Colors.lightBlue,
-                                onPressed:(){
-                                  List<Sector> currentSector=[];
-                                  if(edit == false)
+                                onPressed:() async {
+                                  List<Sector> currentSector = [];
+
+                                  if(controllerSector.text.isNotEmpty)
                                   {
-                                    for(int i = 0; i < sectors.length; i++)
+                                    if(edit == false)
                                     {
-                                      if(controllerSector.text == sectors[i].name)
+                                      for(int i = 0; i < sectors.length; i++)
                                       {
-                                        repeat = true ;
+                                        if(controllerSector.text == sectors[i].name)
+                                        {
+                                          repeat = true ;
+                                        }
+
                                       }
 
-                                    }
-
-                                    if(repeat == false)
-                                    {
-
+                                      if(repeat == false)
+                                      {
 
                                         String idNew = "";
 
@@ -104,15 +107,12 @@ Future<bool> createSector(BuildContext  context, String modif) async {
                                         {
                                           idNew ="1";
                                         }
-
                                         currentSector.add(Sector(
                                           id: idNew,
                                           name: controllerSector.text,
                                         ));
 
-
-                                          sectors+=currentSector;
-
+                                        Navigator.of(context).pop(true);
 
                                         if(conn != null)
                                         {
@@ -120,39 +120,55 @@ Future<bool> createSector(BuildContext  context, String modif) async {
                                         }
                                         else
                                         {
+                                          sectors += currentSector;
                                           csvExportatorSectors(sectors);
                                         }
 
+                                          String action = 'El sector se ha creado correctamente';
+                                          confirm(context, action);
+                                      }
+                                      else
+                                      {
+                                        String action = "Ese sector ya existe";
+                                        await error(context, action);
+                                      }
+
                                     }
                                     else
                                     {
-                                      String action = "Ese sector ya existe";
-                                      error(context, action);
+
+                                      for(int i = 0; i < sectors.length; i++)
+                                      {
+                                        if(modif == sectors[i].name)
+                                        {
+                                          sectors[i].name = controllerSector.text;
+                                          currentSector.add(sectors[i]);
+                                        }
+                                      }
+
+                                      Navigator.of(context).pop(true);
+
+                                      if(conn != null)
+                                      {
+                                        sqlModifySector(currentSector);
+                                      }
+                                      else
+                                      {
+                                        csvExportatorSectors(sectors);
+                                      }
                                     }
+
+
                                   }
                                   else
                                   {
-
-                                    for(int i = 0; i < sectors.length; i++)
-                                    {
-                                       if(modif ==sectors[i].name)
-                                       {
-                                          sectors[i].name = controllerSector.text;
-                                          currentSector.add(sectors[i]);
-                                       }
-                                    }
-
-                                    if(conn != null)
-                                    {
-                                      sqlModifySector(currentSector);
-                                    }
-                                    else
-                                    {
-                                      csvExportatorSectors(sectors);
-                                    }
+                                     String action = 'No puede ir el campo en blanco';
+                                     await error(context,action);
                                   }
 
-                                  Navigator.of(context).pop(true);
+
+
+
                                 }
                             ),
                           ),
