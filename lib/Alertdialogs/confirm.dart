@@ -19,7 +19,7 @@ Future<bool> confirm(BuildContext  context, String action) async {
                      children: [
                        headAlert(title:"Confirmar"),
                        Expanded(child: Padding(
-                         padding: const EdgeInsets.only(left: 25,right: 15, top:15),
+                         padding: const EdgeInsets.only(left: 25,right: 15, top:25),
                          child: Text(action,
                            maxLines: 2,
                            overflow: TextOverflow.ellipsis,),
