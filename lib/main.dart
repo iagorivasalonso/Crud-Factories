@@ -2,6 +2,8 @@ import 'package:crud_factories/Frontend/app.dart';
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:window_manager/window_manager.dart';
 import 'Alertdialogs/closeApp.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:crud_factories/generated/l10n.dart';
 
 void main() async {
 
@@ -24,7 +26,11 @@ void main() async {
 
 class MyApp extends StatelessWidget {
   @override
+
+  final Locale _localeSpanish = const Locale('es');
+
   Widget build(BuildContext context) {
+
     return FluentApp(
       debugShowCheckedModeBanner: false,
       home: MyApp1(),
@@ -61,6 +67,12 @@ class _MyApp1State extends State<MyApp1> with WindowListener {
 
     return const FluentApp(
       debugShowCheckedModeBanner: false,
+      localizationsDelegates: [
+        S.delegate,
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate
+      ],
       home: App(),
     );
   }

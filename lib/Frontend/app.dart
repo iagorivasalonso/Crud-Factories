@@ -14,6 +14,7 @@ import 'package:crud_factories/Frontend/adminRoutes.dart';
 import 'package:crud_factories/Frontend/adminSectors.dart';
 import 'package:crud_factories/Functions/changesNoSave.dart';
 import 'package:crud_factories/Objects/RouteCSV.dart';
+import 'package:crud_factories/generated/l10n.dart';
 import 'package:flutter/material.dart';
 import 'package:menu_bar/menu_bar.dart';
 
@@ -81,7 +82,10 @@ class _AppState extends State<App> {
 
                if(fileFail == true)
                {
-                    action = "No tienes completo el archivo de rutas \n ¿Desea completarlo?";
+                    String no_rutes = S.of(context).no_archivo_rutas;
+                    String want_complete = S.of(context).desea_completarlo;
+
+                    action = "$no_rutes \n $want_complete";
                     bool rutesComplete = await warning(context, action);
 
                     if(rutesComplete == true)
@@ -129,21 +133,21 @@ class _AppState extends State<App> {
       return [
         BarButton (
             text:   SizedBox(
-                child: Text('Archivo',
+                child: Text(S.of(context).archivo,
                   style: TextStyle(color:colorBar),)),
             submenu: SubMenu(
                 menuItems:[
                   MenuButton(
                       text: SizedBox(
                           width: wItem,
-                          child: const Text("Nuevo")
+                          child: Text(S.of(context).nuevo)
                       ),
                       submenu: SubMenu(
                           menuItems: [
                             MenuButton(
                                 text: SizedBox(
                                     width:wItem,
-                                    child: const Text("Empresa")),
+                                    child: Text(S.of(context).empresa)),
                                 onTap: () async {
 
                                     if (saveChanges == false)
@@ -173,7 +177,7 @@ class _AppState extends State<App> {
                             MenuButton(
                                 text: SizedBox(
                                     width: wItem,
-                                    child: const Text("Email")),
+                                    child: Text(S.of(context).email)),
                                 onTap: () async {
 
                                   if (saveChanges == false)
@@ -203,7 +207,7 @@ class _AppState extends State<App> {
                             MenuButton(
                                 text: SizedBox(
                                     width: wItem,
-                                    child: const Text("Envio")),
+                                    child: Text(S.of(context).envio)),
                                 onTap: () async {
 
                                  bool go = false;
@@ -232,7 +236,7 @@ class _AppState extends State<App> {
                                    }
                                    else
                                    {
-                                     String action ='No puede hacer el envio porque no tiene empresas en su base de datos';
+                                     String action =S.of(context).no_puede_hacer_el_envio_porque_no_tiene_empresas_en_su_base_de_datos;
                                      error(context,action);
 
                                      setState(() {
@@ -251,7 +255,7 @@ class _AppState extends State<App> {
                   MenuButton(
                       text: SizedBox(
                           width: wItem,
-                          child: const Text("Rutas")),
+                          child: Text(S.of(context).rutas)),
                       onTap: () async {
                         setState(() {
                           adminRoutes(context);
@@ -262,7 +266,7 @@ class _AppState extends State<App> {
                   MenuButton(
                       text: SizedBox(
                           width: wItem,
-                          child: const Text("Importar")),
+                          child: Text(S.of(context).importar)),
                       onTap: () async {
 
                         if (saveChanges == false)
@@ -292,7 +296,7 @@ class _AppState extends State<App> {
                   MenuButton(
                       text:  SizedBox(
                           width: wItem,
-                          child: const Text("Salir")
+                          child: Text(S.of(context).salir)
                       ),
                       onTap: (){
                         closeAlert(context);
@@ -304,14 +308,14 @@ class _AppState extends State<App> {
         ),
         BarButton (
             text:   SizedBox(
-                child: Text('Listas',
+                child: Text(S.of(context).listas,
                   style: TextStyle(color:colorBar),)),
             submenu: SubMenu(
                 menuItems:[
                   MenuButton(
                       text: SizedBox(
                           width: wItem,
-                          child: const Text("Sectores")),
+                          child:  Text(S.of(context).sectores)),
                       onTap: () async {
                               if(sectors.isNotEmpty)
                               {
@@ -333,12 +337,12 @@ class _AppState extends State<App> {
 
                                   if(errorExp == false)
                                   {
-                                    String action = 'El sector se ha creado correctamente';
+                                    String action = S.of(context).el_sector_se_ha_creado_correctamente;
                                     await confirm(context, action);
                                   }
                                   else
                                   {
-                                    String action = 'No existe archivo de sectores';
+                                    String action = S.of(context).no_existe_archivo_de_sectores;
                                     error(context, action);
                                   }
                                 }
@@ -349,7 +353,7 @@ class _AppState extends State<App> {
                     MenuButton(
                         text: SizedBox(
                             width: wItem,
-                            child: const Text("Empresas")),
+                            child: Text(S.of(context).empresas)),
                             onTap: () async {
                               bool go = false;
                               if (saveChanges == false)
@@ -378,7 +382,7 @@ class _AppState extends State<App> {
                                 }
                                 else
                                 {
-                                  String array = "empresas";
+                                  String array = S.of(context).empresas;
                                   int dat = await noCategory(context, array);
 
                                   if(dat == 1)
@@ -406,14 +410,14 @@ class _AppState extends State<App> {
                   MenuButton(
                         text: SizedBox(
                             width: wItem,
-                            child: const Text("Empresas")),
+                            child: Text(S.of(context).empresas)),
                         submenu: SubMenu(
                             menuItems:
                             [
                               MenuButton(
                                   text: SizedBox(
                                       width:  wItem,
-                                      child: Text("Todas")),
+                                      child: Text(S.of(context).todas)),
                                   onTap: () async {
                                     controllerSearchSend.clear();
                                     if (saveChanges == false)
@@ -463,7 +467,7 @@ class _AppState extends State<App> {
                   MenuButton(
                       text: SizedBox(
                           width: wItem,
-                          child: const Text("Emails")),
+                          child: Text(S.of(context).emails)),
                       onTap: () async {
 
                                bool go = false;
@@ -492,7 +496,7 @@ class _AppState extends State<App> {
                                 }
                                 else
                                 {
-                                  String array = "emails";
+                                  String array = S.of(context).emails;
                                   int dat = await noCategory(context, array);
 
                                   if(dat == 1)
@@ -529,7 +533,7 @@ class _AppState extends State<App> {
                   MenuButton(
                       text: SizedBox(
                           width: wItem,
-                          child: const Text("Envios")
+                          child: Text(S.of(context).envios)
                       ),
                       onTap: () async {
 
@@ -561,7 +565,7 @@ class _AppState extends State<App> {
                                {
                                  if(allFactories.isNotEmpty)
                                  {
-                                   String array = "envios";
+                                   String array = S.of(context).envios;
                                    int dat = await noCategory(context, array);
 
 
@@ -593,7 +597,7 @@ class _AppState extends State<App> {
                                  }
                                  else
                                  {
-                                   String array ="envios";
+                                   String array = S.of(context).envios;
                                    await noCategory(context, array);
                                  }
                                }
@@ -606,7 +610,7 @@ class _AppState extends State<App> {
                    MenuButton(
                         text: SizedBox(
                             width: wItem,
-                            child: const Text("Envios")
+                            child: Text(S.of(context).envios)
                         ),
                         submenu:SubMenu(
                             menuItems:
@@ -614,7 +618,7 @@ class _AppState extends State<App> {
                               MenuButton(
                                   text: SizedBox(
                                       width:  wItem,
-                                      child: Text("Todos")),
+                                      child: Text(S.of(context).todos)),
                                   onTap: () async {
                                     controllerSearchSend.clear();
                                     if (saveChanges == false)
@@ -667,18 +671,18 @@ class _AppState extends State<App> {
         ),
         BarButton (
             text:   SizedBox(
-                child: Text('Utilidades',
+                child: Text(S.of(context).utilidades,
                   style: TextStyle(color:colorBar),)),
             submenu: SubMenu(
                 menuItems:[
                   MenuButton(
                       text: SizedBox(
                           width: wItemMax,
-                          child: const Text("Envio de emails")),
+                          child: Text(S.of(context).envio_de_emails)),
                       onTap: () async {
                         if(mails.isEmpty)
                         {
-                          String action ='No tiene emails registrados';
+                          String action =S.of(context).no_tiene_emails_registrados;
                           error(context,action);
                         }
 
@@ -707,7 +711,7 @@ class _AppState extends State<App> {
                   MenuButton(
                       text: SizedBox(
                           width: wItemMax,
-                          child: const Text("Conexion BD")),
+                          child: Text(S.of(context).conexionBD)),
                       onTap: () async {
 
                         if (saveChanges == false)
