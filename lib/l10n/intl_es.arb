@@ -1,5 +1,29 @@
 {
   "@@locale": "es",
+  "archivo": "Archivo",
+  "conexionBD": "ConexionBD",
+  "desea_completarlo": "¿Desea completarlo?",
+  "el_sector_se_ha_creado_correctamente": "El sector Se ha creado correctamente",
+  "email": "Email",
+  "emails": "Emails",
+  "empresa": "Empresa",
+  "empresas": "Empresas",
+  "envio": "Envio",
+  "envio_de_emails": "Envio de emails",
+  "envios": "Envios",
+  "importar": "Importar",
+  "listas": "Listas",
+  "nuevo": "Nuevo",
+  "no_archivo_rutas": "No tienes Completo el archivo de rutas",
+  "no_existe_archivo_de_sectores": "No existe Archivo de sectores",
+  "no_puede_hacer_el_envio_porque_no_tiene_empresas_en_su_base_de_datos": "No puede Hacer el envio porque no tiene empresas en su base de datos",
+  "no_tiene_emails_registrados": "No tiene Emails registrados",
+  "rutas": "Rutas",
+  "salir": "Salir",
+  "sectores": "Sectores",
+  "todas": "Todas",
+  "todos": "Todos",
+  "utilidades": "Utilidades"
 
   }
 
