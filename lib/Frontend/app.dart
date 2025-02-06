@@ -758,7 +758,7 @@ class _AppState extends State<App> {
           width: mWidth,
           height:  mHeight,
             color: Colors.white,
-          child:  FuntionSeleted(itenSelect, subIten1Select, subIten2Select,mWidth, mHeight)
+          child:  FuntionSeleted(itenSelect, subIten1Select, subIten2Select,mWidth, mHeight,context),
         ),
       )
 
@@ -767,7 +767,7 @@ class _AppState extends State<App> {
         width: mWidth,
         height:  mHeight,
         color: Colors.white,
-        child:  FuntionSeleted(itenSelect, subIten1Select, subIten2Select,mWidth, mHeight)
+        child:  FuntionSeleted(itenSelect, subIten1Select, subIten2Select,mWidth, mHeight,context)
     );
   }
 
