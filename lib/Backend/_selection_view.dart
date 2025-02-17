@@ -8,15 +8,15 @@ import 'package:crud_factories/Frontend/send.dart';
 import 'package:crud_factories/Frontend/send_mail.dart';
 import 'package:crud_factories/Frontend/view.dart';
 import 'package:crud_factories/Functions/avoidRepeatArray.dart';
+import 'package:fluent_ui/fluent_ui.dart';
+import 'package:flutter/src/widgets/framework.dart';
 
-FuntionSeleted(int itenSelection, int subIten1Selection,int subIten2Selection, double mWidth, double mHeight) {
+import '../generated/l10n.dart';
+
+FuntionSeleted(int itenSelection, int subIten1Selection,int subIten2Selection, double mWidth, double mHeight, BuildContext context) {
 
   List<String> element = [];
   int select=-1;
-
-
-
-
 
     switch (itenSelection) {
       case 0:
@@ -24,22 +24,20 @@ FuntionSeleted(int itenSelection, int subIten1Selection,int subIten2Selection, d
           select = -1;
 
           if (subIten2Selection == 0)
-            return newFactory(select);
-
-
+            return newFactory(context,select);
           if (subIten2Selection == 1)
-            return newMail(select);
+            return newMail(context, select);
 
           if (subIten2Selection == 2)
-            return newSend("", "", "", select);
+            return newSend(context,"", "", "", select);
         }
 
 
 
         if (subIten1Selection == 2)
-          return newImport();
+          return newImport(context);
 
-
+break;
       case 1:
         String tView = '';
         bool err = false;
@@ -47,7 +45,7 @@ FuntionSeleted(int itenSelection, int subIten1Selection,int subIten2Selection, d
         if (subIten1Selection == 1 || subIten1Selection == 3)
         {
             err = true;
-            tView = 'factory';
+            tView = S.of(context).empresa;
 
             factoriesSector.clear();
 
@@ -77,11 +75,11 @@ FuntionSeleted(int itenSelection, int subIten1Selection,int subIten2Selection, d
         }
 
         if (subIten1Selection == 2)
-          tView = 'mail';
+          tView = S.of(context).email;
         if (subIten1Selection == 3)
         {
           err = true;
-          tView = 'send';
+          tView = S.of(context).envio;
 
             if(subIten2Selection == 0)
             {
@@ -146,14 +144,14 @@ FuntionSeleted(int itenSelection, int subIten1Selection,int subIten2Selection, d
         }
 
 
-        return view(tView,err);
+        return view(tView,err,context);
 
 
       case 2:
         if (subIten1Selection == 0)
-           return sendMail();
+           return sendMail(context);
         if (subIten1Selection == 1)
-          return conection();
+          return conection(context);
     }
 
 }

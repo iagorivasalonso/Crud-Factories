@@ -1,15 +1,14 @@
-import 'dart:convert';
 import 'package:adaptive_scrollbar/adaptive_scrollbar.dart';
 import 'package:crud_factories/Alertdialogs/confirm.dart';
 import 'package:crud_factories/Alertdialogs/error.dart';
+import 'package:crud_factories/Alertdialogs/warning.dart';
 import 'package:crud_factories/Backend/SQL/createMail.dart';
-import 'package:crud_factories/Backend/SQL/importMail.dart';
 import 'package:crud_factories/Backend/SQL/modifyMail.dart';
 import 'package:crud_factories/Backend/data.dart';
 import 'package:crud_factories/Backend/CSV/exportMails.dart';
-import 'package:crud_factories/Functions/createId.dart';
-import 'package:crud_factories/Functions/validatorCamps.dart';
 import 'package:crud_factories/Objects/Mail.dart';
+import 'package:crud_factories/generated/l10n.dart';
+import 'package:crud_factories/helpers/localization_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:mailer/mailer.dart';
 import 'package:mailer/smtp_server/gmail.dart';
@@ -18,9 +17,11 @@ import 'package:mailer/smtp_server/hotmail.dart';
 
 class newMail extends StatefulWidget {
 
+  BuildContext context;
   int select;
 
-  newMail(this.select);
+
+  newMail(this.context,this.select);
 
 
   State<newMail> createState() => _newMailState();
@@ -42,7 +43,9 @@ class _newMailState extends State<newMail> {
   @override
   Widget build(BuildContext context) {
 
+    BuildContext context =widget.context;
     int select = widget.select;
+
 
     void campCharge() {
           if(saveChanges == false)
@@ -59,16 +62,21 @@ class _newMailState extends State<newMail> {
     String title = "";
 
     if (select == -1) {
-      title = "Nuevo ";
-      action = "Crear";
-      action2 = "Borrar";
+      title = S.of(context).nuevo;
+      action = S.of(context).crear;
+      action2 = S.of(context).borrar;
     }
     else {
+      title = S.of(context).editar;
+
       campCharge();
-      title = "Editar ";
-      action = "Actualizar";
-      action2 = "Deshacer";
+
+      action = S.of(context).actualizar;
+      action2 = S.of(context).deshacer;
     }
+
+    String name = S.of(context).email;
+    String title1 = "$title $name";
 
     return Scaffold(
       body: AdaptiveScrollbar(
@@ -98,7 +106,7 @@ class _newMailState extends State<newMail> {
                         children: [
                           Row(
                             children: [
-                              Text('$title Email: ',
+                              Text('$title1',
                                 style: const TextStyle(
                                     fontWeight: FontWeight.bold),),
                             ],
@@ -108,7 +116,10 @@ class _newMailState extends State<newMail> {
                                 left: 30, top: 20.0, bottom: 30.0),
                             child: Row(
                               children: [
-                                const Text('Nuevo email: '),
+                                Padding(
+                                  padding: const EdgeInsets.only(right: 10.0),
+                                  child: Text(S.of(context).nuevo_email),
+                                ),
                                 SizedBox(
                                   width: 450,
                                   height: 40,
@@ -156,7 +167,10 @@ class _newMailState extends State<newMail> {
                                 left: 30, top: 20.0, bottom: 30.0),
                             child: Row(
                               children: [
-                                const Text('Contraseña: '),
+                                Padding(
+                                  padding: const EdgeInsets.only(right: 10.0),
+                                  child: Text(S.of(context).contrasena),
+                                ),
                                 SizedBox(
                                   width: 400,
                                   height: 40,
@@ -176,7 +190,10 @@ class _newMailState extends State<newMail> {
                                 left: 30, top: 20.0, bottom: 20.0),
                             child: Row(
                               children: [
-                                const Text('Verificar contraseña: '),
+                                Padding(
+                                  padding: const EdgeInsets.only(right: 10.0),
+                                  child: Text(S.of(context).verificar_contrasena),
+                                ),
                                 SizedBox(
                                   width: 400,
                                   height: 40,
@@ -211,17 +228,21 @@ class _newMailState extends State<newMail> {
 
                                         if(controllerMail.text.isEmpty)
                                         {
-                                           action = "El campo email no puede ir vacio";
+                                           String array = S.of(context).email;
+                                           action = LocalizationHelper.camp_empty(context, array);
                                            error(context, action);
                                         }
                                         else if(controllerPas.text.isEmpty)
                                         {
-                                          action = "El campo contraseña no puede ir vacio";
+
+                                          String array = S.of(context).contrasena;
+                                          action = LocalizationHelper.camp_empty(context, array);
                                           error(context, action);
                                         }
                                         else if(controllerPasVerificator.text.isEmpty)
                                         {
-                                          action = "El campo verificar contraseña no puede ir vacio";
+                                          String array = S.of(context).verificar_contrasena;
+                                          action = LocalizationHelper.camp_empty(context, array);
                                           error(context, action);
                                         }
                                         else
@@ -231,7 +252,7 @@ class _newMailState extends State<newMail> {
 
                                                  if (result == false)
                                                  {
-                                                     String action = "No se puede establecer conexion";
+                                                     String action = S.of(context).no_se_puede_establecer_conexion;
                                                      error(context, action);
                                                  }
                                                  else
@@ -253,18 +274,19 @@ class _newMailState extends State<newMail> {
 
                                                           if(errorExp == false && result ==true)
                                                           {
-                                                            String action = 'Los emails se han guardado correctamente';
+                                                            String action = '';
                                                             await confirm(context, action);
                                                           }
                                                           else
                                                           {
-                                                            String action = 'No existe archivo de emails';
-                                                            error(context, action);
+                                                            String array = S.of(context).emails;
+                                                            String action = LocalizationHelper.no_file(context, array);
+                                                            warning(context, action);
                                                           }
                                                         }
                                                         if (result == false)
                                                         {
-                                                          action = 'Compruebe su usuario o contraseña';
+                                                          action = S.of(context).compruebe_su_usuario_o_contrasena;
                                                           error(context, action);
                                                         }
                                                  }
@@ -328,8 +350,8 @@ class _newMailState extends State<newMail> {
       final message = Message()
         ..from = Address(username, separeAddrres[0])
         ..recipients.add(username)
-        ..subject = 'Prueba de conexion'
-        ..text = 'Esto es una prueba de conexion desde la aplicacion';
+        ..subject = S.of(context).prueba_de_conexion
+        ..text = S.of(context).esto_es_una_prueba_de_conexion_desde_la_aplicacion;
 
 
       if (company == "gmail") {

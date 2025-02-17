@@ -21,16 +21,19 @@ import 'package:crud_factories/Objects/Factory.dart';
 import 'package:crud_factories/Objects/LineSend.dart';
 import 'package:crud_factories/Widgets/defaultCard.dart';
 import 'package:crud_factories/Widgets/factoryCard.dart';
+import 'package:crud_factories/generated/l10n.dart';
+import 'package:crud_factories/helpers/localization_helper.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 
 
 class view extends StatefulWidget {
 
+  BuildContext context;
   String tView;
   bool err;
 
-  view(this.tView, this.err);
+  view(this.tView, this.err, this.context);
 
   @override
   State<view> createState() => _viewState();
@@ -39,20 +42,16 @@ class view extends StatefulWidget {
 @override
 class _viewState extends State<view> {
 
-  List<String> opSearch = ['Todos', 'Filtrar'];
+  List<String> opSearch = [];
   List<String> filterList = [];
-  List<String> filterListSends = ['Fecha', 'Empresa'];
-  List<String> filterListFactories = [
-    'Nombre',
-    'Dirección',
-    'Telefono',
-    'Ciudad'
-  ];
+  List<String> filterListSends = [];
+  List<String> filterListFactories = [];
   List <LineSend> sendsDay = [];
   List <cardSend> allCards = [];
   String selectCamp = "";
-  String textFilterFactory = ' ';
-  String filterFactory = 'Nombre';
+  String textFilterFactory = '';
+  String filterFactory = '';
+  String? filterSend = '';
   int select = 0;
   int cardIndex = 0;
   int opSelected = 0;
@@ -64,103 +63,116 @@ class _viewState extends State<view> {
   List<cardSend> allSend = [];
   List<cardSend> resultSend = [];
   List<String> factoryName = [];
-  String? selectedFilterSend = 'Fecha';
   String? selectedFactory;
   String? selectedSend;
 
-  Future<void> _runFilter(String view, String enteredKeyboard, String filter,
+  Future<void> _runFilter(BuildContext context, String view, String enteredKeyboard, String filter,
       List<String> factoryName, [String? filterFactory]) async {
-    if (filter == "Nombre") {
-      filterFactory = "Nombre";
+
+    if (filter ==  S.of(context).nombre) {
+      filterFactory = S.of(context).nombre;
     }
 
     if (filter == "") {
-      filter = "Fecha";
+      filter = S.of(context).fecha;
     }
 
-    if (enteredKeyboard.isEmpty && view == 'factory') {
+    if (enteredKeyboard.isEmpty && view == S.of(context).empresa)
+    {
       resulFactories = allFactories;
     }
-    else {
-      if (selectedFilterSend == "Fecha") {
-        resultSend = allCards.where((card) {
-          final descriptFormat = lineSector[0]
-              .showFormatDate(card.description)
-              .toLowerCase();
-          final textSearch = enteredKeyboard.toLowerCase();
-          return descriptFormat.contains(textSearch);
-        }).toList();
-      }
-
-      if (selectedFilterSend == "Empresa") {
-        resultSend = allCards.where((element) =>
-            element.title.toLowerCase().contains(enteredKeyboard.toLowerCase()))
-            .toList();
-      }
-
-      if (view == "factory") {
-        switch (filterFactory) {
-          case "Nombre":
-            resulFactories = factoriesSector.where((element) =>
-                element.name.toLowerCase().contains(
-                    enteredKeyboard.toLowerCase())).toList();
-            break;
-
-          case "Dirrección":
-            resulFactories = factoriesSector.where((element) =>
-                element.allAdress().toLowerCase().contains(
-                    enteredKeyboard.toLowerCase())).toList();
-            break;
-
-          case "Telefono":
-            resulFactories = factoriesSector.where((element) =>
-                element.thelephones[0].toLowerCase().contains(
-                    enteredKeyboard.toLowerCase())).toList();
-            break;
-
-          case "Ciudad":
-            resulFactories = factoriesSector.where((element) =>
-                element.address['city']!.toLowerCase().contains(
-                    enteredKeyboard.toLowerCase())).toList();
-            break;
-        }
-      }
-
-      String stringDialog = '';
-      bool noDat = false;
-      var noDatfunction;
-
-      if (view == "factory" && resulFactories.isEmpty) {
-        stringDialog = 'Esa empresa no pertenece a nuestra base de datos';
-        noDat = true;
-        noDatfunction = noFind(context, noDat, stringDialog);
-
-        if (filter == "nombre" || filter == "telefono") {
-          filter = 'El $filter';
+    else
+    {
+        if (filterSend ==  S.of(context).fecha)
+        {
+          resultSend = allCards.where((card) {
+            final descriptFormat = lineSector[0]
+                .showFormatDate(card.description)
+                .toLowerCase();
+            final textSearch = enteredKeyboard.toLowerCase();
+            return descriptFormat.contains(textSearch);
+          }).toList();
         }
 
-        if (filter == "dirrección" || filter == "ciudad") {
-          filter = 'La $filter';
-        }
-      }
-      if (view == "send" && resultSend.isEmpty) {
-        if (selectedFilterSend == "Fecha") {
-          stringDialog = 'No tenemos ningún envio en esa fecha';
-          noDat = true;
-        }
-        else {
-          stringDialog = 'Esa empresa no pertenece a nuestra base de datos';
-          noDat = true;
+        if (filterSend == S.of(context).empresa)
+        {
+          resultSend = allCards.where((element) =>
+              element.title.toLowerCase().contains(enteredKeyboard.toLowerCase()))
+              .toList();
         }
 
-        noDatfunction = noFind(context, noDat, stringDialog);
-      }
+        if (view == S.of(context).empresa)
+        {
+           if(filterFactory==S.of(context).nombre)
+           {
+             resulFactories = factoriesSector.where((element) =>
+                 element.name.toLowerCase().contains(
+                     enteredKeyboard.toLowerCase())).toList();
+           }
+           else if(filterFactory==S.of(context).direccion)
+           {
+             resulFactories = factoriesSector.where((element) =>
+                 element.allAdress().toLowerCase().contains(
+                     enteredKeyboard.toLowerCase())).toList();
+           }
+           else if(filterFactory==S.of(context).telefono)
+           {
+             resulFactories = factoriesSector.where((element) =>
+                 element.thelephones[0].toLowerCase().contains(
+                     enteredKeyboard.toLowerCase())).toList();
+           }
+           else if(filterFactory==S.of(context).ciudad)
+           {
+             resulFactories = factoriesSector.where((element) =>
+                 element.address['city']!.toLowerCase().contains(
+                     enteredKeyboard.toLowerCase())).toList();
+           }
+        }
+
+        String stringDialog = '';
+        bool noDat = false;
+        var noDatfunction;
+
+        if (view == S.of(context).empresa && resulFactories.isEmpty)
+        {
+              stringDialog = S.of(context).esa_empresa_no_pertenede_a_nuestra_base_de_datos;
+
+              String pr = "";
+              noDat = true;
+              noDatfunction = noFind(context, noDat, stringDialog);
+
+              if (filter == S.of(context).nombre || filter == S.of(context).telefono)
+              {
+                  pr = S.of(context).el;
+              }
+
+              if (filter ==  S.of(context).direccion || filter ==  S.of(context).ciudad)
+              {
+                  pr = S.of(context).la;
+              }
+              filter = '$pr $filter';
+        }
+        if (view ==  S.of(context).envio && resultSend.isEmpty)
+        {
+              if (filterSend == S.of(context).fecha)
+              {
+                stringDialog = S.of(context).no_tenemos_ningun_envio_en_esa_fecha;
+                noDat = true;
+              }
+              else
+              {
+                stringDialog = S.of(context).esa_empresa_no_pertenede_a_nuestra_base_de_datos;
+                noDat = true;
+              }
+
+              noDatfunction = noFind(context, noDat, stringDialog);
+        }
     }
     setState(() {
-      if (view == "send") {
+      if (view == S.of(context).envio) {
         allSend = resultSend;
       }
-      if (view == "factory") {
+      if (view == S.of(context).empresa) {
         allFactories = resulFactories;
       }
     });
@@ -169,6 +181,9 @@ class _viewState extends State<view> {
   @override
   @override
   Widget build(BuildContext context) {
+
+    BuildContext context = widget.context;
+
     double mWidth = MediaQuery
         .of(context)
         .size
@@ -177,6 +192,27 @@ class _viewState extends State<view> {
         .of(context)
         .size
         .height;
+
+    List<String> opSearch = [
+      S.of(context).todos,
+      S.of(context).filtrar,
+    ];
+
+    filterListFactories = [
+      S.of(context).nombre,
+      S.of(context).direccion,
+      S.of(context).telefono,
+      S.of(context).ciudad,
+    ];
+
+    filterFactory = S.of(context).nombre;
+
+    filterListSends = [
+      S.of(context).fecha,
+      S.of(context).empresa
+    ];
+
+    filterSend = S.of(context).fecha;
 
     String view = widget.tView;
     bool err = false;
@@ -194,20 +230,20 @@ class _viewState extends State<view> {
       mWidthList = mWidth * 0.8;
     }
 
-    if (view == "factory") {
+    if (view == S.of(context).empresa) {
       filterList = filterListFactories;
     }
 
-    if (view == "send") {
+    if (view == S.of(context).envio) {
       filterList = filterListSends;
 
       if (selectCamp.isEmpty && widget.err == false) {
-        selectCamp = chargueList(0);
+        selectCamp = chargueList(0,context);
       }
     }
 
     if (controllerSearchSend.text == "") {
-      if (view == 'factory')
+      if (view ==S.of(context).empresa)
         resulFactories = factoriesSector;
     }
 
@@ -225,7 +261,7 @@ class _viewState extends State<view> {
       mHeightList = mHeiht - 40;
     }
 
-    if (view == "mail") {
+    if (view == S.of(context).email) {
       mHeightList = mHeiht;
     }
 
@@ -234,22 +270,23 @@ class _viewState extends State<view> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
 
       String action="";
+
       if(widget.err== true)
       {
-        if (view == 'factory' )
+        if (view == S.of(context).empresa)
         {
-          action = "No tiene empresas en ese departamento";
+          action = LocalizationHelper.no_array_departament(context, view);
         }
 
-        if (view == 'send')
+        if (view == S.of(context).envio)
         {
-          action = "No tiene envios en ese departamento";
+          action = LocalizationHelper.no_array_departament(context, view);
         }
       }
     });
 
 
-    if (view == 'mail' )
+    if (view == S.of(context).email)
     {
       if(mails.isEmpty)
       {
@@ -263,21 +300,21 @@ class _viewState extends State<view> {
 
       String action="";
 
-      if (view == 'mail' && mails.isEmpty)
+      if (view == S.of(context).email && mails.isEmpty)
       {
-        action = "No tiene emails en su base de datos";
+        action = S.of(context).no_tiene_emails_en_su_base_de_datos;
         error(context, action);
       }
 
-      if(view == 'factory' && factoriesSector.isEmpty)
+      if(view == S.of(context).empresa && factoriesSector.isEmpty)
       {
-        action = "No tiene empresas en ese departamento";
+        action = LocalizationHelper.no_array_departament(context, view);
         error(context, action);
       }
 
-      if(view == 'send' && lineSector.isEmpty)
+      if(view == S.of(context).envio && lineSector.isEmpty)
       {
-        action = "No tiene lineas en ese departamento";
+        action = LocalizationHelper.no_array_departament(context, view);
         error(context, action);
       }
     });
@@ -300,10 +337,10 @@ class _viewState extends State<view> {
                       ),
                       child: Column(
                         children: [
-                          if(view == 'factory' || view == 'send')
+                          if(view == S.of(context).empresa || view == S.of(context).envio)
                             Row(
                               children: [
-                                for (int index = 0; index < 2; index++)
+                                for (int index = 0; index < opSearch.length; index++)
                                   Expanded(
                                     child: GestureDetector(
                                       child: Container(
@@ -336,7 +373,7 @@ class _viewState extends State<view> {
                                   ),
                               ],
                             ),
-                          if(view == 'factory')
+                          if(view == S.of(context).empresa)
                             if (opSelected == 1)
                               Container(
                                 color: Colors.greenAccent,
@@ -348,11 +385,11 @@ class _viewState extends State<view> {
                                           right: 15.0, top: 10.0),
                                       child: Row(
                                         children: [
-                                          const Padding(
+                                          Padding(
                                             padding: EdgeInsets.only(
                                                 left: 10.0, right: 10.0),
                                             child: Text(
-                                              "Filtrar por:",
+                                              S.of(context).filtrar_por,
                                               maxLines: 1,
                                               overflow: TextOverflow.ellipsis,
                                             ),
@@ -412,12 +449,12 @@ class _viewState extends State<view> {
                                                 right: 40.0),
                                             child: TextField(
                                               controller: controllerSearchSend,
-                                              onChanged: (value) => _runFilter(
+                                              onChanged: (value) => _runFilter(context,
                                                   view, value, textFilterFactory,
                                                   factoryName, filterFactory),
-                                              decoration: const InputDecoration(
+                                              decoration: InputDecoration(
                                                   border: OutlineInputBorder(),
-                                                  hintText: 'Buscar...'),
+                                                  hintText: S.of(context).buscar),
                                             ),
                                           ),
                                         ),
@@ -426,7 +463,7 @@ class _viewState extends State<view> {
                                   ],
                                 ),
                               ),
-                          if(view == 'send')
+                          if(view == S.of(context).envio)
                             if (opSelected == 1)
                               Container(
                                 color: Colors.greenAccent,
@@ -438,11 +475,11 @@ class _viewState extends State<view> {
                                           right: 15.0, top: 10.0),
                                       child: Row(
                                         children: [
-                                          const Padding(
+                                          Padding(
                                             padding: EdgeInsets.only(
                                                 left: 10.0, right: 10.0),
                                             child: Text(
-                                              "Filtrar por:",
+                                                S.of(context).filtrar_por,
                                               maxLines: 1,
                                               overflow: TextOverflow.ellipsis,
                                             ),
@@ -452,7 +489,7 @@ class _viewState extends State<view> {
                                               child: DropdownButton2<String>(
                                                 isExpanded: true,
                                                 hint: Text(
-                                                  selectedFilterSend!,
+                                                  filterSend!,
                                                   overflow: TextOverflow.ellipsis,
                                                 ),
                                                 items: filterList.map((
@@ -466,27 +503,23 @@ class _viewState extends State<view> {
                                                       ),
                                                     ))
                                                     .toList(),
-                                                value: selectedFilterSend,
+                                                value: filterSend,
                                                 onChanged: (String? value1) {
                                                   setState(() {
                                                     controllerSearchSend.clear();
-                                                    selectedFilterSend = value1;
+                                                    filterSend = value1;
                                                     controllerSearchSend.text =
                                                     "";
                                                     allCards.clear();
-                                                    chargueList(0);
+                                                    chargueList(0,context);
                                                     select = 0;
 
 
-                                                    if (selectedFilterSend ==
-                                                        "Fecha") {
-                                                      selectCamp = resultSend[0]
-                                                          .description;
+                                                    if (filterSend == S.of(context).fecha) {
+                                                      selectCamp = resultSend[0].description;
                                                     }
-                                                    if (selectedFilterSend ==
-                                                        "Empresa") {
-                                                      selectCamp =
-                                                          resultSend[0].title;
+                                                    if (filterSend ==S.of(context).empresa) {
+                                                      selectCamp = resultSend[0].title;
                                                     }
                                                   });
                                                 },
@@ -518,12 +551,12 @@ class _viewState extends State<view> {
                                                 right: 40.0),
                                             child: TextField(
                                               controller: controllerSearchSend,
-                                              onChanged: (value) => _runFilter(
+                                              onChanged: (value) => _runFilter( context,
                                                   view, value, textFilterFactory,
                                                   factoryName),
                                               decoration: InputDecoration(
                                                   border: OutlineInputBorder(),
-                                                  hintText: 'Buscar...'),
+                                                  hintText: S.of(context).buscar),
                                             ),
                                           ),
                                         ),
@@ -533,10 +566,10 @@ class _viewState extends State<view> {
                                 ),
                               ),
                           Container(
-                            color: view == 'factory'
+                            color: view == S.of(context).empresa
                                 ? Colors.cyan
                                 : Colors.grey,
-                            height: view == 'mail'
+                            height: view == S.of(context).email
                                 ? mHeiht - 40
                                 : opSelected == 0
                                 ? mHeightList - mHeightbutton
@@ -546,18 +579,20 @@ class _viewState extends State<view> {
                             child: Row(
                               children: [
                                 Expanded(
-                                    child: view == 'factory'
+                                    child: view == S.of(context).empresa
                                         ? ListView.builder(
                                       itemCount: resulFactories.length,
                                       itemBuilder: (context, index) {
                                         return Dismissible(
                                           key: Key(resulFactories[index].name),
                                           confirmDismiss: (direction) async {
-                                            String action1 = "¿Realmente desea eliminar la empresa?";
+
+                                            String array = S.of(context).la_empresa;
+                                            String action1 = LocalizationHelper.askConfirmSupr(context, array);
                                             return await warning(context, action1);
                                           },
                                           onDismissed: (direction) async {
-                                            if (view == 'factory')
+                                            if (view == S.of(context).empresa)
                                             {
                                               String idSupr = resulFactories[index].id;
 
@@ -566,7 +601,7 @@ class _viewState extends State<view> {
                                                 if(allFactories[i].id==idSupr)
                                                 {
                                                   String name = allFactories[i].name;
-                                                  String action = 'La empresa $name se ha \n borrado correctamente';
+                                                  String action = LocalizationHelper.delete_Factory(context, name);
                                                   bool delete = await confirm(context, action);
                                                   allFactories.removeAt(i);
                                                 }
@@ -574,9 +609,7 @@ class _viewState extends State<view> {
 
                                               if(allFactories.isEmpty)
                                               {
-                                                setState(() {
-
-                                                });
+                                                setState(() {});
                                               }
                                               if (conn != null)
                                               {
@@ -628,22 +661,27 @@ class _viewState extends State<view> {
                                         );
                                       },
                                     )
-                                        : view == 'mail'
+                                        : view == S.of(context).email
+
                                         ? ListView.builder(
                                       itemCount: mails.length,
-                                      itemBuilder: (context, index) {
+                                      itemBuilder: (context0, index) {
+                                        String array = "";
                                         return Dismissible(
                                           key: Key(mails[index].addrres),
                                           confirmDismiss: (direction) async {
-                                            String action1 = "¿Realmente desea eliminar el email?";
+                                            String pr = S.of(context).el;
+                                            String array0 = S.of(context).email;
+                                             array = "$pr $array0";
+                                            String action1 = LocalizationHelper.askConfirmSupr(context, array);
                                             return await warning(
                                                 context, action1);
                                           },
                                           onDismissed: (direction) async {
-                                            if (view == "mail") {
+                                            if (view == S.of(context).email) {
                                               String idSupr = mails[index].id;
-                                              String name = mails[index].addrres;
-                                              String action = 'El email $name se ha \n borrado correctamente';
+                                              String act = S.of(context).se_ha_borrado_correctamente;
+                                              String action = '$array  $act';
                                               bool delete = await confirm(context, action);
                                               setState(() {
                                                 mails.removeAt(index);
@@ -690,14 +728,17 @@ class _viewState extends State<view> {
                                     )
                                         : ListView.builder(
                                       itemCount: resultSend.length,
-                                      itemBuilder: (context, index) {
-                                        String cantSend = resultSend[index]
-                                            .description;
+                                      itemBuilder: (contxt, index) {
+
+                                        String cantSend = resultSend[index].description;
+                                        String send = S.of(context).envios;
+                                        String titleSend ="$send: $cantSend";
+
                                         return Dismissible(
                                           key: Key(resultSend[index].title),
                                           confirmDismiss: (direction) async {
-                                            if (view == "send") {
-                                              String action1 = "Solo puedes eliminar las  lineas que  \n fueron devueltas ¿Desea eliminar?";
+                                            if (view == S.of(context).envio) {
+                                              String action1 = S.of(context).solo_puede_eliminar_las_lineas_devueltas;
                                               suprLines = await warning(context, action1);
 
                                               String campKey = " ";
@@ -705,13 +746,13 @@ class _viewState extends State<view> {
                                               if (suprLines == true)
                                               {
 
-                                                if (selectedFilterSend == "Fecha") {
+                                                if (filterSend == S.of(context).fecha) {
 
                                                   campKey = resultSend[index].description;
 
                                                   for (int i = 0; i < lineSector.length; i++)
                                                   {
-                                                    if (lineSector[i].date == campKey && lineSector[i].state =="Devuelto")
+                                                    if (lineSector[i].date == campKey && lineSector[i].state == S.of(context).devuelto)
                                                     {
                                                       idsDelete.add(lineSector[i].id);
                                                     }
@@ -723,7 +764,7 @@ class _viewState extends State<view> {
 
                                                   for (int i = 0; i < lineSector.length; i++)
                                                   {
-                                                    if (campKey == lineSector[i].factory && lineSector[i].state =="Devuelto")
+                                                    if (campKey == lineSector[i].factory && lineSector[i].state ==S.of(context).devuelto)
                                                     {
                                                       idsDelete.add(lineSector[i].id);
                                                     }
@@ -731,8 +772,10 @@ class _viewState extends State<view> {
                                                 }
 
                                                 int cantLines = idsDelete.length;
-                                                String action = ' se han eliminado $cantLines  correctamente';
+                                                String array = S.of(context).lineas;
+                                                String action = LocalizationHelper.delete_Cant_Lines(context, cantLines);
                                                 bool delete = await confirm(context, action);
+
                                                 for (int l = 0; l < idsDelete.length; l++)
                                                 {
                                                   lineSector.removeWhere((line) => line.id == idsDelete[l]);
@@ -758,11 +801,11 @@ class _viewState extends State<view> {
                                           child: GestureDetector(
                                             child: defaultCard(
                                                 title: resultSend[index].title,
-                                                description: selectedFilterSend ==
-                                                    "Fecha"
+                                                description: filterSend ==
+                                                    S.of(context).fecha
                                                     ? lineSector[0].showFormatDate(
                                                     resultSend[index].description)
-                                                    : "Envios: $cantSend",
+                                                    : titleSend,
                                                 color: index == cardIndex
                                                     ? Colors.white
                                                     : Colors.grey
@@ -787,10 +830,10 @@ class _viewState extends State<view> {
                                                 }
                                               }
 
-                                              if (selectedFilterSend == "Fecha") {
+                                              if (filterSend ==S.of(context).fecha) {
                                                 selectCamp = resultSend[select].description;
                                               }
-                                              if (selectedFilterSend == "Empresa") {
+                                              if (filterSend ==S.of(context).empresa) {
                                                 selectCamp = resultSend[select].title;
                                               }
                                             },
@@ -809,12 +852,12 @@ class _viewState extends State<view> {
                 SizedBox(
                     width: mWidthPanel,
                     height: mHeiht,
-                    child: view == 'factory'
-                        ? newFactory(select)
-                        : view == 'mail'
-                        ? newMail(select)
+                    child: view == S.of(context).empresa
+                        ? newFactory(context,select,)
+                        : view == S.of(context).email
+                        ? newMail(context,select)
                         : newSend(
-                        selectCamp, filterFactory, selectedFilterSend!, select)
+                        context,selectCamp, filterFactory, filterSend!, select)
                 ),
             ],
           )
@@ -825,16 +868,18 @@ class _viewState extends State<view> {
 
 
 
-  String chargueList(int cardIndex) {
+  String chargueList(int cardIndex, BuildContext context) {
+
     List <String> tmp = [];
     String cardSeleted = "";
     allCards.clear();
 
-
-    if (selectedFilterSend == "Fecha") {
-      for (int i = 0; i < dateSends.length; i++) {
+    if (filterSend ==S.of(context).fecha) {
+      for (int i = 0; i < dateSends.length; i++)
+      {
         int numSend = i + 1;
-        String titleSend = 'Envio $numSend';
+        String send = S.of(context).envio;
+        String titleSend = '$send $numSend';
         allCards.add(cardSend(
             title: titleSend,
             description: dateSends[i])
@@ -844,7 +889,7 @@ class _viewState extends State<view> {
     resultSend = allCards;
 
 
-    if (selectedFilterSend == "Empresa") {
+    if (filterSend == S.of(context).empresa) {
       for (int i = 0; i < lineSector.length; i++) {
         tmp.add(lineSector[i].factory);
       }

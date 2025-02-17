@@ -23,11 +23,16 @@ import 'package:crud_factories/Objects/Factory.dart';
 import 'package:crud_factories/Objects/Mail.dart';
 import 'package:crud_factories/Objects/LineSend.dart';
 import 'package:crud_factories/Objects/Sector.dart';
+import 'package:crud_factories/generated/l10n.dart';
+import 'package:crud_factories/helpers/localization_helper.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 
 class newImport extends StatefulWidget {
 
+  BuildContext context;
+
+    newImport(this.context);
   @override
   State<newImport> createState() => _newImportState();
 }
@@ -40,11 +45,12 @@ class _newImportState extends State<newImport> {
   TextEditingController controllerDatePicker = new TextEditingController();
 
   double widthBar = 10.0;
-  String? campsedValue;
   int idEndList = 0;
 
   @override
   Widget build(BuildContext context) {
+
+    BuildContext context = widget.context;
 
     List<Sector> sectorsNew = [];
     List<Factory> factoriesNew =[];
@@ -87,19 +93,19 @@ class _newImportState extends State<newImport> {
                       padding: const EdgeInsets.only(left: 30.0,top: 30.0),
                       child: Column(
                         children: [
-                          const Row(
+                          Row(
                             children: [
-                              Text('Importar datos: ',
+                              Text(S.of(context).importar_datos,
                                 style: TextStyle(fontWeight: FontWeight.bold),),
                             ],
                           ),
-                          const Padding(
+                         Padding(
                             padding: EdgeInsets.only(top: 15.00),
                             child: Column(
                               children: [
                                 Row(
                                   children: [
-                                    Text('Importar datos en formato CSV.'),
+                                    Text(S.of(context).importar_datos_csv),
                                   ],
                                 ),
                               ],
@@ -110,7 +116,10 @@ class _newImportState extends State<newImport> {
                             padding: const EdgeInsets.only(top:80.0, bottom: 30.0),
                             child: Row(
                               children: [
-                                const Text('Ruta: '),
+                                Padding(
+                                  padding: const EdgeInsets.only(right:10),
+                                  child: Text(S.of(context).ruta),
+                                ),
                                 SizedBox(
                                   width: 420,
                                   height: 40,
@@ -125,7 +134,7 @@ class _newImportState extends State<newImport> {
                                   padding: const EdgeInsets.only(left: 40.0),
                                   child: MaterialButton(
                                     color: Colors.lightBlue,
-                                    child: const Text('Examinar',
+                                    child: Text(S.of(context).examinar,
                                       style: const TextStyle(color: Colors.white),
                                     ),
                                     onPressed: (){
@@ -145,7 +154,7 @@ class _newImportState extends State<newImport> {
                                 children: [
                                   MaterialButton(
                                     color: Colors.lightBlue,
-                                    child: const Text('Importar datos',
+                                    child: Text(S.of(context).importar_datos,
                                       style:  const TextStyle(color: Colors.white) ,),
                                     onPressed: () async {
 
@@ -188,14 +197,16 @@ class _newImportState extends State<newImport> {
                                               sectors.add(sectorsNew[i]);
                                             }
                                           }
+                                          String array =  S.of(context).sectores;
+
                                           if(cantImport > 0)
                                           {
-                                            action ='se importaron $cantImport sectors correctamente';
+                                            action = LocalizationHelper.importData(context,array, cantImport);
                                             confirm(context,action);
                                           }
                                           else
                                           {
-                                            action = 'no hay ningun sector para importar';
+                                            action = LocalizationHelper.no_do_import(context, array);
                                             confirm(context, action);
                                           }
 
@@ -230,7 +241,7 @@ class _newImportState extends State<newImport> {
                                                   if(repeat == false)
                                                   {
                                                     empleoyesNew.removeAt(i);
-                                                    String stringDialog ="El empleado $current no pertenece a la empresa";
+                                                    String stringDialog = LocalizationHelper.empleoyesBeFactory(context, current);
                                                     repeat = await noFind(context, true, stringDialog);
                                                   }
                                                 }
@@ -273,15 +284,16 @@ class _newImportState extends State<newImport> {
 
 
                                                 }
+                                                String array =  S.of(context).empleados;
 
                                                 if(cantImport > 0)
                                                 {
-                                                  action ='se importaron $cantImport empleados correctamente';
+                                                  action = LocalizationHelper.importData(context,array, cantImport);
                                                   confirm(context,action);
                                                 }
                                                 else
                                                 {
-                                                  action = 'no hay ningun empleado para importar';
+                                                  action = LocalizationHelper.no_do_import(context, array);
                                                   confirm(context, action);
                                                 }
 
@@ -296,8 +308,9 @@ class _newImportState extends State<newImport> {
                                           }
                                           else
                                           {
-                                              action ="No puede cargar los empleados porque no tiene empresas";
-                                              error(context, action);
+                                            String array =S.of(context).empleados;
+                                            action = LocalizationHelper.no_companies_without(context, array);
+                                            error(context, action);
                                           }
                                       }
                                       if(mailsNew.isNotEmpty)
@@ -332,14 +345,17 @@ class _newImportState extends State<newImport> {
                                           }
 
                                         }
+                                        String array =  S.of(context).emails;
+
                                         if(cantImport > 0)
                                         {
-                                          action ='se importaron $cantImport emails correctamente';
+
+                                          action = LocalizationHelper.importData(context,array, cantImport);
                                           confirm(context,action);
                                         }
                                         else
                                         {
-                                          action = 'no hay ningun email para importar';
+                                          action = LocalizationHelper.no_do_import(context, array);
                                           confirm(context, action);
                                         }
 
@@ -373,7 +389,7 @@ class _newImportState extends State<newImport> {
                                                 if(repeat == false)
                                                 {
                                                   linesNew.removeAt(i);
-                                                  String stringDialog ="La empresa $current no pertenece a nuestra base de datos";
+                                                  String stringDialog = LocalizationHelper.factorybeBD(context, current);
                                                   repeat = await noFind(context, true, stringDialog);
                                                 }
                                               }
@@ -410,15 +426,16 @@ class _newImportState extends State<newImport> {
                                                 }
 
                                               }
+                                              String array =  S.of(context).lineas;
 
                                               if(cantImport > 0)
                                               {
-                                                action ='se importaron $cantImport lineas correctamente';
+                                                action = LocalizationHelper.importData(context,array, cantImport);
                                                 confirm(context,action);
                                               }
                                               else
                                               {
-                                                action = 'no hay ninguna linea para importar';
+                                                action = LocalizationHelper.no_do_import(context, array);
                                                 confirm(context, action);
                                               }
 
@@ -431,11 +448,12 @@ class _newImportState extends State<newImport> {
                                                    await  csvExportatorLines(lineSector);;
                                               }
                                         }
-                                        else
-                                        {
-                                           action ="No puede cargar las lineas porque no tiene empresas";
+                                         else
+                                         {
+                                           String array =S.of(context).lineas;
+                                           action = LocalizationHelper.no_companies_without(context, array);
                                            error(context, action);
-                                        }
+                                         }
 
                                       }
                                       if(conectionsNew.isNotEmpty)
@@ -471,15 +489,16 @@ class _newImportState extends State<newImport> {
                                           }
 
                                         }
-
+                                        String array =  S.of(context).conexiones;
                                         if(cantImport > 0)
                                         {
-                                          action = 'se importaron $cantImport conexiones correctamente';
+
+                                          action = LocalizationHelper.importData(context,array, cantImport);
                                           confirm(context, action);
                                         }
                                         else
                                         {
-                                          action = 'no hay ninguna conexion para importar';
+                                          action = LocalizationHelper.no_do_import(context, array);
                                           confirm(context, action);
                                         }
 
@@ -506,7 +525,7 @@ class _newImportState extends State<newImport> {
                                                 if(repeat == false)
                                                 {
                                                   factoriesNew.removeAt(i);
-                                                  String stringDialog ="no existe el sector";
+                                                  String stringDialog =S.of(context).no_existe_sector;
                                                   repeat = await noFind(context, true, stringDialog);
                                                 }
                                               }
@@ -545,12 +564,13 @@ class _newImportState extends State<newImport> {
                                               }
                                               if(cantImport > 0)
                                               {
-                                                action = 'se importaron $cantImport empresas correctamente';
+                                                String array =  S.of(context).empresas;
+                                                action = LocalizationHelper.importData(context,array, cantImport);
                                                 confirm(context, action);
                                               }
                                               else
                                               {
-                                                action = 'no hay ninguna empresa para importar';
+                                                action = S.of(context).no_hay_empresas_para_importar;
                                                 confirm(context, action);
                                               }
 
@@ -565,7 +585,7 @@ class _newImportState extends State<newImport> {
                                           }
                                           else
                                           {
-                                            action ="No puede cargar las porque no tiene sectores";
+                                            action =action = S.of(context).no_puede_cargar_sin_sectores;
                                             error(context, action);
                                           }
                                       }
@@ -573,7 +593,7 @@ class _newImportState extends State<newImport> {
                                   ),
                                   MaterialButton(
                                     color: Colors.lightBlue,
-                                    child: const Text('Borrar',
+                                    child: Text(S.of(context).borrar,
                                       style: const TextStyle(color: Colors.white),),
                                     onPressed: () {
                                       setState(() {

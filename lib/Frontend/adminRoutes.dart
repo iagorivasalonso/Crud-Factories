@@ -4,6 +4,8 @@ import 'package:crud_factories/Backend/CSV/exportRoutes.dart';
 import 'package:crud_factories/Backend/data.dart';
 import 'package:crud_factories/Objects/RouteCSV.dart';
 import 'package:crud_factories/Widgets/headAlertDialog.dart';
+import 'package:crud_factories/generated/l10n.dart';
+import 'package:crud_factories/helpers/localization_helper.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 
@@ -70,7 +72,7 @@ Future<bool> adminRoutes(BuildContext context, [bool? sqlBd]) async {
                width: 500,
                child: Column(
                  children: [
-                   headAlert(title:"Selector de rutas"),
+                   headAlert(title: S.of(context).selector_de_rutas),
                  Expanded(
                      child: Align(
                        alignment: Alignment.topLeft,
@@ -80,11 +82,11 @@ Future<bool> adminRoutes(BuildContext context, [bool? sqlBd]) async {
                            width: 310,
                            child: Row(
                              children: [
-                               const Expanded(
+                                Expanded(
                                  flex:2,
                                  child: Padding(
                                    padding: const EdgeInsets.only(left: 40.0),
-                                   child: Text("Fuente",
+                                   child: Text(S.of(context).fuente,
                                      maxLines: 1,
                                      overflow: TextOverflow.ellipsis,
                                    ),
@@ -95,8 +97,8 @@ Future<bool> adminRoutes(BuildContext context, [bool? sqlBd]) async {
                                  child: Row(
                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                    children: [
-                                    const Expanded(
-                                       child: Text("Todas",
+                                     Expanded(
+                                       child: Text(S.of(context).todas,
                                          maxLines: 1,
                                          overflow: TextOverflow.ellipsis,
                                        ),
@@ -119,10 +121,10 @@ Future<bool> adminRoutes(BuildContext context, [bool? sqlBd]) async {
                                  child: Row(
                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                    children: [
-                                     const Expanded(
+                                     Expanded(
                                        child: Padding(
                                          padding: EdgeInsets.only(left: 10),
-                                         child: Text("SQL",
+                                         child: Text(S.of(context).sql,
                                            maxLines: 1,
                                            overflow: TextOverflow.ellipsis,
                                          ),
@@ -197,8 +199,8 @@ Future<bool> adminRoutes(BuildContext context, [bool? sqlBd]) async {
                                                     _pickFile(_controllerRoute[index]);
                                                   });
                                                 },
-                                                child: const Text(
-                                                  "Examinar",
+                                                child: Text(
+                                                  S.of(context).examinar,
                                                   maxLines: 1,
                                                   overflow: TextOverflow.ellipsis,
                                                   style: TextStyle(color: Colors.white),
@@ -238,14 +240,18 @@ Future<bool> adminRoutes(BuildContext context, [bool? sqlBd]) async {
                                     {
                                       idNew = i + 1;
 
-                                      routesNew.add(RouteCSV(
-                                          id: idNew.toString(),
-                                          name: _controllerNameRoute[i].text,
-                                          route: _controllerRoute[i].text
-                                      ));
-                                    }
+                                          routesNew.add(RouteCSV(
+                                              id: idNew.toString(),
+                                              name: _controllerNameRoute[i].text,
+                                              route: _controllerRoute[i].text
+                                          ));
+                                        }
 
-                                      String action = 'Las rutas se han guardado correctamente';
+                                       String array = S.of(context).rutas;
+                                       String actionArray = S.of(context).guardado;
+
+                                       String action = LocalizationHelper.manage_array(context, array, actionArray);
+
                                       await confirm(context, action);
                                       chargueDataCSV();
                                       csvExportatorRoutes(routesNew);
@@ -255,7 +261,7 @@ Future<bool> adminRoutes(BuildContext context, [bool? sqlBd]) async {
                                        Navigator.of(context).pop(true);
                                      });
                                  },
-                                 child: const Text("Importar",style:  TextStyle(color: Colors.white),)
+                                 child: Text(S.of(context).importar,style:  TextStyle(color: Colors.white),)
                              ),
                            ),
                          ),
@@ -265,14 +271,13 @@ Future<bool> adminRoutes(BuildContext context, [bool? sqlBd]) async {
                              child: MaterialButton(
                                  color: Colors.lightBlue,
                                  onPressed:(){
-
                                    campCharge(_controllerNameRoute,_controllerRoute);
 
                                    setState((){
                                      Navigator.of(context).pop(false);
                                    });
                                  },
-                                 child: const Text("Cancelar",style: TextStyle(color: Colors.white),)
+                                 child: Text(S.of(context).cancelar,style: TextStyle(color: Colors.white),)
                              ),
                            ),
                          ),

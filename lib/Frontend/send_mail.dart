@@ -12,6 +12,8 @@ import 'package:crud_factories/Functions/validatorCamps.dart';
 import 'package:crud_factories/Objects/Factory.dart';
 import 'package:crud_factories/Objects/Mail.dart';
 import 'package:crud_factories/Objects/LineSend.dart';
+import 'package:crud_factories/generated/l10n.dart';
+import 'package:crud_factories/helpers/localization_helper.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
@@ -20,6 +22,10 @@ import 'package:mailer/smtp_server.dart';
 
 
 class sendMail extends StatefulWidget {
+
+  BuildContext context;
+
+  sendMail(this.context);
 
   @override
   State<sendMail> createState() => _sendMailState();
@@ -43,7 +49,7 @@ class _sendMailState extends State<sendMail> {
   List<Attachment> atach=[];
 
   List <String> columns = [];
-  List <String> columnsTable = ['Empresa','Email'];
+  List <String> columnsTable = [];
   List <LineSend> sends = [];
   List <LineSend> sendsDay = [];
   List <Factory> allFactories = [];
@@ -60,6 +66,10 @@ class _sendMailState extends State<sendMail> {
 
   @override
   Widget build(BuildContext context) {
+
+    BuildContext context = widget.context;
+
+    columnsTable = [S.of(context).empresa, S.of(context).email];
 
     if(mails.isEmpty)
     {
@@ -80,8 +90,6 @@ class _sendMailState extends State<sendMail> {
              controllerPass.text = "";
            }
     }
-
-
 
     return Scaffold(
       body: AdaptiveScrollbar(
@@ -111,11 +119,14 @@ class _sendMailState extends State<sendMail> {
                       padding: const EdgeInsets.only(left: 30.0, top: 30.0),
                       child: Column(
                           children: [
-                        const Row(
+                         Row(
                           children: [
-                            Text(
-                              'Envio de emails: ',
-                              style: TextStyle(fontWeight: FontWeight.bold),
+                            Padding(
+                              padding: const EdgeInsets.only(right: 10),
+                              child: Text(
+                                 S.of(context).envio_de_emails,
+                                style: TextStyle(fontWeight: FontWeight.bold),
+                              ),
                             ),
                           ],
                         ),
@@ -128,7 +139,10 @@ class _sendMailState extends State<sendMail> {
                                   child: otherMail == false
                                     ? Row(
                                        children: [
-                                          const Text('Remitente:'),
+                                          Padding(
+                                            padding: const EdgeInsets.only(right: 10.0),
+                                            child: Text(S.of(context).remitente),
+                                          ),
                                           Padding(
                                             padding: const EdgeInsets.only(right: 120.0),
                                             child: SizedBox(
@@ -178,7 +192,10 @@ class _sendMailState extends State<sendMail> {
                                          children: [
                                             Row(
                                               children: [
-                                                const Text("Email:"),
+                                                Padding(
+                                                  padding: const EdgeInsets.only(right: 10),
+                                                  child: Text(S.of(context).email),
+                                                ),
                                                 Padding(
                                                   padding: const EdgeInsets.only(left: 49.0),
                                                   child: SizedBox(
@@ -221,9 +238,9 @@ class _sendMailState extends State<sendMail> {
                                       MaterialButton(
                                           color: Colors.lightBlue,
                                           child: otherMail == false
-                                                 ? const Text("Otro" ,
+                                                 ? Text(S.of(context).otro ,
                                                       style: TextStyle(color: Colors.white),)
-                                                 : const Text("Volver" ,
+                                                 : Text(S.of(context).volver ,
                                                             style: TextStyle(color: Colors.white),),
                                           onPressed: () async {
                                             setState(() {
@@ -244,7 +261,10 @@ class _sendMailState extends State<sendMail> {
                               padding: const EdgeInsets.only(top: 35.0, left: 30.0),
                               child: Row(
                                 children: [
-                                  const Text('Contraseña:'),
+                                  Padding(
+                                    padding: const EdgeInsets.only(right: 10.0),
+                                    child: Text(S.of(context).contrasena),
+                                  ),
                                   Padding(
                                     padding: const EdgeInsets.only(left: 10.0),
                                     child: SizedBox(
@@ -278,9 +298,9 @@ class _sendMailState extends State<sendMail> {
                             children: [
                               Row(
                                 children: [
-                                  const Column(
+                                   Column(
                                     children: [
-                                      Text('Para:'),
+                                      Text(S.of(context).para),
                                     ],
                                   ),
                                   Row(
@@ -297,7 +317,7 @@ class _sendMailState extends State<sendMail> {
                                                     isList = false;
                                                   });
                                                 }),
-                                            const Text('Un destinatario'),
+                                             Text(S.of(context).un_destinatario),
                                           ],
                                         ),
                                       ),
@@ -314,7 +334,7 @@ class _sendMailState extends State<sendMail> {
                                                     saveChanges = false;
                                                   });
                                                 }),
-                                            const Text('Varios destinatarios'),
+                                            Text(S.of(context).varios_destinatarios),
                                           ],
                                         ),
                                       ),
@@ -330,7 +350,7 @@ class _sendMailState extends State<sendMail> {
                                       child: isList == false
                                           ?  Row(
                                         children: [
-                                          Text("Enviar a:"),
+                                          Text(S.of(context).enviar_a),
                                           Padding(
                                             padding: EdgeInsets.only(left: 34.0),
                                             child: SizedBox(
@@ -364,13 +384,12 @@ class _sendMailState extends State<sendMail> {
                                               children: [
                                                 Row(
                                                   children: [
-                                                    const Text("Seleccionar envio: "),
+                                                    Text(S.of(context).seleccionar_envio),
                                                     Padding(
                                                       padding: const EdgeInsets.only(left: 20.0),
                                                       child: DropdownButtonHideUnderline(
                                                         child: DropdownButton2<String>(
-                                                          hint: const Text('Seleccionar envio',
-                                                          ),
+                                                          hint: Text(S.of(context).seleccionar_envio),
                                                           items: dateSends.map((String itemSend) => DropdownMenuItem<String>(
                                                             value:  itemSend,
                                                             child: Text( itemSend,
@@ -481,13 +500,13 @@ class _sendMailState extends State<sendMail> {
                                                             children: [
                                                               Padding(
                                                                 padding: const EdgeInsets.only(top: 20.0),
-                                                                child: Text("El envio tiene $cantFactories empresas"),
+                                                                child: Text(LocalizationHelper.shippingFactory(context,cantFactories)),
                                                               )
                                                             ],
                                                           ),
                                                         ],
                                                       )
-                                                          : const Text("no hay ningún envio seleccionado",
+                                                          : Text(S.of(context).no_hay_envios_seleccionados,
                                                         style: TextStyle(color: Colors.red),)
                                                   ),
                                                 )
@@ -504,7 +523,10 @@ class _sendMailState extends State<sendMail> {
                                 padding: const EdgeInsets.only(top: 60.0, right: 10.0),
                                 child: Row(
                                   children: [
-                                    const Text('Asunto:'),
+                                    Padding(
+                                      padding: const EdgeInsets.only(right: 10),
+                                      child: Text(S.of(context).asunto),
+                                    ),
                                     Padding(
                                       padding: const EdgeInsets.only(left: 39.0),
                                       child: SizedBox(
@@ -532,7 +554,7 @@ class _sendMailState extends State<sendMail> {
                                       padding: const EdgeInsets.only(left: 100.0),
                                       child: MaterialButton(
                                         color: Colors.lightBlue,
-                                        child: const Text('Adjuntar',
+                                        child: Text(S.of(context).adjuntar,
                                           style:  TextStyle(color: Colors.white),),
                                         onPressed: () {
                                           setState(() {
@@ -624,7 +646,7 @@ class _sendMailState extends State<sendMail> {
                                          children: [
                                             Padding(
                                               padding: EdgeInsets.only( left: marginBox),
-                                              child: Text(" $nameRoute ",
+                                              child: Text("$nameRoute",
                                                    style: const TextStyle(backgroundColor: Colors.amberAccent),
                                                  ),
                                             ),
@@ -636,12 +658,12 @@ class _sendMailState extends State<sendMail> {
                                  ),
                                ),
                              ),
-                             const Padding(
+                            Padding(
                                 padding:  EdgeInsets.only(top: 40.0),
                                 child:  Row(
                                   children: [
                                     Text(
-                                      'Mensaje: ',
+                                      S.of(context).mensaje,
                                       style: TextStyle(fontWeight: FontWeight.bold),
                                     ),
                                   ],
@@ -682,7 +704,7 @@ class _sendMailState extends State<sendMail> {
                                     padding: const EdgeInsets.only(left: 600.0, right: 30.0),
                                     child: MaterialButton(
                                       color: Colors.lightBlue,
-                                      child: const Text('Enviar',
+                                      child: Text(S.of(context).enviar,
                                       style: const TextStyle(color: Colors.white),),
                                       onPressed: () async {
 
@@ -695,7 +717,7 @@ class _sendMailState extends State<sendMail> {
                                         {
                                             if(mailCorrect(controllerMailFrom.text) != true)
                                             {
-                                              action ='su correo electronico no es valido';
+                                              action = S.of(context).correo_invalido;
                                               validMailFrom = await error(context,action);
 
                                             }
@@ -715,7 +737,7 @@ class _sendMailState extends State<sendMail> {
                                           {
                                             if(mailCorrect(controllerMailTo.text) != true)
                                             {
-                                              action ='El destinatario no es un correo electronico';
+                                              action = S.of(context).destinatario_no_valido;
                                               error(context,action);
 
                                               validMailTo = false;
@@ -726,7 +748,7 @@ class _sendMailState extends State<sendMail> {
                                           {
                                             if(sendsDay.isEmpty)
                                             {
-                                              action ='Debe seleccionar una lista correcta';
+                                              action = S.of(context).lista_incorrecta;
                                               error(context,action);
 
                                               validMailTo = false;
@@ -742,7 +764,8 @@ class _sendMailState extends State<sendMail> {
                                           {
                                             dat_correct=dat_correct-1;
 
-                                             action1 ='el campo asunto está vacio ¿Desea continuar?';
+                                             String array = S.of(context).asunto;
+                                             action1 = LocalizationHelper.camp_empty_continue(context, array);
                                              bool  correct= await warning(context, action1);
 
                                              if(correct)
@@ -755,7 +778,8 @@ class _sendMailState extends State<sendMail> {
                                           {
                                             dat_correct=dat_correct-1;
 
-                                            action1 ='el campo mensaje está vacio ¿Desea continuar?';
+                                            String array = S.of(context).mensaje;
+                                            action1 = LocalizationHelper.camp_empty_continue(context, array);
                                             bool  correct= await warning(context, action1);
 
                                             if(correct)
@@ -791,8 +815,11 @@ class _sendMailState extends State<sendMail> {
                                   ),
                                   MaterialButton(
                                     color: Colors.lightBlue,
-                                    child: const Text('Reiniciar',
-                                      style: const TextStyle(color: Colors.white),),
+                                    child: Padding(
+                                      padding: const EdgeInsets.only(right: 10.0),
+                                      child: Text(S.of(context).reiniciar,
+                                        style: const TextStyle(color: Colors.white),),
+                                    ),
                                     onPressed: () {
                                       setState(() {
                                         isList = false;
@@ -825,7 +852,7 @@ class _sendMailState extends State<sendMail> {
   void _pickFile() async {
 
     FilePickerResult? result =  await FilePicker.platform.pickFiles(
-      dialogTitle: 'Seleccionar archivo',
+      dialogTitle: S.of(context).seleccionar_archivo,
       type: FileType.custom,
       allowedExtensions: ['csv','pdf'],
     );
@@ -883,7 +910,7 @@ class _sendMailState extends State<sendMail> {
 
                       if(sendCorrect.contains("Message successfully sent"))
                       {
-                        action="El email se ha enviado correctamente";
+                        action=S.of(context).email_enviado_correctamente;
                         confirm(context,action);
                       }
 
@@ -930,7 +957,7 @@ class _sendMailState extends State<sendMail> {
 
                            if(sendCorrect.contains("Message successfully sent"))
                            {
-                              sendsDay[cSended].state = "Enviado";
+                              sendsDay[cSended].state = S.of(context).enviado;
                               cSended++;
                            }
 
@@ -939,12 +966,12 @@ class _sendMailState extends State<sendMail> {
                       
                       if (cSended != 0)
                       {
-                        action="Se han enviado $cSended emails";
+                        action = LocalizationHelper.sendMails(context, cSended);
                         confirm(context,action);
                       }
                       else
                       {
-                        action = "No hay emails para enviar";
+                        action = S.of(context).no_hay_conexion_con_el_servidor;
                         error(context, action);
                       }
 
@@ -959,7 +986,7 @@ class _sendMailState extends State<sendMail> {
                     }
 
          }catch (e) {
-           action="No hay conecxion con el email";
+           action = S.of(context).no_hay_conexion_con_el_servidor;
            error(context,action);
          }
      }

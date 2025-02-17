@@ -15,6 +15,7 @@ import 'package:crud_factories/Frontend/adminSectors.dart';
 import 'package:crud_factories/Functions/changesNoSave.dart';
 import 'package:crud_factories/Objects/RouteCSV.dart';
 import 'package:crud_factories/generated/l10n.dart';
+import 'package:crud_factories/helpers/localization_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:menu_bar/menu_bar.dart';
 
@@ -82,7 +83,7 @@ class _AppState extends State<App> {
 
                if(fileFail == true)
                {
-                    String no_rutes = S.of(context).no_archivo_rutas;
+                    String no_rutes = S.of(context).no_tienes_completo_el_archivo_de_rutas;
                     String want_complete = S.of(context).desea_completarlo;
 
                     action = "$no_rutes \n $want_complete";
@@ -325,7 +326,7 @@ class _AppState extends State<App> {
                               }
                               else
                               {
-                                String modif = "nuevo";
+                                String modif = S.of(context).nuevo.toLowerCase();
 
                                 bool create = await createSector(context,modif);
 
@@ -342,7 +343,8 @@ class _AppState extends State<App> {
                                   }
                                   else
                                   {
-                                    String action = S.of(context).no_existe_archivo_de_sectores;
+                                    String array = S.of(context).sectores;
+                                    String action = LocalizationHelper.no_file(context, array);
                                     error(context, action);
                                   }
                                 }
@@ -536,7 +538,6 @@ class _AppState extends State<App> {
                           child: Text(S.of(context).envios)
                       ),
                       onTap: () async {
-
                             bool go = false;
                             if (saveChanges == false)
                             {
@@ -711,7 +712,7 @@ class _AppState extends State<App> {
                   MenuButton(
                       text: SizedBox(
                           width: wItemMax,
-                          child: Text(S.of(context).conexionBD)),
+                          child: Text(S.of(context).conexion_BD)),
                       onTap: () async {
 
                         if (saveChanges == false)

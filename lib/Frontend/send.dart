@@ -6,6 +6,8 @@ import 'package:crud_factories/Backend/data.dart';
 import 'package:crud_factories/Backend/CSV/exportLines.dart';
 import 'package:crud_factories/Functions/createId.dart';
 import 'package:crud_factories/Objects/LineSend.dart';
+import 'package:crud_factories/generated/l10n.dart';
+import 'package:crud_factories/helpers/localization_helper.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:intl/intl.dart';
 import 'package:show_platform_date_picker/show_platform_date_picker.dart';
@@ -15,12 +17,13 @@ import 'package:flutter/material.dart';
 
 class newSend extends StatefulWidget {
 
+  BuildContext context;
   String selectCamp;
   String filter;
   String SeletedFilterSend;
   int select;
 
-  newSend(this.selectCamp, this.filter,  this.SeletedFilterSend,this.select);
+  newSend(this.context, this.selectCamp, this.filter,  this.SeletedFilterSend,this.select);
 
   @override
   State<newSend> createState() => _newSendState();
@@ -43,20 +46,29 @@ class _newSendState extends State<newSend> {
   String filterSelected='';
   String date="";
   int cantFactory = 0;
+  int cantSend = 0;
   bool allSelect = false;
   List<bool> Send = List.generate(allFactories.length, (index) => false);
   List<bool> lineEdit = List.generate(lineSector.length, (index) => false);
   DateTime seletedDate =DateTime.now();
-  String? selectedSector = "Todos";
+  String? selectedSector = "";
   String stringFactories = "";
   List<String> stateSends = [];
-
+  int allLines = 0;
+  int allLinesModify = 0;
   @override
   Widget build(BuildContext context) {
 
+    BuildContext context = widget.context;
     String type = widget.SeletedFilterSend;
     String selectCamp = widget.selectCamp;
     int select = widget.select;
+
+    if(selectedSector=="")
+    {
+      selectedSector = S.of(context).todos;
+    }
+
 
     List<LineSend> lineSelected = [];
     List <String> campKey = [];
@@ -72,13 +84,13 @@ class _newSendState extends State<newSend> {
 
     if (select == -1) {
 
-      title = "Nuevo ";
-      typeList = "empresas: ";
-      type = "Fecha ";
-      action1 = "Nuevo";
-      action2 = "Reiniciar";
+      title = S.of(context).nuevo;
+      typeList = S.of(context).empresas;
+      type = S.of(context).fecha;
+      action1 = S.of(context).nuevo;
+      action2 = S.of(context).reiniciar;
 
-      sectorsString.add("Todos");
+      sectorsString.add(S.of(context).todos);
 
       for(int i = 0; i < sectors.length; i++)
       {
@@ -96,9 +108,15 @@ class _newSendState extends State<newSend> {
         controllerSearch.text=DateFormat('dd-MM-yyyy').format( DateTime.now());
       }
 
-          if(selectedSector == "Todos")
+          if(selectedSector ==S.of(context).todos)
           {
-            campsTable = ['Empresa', 'Sector', 'Observaciones', 'Estado', 'Seleccionar'];
+            campsTable = [
+                  S.of(context).empresa,
+                  S.of(context).sector,
+                  S.of(context).observaciones,
+                  S.of(context).estado,
+                  S.of(context).seleccionar,
+              ];
 
             factoriesSector.clear();
 
@@ -107,18 +125,22 @@ class _newSendState extends State<newSend> {
               factoriesSector.add(allFactories[i]);
             }
 
-
             cantFactory = factoriesSector.length;
-            stringFactories = "Tiene $cantFactory empresas en su base de datos";
+            stringFactories = LocalizationHelper.factoriesBD(context,cantFactory);
           }
     }
     else
     {
 
-      action1 = "Guardar";
-      action2 = "Deshacer";
-      title = "Ver ";
-      stateSends = ['Enviado','En curso','Devuelto','Respondio'];
+      action1 = S.of(context).guardar;
+      action2 = S.of(context).deshacer;
+      title = S.of(context).ver;
+      stateSends = [
+            S.of(context).enviado,
+            S.of(context).en_curso,
+            S.of(context).devuelto,
+            S.of(context).respondio
+      ];
 
       int selected = 0;
       if (subIten2Select != 0)
@@ -133,18 +155,27 @@ class _newSendState extends State<newSend> {
           }
       }
 
-      if(type == "Fecha")
+      if(type == S.of(context).fecha)
       {
 
-        type = "Fecha:  ";
+        type = S.of(context).fecha;
 
             if(subIten2Select == 0)
             {
-                campsTable = ['Empresa', 'Sector', 'Observaciones', 'Estado'];
+                campsTable = [
+                  S.of(context).empresa,
+                  S.of(context).sector,
+                  S.of(context).observaciones,
+                  S.of(context).estado
+                ];
             }
             else
             {
-                 campsTable = ['Empresa', 'Observaciones', 'Estado'];
+                 campsTable = [
+                   S.of(context).empresa,
+                   S.of(context).observaciones,
+                   S.of(context).estado
+                 ];
             }
 
 
@@ -187,15 +218,21 @@ class _newSendState extends State<newSend> {
           }
 
           cant = lineSelected.length;
-          stringFactories = "Este dia se hicieron $cant envios";
+          stringFactories = LocalizationHelper.sendsDay(context, cant);
+
       }
       
-      typeList = "envios: ";
+      typeList = S.of(context).envios;
 
-      if(type == "Empresa")
+      if(type == S.of(context).empresa)
       {
-        type = "Empresa:  ";
-        campsTable = ['Fecha', 'Observaciones', 'Estado'];
+        type = S.of(context).empresa;
+
+        campsTable = [
+          S.of(context).fecha,
+          S.of(context).observaciones,
+          S.of(context).estado
+        ];
         controllerSearch.text = selectCamp;
 
         lineSelected.clear();
@@ -220,11 +257,27 @@ class _newSendState extends State<newSend> {
 
         }
 
-        cant = lineSelected.length;
-        stringFactories = "A esta empresa se le hicieron $cant envios";
-
       }
+
+      cantSend = lineSelected.length;
+      stringFactories = LocalizationHelper.sendsDay(context,cantSend);
     }
+
+    String send = S.of(context).envio;
+    String titleComplete = "";
+
+    if(itenSelect == 1 && subIten2Select != 0 )
+    {
+      String sp = S.of(context).de.toLowerCase();
+      titleComplete ='$title $send $sp $sectorView';
+    }
+    else
+    {
+      titleComplete ='$title $send';
+    }
+
+    String list_d = S.of(context).lista_de;
+    String list_def='$list_d $typeList';
 
     final ShowPlatformDatePicker platformDatePicker = ShowPlatformDatePicker(buildContext: context);
 
@@ -265,11 +318,7 @@ class _newSendState extends State<newSend> {
                             children: [
                               Row(
                                 children: [
-                                  Text('$title Envio  ',
-                                    style: const TextStyle(
-                                        fontWeight: FontWeight.bold),),
-                                  if(itenSelect == 1 && subIten2Select != 0 )
-                                  Text('de $sectorView:  ',
+                                  Text(titleComplete,
                                     style: const TextStyle(
                                         fontWeight: FontWeight.bold),),
                                 ],
@@ -322,12 +371,12 @@ class _newSendState extends State<newSend> {
                                 child: DropdownButtonHideUnderline(
                                   child: Row(
                                     children: [
-                                      const Padding(
+                                       Padding(
                                         padding: EdgeInsets.only(left: 20.0, right: 30.0),
-                                        child: Text("Sector: "),
+                                        child: Text(S.of(context).sector),
                                       ),
                                       DropdownButton2<String>(
-                                        hint:  Text("Todos"),
+                                        hint:  Text(S.of(context).todos),
                                         items: sectorsString.map((String itemSector) => DropdownMenuItem<String>(
                                           value:  itemSector,
                                           child: Text(itemSector),
@@ -335,12 +384,20 @@ class _newSendState extends State<newSend> {
                                         value: selectedSector,
                                         onChanged: (String? sectorChoose) {
                                           setState(() {
+                                            print(sectorChoose!);
                                               selectedSector = sectorChoose!;
                                               factoriesSector.clear();
-                                              if (selectedSector == "Todos")
-                                              {
-                                                campsTable = ['Empresa', 'Sector', 'Observaciones', 'Estado', 'Seleccionar'];
 
+                                              if (selectedSector == S.of(context).todos)
+                                              {
+
+                                                campsTable = [
+                                                  S.of(context).empresa,
+                                                  S.of(context).sector,
+                                                  S.of(context).observaciones,
+                                                  S.of(context).estado,
+                                                  S.of(context).seleccionar
+                                                ];
 
                                                 for(int i = 0; i < allFactories.length;i++)
                                                 {
@@ -349,11 +406,15 @@ class _newSendState extends State<newSend> {
 
 
                                                 cantFactory = factoriesSector.length;
-                                                stringFactories = "Tiene $cantFactory empresas en su base de datos";
                                               }
                                               else
                                               {
-                                                campsTable = ['Empresa', 'Observaciones', 'Estado', 'Seleccionar'];
+                                                campsTable = [
+                                                  S.of(context).empresa,
+                                                  S.of(context).observaciones,
+                                                  S.of(context).estado,
+                                                  S.of(context).seleccionar
+                                                ];
 
                                                 int  sSelected = 0;
                                                 for(int i = 0; i <sectors.length; i++)
@@ -373,12 +434,9 @@ class _newSendState extends State<newSend> {
                                                   }
                                                 }
 
-
-
                                                 cantFactory = factoriesSector.length;
-                                                stringFactories = "Tiene $cantFactory empresas en su base de datos";
                                               }
-
+                                              stringFactories = LocalizationHelper.factoriesBD(context,cantFactory);
 
                                           });
                                         },
@@ -403,7 +461,7 @@ class _newSendState extends State<newSend> {
                                 padding: const EdgeInsets.only(top: 40.0),
                                 child: Row(
                                   children: [
-                                    Text('Lista de $typeList',
+                                    Text(list_def,
                                       style: const TextStyle(
                                           fontWeight: FontWeight.bold),),
                                   ],
@@ -432,7 +490,7 @@ class _newSendState extends State<newSend> {
                                                  DataCell(
                                                    Text(factoriesSector[indexRow].name),
                                                  ),
-                                                 if(selectedSector=="Todos")
+                                                 if(selectedSector==S.of(context).todos)
                                                    DataCell(
                                                      Text(sectors[int.parse(factoriesSector[indexRow].sector)-1].name),
                                                    ),
@@ -490,7 +548,7 @@ class _newSendState extends State<newSend> {
                                                   DataCell(
                                                       Text(campKey[indexRow])
                                                   ),
-                                                  if(subIten2Select == 0 && type == "Fecha:  ")
+                                                  if(subIten2Select == 0 && type == S.of(context).fecha)
                                                     DataCell(
                                                         Text(_controllersSectorLine[indexRow].text)
                                                     ),
@@ -547,12 +605,15 @@ class _newSendState extends State<newSend> {
 
                                                               lineEdit[indexRow] = true;
 
-                                                              if(saveChanges == false) {
-                                                                if (_controllerStateLine[indexRow].text == lineSelected[indexRow].state) {
-                                                                  saveChanges = false;
-                                                                } else {
-                                                                  saveChanges = true;
-                                                                }
+                                                              if(saveChanges == false)
+                                                              {
+                                                                  if (_controllerStateLine[indexRow].text == lineSelected[indexRow].state)
+                                                                  {
+                                                                    saveChanges = false;
+                                                                  } else
+                                                                  {
+                                                                    saveChanges = true;
+                                                                  }
                                                               }
                                                             });
 
@@ -585,9 +646,9 @@ class _newSendState extends State<newSend> {
                                             padding: const EdgeInsets.only(left: 350.0),
                                             child: Row(
                                               children: [
-                                                const Padding(
+                                                Padding(
                                                   padding: EdgeInsets.only(right: 15.0),
-                                                  child: Text("Seleccionar todas"),
+                                                  child: Text(S.of(context).seleccionar_todas),
                                                 ),
                                                 Checkbox(
                                                   value: allSelect,
@@ -610,7 +671,7 @@ class _newSendState extends State<newSend> {
                                     )
                                 ),
                               ),
-                                Padding(
+                              Padding(
                                   padding: const EdgeInsets.only(top: 70.0, left: 550.0),
                                   child: SizedBox(
                                     width: 200,
@@ -642,12 +703,13 @@ class _newSendState extends State<newSend> {
 
                                               if(select == -1)
                                               {
-                                                int allLines =0;
+
                                                 for(int i = 0; i < allFactories.length; i++)
                                                 {
                                                   if(Send[i] == true)
                                                   {
                                                     int idNew = idInit + current.length;
+                                                    allLines ++;
 
                                                     current.add(
                                                         LineSend(
@@ -657,20 +719,18 @@ class _newSendState extends State<newSend> {
                                                             observations: _controllersObserLine[i].text,
                                                             state: _controllerStateLine[i].text)
                                                       );
-                                                      allLines++;
                                                   }
                                                 }
-
-                                                String action ='El pedido contiene $allLines empresas';
+                                                String action = LocalizationHelper.sendsFactory(context, allLines);
+                                                allLines = 0;
                                                 confirm(context,action);
                                               }
                                               else
                                               {
 
-                                                  int allLinesModify = 0;
-
                                                   if(saveChanges == true)
                                                   {
+
                                                       for(int i = 0; i <lineEdit.length; i++)
                                                       {
                                                         if(lineEdit[i]==true)
@@ -696,22 +756,22 @@ class _newSendState extends State<newSend> {
                                                         }
                                                       }
 
+                                                     saveChanges = false;
+                                                     String action ='';
+
+                                                     if (allLinesModify == 0)
+                                                     {
+                                                       action = S.of(context).no_tiene_ninguna_linea_a_modificar;
+                                                       error(context, action);
+                                                     }
+                                                     else
+                                                     {
+                                                       action = LocalizationHelper.cantLinesModify(context, allLinesModify);
+                                                       confirm(context,action);
+                                                     }
 
                                                   }
 
-                                                saveChanges = false;
-                                                String action ='';
-
-                                                if (allLinesModify == 0)
-                                                {
-                                                  action ='no tiene ninguna linea a modificar';
-                                                  error(context, action);
-                                                }
-                                                else
-                                                {
-                                                  action ='fueron modificadas $allLinesModify lineas';
-                                                  confirm(context,action);
-                                                }
                                               }
                                               lineEdit = List.generate(lineSector.length, (index) => false);
                                             });
@@ -733,14 +793,18 @@ class _newSendState extends State<newSend> {
 
                                               bool errorExp = await csvExportatorLines(lineSector);
 
+                                              String array = S.of(context).envios;
+
                                               if(errorExp == false)
                                               {
-                                                String action = 'Las lineas se han guardado correctamente';
+                                                String actionArray = S.of(context).guardado;
+
+                                                String action = LocalizationHelper.manage_array(context, array, actionArray);
                                                 await confirm(context, action);
                                               }
                                               else
                                               {
-                                                String action = 'No existe archivo de lineas';
+                                                String action = LocalizationHelper.no_file(context, array);
                                                 error(context, action);
                                               }
                                             }

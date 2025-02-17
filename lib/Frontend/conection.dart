@@ -17,14 +17,19 @@ import 'package:crud_factories/Backend/CSV/exportConections.dart';
 import 'package:crud_factories/Functions/createId.dart';
 import 'package:crud_factories/Functions/validatorCamps.dart';
 import 'package:crud_factories/Objects/Conection.dart';
+import 'package:crud_factories/generated/l10n.dart';
+import 'package:crud_factories/helpers/localization_helper.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 import 'package:mysql1/mysql1.dart';
 
 class conection extends StatefulWidget {
 
+  BuildContext context;
 
-  @override
+   conection(this.context);
+
+
   State<conection> createState() => _conectionState();
 }
 
@@ -45,9 +50,9 @@ class _conectionState extends State<conection> {
 
 
   int select = - 1;
-  String action0 = "Editar";
-  String action1 = "Nueva";
-  String action2 = "Eliminar";
+  String action0 = "";
+  String action1 = "";
+  String action2 = "";
 
   String bdName = "";
   String host = "";
@@ -65,9 +70,15 @@ class _conectionState extends State<conection> {
   @override
   Widget build(BuildContext context) {
 
-    if(conn != null && action0 == "Editar")
+    BuildContext context = widget.context;
+
+    String action0 = S.of(context).editar;
+    String action1 = S.of(context).nueva;
+    String action2 = S.of(context).eliminar;
+
+    if(conn != null && action0 == S.of(context).editar)
     {
-      action1 = "Desconectar";
+      action1 = S.of(context).desconectar;
 
       for(int i = 0; i <conections.length; i++)
       {
@@ -113,17 +124,23 @@ class _conectionState extends State<conection> {
                       padding: const EdgeInsets.only(left: 30.0,top: 30.0),
                       child: Column(
                         children: [
-                          const Row(
+                          Row(
                             children: [
-                              Text('Conexion base de datos: ',
-                                style: TextStyle(fontWeight: FontWeight.bold),),
+                              Padding(
+                                padding: const EdgeInsets.only(right: 10),
+                                child: Text(S.of(context).conexion_base_datos,
+                                  style: TextStyle(fontWeight: FontWeight.bold),),
+                              ),
                             ],
                           ),
                           Padding(
                             padding: EdgeInsets.only(top:20.0, bottom: 30.0,left: 20.0),
                             child: Row(
                               children: [
-                                Text('Conexion: '),
+                                Padding(
+                                  padding: const EdgeInsets.only(right: 10.0),
+                                  child: Text(S.of(context).conexion_base_datos),
+                                ),
                                 Padding(
                                   padding: const EdgeInsets.only(left: 20.0, right: 120.0),
                                   child: SizedBox(
@@ -131,7 +148,7 @@ class _conectionState extends State<conection> {
                                     height: 40,
                                     child: DropdownButtonHideUnderline(
                                       child: DropdownButton2<Conection>(
-                                        hint:  Text("Nueva"),
+                                        hint:  Text(S.of(context).nueva),
                                         items: conections.map((Conection itemConection) => DropdownMenuItem<Conection>(
                                           value:  itemConection,
                                           child: Text(itemConection.database),
@@ -141,7 +158,7 @@ class _conectionState extends State<conection> {
                                           setState(() {
                                             try{
 
-                                              action1 = "Conectar";
+                                              action1 = S.of(context).conectar;
                                               select=int.parse(conectionChoose!.id)-1;
                                               selectedConection = conectionChoose;
                                               controllerNameBD.text = conectionChoose!.database;
@@ -158,7 +175,7 @@ class _conectionState extends State<conection> {
                                               nameBDOld = conectionChoose!.database;
 
                                             }catch(exeption){
-                                              String err ="Conexion no valida";
+                                              String err = S.of(context).conexion_no_valida;
                                               error(context, err);
                                             }
 
@@ -189,24 +206,24 @@ class _conectionState extends State<conection> {
 
                                         if(conn != null)
                                         {
-                                              if(action0=="Volver")
+                                              if(action0==S.of(context).volver)
                                               {
-                                                action0 = "Editar";
-                                                editText = false;
-                                                action1 = "Desconectar";
-                                                action2 = "Eliminar";
+                                                  editText = false;
+                                                  action0 = S.of(context).editar;
+                                                  action1 = S.of(context).desconectar;
+                                                  action2 = S.of(context).eliminar;
                                               }
                                               else
                                               {
-                                                action0 = "Volver";
-                                                editText = true;
-                                                action1 = "Guardar";
-                                                action2 = "Cancelar";
+                                                  editText = true;
+                                                  action0 = S.of(context).volver;
+                                                  action1 = S.of(context).guardar;
+                                                  action2 = S.of(context).cancelar;
                                               }
                                         }
                                         else
                                         {
-                                          String action1 ="No esta conectado a ninguna base de datos";
+                                          String action1 = S.of(context).no_esta_conectado_a_ninguna_base_de_datos;
                                           error(context, action1);
                                         }
                                       });
@@ -218,7 +235,10 @@ class _conectionState extends State<conection> {
                             padding: EdgeInsets.only(top:20.0, bottom: 30.0,left: 20.0),
                             child: Row(
                               children: [
-                                Text('Base de datos: '),
+                                Padding(
+                                  padding: const EdgeInsets.only(right: 10.0),
+                                  child: Text(S.of(context).base_de_datos),
+                                ),
                                 SizedBox(
                                   width: 170,
                                   height: 40,
@@ -237,7 +257,10 @@ class _conectionState extends State<conection> {
                             padding: const EdgeInsets.only(top:20.0, bottom: 30.0,left: 20.0),
                             child: Row(
                               children: [
-                                const Text('Host: '),
+                                Padding(
+                                  padding: const EdgeInsets.only(right: 10.0),
+                                  child: Text(S.of(context).host),
+                                ),
                                 SizedBox(
                                   width: 170,
                                   height: 40,
@@ -276,9 +299,9 @@ class _conectionState extends State<conection> {
                                     },
                                   ),
                                 ),
-                                const Padding(
-                                  padding: EdgeInsets.only(left: 190.0),
-                                  child: Text('Puerto: '),
+                               Padding(
+                                  padding: EdgeInsets.only(right: 10.0, left: 190.0),
+                                  child: Text(S.of(context).puerto),
                                 ),
                                 SizedBox(
                                   width: 100,
@@ -325,7 +348,10 @@ class _conectionState extends State<conection> {
                             padding: const EdgeInsets.only(top:20.0, bottom: 30.0,left: 20.0),
                             child: Row(
                               children: [
-                                const Text('Usuario: '),
+                                Padding(
+                                  padding: const EdgeInsets.only(right: 10.0),
+                                  child: Text(S.of(context).usuario),
+                                ),
                                 SizedBox(
                                   width: 170,
                                   height: 40,
@@ -364,9 +390,9 @@ class _conectionState extends State<conection> {
                                     },
                                   ),
                                 ),
-                                const Padding(
-                                  padding: EdgeInsets.only(left: 170.0),
-                                  child: Text('Contraseña: '),
+                                Padding(
+                                  padding: EdgeInsets.only(right: 10.0, left: 170.0),
+                                  child: Text(S.of(context).usuario),
                                 ),
                                 SizedBox(
                                   width: 170,
@@ -433,11 +459,11 @@ class _conectionState extends State<conection> {
                                         password = controllerPas.text;
                                         bdName = controllerNameBD.text;
 
-                                        if(action1 == "Nueva")
+                                        if(action1 == S.of(context).nueva)
                                         {
                                           List <String> allKeys = [];
 
-                                          String nameCamp = "base de datos";
+                                          String nameCamp = S.of(context).base_de_datos;
 
                                           for (int i = 0; i < conections.length; i++)
                                           {
@@ -447,7 +473,7 @@ class _conectionState extends State<conection> {
 
                                           String campOld = " ";
 
-                                          if(action1 != "Nueva")
+                                          if(action1 != S.of(context).nueva)
                                           {
                                             campOld =conections[select].database;
                                           }
@@ -456,7 +482,7 @@ class _conectionState extends State<conection> {
                                           {
                                             String idNew = "";
 
-                                            if(action1 == "Nueva")
+                                            if(action1 == S.of(context).nueva)
                                             {
                                               if(conections.isNotEmpty)
                                               {
@@ -476,23 +502,29 @@ class _conectionState extends State<conection> {
                                                   user: controllerUser.text,
                                                   password: controllerPas.text
                                               ));
-                                              String action1 ='La conexion se ha creado correctamente';
+
+
+
+                                              String array = S.of(context).conexion;
+                                              String actionArray = S.of(context).creado;
+
+                                              String action1 = LocalizationHelper.manage_array(context, array, actionArray);
                                               confirm(context,action1);
 
                                               modify = false;
 
                                               ///create bd
-                                              bd_action ="Nueva";
+                                              bd_action = "New";
                                               db = "test";
                                               actionsDB(bd_action,db);
 
                                               setState(() {
-                                                action1 ="Conectar";
+                                                action1 = S.of(context).conectar;
                                               });
 
 
                                             }
-                                            if(action1 == "Guardar")
+                                            if(action1 == S.of(context).guardar)
                                             {
 
                                               conections[select].database = controllerNameBD.text;
@@ -509,13 +541,13 @@ class _conectionState extends State<conection> {
                                             }
                                           }
                                         }
-                                        else if(action1 == "Guardar") {
-                                          bd_action = "Guardar";
+                                        else if(action1 == S.of(context).guardar) {
+                                          bd_action = S.of(context).guardar;
                                           db = controllerNameBD.text;
                                           actionsDB(bd_action, db);
                                         }
 
-                                        if(conn != null && action0 != "Volver")
+                                        if(conn != null && action0 != S.of(context).volver)
                                         {
                                           bd_action = "Desconection";
                                           db = "";
@@ -530,7 +562,7 @@ class _conectionState extends State<conection> {
                                         saveChanges = false;
                                       }catch(Exception ){
 
-                                        String action="No pueden ir campos en blanco";
+                                        String action = S.of(context).no_pueden_ir_campos_en_blanco;
                                         error(context, action);
                                       }
                                     },
@@ -545,10 +577,11 @@ class _conectionState extends State<conection> {
 
                                         if(conn != null)
                                         {
-                                          if(action2 == "Eliminar")
+                                          if(action2 == S.of(context).eliminar)
                                           {
                                             String nameBD = conections[select].database;
-                                            String action1="base de datos $nameBD";
+                                            String title = S.of(context).base_de_datos;
+                                            String action1="$title $nameBD";
                                             bool confirm1 = await confirmDelete(context, action1);
 
 
@@ -562,7 +595,7 @@ class _conectionState extends State<conection> {
 
                                                 setState(() {
                                                   conn = null;
-                                                  action1 = "Nueva";
+                                                  action1 =  S.of(context).nueva;
 
                                                   selectedConection = null;
 
@@ -577,7 +610,7 @@ class _conectionState extends State<conection> {
                                                 });
 
                                                 conections.removeAt(select);
-                                                action1 ='Se ha eliminado correctamente la conexion';
+                                                action1 = S.of(context).se_ha_eliminado_correctamente_la_conexion;
                                                 confirm(context,action1);
                                               }
 
@@ -587,12 +620,12 @@ class _conectionState extends State<conection> {
                                         }
                                         else
                                         {
-                                          String action1 ="No esta conectado a ninguna base de datos";
+                                          String action1 = S.of(context).no_esta_conectado_a_ninguna_base_de_datos;
                                           error(context, action1);
                                         }
                                         saveChanges = false;
                                       }catch(Exeption ){
-                                        err= "no se pudo eliminar";
+                                        err=  S.of(context).no_se_pudo_eliminar;
                                         error(context, err);
                                       }
 
@@ -635,7 +668,7 @@ class _conectionState extends State<conection> {
 
     } on Exception catch( e){
 
-      if(bd_action == "Nueva" ||  bd_action == "Conection")
+      if(bd_action == "New" ||  bd_action == "Conection")
       {
             if(await fServer.exists())
             {
@@ -643,7 +676,7 @@ class _conectionState extends State<conection> {
             }
             else
             {
-                String action = 'No tiene ningún servidor conectado';
+                String action = S.of(context).no_tiene_ningun_servidor_conectado;
                 error(context, action);
             }
 
@@ -655,9 +688,9 @@ class _conectionState extends State<conection> {
 
       } catch(exeption){
 
-        if(bd_action == "Nueva" || bd_action == "Conection")
+        if(bd_action == "New" || bd_action == "Conection")
         {
-          String err = "No hay conexion con el servidor";
+          String err = S.of(context).no_hay_conexion_con_el_servidor;
           error(context, err);
         }
 
@@ -666,26 +699,27 @@ class _conectionState extends State<conection> {
 
     } catch(SQLExeption){
 
-      String type = "Error Sql";
+      String type = S.of(context).error_sql;
 
       if(SQLExeption.toString().contains("Unknown database"))
       {
-        if(bd_action != "Guardar")
+        if(bd_action != "Save")
         {
-          type = "No  base de datos con el nombre $db";
+          String nName =  S.of(context).no_base_de_datos_con_el_nombre;
+          type = "$nName $db";
         }
       }
       if(SQLExeption.toString().contains("is not allowed to connect to this MySQL server"))
       {
-        type = "No se pudo conectar con el servidor";
+        type =  S.of(context).no_se_pudo_conectar_con_el_servidor;
       }
       if(SQLExeption.toString().contains("SocketException: El equipo remoto rechazó la conexión de red."))
       {
-        type ="El puerto no es correcto";
+        type =  S.of(context).el_puerto_no_es_correcto;
       }
       if(SQLExeption.toString().contains(" Access denied for user"))
       {
-        type = "El usuario o la contraseña son incorrectos";
+        type =  S.of(context).el_usuario_o_la_contrasena_son_incorrectos;
       }
       if(type.isNotEmpty)
       {
@@ -696,7 +730,7 @@ class _conectionState extends State<conection> {
 
     switch(bd_action)
     {
-      case "Nueva":
+      case "New":
 
         String err = await createDB(context, bdName,conn);
         conn = null;
@@ -704,7 +738,7 @@ class _conectionState extends State<conection> {
         if(err.isEmpty)
         {
           setState(() {
-            action1 = "Conectar";
+            action1 = S.of(context).conectar;
           });
         }
 
@@ -712,7 +746,7 @@ class _conectionState extends State<conection> {
 
       case "Desconection":
 
-        String action ='Ha cerrado la conexion';
+        String action = S.of(context).ha_cerrado_la_conexion;
         confirm(context,action);
         editText = true;
         conn = null;
@@ -724,7 +758,7 @@ class _conectionState extends State<conection> {
         allLines.clear();
 
         setState(() {
-          action1 = "Conectar";
+          action1 = S.of(context).conectar;
         });
 
         chargueDataCSV();
@@ -737,19 +771,24 @@ class _conectionState extends State<conection> {
 
         if(conn != null)
         {
-          String action1 ='Esta conectado a $bdName';
+          String conected = S.of(context).esta_conectado_a;
+          String action1 = '$conected $bdName';
           BaseDateSelected= bdName;
 
           bool errorExp = await csvExportatorConections(conections);
 
+          String array = S.of(context).conexiones;
+
           if(errorExp == false)
           {
-            String action = 'La conexion se ha guardado correctamente';
+            String actionArray = S.of(context).guardado;
+
+            String action = LocalizationHelper.manage_array(context, array, actionArray);
             await confirm(context, action);
           }
           else
           {
-            String action = 'No existe archivo de conexiones';
+            String action = LocalizationHelper.no_file(context, array);
             error(context, action);
           }
           String err = await createTables(context);
@@ -772,14 +811,14 @@ class _conectionState extends State<conection> {
             sqlImportLines();
 
             setState(() {
-              action1 = "Conectar";
+              action1 = S.of(context).conectar;
             });
           }
 
         }
         break;
 
-      case "Guardar":
+      case "Save":
 
         String NameBDNew = controllerNameBD.text;
         String err = await editDB(context,nameBDOld,NameBDNew);
@@ -800,15 +839,19 @@ class _conectionState extends State<conection> {
             csvExportatorConections(conections);
           });
 
-          String action1 = "La conexion fue modificada correctamente";
+
+          String array = S.of(context).conexion;
+          String actionArray = S.of(context).creado;
+
+          String action1 = LocalizationHelper.manage_array(context, array, actionArray);
           confirm(context,action1);
           conn = null;
 
           setState(() {
-            action0 = "Editar";
             editText = false;
-            action1 = "Conectar";
-            action2 = "Eliminar";
+            action0 = S.of(context).editar;
+            action1 = S.of(context).conectar;
+            action2 = S.of(context).eliminar;
           });
         }
 

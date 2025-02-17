@@ -5,6 +5,8 @@ import 'package:crud_factories/Backend/CSV/exportSectors.dart';
 import 'package:crud_factories/Backend/SQL/deleteSector.dart';
 import 'package:crud_factories/Backend/data.dart';
 import 'package:crud_factories/Widgets/headAlertDialog.dart';
+import 'package:crud_factories/generated/l10n.dart';
+import 'package:crud_factories/helpers/localization_helper.dart';
 import 'package:flutter/material.dart';
 
 
@@ -26,7 +28,7 @@ Future<void> adminSector(BuildContext context) async {
             height: 350,
             child: Column(
               children: [
-                headAlert(title: "Manejo Sectores"),
+                headAlert(title: S.of(context).manejo_de_sectores),
                 const SizedBox(height: 60),
                 Flexible(
                   flex: 1,
@@ -57,7 +59,11 @@ Future<void> adminSector(BuildContext context) async {
                                 icon: Icon(Icons.delete, color: Colors.red),
                                 onPressed: () async {
 
-                                  String action1 = "¿Realmente desea eliminar el sector?";
+                                  String pr = S.of(context).el;
+                                  String array0 = S.of(context).sector;
+                                  String array = "$pr $array0";
+                                  String action1 = LocalizationHelper.askConfirmSupr(context, array);
+
                                   bool correct = await warning(context, action1);
                                   String search = sectors[index].name;
                                   String idSupr = "";
@@ -72,7 +78,7 @@ Future<void> adminSector(BuildContext context) async {
 
                                     setState(() {
                                       sectors.removeAt(index);
-                                      String action = 'El sector se ha quitado correctamente';
+                                      String action = S.of(context).el_sector_se_ha_creado_correctamente;
                                       confirm(context, action);
                                     });
                                   }
@@ -105,8 +111,7 @@ Future<void> adminSector(BuildContext context) async {
                   ),
                 ),
                Expanded(
-                 child: Padding(
-                               padding: const EdgeInsets.only(left: 30.0, right: 10.0,top: 44),
+                 child: Padding(padding: const EdgeInsets.only(left: 30.0, right: 10.0,top: 44),
                  child: Row(
                    children: [
                      Expanded(
@@ -114,12 +119,11 @@ Future<void> adminSector(BuildContext context) async {
                          padding: const EdgeInsets.only(left: 70, right: 15),
                          child: MaterialButton(
                            color: Colors.lightBlue,
-                           child: const Text(
-                             "Crear",
+                           child:  Text(S.of(context).crear,
                              style: TextStyle(color: Colors.white),
                            ),
                            onPressed: () async {
-                             String modif = "nuevo";
+                             String modif = S.of(context).nuevo;
                              bool create = await createSector(context, modif);
 
                              if (create == true) {
@@ -139,8 +143,7 @@ Future<void> adminSector(BuildContext context) async {
                            onPressed: () {
                              Navigator.of(context).pop(false);
                            },
-                           child: const Text(
-                             "Cerrar",
+                           child: Text(S.of(context).cerrar,
                              style: TextStyle(color: Colors.white),
                            ),
                          ),
