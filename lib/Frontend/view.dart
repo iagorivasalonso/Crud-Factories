@@ -582,7 +582,7 @@ class _viewState extends State<view> {
                                     child: view == S.of(context).empresa
                                         ? ListView.builder(
                                       itemCount: resulFactories.length,
-                                      itemBuilder: (context, index) {
+                                      itemBuilder: (context0, index) {
                                         return Dismissible(
                                           key: Key(resulFactories[index].name),
                                           confirmDismiss: (direction) async {
@@ -662,7 +662,6 @@ class _viewState extends State<view> {
                                       },
                                     )
                                         : view == S.of(context).email
-
                                         ? ListView.builder(
                                       itemCount: mails.length,
                                       itemBuilder: (context0, index) {
@@ -728,7 +727,7 @@ class _viewState extends State<view> {
                                     )
                                         : ListView.builder(
                                       itemCount: resultSend.length,
-                                      itemBuilder: (contxt, index) {
+                                      itemBuilder: (context0, index) {
 
                                         String cantSend = resultSend[index].description;
                                         String send = S.of(context).envios;
