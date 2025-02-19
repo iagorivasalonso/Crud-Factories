@@ -1,4 +1,6 @@
 import 'package:crud_factories/Widgets/headAlertDialog.dart';
+import 'package:crud_factories/generated/l10n.dart';
+import 'package:crud_factories/helpers/localization_helper.dart';
 import 'package:flutter/material.dart';
 
 
@@ -15,11 +17,11 @@ Future<int> noCategory(BuildContext  context, String array) async {
               height: 175,
               child: Column(
                 children: [
-                  headAlert(title:"Error categoria"),
+                  headAlert(title:S.of(context).error_categoria),
                   Expanded(
                     child: Padding(
                       padding: const EdgeInsets.only(left: 25,right: 15 ,top: 25, bottom: 15),
-                      child: Text('No tiene $array  en la base de datos ¿Que desea hacer?',
+                      child: Text(LocalizationHelper.no_array_BD(context, array),
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                       ),
@@ -32,11 +34,13 @@ Future<int> noCategory(BuildContext  context, String array) async {
                           child: Padding(
                             padding: const EdgeInsets.only(left: 30),
                             child: MaterialButton(
+                                child: Text(S.of(context).crear,
+                                  style: TextStyle(color: Colors.white),),
                                 color: Colors.lightBlue,
                                 onPressed:() async {
                                   Navigator.of(context).pop(1);
                                 },
-                                child: const Text("Crear",style: TextStyle(color: Colors.white),)
+
                             ),
                           ),
                         ),
@@ -44,11 +48,13 @@ Future<int> noCategory(BuildContext  context, String array) async {
                           child: Padding(
                             padding: const EdgeInsets.only(left: 25),
                             child: MaterialButton(
+                               child: Text(S.of(context).importar,
+                                 style: TextStyle(color: Colors.white),),
                                 color: Colors.lightBlue,
                                 onPressed:(){
                                   Navigator.of(context).pop(2);
                                 },
-                                child: const Text("Importar",style: TextStyle(color: Colors.white),)
+
                             ),
                           ),
                         ),
@@ -56,11 +62,12 @@ Future<int> noCategory(BuildContext  context, String array) async {
                           child: Padding(
                             padding:const EdgeInsets.only(left: 25, right: 25),
                             child: MaterialButton(
+                              child: Text(S.of(context).cancelar,
+                                style: TextStyle(color: Colors.white),),
                                 color: Colors.lightBlue,
                                 onPressed:(){
                                   Navigator.of(context).pop(3);
                                 },
-                                child: const Text("Cancelar",style: TextStyle(color: Colors.white),)
                             ),
                           ),
                         ),

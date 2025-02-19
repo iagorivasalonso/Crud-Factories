@@ -1,4 +1,5 @@
 import 'package:crud_factories/Widgets/headAlertDialog.dart';
+import 'package:crud_factories/generated/l10n.dart';
 import 'package:flutter/material.dart';
 
 
@@ -18,7 +19,7 @@ Future<bool> warning(BuildContext  context,String action) async{
                      : 175,
              child: Column(
                children: [
-                 headAlert(title:"Cuidado"),
+                 headAlert(title: S.of(context).cuidado),
                  Expanded(
                    child: Padding(
                      padding:  const EdgeInsets.only(left: 25,top: 25),
@@ -37,10 +38,12 @@ Future<bool> warning(BuildContext  context,String action) async{
                            padding: const EdgeInsets.only(left: 70, right: 15),
                            child: MaterialButton(
                                color: Colors.lightBlue,
+                               child:  Text(S.of(context).si,
+                                 style: TextStyle(color: Colors.white),),
                                onPressed:() async {
                                  Navigator.of(context).pop(true);
                                },
-                               child: const Text("Si",style: TextStyle(color: Colors.white),)
+
                            ),
                          ),
                        ),
@@ -48,11 +51,13 @@ Future<bool> warning(BuildContext  context,String action) async{
                          child: Padding(
                            padding:  const EdgeInsets.only(left: 5, right: 70),
                            child: MaterialButton(
+                             child: Text(S.of(context).no,
+                               style: TextStyle(color: Colors.white),),
                                color: Colors.lightBlue,
                                onPressed:(){
                                  Navigator.of(context).pop(false);
                                },
-                               child: const Text("No",style: TextStyle(color: Colors.white),)
+
                            ),
                          ),
                        ),

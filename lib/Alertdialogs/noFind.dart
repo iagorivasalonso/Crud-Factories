@@ -1,4 +1,5 @@
 import 'package:crud_factories/Widgets/headAlertDialog.dart';
+import 'package:crud_factories/generated/l10n.dart';
 import 'package:flutter/material.dart';
 
 
@@ -15,7 +16,7 @@ Future<bool> noFind(BuildContext context, bool noDat, String stringDialog) async
             height: 190,
             child: Column(
               children: [
-                headAlert(title: "Error"),
+                headAlert(title: S.of(context).error),
                 Expanded(child: Padding(
                     padding: const EdgeInsets.only(left: 30, top: 25, bottom: 15),
                     child:  Text(stringDialog,
@@ -31,13 +32,13 @@ Future<bool> noFind(BuildContext context, bool noDat, String stringDialog) async
                           padding:  const EdgeInsets.only(left: 170, right: 170),
                           child: MaterialButton(
                             color: Colors.lightBlue,
+                            child: Text(
+                              S.of(context).aceptar,
+                              style: TextStyle(color: Colors.white),
+                            ),
                             onPressed: () {
                               Navigator.of(context).pop(false);
                             },
-                            child: const Text(
-                              "Aceptar",
-                              style: TextStyle(color: Colors.white),
-                            ),
                           ),
                         ),
                       ),
