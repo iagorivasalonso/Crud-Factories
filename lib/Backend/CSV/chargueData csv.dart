@@ -9,15 +9,31 @@ import 'package:crud_factories/Backend/CSV/importMails.dart';
 import 'package:crud_factories/Backend/CSV/importSectors.dart';
 import 'package:crud_factories/Backend/data.dart';
 import 'package:crud_factories/Objects/RouteCSV.dart';
+import 'package:crud_factories/generated/l10n.dart';
+import 'package:flutter/src/widgets/framework.dart';
 
 
-Future<bool> chargueDataCSV() async {
+Future<bool> chargueDataCSV(BuildContext context) async {
 
   routesManage.clear();
   bool isCorrect = true;
 
-  allRoutes = ['Routes', 'Conections', 'serverSql', 'Sectors', 'Factories', 'Empleoyes', 'Lines', 'Mails'];
-  SQLRoutes = ['Routes', 'Conections', 'serverSql'];
+  allRoutes = [
+    S.of(context).rutas,
+    S.of(context).conexiones,
+    S.of(context).servidor,
+    S.of(context).sectores,
+    S.of(context).empresas,
+    S.of(context).empleados,
+    S.of(context).lineas,
+    S.of(context).emails,
+  ];
+
+  SQLRoutes = [
+    S.of(context).rutas,
+    S.of(context).conexiones,
+    S.of(context).servidor,
+  ];
 
   if (routesManage.isEmpty)
   {
@@ -31,7 +47,7 @@ Future<bool> chargueDataCSV() async {
   final filePathRoutes = fRoutes;
 
   try {
-    routesManage.add(await csvImportRoutes(fileContent, routesManage));
+    routesManage.add(await csvImportRoutes(context,fileContent, routesManage));
   } catch (Exeption) {
 
   }
@@ -72,7 +88,7 @@ Future<bool> chargueDataCSV() async {
      }
      else
      {
-       errorFiles.add("No se puede leer el archivo de rutas");
+       errorFiles.add(S.of(context).no_se_puede_leer_el_archivo_de_rutas);
         isCorrect = false;
      }
 
@@ -82,7 +98,7 @@ Future<bool> chargueDataCSV() async {
        fConections = File(routesManage[1].route);
 
        try {
-         conections.add(await csvImportConections(fileContent, conections));
+         conections.add(await csvImportConections(context,fileContent, conections));
        } catch (Exeption) {
 
        }
@@ -103,7 +119,7 @@ Future<bool> chargueDataCSV() async {
        fSectors = File(routesManage[3].route);
 
        try {
-         sectors.add(await csvImportSectors(fileContent, sectors));
+         sectors.add(await csvImportSectors(context,fileContent, sectors));
        } catch (Exeption) {
 
        }
@@ -112,7 +128,7 @@ Future<bool> chargueDataCSV() async {
        fFactories = File(routesManage[4].route);
 
        try {
-         allFactories.add(await csvImportFactories(fileContent, allFactories));
+         allFactories.add(await csvImportFactories(context,fileContent, allFactories));
        } catch (Exeption) {
 
        }
@@ -121,7 +137,7 @@ Future<bool> chargueDataCSV() async {
        fEmpleoyes = File(routesManage[5].route);
 
        try {
-         empleoyes.add(await csvImportEmpleoyes(fileContent, empleoyes));
+         empleoyes.add(await csvImportEmpleoyes(context,fileContent, empleoyes));
        } catch (Exeption) {
 
        }
@@ -130,7 +146,7 @@ Future<bool> chargueDataCSV() async {
        fLines = File(routesManage[6].route);
 
        try {
-         allLines.add(await csvImportLines(fileContent, allLines));
+         allLines.add(await csvImportLines(context,fileContent, allLines));
        } catch (Exeption) {
 
        }
@@ -139,7 +155,7 @@ Future<bool> chargueDataCSV() async {
        fMails = File(routesManage[7].route);
 
        try {
-         mails.add(await csvImportMails(fileContent, mails));
+         mails.add(await csvImportMails(context,fileContent, mails));
        } catch (Exeption) {
 
        }

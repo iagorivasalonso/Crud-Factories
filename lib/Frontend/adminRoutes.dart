@@ -29,8 +29,8 @@ Future<bool> adminRoutes(BuildContext context, [bool? sqlBd]) async {
   {
      currentRoutes = SQLRoutes;
   }
-
-  for(int i = 0; i <allRoutes!.length; i++)
+print(currentRoutes);
+  for(int i = 0; i <currentRoutes!.length; i++)
   {
     _controllerNameRoute.add(TextEditingController());
     _controllerRoute.add(TextEditingController());
@@ -38,7 +38,7 @@ Future<bool> adminRoutes(BuildContext context, [bool? sqlBd]) async {
 
   if(routesManage.isEmpty)
   {
-    for(int i = 0; i <allRoutes.length; i++)
+    for(int i = 0; i <currentRoutes.length; i++)
     {
       _controllerNameRoute[i].text = allRoutes[i];
 
@@ -196,7 +196,7 @@ Future<bool> adminRoutes(BuildContext context, [bool? sqlBd]) async {
                                                 color: Colors.lightBlue,
                                                 onPressed: () async {
                                                   setState(() {
-                                                    _pickFile(_controllerRoute[index]);
+                                                    _pickFile(_controllerRoute[index],context);
                                                   });
                                                 },
                                                 child: Text(
@@ -253,7 +253,7 @@ Future<bool> adminRoutes(BuildContext context, [bool? sqlBd]) async {
                                        String action = LocalizationHelper.manage_array(context, array, actionArray);
 
                                       await confirm(context, action);
-                                      chargueDataCSV();
+                                      chargueDataCSV(context);
                                       csvExportatorRoutes(routesNew);
 
 
@@ -303,10 +303,10 @@ void campCharge(List<TextEditingController> _controllerNameRoute, List<TextEditi
     _controllerRoute[i].text = routesManage[i].route;
   }
 }
-  void _pickFile(TextEditingController controllerRoute) async {
+  void _pickFile(TextEditingController controllerRoute, BuildContext context) async {
 
   FilePickerResult? result =  await FilePicker.platform.pickFiles(
-    dialogTitle: 'Seleccionar archivo',
+    dialogTitle: S.of(context).seleccionar_archivo,
     type: FileType.custom,
     allowedExtensions:  ['csv','exe'],
   );

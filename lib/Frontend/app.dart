@@ -38,7 +38,7 @@ class _AppState extends State<App> {
           String action = "";
           List<RouteCSV> routesCurrent = [];
 
-          bool isChargue = await chargueDataCSV();
+          bool isChargue = await chargueDataCSV(context);
           bool sqlBd = await typeConection(context);
 
           if (sqlBd == true)
