@@ -1,4 +1,5 @@
 import 'package:crud_factories/Widgets/headAlertDialog.dart';
+import 'package:crud_factories/generated/l10n.dart';
 import 'package:flutter/material.dart';
 
 
@@ -17,7 +18,7 @@ Future<bool> confirm(BuildContext  context, String action) async {
                      : 175,
                  child: Column(
                      children: [
-                       headAlert(title:"Confirmar"),
+                       headAlert(title:S.of(context).confirmar),
                        Expanded(child: Padding(
                          padding: const EdgeInsets.only(left: 25,right: 15, top:25),
                          child: Text(action,
@@ -34,8 +35,8 @@ Future<bool> confirm(BuildContext  context, String action) async {
                                  padding: const EdgeInsets.only(left: 110, right: 110),
                                  child: MaterialButton(
                                    color: Colors.lightBlue,
-                                   child: const Text(
-                                     "Aceptar",
+                                   child:  Text(
+                                     S.of(context).aceptar,
                                      style: TextStyle(color: Colors.white),
                                    ),
                                    onPressed: () async {
