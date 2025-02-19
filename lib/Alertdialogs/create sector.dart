@@ -8,6 +8,7 @@ import 'package:crud_factories/Backend/data.dart';
 import 'package:crud_factories/Functions/createId.dart';
 import 'package:crud_factories/Objects/Sector.dart';
 import 'package:crud_factories/Widgets/headAlertDialog.dart';
+import 'package:crud_factories/generated/l10n.dart';
 import 'package:flutter/material.dart';
 
 
@@ -19,17 +20,17 @@ Future<bool> createSector(BuildContext  context, String modif) async {
   String titleAlert="";
   bool edit = false;
 
-  if(modif!="nuevo")
+  if(modif!=S.of(context).nuevo.toLowerCase())
   {
-     titleAlert = "Modificación del sector";
+     titleAlert = S.of(context).modificacion_sector;
      controllerSector.text=modif!;
 
      edit = true;
   }
   else
   {
-    titleAlert = "Creacion del sector";
-    modif = "Nuevo";
+    titleAlert = S.of(context).creacion_sector;
+    modif = S.of(context).nuevo;
 
     edit = false;
   }
@@ -46,10 +47,10 @@ Future<bool> createSector(BuildContext  context, String modif) async {
               child: Column(
                 children: [
                   headAlert(title: titleAlert),
-                 const Expanded(
+                  Expanded(
                     child: Padding(
                       padding: const EdgeInsets.only(right: 120,top: 25),
-                      child: Text('Nombre del sector:',
+                      child: Text(S.of(context).nombre_sector,
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                       ),
@@ -75,7 +76,8 @@ Future<bool> createSector(BuildContext  context, String modif) async {
                           child: Padding(
                             padding: const EdgeInsets.only(left: 110, right: 110),
                             child: MaterialButton(
-                                child: const Text("Aceptar",style: const TextStyle(color: Colors.white),),
+                                child: Text(S.of(context).aceptar,
+                                  style: const TextStyle(color: Colors.white),),
                                 color: Colors.lightBlue,
                                 onPressed:() async {
                                   List<Sector> currentSector = [];
@@ -124,12 +126,12 @@ Future<bool> createSector(BuildContext  context, String modif) async {
                                           csvExportatorSectors(sectors);
                                         }
 
-                                          String action = 'El sector se ha creado correctamente';
+                                          String action = S.of(context).el_sector_se_ha_creado_correctamente;
                                           confirm(context, action);
                                       }
                                       else
                                       {
-                                        String action = "Ese sector ya existe";
+                                        String action = S.of(context).sector_existente;
                                         await error(context, action);
                                       }
 
@@ -162,7 +164,7 @@ Future<bool> createSector(BuildContext  context, String modif) async {
                                   }
                                   else
                                   {
-                                     String action = 'No puede ir el campo en blanco';
+                                     String action = S.of(context).campo_vacio;
                                      await error(context,action);
                                   }
 

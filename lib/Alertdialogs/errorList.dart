@@ -1,8 +1,10 @@
 
 import 'package:crud_factories/Widgets/headAlertDialog.dart';
+import 'package:crud_factories/generated/l10n.dart';
 import 'package:flutter/material.dart';
 
 Future<bool> errors(BuildContext context, List<String> errorFiles) async {
+
   double heightAlert = errorFiles.length * 28.0;
 
   bool? err = await showDialog(
@@ -17,7 +19,7 @@ Future<bool> errors(BuildContext context, List<String> errorFiles) async {
             height: 200 + heightAlert,
             child: Column(
               children: [
-                headAlert(title: "Error"),
+                headAlert(title: S.of(context).error),
                 Expanded(
                   flex: 3,
                   child: Padding(
@@ -46,8 +48,8 @@ Future<bool> errors(BuildContext context, List<String> errorFiles) async {
                     padding: const EdgeInsets.only(bottom: 20),
                     child: MaterialButton(
                       color: Colors.lightBlue,
-                      child: const Text(
-                        "Aceptar",
+                      child: Text(
+                        S.of(context).aceptar,
                         style: TextStyle(color: Colors.white),
                       ),
                       onPressed: () async {

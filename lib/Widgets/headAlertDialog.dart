@@ -1,4 +1,5 @@
 import 'package:crud_factories/Backend/data.dart';
+import 'package:crud_factories/generated/l10n.dart';
 import 'package:flutter/material.dart';
 
 StatefulBuilder headAlert({
@@ -32,7 +33,7 @@ StatefulBuilder headAlert({
                   color: Colors.white,
                   onPressed: (){
 
-                    if(title == "Error categoria")
+                    if(title == S.of(context).error_categoria)
                     {
                       Navigator.of(context).pop(3);
                     }

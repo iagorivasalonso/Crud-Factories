@@ -1,5 +1,5 @@
-import 'package:crud_factories/Backend/data.dart';
 import 'package:crud_factories/Widgets/headAlertDialog.dart';
+import 'package:crud_factories/generated/l10n.dart';
 import 'package:flutter/material.dart';
 import 'package:window_manager/window_manager.dart';
 
@@ -17,10 +17,10 @@ void closeAlert(BuildContext  context) {
                 height: 175,
                 child: Column(
                   children: [
-                   headAlert(title:"Salida de la aplicación"),
+                   headAlert(title:S.of(context).salida_aplicacion),
                     Expanded(child: Padding(
                       padding: EdgeInsets.only(left: 25,top: 25, bottom: 15),
-                      child: Text("¿Desea salir de la aplicacion?",
+                      child: Text(S.of(context).desea_salir,
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,),
                     ),
@@ -33,8 +33,8 @@ void closeAlert(BuildContext  context) {
                             padding: const EdgeInsets.only(left: 70, right: 15),
                             child: MaterialButton(
                               color: Colors.lightBlue,
-                              child: const Text(
-                                "Si",
+                              child: Text(
+                                  S.of(context).si,
                                 style: TextStyle(color: Colors.white),
                               ),
                               onPressed: () async {
@@ -50,13 +50,13 @@ void closeAlert(BuildContext  context) {
                             padding: const EdgeInsets.only(left: 5, right: 70),
                             child: MaterialButton(
                               color: Colors.lightBlue,
+                              child: Text(
+                                  S.of(context).no,
+                                style: TextStyle(color: Colors.white),
+                              ),
                               onPressed: () {
                                 Navigator.of(context).pop(false);
                               },
-                              child: const Text(
-                                "No",
-                                style: TextStyle(color: Colors.white),
-                              ),
                             ),
                           ),
                         ),

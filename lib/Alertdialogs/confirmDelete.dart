@@ -1,8 +1,10 @@
 import 'package:crud_factories/Widgets/headAlertDialog.dart';
+import 'package:crud_factories/generated/l10n.dart';
+import 'package:crud_factories/helpers/localization_helper.dart';
 import 'package:flutter/material.dart';
 
 
-Future<bool> confirmDelete(BuildContext  context, String action) async {
+Future<bool> confirmDelete(BuildContext  context, String array) async {
 
    bool regisDelete = await showDialog(
        context: context,
@@ -15,11 +17,11 @@ Future<bool> confirmDelete(BuildContext  context, String action) async {
                height: 175,
                child: Column(
                  children: [
-                   headAlert(title:"Eliminar"),
+                   headAlert(title:S.of(context).eliminar),
                    Expanded(
                      child: Padding(
                        padding:  const EdgeInsets.only(left: 25,top: 25, bottom: 15),
-                       child: Text("¿Desea eliminar la $action ?",
+                       child: Text(LocalizationHelper.supr_array(context, array),
                          maxLines: 1,
                          overflow: TextOverflow.ellipsis,),
                      ),
@@ -32,10 +34,10 @@ Future<bool> confirmDelete(BuildContext  context, String action) async {
                              padding: const EdgeInsets.only(left: 70, right: 15),
                              child: MaterialButton(
                                  color: Colors.lightBlue,
-                                 onPressed:() async {
-                                   Navigator.of(context).pop(true);
-                                 },
-                                 child: const Text("Si",style: TextStyle(color: Colors.white),)
+                                 child: Text(S.of(context).si,style: TextStyle(color: Colors.white),),
+                               onPressed:() async {
+                                 Navigator.of(context).pop(true);
+                               },
                              ),
                            ),
                          ),
@@ -44,10 +46,11 @@ Future<bool> confirmDelete(BuildContext  context, String action) async {
                              padding:  const EdgeInsets.only(left: 5, right: 70),
                              child: MaterialButton(
                                  color: Colors.lightBlue,
+                                 child: Text(S.of(context).no,style:  TextStyle(color: Colors.white),),
                                  onPressed:(){
                                    Navigator.of(context).pop(false);
                                  },
-                                 child: const Text("No",style:  TextStyle(color: Colors.white),)
+
                              ),
                            ),
                          ),
