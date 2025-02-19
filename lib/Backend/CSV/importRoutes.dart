@@ -1,8 +1,10 @@
 import 'dart:convert';
 import 'package:crud_factories/Backend/data.dart';
 import 'package:crud_factories/Objects/RouteCSV.dart';
+import 'package:crud_factories/generated/l10n.dart';
+import 'package:flutter/material.dart';
 
-csvImportRoutes(List<String> fileContent, List<RouteCSV> routesManage) async {
+csvImportRoutes(BuildContext context,List<String> fileContent, List<RouteCSV> routesManage) async {
 
   try {
 
@@ -21,15 +23,19 @@ csvImportRoutes(List<String> fileContent, List<RouteCSV> routesManage) async {
     }
 
   } catch (e) {
+        String array = S.of(context).rutas;
+
         if(e.toString().contains("El sistema no puede encontrar el archivo especificado"))
         {
-           errorFiles.add("no se encuentra archivo de rutas");
+           String noFile =  S.of(context).no_se_encuentra_archivo_de;
+           errorFiles.add("$noFile $array");
         }
         else
         {
             if(e.toString().contains("Invalid value"))
             {
-              errorFiles.add("error de formato de archivo de rutas");
+              String errorFile =  S.of(context).error_formato_archivo_de;
+              errorFiles.add("$errorFile $array");
             }
         }
   }

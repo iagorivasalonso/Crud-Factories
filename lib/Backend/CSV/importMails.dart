@@ -1,8 +1,10 @@
 import 'dart:convert';
 import 'package:crud_factories/Backend/data.dart';
 import 'package:crud_factories/Objects/Mail.dart';
+import 'package:crud_factories/generated/l10n.dart';
+import 'package:flutter/material.dart';
 
-csvImportMails(List<String> fileContent, List<Mail> mails) async {
+csvImportMails(BuildContext context, List<String> fileContent, List<Mail> mails) async {
 
   try {
 
@@ -22,15 +24,19 @@ csvImportMails(List<String> fileContent, List<Mail> mails) async {
     }
 
   } catch (e) {
+    String array = S.of(context).emails;
+
     if(e.toString().contains("El sistema no puede encontrar el archivo especificado"))
     {
-      errorFiles.add("no se encuentra archivo de emails");
+      String noFile =  S.of(context).no_se_encuentra_archivo_de;
+      errorFiles.add("$noFile $array");
     }
     else
     {
       if(e.toString().contains("Invalid value"))
       {
-        errorFiles.add("error de formato de archivo de emails");
+        String errorFile =  S.of(context).error_formato_archivo_de;
+        errorFiles.add("$errorFile $array");
       }
     }
   }

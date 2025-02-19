@@ -1,8 +1,11 @@
 import 'dart:convert';
 import 'package:crud_factories/Backend/data.dart';
 import 'package:crud_factories/Objects/Sector.dart';
+import 'package:crud_factories/generated/l10n.dart';
+import 'package:fluent_ui/fluent_ui.dart';
 
-csvImportSectors(List<String> fileContent, List<Sector> sectors) async {
+
+csvImportSectors(BuildContext context, List<String> fileContent, List<Sector> sectors) async {
 
   try {
 
@@ -20,15 +23,19 @@ csvImportSectors(List<String> fileContent, List<Sector> sectors) async {
     }
 
   } catch (e) {
+    String array = S.of(context).sectores;
+
     if(e.toString().contains("El sistema no puede encontrar el archivo especificado"))
     {
-      errorFiles.add("no se encuentra archivo de sectores");
+      String noFile =  S.of(context).no_se_encuentra_archivo_de;
+      errorFiles.add("$noFile $array");
     }
     else
     {
       if(e.toString().contains("Invalid value"))
       {
-        errorFiles.add("error de formato de archivo de sectores");
+        String errorFile =  S.of(context).error_formato_archivo_de;
+        errorFiles.add("$errorFile $array");
       }
     }
   }
