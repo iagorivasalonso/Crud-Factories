@@ -7,24 +7,12 @@ import 'package:crud_factories/generated/l10n.dart';
 
 
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
-void main() async {
-  WidgetsFlutterBinding.ensureInitialized();
 
+void main() async {
+
+  WidgetsFlutterBinding.ensureInitialized();
   await windowManager.ensureInitialized();
 
-  WindowOptions windowOptions = WindowOptions(
-    size: const Size(800, 600),
-    center: true,
-    title: "Mi aplicación",
-  );
-
-  windowManager.waitUntilReadyToShow(windowOptions, () async {
-    await windowManager.show();
-    await windowManager.focus();
-    await windowManager.setPreventClose(true);
-  });
-
-  windowManager.addListener(MyWindowListener());
   runApp(MyApp());
 }
 
@@ -44,13 +32,40 @@ class MyApp extends StatelessWidget {
       supportedLocales: S.delegate.supportedLocales,
       home: Builder(
         builder: (context) {
+
           MyWindowListener.context = context;
+
+          String appTitle = S.of(context).cancel;
+
+           _initializeWindow(appTitle);
+
           return App();
         }
       ),
     );
   }
+
+  void _initializeWindow(String title){
+
+    WindowOptions windowOptions = WindowOptions(
+      size: const Size(800,600),
+      center: true,
+      title: title
+    );
+
+    windowManager.waitUntilReadyToShow(windowOptions, () async{
+
+      await windowManager.show();
+      await windowManager.focus();
+      await windowManager.setPreventClose(true);
+
+    });
+
+    windowManager.addListener(MyWindowListener());
+  }
 }
+
+
 
 class MyWindowListener with WindowListener {
 
