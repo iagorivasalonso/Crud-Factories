@@ -25,7 +25,7 @@ csvImportLines(BuildContext context, List<String> fileContent, List<LineSend> li
     }
 
   } catch (e) {
-    String array = S.of(context).lineas;
+    String array = S.of(context).lines;
 
     if(e.toString().contains("El sistema no puede encontrar el file especificado"))
     {

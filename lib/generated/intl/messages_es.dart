@@ -202,11 +202,11 @@ class MessageLookup extends MessageLookupByLibrary {
     "is_connected_to": MessageLookupByLibrary.simpleMessage("Está conectado a"),
     "it_has_been": MessageLookupByLibrary.simpleMessage("Ha sido"),
     "it_was_imported": MessageLookupByLibrary.simpleMessage("Se importó"),
+    "line": MessageLookupByLibrary.simpleMessage("Línea"),
     "line_correctly": MessageLookupByLibrary.simpleMessage(
       "línea correctamente",
     ),
-    "linea": MessageLookupByLibrary.simpleMessage("Línea"),
-    "lineas": MessageLookupByLibrary.simpleMessage("Líneas"),
+    "lines": MessageLookupByLibrary.simpleMessage("Líneas"),
     "lines_correctly": MessageLookupByLibrary.simpleMessage(
       "líneas correctamente",
     ),

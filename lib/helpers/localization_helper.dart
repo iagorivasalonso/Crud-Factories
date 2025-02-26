@@ -75,8 +75,8 @@ class LocalizationHelper {
 
     return Intl.plural(
       countSendDay,
-      one: '${S.of(context).was_modified} $countSendDay ${S.of(context).linea.toLowerCase()}',
-      other: '${S.of(context).were_modified} $countSendDay ${S.of(context).lineas.toLowerCase()}',
+      one: '${S.of(context).was_modified} $countSendDay ${S.of(context).line.toLowerCase()}',
+      other: '${S.of(context).were_modified} $countSendDay ${S.of(context).lines.toLowerCase()}',
       name: "modifylines",
       args: [countSendDay],
       examples: const {"countSendDay": 0},

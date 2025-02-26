@@ -18,22 +18,8 @@ Future<bool> chargueDataCSV(BuildContext context) async {
   routesManage.clear();
   bool isCorrect = true;
 
-  allRoutes = [
-    S.of(context).routes,
-    S.of(context).connections,
-    S.of(context).server,
-    S.of(context).sectors,
-    S.of(context).companies,
-    S.of(context).employees,
-    S.of(context).lineas,
-    S.of(context).emails,
-  ];
-
-  SQLRoutes = [
-    S.of(context).routes,
-    S.of(context).connections,
-    S.of(context).server,
-  ];
+  allRoutes = ['Routes', 'Conections', 'serverSql', 'Sectors', 'Factories', 'Empleoyes', 'Lines', 'Mails'];
+  SQLRoutes = ['Routes', 'Conections', 'serverSql'];
 
   if (routesManage.isEmpty)
   {

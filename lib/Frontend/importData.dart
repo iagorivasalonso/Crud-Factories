@@ -426,7 +426,7 @@ class _newImportState extends State<newImport> {
                                                 }
 
                                               }
-                                              String array =  S.of(context).lineas;
+                                              String array =  S.of(context).lines;
 
                                               if(cantImport > 0)
                                               {
@@ -450,7 +450,7 @@ class _newImportState extends State<newImport> {
                                         }
                                          else
                                          {
-                                           String array = S.of(context).lineas;
+                                           String array = S.of(context).lines;
                                            action = LocalizationHelper.no_companies_without(context, array);
                                            error(context, action);
                                          }

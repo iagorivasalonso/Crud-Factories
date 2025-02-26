@@ -586,13 +586,13 @@ class S {
   }
 
   /// `Línea`
-  String get linea {
-    return Intl.message('Línea', name: 'linea', desc: '', args: []);
+  String get line {
+    return Intl.message('Línea', name: 'line', desc: '', args: []);
   }
 
   /// `Líneas`
-  String get lineas {
-    return Intl.message('Líneas', name: 'lineas', desc: '', args: []);
+  String get lines {
+    return Intl.message('Líneas', name: 'lines', desc: '', args: []);
   }
 
   /// `Enviado`
