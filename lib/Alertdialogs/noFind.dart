@@ -33,7 +33,7 @@ Future<bool> noFind(BuildContext context, bool noDat, String stringDialog) async
                           child: MaterialButton(
                             color: Colors.lightBlue,
                             child: Text(
-                              S.of(context).aceptar,
+                              S.of(context).acept,
                               style: TextStyle(color: Colors.white),
                             ),
                             onPressed: () {

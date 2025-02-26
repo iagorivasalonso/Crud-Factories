@@ -45,7 +45,7 @@ break;
         if (subIten1Selection == 1 || subIten1Selection == 3)
         {
             err = true;
-            tView = S.of(context).empresa;
+            tView = S.of(context).company;
 
             factoriesSector.clear();
 
@@ -79,7 +79,7 @@ break;
         if (subIten1Selection == 3)
         {
           err = true;
-          tView = S.of(context).envio;
+          tView = S.of(context).shipment;
 
             if(subIten2Selection == 0)
             {

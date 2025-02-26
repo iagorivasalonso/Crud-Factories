@@ -22,294 +22,381 @@ class MessageLookup extends MessageLookupByLibrary {
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
-    "a_esta_empresa_se_le_hicieron": MessageLookupByLibrary.simpleMessage(
-      "A esta empresa se le hicieron",
+    "Application_exit": MessageLookupByLibrary.simpleMessage(
+      "Salida de la aplicación",
     ),
-    "actualizar": MessageLookupByLibrary.simpleMessage("Actualizar"),
-    "adjuntar": MessageLookupByLibrary.simpleMessage("adjuntar"),
-    "archivo": MessageLookupByLibrary.simpleMessage("Archivo"),
-    "archivo_no_valido": MessageLookupByLibrary.simpleMessage(
-      "Archivo no válido",
+    "Cannot_Load_Companies_because_it_does_not_have_sectors":
+        MessageLookupByLibrary.simpleMessage(
+          "No se pueden cargar las empresas porque no hay sectores",
+        ),
+    "DB_connection": MessageLookupByLibrary.simpleMessage("Conexión a BD"),
+    "Import_data_in_CSV_format": MessageLookupByLibrary.simpleMessage(
+      "Importar datos en formato CSV",
     ),
-    "asunto": MessageLookupByLibrary.simpleMessage("asunto"),
-    "base_de_datos": MessageLookupByLibrary.simpleMessage("Base de datos"),
-    "borrar": MessageLookupByLibrary.simpleMessage("Borrar"),
-    "buscar": MessageLookupByLibrary.simpleMessage("buscar..."),
-    "calle": MessageLookupByLibrary.simpleMessage("Calle"),
-    "cancelar": MessageLookupByLibrary.simpleMessage("Cancelar"),
-    "cerrar": MessageLookupByLibrary.simpleMessage("Cerrar"),
-    "ciudad": MessageLookupByLibrary.simpleMessage("Ciudad"),
-    "codigo_postal": MessageLookupByLibrary.simpleMessage("Código postal"),
-    "compruebe_su_usuario_o_contrasena": MessageLookupByLibrary.simpleMessage(
-      "Compruebe su usuario o contraseña",
-    ),
-    "conectar": MessageLookupByLibrary.simpleMessage("Conectar"),
-    "conexion": MessageLookupByLibrary.simpleMessage("Conexion"),
-    "conexion_BD": MessageLookupByLibrary.simpleMessage("Conexion BD"),
-    "conexion_base_datos": MessageLookupByLibrary.simpleMessage(
-      "Conexión base de datos",
-    ),
-    "conexion_no_valida": MessageLookupByLibrary.simpleMessage(
-      "Conexión no válida",
-    ),
-    "conexiones": MessageLookupByLibrary.simpleMessage("Conexiones"),
-    "contacto": MessageLookupByLibrary.simpleMessage("Contacto"),
-    "contactos_en_la_empresa": MessageLookupByLibrary.simpleMessage(
-      "Contactos en la empresa",
-    ),
-    "contrasena": MessageLookupByLibrary.simpleMessage("Contraseña"),
-    "correctamente": MessageLookupByLibrary.simpleMessage("Correctamente"),
-    "correo_invalido": MessageLookupByLibrary.simpleMessage(
-      "El correo electrónico no es válido",
-    ),
-    "creado": MessageLookupByLibrary.simpleMessage("Creado"),
-    "crear": MessageLookupByLibrary.simpleMessage("Crear"),
-    "de": MessageLookupByLibrary.simpleMessage("De"),
-    "desconectar": MessageLookupByLibrary.simpleMessage("Desconectar"),
-    "desea_completarlo": MessageLookupByLibrary.simpleMessage(
-      "¿Desea completarlo?",
-    ),
-    "deshacer": MessageLookupByLibrary.simpleMessage("Deshacer"),
-    "destinatario_no_valido": MessageLookupByLibrary.simpleMessage(
+    "The_recipient_is_not_a_valid_email": MessageLookupByLibrary.simpleMessage(
       "El destinatario no es un correo electrónico válido",
     ),
-    "devuelto": MessageLookupByLibrary.simpleMessage("Devuelto"),
-    "direccion": MessageLookupByLibrary.simpleMessage("Dirección"),
-    "editar": MessageLookupByLibrary.simpleMessage("Editar"),
-    "el": MessageLookupByLibrary.simpleMessage("El"),
-    "el_codigo_postal_debe_de_tener_5_digitos":
-        MessageLookupByLibrary.simpleMessage(
-          "El código postal debe de tener 5 dígitos",
-        ),
-    "el_empleado": MessageLookupByLibrary.simpleMessage("El empleado"),
-    "el_empleado_se_ha_quitado_correctamente":
-        MessageLookupByLibrary.simpleMessage(
-          "El empleado se ha quitado correctamente",
-        ),
-    "el_envio_contiene": MessageLookupByLibrary.simpleMessage(
-      "El envio contiene",
+    "The_sector_does_not_exist": MessageLookupByLibrary.simpleMessage(
+      "El sector no existe",
     ),
-    "el_envio_tiene": MessageLookupByLibrary.simpleMessage("El envio tiene"),
-    "el_puerto_no_es_correcto": MessageLookupByLibrary.simpleMessage(
+    "There_is_no_connection_to_the_server":
+        MessageLookupByLibrary.simpleMessage("No hay conexión con el servidor"),
+    "They_were_imported": MessageLookupByLibrary.simpleMessage("Se importaron"),
+    "They_will_be_saved_in_a_temporary_file":
+        MessageLookupByLibrary.simpleMessage(
+          "Se guardarán en un archivo temporal",
+        ),
+    "What_type_of_database_do_you_want_to_use":
+        MessageLookupByLibrary.simpleMessage(
+          "¿Qué tipo de base de datos deseas utilizar?",
+        ),
+    "Without_company": MessageLookupByLibrary.simpleMessage("Sin empresa"),
+    "You_can_only_delete_the_lines_that_were_returned_Do_you_want_to_delete":
+        MessageLookupByLibrary.simpleMessage(
+          "Solo puedes eliminar las líneas que fueron devueltas. ¿Desea eliminar?",
+        ),
+    "You_cannot_leave_the_field_empty_you_want_to_continue":
+        MessageLookupByLibrary.simpleMessage(
+          "No puede dejar el campo vacío. ¿Desea continuar?",
+        ),
+    "You_must_select_a_correct_list": MessageLookupByLibrary.simpleMessage(
+      "Debes seleccionar una lista correcta",
+    ),
+    "a_recipient": MessageLookupByLibrary.simpleMessage("Un destinatario"),
+    "acept": MessageLookupByLibrary.simpleMessage("Aceptar"),
+    "address": MessageLookupByLibrary.simpleMessage("Dirección"),
+    "affair": MessageLookupByLibrary.simpleMessage("Asunto"),
+    "allFemale": MessageLookupByLibrary.simpleMessage("Todas"),
+    "allMale": MessageLookupByLibrary.simpleMessage("Todos"),
+    "all_changes_will_be_lost_do_you_want_to_continue":
+        MessageLookupByLibrary.simpleMessage(
+          "Todos los cambios se perderán. ¿Desea continuar?",
+        ),
+    "appTitle": MessageLookupByLibrary.simpleMessage("Mi aplicación"),
+    "attach": MessageLookupByLibrary.simpleMessage("Adjuntar"),
+    "can_not_go_blank_fields": MessageLookupByLibrary.simpleMessage(
+      "No pueden quedar campos en blanco",
+    ),
+    "can_not_load": MessageLookupByLibrary.simpleMessage("No se puede cargar"),
+    "cancel": MessageLookupByLibrary.simpleMessage("Cancelar"),
+    "careful": MessageLookupByLibrary.simpleMessage("Cuidado"),
+    "category_error": MessageLookupByLibrary.simpleMessage(
+      "Error de categoría",
+    ),
+    "check_your_user_or_password": MessageLookupByLibrary.simpleMessage(
+      "Comprueba tu usuario o contraseña",
+    ),
+    "city": MessageLookupByLibrary.simpleMessage("Ciudad"),
+    "close": MessageLookupByLibrary.simpleMessage("Cerrar"),
+    "companies": MessageLookupByLibrary.simpleMessage("Empresas"),
+    "companies_en_base_datos": MessageLookupByLibrary.simpleMessage(
+      "Empresas en su base de datos",
+    ),
+    "company": MessageLookupByLibrary.simpleMessage("Empresa"),
+    "company_contacts": MessageLookupByLibrary.simpleMessage(
+      "Contactos de la empresa",
+    ),
+    "company_en_base_datos": MessageLookupByLibrary.simpleMessage(
+      "Empresas en su base de datos",
+    ),
+    "confirm": MessageLookupByLibrary.simpleMessage("Confirmar"),
+    "connect": MessageLookupByLibrary.simpleMessage("Conectar"),
+    "connection": MessageLookupByLibrary.simpleMessage("Conexión"),
+    "connection_cannot_be_established": MessageLookupByLibrary.simpleMessage(
+      "No se puede establecer conexión",
+    ),
+    "connection_has_been_successfully_deleted":
+        MessageLookupByLibrary.simpleMessage(
+          "La conexión se ha eliminado correctamente",
+        ),
+    "connection_test": MessageLookupByLibrary.simpleMessage(
+      "Prueba de conexión",
+    ),
+    "connections": MessageLookupByLibrary.simpleMessage("Conexiones"),
+    "contact": MessageLookupByLibrary.simpleMessage("Contacto"),
+    "correctly": MessageLookupByLibrary.simpleMessage("correctamente"),
+    "could_not_be_deleted": MessageLookupByLibrary.simpleMessage(
+      "No se pudo eliminar",
+    ),
+    "could_not_connect_with_the_server": MessageLookupByLibrary.simpleMessage(
+      "No se pudo conectar con el servidor",
+    ),
+    "create": MessageLookupByLibrary.simpleMessage("Crear"),
+    "created": MessageLookupByLibrary.simpleMessage("Creado"),
+    "creation_of_the_sector": MessageLookupByLibrary.simpleMessage(
+      "Creación del sector",
+    ),
+    "csv": MessageLookupByLibrary.simpleMessage("CSV"),
+    "data_base": MessageLookupByLibrary.simpleMessage("Base de datos"),
+    "database_connection": MessageLookupByLibrary.simpleMessage(
+      "Conexión a base de datos",
+    ),
+    "date": MessageLookupByLibrary.simpleMessage("Fecha"),
+    "de": MessageLookupByLibrary.simpleMessage("De"),
+    "delete": MessageLookupByLibrary.simpleMessage("Eliminar"),
+    "desea_go_out": MessageLookupByLibrary.simpleMessage(
+      "¿Desea salir de la aplicación?",
+    ),
+    "discharge_date": MessageLookupByLibrary.simpleMessage("Fecha de alta"),
+    "disconnect": MessageLookupByLibrary.simpleMessage("Desconectar"),
+    "do_you_really_want_to_delete": MessageLookupByLibrary.simpleMessage(
+      "¿Realmente desea eliminar?",
+    ),
+    "does_not_belong_to_our_database": MessageLookupByLibrary.simpleMessage(
+      "No pertenece a nuestra base de datos",
+    ),
+    "does_not_belong_to_the_company": MessageLookupByLibrary.simpleMessage(
+      "No pertenece a la empresa",
+    ),
+    "edit": MessageLookupByLibrary.simpleMessage("Editar"),
+    "el_shipment_has": MessageLookupByLibrary.simpleMessage("El envío tiene"),
+    "email": MessageLookupByLibrary.simpleMessage("Email"),
+    "emails": MessageLookupByLibrary.simpleMessage("Emails"),
+    "employees": MessageLookupByLibrary.simpleMessage("Empleados"),
+    "enviado": MessageLookupByLibrary.simpleMessage("Enviado"),
+    "error": MessageLookupByLibrary.simpleMessage("Error"),
+    "examine": MessageLookupByLibrary.simpleMessage("Examinar"),
+    "file": MessageLookupByLibrary.simpleMessage("Archivo"),
+    "file_format_error": MessageLookupByLibrary.simpleMessage(
+      "Error en el formato del archivo de",
+    ),
+    "file_not_found": MessageLookupByLibrary.simpleMessage(
+      "No se encontró el archivo de",
+    ),
+    "filter": MessageLookupByLibrary.simpleMessage("Filtrar"),
+    "filter_by": MessageLookupByLibrary.simpleMessage("Filtrar por"),
+    "font_type": MessageLookupByLibrary.simpleMessage("Tipo de fuente"),
+    "go_out": MessageLookupByLibrary.simpleMessage("Salir"),
+    "has": MessageLookupByLibrary.simpleMessage("Tiene"),
+    "has_been_deleted_successfully": MessageLookupByLibrary.simpleMessage(
+      "Se ha eliminado correctamente",
+    ),
+    "has_been_removed": MessageLookupByLibrary.simpleMessage("Se ha eliminado"),
+    "has_been_sent": MessageLookupByLibrary.simpleMessage("Se ha enviado"),
+    "has_closed_the_connection": MessageLookupByLibrary.simpleMessage(
+      "Ha cerrado la conexión",
+    ),
+    "has_no_line_to_modify": MessageLookupByLibrary.simpleMessage(
+      "No tienes ninguna línea para modificar",
+    ),
+    "has_no_server_connected": MessageLookupByLibrary.simpleMessage(
+      "No tienes ningún servidor conectado",
+    ),
+    "have_been_removed": MessageLookupByLibrary.simpleMessage(
+      "Se han eliminado",
+    ),
+    "have_been_sent": MessageLookupByLibrary.simpleMessage("Se han enviado"),
+    "he": MessageLookupByLibrary.simpleMessage("Él"),
+    "host": MessageLookupByLibrary.simpleMessage("Host"),
+    "import": MessageLookupByLibrary.simpleMessage("Importar"),
+    "import_data": MessageLookupByLibrary.simpleMessage("Importar datos"),
+    "in_progress": MessageLookupByLibrary.simpleMessage("En curso"),
+    "in_the_database_what_do_you_want_to_do":
+        MessageLookupByLibrary.simpleMessage(
+          "en la base de datos. ¿Qué desea hacer?",
+        ),
+    "invalid_connection": MessageLookupByLibrary.simpleMessage(
+      "Conexión no válida",
+    ),
+    "invalid_file": MessageLookupByLibrary.simpleMessage("Archivo no válido"),
+    "is_connected_to": MessageLookupByLibrary.simpleMessage("Está conectado a"),
+    "it_has_been": MessageLookupByLibrary.simpleMessage("Ha sido"),
+    "it_was_imported": MessageLookupByLibrary.simpleMessage("Se importó"),
+    "line_correctly": MessageLookupByLibrary.simpleMessage(
+      "línea correctamente",
+    ),
+    "linea": MessageLookupByLibrary.simpleMessage("Línea"),
+    "lineas": MessageLookupByLibrary.simpleMessage("Líneas"),
+    "lines_correctly": MessageLookupByLibrary.simpleMessage(
+      "líneas correctamente",
+    ),
+    "list_of": MessageLookupByLibrary.simpleMessage("Lista de"),
+    "lists": MessageLookupByLibrary.simpleMessage("Listas"),
+    "message": MessageLookupByLibrary.simpleMessage("Mensaje"),
+    "modification_of_the_sector": MessageLookupByLibrary.simpleMessage(
+      "Modificación del sector",
+    ),
+    "multiple_recipients": MessageLookupByLibrary.simpleMessage(
+      "Varios destinatarios",
+    ),
+    "must_be": MessageLookupByLibrary.simpleMessage("debe ser"),
+    "name": MessageLookupByLibrary.simpleMessage("Nombre"),
+    "name_sector": MessageLookupByLibrary.simpleMessage("Nombre del sector"),
+    "newFemale": MessageLookupByLibrary.simpleMessage("Nueva"),
+    "newMale": MessageLookupByLibrary.simpleMessage("Nuevo"),
+    "new_email": MessageLookupByLibrary.simpleMessage(
+      "Nuevo correo electrónico",
+    ),
+    "no": MessageLookupByLibrary.simpleMessage("No"),
+    "no_file_exists": MessageLookupByLibrary.simpleMessage(
+      "No existe el archivo de",
+    ),
+    "no_has": MessageLookupByLibrary.simpleMessage("no tiene"),
+    "no_have_registered_emails": MessageLookupByLibrary.simpleMessage(
+      "No tienes correos electrónicos registrados",
+    ),
+    "not_a_valid_email": MessageLookupByLibrary.simpleMessage(
+      "No es un correo electrónico válido",
+    ),
+    "not_a_valid_webpage": MessageLookupByLibrary.simpleMessage(
+      "No es una página web válida",
+    ),
+    "not_connected_to_any_database": MessageLookupByLibrary.simpleMessage(
+      "No estás conectado a ninguna base de datos",
+    ),
+    "not_in_that_department": MessageLookupByLibrary.simpleMessage(
+      "no está en ese departamento",
+    ),
+    "number": MessageLookupByLibrary.simpleMessage("Número"),
+    "observations": MessageLookupByLibrary.simpleMessage("Observaciones"),
+    "orther": MessageLookupByLibrary.simpleMessage("Otro"),
+    "para": MessageLookupByLibrary.simpleMessage("Para"),
+    "password": MessageLookupByLibrary.simpleMessage("Contraseña"),
+    "phone": MessageLookupByLibrary.simpleMessage("Teléfono"),
+    "phone_1": MessageLookupByLibrary.simpleMessage("Teléfono 1"),
+    "phone_2": MessageLookupByLibrary.simpleMessage("Teléfono 2"),
+    "port": MessageLookupByLibrary.simpleMessage("Puerto"),
+    "postal_code": MessageLookupByLibrary.simpleMessage("Código postal"),
+    "province": MessageLookupByLibrary.simpleMessage("Provincia"),
+    "reboot": MessageLookupByLibrary.simpleMessage("Reiniciar"),
+    "respondio": MessageLookupByLibrary.simpleMessage("Respondió"),
+    "returned": MessageLookupByLibrary.simpleMessage("Devuelto"),
+    "route": MessageLookupByLibrary.simpleMessage("Ruta"),
+    "route_file_cannot_be_read": MessageLookupByLibrary.simpleMessage(
+      "No se puede leer el archivo de rutas",
+    ),
+    "route_selector": MessageLookupByLibrary.simpleMessage("Selector de rutas"),
+    "routes": MessageLookupByLibrary.simpleMessage("Rutas"),
+    "save": MessageLookupByLibrary.simpleMessage("Guardar"),
+    "saved": MessageLookupByLibrary.simpleMessage("Guardado"),
+    "search": MessageLookupByLibrary.simpleMessage("Buscar..."),
+    "sector": MessageLookupByLibrary.simpleMessage("Sector"),
+    "sector_management": MessageLookupByLibrary.simpleMessage(
+      "Gestión de sectores",
+    ),
+    "sectors": MessageLookupByLibrary.simpleMessage("Sectores"),
+    "select": MessageLookupByLibrary.simpleMessage("Seleccionar"),
+    "select_all": MessageLookupByLibrary.simpleMessage("Seleccionar todos"),
+    "select_file": MessageLookupByLibrary.simpleMessage("Seleccionar archivo"),
+    "select_shipment": MessageLookupByLibrary.simpleMessage(
+      "Seleccionar envío",
+    ),
+    "send": MessageLookupByLibrary.simpleMessage("Enviar"),
+    "send_a": MessageLookupByLibrary.simpleMessage("Enviar a"),
+    "sender": MessageLookupByLibrary.simpleMessage("Remitente"),
+    "sending_emails": MessageLookupByLibrary.simpleMessage(
+      "Envío de correos electrónicos",
+    ),
+    "server": MessageLookupByLibrary.simpleMessage("Servidor"),
+    "shipment": MessageLookupByLibrary.simpleMessage("Envío"),
+    "shipments": MessageLookupByLibrary.simpleMessage("Envíos"),
+    "source": MessageLookupByLibrary.simpleMessage("Fuente"),
+    "sql": MessageLookupByLibrary.simpleMessage("SQL"),
+    "sql_error": MessageLookupByLibrary.simpleMessage("Error SQL"),
+    "state": MessageLookupByLibrary.simpleMessage("Estado"),
+    "street": MessageLookupByLibrary.simpleMessage("Calle"),
+    "that_company_does_not_belong_to_our_database":
+        MessageLookupByLibrary.simpleMessage(
+          "Esa empresa no pertenece a nuestra base de datos",
+        ),
+    "that_sector_already_exists": MessageLookupByLibrary.simpleMessage(
+      "Ese sector ya existe",
+    ),
+    "the": MessageLookupByLibrary.simpleMessage("El"),
+    "the_company": MessageLookupByLibrary.simpleMessage("La empresa"),
+    "the_email_has_been_successfully_sent":
+        MessageLookupByLibrary.simpleMessage(
+          "El correo electrónico se ha enviado correctamente",
+        ),
+    "the_employee": MessageLookupByLibrary.simpleMessage("El empleado"),
+    "the_employee_has_been_correctly_removed":
+        MessageLookupByLibrary.simpleMessage(
+          "El empleado se ha eliminado correctamente",
+        ),
+    "the_field": MessageLookupByLibrary.simpleMessage("El campo"),
+    "the_field_cannot_be_blank": MessageLookupByLibrary.simpleMessage(
+      "El campo no puede estar en blanco",
+    ),
+    "the_field_cannot_go_empty": MessageLookupByLibrary.simpleMessage(
+      "El campo no puede quedar vacío",
+    ),
+    "the_format_of_the": MessageLookupByLibrary.simpleMessage("El formato de"),
+    "the_port_is_not_correct": MessageLookupByLibrary.simpleMessage(
       "El puerto no es correcto",
     ),
-    "el_sector_se_ha_creado_correctamente":
+    "the_postal_code_must_have_5_digits": MessageLookupByLibrary.simpleMessage(
+      "El código postal debe tener 5 dígitos",
+    ),
+    "the_sector_has_been_created_successfully":
         MessageLookupByLibrary.simpleMessage(
           "El sector se ha creado correctamente",
         ),
-    "el_usuario_o_la_contrasena_son_incorrectos":
+    "the_shipment_contains": MessageLookupByLibrary.simpleMessage(
+      "El envío contiene",
+    ),
+    "the_user_or_password_are_incorrect": MessageLookupByLibrary.simpleMessage(
+      "El usuario o la contraseña son incorrectos",
+    ),
+    "there_is_no": MessageLookupByLibrary.simpleMessage("No hay"),
+    "there_is_no_companies_to_import": MessageLookupByLibrary.simpleMessage(
+      "No hay empresas para importar",
+    ),
+    "there_is_no_database_with_that_name": MessageLookupByLibrary.simpleMessage(
+      "No existe una base de datos con ese nombre",
+    ),
+    "there_is_no_emails_para_send": MessageLookupByLibrary.simpleMessage(
+      "No hay correos electrónicos para enviar",
+    ),
+    "there_is_no_shipping_selected": MessageLookupByLibrary.simpleMessage(
+      "No hay ningún envío seleccionado",
+    ),
+    "this_company_was_made_to_this_company":
+        MessageLookupByLibrary.simpleMessage("A esta empresa se le realizaron"),
+    "this_day_they_were_made": MessageLookupByLibrary.simpleMessage(
+      "Este día se realizaron",
+    ),
+    "this_day_was_made": MessageLookupByLibrary.simpleMessage(
+      "Este día se realizó",
+    ),
+    "this_is_a_connection_test_from_the_application":
         MessageLookupByLibrary.simpleMessage(
-          "El usuario o la contraseña son incorrectos",
+          "Esta es una prueba de conexión desde la aplicación",
         ),
-    "eliminar": MessageLookupByLibrary.simpleMessage("Eliminar"),
-    "email": MessageLookupByLibrary.simpleMessage("Email"),
-    "email_enviado_correctamente": MessageLookupByLibrary.simpleMessage(
-      "El email se ha enviado correctamente",
-    ),
-    "emails": MessageLookupByLibrary.simpleMessage("Emails"),
-    "empleados": MessageLookupByLibrary.simpleMessage("Empleados"),
-    "empresa": MessageLookupByLibrary.simpleMessage("Empresa"),
-    "empresas": MessageLookupByLibrary.simpleMessage("Empresas"),
-    "empresas_en_base_datos": MessageLookupByLibrary.simpleMessage(
-      "empresas en su base de datos",
-    ),
-    "en_curso": MessageLookupByLibrary.simpleMessage("En curso"),
-    "enviado": MessageLookupByLibrary.simpleMessage("Enviado"),
-    "enviar": MessageLookupByLibrary.simpleMessage("enviar"),
-    "enviar_a": MessageLookupByLibrary.simpleMessage("enviar a"),
-    "envio": MessageLookupByLibrary.simpleMessage("Envío"),
-    "envio_de_emails": MessageLookupByLibrary.simpleMessage("Envio de emails"),
-    "envios": MessageLookupByLibrary.simpleMessage("Envíos"),
-    "error_sql": MessageLookupByLibrary.simpleMessage("Error SQL"),
-    "esa_empresa_no_pertenede_a_nuestra_base_de_datos":
-        MessageLookupByLibrary.simpleMessage(
-          "Esa_empresa no pertenede a nuestra base de datos",
-        ),
-    "esta_conectado_a": MessageLookupByLibrary.simpleMessage(
-      "Está conectado a",
-    ),
-    "estado": MessageLookupByLibrary.simpleMessage("Estado"),
-    "este_dia_se_hicieron": MessageLookupByLibrary.simpleMessage(
-      "Este día se hicieron",
-    ),
-    "esto_es_una_prueba_de_conexion_desde_la_aplicacion":
-        MessageLookupByLibrary.simpleMessage(
-          "esto es una prueba de conexion desde la aplicacion",
-        ),
-    "examinar": MessageLookupByLibrary.simpleMessage("Examinar"),
-    "fecha": MessageLookupByLibrary.simpleMessage("Fecha"),
-    "fecha_de_alta": MessageLookupByLibrary.simpleMessage("Fecha de alta"),
-    "filtrar": MessageLookupByLibrary.simpleMessage("Filtrar"),
-    "filtrar_por": MessageLookupByLibrary.simpleMessage("Filtrar por"),
-    "fuente": MessageLookupByLibrary.simpleMessage("Fuente"),
-    "fueron_modificadas": MessageLookupByLibrary.simpleMessage(
-      "Fueron modificadas",
-    ),
-    "guardado": MessageLookupByLibrary.simpleMessage("Guardado"),
-    "guardar": MessageLookupByLibrary.simpleMessage("Guardar"),
-    "ha_cerrado_la_conexion": MessageLookupByLibrary.simpleMessage(
-      "Ha cerrado la conexión",
-    ),
-    "host": MessageLookupByLibrary.simpleMessage("Host"),
-    "importar": MessageLookupByLibrary.simpleMessage("Importar"),
-    "importar_datos": MessageLookupByLibrary.simpleMessage("Importar datos"),
-    "importar_datos_csv": MessageLookupByLibrary.simpleMessage(
-      "Importar datos en formato CSV",
-    ),
-    "la": MessageLookupByLibrary.simpleMessage("La"),
-    "la_empresa": MessageLookupByLibrary.simpleMessage("La empresa"),
-    "lineas": MessageLookupByLibrary.simpleMessage("Líneas"),
-    "lista_de": MessageLookupByLibrary.simpleMessage("Lista de"),
-    "lista_incorrecta": MessageLookupByLibrary.simpleMessage(
-      "Debe seleccionar una lista correcta",
-    ),
-    "listas": MessageLookupByLibrary.simpleMessage("Listas"),
-    "manejo_de_sectores": MessageLookupByLibrary.simpleMessage(
-      "Manejo de sectores",
-    ),
-    "mensaje": MessageLookupByLibrary.simpleMessage("mensaje"),
-    "no_base_de_datos_con_el_nombre": MessageLookupByLibrary.simpleMessage(
-      "No hay base de datos con ese nombre",
-    ),
-    "no_es_un_correo_electronico_valido": MessageLookupByLibrary.simpleMessage(
-      "No es un correo electrónico válido",
-    ),
-    "no_es_una_pagina_web_valida": MessageLookupByLibrary.simpleMessage(
-      "No es una página web válida",
-    ),
-    "no_esta_conectado_a_ninguna_base_de_datos":
-        MessageLookupByLibrary.simpleMessage(
-          "No está conectado a ninguna base de datos",
-        ),
-    "no_existe_sector": MessageLookupByLibrary.simpleMessage(
-      "No existe el sector",
-    ),
-    "no_hay_conexion_con_el_servidor": MessageLookupByLibrary.simpleMessage(
-      "No hay conexión con el servidor",
-    ),
-    "no_hay_emails_para_enviar": MessageLookupByLibrary.simpleMessage(
-      "No hay emails para enviar",
-    ),
-    "no_hay_empresas_para_importar": MessageLookupByLibrary.simpleMessage(
-      "No hay ninguna empresa para importar",
-    ),
-    "no_hay_envios_seleccionados": MessageLookupByLibrary.simpleMessage(
-      "Mo hay ningún envio seleccionado",
-    ),
-    "no_pertenede_a_la_empresa": MessageLookupByLibrary.simpleMessage(
-      "No pertenede a la empresa",
-    ),
-    "no_pertenede_a_nuestra_base_de_datos":
-        MessageLookupByLibrary.simpleMessage(
-          "No pertenede a nuestra base de datos",
-        ),
-    "no_puede_cargar_sin_sectores": MessageLookupByLibrary.simpleMessage(
-      "No puede cargar las empresas porque no tiene sectores",
-    ),
-    "no_puede_hacer_el_envio_porque_no_tiene_empresas_en_su_base_de_datos":
-        MessageLookupByLibrary.simpleMessage(
-          "No puede hacer el envío porque no tiene empresas en su base de datos",
-        ),
-    "no_pueden_ir_campos_en_blanco": MessageLookupByLibrary.simpleMessage(
-      "No pueden ir campos en blanco",
-    ),
-    "no_se_pudo_conectar_con_el_servidor": MessageLookupByLibrary.simpleMessage(
-      "No se pudo conectar con el servidor",
-    ),
-    "no_se_pudo_eliminar": MessageLookupByLibrary.simpleMessage(
-      "No se pudo eliminar",
-    ),
-    "no_se_puede_establecer_conexion": MessageLookupByLibrary.simpleMessage(
-      "No se puede establecer conexión",
-    ),
-    "no_tenemos_ningun_envio_en_esa_fecha":
-        MessageLookupByLibrary.simpleMessage(
-          "No tenemos ningún envio en esa fecha",
-        ),
-    "no_tiene_el_archivo_de_rutas": MessageLookupByLibrary.simpleMessage(
-      "No tiene el archivo de rutas",
-    ),
-    "no_tiene_emails_en_su_base_de_datos": MessageLookupByLibrary.simpleMessage(
-      "No tiene emails en su base de datos",
-    ),
-    "no_tiene_emails_registrados": MessageLookupByLibrary.simpleMessage(
-      "No tiene emails registrados",
-    ),
-    "no_tiene_ningun_servidor_conectado": MessageLookupByLibrary.simpleMessage(
-      "No tiene ningun servidor conectado",
-    ),
-    "no_tiene_ninguna_linea_a_modificar": MessageLookupByLibrary.simpleMessage(
-      "No tiene ninguna línea a modificar",
-    ),
-    "no_tienes_completo_el_archivo_de_rutas":
-        MessageLookupByLibrary.simpleMessage(
-          "No tienes completo el archivo de rutas",
-        ),
-    "nombre": MessageLookupByLibrary.simpleMessage("Nombre"),
-    "nueva": MessageLookupByLibrary.simpleMessage("Nueva"),
-    "nuevo": MessageLookupByLibrary.simpleMessage("Nuevo"),
-    "nuevo_email": MessageLookupByLibrary.simpleMessage("Nuevo email"),
-    "numero": MessageLookupByLibrary.simpleMessage("Número"),
-    "observaciones": MessageLookupByLibrary.simpleMessage("Observaciones"),
-    "otro": MessageLookupByLibrary.simpleMessage("Otro"),
-    "pagina_web": MessageLookupByLibrary.simpleMessage("Página web"),
-    "para": MessageLookupByLibrary.simpleMessage("Para"),
-    "provincia": MessageLookupByLibrary.simpleMessage("Provincia"),
-    "prueba_de_conexion": MessageLookupByLibrary.simpleMessage(
-      "prueba de conexion",
-    ),
-    "puerto": MessageLookupByLibrary.simpleMessage("Puerto"),
-    "reiniciar": MessageLookupByLibrary.simpleMessage("Reiniciar"),
-    "remitente": MessageLookupByLibrary.simpleMessage("Remitente"),
-    "respondio": MessageLookupByLibrary.simpleMessage("Respondió"),
-    "ruta": MessageLookupByLibrary.simpleMessage("Ruta"),
-    "rutas": MessageLookupByLibrary.simpleMessage("Rutas"),
-    "salir": MessageLookupByLibrary.simpleMessage("Salir"),
-    "se_ha_borrado_correctamente": MessageLookupByLibrary.simpleMessage(
-      "se ha borrado correctamente",
-    ),
-    "se_ha_eliminado_correctamente_la_conexion":
-        MessageLookupByLibrary.simpleMessage(
-          "Se ha eliminado correctamente la conexión",
-        ),
-    "se_han_enviado": MessageLookupByLibrary.simpleMessage("Se han enviado"),
-    "se_importaron": MessageLookupByLibrary.simpleMessage("Se importaron"),
-    "sector": MessageLookupByLibrary.simpleMessage("Sector"),
-    "sectores": MessageLookupByLibrary.simpleMessage("Sectores"),
-    "seleccionar": MessageLookupByLibrary.simpleMessage("Seleccionar"),
-    "seleccionar_archivo": MessageLookupByLibrary.simpleMessage(
-      "Seleccionar archivo",
-    ),
-    "seleccionar_envio": MessageLookupByLibrary.simpleMessage(
-      "seleccionar envio",
-    ),
-    "seleccionar_todas": MessageLookupByLibrary.simpleMessage(
-      "Seleccionar todas",
-    ),
-    "selector_de_rutas": MessageLookupByLibrary.simpleMessage(
-      "Selector de rutas",
-    ),
-    "solo_puede_eliminar_las_lineas_devueltas":
-        MessageLookupByLibrary.simpleMessage(
-          "Solo puede eliminar las líneas que fueron devueltas. ¿Desea eliminar?",
-        ),
-    "sql": MessageLookupByLibrary.simpleMessage("SQL"),
-    "telefono": MessageLookupByLibrary.simpleMessage("Teléfono"),
-    "telefono_1": MessageLookupByLibrary.simpleMessage("Teléfono 1"),
-    "telefono_2": MessageLookupByLibrary.simpleMessage("Teléfono 2"),
-    "tiene": MessageLookupByLibrary.simpleMessage("Tiene"),
-    "todas": MessageLookupByLibrary.simpleMessage("Todas"),
-    "todos": MessageLookupByLibrary.simpleMessage("Todos"),
-    "un_destinatario": MessageLookupByLibrary.simpleMessage("un destinatario"),
-    "usuario": MessageLookupByLibrary.simpleMessage("Usuario"),
-    "utilidades": MessageLookupByLibrary.simpleMessage("Utilidades"),
-    "varios_destinatarios": MessageLookupByLibrary.simpleMessage(
-      "varios destinatarios",
-    ),
+    "to_import": MessageLookupByLibrary.simpleMessage("Para importar"),
+    "undo": MessageLookupByLibrary.simpleMessage("Deshacer"),
+    "update": MessageLookupByLibrary.simpleMessage("Actualizar"),
+    "user": MessageLookupByLibrary.simpleMessage("Usuario"),
+    "utilities": MessageLookupByLibrary.simpleMessage("Utilidades"),
     "ver": MessageLookupByLibrary.simpleMessage("Ver"),
-    "verificar_contrasena": MessageLookupByLibrary.simpleMessage(
+    "verify_password": MessageLookupByLibrary.simpleMessage(
       "Verificar contraseña",
     ),
     "volver": MessageLookupByLibrary.simpleMessage("Volver"),
+    "want_to_complete_it": MessageLookupByLibrary.simpleMessage(
+      "¿Desea completarlo?",
+    ),
+    "was_modified": MessageLookupByLibrary.simpleMessage("Fue modificado"),
+    "we_do_not_have_any_shipping_on_that_date":
+        MessageLookupByLibrary.simpleMessage(
+          "No tenemos ningún envío en esa fecha",
+        ),
+    "web_page": MessageLookupByLibrary.simpleMessage("Página web"),
+    "were_modified": MessageLookupByLibrary.simpleMessage("Fueron modificados"),
+    "yes": MessageLookupByLibrary.simpleMessage("Sí"),
+    "you_can_not_make_the_shipping_because_you_do_not_have_companies_in_your_database":
+        MessageLookupByLibrary.simpleMessage(
+          "No puedes realizar el envío porque no tienes empresas en tu base de datos",
+        ),
+    "you_do_not_have_a_complete_route_file":
+        MessageLookupByLibrary.simpleMessage(
+          "No tienes un archivo de rutas completo",
+        ),
+    "you_do_not_have_emails_in_your_database":
+        MessageLookupByLibrary.simpleMessage(
+          "No tienes correos electrónicos en tu base de datos",
+        ),
+    "your_email_is_invalid": MessageLookupByLibrary.simpleMessage(
+      "Tu correo electrónico no es válido",
+    ),
   };
 }

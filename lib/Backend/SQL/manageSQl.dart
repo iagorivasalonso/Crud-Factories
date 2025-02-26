@@ -11,7 +11,7 @@ Future<String> createDB(BuildContext context, String nameBD, conn) async {
     await conn.query('CREATE DATABASE $nameBD');
 
   }catch(SQLException){
-    err = "No se pudo crear la base de datos";
+    err = "No se pudo create la base de datos";
     error(context, err);
   }
 
@@ -71,7 +71,7 @@ Future<String> createTables(BuildContext context) async {
 
   }catch(SQLException){
 
-    String err= "No se pudieron crear las tablas de la base de datos";
+    String err= "No se pudieron create las tablas de la base de datos";
     error(context, err);
   }
 
@@ -130,7 +130,7 @@ Future<String> editDB(BuildContext context, String nameBD, String nameBDnew) asy
 
   }catch(SQLException){
 
-    err = "Error al modificar el nombre ";
+    err = "Error al modificar el name ";
     error(context, err);
   }
 

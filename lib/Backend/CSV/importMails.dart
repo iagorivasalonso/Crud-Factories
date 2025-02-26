@@ -26,16 +26,16 @@ csvImportMails(BuildContext context, List<String> fileContent, List<Mail> mails)
   } catch (e) {
     String array = S.of(context).emails;
 
-    if(e.toString().contains("El sistema no puede encontrar el archivo especificado"))
+    if(e.toString().contains("El sistema no puede encontrar el file especificado"))
     {
-      String noFile =  S.of(context).no_se_encuentra_archivo_de;
+      String noFile =  S.of(context).file_not_found;
       errorFiles.add("$noFile $array");
     }
     else
     {
       if(e.toString().contains("Invalid value"))
       {
-        String errorFile =  S.of(context).error_formato_archivo_de;
+        String errorFile =  S.of(context).file_format_error;
         errorFiles.add("$errorFile $array");
       }
     }

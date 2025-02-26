@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:crud_factories/Alertdialogs/confirm.dart';
 import 'package:crud_factories/Alertdialogs/error.dart';
 import 'package:crud_factories/Alertdialogs/noFind.dart';
@@ -69,21 +67,21 @@ class _viewState extends State<view> {
   Future<void> _runFilter(BuildContext context, String view, String enteredKeyboard, String filter,
       List<String> factoryName, [String? filterFactory]) async {
 
-    if (filter ==  S.of(context).nombre) {
-      filterFactory = S.of(context).nombre;
+    if (filter ==  S.of(context).name) {
+      filterFactory = S.of(context).name;
     }
 
     if (filter == "") {
-      filter = S.of(context).fecha;
+      filter = S.of(context).date;
     }
 
-    if (enteredKeyboard.isEmpty && view == S.of(context).empresa)
+    if (enteredKeyboard.isEmpty && view == S.of(context).company)
     {
       resulFactories = allFactories;
     }
     else
     {
-        if (filterSend ==  S.of(context).fecha)
+        if (filterSend ==  S.of(context).date)
         {
           resultSend = allCards.where((card) {
             final descriptFormat = lineSector[0]
@@ -94,34 +92,34 @@ class _viewState extends State<view> {
           }).toList();
         }
 
-        if (filterSend == S.of(context).empresa)
+        if (filterSend == S.of(context).company)
         {
           resultSend = allCards.where((element) =>
               element.title.toLowerCase().contains(enteredKeyboard.toLowerCase()))
               .toList();
         }
 
-        if (view == S.of(context).empresa)
+        if (view == S.of(context).company)
         {
-           if(filterFactory==S.of(context).nombre)
+           if(filterFactory==S.of(context).name)
            {
              resulFactories = factoriesSector.where((element) =>
                  element.name.toLowerCase().contains(
                      enteredKeyboard.toLowerCase())).toList();
            }
-           else if(filterFactory==S.of(context).direccion)
+           else if(filterFactory==S.of(context).address)
            {
              resulFactories = factoriesSector.where((element) =>
                  element.allAdress().toLowerCase().contains(
                      enteredKeyboard.toLowerCase())).toList();
            }
-           else if(filterFactory==S.of(context).telefono)
+           else if(filterFactory==S.of(context).phone)
            {
              resulFactories = factoriesSector.where((element) =>
                  element.thelephones[0].toLowerCase().contains(
                      enteredKeyboard.toLowerCase())).toList();
            }
-           else if(filterFactory==S.of(context).ciudad)
+           else if(filterFactory==S.of(context).city)
            {
              resulFactories = factoriesSector.where((element) =>
                  element.address['city']!.toLowerCase().contains(
@@ -133,35 +131,35 @@ class _viewState extends State<view> {
         bool noDat = false;
         var noDatfunction;
 
-        if (view == S.of(context).empresa && resulFactories.isEmpty)
+        if (view == S.of(context).company && resulFactories.isEmpty)
         {
-              stringDialog = S.of(context).esa_empresa_no_pertenede_a_nuestra_base_de_datos;
+              stringDialog = S.of(context).that_company_does_not_belong_to_our_database;
 
               String pr = "";
               noDat = true;
               noDatfunction = noFind(context, noDat, stringDialog);
 
-              if (filter == S.of(context).nombre || filter == S.of(context).telefono)
+              if (filter == S.of(context).name || filter == S.of(context).phone)
               {
-                  pr = S.of(context).el;
+                  pr = S.of(context).he;
               }
 
-              if (filter ==  S.of(context).direccion || filter ==  S.of(context).ciudad)
+              if (filter ==  S.of(context).address || filter ==  S.of(context).city)
               {
-                  pr = S.of(context).la;
+                  pr = S.of(context).the;
               }
               filter = '$pr $filter';
         }
-        if (view ==  S.of(context).envio && resultSend.isEmpty)
+        if (view ==  S.of(context).shipment && resultSend.isEmpty)
         {
-              if (filterSend == S.of(context).fecha)
+              if (filterSend == S.of(context).date)
               {
-                stringDialog = S.of(context).no_tenemos_ningun_envio_en_esa_fecha;
+                stringDialog = S.of(context).we_do_not_have_any_shipping_on_that_date;
                 noDat = true;
               }
               else
               {
-                stringDialog = S.of(context).esa_empresa_no_pertenede_a_nuestra_base_de_datos;
+                stringDialog = S.of(context).that_company_does_not_belong_to_our_database;
                 noDat = true;
               }
 
@@ -169,10 +167,10 @@ class _viewState extends State<view> {
         }
     }
     setState(() {
-      if (view == S.of(context).envio) {
+      if (view == S.of(context).shipment) {
         allSend = resultSend;
       }
-      if (view == S.of(context).empresa) {
+      if (view == S.of(context).company) {
         allFactories = resulFactories;
       }
     });
@@ -194,25 +192,25 @@ class _viewState extends State<view> {
         .height;
 
     List<String> opSearch = [
-      S.of(context).todos,
-      S.of(context).filtrar,
+      S.of(context).allMale,
+      S.of(context).filter,
     ];
 
     filterListFactories = [
-      S.of(context).nombre,
-      S.of(context).direccion,
-      S.of(context).telefono,
-      S.of(context).ciudad,
+      S.of(context).name,
+      S.of(context).address,
+      S.of(context).phone,
+      S.of(context).city,
     ];
 
-    filterFactory = S.of(context).nombre;
+    filterFactory = S.of(context).name;
 
     filterListSends = [
-      S.of(context).fecha,
-      S.of(context).empresa
+      S.of(context).date,
+      S.of(context).company
     ];
 
-    filterSend = S.of(context).fecha;
+    filterSend = S.of(context).date;
 
     String view = widget.tView;
     bool err = false;
@@ -230,11 +228,11 @@ class _viewState extends State<view> {
       mWidthList = mWidth * 0.8;
     }
 
-    if (view == S.of(context).empresa) {
+    if (view == S.of(context).company) {
       filterList = filterListFactories;
     }
 
-    if (view == S.of(context).envio) {
+    if (view == S.of(context).shipment) {
       filterList = filterListSends;
 
       if (selectCamp.isEmpty && widget.err == false) {
@@ -243,7 +241,7 @@ class _viewState extends State<view> {
     }
 
     if (controllerSearchSend.text == "") {
-      if (view ==S.of(context).empresa)
+      if (view ==S.of(context).company)
         resulFactories = factoriesSector;
     }
 
@@ -273,12 +271,12 @@ class _viewState extends State<view> {
 
       if(widget.err== true)
       {
-        if (view == S.of(context).empresa)
+        if (view == S.of(context).company)
         {
           action = LocalizationHelper.no_array_departament(context, view);
         }
 
-        if (view == S.of(context).envio)
+        if (view == S.of(context).shipment)
         {
           action = LocalizationHelper.no_array_departament(context, view);
         }
@@ -302,17 +300,17 @@ class _viewState extends State<view> {
 
       if (view == S.of(context).email && mails.isEmpty)
       {
-        action = S.of(context).no_tiene_emails_en_su_base_de_datos;
+        action = S.of(context).you_do_not_have_emails_in_your_database;
         error(context, action);
       }
 
-      if(view == S.of(context).empresa && factoriesSector.isEmpty)
+      if(view == S.of(context).company && factoriesSector.isEmpty)
       {
         action = LocalizationHelper.no_array_departament(context, view);
         error(context, action);
       }
 
-      if(view == S.of(context).envio && lineSector.isEmpty)
+      if(view == S.of(context).shipment && lineSector.isEmpty)
       {
         action = LocalizationHelper.no_array_departament(context, view);
         error(context, action);
@@ -337,7 +335,7 @@ class _viewState extends State<view> {
                       ),
                       child: Column(
                         children: [
-                          if(view == S.of(context).empresa || view == S.of(context).envio)
+                          if(view == S.of(context).company || view == S.of(context).shipment)
                             Row(
                               children: [
                                 for (int index = 0; index < opSearch.length; index++)
@@ -373,7 +371,7 @@ class _viewState extends State<view> {
                                   ),
                               ],
                             ),
-                          if(view == S.of(context).empresa)
+                          if(view == S.of(context).company)
                             if (opSelected == 1)
                               Container(
                                 color: Colors.greenAccent,
@@ -389,7 +387,7 @@ class _viewState extends State<view> {
                                             padding: EdgeInsets.only(
                                                 left: 10.0, right: 10.0),
                                             child: Text(
-                                              S.of(context).filtrar_por,
+                                              S.of(context).filter_by,
                                               maxLines: 1,
                                               overflow: TextOverflow.ellipsis,
                                             ),
@@ -454,7 +452,7 @@ class _viewState extends State<view> {
                                                   factoryName, filterFactory),
                                               decoration: InputDecoration(
                                                   border: OutlineInputBorder(),
-                                                  hintText: S.of(context).buscar),
+                                                  hintText: S.of(context).search),
                                             ),
                                           ),
                                         ),
@@ -463,7 +461,7 @@ class _viewState extends State<view> {
                                   ],
                                 ),
                               ),
-                          if(view == S.of(context).envio)
+                          if(view == S.of(context).shipment)
                             if (opSelected == 1)
                               Container(
                                 color: Colors.greenAccent,
@@ -479,7 +477,7 @@ class _viewState extends State<view> {
                                             padding: EdgeInsets.only(
                                                 left: 10.0, right: 10.0),
                                             child: Text(
-                                                S.of(context).filtrar_por,
+                                                S.of(context).filter_by,
                                               maxLines: 1,
                                               overflow: TextOverflow.ellipsis,
                                             ),
@@ -515,10 +513,10 @@ class _viewState extends State<view> {
                                                     select = 0;
 
 
-                                                    if (filterSend == S.of(context).fecha) {
+                                                    if (filterSend == S.of(context).date) {
                                                       selectCamp = resultSend[0].description;
                                                     }
-                                                    if (filterSend ==S.of(context).empresa) {
+                                                    if (filterSend ==S.of(context).company) {
                                                       selectCamp = resultSend[0].title;
                                                     }
                                                   });
@@ -556,7 +554,7 @@ class _viewState extends State<view> {
                                                   factoryName),
                                               decoration: InputDecoration(
                                                   border: OutlineInputBorder(),
-                                                  hintText: S.of(context).buscar),
+                                                  hintText: S.of(context).search),
                                             ),
                                           ),
                                         ),
@@ -566,7 +564,7 @@ class _viewState extends State<view> {
                                 ),
                               ),
                           Container(
-                            color: view == S.of(context).empresa
+                            color: view == S.of(context).company
                                 ? Colors.cyan
                                 : Colors.grey,
                             height: view == S.of(context).email
@@ -579,7 +577,7 @@ class _viewState extends State<view> {
                             child: Row(
                               children: [
                                 Expanded(
-                                    child: view == S.of(context).empresa
+                                    child: view == S.of(context).company
                                         ? ListView.builder(
                                       itemCount: resulFactories.length,
                                       itemBuilder: (context0, index) {
@@ -587,12 +585,12 @@ class _viewState extends State<view> {
                                           key: Key(resulFactories[index].name),
                                           confirmDismiss: (direction) async {
 
-                                            String array = S.of(context).la_empresa;
-                                            String action1 = LocalizationHelper.askConfirmSupr(context, array);
+                                            String array = S.of(context).the_company;
+                                            String action1 = LocalizationHelper.ask_confirm_supr(context, array);
                                             return await warning(context, action1);
                                           },
                                           onDismissed: (direction) async {
-                                            if (view == S.of(context).empresa)
+                                            if (view == S.of(context).company)
                                             {
                                               String idSupr = resulFactories[index].id;
 
@@ -601,7 +599,7 @@ class _viewState extends State<view> {
                                                 if(allFactories[i].id==idSupr)
                                                 {
                                                   String name = allFactories[i].name;
-                                                  String action = LocalizationHelper.delete_Factory(context, name);
+                                                  String action = LocalizationHelper.delete_factory(context, name);
                                                   bool delete = await confirm(context, action);
                                                   allFactories.removeAt(i);
                                                 }
@@ -669,17 +667,17 @@ class _viewState extends State<view> {
                                         return Dismissible(
                                           key: Key(mails[index].addrres),
                                           confirmDismiss: (direction) async {
-                                            String pr = S.of(context).el;
+                                            String pr = S.of(context).he;
                                             String array0 = S.of(context).email;
                                              array = "$pr $array0";
-                                            String action1 = LocalizationHelper.askConfirmSupr(context, array);
+                                            String action1 = LocalizationHelper.ask_confirm_supr(context, array);
                                             return await warning(
                                                 context, action1);
                                           },
                                           onDismissed: (direction) async {
                                             if (view == S.of(context).email) {
                                               String idSupr = mails[index].id;
-                                              String act = S.of(context).se_ha_borrado_correctamente;
+                                              String act = S.of(context).has_been_deleted_successfully;
                                               String action = '$array  $act';
                                               bool delete = await confirm(context, action);
                                               setState(() {
@@ -730,14 +728,14 @@ class _viewState extends State<view> {
                                       itemBuilder: (context0, index) {
 
                                         String cantSend = resultSend[index].description;
-                                        String send = S.of(context).envios;
+                                        String send = S.of(context).shipments;
                                         String titleSend ="$send: $cantSend";
 
                                         return Dismissible(
                                           key: Key(resultSend[index].title),
                                           confirmDismiss: (direction) async {
-                                            if (view == S.of(context).envio) {
-                                              String action1 = S.of(context).solo_puede_eliminar_las_lineas_devueltas;
+                                            if (view == S.of(context).shipment) {
+                                              String action1 = S.of(context).You_can_only_delete_the_lines_that_were_returned_Do_you_want_to_delete;
                                               suprLines = await warning(context, action1);
 
                                               String campKey = " ";
@@ -745,13 +743,13 @@ class _viewState extends State<view> {
                                               if (suprLines == true)
                                               {
 
-                                                if (filterSend == S.of(context).fecha) {
+                                                if (filterSend == S.of(context).date) {
 
                                                   campKey = resultSend[index].description;
 
                                                   for (int i = 0; i < lineSector.length; i++)
                                                   {
-                                                    if (lineSector[i].date == campKey && lineSector[i].state == S.of(context).devuelto)
+                                                    if (lineSector[i].date == campKey && lineSector[i].state == S.of(context).returned)
                                                     {
                                                       idsDelete.add(lineSector[i].id);
                                                     }
@@ -763,7 +761,7 @@ class _viewState extends State<view> {
 
                                                   for (int i = 0; i < lineSector.length; i++)
                                                   {
-                                                    if (campKey == lineSector[i].factory && lineSector[i].state ==S.of(context).devuelto)
+                                                    if (campKey == lineSector[i].factory && lineSector[i].state ==S.of(context).returned)
                                                     {
                                                       idsDelete.add(lineSector[i].id);
                                                     }
@@ -771,7 +769,6 @@ class _viewState extends State<view> {
                                                 }
 
                                                 int cantLines = idsDelete.length;
-                                                String array = S.of(context).lineas;
                                                 String action = LocalizationHelper.delete_Cant_Lines(context, cantLines);
                                                 bool delete = await confirm(context, action);
 
@@ -801,7 +798,7 @@ class _viewState extends State<view> {
                                             child: defaultCard(
                                                 title: resultSend[index].title,
                                                 description: filterSend ==
-                                                    S.of(context).fecha
+                                                    S.of(context).date
                                                     ? lineSector[0].showFormatDate(
                                                     resultSend[index].description)
                                                     : titleSend,
@@ -829,10 +826,10 @@ class _viewState extends State<view> {
                                                 }
                                               }
 
-                                              if (filterSend ==S.of(context).fecha) {
+                                              if (filterSend ==S.of(context).date) {
                                                 selectCamp = resultSend[select].description;
                                               }
-                                              if (filterSend ==S.of(context).empresa) {
+                                              if (filterSend ==S.of(context).company) {
                                                 selectCamp = resultSend[select].title;
                                               }
                                             },
@@ -851,7 +848,7 @@ class _viewState extends State<view> {
                 SizedBox(
                     width: mWidthPanel,
                     height: mHeiht,
-                    child: view == S.of(context).empresa
+                    child: view == S.of(context).company
                         ? newFactory(context,select,)
                         : view == S.of(context).email
                         ? newMail(context,select)
@@ -873,11 +870,11 @@ class _viewState extends State<view> {
     String cardSeleted = "";
     allCards.clear();
 
-    if (filterSend ==S.of(context).fecha) {
+    if (filterSend ==S.of(context).date) {
       for (int i = 0; i < dateSends.length; i++)
       {
         int numSend = i + 1;
-        String send = S.of(context).envio;
+        String send = S.of(context).shipment;
         String titleSend = '$send $numSend';
         allCards.add(cardSend(
             title: titleSend,
@@ -888,7 +885,7 @@ class _viewState extends State<view> {
     resultSend = allCards;
 
 
-    if (filterSend == S.of(context).empresa) {
+    if (filterSend == S.of(context).company) {
       for (int i = 0; i < lineSector.length; i++) {
         tmp.add(lineSector[i].factory);
       }

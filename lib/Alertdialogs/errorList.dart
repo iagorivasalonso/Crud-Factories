@@ -49,7 +49,7 @@ Future<bool> errors(BuildContext context, List<String> errorFiles) async {
                     child: MaterialButton(
                       color: Colors.lightBlue,
                       child: Text(
-                        S.of(context).aceptar,
+                        S.of(context).acept,
                         style: TextStyle(color: Colors.white),
                       ),
                       onPressed: () async {

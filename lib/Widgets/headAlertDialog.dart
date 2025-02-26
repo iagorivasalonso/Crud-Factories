@@ -33,7 +33,7 @@ StatefulBuilder headAlert({
                   color: Colors.white,
                   onPressed: (){
 
-                    if(title == S.of(context).error_categoria)
+                    if(title == S.of(context).category_error)
                     {
                       Navigator.of(context).pop(3);
                     }

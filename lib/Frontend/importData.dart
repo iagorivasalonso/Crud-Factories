@@ -95,7 +95,7 @@ class _newImportState extends State<newImport> {
                         children: [
                           Row(
                             children: [
-                              Text(S.of(context).importar_datos,
+                              Text(S.of(context).import_data,
                                 style: TextStyle(fontWeight: FontWeight.bold),),
                             ],
                           ),
@@ -105,7 +105,7 @@ class _newImportState extends State<newImport> {
                               children: [
                                 Row(
                                   children: [
-                                    Text(S.of(context).importar_datos_csv),
+                                    Text(S.of(context).Import_data_in_CSV_format),
                                   ],
                                 ),
                               ],
@@ -118,7 +118,7 @@ class _newImportState extends State<newImport> {
                               children: [
                                 Padding(
                                   padding: const EdgeInsets.only(right:10),
-                                  child: Text(S.of(context).ruta),
+                                  child: Text(S.of(context).route),
                                 ),
                                 SizedBox(
                                   width: 420,
@@ -134,7 +134,7 @@ class _newImportState extends State<newImport> {
                                   padding: const EdgeInsets.only(left: 40.0),
                                   child: MaterialButton(
                                     color: Colors.lightBlue,
-                                    child: Text(S.of(context).examinar,
+                                    child: Text(S.of(context).examine,
                                       style: const TextStyle(color: Colors.white),
                                     ),
                                     onPressed: (){
@@ -154,7 +154,7 @@ class _newImportState extends State<newImport> {
                                 children: [
                                   MaterialButton(
                                     color: Colors.lightBlue,
-                                    child: Text(S.of(context).importar_datos,
+                                    child: Text(S.of(context).import_data,
                                       style:  const TextStyle(color: Colors.white) ,),
                                     onPressed: () async {
 
@@ -197,7 +197,7 @@ class _newImportState extends State<newImport> {
                                               sectors.add(sectorsNew[i]);
                                             }
                                           }
-                                          String array =  S.of(context).sectores;
+                                          String array =  S.of(context).sectors;
 
                                           if(cantImport > 0)
                                           {
@@ -284,7 +284,7 @@ class _newImportState extends State<newImport> {
 
 
                                                 }
-                                                String array =  S.of(context).empleados;
+                                                String array =  S.of(context).employees;
 
                                                 if(cantImport > 0)
                                                 {
@@ -308,7 +308,7 @@ class _newImportState extends State<newImport> {
                                           }
                                           else
                                           {
-                                            String array =S.of(context).empleados;
+                                            String array =S.of(context).employees;
                                             action = LocalizationHelper.no_companies_without(context, array);
                                             error(context, action);
                                           }
@@ -450,7 +450,7 @@ class _newImportState extends State<newImport> {
                                         }
                                          else
                                          {
-                                           String array =S.of(context).lineas;
+                                           String array = S.of(context).lineas;
                                            action = LocalizationHelper.no_companies_without(context, array);
                                            error(context, action);
                                          }
@@ -489,7 +489,7 @@ class _newImportState extends State<newImport> {
                                           }
 
                                         }
-                                        String array =  S.of(context).conexiones;
+                                        String array =  S.of(context).connections;
                                         if(cantImport > 0)
                                         {
 
@@ -525,7 +525,7 @@ class _newImportState extends State<newImport> {
                                                 if(repeat == false)
                                                 {
                                                   factoriesNew.removeAt(i);
-                                                  String stringDialog =S.of(context).no_existe_sector;
+                                                  String stringDialog =S.of(context).The_sector_does_not_exist;
                                                   repeat = await noFind(context, true, stringDialog);
                                                 }
                                               }
@@ -564,13 +564,13 @@ class _newImportState extends State<newImport> {
                                               }
                                               if(cantImport > 0)
                                               {
-                                                String array =  S.of(context).empresas;
+                                                String array =  S.of(context).companies;
                                                 action = LocalizationHelper.importData(context,array, cantImport);
                                                 confirm(context, action);
                                               }
                                               else
                                               {
-                                                action = S.of(context).no_hay_empresas_para_importar;
+                                                action = S.of(context).there_is_no_companies_to_import;
                                                 confirm(context, action);
                                               }
 
@@ -585,7 +585,7 @@ class _newImportState extends State<newImport> {
                                           }
                                           else
                                           {
-                                            action =action = S.of(context).no_puede_cargar_sin_sectores;
+                                            action =action = S.of(context).Cannot_Load_Companies_because_it_does_not_have_sectors;
                                             error(context, action);
                                           }
                                       }
@@ -593,7 +593,7 @@ class _newImportState extends State<newImport> {
                                   ),
                                   MaterialButton(
                                     color: Colors.lightBlue,
-                                    child: Text(S.of(context).borrar,
+                                    child: Text(S.of(context).delete,
                                       style: const TextStyle(color: Colors.white),),
                                     onPressed: () {
                                       setState(() {
@@ -624,7 +624,7 @@ void _pickFile(BuildContext context, TextEditingController controllerDatePicker,
 
 
   FilePickerResult? result =  await FilePicker.platform.pickFiles(
-    dialogTitle: 'Seleccionar archivo',
+    dialogTitle: 'select file',
     type: FileType.custom,
     allowedExtensions: ['csv'],
   );
@@ -783,7 +783,7 @@ void _pickFile(BuildContext context, TextEditingController controllerDatePicker,
      }
      else
      {
-        String action ="archivo no valido";
+        String action ="file no valido";
         error(context, action);
      }
 

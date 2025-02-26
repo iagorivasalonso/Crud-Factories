@@ -24,15 +24,15 @@ csvImportConections(BuildContext context,List<String> fileContent, List<Conectio
      }
 
   } catch (e) {
-    if(e.toString().contains("El sistema no puede encontrar el archivo especificado"))
+    if(e.toString().contains("El sistema no puede encontrar el file especificado"))
     {
-      errorFiles.add("no se encuentra archivo de conexiones");
+      errorFiles.add("no se encuentra file de connections");
     }
     else
     {
       if(e.toString().contains("Invalid value"))
       {
-        errorFiles.add("error de formato de archivo de conexiones");
+        errorFiles.add("error de formato de file de connections");
       }
     }
   }

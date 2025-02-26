@@ -20,17 +20,17 @@ Future<bool> createSector(BuildContext  context, String modif) async {
   String titleAlert="";
   bool edit = false;
 
-  if(modif!=S.of(context).nuevo.toLowerCase())
+  if(modif!=S.of(context).newMale.toLowerCase())
   {
-     titleAlert = S.of(context).modificacion_sector;
+     titleAlert = S.of(context).modification_of_the_sector;
      controllerSector.text=modif!;
 
      edit = true;
   }
   else
   {
-    titleAlert = S.of(context).creacion_sector;
-    modif = S.of(context).nuevo;
+    titleAlert = S.of(context).creation_of_the_sector;
+    modif = S.of(context).newMale;
 
     edit = false;
   }
@@ -50,7 +50,7 @@ Future<bool> createSector(BuildContext  context, String modif) async {
                   Expanded(
                     child: Padding(
                       padding: const EdgeInsets.only(right: 120,top: 25),
-                      child: Text(S.of(context).nombre_sector,
+                      child: Text(S.of(context).name_sector,
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                       ),
@@ -76,7 +76,7 @@ Future<bool> createSector(BuildContext  context, String modif) async {
                           child: Padding(
                             padding: const EdgeInsets.only(left: 110, right: 110),
                             child: MaterialButton(
-                                child: Text(S.of(context).aceptar,
+                                child: Text(S.of(context).acept,
                                   style: const TextStyle(color: Colors.white),),
                                 color: Colors.lightBlue,
                                 onPressed:() async {
@@ -126,12 +126,12 @@ Future<bool> createSector(BuildContext  context, String modif) async {
                                           csvExportatorSectors(sectors);
                                         }
 
-                                          String action = S.of(context).el_sector_se_ha_creado_correctamente;
+                                          String action = S.of(context).the_sector_has_been_created_successfully;
                                           confirm(context, action);
                                       }
                                       else
                                       {
-                                        String action = S.of(context).sector_existente;
+                                        String action = S.of(context).that_sector_already_exists;
                                         await error(context, action);
                                       }
 
@@ -164,7 +164,7 @@ Future<bool> createSector(BuildContext  context, String modif) async {
                                   }
                                   else
                                   {
-                                     String action = S.of(context).campo_vacio;
+                                     String action = S.of(context).the_field_cannot_be_blank;
                                      await error(context,action);
                                   }
 

@@ -1,7 +1,7 @@
 import 'dart:io';
 import 'package:crud_factories/Backend/data.dart';
 
-serverConnect() async {
+serverconnect() async {
 
   var executable ='';
 

@@ -66,7 +66,7 @@ class _newSendState extends State<newSend> {
 
     if(selectedSector=="")
     {
-      selectedSector = S.of(context).todos;
+      selectedSector = S.of(context).allMale;
     }
 
 
@@ -84,13 +84,13 @@ class _newSendState extends State<newSend> {
 
     if (select == -1) {
 
-      title = S.of(context).nuevo;
-      typeList = S.of(context).empresas;
-      type = S.of(context).fecha;
-      action1 = S.of(context).nuevo;
-      action2 = S.of(context).reiniciar;
+      title = S.of(context).newMale;
+      typeList = S.of(context).companies;
+      type = S.of(context).date;
+      action1 = S.of(context).newMale;
+      action2 = S.of(context).reboot;
 
-      sectorsString.add(S.of(context).todos);
+      sectorsString.add(S.of(context).allMale);
 
       for(int i = 0; i < sectors.length; i++)
       {
@@ -108,14 +108,14 @@ class _newSendState extends State<newSend> {
         controllerSearch.text=DateFormat('dd-MM-yyyy').format( DateTime.now());
       }
 
-          if(selectedSector ==S.of(context).todos)
+          if(selectedSector ==S.of(context).allMale)
           {
             campsTable = [
-                  S.of(context).empresa,
+                  S.of(context).company,
                   S.of(context).sector,
-                  S.of(context).observaciones,
-                  S.of(context).estado,
-                  S.of(context).seleccionar,
+                  S.of(context).observations,
+                  S.of(context).state,
+                  S.of(context).select,
               ];
 
             factoriesSector.clear();
@@ -132,13 +132,13 @@ class _newSendState extends State<newSend> {
     else
     {
 
-      action1 = S.of(context).guardar;
-      action2 = S.of(context).deshacer;
+      action1 = S.of(context).save;
+      action2 = S.of(context).undo;
       title = S.of(context).ver;
       stateSends = [
             S.of(context).enviado,
-            S.of(context).en_curso,
-            S.of(context).devuelto,
+            S.of(context).in_progress,
+            S.of(context).returned,
             S.of(context).respondio
       ];
 
@@ -155,26 +155,26 @@ class _newSendState extends State<newSend> {
           }
       }
 
-      if(type == S.of(context).fecha)
+      if(type == S.of(context).date)
       {
 
-        type = S.of(context).fecha;
+        type = S.of(context).date;
 
             if(subIten2Select == 0)
             {
                 campsTable = [
-                  S.of(context).empresa,
+                  S.of(context).company,
                   S.of(context).sector,
-                  S.of(context).observaciones,
-                  S.of(context).estado
+                  S.of(context).observations,
+                  S.of(context).state
                 ];
             }
             else
             {
                  campsTable = [
-                   S.of(context).empresa,
-                   S.of(context).observaciones,
-                   S.of(context).estado
+                   S.of(context).company,
+                   S.of(context).observations,
+                   S.of(context).state
                  ];
             }
 
@@ -222,16 +222,16 @@ class _newSendState extends State<newSend> {
 
       }
       
-      typeList = S.of(context).envios;
+      typeList = S.of(context).shipments;
 
-      if(type == S.of(context).empresa)
+      if(type == S.of(context).company)
       {
-        type = S.of(context).empresa;
+        type = S.of(context).company;
 
         campsTable = [
-          S.of(context).fecha,
-          S.of(context).observaciones,
-          S.of(context).estado
+          S.of(context).date,
+          S.of(context).observations,
+          S.of(context).state
         ];
         controllerSearch.text = selectCamp;
 
@@ -263,7 +263,7 @@ class _newSendState extends State<newSend> {
       stringFactories = LocalizationHelper.sendsDay(context,cantSend);
     }
 
-    String send = S.of(context).envio;
+    String send = S.of(context).shipment;
     String titleComplete = "";
 
     if(itenSelect == 1 && subIten2Select != 0 )
@@ -276,7 +276,7 @@ class _newSendState extends State<newSend> {
       titleComplete ='$title $send';
     }
 
-    String list_d = S.of(context).lista_de;
+    String list_d = S.of(context).list_of;
     String list_def='$list_d $typeList';
 
     final ShowPlatformDatePicker platformDatePicker = ShowPlatformDatePicker(buildContext: context);
@@ -376,7 +376,7 @@ class _newSendState extends State<newSend> {
                                         child: Text(S.of(context).sector),
                                       ),
                                       DropdownButton2<String>(
-                                        hint:  Text(S.of(context).todos),
+                                        hint:  Text(S.of(context).allMale),
                                         items: sectorsString.map((String itemSector) => DropdownMenuItem<String>(
                                           value:  itemSector,
                                           child: Text(itemSector),
@@ -388,15 +388,15 @@ class _newSendState extends State<newSend> {
                                               selectedSector = sectorChoose!;
                                               factoriesSector.clear();
 
-                                              if (selectedSector == S.of(context).todos)
+                                              if (selectedSector == S.of(context).allMale)
                                               {
 
                                                 campsTable = [
-                                                  S.of(context).empresa,
+                                                  S.of(context).company,
                                                   S.of(context).sector,
-                                                  S.of(context).observaciones,
-                                                  S.of(context).estado,
-                                                  S.of(context).seleccionar
+                                                  S.of(context).observations,
+                                                  S.of(context).state,
+                                                  S.of(context).select
                                                 ];
 
                                                 for(int i = 0; i < allFactories.length;i++)
@@ -410,10 +410,10 @@ class _newSendState extends State<newSend> {
                                               else
                                               {
                                                 campsTable = [
-                                                  S.of(context).empresa,
-                                                  S.of(context).observaciones,
-                                                  S.of(context).estado,
-                                                  S.of(context).seleccionar
+                                                  S.of(context).company,
+                                                  S.of(context).observations,
+                                                  S.of(context).state,
+                                                  S.of(context).select
                                                 ];
 
                                                 int  sSelected = 0;
@@ -490,7 +490,7 @@ class _newSendState extends State<newSend> {
                                                  DataCell(
                                                    Text(factoriesSector[indexRow].name),
                                                  ),
-                                                 if(selectedSector==S.of(context).todos)
+                                                 if(selectedSector==S.of(context).allMale)
                                                    DataCell(
                                                      Text(sectors[int.parse(factoriesSector[indexRow].sector)-1].name),
                                                    ),
@@ -548,7 +548,7 @@ class _newSendState extends State<newSend> {
                                                   DataCell(
                                                       Text(campKey[indexRow])
                                                   ),
-                                                  if(subIten2Select == 0 && type == S.of(context).fecha)
+                                                  if(subIten2Select == 0 && type == S.of(context).date)
                                                     DataCell(
                                                         Text(_controllersSectorLine[indexRow].text)
                                                     ),
@@ -648,7 +648,7 @@ class _newSendState extends State<newSend> {
                                               children: [
                                                 Padding(
                                                   padding: EdgeInsets.only(right: 15.0),
-                                                  child: Text(S.of(context).seleccionar_todas),
+                                                  child: Text(S.of(context).select_all),
                                                 ),
                                                 Checkbox(
                                                   value: allSelect,
@@ -761,7 +761,7 @@ class _newSendState extends State<newSend> {
 
                                                      if (allLinesModify == 0)
                                                      {
-                                                       action = S.of(context).no_tiene_ninguna_linea_a_modificar;
+                                                       action = S.of(context).has_no_line_to_modify;
                                                        error(context, action);
                                                      }
                                                      else
@@ -793,11 +793,11 @@ class _newSendState extends State<newSend> {
 
                                               bool errorExp = await csvExportatorLines(lineSector);
 
-                                              String array = S.of(context).envios;
+                                              String array = S.of(context).shipments;
 
                                               if(errorExp == false)
                                               {
-                                                String actionArray = S.of(context).guardado;
+                                                String actionArray = S.of(context).saved;
 
                                                 String action = LocalizationHelper.manage_array(context, array, actionArray);
                                                 await confirm(context, action);

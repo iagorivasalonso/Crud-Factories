@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 
 Future<bool> typeConection (BuildContext  context) async {
 
-  bool? tConnection  = await   showDialog(
+  bool? tconnection  = await   showDialog(
       context: context,
       barrierDismissible: true,
       builder: (BuildContext context, ) {
@@ -16,11 +16,11 @@ Future<bool> typeConection (BuildContext  context) async {
               height: 175,
               child: Column(
                 children: [
-                  headAlert(title: S.of(context).tipo_fuente),
+                  headAlert(title: S.of(context).font_type),
                   Expanded(
                     child: Padding(
                       padding:  EdgeInsets.only(left: 25,top: 25, bottom: 15),
-                      child: Text(S.of(context).tipo_base_datos,
+                      child: Text(S.of(context).What_type_of_database_do_you_want_to_use,
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,),
                     ),
@@ -66,6 +66,6 @@ Future<bool> typeConection (BuildContext  context) async {
       });
 
 
-  return tConnection ?? false;
+  return tconnection ?? false;
 }
 

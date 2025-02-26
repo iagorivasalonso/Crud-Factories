@@ -55,144 +55,144 @@ class S {
     return Localizations.of<S>(context, S);
   }
 
+  /// `Mi aplicación`
+  String get appTitle {
+    return Intl.message('Mi aplicación', name: 'appTitle', desc: '', args: []);
+  }
+
   /// `Actualizar`
-  String get actualizar {
-    return Intl.message('Actualizar', name: 'actualizar', desc: '', args: []);
+  String get update {
+    return Intl.message('Actualizar', name: 'update', desc: '', args: []);
   }
 
   /// `Archivo`
-  String get archivo {
-    return Intl.message('Archivo', name: 'archivo', desc: '', args: []);
+  String get file {
+    return Intl.message('Archivo', name: 'file', desc: '', args: []);
   }
 
   /// `Base de datos`
-  String get base_de_datos {
-    return Intl.message(
-      'Base de datos',
-      name: 'base_de_datos',
-      desc: '',
-      args: [],
-    );
+  String get data_base {
+    return Intl.message('Base de datos', name: 'data_base', desc: '', args: []);
   }
 
-  /// `Borrar`
-  String get borrar {
-    return Intl.message('Borrar', name: 'borrar', desc: '', args: []);
+  /// `Eliminar`
+  String get delete {
+    return Intl.message('Eliminar', name: 'delete', desc: '', args: []);
   }
 
   /// `Calle`
-  String get calle {
-    return Intl.message('Calle', name: 'calle', desc: '', args: []);
+  String get street {
+    return Intl.message('Calle', name: 'street', desc: '', args: []);
   }
 
   /// `Cancelar`
-  String get cancelar {
-    return Intl.message('Cancelar', name: 'cancelar', desc: '', args: []);
+  String get cancel {
+    return Intl.message('Cancelar', name: 'cancel', desc: '', args: []);
   }
 
   /// `Ciudad`
-  String get ciudad {
-    return Intl.message('Ciudad', name: 'ciudad', desc: '', args: []);
+  String get city {
+    return Intl.message('Ciudad', name: 'city', desc: '', args: []);
   }
 
   /// `Código postal`
-  String get codigo_postal {
+  String get postal_code {
     return Intl.message(
       'Código postal',
-      name: 'codigo_postal',
+      name: 'postal_code',
       desc: '',
       args: [],
     );
   }
 
-  /// `Conexión base de datos`
-  String get conexion_base_datos {
+  /// `Conexión a base de datos`
+  String get database_connection {
     return Intl.message(
-      'Conexión base de datos',
-      name: 'conexion_base_datos',
+      'Conexión a base de datos',
+      name: 'database_connection',
       desc: '',
       args: [],
     );
   }
 
   /// `Conexión no válida`
-  String get conexion_no_valida {
+  String get invalid_connection {
     return Intl.message(
       'Conexión no válida',
-      name: 'conexion_no_valida',
+      name: 'invalid_connection',
       desc: '',
       args: [],
     );
   }
 
   /// `Conectar`
-  String get conectar {
-    return Intl.message('Conectar', name: 'conectar', desc: '', args: []);
+  String get connect {
+    return Intl.message('Conectar', name: 'connect', desc: '', args: []);
   }
 
   /// `Contacto`
-  String get contacto {
-    return Intl.message('Contacto', name: 'contacto', desc: '', args: []);
+  String get contact {
+    return Intl.message('Contacto', name: 'contact', desc: '', args: []);
   }
 
-  /// `Contactos en la empresa`
-  String get contactos_en_la_empresa {
+  /// `Contactos de la empresa`
+  String get company_contacts {
     return Intl.message(
-      'Contactos en la empresa',
-      name: 'contactos_en_la_empresa',
+      'Contactos de la empresa',
+      name: 'company_contacts',
       desc: '',
       args: [],
     );
   }
 
-  /// `Conexion BD`
-  String get conexion_BD {
-    return Intl.message('Conexion BD', name: 'conexion_BD', desc: '', args: []);
+  /// `Conexión a BD`
+  String get DB_connection {
+    return Intl.message(
+      'Conexión a BD',
+      name: 'DB_connection',
+      desc: '',
+      args: [],
+    );
   }
 
   /// `Contraseña`
-  String get contrasena {
-    return Intl.message('Contraseña', name: 'contrasena', desc: '', args: []);
+  String get password {
+    return Intl.message('Contraseña', name: 'password', desc: '', args: []);
   }
 
   /// `Crear`
-  String get crear {
-    return Intl.message('Crear', name: 'crear', desc: '', args: []);
+  String get create {
+    return Intl.message('Crear', name: 'create', desc: '', args: []);
   }
 
   /// `¿Desea completarlo?`
-  String get desea_completarlo {
+  String get want_to_complete_it {
     return Intl.message(
       '¿Desea completarlo?',
-      name: 'desea_completarlo',
+      name: 'want_to_complete_it',
       desc: '',
       args: [],
     );
   }
 
   /// `Desconectar`
-  String get desconectar {
-    return Intl.message('Desconectar', name: 'desconectar', desc: '', args: []);
+  String get disconnect {
+    return Intl.message('Desconectar', name: 'disconnect', desc: '', args: []);
   }
 
   /// `Deshacer`
-  String get deshacer {
-    return Intl.message('Deshacer', name: 'deshacer', desc: '', args: []);
+  String get undo {
+    return Intl.message('Deshacer', name: 'undo', desc: '', args: []);
   }
 
   /// `Dirección`
-  String get direccion {
-    return Intl.message('Dirección', name: 'direccion', desc: '', args: []);
+  String get address {
+    return Intl.message('Dirección', name: 'address', desc: '', args: []);
   }
 
   /// `Editar`
-  String get editar {
-    return Intl.message('Editar', name: 'editar', desc: '', args: []);
-  }
-
-  /// `Eliminar`
-  String get eliminar {
-    return Intl.message('Eliminar', name: 'eliminar', desc: '', args: []);
+  String get edit {
+    return Intl.message('Editar', name: 'edit', desc: '', args: []);
   }
 
   /// `Email`
@@ -206,83 +206,73 @@ class S {
   }
 
   /// `Empresa`
-  String get empresa {
-    return Intl.message('Empresa', name: 'empresa', desc: '', args: []);
+  String get company {
+    return Intl.message('Empresa', name: 'company', desc: '', args: []);
   }
 
   /// `Empresas`
-  String get empresas {
-    return Intl.message('Empresas', name: 'empresas', desc: '', args: []);
+  String get companies {
+    return Intl.message('Empresas', name: 'companies', desc: '', args: []);
   }
 
   /// `Envío`
-  String get envio {
-    return Intl.message('Envío', name: 'envio', desc: '', args: []);
+  String get shipment {
+    return Intl.message('Envío', name: 'shipment', desc: '', args: []);
   }
 
-  /// `Envio de emails`
-  String get envio_de_emails {
+  /// `Envíos`
+  String get shipments {
+    return Intl.message('Envíos', name: 'shipments', desc: '', args: []);
+  }
+
+  /// `Envío de correos electrónicos`
+  String get sending_emails {
     return Intl.message(
-      'Envio de emails',
-      name: 'envio_de_emails',
+      'Envío de correos electrónicos',
+      name: 'sending_emails',
       desc: '',
       args: [],
     );
   }
 
   /// `Está conectado a`
-  String get esta_conectado_a {
+  String get is_connected_to {
     return Intl.message(
       'Está conectado a',
-      name: 'esta_conectado_a',
+      name: 'is_connected_to',
       desc: '',
       args: [],
     );
   }
 
-  /// `Envíos`
-  String get envios {
-    return Intl.message('Envíos', name: 'envios', desc: '', args: []);
-  }
-
   /// `Fecha`
-  String get fecha {
-    return Intl.message('Fecha', name: 'fecha', desc: '', args: []);
+  String get date {
+    return Intl.message('Fecha', name: 'date', desc: '', args: []);
   }
 
   /// `Filtrar`
-  String get filtrar {
-    return Intl.message('Filtrar', name: 'filtrar', desc: '', args: []);
+  String get filter {
+    return Intl.message('Filtrar', name: 'filter', desc: '', args: []);
   }
 
   /// `Fecha de alta`
-  String get fecha_de_alta {
+  String get discharge_date {
     return Intl.message(
       'Fecha de alta',
-      name: 'fecha_de_alta',
+      name: 'discharge_date',
       desc: '',
       args: [],
     );
   }
 
   /// `Guardar`
-  String get guardar {
-    return Intl.message('Guardar', name: 'guardar', desc: '', args: []);
+  String get save {
+    return Intl.message('Guardar', name: 'save', desc: '', args: []);
   }
 
   /// `Guardado`
-  String get guardado {
-    return Intl.message('Guardado', name: 'guardado', desc: '', args: []);
-  }
-
-  /// `Ha cerrado la conexión`
-  String get ha_cerrado_la_conexion {
-    return Intl.message(
-      'Ha cerrado la conexión',
-      name: 'ha_cerrado_la_conexion',
-      desc: '',
-      args: [],
-    );
+  String get saved {
+    return Intl.message('Guardado', name: 'saved', desc: '', args: []);
   }
 
   /// `Host`
@@ -291,93 +281,98 @@ class S {
   }
 
   /// `Importar`
-  String get importar {
-    return Intl.message('Importar', name: 'importar', desc: '', args: []);
+  String get import {
+    return Intl.message('Importar', name: 'import', desc: '', args: []);
   }
 
   /// `Nombre`
-  String get nombre {
-    return Intl.message('Nombre', name: 'nombre', desc: '', args: []);
+  String get name {
+    return Intl.message('Nombre', name: 'name', desc: '', args: []);
   }
 
   /// `Nueva`
-  String get nueva {
-    return Intl.message('Nueva', name: 'nueva', desc: '', args: []);
+  String get newFemale {
+    return Intl.message('Nueva', name: 'newFemale', desc: '', args: []);
   }
 
   /// `Nuevo`
-  String get nuevo {
-    return Intl.message('Nuevo', name: 'nuevo', desc: '', args: []);
+  String get newMale {
+    return Intl.message('Nuevo', name: 'newMale', desc: '', args: []);
   }
 
-  /// `Conexion`
-  String get conexion {
-    return Intl.message('Conexion', name: 'conexion', desc: '', args: []);
+  /// `Conexión`
+  String get connection {
+    return Intl.message('Conexión', name: 'connection', desc: '', args: []);
   }
 
   /// `Creado`
-  String get creado {
-    return Intl.message('Creado', name: 'creado', desc: '', args: []);
+  String get created {
+    return Intl.message('Creado', name: 'created', desc: '', args: []);
   }
 
   /// `Estado`
-  String get estado {
-    return Intl.message('Estado', name: 'estado', desc: '', args: []);
+  String get state {
+    return Intl.message('Estado', name: 'state', desc: '', args: []);
   }
 
   /// `Observaciones`
-  String get observaciones {
+  String get observations {
     return Intl.message(
       'Observaciones',
-      name: 'observaciones',
+      name: 'observations',
       desc: '',
       args: [],
     );
   }
 
   /// `Listas`
-  String get listas {
-    return Intl.message('Listas', name: 'listas', desc: '', args: []);
+  String get lists {
+    return Intl.message('Listas', name: 'lists', desc: '', args: []);
   }
 
-  /// `Nuevo email`
-  String get nuevo_email {
-    return Intl.message('Nuevo email', name: 'nuevo_email', desc: '', args: []);
+  /// `Nuevo correo electrónico`
+  String get new_email {
+    return Intl.message(
+      'Nuevo correo electrónico',
+      name: 'new_email',
+      desc: '',
+      args: [],
+    );
   }
 
   /// `Número`
-  String get numero {
-    return Intl.message('Número', name: 'numero', desc: '', args: []);
+  String get number {
+    return Intl.message('Número', name: 'number', desc: '', args: []);
   }
 
   /// `Página web`
-  String get pagina_web {
-    return Intl.message('Página web', name: 'pagina_web', desc: '', args: []);
+  String get web_page {
+    return Intl.message('Página web', name: 'web_page', desc: '', args: []);
   }
 
   /// `Provincia`
-  String get provincia {
-    return Intl.message('Provincia', name: 'provincia', desc: '', args: []);
+  String get province {
+    return Intl.message('Provincia', name: 'province', desc: '', args: []);
   }
 
-  /// `prueba de conexion`
-  String get prueba_de_conexion {
+  /// `Prueba de conexión`
+  String get connection_test {
     return Intl.message(
-      'prueba de conexion',
-      name: 'prueba_de_conexion',
+      'Prueba de conexión',
+      name: 'connection_test',
       desc: '',
       args: [],
     );
   }
 
   /// `Puerto`
-  String get puerto {
-    return Intl.message('Puerto', name: 'puerto', desc: '', args: []);
+  String get port {
+    return Intl.message('Puerto', name: 'port', desc: '', args: []);
   }
 
   /// `Salir`
-  String get salir {
-    return Intl.message('Salir', name: 'salir', desc: '', args: []);
+  String get go_out {
+    return Intl.message('Salir', name: 'go_out', desc: '', args: []);
   }
 
   /// `Sector`
@@ -386,48 +381,48 @@ class S {
   }
 
   /// `Sectores`
-  String get sectores {
-    return Intl.message('Sectores', name: 'sectores', desc: '', args: []);
+  String get sectors {
+    return Intl.message('Sectores', name: 'sectors', desc: '', args: []);
   }
 
   /// `Seleccionar`
-  String get seleccionar {
-    return Intl.message('Seleccionar', name: 'seleccionar', desc: '', args: []);
+  String get select {
+    return Intl.message('Seleccionar', name: 'select', desc: '', args: []);
   }
 
   /// `Teléfono`
-  String get telefono {
-    return Intl.message('Teléfono', name: 'telefono', desc: '', args: []);
+  String get phone {
+    return Intl.message('Teléfono', name: 'phone', desc: '', args: []);
   }
 
   /// `Teléfono 1`
-  String get telefono_1 {
-    return Intl.message('Teléfono 1', name: 'telefono_1', desc: '', args: []);
+  String get phone_1 {
+    return Intl.message('Teléfono 1', name: 'phone_1', desc: '', args: []);
   }
 
   /// `Teléfono 2`
-  String get telefono_2 {
-    return Intl.message('Teléfono 2', name: 'telefono_2', desc: '', args: []);
+  String get phone_2 {
+    return Intl.message('Teléfono 2', name: 'phone_2', desc: '', args: []);
   }
 
   /// `Todas`
-  String get todas {
-    return Intl.message('Todas', name: 'todas', desc: '', args: []);
+  String get allFemale {
+    return Intl.message('Todas', name: 'allFemale', desc: '', args: []);
   }
 
   /// `Todos`
-  String get todos {
-    return Intl.message('Todos', name: 'todos', desc: '', args: []);
+  String get allMale {
+    return Intl.message('Todos', name: 'allMale', desc: '', args: []);
   }
 
   /// `Usuario`
-  String get usuario {
-    return Intl.message('Usuario', name: 'usuario', desc: '', args: []);
+  String get user {
+    return Intl.message('Usuario', name: 'user', desc: '', args: []);
   }
 
   /// `Utilidades`
-  String get utilidades {
-    return Intl.message('Utilidades', name: 'utilidades', desc: '', args: []);
+  String get utilities {
+    return Intl.message('Utilidades', name: 'utilities', desc: '', args: []);
   }
 
   /// `Ver`
@@ -440,44 +435,9 @@ class S {
     return Intl.message('Volver', name: 'volver', desc: '', args: []);
   }
 
-  /// `Rutas`
-  String get rutas {
-    return Intl.message('Rutas', name: 'rutas', desc: '', args: []);
-  }
-
-  /// `Tiene`
-  String get tiene {
-    return Intl.message('Tiene', name: 'tiene', desc: '', args: []);
-  }
-
-  /// `empresas en su base de datos`
-  String get empresas_en_base_datos {
-    return Intl.message(
-      'empresas en su base de datos',
-      name: 'empresas_en_base_datos',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Fuente`
-  String get fuente {
-    return Intl.message('Fuente', name: 'fuente', desc: '', args: []);
-  }
-
-  /// `SQL`
-  String get sql {
-    return Intl.message('SQL', name: 'sql', desc: '', args: []);
-  }
-
-  /// `Cerrar`
-  String get cerrar {
-    return Intl.message('Cerrar', name: 'cerrar', desc: '', args: []);
-  }
-
-  /// `Otro`
-  String get otro {
-    return Intl.message('Otro', name: 'otro', desc: '', args: []);
+  /// `Para`
+  String get para {
+    return Intl.message('Para', name: 'para', desc: '', args: []);
   }
 
   /// `De`
@@ -485,84 +445,139 @@ class S {
     return Intl.message('De', name: 'de', desc: '', args: []);
   }
 
-  /// `Examinar`
-  String get examinar {
-    return Intl.message('Examinar', name: 'examinar', desc: '', args: []);
-  }
-
-  /// `Remitente`
-  String get remitente {
-    return Intl.message('Remitente', name: 'remitente', desc: '', args: []);
-  }
-
-  /// `Para`
-  String get para {
-    return Intl.message('Para', name: 'para', desc: '', args: []);
+  /// `Rutas`
+  String get routes {
+    return Intl.message('Rutas', name: 'routes', desc: '', args: []);
   }
 
   /// `Ruta`
-  String get ruta {
-    return Intl.message('Ruta', name: 'ruta', desc: '', args: []);
+  String get route {
+    return Intl.message('Ruta', name: 'route', desc: '', args: []);
   }
 
-  /// `enviar`
-  String get enviar {
-    return Intl.message('enviar', name: 'enviar', desc: '', args: []);
+  /// `Tiene`
+  String get has {
+    return Intl.message('Tiene', name: 'has', desc: '', args: []);
   }
 
-  /// `enviar a`
-  String get enviar_a {
-    return Intl.message('enviar a', name: 'enviar_a', desc: '', args: []);
-  }
-
-  /// `seleccionar envio`
-  String get seleccionar_envio {
+  /// `Empresas en su base de datos`
+  String get company_en_base_datos {
     return Intl.message(
-      'seleccionar envio',
-      name: 'seleccionar_envio',
+      'Empresas en su base de datos',
+      name: 'company_en_base_datos',
       desc: '',
       args: [],
     );
   }
 
-  /// `asunto`
-  String get asunto {
-    return Intl.message('asunto', name: 'asunto', desc: '', args: []);
+  /// `Empresas en su base de datos`
+  String get companies_en_base_datos {
+    return Intl.message(
+      'Empresas en su base de datos',
+      name: 'companies_en_base_datos',
+      desc: '',
+      args: [],
+    );
   }
 
-  /// `adjuntar`
-  String get adjuntar {
-    return Intl.message('adjuntar', name: 'adjuntar', desc: '', args: []);
+  /// `Fuente`
+  String get source {
+    return Intl.message('Fuente', name: 'source', desc: '', args: []);
   }
 
-  /// `mensaje`
-  String get mensaje {
-    return Intl.message('mensaje', name: 'mensaje', desc: '', args: []);
+  /// `SQL`
+  String get sql {
+    return Intl.message('SQL', name: 'sql', desc: '', args: []);
+  }
+
+  /// `CSV`
+  String get csv {
+    return Intl.message('CSV', name: 'csv', desc: '', args: []);
+  }
+
+  /// `Cerrar`
+  String get close {
+    return Intl.message('Cerrar', name: 'close', desc: '', args: []);
+  }
+
+  /// `Cuidado`
+  String get careful {
+    return Intl.message('Cuidado', name: 'careful', desc: '', args: []);
+  }
+
+  /// `Otro`
+  String get orther {
+    return Intl.message('Otro', name: 'orther', desc: '', args: []);
+  }
+
+  /// `Examinar`
+  String get examine {
+    return Intl.message('Examinar', name: 'examine', desc: '', args: []);
+  }
+
+  /// `Remitente`
+  String get sender {
+    return Intl.message('Remitente', name: 'sender', desc: '', args: []);
+  }
+
+  /// `Enviar`
+  String get send {
+    return Intl.message('Enviar', name: 'send', desc: '', args: []);
+  }
+
+  /// `Enviar a`
+  String get send_a {
+    return Intl.message('Enviar a', name: 'send_a', desc: '', args: []);
+  }
+
+  /// `Seleccionar envío`
+  String get select_shipment {
+    return Intl.message(
+      'Seleccionar envío',
+      name: 'select_shipment',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Asunto`
+  String get affair {
+    return Intl.message('Asunto', name: 'affair', desc: '', args: []);
+  }
+
+  /// `Adjuntar`
+  String get attach {
+    return Intl.message('Adjuntar', name: 'attach', desc: '', args: []);
+  }
+
+  /// `Mensaje`
+  String get message {
+    return Intl.message('Mensaje', name: 'message', desc: '', args: []);
   }
 
   /// `Reiniciar`
-  String get reiniciar {
-    return Intl.message('Reiniciar', name: 'reiniciar', desc: '', args: []);
+  String get reboot {
+    return Intl.message('Reiniciar', name: 'reboot', desc: '', args: []);
   }
 
-  /// `El envio tiene`
-  String get el_envio_tiene {
+  /// `El envío tiene`
+  String get el_shipment_has {
     return Intl.message(
-      'El envio tiene',
-      name: 'el_envio_tiene',
+      'El envío tiene',
+      name: 'el_shipment_has',
       desc: '',
       args: [],
     );
   }
 
   /// `En curso`
-  String get en_curso {
-    return Intl.message('En curso', name: 'en_curso', desc: '', args: []);
+  String get in_progress {
+    return Intl.message('En curso', name: 'in_progress', desc: '', args: []);
   }
 
   /// `Devuelto`
-  String get devuelto {
-    return Intl.message('Devuelto', name: 'devuelto', desc: '', args: []);
+  String get returned {
+    return Intl.message('Devuelto', name: 'returned', desc: '', args: []);
   }
 
   /// `Respondió`
@@ -570,446 +585,9 @@ class S {
     return Intl.message('Respondió', name: 'respondio', desc: '', args: []);
   }
 
-  /// `El código postal debe de tener 5 dígitos`
-  String get el_codigo_postal_debe_de_tener_5_digitos {
-    return Intl.message(
-      'El código postal debe de tener 5 dígitos',
-      name: 'el_codigo_postal_debe_de_tener_5_digitos',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `El empleado se ha quitado correctamente`
-  String get el_empleado_se_ha_quitado_correctamente {
-    return Intl.message(
-      'El empleado se ha quitado correctamente',
-      name: 'el_empleado_se_ha_quitado_correctamente',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `El sector se ha creado correctamente`
-  String get el_sector_se_ha_creado_correctamente {
-    return Intl.message(
-      'El sector se ha creado correctamente',
-      name: 'el_sector_se_ha_creado_correctamente',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `esto es una prueba de conexion desde la aplicacion`
-  String get esto_es_una_prueba_de_conexion_desde_la_aplicacion {
-    return Intl.message(
-      'esto es una prueba de conexion desde la aplicacion',
-      name: 'esto_es_una_prueba_de_conexion_desde_la_aplicacion',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `se ha borrado correctamente`
-  String get se_ha_borrado_correctamente {
-    return Intl.message(
-      'se ha borrado correctamente',
-      name: 'se_ha_borrado_correctamente',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `No tienes completo el archivo de rutas`
-  String get no_tienes_completo_el_archivo_de_rutas {
-    return Intl.message(
-      'No tienes completo el archivo de rutas',
-      name: 'no_tienes_completo_el_archivo_de_rutas',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `No tiene el archivo de rutas`
-  String get no_tiene_el_archivo_de_rutas {
-    return Intl.message(
-      'No tiene el archivo de rutas',
-      name: 'no_tiene_el_archivo_de_rutas',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `No tiene emails en su base de datos`
-  String get no_tiene_emails_en_su_base_de_datos {
-    return Intl.message(
-      'No tiene emails en su base de datos',
-      name: 'no_tiene_emails_en_su_base_de_datos',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `No es un correo electrónico válido`
-  String get no_es_un_correo_electronico_valido {
-    return Intl.message(
-      'No es un correo electrónico válido',
-      name: 'no_es_un_correo_electronico_valido',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `No es una página web válida`
-  String get no_es_una_pagina_web_valida {
-    return Intl.message(
-      'No es una página web válida',
-      name: 'no_es_una_pagina_web_valida',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `No está conectado a ninguna base de datos`
-  String get no_esta_conectado_a_ninguna_base_de_datos {
-    return Intl.message(
-      'No está conectado a ninguna base de datos',
-      name: 'no_esta_conectado_a_ninguna_base_de_datos',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `No pueden ir campos en blanco`
-  String get no_pueden_ir_campos_en_blanco {
-    return Intl.message(
-      'No pueden ir campos en blanco',
-      name: 'no_pueden_ir_campos_en_blanco',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `No puede hacer el envío porque no tiene empresas en su base de datos`
-  String
-  get no_puede_hacer_el_envio_porque_no_tiene_empresas_en_su_base_de_datos {
-    return Intl.message(
-      'No puede hacer el envío porque no tiene empresas en su base de datos',
-      name:
-          'no_puede_hacer_el_envio_porque_no_tiene_empresas_en_su_base_de_datos',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `No se pudo eliminar`
-  String get no_se_pudo_eliminar {
-    return Intl.message(
-      'No se pudo eliminar',
-      name: 'no_se_pudo_eliminar',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `No se pudo conectar con el servidor`
-  String get no_se_pudo_conectar_con_el_servidor {
-    return Intl.message(
-      'No se pudo conectar con el servidor',
-      name: 'no_se_pudo_conectar_con_el_servidor',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `No tiene emails registrados`
-  String get no_tiene_emails_registrados {
-    return Intl.message(
-      'No tiene emails registrados',
-      name: 'no_tiene_emails_registrados',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `No tiene ningun servidor conectado`
-  String get no_tiene_ningun_servidor_conectado {
-    return Intl.message(
-      'No tiene ningun servidor conectado',
-      name: 'no_tiene_ningun_servidor_conectado',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Compruebe su usuario o contraseña`
-  String get compruebe_su_usuario_o_contrasena {
-    return Intl.message(
-      'Compruebe su usuario o contraseña',
-      name: 'compruebe_su_usuario_o_contrasena',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Se ha eliminado correctamente la conexión`
-  String get se_ha_eliminado_correctamente_la_conexion {
-    return Intl.message(
-      'Se ha eliminado correctamente la conexión',
-      name: 'se_ha_eliminado_correctamente_la_conexion',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `No se puede establecer conexión`
-  String get no_se_puede_establecer_conexion {
-    return Intl.message(
-      'No se puede establecer conexión',
-      name: 'no_se_puede_establecer_conexion',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Verificar contraseña`
-  String get verificar_contrasena {
-    return Intl.message(
-      'Verificar contraseña',
-      name: 'verificar_contrasena',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `No hay conexión con el servidor`
-  String get no_hay_conexion_con_el_servidor {
-    return Intl.message(
-      'No hay conexión con el servidor',
-      name: 'no_hay_conexion_con_el_servidor',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Error SQL`
-  String get error_sql {
-    return Intl.message('Error SQL', name: 'error_sql', desc: '', args: []);
-  }
-
-  /// `No hay base de datos con ese nombre`
-  String get no_base_de_datos_con_el_nombre {
-    return Intl.message(
-      'No hay base de datos con ese nombre',
-      name: 'no_base_de_datos_con_el_nombre',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `El puerto no es correcto`
-  String get el_puerto_no_es_correcto {
-    return Intl.message(
-      'El puerto no es correcto',
-      name: 'el_puerto_no_es_correcto',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `El usuario o la contraseña son incorrectos`
-  String get el_usuario_o_la_contrasena_son_incorrectos {
-    return Intl.message(
-      'El usuario o la contraseña son incorrectos',
-      name: 'el_usuario_o_la_contrasena_son_incorrectos',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Lista de`
-  String get lista_de {
-    return Intl.message('Lista de', name: 'lista_de', desc: '', args: []);
-  }
-
-  /// `Selector de rutas`
-  String get selector_de_rutas {
-    return Intl.message(
-      'Selector de rutas',
-      name: 'selector_de_rutas',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Seleccionar archivo`
-  String get seleccionar_archivo {
-    return Intl.message(
-      'Seleccionar archivo',
-      name: 'seleccionar_archivo',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Manejo de sectores`
-  String get manejo_de_sectores {
-    return Intl.message(
-      'Manejo de sectores',
-      name: 'manejo_de_sectores',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Se han enviado`
-  String get se_han_enviado {
-    return Intl.message(
-      'Se han enviado',
-      name: 'se_han_enviado',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `un destinatario`
-  String get un_destinatario {
-    return Intl.message(
-      'un destinatario',
-      name: 'un_destinatario',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `varios destinatarios`
-  String get varios_destinatarios {
-    return Intl.message(
-      'varios destinatarios',
-      name: 'varios_destinatarios',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Mo hay ningún envio seleccionado`
-  String get no_hay_envios_seleccionados {
-    return Intl.message(
-      'Mo hay ningún envio seleccionado',
-      name: 'no_hay_envios_seleccionados',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `El correo electrónico no es válido`
-  String get correo_invalido {
-    return Intl.message(
-      'El correo electrónico no es válido',
-      name: 'correo_invalido',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Debe seleccionar una lista correcta`
-  String get lista_incorrecta {
-    return Intl.message(
-      'Debe seleccionar una lista correcta',
-      name: 'lista_incorrecta',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `El email se ha enviado correctamente`
-  String get email_enviado_correctamente {
-    return Intl.message(
-      'El email se ha enviado correctamente',
-      name: 'email_enviado_correctamente',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `No hay emails para enviar`
-  String get no_hay_emails_para_enviar {
-    return Intl.message(
-      'No hay emails para enviar',
-      name: 'no_hay_emails_para_enviar',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `El destinatario no es un correo electrónico válido`
-  String get destinatario_no_valido {
-    return Intl.message(
-      'El destinatario no es un correo electrónico válido',
-      name: 'destinatario_no_valido',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Este día se hicieron`
-  String get este_dia_se_hicieron {
-    return Intl.message(
-      'Este día se hicieron',
-      name: 'este_dia_se_hicieron',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `A esta empresa se le hicieron`
-  String get a_esta_empresa_se_le_hicieron {
-    return Intl.message(
-      'A esta empresa se le hicieron',
-      name: 'a_esta_empresa_se_le_hicieron',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Seleccionar todas`
-  String get seleccionar_todas {
-    return Intl.message(
-      'Seleccionar todas',
-      name: 'seleccionar_todas',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `El envio contiene`
-  String get el_envio_contiene {
-    return Intl.message(
-      'El envio contiene',
-      name: 'el_envio_contiene',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `No tiene ninguna línea a modificar`
-  String get no_tiene_ninguna_linea_a_modificar {
-    return Intl.message(
-      'No tiene ninguna línea a modificar',
-      name: 'no_tiene_ninguna_linea_a_modificar',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `No tenemos ningún envio en esa fecha`
-  String get no_tenemos_ningun_envio_en_esa_fecha {
-    return Intl.message(
-      'No tenemos ningún envio en esa fecha',
-      name: 'no_tenemos_ningun_envio_en_esa_fecha',
-      desc: '',
-      args: [],
-    );
+  /// `Línea`
+  String get linea {
+    return Intl.message('Línea', name: 'linea', desc: '', args: []);
   }
 
   /// `Líneas`
@@ -1022,171 +600,995 @@ class S {
     return Intl.message('Enviado', name: 'enviado', desc: '', args: []);
   }
 
-  /// `Fueron modificadas`
-  String get fueron_modificadas {
+  /// `El código postal debe tener 5 dígitos`
+  String get the_postal_code_must_have_5_digits {
     return Intl.message(
-      'Fueron modificadas',
-      name: 'fueron_modificadas',
+      'El código postal debe tener 5 dígitos',
+      name: 'the_postal_code_must_have_5_digits',
       desc: '',
       args: [],
     );
   }
 
-  /// `Importar datos`
-  String get importar_datos {
+  /// `El empleado se ha eliminado correctamente`
+  String get the_employee_has_been_correctly_removed {
     return Intl.message(
-      'Importar datos',
-      name: 'importar_datos',
+      'El empleado se ha eliminado correctamente',
+      name: 'the_employee_has_been_correctly_removed',
       desc: '',
       args: [],
     );
   }
 
-  /// `Importar datos en formato CSV`
-  String get importar_datos_csv {
+  /// `El sector se ha creado correctamente`
+  String get the_sector_has_been_created_successfully {
     return Intl.message(
-      'Importar datos en formato CSV',
-      name: 'importar_datos_csv',
+      'El sector se ha creado correctamente',
+      name: 'the_sector_has_been_created_successfully',
       desc: '',
       args: [],
     );
   }
 
-  /// `No existe el sector`
-  String get no_existe_sector {
+  /// `Esta es una prueba de conexión desde la aplicación`
+  String get this_is_a_connection_test_from_the_application {
     return Intl.message(
-      'No existe el sector',
-      name: 'no_existe_sector',
+      'Esta es una prueba de conexión desde la aplicación',
+      name: 'this_is_a_connection_test_from_the_application',
       desc: '',
       args: [],
     );
   }
 
-  /// `No pertenede a la empresa`
-  String get no_pertenede_a_la_empresa {
+  /// `Se ha eliminado correctamente`
+  String get has_been_deleted_successfully {
     return Intl.message(
-      'No pertenede a la empresa',
-      name: 'no_pertenede_a_la_empresa',
+      'Se ha eliminado correctamente',
+      name: 'has_been_deleted_successfully',
       desc: '',
       args: [],
     );
   }
 
-  /// `No hay ninguna empresa para importar`
-  String get no_hay_empresas_para_importar {
+  /// `No tienes un archivo de rutas completo`
+  String get you_do_not_have_a_complete_route_file {
     return Intl.message(
-      'No hay ninguna empresa para importar',
-      name: 'no_hay_empresas_para_importar',
+      'No tienes un archivo de rutas completo',
+      name: 'you_do_not_have_a_complete_route_file',
       desc: '',
       args: [],
     );
   }
 
-  /// `No puede cargar las empresas porque no tiene sectores`
-  String get no_puede_cargar_sin_sectores {
+  /// `No tienes correos electrónicos en tu base de datos`
+  String get you_do_not_have_emails_in_your_database {
     return Intl.message(
-      'No puede cargar las empresas porque no tiene sectores',
-      name: 'no_puede_cargar_sin_sectores',
+      'No tienes correos electrónicos en tu base de datos',
+      name: 'you_do_not_have_emails_in_your_database',
       desc: '',
       args: [],
     );
   }
 
-  /// `Archivo no válido`
-  String get archivo_no_valido {
+  /// `No es un correo electrónico válido`
+  String get not_a_valid_email {
     return Intl.message(
-      'Archivo no válido',
-      name: 'archivo_no_valido',
+      'No es un correo electrónico válido',
+      name: 'not_a_valid_email',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `No es una página web válida`
+  String get not_a_valid_webpage {
+    return Intl.message(
+      'No es una página web válida',
+      name: 'not_a_valid_webpage',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `No estás conectado a ninguna base de datos`
+  String get not_connected_to_any_database {
+    return Intl.message(
+      'No estás conectado a ninguna base de datos',
+      name: 'not_connected_to_any_database',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `No pueden quedar campos en blanco`
+  String get can_not_go_blank_fields {
+    return Intl.message(
+      'No pueden quedar campos en blanco',
+      name: 'can_not_go_blank_fields',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `No puedes realizar el envío porque no tienes empresas en tu base de datos`
+  String
+  get you_can_not_make_the_shipping_because_you_do_not_have_companies_in_your_database {
+    return Intl.message(
+      'No puedes realizar el envío porque no tienes empresas en tu base de datos',
+      name:
+          'you_can_not_make_the_shipping_because_you_do_not_have_companies_in_your_database',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Todos los cambios se perderán. ¿Desea continuar?`
+  String get all_changes_will_be_lost_do_you_want_to_continue {
+    return Intl.message(
+      'Todos los cambios se perderán. ¿Desea continuar?',
+      name: 'all_changes_will_be_lost_do_you_want_to_continue',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `No se pudo eliminar`
+  String get could_not_be_deleted {
+    return Intl.message(
+      'No se pudo eliminar',
+      name: 'could_not_be_deleted',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `No se pudo conectar con el servidor`
+  String get could_not_connect_with_the_server {
+    return Intl.message(
+      'No se pudo conectar con el servidor',
+      name: 'could_not_connect_with_the_server',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `No tienes correos electrónicos registrados`
+  String get no_have_registered_emails {
+    return Intl.message(
+      'No tienes correos electrónicos registrados',
+      name: 'no_have_registered_emails',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `No tienes ningún servidor conectado`
+  String get has_no_server_connected {
+    return Intl.message(
+      'No tienes ningún servidor conectado',
+      name: 'has_no_server_connected',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Comprueba tu usuario o contraseña`
+  String get check_your_user_or_password {
+    return Intl.message(
+      'Comprueba tu usuario o contraseña',
+      name: 'check_your_user_or_password',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `La conexión se ha eliminado correctamente`
+  String get connection_has_been_successfully_deleted {
+    return Intl.message(
+      'La conexión se ha eliminado correctamente',
+      name: 'connection_has_been_successfully_deleted',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `No se puede establecer conexión`
+  String get connection_cannot_be_established {
+    return Intl.message(
+      'No se puede establecer conexión',
+      name: 'connection_cannot_be_established',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `No se puede leer el archivo de rutas`
+  String get route_file_cannot_be_read {
+    return Intl.message(
+      'No se puede leer el archivo de rutas',
+      name: 'route_file_cannot_be_read',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Servidor`
+  String get server {
+    return Intl.message('Servidor', name: 'server', desc: '', args: []);
+  }
+
+  /// `Verificar contraseña`
+  String get verify_password {
+    return Intl.message(
+      'Verificar contraseña',
+      name: 'verify_password',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `No hay`
+  String get there_is_no {
+    return Intl.message('No hay', name: 'there_is_no', desc: '', args: []);
+  }
+
+  /// `No hay conexión con el servidor`
+  String get There_is_no_connection_to_the_server {
+    return Intl.message(
+      'No hay conexión con el servidor',
+      name: 'There_is_no_connection_to_the_server',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Error SQL`
+  String get sql_error {
+    return Intl.message('Error SQL', name: 'sql_error', desc: '', args: []);
+  }
+
+  /// `Error de categoría`
+  String get category_error {
+    return Intl.message(
+      'Error de categoría',
+      name: 'category_error',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `No existe una base de datos con ese nombre`
+  String get there_is_no_database_with_that_name {
+    return Intl.message(
+      'No existe una base de datos con ese nombre',
+      name: 'there_is_no_database_with_that_name',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `El puerto no es correcto`
+  String get the_port_is_not_correct {
+    return Intl.message(
+      'El puerto no es correcto',
+      name: 'the_port_is_not_correct',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `El usuario o la contraseña son incorrectos`
+  String get the_user_or_password_are_incorrect {
+    return Intl.message(
+      'El usuario o la contraseña son incorrectos',
+      name: 'the_user_or_password_are_incorrect',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Ha cerrado la conexión`
+  String get has_closed_the_connection {
+    return Intl.message(
+      'Ha cerrado la conexión',
+      name: 'has_closed_the_connection',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Lista de`
+  String get list_of {
+    return Intl.message('Lista de', name: 'list_of', desc: '', args: []);
+  }
+
+  /// `Para importar`
+  String get to_import {
+    return Intl.message('Para importar', name: 'to_import', desc: '', args: []);
+  }
+
+  /// `Selector de rutas`
+  String get route_selector {
+    return Intl.message(
+      'Selector de rutas',
+      name: 'route_selector',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Seleccionar archivo`
+  String get select_file {
+    return Intl.message(
+      'Seleccionar archivo',
+      name: 'select_file',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Gestión de sectores`
+  String get sector_management {
+    return Intl.message(
+      'Gestión de sectores',
+      name: 'sector_management',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Se ha enviado`
+  String get has_been_sent {
+    return Intl.message(
+      'Se ha enviado',
+      name: 'has_been_sent',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Se han enviado`
+  String get have_been_sent {
+    return Intl.message(
+      'Se han enviado',
+      name: 'have_been_sent',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Un destinatario`
+  String get a_recipient {
+    return Intl.message(
+      'Un destinatario',
+      name: 'a_recipient',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Varios destinatarios`
+  String get multiple_recipients {
+    return Intl.message(
+      'Varios destinatarios',
+      name: 'multiple_recipients',
       desc: '',
       args: [],
     );
   }
 
   /// `Empleados`
-  String get empleados {
-    return Intl.message('Empleados', name: 'empleados', desc: '', args: []);
+  String get employees {
+    return Intl.message('Empleados', name: 'employees', desc: '', args: []);
   }
 
   /// `Conexiones`
-  String get conexiones {
-    return Intl.message('Conexiones', name: 'conexiones', desc: '', args: []);
+  String get connections {
+    return Intl.message('Conexiones', name: 'connections', desc: '', args: []);
+  }
+
+  /// `Se importó`
+  String get it_was_imported {
+    return Intl.message(
+      'Se importó',
+      name: 'it_was_imported',
+      desc: '',
+      args: [],
+    );
   }
 
   /// `Se importaron`
-  String get se_importaron {
+  String get They_were_imported {
     return Intl.message(
       'Se importaron',
-      name: 'se_importaron',
+      name: 'They_were_imported',
       desc: '',
       args: [],
     );
   }
 
-  /// `Correctamente`
-  String get correctamente {
-    return Intl.message(
-      'Correctamente',
-      name: 'correctamente',
-      desc: '',
-      args: [],
-    );
+  /// `correctamente`
+  String get correctly {
+    return Intl.message('correctamente', name: 'correctly', desc: '', args: []);
   }
 
   /// `La empresa`
-  String get la_empresa {
-    return Intl.message('La empresa', name: 'la_empresa', desc: '', args: []);
-  }
-
-  /// `Esa_empresa no pertenede a nuestra base de datos`
-  String get esa_empresa_no_pertenede_a_nuestra_base_de_datos {
-    return Intl.message(
-      'Esa_empresa no pertenede a nuestra base de datos',
-      name: 'esa_empresa_no_pertenede_a_nuestra_base_de_datos',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `No pertenede a nuestra base de datos`
-  String get no_pertenede_a_nuestra_base_de_datos {
-    return Intl.message(
-      'No pertenede a nuestra base de datos',
-      name: 'no_pertenede_a_nuestra_base_de_datos',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `La`
-  String get la {
-    return Intl.message('La', name: 'la', desc: '', args: []);
-  }
-
-  /// `El empleado`
-  String get el_empleado {
-    return Intl.message('El empleado', name: 'el_empleado', desc: '', args: []);
+  String get the_company {
+    return Intl.message('La empresa', name: 'the_company', desc: '', args: []);
   }
 
   /// `El`
-  String get el {
-    return Intl.message('El', name: 'el', desc: '', args: []);
+  String get the {
+    return Intl.message('El', name: 'the', desc: '', args: []);
+  }
+
+  /// `El empleado`
+  String get the_employee {
+    return Intl.message(
+      'El empleado',
+      name: 'the_employee',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Él`
+  String get he {
+    return Intl.message('Él', name: 'he', desc: '', args: []);
   }
 
   /// `Filtrar por`
-  String get filtrar_por {
-    return Intl.message('Filtrar por', name: 'filtrar_por', desc: '', args: []);
+  String get filter_by {
+    return Intl.message('Filtrar por', name: 'filter_by', desc: '', args: []);
   }
 
-  /// `buscar...`
-  String get buscar {
-    return Intl.message('buscar...', name: 'buscar', desc: '', args: []);
+  /// `Buscar...`
+  String get search {
+    return Intl.message('Buscar...', name: 'search', desc: '', args: []);
   }
 
-  /// `Solo puede eliminar las líneas que fueron devueltas. ¿Desea eliminar?`
-  String get solo_puede_eliminar_las_lineas_devueltas {
+  /// `Tipo de fuente`
+  String get font_type {
     return Intl.message(
-      'Solo puede eliminar las líneas que fueron devueltas. ¿Desea eliminar?',
-      name: 'solo_puede_eliminar_las_lineas_devueltas',
+      'Tipo de fuente',
+      name: 'font_type',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Confirmar`
+  String get confirm {
+    return Intl.message('Confirmar', name: 'confirm', desc: '', args: []);
+  }
+
+  /// `Sí`
+  String get yes {
+    return Intl.message('Sí', name: 'yes', desc: '', args: []);
+  }
+
+  /// `No`
+  String get no {
+    return Intl.message('No', name: 'no', desc: '', args: []);
+  }
+
+  /// `Aceptar`
+  String get acept {
+    return Intl.message('Aceptar', name: 'acept', desc: '', args: []);
+  }
+
+  /// `Error`
+  String get error {
+    return Intl.message('Error', name: 'error', desc: '', args: []);
+  }
+
+  /// `No hay ningún envío seleccionado`
+  String get there_is_no_shipping_selected {
+    return Intl.message(
+      'No hay ningún envío seleccionado',
+      name: 'there_is_no_shipping_selected',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Tu correo electrónico no es válido`
+  String get your_email_is_invalid {
+    return Intl.message(
+      'Tu correo electrónico no es válido',
+      name: 'your_email_is_invalid',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Debes seleccionar una lista correcta`
+  String get You_must_select_a_correct_list {
+    return Intl.message(
+      'Debes seleccionar una lista correcta',
+      name: 'You_must_select_a_correct_list',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `El correo electrónico se ha enviado correctamente`
+  String get the_email_has_been_successfully_sent {
+    return Intl.message(
+      'El correo electrónico se ha enviado correctamente',
+      name: 'the_email_has_been_successfully_sent',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `No hay correos electrónicos para enviar`
+  String get there_is_no_emails_para_send {
+    return Intl.message(
+      'No hay correos electrónicos para enviar',
+      name: 'there_is_no_emails_para_send',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `El destinatario no es un correo electrónico válido`
+  String get The_recipient_is_not_a_valid_email {
+    return Intl.message(
+      'El destinatario no es un correo electrónico válido',
+      name: 'The_recipient_is_not_a_valid_email',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Este día se realizaron`
+  String get this_day_they_were_made {
+    return Intl.message(
+      'Este día se realizaron',
+      name: 'this_day_they_were_made',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Este día se realizó`
+  String get this_day_was_made {
+    return Intl.message(
+      'Este día se realizó',
+      name: 'this_day_was_made',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `A esta empresa se le realizaron`
+  String get this_company_was_made_to_this_company {
+    return Intl.message(
+      'A esta empresa se le realizaron',
+      name: 'this_company_was_made_to_this_company',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Seleccionar todos`
+  String get select_all {
+    return Intl.message(
+      'Seleccionar todos',
+      name: 'select_all',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `El envío contiene`
+  String get the_shipment_contains {
+    return Intl.message(
+      'El envío contiene',
+      name: 'the_shipment_contains',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `No tienes ninguna línea para modificar`
+  String get has_no_line_to_modify {
+    return Intl.message(
+      'No tienes ninguna línea para modificar',
+      name: 'has_no_line_to_modify',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `No tenemos ningún envío en esa fecha`
+  String get we_do_not_have_any_shipping_on_that_date {
+    return Intl.message(
+      'No tenemos ningún envío en esa fecha',
+      name: 'we_do_not_have_any_shipping_on_that_date',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Fue modificado`
+  String get was_modified {
+    return Intl.message(
+      'Fue modificado',
+      name: 'was_modified',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Fueron modificados`
+  String get were_modified {
+    return Intl.message(
+      'Fueron modificados',
+      name: 'were_modified',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Importar datos`
+  String get import_data {
+    return Intl.message(
+      'Importar datos',
+      name: 'import_data',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Importar datos en formato CSV`
+  String get Import_data_in_CSV_format {
+    return Intl.message(
+      'Importar datos en formato CSV',
+      name: 'Import_data_in_CSV_format',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `El sector no existe`
+  String get The_sector_does_not_exist {
+    return Intl.message(
+      'El sector no existe',
+      name: 'The_sector_does_not_exist',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `No existe el archivo de`
+  String get no_file_exists {
+    return Intl.message(
+      'No existe el archivo de',
+      name: 'no_file_exists',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Se guardarán en un archivo temporal`
+  String get They_will_be_saved_in_a_temporary_file {
+    return Intl.message(
+      'Se guardarán en un archivo temporal',
+      name: 'They_will_be_saved_in_a_temporary_file',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `No pertenece a la empresa`
+  String get does_not_belong_to_the_company {
+    return Intl.message(
+      'No pertenece a la empresa',
+      name: 'does_not_belong_to_the_company',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `No hay empresas para importar`
+  String get there_is_no_companies_to_import {
+    return Intl.message(
+      'No hay empresas para importar',
+      name: 'there_is_no_companies_to_import',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `No se pueden cargar las empresas porque no hay sectores`
+  String get Cannot_Load_Companies_because_it_does_not_have_sectors {
+    return Intl.message(
+      'No se pueden cargar las empresas porque no hay sectores',
+      name: 'Cannot_Load_Companies_because_it_does_not_have_sectors',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Archivo no válido`
+  String get invalid_file {
+    return Intl.message(
+      'Archivo no válido',
+      name: 'invalid_file',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Esa empresa no pertenece a nuestra base de datos`
+  String get that_company_does_not_belong_to_our_database {
+    return Intl.message(
+      'Esa empresa no pertenece a nuestra base de datos',
+      name: 'that_company_does_not_belong_to_our_database',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `No pertenece a nuestra base de datos`
+  String get does_not_belong_to_our_database {
+    return Intl.message(
+      'No pertenece a nuestra base de datos',
+      name: 'does_not_belong_to_our_database',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Solo puedes eliminar las líneas que fueron devueltas. ¿Desea eliminar?`
+  String
+  get You_can_only_delete_the_lines_that_were_returned_Do_you_want_to_delete {
+    return Intl.message(
+      'Solo puedes eliminar las líneas que fueron devueltas. ¿Desea eliminar?',
+      name:
+          'You_can_only_delete_the_lines_that_were_returned_Do_you_want_to_delete',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `¿Qué tipo de base de datos deseas utilizar?`
+  String get What_type_of_database_do_you_want_to_use {
+    return Intl.message(
+      '¿Qué tipo de base de datos deseas utilizar?',
+      name: 'What_type_of_database_do_you_want_to_use',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Salida de la aplicación`
+  String get Application_exit {
+    return Intl.message(
+      'Salida de la aplicación',
+      name: 'Application_exit',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `¿Desea salir de la aplicación?`
+  String get desea_go_out {
+    return Intl.message(
+      '¿Desea salir de la aplicación?',
+      name: 'desea_go_out',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Modificación del sector`
+  String get modification_of_the_sector {
+    return Intl.message(
+      'Modificación del sector',
+      name: 'modification_of_the_sector',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Creación del sector`
+  String get creation_of_the_sector {
+    return Intl.message(
+      'Creación del sector',
+      name: 'creation_of_the_sector',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Nombre del sector`
+  String get name_sector {
+    return Intl.message(
+      'Nombre del sector',
+      name: 'name_sector',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Ese sector ya existe`
+  String get that_sector_already_exists {
+    return Intl.message(
+      'Ese sector ya existe',
+      name: 'that_sector_already_exists',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `El campo no puede estar en blanco`
+  String get the_field_cannot_be_blank {
+    return Intl.message(
+      'El campo no puede estar en blanco',
+      name: 'the_field_cannot_be_blank',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `El campo no puede quedar vacío`
+  String get the_field_cannot_go_empty {
+    return Intl.message(
+      'El campo no puede quedar vacío',
+      name: 'the_field_cannot_go_empty',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `No puede dejar el campo vacío. ¿Desea continuar?`
+  String get You_cannot_leave_the_field_empty_you_want_to_continue {
+    return Intl.message(
+      'No puede dejar el campo vacío. ¿Desea continuar?',
+      name: 'You_cannot_leave_the_field_empty_you_want_to_continue',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `El campo`
+  String get the_field {
+    return Intl.message('El campo', name: 'the_field', desc: '', args: []);
+  }
+
+  /// `No se encontró el archivo de`
+  String get file_not_found {
+    return Intl.message(
+      'No se encontró el archivo de',
+      name: 'file_not_found',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Error en el formato del archivo de`
+  String get file_format_error {
+    return Intl.message(
+      'Error en el formato del archivo de',
+      name: 'file_format_error',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Ha sido`
+  String get it_has_been {
+    return Intl.message('Ha sido', name: 'it_has_been', desc: '', args: []);
+  }
+
+  /// `Se ha eliminado`
+  String get has_been_removed {
+    return Intl.message(
+      'Se ha eliminado',
+      name: 'has_been_removed',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Se han eliminado`
+  String get have_been_removed {
+    return Intl.message(
+      'Se han eliminado',
+      name: 'have_been_removed',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `líneas correctamente`
+  String get lines_correctly {
+    return Intl.message(
+      'líneas correctamente',
+      name: 'lines_correctly',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `línea correctamente`
+  String get line_correctly {
+    return Intl.message(
+      'línea correctamente',
+      name: 'line_correctly',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `No se puede cargar`
+  String get can_not_load {
+    return Intl.message(
+      'No se puede cargar',
+      name: 'can_not_load',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Sin empresa`
+  String get Without_company {
+    return Intl.message(
+      'Sin empresa',
+      name: 'Without_company',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `El formato de`
+  String get the_format_of_the {
+    return Intl.message(
+      'El formato de',
+      name: 'the_format_of_the',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `debe ser`
+  String get must_be {
+    return Intl.message('debe ser', name: 'must_be', desc: '', args: []);
+  }
+
+  /// `no tiene`
+  String get no_has {
+    return Intl.message('no tiene', name: 'no_has', desc: '', args: []);
+  }
+
+  /// `no está en ese departamento`
+  String get not_in_that_department {
+    return Intl.message(
+      'no está en ese departamento',
+      name: 'not_in_that_department',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `¿Realmente desea eliminar?`
+  String get do_you_really_want_to_delete {
+    return Intl.message(
+      '¿Realmente desea eliminar?',
+      name: 'do_you_really_want_to_delete',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `en la base de datos. ¿Qué desea hacer?`
+  String get in_the_database_what_do_you_want_to_do {
+    return Intl.message(
+      'en la base de datos. ¿Qué desea hacer?',
+      name: 'in_the_database_what_do_you_want_to_do',
       desc: '',
       args: [],
     );

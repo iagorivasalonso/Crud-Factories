@@ -18,7 +18,7 @@ Future<bool> confirm(BuildContext  context, String action) async {
                      : 175,
                  child: Column(
                      children: [
-                       headAlert(title:S.of(context).confirmar),
+                       headAlert(title:S.of(context).confirm),
                        Expanded(child: Padding(
                          padding: const EdgeInsets.only(left: 25,right: 15, top:25),
                          child: Text(action,
@@ -36,7 +36,7 @@ Future<bool> confirm(BuildContext  context, String action) async {
                                  child: MaterialButton(
                                    color: Colors.lightBlue,
                                    child:  Text(
-                                     S.of(context).aceptar,
+                                     S.of(context).acept,
                                      style: TextStyle(color: Colors.white),
                                    ),
                                    onPressed: () async {

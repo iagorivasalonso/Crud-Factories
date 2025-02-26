@@ -17,7 +17,7 @@ Future<int> noCategory(BuildContext  context, String array) async {
               height: 175,
               child: Column(
                 children: [
-                  headAlert(title:S.of(context).error_categoria),
+                  headAlert(title:S.of(context).category_error),
                   Expanded(
                     child: Padding(
                       padding: const EdgeInsets.only(left: 25,right: 15 ,top: 25, bottom: 15),
@@ -34,7 +34,7 @@ Future<int> noCategory(BuildContext  context, String array) async {
                           child: Padding(
                             padding: const EdgeInsets.only(left: 30),
                             child: MaterialButton(
-                                child: Text(S.of(context).crear,
+                                child: Text(S.of(context).create,
                                   style: TextStyle(color: Colors.white),),
                                 color: Colors.lightBlue,
                                 onPressed:() async {
@@ -48,7 +48,7 @@ Future<int> noCategory(BuildContext  context, String array) async {
                           child: Padding(
                             padding: const EdgeInsets.only(left: 25),
                             child: MaterialButton(
-                               child: Text(S.of(context).importar,
+                               child: Text(S.of(context).import,
                                  style: TextStyle(color: Colors.white),),
                                 color: Colors.lightBlue,
                                 onPressed:(){
@@ -62,7 +62,7 @@ Future<int> noCategory(BuildContext  context, String array) async {
                           child: Padding(
                             padding:const EdgeInsets.only(left: 25, right: 25),
                             child: MaterialButton(
-                              child: Text(S.of(context).cancelar,
+                              child: Text(S.of(context).cancel,
                                 style: TextStyle(color: Colors.white),),
                                 color: Colors.lightBlue,
                                 onPressed:(){

@@ -119,7 +119,7 @@ bool telephoneCorrect(String telephone, BuildContext context) {
 
     if(telephoneValid != true)
     {
-      String action ='El telefono debe de ser numerico';
+      String action ='El phone debe de ser numerico';
       error(context,action);
     }
     else
@@ -127,7 +127,7 @@ bool telephoneCorrect(String telephone, BuildContext context) {
       if(telephone.trim().length!=9)
       {
         telephoneValid = false;
-        String action ='El telefono debe de tener 9 digitos';
+        String action ='El phone debe de tener 9 digitos';
         error(context,action);
 
       }

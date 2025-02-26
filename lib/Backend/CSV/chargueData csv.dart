@@ -19,20 +19,20 @@ Future<bool> chargueDataCSV(BuildContext context) async {
   bool isCorrect = true;
 
   allRoutes = [
-    S.of(context).rutas,
-    S.of(context).conexiones,
-    S.of(context).servidor,
-    S.of(context).sectores,
-    S.of(context).empresas,
-    S.of(context).empleados,
+    S.of(context).routes,
+    S.of(context).connections,
+    S.of(context).server,
+    S.of(context).sectors,
+    S.of(context).companies,
+    S.of(context).employees,
     S.of(context).lineas,
     S.of(context).emails,
   ];
 
   SQLRoutes = [
-    S.of(context).rutas,
-    S.of(context).conexiones,
-    S.of(context).servidor,
+    S.of(context).routes,
+    S.of(context).connections,
+    S.of(context).server,
   ];
 
   if (routesManage.isEmpty)
@@ -88,7 +88,7 @@ Future<bool> chargueDataCSV(BuildContext context) async {
      }
      else
      {
-       errorFiles.add(S.of(context).no_se_puede_leer_el_archivo_de_rutas);
+       errorFiles.add(S.of(context).route_file_cannot_be_read);
         isCorrect = false;
      }
 

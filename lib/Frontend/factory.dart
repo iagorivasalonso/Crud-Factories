@@ -79,7 +79,7 @@ class _newFactoryState extends State<newFactory> {
     BuildContext context = widget.context;
     sectorsString.clear();
 
-    sectorsString.add(S.of(context).nuevo);
+    sectorsString.add(S.of(context).newMale);
 
       for(int i = 0; i < sectors.length; i++)
       {
@@ -147,26 +147,26 @@ class _newFactoryState extends State<newFactory> {
       }
 
     }
-    String action = S.of(context).actualizar;
+    String action = S.of(context).update;
     String action2 = "";
     String title = "";
 
     if (select == -1) {
-      title = S.of(context).nueva;
-      action = S.of(context).crear;
-      action2 = S.of(context).borrar;
-      sector = S.of(context).seleccionar;
+      title = S.of(context).newFemale;
+      action = S.of(context).create;
+      action2 = S.of(context).delete;
+      sector = S.of(context).select;
     }
     else {
-      title = S.of(context).editar;
+      title = S.of(context).edit;
 
         campCharge();
 
-      action = S.of(context).actualizar;
-      action2 = S.of(context).deshacer;
+      action = S.of(context).update;
+      action2 = S.of(context).undo;
    }
 
-    String name = S.of(context).empresa;
+    String name = S.of(context).company;
     String title1 = "$title $name";
 
     final ShowPlatformDatePicker platformDatePicker = ShowPlatformDatePicker(buildContext: context);
@@ -212,7 +212,7 @@ class _newFactoryState extends State<newFactory> {
                               children: [
                                 Padding(
                                   padding: const EdgeInsets.only(right: 10.0),
-                                  child: Text(S.of(context).nombre),
+                                  child: Text(S.of(context).name),
                                 ),
                                 SizedBox(
                                   width: 450,
@@ -264,7 +264,7 @@ class _newFactoryState extends State<newFactory> {
                               children: [
                                 Padding(
                                   padding: const EdgeInsets.only(right: 10.0),
-                                  child: Text(S.of(context).fecha_de_alta),
+                                  child: Text(S.of(context).discharge_date),
                                 ),
                                 SizedBox(
                                   width: 200,
@@ -338,16 +338,16 @@ class _newFactoryState extends State<newFactory> {
                                                  controllerSector.text =sectorChoose!;
                                                });
 
-                                               if(sectorChoose == S.of(context).nuevo)
+                                               if(sectorChoose == S.of(context).newMale)
                                                {
 
-                                                     String modif = S.of(context).nuevo;
+                                                     String modif = S.of(context).newMale;
                                                      bool create = await createSector(context,modif);
 
                                                        if(create == true)
                                                        {
                                                            setState((){
-                                                               String action = S.of(context).el_sector_se_ha_creado_correctamente;
+                                                               String action = S.of(context).the_sector_has_been_created_successfully;
                                                                confirm(context, action);
                                                            });
                                                        }
@@ -375,7 +375,7 @@ class _newFactoryState extends State<newFactory> {
                           Row(
                             children: [
                               Text(
-                                S.of(context).contacto,
+                                S.of(context).contact,
                                 style: TextStyle(fontWeight: FontWeight.bold),
                               ),
                             ],
@@ -386,7 +386,7 @@ class _newFactoryState extends State<newFactory> {
                               children: [
                                 Padding(
                                   padding: const EdgeInsets.only(right: 10.0),
-                                  child: Text(S.of(context).telefono_1),
+                                  child: Text(S.of(context).phone_1),
                                 ),
                                 SizedBox(
                                   width: 200,
@@ -413,7 +413,7 @@ class _newFactoryState extends State<newFactory> {
                                 ),
                                 Padding(
                                   padding: EdgeInsets.only(left: 85.0,right: 10.0),
-                                  child:  Text(S.of(context).telefono_2),
+                                  child:  Text(S.of(context).phone_2),
                                 ),
                                 SizedBox(
                                   width: 200,
@@ -475,7 +475,7 @@ class _newFactoryState extends State<newFactory> {
                                 ),
                                 Padding(
                                   padding: EdgeInsets.only(left: 70.0,right: 10.0),
-                                  child: Text(S.of(context).pagina_web),
+                                  child: Text(S.of(context).web_page),
                                 ),
                                 SizedBox(
                                   width: 300,
@@ -510,7 +510,7 @@ class _newFactoryState extends State<newFactory> {
                               children: [
                                 Padding(
                                   padding: const EdgeInsets.only(right: 10.0),
-                                  child: Text(S.of(context).direccion),
+                                  child: Text(S.of(context).address),
                                 ),
                                 SizedBox(
                                   width: 600,
@@ -545,7 +545,7 @@ class _newFactoryState extends State<newFactory> {
                               children: [
                                 Padding(
                                   padding: const EdgeInsets.only(right: 10.0),
-                                  child: Text(S.of(context).ciudad),
+                                  child: Text(S.of(context).city),
                                 ),
                                 SizedBox(
                                   width: 200,
@@ -572,7 +572,7 @@ class _newFactoryState extends State<newFactory> {
                                 ),
                                 Padding(
                                   padding: EdgeInsets.only(left: 85.0, right: 10.0),
-                                  child: Text(S.of(context).codigo_postal),
+                                  child: Text(S.of(context).postal_code),
                                 ),
                                 SizedBox(
                                   width: 200,
@@ -607,7 +607,7 @@ class _newFactoryState extends State<newFactory> {
                               children: [
                                Padding(
                                  padding: const EdgeInsets.only(right: 10.0),
-                                 child: Text(S.of(context).provincia),
+                                 child: Text(S.of(context).province),
                                ),
                                 SizedBox(
                                   width: 200,
@@ -638,7 +638,7 @@ class _newFactoryState extends State<newFactory> {
                           Row(
                             children: [
                               Text(
-                                S.of(context).contactos_en_la_empresa,
+                                S.of(context).company_contacts,
                                 style: TextStyle(fontWeight: FontWeight.bold),
                               ),
                             ],
@@ -713,7 +713,7 @@ class _newFactoryState extends State<newFactory> {
                                                     if (contacsCurrent[contactSelect] == delete)
                                                     {
                                                         contacsCurrent.removeAt(contactSelect);
-                                                        String action =S.of(context).el_empleado_se_ha_quitado_correctamente;
+                                                        String action =S.of(context).the_employee_has_been_correctly_removed;
                                                         confirm(context,action);
                                                     }
                                                 });
@@ -785,7 +785,7 @@ class _newFactoryState extends State<newFactory> {
 
                                       List <Factory> current=[];
                                       List <String> allKeys = [];
-                                      String nameCamp = S.of(context).nombre;
+                                      String nameCamp = S.of(context).name;
 
                                       for (int i = 0; i < allFactories.length; i++)
                                       {
@@ -807,7 +807,7 @@ class _newFactoryState extends State<newFactory> {
 
                                         if (dateCorrect(controllerHighDate.text) == false) {
 
-                                          String array = S.of(context).fecha;
+                                          String array = S.of(context).date;
                                           String action = LocalizationHelper.format_must(context, array);
 
                                           String format = 'DD-MM-AAAA';
@@ -831,21 +831,21 @@ class _newFactoryState extends State<newFactory> {
                                         else
                                         if (mailCorrect(controllerMail.text) !=
                                             true) {
-                                          action = S.of(context).no_es_un_correo_electronico_valido;
+                                          action = S.of(context).not_a_valid_email;
                                           error(context, action);
                                         }
                                         else
                                         if (webCorrect(controllerWeb.text) !=
                                             true) {
-                                          action = S.of(context).no_es_una_pagina_web_valida;
+                                          action = S.of(context).not_a_valid_webpage;
                                           error(context, action);
                                         }
                                         else if (adrressCorrect(
                                             controllerAdrress.text) != true) {
-                                          String array = S.of(context).direccion;
+                                          String array = S.of(context).address;
                                           String action = LocalizationHelper.format_must(context, array);
-                                          String street = S.of(context).calle;
-                                          String number = S.of(context).numero;
+                                          String street = S.of(context).street;
+                                          String number = S.of(context).number;
                                           String format = '$street , $number';
                                           error(context, action, format);
                                         }
@@ -854,7 +854,7 @@ class _newFactoryState extends State<newFactory> {
                                             context) == true) {
                                           if (controllerPostalCode.text
                                               .length != 5) {
-                                            action =S.of(context).el_codigo_postal_debe_de_tener_5_digitos;
+                                            action =S.of(context).the_postal_code_must_have_5_digits;
                                             error(context, action);
                                           }
                                           else {
@@ -1032,12 +1032,12 @@ class _newFactoryState extends State<newFactory> {
                                               bool errorExp = await csvExportatorFactories(
                                                   allFactories);
 
-                                              String array = S.of(context).empresas;
+                                              String array = S.of(context).companies;
 
                                               if (errorExp == false)
                                               {
 
-                                                String actionArray = S.of(context).guardado;
+                                                String actionArray = S.of(context).saved;
 
                                                 String action = LocalizationHelper.manage_array(context, array, actionArray);
                                                 await confirm(context, action);

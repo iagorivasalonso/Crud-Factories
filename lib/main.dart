@@ -35,9 +35,7 @@ class MyApp extends StatelessWidget {
 
           MyWindowListener.context = context;
 
-          String appTitle = S.of(context).cancel;
-
-           _initializeWindow(appTitle);
+           _initializeWindow(context);
 
           return App();
         }
@@ -45,12 +43,12 @@ class MyApp extends StatelessWidget {
     );
   }
 
-  void _initializeWindow(String title){
+  void _initializeWindow(BuildContext context){
 
     WindowOptions windowOptions = WindowOptions(
       size: const Size(800,600),
       center: true,
-      title: title
+      title: S.of(context).appTitle,
     );
 
     windowManager.waitUntilReadyToShow(windowOptions, () async{

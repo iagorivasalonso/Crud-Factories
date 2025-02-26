@@ -33,6 +33,7 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
 
+
 flutter_intl:
   enabled: true
   class_name: S

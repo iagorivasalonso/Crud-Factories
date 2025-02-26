@@ -62,17 +62,17 @@ class _newMailState extends State<newMail> {
     String title = "";
 
     if (select == -1) {
-      title = S.of(context).nuevo;
-      action = S.of(context).crear;
-      action2 = S.of(context).borrar;
+      title = S.of(context).newMale;
+      action = S.of(context).create;
+      action2 = S.of(context).delete;
     }
     else {
-      title = S.of(context).editar;
+      title = S.of(context).edit;
 
       campCharge();
 
-      action = S.of(context).actualizar;
-      action2 = S.of(context).deshacer;
+      action = S.of(context).update;
+      action2 = S.of(context).undo;
     }
 
     String name = S.of(context).email;
@@ -118,7 +118,7 @@ class _newMailState extends State<newMail> {
                               children: [
                                 Padding(
                                   padding: const EdgeInsets.only(right: 10.0),
-                                  child: Text(S.of(context).nuevo_email),
+                                  child: Text(S.of(context).new_email),
                                 ),
                                 SizedBox(
                                   width: 450,
@@ -169,7 +169,7 @@ class _newMailState extends State<newMail> {
                               children: [
                                 Padding(
                                   padding: const EdgeInsets.only(right: 10.0),
-                                  child: Text(S.of(context).contrasena),
+                                  child: Text(S.of(context).password),
                                 ),
                                 SizedBox(
                                   width: 400,
@@ -192,7 +192,7 @@ class _newMailState extends State<newMail> {
                               children: [
                                 Padding(
                                   padding: const EdgeInsets.only(right: 10.0),
-                                  child: Text(S.of(context).verificar_contrasena),
+                                  child: Text(S.of(context).verify_password),
                                 ),
                                 SizedBox(
                                   width: 400,
@@ -235,13 +235,13 @@ class _newMailState extends State<newMail> {
                                         else if(controllerPas.text.isEmpty)
                                         {
 
-                                          String array = S.of(context).contrasena;
+                                          String array = S.of(context).password;
                                           action = LocalizationHelper.camp_empty(context, array);
                                           error(context, action);
                                         }
                                         else if(controllerPasVerificator.text.isEmpty)
                                         {
-                                          String array = S.of(context).verificar_contrasena;
+                                          String array = S.of(context).verify_password;
                                           action = LocalizationHelper.camp_empty(context, array);
                                           error(context, action);
                                         }
@@ -252,7 +252,7 @@ class _newMailState extends State<newMail> {
 
                                                  if (result == false)
                                                  {
-                                                     String action = S.of(context).no_se_puede_establecer_conexion;
+                                                     String action = S.of(context).connection_cannot_be_established;
                                                      error(context, action);
                                                  }
                                                  else
@@ -286,7 +286,7 @@ class _newMailState extends State<newMail> {
                                                         }
                                                         if (result == false)
                                                         {
-                                                          action = S.of(context).compruebe_su_usuario_o_contrasena;
+                                                          action = S.of(context).check_your_user_or_password;
                                                           error(context, action);
                                                         }
                                                  }
@@ -350,8 +350,8 @@ class _newMailState extends State<newMail> {
       final message = Message()
         ..from = Address(username, separeAddrres[0])
         ..recipients.add(username)
-        ..subject = S.of(context).prueba_de_conexion
-        ..text = S.of(context).esto_es_una_prueba_de_conexion_desde_la_aplicacion;
+        ..subject = S.of(context).connection_test
+        ..text = S.of(context).this_is_a_connection_test_from_the_application;
 
 
       if (company == "gmail") {

@@ -28,7 +28,7 @@ Future<void> adminSector(BuildContext context) async {
             height: 350,
             child: Column(
               children: [
-                headAlert(title: S.of(context).manejo_de_sectores),
+                headAlert(title: S.of(context).sector_management),
                 const SizedBox(height: 60),
                 Flexible(
                   flex: 1,
@@ -59,10 +59,10 @@ Future<void> adminSector(BuildContext context) async {
                                 icon: Icon(Icons.delete, color: Colors.red),
                                 onPressed: () async {
 
-                                  String pr = S.of(context).el;
+                                  String pr = S.of(context).he;
                                   String array0 = S.of(context).sector;
                                   String array = "$pr $array0";
-                                  String action1 = LocalizationHelper.askConfirmSupr(context, array);
+                                  String action1 = LocalizationHelper.ask_confirm_supr(context, array);
 
                                   bool correct = await warning(context, action1);
                                   String search = sectors[index].name;
@@ -78,7 +78,7 @@ Future<void> adminSector(BuildContext context) async {
 
                                     setState(() {
                                       sectors.removeAt(index);
-                                      String action = S.of(context).el_sector_se_ha_creado_correctamente;
+                                      String action = S.of(context).the_sector_has_been_created_successfully;
                                       confirm(context, action);
                                     });
                                   }
@@ -119,11 +119,11 @@ Future<void> adminSector(BuildContext context) async {
                          padding: const EdgeInsets.only(left: 70, right: 15),
                          child: MaterialButton(
                            color: Colors.lightBlue,
-                           child:  Text(S.of(context).crear,
+                           child:  Text(S.of(context).create,
                              style: TextStyle(color: Colors.white),
                            ),
                            onPressed: () async {
-                             String modif = S.of(context).nuevo;
+                             String modif = S.of(context).newMale;
                              bool create = await createSector(context, modif);
 
                              if (create == true) {
@@ -143,7 +143,7 @@ Future<void> adminSector(BuildContext context) async {
                            onPressed: () {
                              Navigator.of(context).pop(false);
                            },
-                           child: Text(S.of(context).cerrar,
+                           child: Text(S.of(context).close,
                              style: TextStyle(color: Colors.white),
                            ),
                          ),

@@ -29,7 +29,7 @@ Future<bool> adminRoutes(BuildContext context, [bool? sqlBd]) async {
   {
      currentRoutes = SQLRoutes;
   }
-print(currentRoutes);
+
   for(int i = 0; i <currentRoutes!.length; i++)
   {
     _controllerNameRoute.add(TextEditingController());
@@ -60,7 +60,7 @@ print(currentRoutes);
     campCharge(_controllerNameRoute,_controllerRoute);
   }
 
-  bool? ruta = await showDialog(
+  bool? route = await showDialog(
     context: context,
     builder: (BuildContext context) {
       return StatefulBuilder(
@@ -72,7 +72,7 @@ print(currentRoutes);
                width: 500,
                child: Column(
                  children: [
-                   headAlert(title: S.of(context).selector_de_rutas),
+                   headAlert(title: S.of(context).route_selector),
                  Expanded(
                      child: Align(
                        alignment: Alignment.topLeft,
@@ -86,7 +86,7 @@ print(currentRoutes);
                                  flex:2,
                                  child: Padding(
                                    padding: const EdgeInsets.only(left: 40.0),
-                                   child: Text(S.of(context).fuente,
+                                   child: Text(S.of(context).source,
                                      maxLines: 1,
                                      overflow: TextOverflow.ellipsis,
                                    ),
@@ -98,7 +98,7 @@ print(currentRoutes);
                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                    children: [
                                      Expanded(
-                                       child: Text(S.of(context).todas,
+                                       child: Text(S.of(context).allFemale,
                                          maxLines: 1,
                                          overflow: TextOverflow.ellipsis,
                                        ),
@@ -200,7 +200,7 @@ print(currentRoutes);
                                                   });
                                                 },
                                                 child: Text(
-                                                  S.of(context).examinar,
+                                                  S.of(context).examine,
                                                   maxLines: 1,
                                                   overflow: TextOverflow.ellipsis,
                                                   style: TextStyle(color: Colors.white),
@@ -247,8 +247,8 @@ print(currentRoutes);
                                           ));
                                         }
 
-                                       String array = S.of(context).rutas;
-                                       String actionArray = S.of(context).guardado;
+                                       String array = S.of(context).routes;
+                                       String actionArray = S.of(context).saved;
 
                                        String action = LocalizationHelper.manage_array(context, array, actionArray);
 
@@ -261,7 +261,7 @@ print(currentRoutes);
                                        Navigator.of(context).pop(true);
                                      });
                                  },
-                                 child: Text(S.of(context).importar,style:  TextStyle(color: Colors.white),)
+                                 child: Text(S.of(context).import,style:  TextStyle(color: Colors.white),)
                              ),
                            ),
                          ),
@@ -277,7 +277,7 @@ print(currentRoutes);
                                      Navigator.of(context).pop(false);
                                    });
                                  },
-                                 child: Text(S.of(context).cancelar,style: TextStyle(color: Colors.white),)
+                                 child: Text(S.of(context).cancel,style: TextStyle(color: Colors.white),)
                              ),
                            ),
                          ),
@@ -292,7 +292,7 @@ print(currentRoutes);
       );
     },
   );
-  return ruta ?? false;
+  return route ?? false;
 }
 
 void campCharge(List<TextEditingController> _controllerNameRoute, List<TextEditingController> _controllerRoute) {
@@ -306,7 +306,7 @@ void campCharge(List<TextEditingController> _controllerNameRoute, List<TextEditi
   void _pickFile(TextEditingController controllerRoute, BuildContext context) async {
 
   FilePickerResult? result =  await FilePicker.platform.pickFiles(
-    dialogTitle: S.of(context).seleccionar_archivo,
+    dialogTitle: S.of(context).select_file,
     type: FileType.custom,
     allowedExtensions:  ['csv','exe'],
   );

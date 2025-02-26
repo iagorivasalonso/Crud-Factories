@@ -17,10 +17,10 @@ void closeAlert(BuildContext  context) {
                 height: 175,
                 child: Column(
                   children: [
-                   headAlert(title:S.of(context).salida_aplicacion),
+                   headAlert(title:S.of(context).Application_exit),
                     Expanded(child: Padding(
                       padding: EdgeInsets.only(left: 25,top: 25, bottom: 15),
-                      child: Text(S.of(context).desea_salir,
+                      child: Text(S.of(context).desea_go_out,
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,),
                     ),
@@ -34,7 +34,7 @@ void closeAlert(BuildContext  context) {
                             child: MaterialButton(
                               color: Colors.lightBlue,
                               child: Text(
-                                  S.of(context).si,
+                                  S.of(context).yes,
                                 style: TextStyle(color: Colors.white),
                               ),
                               onPressed: () async {

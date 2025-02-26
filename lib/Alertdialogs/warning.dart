@@ -19,7 +19,7 @@ Future<bool> warning(BuildContext  context,String action) async{
                      : 175,
              child: Column(
                children: [
-                 headAlert(title: S.of(context).cuidado),
+                 headAlert(title: S.of(context).careful),
                  Expanded(
                    child: Padding(
                      padding:  const EdgeInsets.only(left: 25,top: 25),
@@ -38,7 +38,7 @@ Future<bool> warning(BuildContext  context,String action) async{
                            padding: const EdgeInsets.only(left: 70, right: 15),
                            child: MaterialButton(
                                color: Colors.lightBlue,
-                               child:  Text(S.of(context).si,
+                               child:  Text(S.of(context).yes,
                                  style: TextStyle(color: Colors.white),),
                                onPressed:() async {
                                  Navigator.of(context).pop(true);
