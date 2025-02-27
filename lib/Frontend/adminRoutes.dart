@@ -57,7 +57,7 @@ Future<bool> adminRoutes(BuildContext context, [bool? sqlBd]) async {
   }
   else
   {
-    campCharge(_controllerNameRoute,_controllerRoute);
+    campCharge(_controllerNameRoute,_controllerRoute,context);
   }
 
   bool? route = await showDialog(
@@ -271,7 +271,7 @@ Future<bool> adminRoutes(BuildContext context, [bool? sqlBd]) async {
                              child: MaterialButton(
                                  color: Colors.lightBlue,
                                  onPressed:(){
-                                   campCharge(_controllerNameRoute,_controllerRoute);
+                                   campCharge(_controllerNameRoute,_controllerRoute,context);
 
                                    setState((){
                                      Navigator.of(context).pop(false);
@@ -295,11 +295,21 @@ Future<bool> adminRoutes(BuildContext context, [bool? sqlBd]) async {
   return route ?? false;
 }
 
-void campCharge(List<TextEditingController> _controllerNameRoute, List<TextEditingController> _controllerRoute) {
+void campCharge(List<TextEditingController> _controllerNameRoute, List<TextEditingController> _controllerRoute, BuildContext context) {
 
+  allRoutes = [
+    S.of(context).routes,
+    S.of(context).connections,
+    S.of(context).server,
+    S.of(context).sectors,
+    S.of(context).companies,
+    S.of(context).employees,
+    S.of(context).lines,
+    S.of(context).emails,
+  ];
   for(int i = 0; i <routesManage.length; i++)
   {
-     _controllerNameRoute[i].text = routesManage[i].name;
+     _controllerNameRoute[i].text = allRoutes[i];
     _controllerRoute[i].text = routesManage[i].route;
   }
 }
