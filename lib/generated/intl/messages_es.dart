@@ -199,7 +199,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "Se han eliminado",
     ),
     "have_been_sent": MessageLookupByLibrary.simpleMessage("Se han enviado"),
-    "he": MessageLookupByLibrary.simpleMessage("Él"),
+    "he": MessageLookupByLibrary.simpleMessage("El"),
     "host": MessageLookupByLibrary.simpleMessage("Host"),
     "import": MessageLookupByLibrary.simpleMessage("Importar"),
     "import_data": MessageLookupByLibrary.simpleMessage("Importar datos"),

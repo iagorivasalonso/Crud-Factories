@@ -1072,9 +1072,9 @@ class S {
     );
   }
 
-  /// `Él`
+  /// `El`
   String get he {
-    return Intl.message('Él', name: 'he', desc: '', args: []);
+    return Intl.message('El', name: 'he', desc: '', args: []);
   }
 
   /// `Filtrar por`

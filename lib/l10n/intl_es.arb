@@ -112,7 +112,7 @@
   "could_not_create_database": "No se pudo crear la base de datos",
   "database_tables_could_not_be_created": "No se pudieron crear las tablas de la base de datos",
   "could_not_delete_database" : "No se pudo eliminar la base de datos",
-  "error_modifying_the_database_name": "Error al modificar el nombre de la base de datos",
+  "error_modifying_the_database_name": "Error al modificar el el nombre de la base de datos",
   "no_have_registered_emails": "No tienes correos electrónicos registrados",
   "has_no_server_connected": "No tienes ningún servidor conectado",
   "check_your_user_or_password": "Comprueba tu usuario o contraseña",
