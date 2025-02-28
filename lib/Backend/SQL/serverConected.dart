@@ -7,7 +7,7 @@ serverconnect() async {
 
   if (Platform.isWindows) {
 
-    executable = routesManage[7].route;
+    executable = routesManage[2].route;
 
   }
 
