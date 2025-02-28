@@ -558,11 +558,12 @@ class _AppState extends State<App> {
 
                              if(go == true)
                              {
-                               if(lineSector.isNotEmpty)
+                               if(allLines.isNotEmpty)
                                {
                                  setState(() {
                                    itenSelect = 1;
                                    subIten1Select = 3;
+                                   subIten2Select = 0;
                                  });
                                }
                                else
