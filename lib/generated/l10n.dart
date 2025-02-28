@@ -752,6 +752,46 @@ class S {
     );
   }
 
+  /// `No se pudo crear la base de datos`
+  String get could_not_create_database {
+    return Intl.message(
+      'No se pudo crear la base de datos',
+      name: 'could_not_create_database',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `No se pudieron crear las tablas de la base de datos`
+  String get database_tables_could_not_be_created {
+    return Intl.message(
+      'No se pudieron crear las tablas de la base de datos',
+      name: 'database_tables_could_not_be_created',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `No se pudo eliminar la base de datos`
+  String get could_not_delete_database {
+    return Intl.message(
+      'No se pudo eliminar la base de datos',
+      name: 'could_not_delete_database',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Error al modificar el nombre de la base de datos`
+  String get error_modifying_the_database_name {
+    return Intl.message(
+      'Error al modificar el nombre de la base de datos',
+      name: 'error_modifying_the_database_name',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `No tienes correos electrónicos registrados`
   String get no_have_registered_emails {
     return Intl.message(
@@ -1227,6 +1267,16 @@ class S {
     return Intl.message(
       'Fueron modificados',
       name: 'were_modified',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Modificada`
+  String get modifiedFemale {
+    return Intl.message(
+      'Modificada',
+      name: 'modifiedFemale',
       desc: '',
       args: [],
     );

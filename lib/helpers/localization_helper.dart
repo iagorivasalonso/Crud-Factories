@@ -218,6 +218,7 @@ class LocalizationHelper {
     String preVar = S.of(context).the;
     String intermVar = S.of(context).it_has_been.toLowerCase();
     String postVar = S.of(context).correctly.toLowerCase();
+    actionArray = actionArray.toLowerCase();
 
     return Intl.message(
       '$preVar $array $intermVar $actionArray $postVar',
@@ -269,7 +270,7 @@ class LocalizationHelper {
 
     String preVar = S.of(context).no_has;
     String postVar = S.of(context).in_the_database_what_do_you_want_to_do.toLowerCase();
-     array = array.toLowerCase();
+    array = array.toLowerCase();
 
     return Intl.message(
       '$preVar $array  $postVar',

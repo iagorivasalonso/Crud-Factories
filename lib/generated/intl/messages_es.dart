@@ -121,6 +121,12 @@ class MessageLookup extends MessageLookupByLibrary {
     "could_not_connect_with_the_server": MessageLookupByLibrary.simpleMessage(
       "No se pudo conectar con el servidor",
     ),
+    "could_not_create_database": MessageLookupByLibrary.simpleMessage(
+      "No se pudo crear la base de datos",
+    ),
+    "could_not_delete_database": MessageLookupByLibrary.simpleMessage(
+      "No se pudo eliminar la base de datos",
+    ),
     "create": MessageLookupByLibrary.simpleMessage("Crear"),
     "created": MessageLookupByLibrary.simpleMessage("Creado"),
     "creation_of_the_sector": MessageLookupByLibrary.simpleMessage(
@@ -131,6 +137,10 @@ class MessageLookup extends MessageLookupByLibrary {
     "database_connection": MessageLookupByLibrary.simpleMessage(
       "Conexión a base de datos",
     ),
+    "database_tables_could_not_be_created":
+        MessageLookupByLibrary.simpleMessage(
+          "No se pudieron crear las tablas de la base de datos",
+        ),
     "date": MessageLookupByLibrary.simpleMessage("Fecha"),
     "de": MessageLookupByLibrary.simpleMessage("De"),
     "delete": MessageLookupByLibrary.simpleMessage("Eliminar"),
@@ -155,6 +165,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "employees": MessageLookupByLibrary.simpleMessage("Empleados"),
     "enviado": MessageLookupByLibrary.simpleMessage("Enviado"),
     "error": MessageLookupByLibrary.simpleMessage("Error"),
+    "error_modifying_the_database_name": MessageLookupByLibrary.simpleMessage(
+      "Error al modificar el nombre de la base de datos",
+    ),
     "examine": MessageLookupByLibrary.simpleMessage("Examinar"),
     "file": MessageLookupByLibrary.simpleMessage("Archivo"),
     "file_format_error": MessageLookupByLibrary.simpleMessage(
@@ -216,6 +229,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "modification_of_the_sector": MessageLookupByLibrary.simpleMessage(
       "Modificación del sector",
     ),
+    "modifiedFemale": MessageLookupByLibrary.simpleMessage("Modificada"),
     "multiple_recipients": MessageLookupByLibrary.simpleMessage(
       "Varios destinatarios",
     ),
