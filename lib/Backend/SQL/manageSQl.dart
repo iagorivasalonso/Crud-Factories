@@ -1,5 +1,6 @@
 import 'package:crud_factories/Alertdialogs/error.dart';
 import 'package:crud_factories/Backend/data.dart';
+import 'package:crud_factories/generated/l10n.dart';
 import 'package:flutter/material.dart';
 
 
@@ -11,7 +12,8 @@ Future<String> createDB(BuildContext context, String nameBD, conn) async {
     await conn.query('CREATE DATABASE $nameBD');
 
   }catch(SQLException){
-    err = "No se pudo create la base de datos";
+
+    err = S.of(context).could_not_create_database;
     error(context, err);
   }
 
@@ -71,7 +73,7 @@ Future<String> createTables(BuildContext context) async {
 
   }catch(SQLException){
 
-    String err= "No se pudieron create las tablas de la base de datos";
+    err = S.of(context).database_tables_could_not_be_created;
     error(context, err);
   }
 
@@ -88,7 +90,7 @@ Future<String> deleteDB(BuildContext context, String nameBD, conn) async {
 
   }catch(SQLException){
 
-    err= "No se pudo eliminar la base de datos";
+    err = S.of(context).could_not_delete_database;
     error(context, err);
   }
 
@@ -130,7 +132,7 @@ Future<String> editDB(BuildContext context, String nameBD, String nameBDnew) asy
 
   }catch(SQLException){
 
-    err = "Error al modificar el name ";
+    err = S.of(context).error_modifying_the_database_name;
     error(context, err);
   }
 
