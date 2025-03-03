@@ -105,6 +105,11 @@ class S {
     );
   }
 
+  /// `digitos`
+  String get digits {
+    return Intl.message('digitos', name: 'digits', desc: '', args: []);
+  }
+
   /// `Conexión a base de datos`
   String get database_connection {
     return Intl.message(
@@ -600,14 +605,19 @@ class S {
     return Intl.message('Enviado', name: 'enviado', desc: '', args: []);
   }
 
-  /// `El código postal debe tener 5 dígitos`
-  String get the_postal_code_must_have_5_digits {
+  /// `Debe de ser numérico`
+  String get it_must_be_numerical {
     return Intl.message(
-      'El código postal debe tener 5 dígitos',
-      name: 'the_postal_code_must_have_5_digits',
+      'Debe de ser numérico',
+      name: 'it_must_be_numerical',
       desc: '',
       args: [],
     );
+  }
+
+  /// `Debe de tener`
+  String get must_have {
+    return Intl.message('Debe de tener', name: 'must_have', desc: '', args: []);
   }
 
   /// `El empleado se ha eliminado correctamente`
@@ -782,10 +792,10 @@ class S {
     );
   }
 
-  /// `Error al modificar el nombre de la base de datos`
+  /// `Error al modificar el el nombre de la base de datos`
   String get error_modifying_the_database_name {
     return Intl.message(
-      'Error al modificar el nombre de la base de datos',
+      'Error al modificar el el nombre de la base de datos',
       name: 'error_modifying_the_database_name',
       desc: '',
       args: [],
@@ -807,16 +817,6 @@ class S {
     return Intl.message(
       'No tienes ningún servidor conectado',
       name: 'has_no_server_connected',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Comprueba tu usuario o contraseña`
-  String get check_your_user_or_password {
-    return Intl.message(
-      'Comprueba tu usuario o contraseña',
-      name: 'check_your_user_or_password',
       desc: '',
       args: [],
     );
@@ -862,6 +862,16 @@ class S {
     return Intl.message(
       'Verificar contraseña',
       name: 'verify_password',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Las contraseñas no coinciden`
+  String get passwords_do_not_match {
+    return Intl.message(
+      'Las contraseñas no coinciden',
+      name: 'passwords_do_not_match',
       desc: '',
       args: [],
     );
@@ -1072,9 +1082,9 @@ class S {
     );
   }
 
-  /// `El`
+  /// `Él`
   String get he {
-    return Intl.message('El', name: 'he', desc: '', args: []);
+    return Intl.message('Él', name: 'he', desc: '', args: []);
   }
 
   /// `Filtrar por`
@@ -1484,11 +1494,11 @@ class S {
     );
   }
 
-  /// `El campo no puede quedar vacío`
-  String get the_field_cannot_go_empty {
+  /// `no puede quedar vacío`
+  String get cannot_go_empty {
     return Intl.message(
-      'El campo no puede quedar vacío',
-      name: 'the_field_cannot_go_empty',
+      'no puede quedar vacío',
+      name: 'cannot_go_empty',
       desc: '',
       args: [],
     );
@@ -1619,6 +1629,16 @@ class S {
     return Intl.message(
       'no está en ese departamento',
       name: 'not_in_that_department',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Este campo no puede ser repetido`
+  String get this_field_cannot_be_repeated {
+    return Intl.message(
+      'Este campo no puede ser repetido',
+      name: 'this_field_cannot_be_repeated',
       desc: '',
       args: [],
     );

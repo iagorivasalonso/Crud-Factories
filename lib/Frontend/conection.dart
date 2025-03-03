@@ -502,7 +502,7 @@ class _conectionState extends State<conection> {
                                             campOld =conections[select].database;
                                           }
 
-                                          if (primaryKeyCorrect(controllerNameBD.text, nameCamp,allKeys, campOld, context) == true)
+                                          if (validatorCamps.primaryKeyCorrect(controllerNameBD.text, nameCamp,allKeys, campOld, context) == true)
                                           {
                                             String idNew = "";
 

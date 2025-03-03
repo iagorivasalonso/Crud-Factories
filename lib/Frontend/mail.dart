@@ -6,6 +6,7 @@ import 'package:crud_factories/Backend/SQL/createMail.dart';
 import 'package:crud_factories/Backend/SQL/modifyMail.dart';
 import 'package:crud_factories/Backend/data.dart';
 import 'package:crud_factories/Backend/CSV/exportMails.dart';
+import 'package:crud_factories/Functions/validatorCamps.dart';
 import 'package:crud_factories/Objects/Mail.dart';
 import 'package:crud_factories/generated/l10n.dart';
 import 'package:crud_factories/helpers/localization_helper.dart';
@@ -226,74 +227,96 @@ class _newMailState extends State<newMail> {
                                         List <Mail> current = [];
                                         String action = "";
 
-                                        if(controllerMail.text.isEmpty)
-                                        {
-                                           String array = S.of(context).email;
-                                           action = LocalizationHelper.camp_empty(context, array);
-                                           error(context, action);
-                                        }
-                                        else if(controllerPas.text.isEmpty)
-                                        {
+                                        List <String> allKeys = [];
+                                        String nameCamp = S.of(context).email;
 
-                                          String array = S.of(context).password;
-                                          action = LocalizationHelper.camp_empty(context, array);
+                                        for (int i = 0; i < allFactories.length; i++)
+                                        {
+                                          allKeys.add(allFactories[i].name);
+                                        }
+
+
+                                        String campOld = " ";
+                                        if(select != -1)
+                                        {
+                                          campOld = mails[select].addrres;
+                                        }
+
+
+                                        if((validatorCamps.primaryKeyCorrect(controllerMail.text,nameCamp,allKeys,campOld,context) ==true) )
+                                        {
+                                         if(validatorCamps.mailCorrect(controllerMail.text) != true)
+                                        {
+                                          action = S.of(context).not_a_valid_email;
                                           error(context, action);
-                                        }
-                                        else if(controllerPasVerificator.text.isEmpty)
-                                        {
-                                          String array = S.of(context).verify_password;
-                                          action = LocalizationHelper.camp_empty(context, array);
-                                          error(context, action);
-                                        }
-                                        else
-                                        {
 
-                                                 final result = await testMail();
+                                          if(controllerPas.text.isEmpty)
+                                          {
 
-                                                 if (result == false)
-                                                 {
-                                                     String action = S.of(context).connection_cannot_be_established;
-                                                     error(context, action);
-                                                 }
-                                                 else
-                                                 {
-                                                        if (conn != null) {
-                                                          if (select == -1) {
-                                                            sqlCreateMail(current);
-                                                          }
-                                                          else {
-                                                            current.add(mails[select]);
-                                                            sqlModifyMail(current);
-                                                          }
+                                            String array = S.of(context).password;
+                                            action = LocalizationHelper.camp_empty(context, array);
+                                            error(context, action);
+                                          }
+                                          else if(controllerPasVerificator.text.isEmpty)
+                                          {
+                                            String array = S.of(context).verify_password;
+                                            action = LocalizationHelper.camp_empty(context, array);
+                                            error(context, action);
+                                          }
+                                          else
+                                          {
+                                                    final result = await testMail();
+
+                                                    if (result == false)
+                                                    {
+                                                      String action = S.of(context).connection_cannot_be_established;
+                                                      error(context, action);
+                                                    }
+                                                    else
+                                                    {
+                                                      if (conn != null)
+                                                      {
+                                                        if (select == -1)
+                                                        {
+                                                          sqlCreateMail(current);
                                                         }
                                                         else
                                                         {
-                                                          mails = mails + current;
-
-                                                          bool errorExp = await csvExportatorMails(mails);
-
-                                                          if(errorExp == false && result ==true)
-                                                          {
-                                                            String action = '';
-                                                            await confirm(context, action);
-                                                          }
-                                                          else
-                                                          {
-                                                            String array = S.of(context).emails;
-                                                            String action = LocalizationHelper.no_file(context, array);
-                                                            warning(context, action);
-                                                          }
+                                                          current.add(mails[select]);
+                                                          sqlModifyMail(current);
                                                         }
-                                                        if (result == false)
+                                                      }
+                                                      else
+                                                      {
+                                                        mails = mails + current;
+
+                                                        bool errorExp = await csvExportatorMails(mails);
+
+                                                        if(errorExp == false && result ==true)
                                                         {
-                                                          action = S.of(context).check_your_user_or_password;
-                                                          error(context, action);
+                                                          String action = '';
+                                                          await confirm(context, action);
                                                         }
-                                                 }
+                                                        else
+                                                        {
+                                                          String array = S.of(context).emails;
+                                                          String action = LocalizationHelper.no_file(context, array);
+                                                          warning(context, action);
+                                                        }
+                                                      }
+
+                                                      if (result == false)
+                                                      {
+                                                        action = S.of(context).the_user_or_password_are_incorrect;
+                                                        error(context, action);
+                                                      }
+                                                    }
+                                          }
+
+                                        }
                                         }
 
-                                      }
-                                  ),
+                                  }),
                                   MaterialButton(
                                     color: Colors.lightBlue,
                                     child: Text(action2,

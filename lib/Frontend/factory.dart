@@ -799,13 +799,13 @@ class _newFactoryState extends State<newFactory> {
                                         campOld = allFactories[select].name;
                                       }
 
-                                      if(primaryKeyCorrect(controllerName.text,nameCamp,allKeys,campOld,context) ==true) {
+                                      if(validatorCamps.primaryKeyCorrect(controllerName.text,nameCamp,allKeys,campOld,context) ==true) {
                                         final telephone1 = controllerTelephone1
                                             .text.replaceAll(" ", "");
                                         final telephone2 = controllerTelephone2
                                             .text.replaceAll(" ", "");
 
-                                        if (dateCorrect(controllerHighDate.text) == false) {
+                                        if (validatorCamps.dateCorrect(controllerHighDate.text) == false) {
 
                                           String array = S.of(context).date;
                                           String action = LocalizationHelper.format_must(context, array);
@@ -813,35 +813,33 @@ class _newFactoryState extends State<newFactory> {
                                           String format = 'DD-MM-AAAA';
                                           error(context, action, format);
                                         }
-                                        if (campEmpty(controllerSector.text) ==
-                                            true) {
+                                        if (validatorCamps.campEmpty(controllerSector.text) == true) {
+
                                           String campo=S.of(context).sector;
                                           String action = LocalizationHelper.camp_empty(context, campo);
                                           error(context, action);
                                         }
-                                        else if (telephoneCorrect(
-                                            telephone1, context) == false) {
+                                        else if (validatorCamps.telephoneCorrect(telephone1, context) == false) {
 
 
                                         }
-                                        else if (telephoneCorrect(
-                                            telephone2, context) == true) {
+                                        else if (validatorCamps.telephoneCorrect(telephone2, context) == true) {
 
                                         }
                                         else
-                                        if (mailCorrect(controllerMail.text) !=
-                                            true) {
+                                        if (validatorCamps.mailCorrect(controllerMail.text) != true) {
+
                                           action = S.of(context).not_a_valid_email;
                                           error(context, action);
                                         }
                                         else
-                                        if (webCorrect(controllerWeb.text) !=
-                                            true) {
+                                        if (validatorCamps.webCorrect(controllerWeb.text) != true)
+                                        {
                                           action = S.of(context).not_a_valid_webpage;
                                           error(context, action);
                                         }
-                                        else if (adrressCorrect(
-                                            controllerAdrress.text) != true) {
+                                        else if (validatorCamps.adrressCorrect(controllerAdrress.text) != true)
+                                        {
                                           String array = S.of(context).address;
                                           String action = LocalizationHelper.format_must(context, array);
                                           String street = S.of(context).street;
@@ -849,25 +847,14 @@ class _newFactoryState extends State<newFactory> {
                                           String format = '$street , $number';
                                           error(context, action, format);
                                         }
-                                        else if (postalCodeCorrect(
-                                            controllerPostalCode.text,
-                                            context) == true) {
-                                          if (controllerPostalCode.text
-                                              .length != 5) {
-                                            action =S.of(context).the_postal_code_must_have_5_digits;
-                                            error(context, action);
-                                          }
-                                          else {
-                                            List<
-                                                String> adrress1 = controllerAdrress
-                                                .text.split(",");
-                                            List<
-                                                String> adrress2 = controllerAdrress
-                                                .text.split("-");
+                                        else
+                                        {
+                                            List<String> adrress1 = controllerAdrress.text.split(",");
+
+                                            List<String> adrress2 = controllerAdrress.text.split("-");
                                             String apartament = '';
 
-                                            if (controllerAdrress.text.contains(
-                                                "-")) {
+                                            if (controllerAdrress.text.contains("-")) {
                                               apartament = adrress2[1];
                                             }
                                             else {
@@ -1050,7 +1037,6 @@ class _newFactoryState extends State<newFactory> {
                                             }
                                           }
                                         }
-                                      }
                                     }),
 
                                   MaterialButton(

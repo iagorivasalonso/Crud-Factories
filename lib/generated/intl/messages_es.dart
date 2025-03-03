@@ -79,12 +79,12 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "can_not_load": MessageLookupByLibrary.simpleMessage("No se puede cargar"),
     "cancel": MessageLookupByLibrary.simpleMessage("Cancelar"),
+    "cannot_go_empty": MessageLookupByLibrary.simpleMessage(
+      "no puede quedar vacío",
+    ),
     "careful": MessageLookupByLibrary.simpleMessage("Cuidado"),
     "category_error": MessageLookupByLibrary.simpleMessage(
       "Error de categoría",
-    ),
-    "check_your_user_or_password": MessageLookupByLibrary.simpleMessage(
-      "Comprueba tu usuario o contraseña",
     ),
     "city": MessageLookupByLibrary.simpleMessage("Ciudad"),
     "close": MessageLookupByLibrary.simpleMessage("Cerrar"),
@@ -147,6 +147,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "desea_go_out": MessageLookupByLibrary.simpleMessage(
       "¿Desea salir de la aplicación?",
     ),
+    "digits": MessageLookupByLibrary.simpleMessage("digitos"),
     "discharge_date": MessageLookupByLibrary.simpleMessage("Fecha de alta"),
     "disconnect": MessageLookupByLibrary.simpleMessage("Desconectar"),
     "do_you_really_want_to_delete": MessageLookupByLibrary.simpleMessage(
@@ -166,7 +167,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "enviado": MessageLookupByLibrary.simpleMessage("Enviado"),
     "error": MessageLookupByLibrary.simpleMessage("Error"),
     "error_modifying_the_database_name": MessageLookupByLibrary.simpleMessage(
-      "Error al modificar el nombre de la base de datos",
+      "Error al modificar el el nombre de la base de datos",
     ),
     "examine": MessageLookupByLibrary.simpleMessage("Examinar"),
     "file": MessageLookupByLibrary.simpleMessage("Archivo"),
@@ -199,7 +200,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "Se han eliminado",
     ),
     "have_been_sent": MessageLookupByLibrary.simpleMessage("Se han enviado"),
-    "he": MessageLookupByLibrary.simpleMessage("El"),
+    "he": MessageLookupByLibrary.simpleMessage("Él"),
     "host": MessageLookupByLibrary.simpleMessage("Host"),
     "import": MessageLookupByLibrary.simpleMessage("Importar"),
     "import_data": MessageLookupByLibrary.simpleMessage("Importar datos"),
@@ -214,6 +215,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "invalid_file": MessageLookupByLibrary.simpleMessage("Archivo no válido"),
     "is_connected_to": MessageLookupByLibrary.simpleMessage("Está conectado a"),
     "it_has_been": MessageLookupByLibrary.simpleMessage("Ha sido"),
+    "it_must_be_numerical": MessageLookupByLibrary.simpleMessage(
+      "Debe de ser numérico",
+    ),
     "it_was_imported": MessageLookupByLibrary.simpleMessage("Se importó"),
     "line": MessageLookupByLibrary.simpleMessage("Línea"),
     "line_correctly": MessageLookupByLibrary.simpleMessage(
@@ -234,6 +238,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "Varios destinatarios",
     ),
     "must_be": MessageLookupByLibrary.simpleMessage("debe ser"),
+    "must_have": MessageLookupByLibrary.simpleMessage("Debe de tener"),
     "name": MessageLookupByLibrary.simpleMessage("Nombre"),
     "name_sector": MessageLookupByLibrary.simpleMessage("Nombre del sector"),
     "newFemale": MessageLookupByLibrary.simpleMessage("Nueva"),
@@ -266,6 +271,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "orther": MessageLookupByLibrary.simpleMessage("Otro"),
     "para": MessageLookupByLibrary.simpleMessage("Para"),
     "password": MessageLookupByLibrary.simpleMessage("Contraseña"),
+    "passwords_do_not_match": MessageLookupByLibrary.simpleMessage(
+      "Las contraseñas no coinciden",
+    ),
     "phone": MessageLookupByLibrary.simpleMessage("Teléfono"),
     "phone_1": MessageLookupByLibrary.simpleMessage("Teléfono 1"),
     "phone_2": MessageLookupByLibrary.simpleMessage("Teléfono 2"),
@@ -331,15 +339,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "the_field_cannot_be_blank": MessageLookupByLibrary.simpleMessage(
       "El campo no puede estar en blanco",
     ),
-    "the_field_cannot_go_empty": MessageLookupByLibrary.simpleMessage(
-      "El campo no puede quedar vacío",
-    ),
     "the_format_of_the": MessageLookupByLibrary.simpleMessage("El formato de"),
     "the_port_is_not_correct": MessageLookupByLibrary.simpleMessage(
       "El puerto no es correcto",
-    ),
-    "the_postal_code_must_have_5_digits": MessageLookupByLibrary.simpleMessage(
-      "El código postal debe tener 5 dígitos",
     ),
     "the_sector_has_been_created_successfully":
         MessageLookupByLibrary.simpleMessage(
@@ -371,6 +373,9 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "this_day_was_made": MessageLookupByLibrary.simpleMessage(
       "Este día se realizó",
+    ),
+    "this_field_cannot_be_repeated": MessageLookupByLibrary.simpleMessage(
+      "Este campo no puede ser repetido",
     ),
     "this_is_a_connection_test_from_the_application":
         MessageLookupByLibrary.simpleMessage(

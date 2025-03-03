@@ -715,7 +715,7 @@ class _sendMailState extends State<sendMail> {
 
                                         if(otherMail == true)
                                         {
-                                            if(mailCorrect(controllerMailFrom.text) != true)
+                                            if(validatorCamps.mailCorrect(controllerMailFrom.text) != true)
                                             {
                                               action = S.of(context).your_email_is_invalid;
                                               validMailFrom = await error(context,action);
@@ -735,7 +735,7 @@ class _sendMailState extends State<sendMail> {
                                         {
                                           if(isList == false)
                                           {
-                                            if(mailCorrect(controllerMailTo.text) != true)
+                                            if(validatorCamps.mailCorrect(controllerMailTo.text) != true)
                                             {
                                               action = S.of(context).The_recipient_is_not_a_valid_email;
                                               error(context,action);

@@ -137,7 +137,7 @@ class LocalizationHelper {
   static String camp_empty( BuildContext context,String camp) {
 
     String preVar = S.of(context).the_field;
-    String postVar = S.of(context).the_field_cannot_go_empty.toLowerCase();
+    String postVar = S.of(context).cannot_go_empty.toLowerCase();
 
     return Intl.message(
       '$preVar $camp $postVar',
@@ -161,6 +161,33 @@ class LocalizationHelper {
     );
   }
 
+  static String camp_number( BuildContext context,String camp) {
+
+    String preVar = S.of(context).the_field;
+    String postVar = S.of(context).it_must_be_numerical.toLowerCase();
+
+    return Intl.message(
+      '$preVar $camp $postVar',
+      name: '$preVar $camp $postVar',
+      args: [camp, preVar,postVar],
+      examples: const {'campEmpty': 'campEmpty','preVar': 'the field', 'postVar': 'it_must_be_numerical'},
+
+    );
+  }
+  static String cant_numbers( BuildContext context,String camp,int cant) {
+
+    String preVar = S.of(context).the;
+    String intermVar = S.of(context).must_have;
+    String postVar = S.of(context).digits;
+
+
+    return Intl.message(
+      '$preVar $camp $intermVar $cant $postVar',
+      name: '$preVar $camp $postVar',
+      args: [preVar, camp, postVar],
+      examples: const {'manageArray': 'manageArray','preVar': 'the','intermVar': 'must_be', 'postVar':'digits'},
+    );
+  }
   static String no_file( BuildContext context,String array) {
 
     String preVar = S.of(context).no_file_exists;
