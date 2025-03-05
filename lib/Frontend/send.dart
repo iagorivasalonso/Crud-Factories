@@ -136,6 +136,7 @@ class _newSendState extends State<newSend> {
       action1 = S.of(context).save;
       action2 = S.of(context).undo;
       title = S.of(context).ver;
+
       stateSends = [
             S.of(context).enviado,
             S.of(context).in_progress,
