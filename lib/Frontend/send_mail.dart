@@ -52,7 +52,6 @@ class _sendMailState extends State<sendMail> {
   List <String> columnsTable = [];
   List <LineSend> sends = [];
   List <LineSend> sendsDay = [];
-  List <Factory> allFactories = [];
   List <Factory> selectedFactories = [];
   String? selectedSend;
   bool otherMail= false;
@@ -646,7 +645,7 @@ class _sendMailState extends State<sendMail> {
                                          children: [
                                             Padding(
                                               padding: EdgeInsets.only( left: marginBox),
-                                              child: Text("$nameRoute",
+                                              child: Text(nameRoute,
                                                    style: const TextStyle(backgroundColor: Colors.amberAccent),
                                                  ),
                                             ),
