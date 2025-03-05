@@ -1414,11 +1414,11 @@ class S {
     );
   }
 
-  /// `¿Qué tipo de base de datos deseas utilizar?`
-  String get What_type_of_database_do_you_want_to_use {
+  /// `¿Qué tipo de base de datos desea utilizar?`
+  String get what_type_of_database_do_you_want_to_use {
     return Intl.message(
-      '¿Qué tipo de base de datos deseas utilizar?',
-      name: 'What_type_of_database_do_you_want_to_use',
+      '¿Qué tipo de base de datos desea utilizar?',
+      name: 'what_type_of_database_do_you_want_to_use',
       desc: '',
       args: [],
     );

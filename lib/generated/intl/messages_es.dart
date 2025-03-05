@@ -46,10 +46,6 @@ class MessageLookup extends MessageLookupByLibrary {
         MessageLookupByLibrary.simpleMessage(
           "Se guardarán en un archivo temporal",
         ),
-    "What_type_of_database_do_you_want_to_use":
-        MessageLookupByLibrary.simpleMessage(
-          "¿Qué tipo de base de datos deseas utilizar?",
-        ),
     "Without_company": MessageLookupByLibrary.simpleMessage("Sin empresa"),
     "You_can_only_delete_the_lines_that_were_returned_Do_you_want_to_delete":
         MessageLookupByLibrary.simpleMessage(
@@ -401,6 +397,10 @@ class MessageLookup extends MessageLookupByLibrary {
         ),
     "web_page": MessageLookupByLibrary.simpleMessage("Página web"),
     "were_modified": MessageLookupByLibrary.simpleMessage("Fueron modificados"),
+    "what_type_of_database_do_you_want_to_use":
+        MessageLookupByLibrary.simpleMessage(
+          "¿Qué tipo de base de datos desea utilizar?",
+        ),
     "yes": MessageLookupByLibrary.simpleMessage("Sí"),
     "you_can_not_make_the_shipping_because_you_do_not_have_companies_in_your_database":
         MessageLookupByLibrary.simpleMessage(

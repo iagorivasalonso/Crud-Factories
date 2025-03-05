@@ -185,7 +185,7 @@
   "that_company_does_not_belong_to_our_database": "Esa empresa no pertenece a nuestra base de datos",
   "does_not_belong_to_our_database": "No pertenece a nuestra base de datos",
   "You_can_only_delete_the_lines_that_were_returned_Do_you_want_to_delete": "Solo puedes eliminar las líneas que fueron devueltas. ¿Desea eliminar?",
-  "What_type_of_database_do_you_want_to_use": "¿Qué tipo de base de datos deseas utilizar?",
+  "what_type_of_database_do_you_want_to_use": "¿Qué tipo de base de datos desea utilizar?",
   "Application_exit": "Salida de la aplicación",
   "desea_go_out": "¿Desea salir de la aplicación?",
   "modification_of_the_sector": "Modificación del sector",

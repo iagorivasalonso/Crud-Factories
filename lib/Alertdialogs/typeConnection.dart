@@ -20,7 +20,9 @@ Future<bool> typeConection (BuildContext  context) async {
                   Expanded(
                     child: Padding(
                       padding:  EdgeInsets.only(left: 25,top: 25, bottom: 15),
-                      child: Text(S.of(context).What_type_of_database_do_you_want_to_use,
+                      child: Text(S.of(context).what_type_of_database_do_you_want_to_use
+
+,
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,),
                     ),
