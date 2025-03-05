@@ -43,19 +43,20 @@ class _newSendState extends State<newSend> {
   List<TextEditingController> _controllerStateLine = [];
 
   List<String> campsTable = [];
-  String filterSelected='';
-  String date="";
+  String filterSelected = '';
+  String date = "";
   int cantFactory = 0;
   int cantSend = 0;
   bool allSelect = false;
   List<bool> Send = List.generate(allFactories.length, (index) => false);
-  List<bool> lineEdit = List.generate(lineSector.length, (index) => false);
+  List<bool> lineEdit = List.generate(allFactories.length, (index) => false);
   DateTime seletedDate =DateTime.now();
   String? selectedSector = "";
   String stringFactories = "";
   List<String> stateSends = [];
   int allLines = 0;
   int allLinesModify = 0;
+
   @override
   Widget build(BuildContext context) {
 
@@ -507,7 +508,6 @@ class _newSendState extends State<newSend> {
                                                              lineEdit[indexRow]=true;
                                                              saveChanges = true;
                                                            });
-
                                                           },
                                                        ),
                                                      ),
@@ -730,7 +730,6 @@ class _newSendState extends State<newSend> {
 
                                                   if(saveChanges == true)
                                                   {
-
                                                       for(int i = 0; i <lineEdit.length; i++)
                                                       {
                                                         if(lineEdit[i]==true)
@@ -756,7 +755,7 @@ class _newSendState extends State<newSend> {
                                                         }
                                                       }
 
-                                                     saveChanges = false;
+
                                                      String action ='';
 
                                                      if (allLinesModify == 0)
@@ -790,23 +789,34 @@ class _newSendState extends State<newSend> {
                                             {
                                               lineSector = lineSector + current;
 
-
                                               bool errorExp = await csvExportatorLines(lineSector);
 
                                               String array = S.of(context).shipments;
 
                                               if(errorExp == false)
                                               {
-                                                String actionArray = S.of(context).saved;
+                                                  if(select == -1)
+                                                  {
 
-                                                String action = LocalizationHelper.manage_array(context, array, actionArray);
-                                                await confirm(context, action);
+                                                     Send = List.generate(allFactories.length, (index) => false);
+                                                     lineEdit = List.generate(allFactories.length, (index) => false);
+                                                  }
+                                                  else
+                                                  {
+                                                    String actionArray = S.of(context).saved;
+
+                                                    String action = LocalizationHelper.manage_array(context, array, actionArray);
+                                                    await confirm(context, action);
+                                                  }
+
+
                                               }
                                               else
                                               {
                                                 String action = LocalizationHelper.no_file(context, array);
                                                 error(context, action);
                                               }
+                                              saveChanges = false;
                                             }
                                           },
                                         ),
@@ -820,25 +830,21 @@ class _newSendState extends State<newSend> {
                                             setState(() {
                                               if (select == -1)
                                               {
-                                                  for(int i = 0 ; i<allFactories.length; i++)
-                                                  {
-                                                    Send[i] = false;
-                                                    _controllersObserLine[i].text="";
-                                                  }
+                                                 resetCamps();
                                               }
                                               else
                                               {
-
                                                   for(int i = 0 ; i < lineSelected.length; i++)
                                                   {
-                                                    if(lineEdit[i]==true)
-                                                    {
-                                                       _controllersObserLine[i].text = lineSelected[i].observations;
-                                                       _controllerStateLine[i].text = lineSelected[i].state;
-                                                    }
-
+                                                        if(lineEdit[i]==true)
+                                                        {
+                                                           _controllersObserLine[i].text = lineSelected[i].observations;
+                                                           _controllerStateLine[i].text = lineSelected[i].state;
+                                                        }
                                                   }
-                                                }
+                                              }
+
+                                               saveChanges = false;
 
                                             });
 
@@ -859,6 +865,17 @@ class _newSendState extends State<newSend> {
         ),
       ),
     );
+  }
+
+  void resetCamps() {
+
+    for(int i = 0 ; i<allFactories.length; i++)
+    {
+      Send[i] = false;
+      _controllersObserLine[i].text= "";
+      _controllerStateLine[i].text = "";
+    }
+
   }
 }
 
