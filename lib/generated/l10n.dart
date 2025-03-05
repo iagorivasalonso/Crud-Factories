@@ -1132,6 +1132,11 @@ class S {
     return Intl.message('Error', name: 'error', desc: '', args: []);
   }
 
+  /// `Enviaddo`
+  String get sent {
+    return Intl.message('Enviaddo', name: 'sent', desc: '', args: []);
+  }
+
   /// `No hay ningún envío seleccionado`
   String get there_is_no_shipping_selected {
     return Intl.message(

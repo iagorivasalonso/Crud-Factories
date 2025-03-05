@@ -138,7 +138,7 @@ class _newSendState extends State<newSend> {
       title = S.of(context).ver;
 
       stateSends = [
-            S.of(context).enviado,
+            S.of(context).sent,
             S.of(context).in_progress,
             S.of(context).returned,
             S.of(context).respondio

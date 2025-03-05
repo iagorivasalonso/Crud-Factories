@@ -1,4 +1,5 @@
 
+enum LineSendState {ws}
 class LineSend {
 
   String id;

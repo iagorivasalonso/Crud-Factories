@@ -157,6 +157,7 @@
   "no": "No",
   "acept": "Aceptar",
   "error": "Error",
+  "sent" : "Enviaddo",
   "there_is_no_shipping_selected": "No hay ningún envío seleccionado",
   "your_email_is_invalid": "Tu correo electrónico no es válido",
   "You_must_select_a_correct_list": "Debes seleccionar una lista correcta",

@@ -305,6 +305,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "sending_emails": MessageLookupByLibrary.simpleMessage(
       "Envío de correos electrónicos",
     ),
+    "sent": MessageLookupByLibrary.simpleMessage("Enviaddo"),
     "server": MessageLookupByLibrary.simpleMessage("Servidor"),
     "shipment": MessageLookupByLibrary.simpleMessage("Envío"),
     "shipments": MessageLookupByLibrary.simpleMessage("Envíos"),
