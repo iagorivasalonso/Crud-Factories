@@ -311,7 +311,7 @@ class _newSendState extends State<newSend> {
                   height: select == -1
                       ? 710
                       : 630,
-                  width: 900,
+                  width: 1400,
                   child: Align(
                       alignment: Alignment.topLeft,
                       child: Padding(
@@ -470,7 +470,7 @@ class _newSendState extends State<newSend> {
                                 ),
                               ),
                               Padding(
-                                padding: const EdgeInsets.only(top: 40.0, left: 90.0),
+                                padding: const EdgeInsets.only(top: 40.0, left: 90.0,bottom: 30.0),
                                 child: Scrollbar(
                                   controller: verticalScrollTable,
                                   child: SizedBox(
@@ -478,202 +478,207 @@ class _newSendState extends State<newSend> {
                                     child: SingleChildScrollView(
                                       controller: verticalScrollTable,
                                       scrollDirection: Axis.vertical,
-                                      child: DataTable(
-                                        columns: List<DataColumn>.generate(campsTable.length, (index) =>
-                                          DataColumn(
-                                              label: SizedBox(
-                                                width: 100,
-                                                  child: Text(campsTable[index])))
-                                        ),
-                                        rows: select == -1
-                                        ? List<DataRow>.generate(factoriesSector.length, (indexRow) =>
-                                           DataRow(
-                                               cells: <DataCell>[
-                                                 DataCell(
-                                                   Text(factoriesSector[indexRow].name),
-                                                 ),
-                                                 if(selectedSector==S.of(context).allMale)
+                                      child: Align(
+                                        alignment: Alignment.topLeft,
+                                        child: DataTable(
+                                          columns: List<DataColumn>.generate(campsTable.length, (index) =>
+                                            DataColumn(
+                                                label: SizedBox(
+                                                  width: 100,
+                                                    child: Text(campsTable[index])))
+                                          ),
+                                          rows: select == -1
+                                          ? List<DataRow>.generate(factoriesSector.length, (indexRow) =>
+                                             DataRow(
+                                                 cells: <DataCell>[
                                                    DataCell(
-                                                     Text(sectors[int.parse(factoriesSector[indexRow].sector)-1].name),
+                                                     Text(factoriesSector[indexRow].name),
                                                    ),
-                                                 DataCell(
+                                                   if(selectedSector==S.of(context).allMale)
+                                                     DataCell(
+                                                       Text(sectors[int.parse(factoriesSector[indexRow].sector)-1].name),
+                                                     ),
+                                                   DataCell(
+                                                       Padding(
+                                                         padding: const EdgeInsets.all(8.0),
+                                                         child: TextField(
+                                                           controller: _controllersObserLine[indexRow],
+                                                           decoration: InputDecoration(
+                                                             border: OutlineInputBorder(),
+                                                           ),
+                                                           onChanged: (s){
+                                                             setState(() {
+                                                               lineEdit[indexRow]=true;
+                                                               saveChanges = true;
+                                                             });
+                                                            },
+                                                         ),
+                                                       ),
+                                                   ),
+                                                   DataCell(
                                                      Padding(
                                                        padding: const EdgeInsets.all(8.0),
                                                        child: TextField(
-                                                         controller: _controllersObserLine[indexRow],
+                                                         controller: _controllerStateLine[indexRow],
                                                          decoration: InputDecoration(
                                                            border: OutlineInputBorder(),
                                                          ),
                                                          onChanged: (s){
-                                                           setState(() {
-                                                             lineEdit[indexRow]=true;
-                                                             saveChanges = true;
-                                                           });
-                                                          },
+                                                           lineEdit[indexRow]=true;
+                                                           saveChanges = true;
+                                                         },
                                                        ),
                                                      ),
-                                                 ),
-                                                 DataCell(
-                                                   Padding(
-                                                     padding: const EdgeInsets.all(8.0),
-                                                     child: TextField(
-                                                       controller: _controllerStateLine[indexRow],
-                                                       decoration: InputDecoration(
-                                                         border: OutlineInputBorder(),
-                                                       ),
-                                                       onChanged: (s){
-                                                         lineEdit[indexRow]=true;
-                                                         saveChanges = true;
+                                                   ),
+                                                   DataCell(
+                                                     CheckboxListTile(
+                                                       value: Send[indexRow],
+                                                       onChanged:( bool? value) {
+                                                            setState(() {
+                                                               Send[indexRow] = value!;
+                                                               allSelect = true;
+                                                               saveChanges = true;
+                                                            });
                                                        },
                                                      ),
                                                    ),
-                                                 ),
-                                                 DataCell(
-                                                   CheckboxListTile(
-                                                     value: Send[indexRow],
-                                                     onChanged:( bool? value) {
-                                                          setState(() {
-                                                             Send[indexRow] = value!;
-                                                             allSelect = true;
-                                                             saveChanges = true;
-                                                          });
-                                                     },
-                                                   ),
-                                                 ),
-                                               ]
-                                           )
-                                        )
-                                        : List<DataRow>.generate(lineSelected.length, (indexRow) =>
-                                            DataRow(
-                                                cells:  <DataCell>[
-                                                  DataCell(
-                                                      Text(campKey[indexRow])
-                                                  ),
-                                                  if(subIten2Select == 0 && type == S.of(context).date)
+                                                 ]
+                                             )
+                                          )
+                                          : List<DataRow>.generate(lineSelected.length, (indexRow) =>
+                                              DataRow(
+                                                  cells:  <DataCell>[
                                                     DataCell(
-                                                        Text(_controllersSectorLine[indexRow].text)
+                                                        Text(campKey[indexRow])
                                                     ),
-                                                  DataCell(
-                                                    Padding(
-                                                      padding: const EdgeInsets.all(8.0),
-                                                      child: TextField(
-                                                        controller: _controllersObserLine[indexRow],
-                                                        decoration: InputDecoration(
-                                                            border: OutlineInputBorder(),
-                                                        ),
-                                                        onChanged: (s){
-                                                          lineEdit[indexRow]=true;
-
-                                                          if(saveChanges == false)
-                                                          {
-                                                              if(_controllersObserLine[indexRow].text == lineSelected[indexRow].observations)
-                                                              {
-                                                                saveChanges = false;
-                                                              }
-                                                              else
-                                                              {
-                                                                saveChanges = true;
-                                                              }
-                                                          }
-                                                        },
+                                                    if(subIten2Select == 0 && type == S.of(context).date)
+                                                      DataCell(
+                                                          Text(_controllersSectorLine[indexRow].text)
                                                       ),
-                                                    ),
-                                                  ),
-                                                  DataCell(
-                                                    Padding(
-                                                      padding: const EdgeInsets.all(1.0),
-                                                      child: SizedBox(
-                                                        height: 40,
-                                                        child: DropdownButtonFormField<String>(
-                                                          value: stateSends.contains(_controllerStateLine[indexRow].text)
-                                                              ? _controllerStateLine[indexRow].text
-                                                              : stateSends.isNotEmpty
-                                                              ? stateSends[0]
-                                                              : null,
+                                                    DataCell(
+                                                      Padding(
+                                                        padding: const EdgeInsets.all(8.0),
+                                                        child: TextField(
+                                                          controller: _controllersObserLine[indexRow],
                                                           decoration: InputDecoration(
-                                                            border: OutlineInputBorder(),
+                                                              border: OutlineInputBorder(),
                                                           ),
-                                                          items: stateSends.map((option) {
-                                                            return DropdownMenuItem<String>(
-                                                              value: option,
-                                                              child: Text(option, style: TextStyle(fontSize: 12),),
-                                                            );
-                                                          }).toList(),
-                                                          onChanged: (newValue) {
-                                                            setState(() {
+                                                          onChanged: (s){
+                                                            lineEdit[indexRow]=true;
 
-                                                              _controllerStateLine[indexRow].text = newValue!;
-
-                                                              lineEdit[indexRow] = true;
-
-                                                              if(saveChanges == false)
-                                                              {
-                                                                  if (_controllerStateLine[indexRow].text == lineSelected[indexRow].state)
-                                                                  {
-                                                                    saveChanges = false;
-                                                                  } else
-                                                                  {
-                                                                    saveChanges = true;
-                                                                  }
-                                                              }
-                                                            });
-
+                                                            if(saveChanges == false)
+                                                            {
+                                                                if(_controllersObserLine[indexRow].text == lineSelected[indexRow].observations)
+                                                                {
+                                                                  saveChanges = false;
+                                                                }
+                                                                else
+                                                                {
+                                                                  saveChanges = true;
+                                                                }
+                                                            }
                                                           },
                                                         ),
                                                       ),
                                                     ),
-                                                  ),
-                                                ]
-                                            )
+                                                    DataCell(
+                                                      Padding(
+                                                        padding: const EdgeInsets.all(1.0),
+                                                        child: SizedBox(
+                                                          height: 40,
+                                                          child: DropdownButtonFormField<String>(
+                                                            value: stateSends.contains(_controllerStateLine[indexRow].text)
+                                                                ? _controllerStateLine[indexRow].text
+                                                                : stateSends.isNotEmpty
+                                                                ? stateSends[0]
+                                                                : null,
+                                                            decoration: InputDecoration(
+                                                              border: OutlineInputBorder(),
+                                                            ),
+                                                            items: stateSends.map((option) {
+                                                              return DropdownMenuItem<String>(
+                                                                value: option,
+                                                                child: Text(option, style: TextStyle(fontSize: 12),),
+                                                              );
+                                                            }).toList(),
+                                                            onChanged: (newValue) {
+                                                              setState(() {
+
+                                                                _controllerStateLine[indexRow].text = newValue!;
+
+                                                                lineEdit[indexRow] = true;
+
+                                                                if(saveChanges == false)
+                                                                {
+                                                                    if (_controllerStateLine[indexRow].text == lineSelected[indexRow].state)
+                                                                    {
+                                                                      saveChanges = false;
+                                                                    } else
+                                                                    {
+                                                                      saveChanges = true;
+                                                                    }
+                                                                }
+                                                              });
+
+                                                            },
+                                                          ),
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  ]
+                                              )
+                                          ),
                                         ),
                                       )
                                     ),
                                   ),
                                 ),
                               ),
-                              Padding(
-                                padding: const EdgeInsets.only(top: 30.0,left: 60.0),
-                                child: Align(
-                                    alignment: Alignment.topLeft,
-                                    child: Row(
-                                      children: [
-                                        Column(
-                                          children: [
-                                            Text(stringFactories),
-                                          ],
-                                        ),
-                                          if(select == -1)
-                                          Padding(
-                                            padding: const EdgeInsets.only(left: 350.0),
-                                            child: Row(
-                                              children: [
-                                                Padding(
-                                                  padding: EdgeInsets.only(right: 15.0),
-                                                  child: Text(S.of(context).select_all),
-                                                ),
-                                                Checkbox(
-                                                  value: allSelect,
-                                                  onChanged: (value) {
-                                                    setState(() {
+                              Align(
+                                  alignment: Alignment.topLeft,
+                                  child: Row(
+                                    children: [
+                                      Column(
+                                        children: [
+                                          Row(
+                                            children: [
+                                              Text(stringFactories),
 
-                                                      for(int i = 0 ; i<Send.length; i++)
-                                                      {
-                                                        Send[i] = value!;
-                                                      }
-                                                      allSelect = value!;
-
-                                                    });
-                                                  },
-                                                )
-                                              ],
-                                            ),
+                                            ],
                                           ),
-                                      ],
-                                    )
-                                ),
+                                        ],
+                                      ),
+                                        if(select == -1)
+                                        Padding(
+                                          padding: const EdgeInsets.only(left: 500.0),
+                                          child: Row(
+                                            children: [
+                                              Padding(
+                                                padding: EdgeInsets.only(right: 15.0),
+                                                child: Text(S.of(context).select_all),
+                                              ),
+                                              Checkbox(
+                                                value: allSelect,
+                                                onChanged: (value) {
+                                                  setState(() {
+
+                                                    for(int i = 0 ; i<Send.length; i++)
+                                                    {
+                                                      Send[i] = value!;
+                                                    }
+                                                    allSelect = value!;
+
+                                                  });
+                                                },
+                                              )
+                                            ],
+                                          ),
+                                        ),
+                                    ],
+                                  )
                               ),
                               Padding(
-                                  padding: const EdgeInsets.only(top: 70.0, left: 550.0),
+                                  padding: const EdgeInsets.only(top: 70.0, right: 50.0),
                                   child: SizedBox(
                                     width: 200,
                                     child: Row(
