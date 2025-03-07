@@ -20,10 +20,10 @@ class newSend extends StatefulWidget {
   BuildContext context;
   String selectCamp;
   String filter;
-  String SeletedFilterSend;
+
   int select;
 
-  newSend(this.context, this.selectCamp, this.filter,  this.SeletedFilterSend,this.select);
+  newSend(this.context, this.selectCamp, this.filter, this.select);
 
   @override
   State<newSend> createState() => _newSendState();
@@ -61,7 +61,7 @@ class _newSendState extends State<newSend> {
   Widget build(BuildContext context) {
 
     BuildContext context = widget.context;
-    String type = widget.SeletedFilterSend;
+    String type = widget.filter;
     String selectCamp = widget.selectCamp;
     int select = widget.select;
 

@@ -29,7 +29,7 @@ FuntionSeleted(int itenSelection, int subIten1Selection,int subIten2Selection, d
             return newMail(context, select);
 
           if (subIten2Selection == 2)
-            return newSend(context,"", "", "", select);
+            return newSend(context,"", "", select);
         }
 
 

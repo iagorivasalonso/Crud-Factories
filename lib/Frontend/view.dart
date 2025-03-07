@@ -44,12 +44,13 @@ class _viewState extends State<view> {
   List<String> filterList = [];
   List<String> filterListSends = [];
   List<String> filterListFactories = [];
+  List<String> filterListCurrent = [];
   List <LineSend> sendsDay = [];
   List <cardSend> allCards = [];
   String selectCamp = "";
   String textFilterFactory = '';
-  String filterFactory = '';
-  String? filterSend = '';
+  String filter = '';
+  String? filterSearch = '';
   int select = 0;
   int cardIndex = 0;
   int opSelected = 0;
@@ -61,19 +62,14 @@ class _viewState extends State<view> {
   List<cardSend> allSend = [];
   List<cardSend> resultSend = [];
   List<String> factoryName = [];
-  String? selectedFactory;
+  String? selectedFilter;
   String? selectedSend;
 
   Future<void> _runFilter(BuildContext context, String view, String enteredKeyboard, String filter,
       List<String> factoryName, [String? filterFactory]) async {
 
-    if (filter ==  S.of(context).name) {
-      filterFactory = S.of(context).name;
-    }
+    filter = selectedFilter.toString();
 
-    if (filter == "") {
-      filter = S.of(context).date;
-    }
 
     if (enteredKeyboard.isEmpty && view == S.of(context).company)
     {
@@ -81,49 +77,59 @@ class _viewState extends State<view> {
     }
     else
     {
-        if (filterSend ==  S.of(context).date)
-        {
-          resultSend = allCards.where((card) {
-            final descriptFormat = lineSector[0]
-                .showFormatDate(card.description)
-                .toLowerCase();
-            final textSearch = enteredKeyboard.toLowerCase();
-            return descriptFormat.contains(textSearch);
-          }).toList();
+            if (view ==  S.of(context).shipment)
+            {
+              if (filter == S.of(context).company)
+              {
+
+                resultSend = allCards.where((element) =>
+                    element.title.toLowerCase().contains(enteredKeyboard.toLowerCase()))
+                    .toList();
+              }
+              else
+              {
+                resultSend = allCards.where((card) {
+                  final descriptFormat = lineSector[0]
+                      .showFormatDate(card.description)
+                      .toLowerCase();
+                  final textSearch = enteredKeyboard.toLowerCase();
+                  return descriptFormat.contains(textSearch);
+                }).toList();
+              }
         }
 
-        if (filterSend == S.of(context).company)
+
+        if (filter == S.of(context).company)
         {
+
           resultSend = allCards.where((element) =>
               element.title.toLowerCase().contains(enteredKeyboard.toLowerCase()))
               .toList();
         }
 
-        if (view == S.of(context).company)
-        {
-           if(filterFactory==S.of(context).name)
-           {
-             resulFactories = factoriesSector.where((element) =>
-                 element.name.toLowerCase().contains(
-                     enteredKeyboard.toLowerCase())).toList();
-           }
-           else if(filterFactory==S.of(context).address)
+           if(filter==S.of(context).address)
            {
              resulFactories = factoriesSector.where((element) =>
                  element.allAdress().toLowerCase().contains(
                      enteredKeyboard.toLowerCase())).toList();
            }
-           else if(filterFactory==S.of(context).phone)
+           else if(filter==S.of(context).phone)
            {
              resulFactories = factoriesSector.where((element) =>
                  element.thelephones[0].toLowerCase().contains(
                      enteredKeyboard.toLowerCase())).toList();
            }
-           else if(filterFactory==S.of(context).city)
+           else if(filter==S.of(context).city)
            {
              resulFactories = factoriesSector.where((element) =>
                  element.address['city']!.toLowerCase().contains(
                      enteredKeyboard.toLowerCase())).toList();
+           }
+           else
+           {
+               resulFactories = factoriesSector.where((element) =>
+                   element.name.toLowerCase().contains(
+                       enteredKeyboard.toLowerCase())).toList();
            }
         }
 
@@ -152,7 +158,7 @@ class _viewState extends State<view> {
         }
         if (view ==  S.of(context).shipment && resultSend.isEmpty)
         {
-              if (filterSend == S.of(context).date)
+              if (filter == S.of(context).date)
               {
                 stringDialog = S.of(context).we_do_not_have_any_shipping_on_that_date;
                 noDat = true;
@@ -164,7 +170,7 @@ class _viewState extends State<view> {
               }
 
               noDatfunction = noFind(context, noDat, stringDialog);
-        }
+
     }
     setState(() {
       if (view == S.of(context).shipment) {
@@ -176,7 +182,6 @@ class _viewState extends State<view> {
     });
   }
 
-  @override
   @override
   Widget build(BuildContext context) {
 
@@ -203,16 +208,17 @@ class _viewState extends State<view> {
       S.of(context).city,
     ];
 
-    filterFactory = S.of(context).name;
-
     filterListSends = [
       S.of(context).date,
       S.of(context).company
     ];
-
-    filterSend = S.of(context).date;
-
     String view = widget.tView;
+
+   if(view == S.of(context).shipment && filter=='')
+   {
+     filter = S.of(context).date;
+   }
+
     bool err = false;
     double mWidthList = mWidth * 0.2;
     if (mWidthList < 42.0)
@@ -240,9 +246,26 @@ class _viewState extends State<view> {
       }
     }
 
-    if (controllerSearchSend.text == "") {
-      if (view ==S.of(context).company)
+    if (controllerSearchSend.text == "")
+    {
+
+
+      if (view == S.of(context).company)
+      {
+        selectedFilter = null;
+
         resulFactories = factoriesSector;
+        filterSearch = S.of(context).name;
+        filterListCurrent = filterListFactories;
+      }
+      if (view == S.of(context).shipment)
+      {
+        selectedFilter = null;
+
+        filterSearch = S.of(context).date;
+        filterListCurrent = filterListSends;
+      }
+
     }
 
     double mWidthPanel = mWidth - mWidthList;
@@ -371,7 +394,7 @@ class _viewState extends State<view> {
                                   ),
                               ],
                             ),
-                          if(view == S.of(context).company)
+                          if(view == S.of(context).company || view == S.of(context).shipment)
                             if (opSelected == 1)
                               Container(
                                 color: Colors.greenAccent,
@@ -397,26 +420,40 @@ class _viewState extends State<view> {
                                               child: DropdownButton2<String>(
                                                 isExpanded: true,
                                                 hint: Text(
-                                                  filterFactory,
+                                                  filterSearch!,
                                                   overflow: TextOverflow.ellipsis,
                                                 ),
                                                 items: filterList.map((
-                                                    String itemFactory) =>
+                                                    String itemSearch) =>
                                                     DropdownMenuItem<String>(
-                                                      value: itemFactory,
+                                                      value: itemSearch,
                                                       child: Text(
-                                                        itemFactory,
+                                                        itemSearch,
                                                         overflow: TextOverflow
                                                             .ellipsis,
                                                       ),
                                                     ))
                                                     .toList(),
-                                                value: selectedFactory,
+                                                value: selectedFilter,
                                                 onChanged: (String? value) {
                                                   setState(() {
-                                                    selectedFactory = value;
-                                                    filterFactory = value.toString();
-                                                    controllerSearchSend.clear();
+                                                    selectedFilter = value;
+
+                                                    filter = value.toString();
+
+                                                        if(view == S.of(context).shipment)
+                                                        {
+                                                            chargueList(0,context);
+
+                                                            if (selectedFilter == S.of(context).date)
+                                                            {
+                                                                  selectCamp = resultSend[0].description;
+                                                            }
+                                                            if (selectedFilter == S.of(context).company)
+                                                            {
+                                                                 selectCamp = resultSend[0].title;
+                                                            }
+                                                        }
                                                   });
                                                 },
                                                 buttonStyleData: const ButtonStyleData(
@@ -447,9 +484,9 @@ class _viewState extends State<view> {
                                                 right: 40.0),
                                             child: TextField(
                                               controller: controllerSearchSend,
-                                              onChanged: (value) => _runFilter(context,
-                                                  view, value, textFilterFactory,
-                                                  factoryName, filterFactory),
+                                              onChanged: (value) =>view == S.of(context).company
+                                                   ? _runFilter(context, view, value, textFilterFactory, factoryName, filter)
+                                                   : _runFilter( context, view, value, textFilterFactory, factoryName,filter),
                                               decoration: InputDecoration(
                                                   border: OutlineInputBorder(),
                                                   hintText: S.of(context).search),
@@ -461,108 +498,7 @@ class _viewState extends State<view> {
                                   ],
                                 ),
                               ),
-                          if(view == S.of(context).shipment)
-                            if (opSelected == 1)
-                              Container(
-                                color: Colors.greenAccent,
-                                height: mHeightfilter,
-                                child: Column(
-                                  children: [
-                                    Padding(
-                                      padding: const EdgeInsets.only(
-                                          right: 15.0, top: 10.0),
-                                      child: Row(
-                                        children: [
-                                          Padding(
-                                            padding: EdgeInsets.only(
-                                                left: 10.0, right: 10.0),
-                                            child: Text(
-                                                S.of(context).filter_by,
-                                              maxLines: 1,
-                                              overflow: TextOverflow.ellipsis,
-                                            ),
-                                          ),
-                                          Expanded(
-                                            child: DropdownButtonHideUnderline(
-                                              child: DropdownButton2<String>(
-                                                isExpanded: true,
-                                                hint: Text(
-                                                  filterSend!,
-                                                  overflow: TextOverflow.ellipsis,
-                                                ),
-                                                items: filterList.map((
-                                                    String itemSend) =>
-                                                    DropdownMenuItem<String>(
-                                                      value: itemSend,
-                                                      child: Text(
-                                                        itemSend,
-                                                        overflow: TextOverflow
-                                                            .ellipsis,
-                                                      ),
-                                                    ))
-                                                    .toList(),
-                                                value: filterSend,
-                                                onChanged: (String? value1) {
-                                                  setState(() {
-                                                    controllerSearchSend.clear();
-                                                    filterSend = value1;
-                                                    controllerSearchSend.text =
-                                                    "";
-                                                    allCards.clear();
-                                                    chargueList(0,context);
-                                                    select = 0;
-
-
-                                                    if (filterSend == S.of(context).date) {
-                                                      selectCamp = resultSend[0].description;
-                                                    }
-                                                    if (filterSend ==S.of(context).company) {
-                                                      selectCamp = resultSend[0].title;
-                                                    }
-                                                  });
-                                                },
-                                                buttonStyleData: const ButtonStyleData(
-                                                  padding: EdgeInsets.only(
-                                                      left: 14, right: 14),
-                                                ),
-                                                dropdownStyleData: DropdownStyleData(
-                                                  maxHeight: 130,
-                                                  width: 140,
-                                                  scrollbarTheme: ScrollbarThemeData(
-                                                    thickness: MaterialStateProperty
-                                                        .all(4),
-                                                  ),
-                                                ),
-                                              ),
-                                            ),
-                                          )
-                                        ],
-                                      ),
-                                    ),
-                                    Row(
-                                      children: [
-                                        Expanded(
-                                          child: Padding(
-                                            padding: EdgeInsets.only(
-                                                top: 15.0,
-                                                left: 40.0,
-                                                right: 40.0),
-                                            child: TextField(
-                                              controller: controllerSearchSend,
-                                              onChanged: (value) => _runFilter( context,
-                                                  view, value, textFilterFactory,
-                                                  factoryName),
-                                              decoration: InputDecoration(
-                                                  border: OutlineInputBorder(),
-                                                  hintText: S.of(context).search),
-                                            ),
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ],
-                                ),
-                              ),
+                          if(view == S.of(context).company || view == S.of(context).shipment)
                           Container(
                             color: view == S.of(context).company
                                 ? Colors.cyan
@@ -743,7 +679,7 @@ class _viewState extends State<view> {
                                               if (suprLines == true)
                                               {
 
-                                                if (filterSend == S.of(context).date) {
+                                                if (filter == S.of(context).date) {
 
                                                   campKey = resultSend[index].description;
 
@@ -797,8 +733,7 @@ class _viewState extends State<view> {
                                           child: GestureDetector(
                                             child: defaultCard(
                                                 title: resultSend[index].title,
-                                                description: filterSend ==
-                                                    S.of(context).date
+                                                description: filter == S.of(context).date
                                                     ? lineSector[0].showFormatDate(
                                                     resultSend[index].description)
                                                     : titleSend,
@@ -826,10 +761,10 @@ class _viewState extends State<view> {
                                                 }
                                               }
 
-                                              if (filterSend ==S.of(context).date) {
+                                              if (filter == S.of(context).date) {
                                                 selectCamp = resultSend[select].description;
                                               }
-                                              if (filterSend ==S.of(context).company) {
+                                              if (filter == S.of(context).company) {
                                                 selectCamp = resultSend[select].title;
                                               }
                                             },
@@ -852,8 +787,7 @@ class _viewState extends State<view> {
                         ? newFactory(context,select,)
                         : view == S.of(context).email
                         ? newMail(context,select)
-                        : newSend(
-                        context,selectCamp, filterFactory, filterSend!, select)
+                        : newSend(context,selectCamp,  filter!, select)
                 ),
             ],
           )
@@ -870,7 +804,7 @@ class _viewState extends State<view> {
     String cardSeleted = "";
     allCards.clear();
 
-    if (filterSend ==S.of(context).date) {
+    if (filter ==S.of(context).date) {
       for (int i = 0; i < dateSends.length; i++)
       {
         int numSend = i + 1;
@@ -885,7 +819,7 @@ class _viewState extends State<view> {
     resultSend = allCards;
 
 
-    if (filterSend == S.of(context).company) {
+    if (filter== S.of(context).company) {
       for (int i = 0; i < lineSector.length; i++) {
         tmp.add(lineSector[i].factory);
       }
