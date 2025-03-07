@@ -90,7 +90,7 @@ class _viewState extends State<view> {
               {
                 resultSend = allCards.where((card) {
                   final descriptFormat = lineSector[0]
-                      .showFormatDate(card.description)
+                      .showFormatDate(card.description,context)
                       .toLowerCase();
                   final textSearch = enteredKeyboard.toLowerCase();
                   return descriptFormat.contains(textSearch);
@@ -735,7 +735,7 @@ class _viewState extends State<view> {
                                                 title: resultSend[index].title,
                                                 description: filter == S.of(context).date
                                                     ? lineSector[0].showFormatDate(
-                                                    resultSend[index].description)
+                                                    resultSend[index].description,context)
                                                     : titleSend,
                                                 color: index == cardIndex
                                                     ? Colors.white

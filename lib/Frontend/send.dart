@@ -183,11 +183,11 @@ class _newSendState extends State<newSend> {
 
           lineSelected.clear();
 
-           controllerSearch.text = lineSector[0].showFormatDate(selectCamp);
+           controllerSearch.text = lineSector[0].showFormatDate(selectCamp,context);
 
            for (int i = 0; i < lineSector.length; i++)
            {
-             if(controllerSearch.text == lineSector[0].showFormatDate(lineSector[i].date))
+             if(controllerSearch.text == lineSector[0].showFormatDate(lineSector[i].date,context))
              {
                lineSelected.add(lineSector[i]);
                campKey.add(lineSector[i].factory);
@@ -270,7 +270,7 @@ class _newSendState extends State<newSend> {
 
     if(itenSelect == 1 && subIten2Select != 0 )
     {
-      String sp = S.of(context).de.toLowerCase();
+      String sp = S.of(context).the.toLowerCase();
       titleComplete ='$title $send $sp $sectorView';
     }
     else

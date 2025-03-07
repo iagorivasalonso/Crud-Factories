@@ -105,9 +105,9 @@ class S {
     );
   }
 
-  /// `digitos`
+  /// `Digitos`
   String get digits {
-    return Intl.message('digitos', name: 'digits', desc: '', args: []);
+    return Intl.message('Digitos', name: 'digits', desc: '', args: []);
   }
 
   /// `Conexión a base de datos`
@@ -448,6 +448,11 @@ class S {
   /// `De`
   String get de {
     return Intl.message('De', name: 'de', desc: '', args: []);
+  }
+
+  /// `Del`
+  String get ofThe {
+    return Intl.message('Del', name: 'ofThe', desc: '', args: []);
   }
 
   /// `Rutas`
@@ -1132,9 +1137,69 @@ class S {
     return Intl.message('Error', name: 'error', desc: '', args: []);
   }
 
-  /// `Enviaddo`
+  /// `Enviado`
   String get sent {
-    return Intl.message('Enviaddo', name: 'sent', desc: '', args: []);
+    return Intl.message('Enviado', name: 'sent', desc: '', args: []);
+  }
+
+  /// `Enero`
+  String get january {
+    return Intl.message('Enero', name: 'january', desc: '', args: []);
+  }
+
+  /// `Febrero`
+  String get february {
+    return Intl.message('Febrero', name: 'february', desc: '', args: []);
+  }
+
+  /// `Marzo`
+  String get march {
+    return Intl.message('Marzo', name: 'march', desc: '', args: []);
+  }
+
+  /// `Abril`
+  String get april {
+    return Intl.message('Abril', name: 'april', desc: '', args: []);
+  }
+
+  /// `Mayo`
+  String get may {
+    return Intl.message('Mayo', name: 'may', desc: '', args: []);
+  }
+
+  /// `Junio`
+  String get june {
+    return Intl.message('Junio', name: 'june', desc: '', args: []);
+  }
+
+  /// `Julio`
+  String get july {
+    return Intl.message('Julio', name: 'july', desc: '', args: []);
+  }
+
+  /// `Agosto`
+  String get august {
+    return Intl.message('Agosto', name: 'august', desc: '', args: []);
+  }
+
+  /// `Septiembre`
+  String get september {
+    return Intl.message('Septiembre', name: 'september', desc: '', args: []);
+  }
+
+  /// `Octubre`
+  String get october {
+    return Intl.message('Octubre', name: 'october', desc: '', args: []);
+  }
+
+  /// `Noviembre`
+  String get november {
+    return Intl.message('Noviembre', name: 'november', desc: '', args: []);
+  }
+
+  /// `Diciembre`
+  String get december {
+    return Intl.message('Diciembre', name: 'december', desc: '', args: []);
   }
 
   /// `No hay ningún envío seleccionado`
@@ -1569,20 +1634,20 @@ class S {
     );
   }
 
-  /// `líneas correctamente`
+  /// `Líneas correctamente`
   String get lines_correctly {
     return Intl.message(
-      'líneas correctamente',
+      'Líneas correctamente',
       name: 'lines_correctly',
       desc: '',
       args: [],
     );
   }
 
-  /// `línea correctamente`
+  /// `Línea correctamente`
   String get line_correctly {
     return Intl.message(
-      'línea correctamente',
+      'Línea correctamente',
       name: 'line_correctly',
       desc: '',
       args: [],
@@ -1619,20 +1684,20 @@ class S {
     );
   }
 
-  /// `debe ser`
+  /// `Debe ser`
   String get must_be {
-    return Intl.message('debe ser', name: 'must_be', desc: '', args: []);
+    return Intl.message('Debe ser', name: 'must_be', desc: '', args: []);
   }
 
-  /// `no tiene`
+  /// `No tiene`
   String get no_has {
-    return Intl.message('no tiene', name: 'no_has', desc: '', args: []);
+    return Intl.message('No tiene', name: 'no_has', desc: '', args: []);
   }
 
-  /// `no está en ese departamento`
+  /// `No está en ese departamento`
   String get not_in_that_department {
     return Intl.message(
-      'no está en ese departamento',
+      'No está en ese departamento',
       name: 'not_in_that_department',
       desc: '',
       args: [],
@@ -1659,10 +1724,10 @@ class S {
     );
   }
 
-  /// `en la base de datos. ¿Qué desea hacer?`
+  /// `En la base de datos. ¿Qué desea hacer?`
   String get in_the_database_what_do_you_want_to_do {
     return Intl.message(
-      'en la base de datos. ¿Qué desea hacer?',
+      'En la base de datos. ¿Qué desea hacer?',
       name: 'in_the_database_what_do_you_want_to_do',
       desc: '',
       args: [],

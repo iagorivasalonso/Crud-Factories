@@ -69,7 +69,9 @@ class MessageLookup extends MessageLookupByLibrary {
           "Todos los cambios se perderán. ¿Desea continuar?",
         ),
     "appTitle": MessageLookupByLibrary.simpleMessage("Mi aplicación"),
+    "april": MessageLookupByLibrary.simpleMessage("Abril"),
     "attach": MessageLookupByLibrary.simpleMessage("Adjuntar"),
+    "august": MessageLookupByLibrary.simpleMessage("Agosto"),
     "can_not_go_blank_fields": MessageLookupByLibrary.simpleMessage(
       "No pueden quedar campos en blanco",
     ),
@@ -139,11 +141,12 @@ class MessageLookup extends MessageLookupByLibrary {
         ),
     "date": MessageLookupByLibrary.simpleMessage("Fecha"),
     "de": MessageLookupByLibrary.simpleMessage("De"),
+    "december": MessageLookupByLibrary.simpleMessage("Diciembre"),
     "delete": MessageLookupByLibrary.simpleMessage("Eliminar"),
     "desea_go_out": MessageLookupByLibrary.simpleMessage(
       "¿Desea salir de la aplicación?",
     ),
-    "digits": MessageLookupByLibrary.simpleMessage("digitos"),
+    "digits": MessageLookupByLibrary.simpleMessage("Digitos"),
     "discharge_date": MessageLookupByLibrary.simpleMessage("Fecha de alta"),
     "disconnect": MessageLookupByLibrary.simpleMessage("Desconectar"),
     "do_you_really_want_to_delete": MessageLookupByLibrary.simpleMessage(
@@ -166,6 +169,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "Error al modificar el el nombre de la base de datos",
     ),
     "examine": MessageLookupByLibrary.simpleMessage("Examinar"),
+    "february": MessageLookupByLibrary.simpleMessage("Febrero"),
     "file": MessageLookupByLibrary.simpleMessage("Archivo"),
     "file_format_error": MessageLookupByLibrary.simpleMessage(
       "Error en el formato del archivo de",
@@ -203,7 +207,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "in_progress": MessageLookupByLibrary.simpleMessage("En curso"),
     "in_the_database_what_do_you_want_to_do":
         MessageLookupByLibrary.simpleMessage(
-          "en la base de datos. ¿Qué desea hacer?",
+          "En la base de datos. ¿Qué desea hacer?",
         ),
     "invalid_connection": MessageLookupByLibrary.simpleMessage(
       "Conexión no válida",
@@ -215,16 +219,21 @@ class MessageLookup extends MessageLookupByLibrary {
       "Debe de ser numérico",
     ),
     "it_was_imported": MessageLookupByLibrary.simpleMessage("Se importó"),
+    "january": MessageLookupByLibrary.simpleMessage("Enero"),
+    "july": MessageLookupByLibrary.simpleMessage("Julio"),
+    "june": MessageLookupByLibrary.simpleMessage("Junio"),
     "line": MessageLookupByLibrary.simpleMessage("Línea"),
     "line_correctly": MessageLookupByLibrary.simpleMessage(
-      "línea correctamente",
+      "Línea correctamente",
     ),
     "lines": MessageLookupByLibrary.simpleMessage("Líneas"),
     "lines_correctly": MessageLookupByLibrary.simpleMessage(
-      "líneas correctamente",
+      "Líneas correctamente",
     ),
     "list_of": MessageLookupByLibrary.simpleMessage("Lista de"),
     "lists": MessageLookupByLibrary.simpleMessage("Listas"),
+    "march": MessageLookupByLibrary.simpleMessage("Marzo"),
+    "may": MessageLookupByLibrary.simpleMessage("Mayo"),
     "message": MessageLookupByLibrary.simpleMessage("Mensaje"),
     "modification_of_the_sector": MessageLookupByLibrary.simpleMessage(
       "Modificación del sector",
@@ -233,7 +242,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "multiple_recipients": MessageLookupByLibrary.simpleMessage(
       "Varios destinatarios",
     ),
-    "must_be": MessageLookupByLibrary.simpleMessage("debe ser"),
+    "must_be": MessageLookupByLibrary.simpleMessage("Debe ser"),
     "must_have": MessageLookupByLibrary.simpleMessage("Debe de tener"),
     "name": MessageLookupByLibrary.simpleMessage("Nombre"),
     "name_sector": MessageLookupByLibrary.simpleMessage("Nombre del sector"),
@@ -246,7 +255,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "no_file_exists": MessageLookupByLibrary.simpleMessage(
       "No existe el archivo de",
     ),
-    "no_has": MessageLookupByLibrary.simpleMessage("no tiene"),
+    "no_has": MessageLookupByLibrary.simpleMessage("No tiene"),
     "no_have_registered_emails": MessageLookupByLibrary.simpleMessage(
       "No tienes correos electrónicos registrados",
     ),
@@ -260,10 +269,13 @@ class MessageLookup extends MessageLookupByLibrary {
       "No estás conectado a ninguna base de datos",
     ),
     "not_in_that_department": MessageLookupByLibrary.simpleMessage(
-      "no está en ese departamento",
+      "No está en ese departamento",
     ),
+    "november": MessageLookupByLibrary.simpleMessage("Noviembre"),
     "number": MessageLookupByLibrary.simpleMessage("Número"),
     "observations": MessageLookupByLibrary.simpleMessage("Observaciones"),
+    "october": MessageLookupByLibrary.simpleMessage("Octubre"),
+    "ofThe": MessageLookupByLibrary.simpleMessage("Del"),
     "orther": MessageLookupByLibrary.simpleMessage("Otro"),
     "para": MessageLookupByLibrary.simpleMessage("Para"),
     "password": MessageLookupByLibrary.simpleMessage("Contraseña"),
@@ -305,7 +317,8 @@ class MessageLookup extends MessageLookupByLibrary {
     "sending_emails": MessageLookupByLibrary.simpleMessage(
       "Envío de correos electrónicos",
     ),
-    "sent": MessageLookupByLibrary.simpleMessage("Enviaddo"),
+    "sent": MessageLookupByLibrary.simpleMessage("Enviado"),
+    "september": MessageLookupByLibrary.simpleMessage("Septiembre"),
     "server": MessageLookupByLibrary.simpleMessage("Servidor"),
     "shipment": MessageLookupByLibrary.simpleMessage("Envío"),
     "shipments": MessageLookupByLibrary.simpleMessage("Envíos"),
