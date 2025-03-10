@@ -289,7 +289,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "postal_code": MessageLookupByLibrary.simpleMessage("Código postal"),
     "province": MessageLookupByLibrary.simpleMessage("Provincia"),
     "reboot": MessageLookupByLibrary.simpleMessage("Reiniciar"),
-    "respondio": MessageLookupByLibrary.simpleMessage("Respondió"),
+    "he_responded": MessageLookupByLibrary.simpleMessage("Respondió"),
     "returned": MessageLookupByLibrary.simpleMessage("Devuelto"),
     "route": MessageLookupByLibrary.simpleMessage("Ruta"),
     "route_file_cannot_be_read": MessageLookupByLibrary.simpleMessage(

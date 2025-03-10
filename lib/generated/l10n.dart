@@ -591,8 +591,8 @@ class S {
   }
 
   /// `Respondió`
-  String get respondio {
-    return Intl.message('Respondió', name: 'respondio', desc: '', args: []);
+  String get he_responded {
+    return Intl.message('Respondió', name: 'he_responded', desc: '', args: []);
   }
 
   /// `Línea`
