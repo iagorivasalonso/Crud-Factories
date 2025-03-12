@@ -1,4 +1,4 @@
-import 'package:crud_factories/Backend/data.dart';
+import 'package:crud_factories/Backend/Global/variables.dart';
 import 'package:crud_factories/Objects/Factory.dart';
 
 Future<void> sqlCeateFactory(List<Factory> factories) async {

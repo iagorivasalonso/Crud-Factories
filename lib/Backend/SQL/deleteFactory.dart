@@ -1,4 +1,4 @@
-import 'package:crud_factories/Backend/data.dart';
+import 'package:crud_factories/Backend/Global/variables.dart';
 
 Future<void> sqlDeleteFactory(String id) async {
 

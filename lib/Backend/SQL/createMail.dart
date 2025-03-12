@@ -1,4 +1,4 @@
-import 'package:crud_factories/Backend/data.dart';
+import 'package:crud_factories/Backend/Global/variables.dart';
 import 'package:crud_factories/Objects/Mail.dart';
 
 Future<void> sqlCreateMail(List<Mail> mails) async {

@@ -1,8 +1,9 @@
 import 'package:crud_factories/Alertdialogs/confirm.dart';
 import 'package:crud_factories/Alertdialogs/error.dart';
+import 'package:crud_factories/Backend/Global/list.dart';
 import 'package:crud_factories/Backend/SQL/createLine.dart';
 import 'package:crud_factories/Backend/SQL/modifyLines.dart';
-import 'package:crud_factories/Backend/data.dart';
+import 'package:crud_factories/Backend/Global/variables.dart';
 import 'package:crud_factories/Backend/CSV/exportLines.dart';
 import 'package:crud_factories/Functions/createId.dart';
 import 'package:crud_factories/Functions/manageState.dart';

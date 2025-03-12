@@ -1,6 +1,6 @@
 import 'dart:io';
-
-import 'package:crud_factories/Backend/data.dart';
+import 'package:crud_factories/Backend/Global/files.dart';
+import 'package:crud_factories/Backend/Global/variables.dart';
 import 'package:crud_factories/Objects/RouteCSV.dart';
 import 'package:csv/csv.dart';
 

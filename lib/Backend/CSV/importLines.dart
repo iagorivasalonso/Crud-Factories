@@ -1,5 +1,6 @@
 import 'dart:convert';
-import 'package:crud_factories/Backend/data.dart';
+import 'package:crud_factories/Backend/Global/list.dart';
+import 'package:crud_factories/Backend/Global/files.dart';
 import 'package:crud_factories/Functions/manageState.dart';
 import 'package:crud_factories/Objects/LineSend.dart';
 import 'package:crud_factories/generated/l10n.dart';

@@ -1,5 +1,4 @@
-import 'package:crud_factories/Backend/data.dart';
-import 'package:crud_factories/Frontend/adminRoutes.dart';
+import 'package:crud_factories/Backend/Global/list.dart';
 import 'package:crud_factories/Frontend/conection.dart';
 import 'package:crud_factories/Frontend/mail.dart';
 import 'package:crud_factories/Frontend/factory.dart';

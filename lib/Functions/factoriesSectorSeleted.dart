@@ -1,4 +1,4 @@
-import 'package:crud_factories/Backend/data.dart';
+import 'package:crud_factories/Backend/Global/list.dart';
 import 'package:crud_factories/Objects/Factory.dart';
 
 List<Factory> factoriesSectorSeleted(String subIten2Selection) {

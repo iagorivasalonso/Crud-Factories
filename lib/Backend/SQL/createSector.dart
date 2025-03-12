@@ -1,4 +1,5 @@
-import 'package:crud_factories/Backend/data.dart';
+
+import 'package:crud_factories/Backend/Global/variables.dart';
 import 'package:crud_factories/Objects/Sector.dart';
 
 Future<void> sqlCreateSector(List<Sector> sectors) async {

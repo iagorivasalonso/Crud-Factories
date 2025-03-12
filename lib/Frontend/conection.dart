@@ -1,10 +1,11 @@
 import 'dart:io';
-
 import 'package:adaptive_scrollbar/adaptive_scrollbar.dart';
 import 'package:crud_factories/Alertdialogs/confirm.dart';
 import 'package:crud_factories/Alertdialogs/confirmDelete.dart';
 import 'package:crud_factories/Alertdialogs/error.dart';
 import 'package:crud_factories/Backend/CSV/chargueData%20csv.dart';
+import 'package:crud_factories/Backend/Global/files.dart';
+import 'package:crud_factories/Backend/Global/list.dart';
 import 'package:crud_factories/Backend/SQL/importEmpleoye.dart';
 import 'package:crud_factories/Backend/SQL/importSector.dart';
 import 'package:crud_factories/Backend/SQL/manageSQl.dart';
@@ -12,7 +13,7 @@ import 'package:crud_factories/Backend/SQL/importFactories.dart';
 import 'package:crud_factories/Backend/SQL/importLines.dart';
 import 'package:crud_factories/Backend/SQL/importMail.dart';
 import 'package:crud_factories/Backend/SQL/serverConected.dart';
-import 'package:crud_factories/Backend/data.dart';
+import 'package:crud_factories/Backend/Global/variables.dart';
 import 'package:crud_factories/Backend/CSV/exportConections.dart';
 import 'package:crud_factories/Functions/createId.dart';
 import 'package:crud_factories/Functions/validatorCamps.dart';
