@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:crud_factories/Backend/data.dart';
+import 'package:crud_factories/Functions/manageState.dart';
 import 'package:crud_factories/Objects/LineSend.dart';
 import 'package:crud_factories/generated/l10n.dart';
 import 'package:flutter/material.dart';
@@ -20,8 +21,10 @@ csvImportLines(BuildContext context, List<String> fileContent, List<LineSend> li
               date:select[1],
               factory:select[2] ,
               observations: select[3] ,
-              state: select[4],
+              state: manageState.parseState(select[4],context,
+                  true),
           ));
+
     }
 
   } catch (e) {

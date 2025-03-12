@@ -956,7 +956,7 @@ class _sendMailState extends State<sendMail> {
 
                            if(sendCorrect.contains("Message successfully sent"))
                            {
-                              sendsDay[cSended].state = S.of(context).enviado;
+                              sendsDay[cSended].state =LineSendState.has_responded;
                               cSended++;
                            }
 

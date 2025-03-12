@@ -5,6 +5,7 @@ import 'package:crud_factories/Backend/SQL/modifyLines.dart';
 import 'package:crud_factories/Backend/data.dart';
 import 'package:crud_factories/Backend/CSV/exportLines.dart';
 import 'package:crud_factories/Functions/createId.dart';
+import 'package:crud_factories/Functions/manageState.dart';
 import 'package:crud_factories/Objects/LineSend.dart';
 import 'package:crud_factories/generated/l10n.dart';
 import 'package:crud_factories/helpers/localization_helper.dart';
@@ -83,6 +84,14 @@ class _newSendState extends State<newSend> {
     String action2 = "";
     String sectorView = " ";
 
+    stateSends = [
+      S.of(context).prepared,
+      S.of(context).sent,
+      S.of(context).in_progress,
+      S.of(context).returned,
+      S.of(context).he_responded,
+      S.of(context).pending
+    ];
     if (select == -1) {
 
       title = S.of(context).newMale;
@@ -137,12 +146,7 @@ class _newSendState extends State<newSend> {
       action2 = S.of(context).undo;
       title = S.of(context).ver;
 
-      stateSends = [
-            S.of(context).sent,
-            S.of(context).in_progress,
-            S.of(context).returned,
-            S.of(context).respondio
-      ];
+
 
       int selected = 0;
       if (subIten2Select != 0)
@@ -203,10 +207,14 @@ class _newSendState extends State<newSend> {
 
           for (int i = 0; i < lineSelected.length; i++)
           {
+
               if(saveChanges == false)
               {
                 _controllersObserLine[i].text = lineSelected[i].observations;
-                _controllerStateLine[i].text = lineSelected[i].state;
+                _controllerStateLine[i].text =  manageState.seeLanguage(context, lineSelected[i].state.toString());
+
+
+                print(_controllerStateLine[i].text);
               }
 
               int sectorfactory = 0;
@@ -221,9 +229,8 @@ class _newSendState extends State<newSend> {
 
           cant = lineSelected.length;
           stringFactories = LocalizationHelper.sendsDay(context, cant);
-
       }
-      
+
       typeList = S.of(context).shipments;
 
       if(type == S.of(context).company)
@@ -253,8 +260,8 @@ class _newSendState extends State<newSend> {
         {
           if(controllerSearch.text==lineSelected[i].factory)
           {
-            _controllersObserLine[i].text=lineSelected[i].observations;
-             _controllerStateLine[i].text = lineSelected[i].state;
+            _controllersObserLine[i].text = lineSelected[i].observations;
+             _controllerStateLine[i].text = manageState.seeLanguage(context, lineSelected[i].state.toString());
           }
 
         }
@@ -354,7 +361,7 @@ class _newSendState extends State<newSend> {
                                                     DateTime(DateTime.now().year + 1),
                                               );
                                               setState(() {
-                                                 date =DateFormat('dd-MM-yyyy').format(dateSelected!);
+                                                 date = DateFormat('dd-MM-yyyy').format(dateSelected!);
                                                  controllerSearch.text = date;
                                             });
                                           }
@@ -386,58 +393,74 @@ class _newSendState extends State<newSend> {
                                         value: selectedSector,
                                         onChanged: (String? sectorChoose) {
                                           setState(() {
-                                            print(sectorChoose!);
-                                              selectedSector = sectorChoose!;
-                                              factoriesSector.clear();
 
-                                              if (selectedSector == S.of(context).allMale)
-                                              {
+                                            selectedSector = sectorChoose!;
 
-                                                campsTable = [
-                                                  S.of(context).company,
-                                                  S.of(context).sector,
-                                                  S.of(context).observations,
-                                                  S.of(context).state,
-                                                  S.of(context).select
-                                                ];
+                                         do{
+                                           print(selectedSector);
+                                           factoriesSector.clear();
+                                           if (selectedSector == S.of(context).allMale)
+                                           {
 
-                                                for(int i = 0; i < allFactories.length;i++)
-                                                {
-                                                  factoriesSector.add(allFactories[i]);
-                                                }
+                                             campsTable = [
+                                               S.of(context).company,
+                                               S.of(context).sector,
+                                               S.of(context).observations,
+                                               S.of(context).state,
+                                               S.of(context).select
+                                             ];
+
+                                             for(int i = 0; i < allFactories.length;i++)
+                                             {
+                                               factoriesSector.add(allFactories[i]);
+                                             }
+
+                                             cantFactory = factoriesSector.length;
+                                           }
+                                           else
+                                           {
 
 
-                                                cantFactory = factoriesSector.length;
-                                              }
-                                              else
-                                              {
-                                                campsTable = [
-                                                  S.of(context).company,
-                                                  S.of(context).observations,
-                                                  S.of(context).state,
-                                                  S.of(context).select
-                                                ];
+                                             int  sSelected = 0;
+                                             for(int i = 0; i <sectors.length; i++)
+                                             {
+                                               if(sectors[i].name == selectedSector)
+                                               {
+                                                 sSelected = i;
+                                               }
+                                             }
+                                             int factoriesSelected = sSelected + 1;
 
-                                                int  sSelected = 0;
-                                                for(int i = 0; i <sectors.length; i++)
-                                                {
-                                                   if(sectors[i].name == selectedSector)
-                                                   {
-                                                      sSelected = i;
-                                                   }
-                                                }
-                                                 int factoriesSelected = sSelected + 1;
+                                             campsTable = [
+                                               S.of(context).company,
+                                               S.of(context).observations,
+                                               S.of(context).state,
+                                               S.of(context).select
+                                             ];
 
-                                                for(int i = 0; i < allFactories.length;i++)
-                                                {
-                                                  if(allFactories[i].sector == factoriesSelected.toString())
-                                                  {
-                                                    factoriesSector.add(allFactories[i]);
-                                                  }
-                                                }
+                                             for(int i = 0; i < allFactories.length;i++)
+                                             {
+                                               if(allFactories[i].sector == factoriesSelected.toString())
+                                               {
+                                                 factoriesSector.add(allFactories[i]);
+                                               }
+                                             }
 
-                                                cantFactory = factoriesSector.length;
-                                              }
+                                             cantFactory = factoriesSector.length;
+
+                                             if(cantFactory == 0)
+                                             {
+                                                 String array = S.of(context).companies;
+                                                 String action = LocalizationHelper.no_array_departament(context, array);
+                                                 error(context, action);
+                                                 selectedSector = S.of(context).allMale;
+                                             }
+                                           }
+
+                                         } while (cantFactory == 0);
+
+
+
                                               stringFactories = LocalizationHelper.factoriesBD(context,cantFactory);
 
                                           });
@@ -517,16 +540,45 @@ class _newSendState extends State<newSend> {
                                                    ),
                                                    DataCell(
                                                      Padding(
-                                                       padding: const EdgeInsets.all(8.0),
-                                                       child: TextField(
-                                                         controller: _controllerStateLine[indexRow],
-                                                         decoration: InputDecoration(
-                                                           border: OutlineInputBorder(),
+                                                       padding: const EdgeInsets.all(1.0),
+                                                       child: SizedBox(
+                                                         height: 40,
+                                                         child: DropdownButtonFormField<String>(
+                                                           value: stateSends.contains(_controllerStateLine[indexRow].text)
+                                                               ?manageState.seeLanguage(context, _controllerStateLine[indexRow].text)
+                                                               : stateSends.isNotEmpty
+                                                               ? stateSends[0]
+                                                               : null,
+                                                           decoration: InputDecoration(
+                                                             border: OutlineInputBorder(),
+                                                           ),
+                                                           items: stateSends.map((option) {
+                                                             return DropdownMenuItem<String>(
+                                                               value: option,
+                                                               child: Text(manageState.seeLanguage(context, option), style: TextStyle(fontSize: 12),),
+                                                             );
+                                                           }).toList(),
+                                                           onChanged: (newValue) {
+                                                             setState(() {
+
+                                                               _controllerStateLine[indexRow].text = newValue!;
+
+                                                               lineEdit[indexRow] = true;
+
+                                                               if(saveChanges == false)
+                                                               {
+                                                                 if (_controllerStateLine[indexRow].text == lineSelected[indexRow].state)
+                                                                 {
+                                                                   saveChanges = false;
+                                                                 } else
+                                                                 {
+                                                                   saveChanges = true;
+                                                                 }
+                                                               }
+                                                             });
+
+                                                           },
                                                          ),
-                                                         onChanged: (s){
-                                                           lineEdit[indexRow]=true;
-                                                           saveChanges = true;
-                                                         },
                                                        ),
                                                      ),
                                                    ),
@@ -588,7 +640,7 @@ class _newSendState extends State<newSend> {
                                                           height: 40,
                                                           child: DropdownButtonFormField<String>(
                                                             value: stateSends.contains(_controllerStateLine[indexRow].text)
-                                                                ? _controllerStateLine[indexRow].text
+                                                                ?manageState.seeLanguage(context, _controllerStateLine[indexRow].text)
                                                                 : stateSends.isNotEmpty
                                                                 ? stateSends[0]
                                                                 : null,
@@ -598,7 +650,7 @@ class _newSendState extends State<newSend> {
                                                             items: stateSends.map((option) {
                                                               return DropdownMenuItem<String>(
                                                                 value: option,
-                                                                child: Text(option, style: TextStyle(fontSize: 12),),
+                                                                child: Text(manageState.seeLanguage(context, option), style: TextStyle(fontSize: 12),),
                                                               );
                                                             }).toList(),
                                                             onChanged: (newValue) {
@@ -643,7 +695,6 @@ class _newSendState extends State<newSend> {
                                           Row(
                                             children: [
                                               Text(stringFactories),
-
                                             ],
                                           ),
                                         ],
@@ -723,12 +774,11 @@ class _newSendState extends State<newSend> {
                                                             date: controllerSearch.text,
                                                             factory: allFactories[i].name,
                                                             observations: _controllersObserLine[i].text,
-                                                            state: _controllerStateLine[i].text)
+                                                            state:manageState.parseState(_controllerStateLine[i].text,context,true)),
                                                       );
                                                   }
                                                 }
                                                 String action = LocalizationHelper.sendsFactory(context, allLines);
-                                                allLines = 0;
                                                 confirm(context,action);
                                               }
                                               else
@@ -744,6 +794,7 @@ class _newSendState extends State<newSend> {
                                                         }
                                                       }
 
+
                                                       String id='';
                                                       for (int i = 0; i < lineSelected.length; i++)
                                                       {
@@ -755,10 +806,12 @@ class _newSendState extends State<newSend> {
 
                                                           if(lineSelected[i].id == id)
                                                           {
-                                                            lineSelected[i].state =_controllerStateLine[i].text;
+                                                            print(_controllerStateLine[i].text);
+                                                            lineSelected[i].state = manageState.parseState(_controllerStateLine[i].text,context,false);
                                                             lineSelected[i].observations = _controllersObserLine[i].text;
                                                           }
                                                         }
+                                                        allLinesModify = 0;
                                                       }
 
 
@@ -779,6 +832,7 @@ class _newSendState extends State<newSend> {
 
                                               }
                                               lineEdit = List.generate(lineSector.length, (index) => false);
+
                                             });
                                             if (conn != null)
                                             {
@@ -803,25 +857,24 @@ class _newSendState extends State<newSend> {
                                               {
                                                   if(select == -1)
                                                   {
-
                                                      Send = List.generate(allFactories.length, (index) => false);
                                                      lineEdit = List.generate(allFactories.length, (index) => false);
+
+                                                     resetCamps();
                                                   }
                                                   else
                                                   {
                                                     String actionArray = S.of(context).saved;
-
                                                     String action = LocalizationHelper.manage_array(context, array, actionArray);
                                                     await confirm(context, action);
                                                   }
-
-
                                               }
                                               else
                                               {
                                                 String action = LocalizationHelper.no_file(context, array);
                                                 error(context, action);
                                               }
+                                              allLines = 0;
                                               saveChanges = false;
                                             }
                                           },
@@ -845,7 +898,7 @@ class _newSendState extends State<newSend> {
                                                         if(lineEdit[i]==true)
                                                         {
                                                            _controllersObserLine[i].text = lineSelected[i].observations;
-                                                           _controllerStateLine[i].text = lineSelected[i].state;
+                                                           _controllerStateLine[i].text = manageState.parseState(_controllerStateLine[i].text,context,false).name;
                                                         }
                                                   }
                                               }

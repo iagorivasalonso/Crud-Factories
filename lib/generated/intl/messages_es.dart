@@ -201,10 +201,14 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "have_been_sent": MessageLookupByLibrary.simpleMessage("Se han enviado"),
     "he": MessageLookupByLibrary.simpleMessage("Él"),
+    "he_responded": MessageLookupByLibrary.simpleMessage("Respondió"),
     "host": MessageLookupByLibrary.simpleMessage("Host"),
     "import": MessageLookupByLibrary.simpleMessage("Importar"),
     "import_data": MessageLookupByLibrary.simpleMessage("Importar datos"),
     "in_progress": MessageLookupByLibrary.simpleMessage("En curso"),
+    "in_that_department": MessageLookupByLibrary.simpleMessage(
+      "en ese departamento",
+    ),
     "in_the_database_what_do_you_want_to_do":
         MessageLookupByLibrary.simpleMessage(
           "En la base de datos. ¿Qué desea hacer?",
@@ -268,9 +272,6 @@ class MessageLookup extends MessageLookupByLibrary {
     "not_connected_to_any_database": MessageLookupByLibrary.simpleMessage(
       "No estás conectado a ninguna base de datos",
     ),
-    "not_in_that_department": MessageLookupByLibrary.simpleMessage(
-      "No está en ese departamento",
-    ),
     "november": MessageLookupByLibrary.simpleMessage("Noviembre"),
     "number": MessageLookupByLibrary.simpleMessage("Número"),
     "observations": MessageLookupByLibrary.simpleMessage("Observaciones"),
@@ -282,14 +283,15 @@ class MessageLookup extends MessageLookupByLibrary {
     "passwords_do_not_match": MessageLookupByLibrary.simpleMessage(
       "Las contraseñas no coinciden",
     ),
+    "pending": MessageLookupByLibrary.simpleMessage("Pendiente"),
     "phone": MessageLookupByLibrary.simpleMessage("Teléfono"),
     "phone_1": MessageLookupByLibrary.simpleMessage("Teléfono 1"),
     "phone_2": MessageLookupByLibrary.simpleMessage("Teléfono 2"),
     "port": MessageLookupByLibrary.simpleMessage("Puerto"),
     "postal_code": MessageLookupByLibrary.simpleMessage("Código postal"),
+    "prepared": MessageLookupByLibrary.simpleMessage("Preparado"),
     "province": MessageLookupByLibrary.simpleMessage("Provincia"),
     "reboot": MessageLookupByLibrary.simpleMessage("Reiniciar"),
-    "he_responded": MessageLookupByLibrary.simpleMessage("Respondió"),
     "returned": MessageLookupByLibrary.simpleMessage("Devuelto"),
     "route": MessageLookupByLibrary.simpleMessage("Ruta"),
     "route_file_cannot_be_read": MessageLookupByLibrary.simpleMessage(

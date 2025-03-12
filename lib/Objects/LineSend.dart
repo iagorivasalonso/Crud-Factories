@@ -1,6 +1,9 @@
 import 'package:crud_factories/generated/l10n.dart';
 import 'package:flutter/src/widgets/framework.dart';
 
+
+enum LineSendState {prepared, pending, sent, in_progress, returned,has_responded}
+
 class LineSend {
 
   String id;
@@ -8,7 +11,7 @@ class LineSend {
   String factory;
   String? sector; //  Atributo opcional
   String observations;
-  String state;
+  LineSendState state;
 
 
   LineSend({

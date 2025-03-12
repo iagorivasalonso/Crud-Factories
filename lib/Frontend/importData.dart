@@ -17,6 +17,7 @@ import 'package:crud_factories/Backend/CSV/exportFactories.dart';
 import 'package:crud_factories/Backend/CSV/exportLines.dart';
 import 'package:crud_factories/Backend/CSV/exportMails.dart';
 import 'package:crud_factories/Functions/createId.dart';
+import 'package:crud_factories/Functions/manageState.dart';
 import 'package:crud_factories/Objects/Conection.dart';
 import 'package:crud_factories/Objects/Empleoye.dart';
 import 'package:crud_factories/Objects/Factory.dart';
@@ -721,7 +722,7 @@ void _pickFile(BuildContext context, TextEditingController controllerDatePicker,
                 date:camps[1],
                 factory:camps[2] ,
                 observations: camps[3] ,
-                state: camps[4])
+                state: manageState.parseState(camps[4],context,true),)
                 );
           }
          
@@ -783,7 +784,7 @@ void _pickFile(BuildContext context, TextEditingController controllerDatePicker,
      }
      else
      {
-        String action ="file no valido";
+        String action =S.of(context).file_not_found;
         error(context, action);
      }
 
