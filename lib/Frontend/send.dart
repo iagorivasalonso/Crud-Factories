@@ -812,12 +812,12 @@ class _newSendState extends State<newSend> {
                                                             lineSelected[i].observations = _controllersObserLine[i].text;
                                                           }
                                                         }
-                                                        allLinesModify = 0;
+
                                                       }
 
 
                                                      String action ='';
-
+                                                      allLinesModify = 0;
                                                      if (allLinesModify == 0)
                                                      {
                                                        action = S.of(context).has_no_line_to_modify;
@@ -839,11 +839,11 @@ class _newSendState extends State<newSend> {
                                             {
                                               if(select==-1)
                                               {
-                                                sqlCreateLine(current);
+                                                sqlCreateLine(current,context);
                                               }
                                               else
                                               {
-                                                sqlModifyLines(lineSelected);
+                                                sqlModifyLines(lineSelected, context);
                                               }
                                             }
                                             else

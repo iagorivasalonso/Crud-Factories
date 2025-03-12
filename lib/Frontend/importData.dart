@@ -443,7 +443,7 @@ class _newImportState extends State<newImport> {
 
                                               if(conn != null)
                                               {
-                                                sqlCreateLine(linesNew);
+                                                sqlCreateLine(linesNew,context);
                                               }
                                               else
                                               {

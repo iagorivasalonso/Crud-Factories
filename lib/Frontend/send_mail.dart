@@ -977,7 +977,7 @@ class _sendMailState extends State<sendMail> {
 
                       if (conn != null)
                       {
-                        sqlModifyLines(sendsDay);
+                        sqlModifyLines(sendsDay,context);
                       }
                       else
                       {
