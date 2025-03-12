@@ -258,7 +258,8 @@ class LocalizationHelper {
   static String no_array_departament( BuildContext context,String array) {
 
     String preVar = S.of(context).no_has;
-    String postVar = S.of(context).not_in_that_department;
+    String postVar = S.of(context).in_that_department;
+    array = array.toLowerCase();
 
     return Intl.message(
     '$preVar $array  $postVar',

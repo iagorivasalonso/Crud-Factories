@@ -580,6 +580,11 @@ class S {
     );
   }
 
+  /// `Preparado`
+  String get prepared {
+    return Intl.message('Preparado', name: 'prepared', desc: '', args: []);
+  }
+
   /// `En curso`
   String get in_progress {
     return Intl.message('En curso', name: 'in_progress', desc: '', args: []);
@@ -593,6 +598,11 @@ class S {
   /// `Respondió`
   String get he_responded {
     return Intl.message('Respondió', name: 'he_responded', desc: '', args: []);
+  }
+
+  /// `Pendiente`
+  String get pending {
+    return Intl.message('Pendiente', name: 'pending', desc: '', args: []);
   }
 
   /// `Línea`
@@ -1694,11 +1704,11 @@ class S {
     return Intl.message('No tiene', name: 'no_has', desc: '', args: []);
   }
 
-  /// `No está en ese departamento`
-  String get not_in_that_department {
+  /// `en ese departamento`
+  String get in_that_department {
     return Intl.message(
-      'No está en ese departamento',
-      name: 'not_in_that_department',
+      'en ese departamento',
+      name: 'in_that_department',
       desc: '',
       args: [],
     );
