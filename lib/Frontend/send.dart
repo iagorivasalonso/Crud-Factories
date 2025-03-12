@@ -827,6 +827,8 @@ class _newSendState extends State<newSend> {
                                                      {
                                                        action = LocalizationHelper.cantLinesModify(context, allLinesModify);
                                                        confirm(context,action);
+
+                                                       allLinesModify = 0;
                                                      }
 
                                                   }
