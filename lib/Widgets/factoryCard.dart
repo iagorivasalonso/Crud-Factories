@@ -6,6 +6,8 @@ Card factoryCard({
   required String telephone,
   String? city}) {
 
+  telephone = telephone.replaceAllMapped(RegExp(r".{1,3}"), (math) => "${math.group(0)} ").trim();
+
   return Card(
     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
     margin: const EdgeInsets.all(10),
