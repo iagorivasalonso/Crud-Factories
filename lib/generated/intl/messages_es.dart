@@ -150,7 +150,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "discharge_date": MessageLookupByLibrary.simpleMessage("Fecha de alta"),
     "disconnect": MessageLookupByLibrary.simpleMessage("Desconectar"),
     "do_you_really_want_to_delete": MessageLookupByLibrary.simpleMessage(
-      "¿Realmente desea eliminar?",
+      "¿Realmente desea eliminar",
     ),
     "does_not_belong_to_our_database": MessageLookupByLibrary.simpleMessage(
       "No pertenece a nuestra base de datos",
@@ -200,7 +200,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "Se han eliminado",
     ),
     "have_been_sent": MessageLookupByLibrary.simpleMessage("Se han enviado"),
-    "he": MessageLookupByLibrary.simpleMessage("Él"),
+    "he": MessageLookupByLibrary.simpleMessage("el"),
     "he_responded": MessageLookupByLibrary.simpleMessage("Respondió"),
     "host": MessageLookupByLibrary.simpleMessage("Host"),
     "import": MessageLookupByLibrary.simpleMessage("Importar"),

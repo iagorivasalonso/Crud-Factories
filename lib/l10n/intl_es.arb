@@ -151,7 +151,7 @@
   "the_company": "La empresa",
   "the": "El",
   "the_employee": "El empleado",
-  "he": "Él",
+  "he": "el",
   "filter_by": "Filtrar por",
   "search": "Buscar...",
   "font_type": "Tipo de fuente",
@@ -226,6 +226,6 @@
   "no_has": "No tiene",
   "in_that_department": "en ese departamento",
   "this_field_cannot_be_repeated": "Este campo no puede ser repetido",
-  "do_you_really_want_to_delete": "¿Realmente desea eliminar?",
+  "do_you_really_want_to_delete": "¿Realmente desea eliminar",
   "in_the_database_what_do_you_want_to_do": "En la base de datos. ¿Qué desea hacer?"
 }

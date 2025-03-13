@@ -270,8 +270,9 @@ class LocalizationHelper {
   }
   static String ask_confirm_supr( BuildContext context,String array) {
 
-    String preVar = S.of(context).do_you_really_want_to_delete.toLowerCase();
+    String preVar = S.of(context).do_you_really_want_to_delete;
     String postVar = "?";
+    array = array.toLowerCase();
 
     return Intl.message(
       '$preVar $array  $postVar',

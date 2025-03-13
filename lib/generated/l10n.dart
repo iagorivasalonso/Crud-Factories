@@ -1097,9 +1097,9 @@ class S {
     );
   }
 
-  /// `Él`
+  /// `el`
   String get he {
-    return Intl.message('Él', name: 'he', desc: '', args: []);
+    return Intl.message('el', name: 'he', desc: '', args: []);
   }
 
   /// `Filtrar por`
@@ -1724,10 +1724,10 @@ class S {
     );
   }
 
-  /// `¿Realmente desea eliminar?`
+  /// `¿Realmente desea eliminar`
   String get do_you_really_want_to_delete {
     return Intl.message(
-      '¿Realmente desea eliminar?',
+      '¿Realmente desea eliminar',
       name: 'do_you_really_want_to_delete',
       desc: '',
       args: [],
