@@ -87,7 +87,7 @@ class _AppState extends State<App> {
                }
                if(errorFiles.isNotEmpty)
                {
-                 await errors(context, errorFiles);
+                 errors(context, errorFiles);
 
                  setState(() {
                    adminRoutes(context,sqlBd);
