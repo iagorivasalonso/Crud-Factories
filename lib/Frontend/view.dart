@@ -499,7 +499,6 @@ class _viewState extends State<view> {
                                   ],
                                 ),
                               ),
-                          if(view == S.of(context).company || view == S.of(context).shipment)
                           Container(
                             color: view == S.of(context).company
                                 ? Colors.cyan
