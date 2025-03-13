@@ -26,7 +26,7 @@ csvImportRoutes(BuildContext context,List<String> fileContent, List<RouteCSV> ro
   } catch (e) {
         String array = S.of(context).routes;
 
-        if(e.toString().contains("El sistema no puede encontrar el file especificado"))
+        if(e.toString().contains("El sistema no puede encontrar el archivo especificado"))
         {
            String noFile =  S.of(context).file_not_found;
            errorFiles.add("$noFile $array");

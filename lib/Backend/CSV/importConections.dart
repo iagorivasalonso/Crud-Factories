@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:crud_factories/Backend/Global/list.dart';
 import 'package:crud_factories/Backend/Global/files.dart';
 import 'package:crud_factories/Objects/Conection.dart';
+import 'package:crud_factories/generated/l10n.dart';
 import 'package:flutter/material.dart';
 
 csvImportConections(BuildContext context,List<String> fileContent, List<Conection> conections) async {
@@ -25,15 +26,19 @@ csvImportConections(BuildContext context,List<String> fileContent, List<Conectio
      }
 
   } catch (e) {
-    if(e.toString().contains("El sistema no puede encontrar el file especificado"))
+    String array = S.of(context).connections;
+
+    if(e.toString().contains("El sistema no puede encontrar el archivo especificado"))
     {
-      errorFiles.add("no se encuentra file de connections");
+      String noFile =  S.of(context).file_not_found;
+      errorFiles.add("$noFile $array");
     }
     else
     {
       if(e.toString().contains("Invalid value"))
       {
-        errorFiles.add("error de formato de file de connections");
+        String errorFile =  S.of(context).file_format_error;
+        errorFiles.add("$errorFile $array");
       }
     }
   }

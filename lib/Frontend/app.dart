@@ -85,6 +85,14 @@ class _AppState extends State<App> {
                         fileFail = true;
                    }
                }
+               if(errorFiles.isNotEmpty)
+               {
+                 await errors(context, errorFiles);
+
+                 setState(() {
+                   adminRoutes(context,sqlBd);
+                 });
+               }
 
                if(fileFail == true)
                {
@@ -103,23 +111,7 @@ class _AppState extends State<App> {
                }
           }
 
-          if(errorFiles.isNotEmpty)
-          {
-               if(errorFiles.length > 1)
-               {
-                 errors(context, errorFiles);
-               }
-               else
-               {
-                  String action = errorFiles[0];
-                  await error(context, action);
 
-                  setState(() {
-                    adminRoutes(context,sqlBd);
-                  });
-               }
-
-          }
      });
 
   }

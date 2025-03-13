@@ -5,7 +5,8 @@ import 'package:flutter/material.dart';
 
 Future<bool> errors(BuildContext context, List<String> errorFiles) async {
 
-  double heightAlert = errorFiles.length * 28.0;
+  double heightAlert = 185.0 + (errorFiles.length * 15.0);
+  double dialogHeight = heightAlert.clamp(185.0, 400.0);
 
   bool? err = await showDialog(
     context: context,
@@ -16,14 +17,15 @@ Future<bool> errors(BuildContext context, List<String> errorFiles) async {
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(0)),
           child: SizedBox(
             width: 400,
-            height: 200 + heightAlert,
+            height: dialogHeight,
             child: Column(
               children: [
                 headAlert(title: S.of(context).error),
                 Expanded(
-                  flex: 3,
+                  flex: 2,
                   child: Padding(
-                    padding: const EdgeInsets.only(top: 40.0,left: 60.0),
+                    padding:  const EdgeInsets.only(left: 25,top: 25,right: 20, bottom: 10.0
+                    ),
                     child: ListView.builder(
                       itemCount: errorFiles.length,
                       itemBuilder: (BuildContext context, int index) {
@@ -42,20 +44,17 @@ Future<bool> errors(BuildContext context, List<String> errorFiles) async {
                     ),
                   ),
                 ),
-                Expanded(
-                  flex: 1,
-                  child: Padding(
-                    padding: const EdgeInsets.only(bottom: 20),
-                    child: MaterialButton(
-                      color: Colors.lightBlue,
-                      child: Text(
-                        S.of(context).acept,
-                        style: TextStyle(color: Colors.white),
-                      ),
-                      onPressed: () async {
-                        Navigator.of(context).pop(false);
-                      },
+                Padding(
+                  padding:  const EdgeInsets.only(left: 150, right: 150, bottom: 15),
+                  child: MaterialButton(
+                    color: Colors.lightBlue,
+                    child: Text(
+                      S.of(context).acept,
+                      style: TextStyle(color: Colors.white),
                     ),
+                    onPressed: () async {
+                      Navigator.of(context).pop(false);
+                    },
                   ),
                 ),
               ],
