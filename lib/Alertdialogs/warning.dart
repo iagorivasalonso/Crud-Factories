@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 
 Future<bool> warning(BuildContext  context,String action) async{
 
- bool? campEmpty = await showDialog(
+  bool? campEmpty = await showDialog(
      context: context,
      barrierDismissible: true,
      builder: (BuildContext context, ) {
@@ -14,9 +14,7 @@ Future<bool> warning(BuildContext  context,String action) async{
            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(0)),
            child: SizedBox(
              width: 380,
-             height: action.length > 59
-                     ? 220
-                     : 175,
+             height: 185,
              child: Column(
                children: [
                  headAlert(title: S.of(context).careful),
@@ -28,8 +26,6 @@ Future<bool> warning(BuildContext  context,String action) async{
                        overflow: TextOverflow.ellipsis,),
                    ),
                  ),
-                 if(action.length >59)
-                 SizedBox(height: 25,),
                  Expanded(
                    child: Row(
                      children: [
