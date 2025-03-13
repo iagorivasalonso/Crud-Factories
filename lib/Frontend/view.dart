@@ -330,13 +330,17 @@ class _viewState extends State<view> {
 
       if(view == S.of(context).company && factoriesSector.isEmpty)
       {
-        action = LocalizationHelper.no_array_departament(context, view);
+        String array =  S.of(context).companies;
+
+        action = LocalizationHelper.no_array_departament(context, array);
         error(context, action);
       }
 
       if(view == S.of(context).shipment && lineSector.isEmpty)
       {
-        action = LocalizationHelper.no_array_departament(context, view);
+        String array =  S.of(context).shipments;
+
+        action = LocalizationHelper.no_array_departament(context, array);
         error(context, action);
       }
     });
