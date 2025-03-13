@@ -70,9 +70,12 @@ Future<bool> chargueDataCSV(BuildContext context) async {
                    route: '',
                  ));
                }
+               else
+               {
+                 routesManage = routesOrd;
+               }
          }
 
-         routesManage = routesOrd;
      }
      else
      {
