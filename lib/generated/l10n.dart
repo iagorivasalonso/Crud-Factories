@@ -230,10 +230,10 @@ class S {
     return Intl.message('Envíos', name: 'shipments', desc: '', args: []);
   }
 
-  /// `Envío de correos electrónicos`
+  /// `Envío de emails`
   String get sending_emails {
     return Intl.message(
-      'Envío de correos electrónicos',
+      'Envío de emails',
       name: 'sending_emails',
       desc: '',
       args: [],
@@ -335,14 +335,9 @@ class S {
     return Intl.message('Listas', name: 'lists', desc: '', args: []);
   }
 
-  /// `Nuevo correo electrónico`
+  /// `Nuevo email`
   String get new_email {
-    return Intl.message(
-      'Nuevo correo electrónico',
-      name: 'new_email',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('Nuevo email', name: 'new_email', desc: '', args: []);
   }
 
   /// `Número`
@@ -847,10 +842,10 @@ class S {
     );
   }
 
-  /// `No se puede establecer conexión`
+  /// `No se puede establecer la conexión`
   String get connection_cannot_be_established {
     return Intl.message(
-      'No se puede establecer conexión',
+      'No se puede establecer la conexión',
       name: 'connection_cannot_be_established',
       desc: '',
       args: [],
@@ -1082,9 +1077,14 @@ class S {
     return Intl.message('La empresa', name: 'the_company', desc: '', args: []);
   }
 
+  /// `La`
+  String get theFemale {
+    return Intl.message('La', name: 'theFemale', desc: '', args: []);
+  }
+
   /// `El`
-  String get the {
-    return Intl.message('El', name: 'the', desc: '', args: []);
+  String get theMale {
+    return Intl.message('El', name: 'theMale', desc: '', args: []);
   }
 
   /// `El empleado`

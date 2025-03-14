@@ -176,10 +176,10 @@ class LocalizationHelper {
   }
   static String cant_numbers( BuildContext context,String camp,int cant) {
 
-    String preVar = S.of(context).the;
+    String preVar = S.of(context).theMale;
     String intermVar = S.of(context).must_have;
     String postVar = S.of(context).digits;
-
+    camp = camp.toLowerCase();
 
     return Intl.message(
       '$preVar $camp $intermVar $cant $postVar',
@@ -240,11 +240,18 @@ class LocalizationHelper {
     );
   }
 
-  static String manage_array( BuildContext context,String array,String actionArray) {
+  static String manage_array( BuildContext context,String array,String actionArray, [String? pr]) {
 
-    String preVar = S.of(context).the;
+    String preVar = S.of(context).theMale;
+
+    if( pr != null)
+    {
+       preVar = S.of(context).theFemale;
+    }
+
     String intermVar = S.of(context).it_has_been.toLowerCase();
     String postVar = S.of(context).correctly.toLowerCase();
+    array = array.toLowerCase();
     actionArray = actionArray.toLowerCase();
 
     return Intl.message(
@@ -287,7 +294,7 @@ class LocalizationHelper {
 
     String preVar = S.of(context).the_company;
     String postVar = S.of(context).has_been_deleted_successfully.toLowerCase();
-
+print(array);
     return Intl.message(
       '$preVar $array  $postVar',
       name: '$preVar $array $postVar',

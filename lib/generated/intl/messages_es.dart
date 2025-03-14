@@ -101,7 +101,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "connect": MessageLookupByLibrary.simpleMessage("Conectar"),
     "connection": MessageLookupByLibrary.simpleMessage("Conexión"),
     "connection_cannot_be_established": MessageLookupByLibrary.simpleMessage(
-      "No se puede establecer conexión",
+      "No se puede establecer la conexión",
     ),
     "connection_has_been_successfully_deleted":
         MessageLookupByLibrary.simpleMessage(
@@ -252,9 +252,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "name_sector": MessageLookupByLibrary.simpleMessage("Nombre del sector"),
     "newFemale": MessageLookupByLibrary.simpleMessage("Nueva"),
     "newMale": MessageLookupByLibrary.simpleMessage("Nuevo"),
-    "new_email": MessageLookupByLibrary.simpleMessage(
-      "Nuevo correo electrónico",
-    ),
+    "new_email": MessageLookupByLibrary.simpleMessage("Nuevo email"),
     "no": MessageLookupByLibrary.simpleMessage("No"),
     "no_file_exists": MessageLookupByLibrary.simpleMessage(
       "No existe el archivo de",
@@ -316,9 +314,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "send": MessageLookupByLibrary.simpleMessage("Enviar"),
     "send_a": MessageLookupByLibrary.simpleMessage("Enviar a"),
     "sender": MessageLookupByLibrary.simpleMessage("Remitente"),
-    "sending_emails": MessageLookupByLibrary.simpleMessage(
-      "Envío de correos electrónicos",
-    ),
+    "sending_emails": MessageLookupByLibrary.simpleMessage("Envío de emails"),
     "sent": MessageLookupByLibrary.simpleMessage("Enviado"),
     "september": MessageLookupByLibrary.simpleMessage("Septiembre"),
     "server": MessageLookupByLibrary.simpleMessage("Servidor"),
@@ -336,7 +332,8 @@ class MessageLookup extends MessageLookupByLibrary {
     "that_sector_already_exists": MessageLookupByLibrary.simpleMessage(
       "Ese sector ya existe",
     ),
-    "the": MessageLookupByLibrary.simpleMessage("El"),
+    "theFemale": MessageLookupByLibrary.simpleMessage("La"),
+    "theMale": MessageLookupByLibrary.simpleMessage("El"),
     "the_company": MessageLookupByLibrary.simpleMessage("La empresa"),
     "the_email_has_been_successfully_sent":
         MessageLookupByLibrary.simpleMessage(
