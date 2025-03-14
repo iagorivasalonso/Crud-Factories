@@ -120,10 +120,10 @@ class validatorCamps {
     if(telephone.isNotEmpty)
     {
       telephoneValid = RegExp(r"^[0-9,$]*$").hasMatch(telephone);
+      String camp = S.of(context).phone;
 
       if(telephoneValid != true)
       {
-         String camp = S.of(context).phone;
         String action =LocalizationHelper.camp_number(context, camp);
         error(context,action);
       }
@@ -132,7 +132,7 @@ class validatorCamps {
         if(telephone.trim().length!=9)
         {
           telephoneValid = false;
-          String action = LocalizationHelper.cant_numbers(context,telephone, 9);
+          String action = LocalizationHelper.cant_numbers(context,camp, 9);
           error(context,action);
 
         }
