@@ -5,7 +5,8 @@ import 'package:flutter/material.dart';
 
 Future<bool> error(BuildContext  context, String action, [format]) async {
 
-
+  double heightAlert = 185.0 + (2 * 15.0);
+  double dialogHeight = heightAlert.clamp(185.0, 400.0);
 
   bool? err = await showDialog(
       context: context,
@@ -16,17 +17,17 @@ Future<bool> error(BuildContext  context, String action, [format]) async {
             shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(0)),
             child: SizedBox(
               width: 400,
-              height: action.length > 59
-                  ? 185
-                  : 175,
+              height: format == null
+                  ? 175
+                  : dialogHeight,
               child: Column(
                 children: [
                   headAlert(title: S.of(context).error),
                   Expanded(
                     child: Padding(
-                      padding:  const EdgeInsets.only(left: 25,top: 25,right: 20),
+                      padding:  const EdgeInsets.only(left: 25,top: 20, bottom: 10.0 ,right: 20),
                       child: format == null
-                        ? Row(
+                        ? Column(
                         children: [
                           Expanded(
                             child: Text(action,
@@ -35,7 +36,7 @@ Future<bool> error(BuildContext  context, String action, [format]) async {
                           ),
                         ],
                       )
-                      :Row(
+                      :Column(
                         children: [
                           Expanded(
                             child: Text(action,
