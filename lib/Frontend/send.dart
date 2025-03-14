@@ -814,7 +814,6 @@ class _newSendState extends State<newSend> {
 
 
                                                      String action ='';
-                                                      allLinesModify = 0;
                                                      if (allLinesModify == 0)
                                                      {
                                                        action = S.of(context).has_no_line_to_modify;
@@ -861,12 +860,6 @@ class _newSendState extends State<newSend> {
                                                      lineEdit = List.generate(allFactories.length, (index) => false);
 
                                                      resetCamps();
-                                                  }
-                                                  else
-                                                  {
-                                                    String actionArray = S.of(context).saved;
-                                                    String action = LocalizationHelper.manage_array(context, array, actionArray);
-                                                    await confirm(context, action);
                                                   }
                                               }
                                               else
