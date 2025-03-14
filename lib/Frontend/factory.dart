@@ -820,20 +820,19 @@ class _newFactoryState extends State<newFactory> {
                                           String action = LocalizationHelper.camp_empty(context, campo);
                                           error(context, action);
                                         }
-                                        else if (validatorCamps.telephoneCorrect(telephone1, context) == false) {
+                                        if (validatorCamps.telephoneCorrect(telephone1, context) == false) {
 
 
                                         }
-                                        else if (validatorCamps.telephoneCorrect(telephone2, context) == true) {
+                                        if (validatorCamps.telephoneCorrect(telephone2, context) == true) {
 
                                         }
-                                        else
                                         if (validatorCamps.mailCorrect(controllerMail.text) != true) {
 
                                           action = S.of(context).not_a_valid_email;
                                           error(context, action);
+
                                         }
-                                        else
                                         if (validatorCamps.webCorrect(controllerWeb.text) != true)
                                         {
                                           action = S.of(context).not_a_valid_webpage;
@@ -846,6 +845,7 @@ class _newFactoryState extends State<newFactory> {
                                           String street = S.of(context).street;
                                           String number = S.of(context).number;
                                           String format = '$street , $number';
+
                                           error(context, action, format);
                                         }
                                         else
@@ -1020,14 +1020,15 @@ class _newFactoryState extends State<newFactory> {
                                               bool errorExp = await csvExportatorFactories(
                                                   allFactories);
 
-                                              String array = S.of(context).companies;
+                                              String array = S.of(context).company;
 
                                               if (errorExp == false)
                                               {
 
                                                 String actionArray = S.of(context).saved;
+                                               String pr = S.of(context).theFemale;
 
-                                                String action = LocalizationHelper.manage_array(context, array, actionArray);
+                                                String action = LocalizationHelper.manage_array(context, array, actionArray,pr);
                                                 await confirm(context, action);
                                               }
                                               else
