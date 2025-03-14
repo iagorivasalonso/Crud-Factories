@@ -213,9 +213,6 @@ class _newSendState extends State<newSend> {
               {
                 _controllersObserLine[i].text = lineSelected[i].observations;
                 _controllerStateLine[i].text =  manageState.seeLanguage(context, lineSelected[i].state.toString());
-
-
-                print(_controllerStateLine[i].text);
               }
 
               int sectorfactory = 0;
@@ -278,7 +275,7 @@ class _newSendState extends State<newSend> {
 
     if(itenSelect == 1 && subIten2Select != 0 )
     {
-      String sp = S.of(context).the.toLowerCase();
+      String sp = S.of(context).theMale.toLowerCase();
       titleComplete ='$title $send $sp $sectorView';
     }
     else
