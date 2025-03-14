@@ -66,6 +66,7 @@ class _viewState extends State<view> {
   List<String> factoryName = [];
   String? selectedFilter;
   String? selectedSend;
+  bool listEmpty = false;
 
   Future<void> _runFilter(BuildContext context, String view, String enteredKeyboard, String filter,
       List<String> factoryName, [String? filterFactory]) async {
@@ -154,7 +155,7 @@ class _viewState extends State<view> {
 
               if (filter ==  S.of(context).address || filter ==  S.of(context).city)
               {
-                  pr = S.of(context).the;
+                  pr = S.of(context).theMale;
               }
               filter = '$pr $filter';
         }
@@ -345,6 +346,10 @@ class _viewState extends State<view> {
       }
     });
 
+    if(listEmpty == true)
+    {
+      err = true;
+    }
     return Scaffold(
       body: widget.err== false
           ? Align(
@@ -533,27 +538,38 @@ class _viewState extends State<view> {
                                             if (view == S.of(context).company)
                                             {
                                               String idSupr = resulFactories[index].id;
+                                              String action ="";
 
-                                              for(int i = 0; i <allFactories.length; i++)
+                                              for(int i = 0; i <resulFactories.length; i++)
                                               {
-                                                if(allFactories[i].id==idSupr)
-                                                {
-                                                  String name = allFactories[i].name;
-                                                  String action = LocalizationHelper.delete_factory(context, name);
-                                                  bool delete = await confirm(context, action);
-                                                  allFactories.removeAt(i);
-                                                }
+                                                  String name = resulFactories[i].name;
+                                                  action = LocalizationHelper.delete_factory(context, name);
                                               }
+                                              bool delete = await confirm(context, action);
+                                              setState(() {
+                                                resulFactories.removeAt(index);
+                                              });
 
-                                              if(allFactories.isEmpty)
+                                              if(resulFactories.isEmpty)
                                               {
-                                                setState(() {});
+                                                setState(() {
+                                                  listEmpty = true;
+                                                });
                                               }
                                               if (conn != null)
                                               {
                                                 sqlDeleteFactory(idSupr);
                                               }
-                                              else {
+                                              else
+                                              {
+
+                                                 for(int i = 0; i < allFactories.length; i ++)
+                                                 {
+                                                     if(idSupr == allFactories[i].id)
+                                                     {
+                                                         allFactories[i];
+                                                     }
+                                                 }
                                                 csvExportatorFactories(allFactories);
                                                 empleoyes.removeWhere((empleoye) => empleoye.idFactory == idSupr);
                                                 csvExportatorEmpleoyes(empleoyes);
@@ -615,9 +631,10 @@ class _viewState extends State<view> {
                                                 context, action1);
                                           },
                                           onDismissed: (direction) async {
-                                            if (view == S.of(context).email) {
+                                            if (view == S.of(context).email)
+                                            {
                                               String idSupr = mails[index].id;
-                                              String act = S.of(context).has_been_deleted_successfully;
+                                              String act = S.of(context).has_been_deleted_successfully.toLowerCase();
                                               String action = '$array  $act';
                                               bool delete = await confirm(context, action);
                                               setState(() {
@@ -648,8 +665,7 @@ class _viewState extends State<view> {
                                                 });
                                               }
                                               else {
-                                                saveChanges =
-                                                !await changesNoSave(context);
+                                                saveChanges = !await changesNoSave(context);
 
                                                 if (saveChanges == false) {
                                                   setState(() {
@@ -682,14 +698,13 @@ class _viewState extends State<view> {
                                               List<String> idsDelete = [];
                                               if (suprLines == true)
                                               {
-
                                                 if (filter == S.of(context).date) {
 
                                                   campKey = resultSend[index].description;
 
                                                   for (int i = 0; i < lineSector.length; i++)
                                                   {
-                                                    if (lineSector[i].date == campKey && lineSector[i].state == S.of(context).returned)
+                                                    if (lineSector[i].date == campKey && lineSector[i].state == LineSendState.returned)
                                                     {
                                                       idsDelete.add(lineSector[i].id);
                                                     }
