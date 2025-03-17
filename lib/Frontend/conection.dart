@@ -558,8 +558,14 @@ class _conectionState extends State<conection> {
                                         }
                                         else if(action1 == S.of(context).save)
                                         {
-                                          bd_action = S.of(context).save;
-                                          db = controllerNameBD.text;
+                                            bd_action = S.of(context).save;
+                                            db = controllerNameBD.text;
+
+                                            setState(() {
+                                              action0 = S.of(context).edit;
+                                              action1 = S.of(context).disconnect;
+                                              action2 = S.of(context).delete;
+                                            });
                                         }
 
                                         if(conn != null && action0 != S.of(context).volver)
