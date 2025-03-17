@@ -6,7 +6,7 @@ import 'package:crud_factories/Frontend/importData.dart';
 import 'package:crud_factories/Frontend/send.dart';
 import 'package:crud_factories/Frontend/send_mail.dart';
 import 'package:crud_factories/Frontend/view.dart';
-import 'package:crud_factories/Functions/avoidRepeatArray.dart';
+import 'package:crud_factories/Functions/manageArrays.dart';
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter/src/widgets/framework.dart';
 
@@ -75,6 +75,7 @@ break;
 
         if (subIten1Selection == 2)
           tView = S.of(context).email;
+
         if (subIten1Selection == 3)
         {
           err = true;
@@ -82,7 +83,7 @@ break;
 
             if(subIten2Selection == 0)
             {
-                lineSector.clear();
+              //  lineSector.clear();
                 String lineFactory ="";
 
                 for(int i = 0; i < allLines.length; i++)
@@ -139,7 +140,8 @@ break;
               element.add(lineSector[i].date);
             }
 
-            dateSends = avoidRepeteat(element);
+          if(dateSends.isEmpty)
+          dateSends = manageArrays.avoidRepeteat(element);
         }
 
 

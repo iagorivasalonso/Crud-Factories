@@ -6,6 +6,7 @@ import 'package:crud_factories/Backend/SQL/modifyLines.dart';
 import 'package:crud_factories/Backend/Global/variables.dart';
 import 'package:crud_factories/Backend/CSV/exportLines.dart';
 import 'package:crud_factories/Functions/createId.dart';
+import 'package:crud_factories/Functions/manageArrays.dart';
 import 'package:crud_factories/Functions/manageState.dart';
 import 'package:crud_factories/Objects/LineSend.dart';
 import 'package:crud_factories/generated/l10n.dart';
@@ -774,6 +775,8 @@ class _newSendState extends State<newSend> {
                                                             observations: _controllersObserLine[i].text,
                                                             state:manageState.parseState(_controllerStateLine[i].text,context,true)),
                                                       );
+
+                                                      manageArrays.addDateSend(controllerSearch.text);
                                                   }
                                                 }
                                                 String action = LocalizationHelper.sendsFactory(context, allLines);

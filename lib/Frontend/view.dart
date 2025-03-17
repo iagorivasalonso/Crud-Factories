@@ -15,7 +15,7 @@ import 'package:crud_factories/Backend/Global/variables.dart';
 import 'package:crud_factories/Frontend/factory.dart';
 import 'package:crud_factories/Frontend/mail.dart';
 import 'package:crud_factories/Frontend/send.dart';
-import 'package:crud_factories/Functions/avoidRepeatArray.dart';
+import 'package:crud_factories/Functions/manageArrays.dart';
 import 'package:crud_factories/Functions/changesNoSave.dart';
 import 'package:crud_factories/Objects/Factory.dart';
 import 'package:crud_factories/Objects/LineSend.dart';
@@ -843,7 +843,7 @@ class _viewState extends State<view> {
         tmp.add(lineSector[i].factory);
       }
 
-      factoryName = avoidRepeteat(tmp);
+      factoryName = manageArrays.avoidRepeteat(tmp);
 
 
       int cant = 0;
