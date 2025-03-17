@@ -8,6 +8,7 @@ import 'package:crud_factories/Backend/CSV/exportLines.dart';
 import 'package:crud_factories/Functions/createId.dart';
 import 'package:crud_factories/Functions/manageArrays.dart';
 import 'package:crud_factories/Functions/manageState.dart';
+import 'package:crud_factories/Functions/validatorCamps.dart';
 import 'package:crud_factories/Objects/LineSend.dart';
 import 'package:crud_factories/generated/l10n.dart';
 import 'package:crud_factories/helpers/localization_helper.dart';
@@ -359,12 +360,13 @@ class _newSendState extends State<newSend> {
                                                     DateTime(DateTime.now().year - 10),
                                                     DateTime(DateTime.now().year + 1),
                                               );
-                                              setState(() {
-                                                 date = DateFormat('dd-MM-yyyy').format(dateSelected!);
-                                                 controllerSearch.text = date;
-                                            });
-                                          }
 
+                                               if (dateSelected != null) {
+                                                 setState(() {
+                                                   date = DateFormat('dd-MM-yyyy').format(dateSelected);
+                                                 });
+                                               }
+                                          }
 
                                         },
                                       ),
@@ -760,27 +762,40 @@ class _newSendState extends State<newSend> {
                                               if(select == -1)
                                               {
 
-                                                for(int i = 0; i < allFactories.length; i++)
-                                                {
-                                                  if(Send[i] == true)
-                                                  {
-                                                    int idNew = idInit + current.length;
-                                                    allLines ++;
+                                                    if (validatorCamps.dateCorrect(controllerSearch.text) == false)
+                                                    {
 
-                                                    current.add(
-                                                        LineSend(
-                                                            id: idNew.toString(),
-                                                            date: controllerSearch.text,
-                                                            factory: allFactories[i].name,
-                                                            observations: _controllersObserLine[i].text,
-                                                            state:manageState.parseState(_controllerStateLine[i].text,context,true)),
-                                                      );
+                                                      String array = S.of(context).date;
+                                                      String action = LocalizationHelper.format_must(context, array);
 
-                                                      manageArrays.addDateSend(controllerSearch.text);
-                                                  }
-                                                }
-                                                String action = LocalizationHelper.sendsFactory(context, allLines);
-                                                confirm(context,action);
+                                                      String format = 'DD-MM-AAAA';
+                                                      error(context, action, format);
+                                                    }
+                                                    else
+                                                    {
+                                                      for(int i = 0; i < allFactories.length; i++)
+                                                      {
+                                                        if(Send[i] == true)
+                                                        {
+                                                          int idNew = idInit + current.length;
+                                                          allLines ++;
+
+                                                          current.add(
+                                                            LineSend(
+                                                                id: idNew.toString(),
+                                                                date: controllerSearch.text,
+                                                                factory: allFactories[i].name,
+                                                                observations: _controllersObserLine[i].text,
+                                                                state:manageState.parseState(_controllerStateLine[i].text,context,true)),
+                                                          );
+
+                                                          manageArrays.addDateSend(controllerSearch.text);
+                                                        }
+                                                      }
+                                                      String action = LocalizationHelper.sendsFactory(context, allLines);
+                                                      confirm(context,action);
+                                                    }
+
                                               }
                                               else
                                               {
