@@ -83,7 +83,7 @@ break;
 
             if(subIten2Selection == 0)
             {
-              //  lineSector.clear();
+
                 String lineFactory ="";
 
                 for(int i = 0; i < allLines.length; i++)
