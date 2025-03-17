@@ -616,7 +616,6 @@ class _conectionState extends State<conection> {
                                             String action1="$title $nameBD";
                                             bool confirm1 = await confirmDelete(context, action1);
 
-
                                             if(confirm1 == true)
                                             {
 
@@ -645,10 +644,8 @@ class _conectionState extends State<conection> {
                                                 action1 = S.of(context).connection_has_been_successfully_deleted;
                                                 confirm(context,action1);
                                               }
-
                                             }
                                           }
-
                                         }
                                         else
                                         {
