@@ -277,7 +277,7 @@ class _newSendState extends State<newSend> {
 
     if(itenSelect == 1 && subIten2Select != 0 )
     {
-      String sp = S.of(context).theMale.toLowerCase();
+      String sp = S.of(context).de.toLowerCase();
       titleComplete ='$title $send $sp $sectorView';
     }
     else

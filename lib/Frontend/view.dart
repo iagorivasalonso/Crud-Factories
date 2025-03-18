@@ -260,7 +260,7 @@ class _viewState extends State<view> {
         filterSearch = S.of(context).name;
         filterListCurrent = filterListFactories;
       }
-      if (view == S.of(context).shipment)
+      if (view == S.of(context).shipment && widget.err == false)
       {
         selectedFilter = null;
 

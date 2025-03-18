@@ -36,40 +36,21 @@ FuntionSeleted(int itenSelection, int subIten1Selection,int subIten2Selection, d
         if (subIten1Selection == 2)
           return newImport(context);
 
-break;
       case 1:
         String tView = '';
         bool err = false;
+        factoriesSector.clear();
 
-        if (subIten1Selection == 1 || subIten1Selection == 3)
+        if (subIten1Selection == 1)
         {
-            err = true;
             tView = S.of(context).company;
 
-            factoriesSector.clear();
 
-            String sector = subIten2Selection.toString();
+            groupFactoriesSector(subIten2Selection);
 
-            if(subIten2Selection == 0)
+            if(factoriesSector.isEmpty)
             {
-              factoriesSector.clear();
-
-              for(int i = 0; i < allFactories.length;i++)
-              {
-                factoriesSector.add(allFactories[i]);
-                err = false;
-              }
-            }
-            else
-            {
-              for(int i = 0; i < allFactories.length;i++)
-              {
-                if(allFactories[i].sector == sector)
-                {
-                  factoriesSector.add(allFactories[i]);
-                  err = false;
-                }
-              }
+                err = true;
             }
         }
 
@@ -78,84 +59,142 @@ break;
 
         if (subIten1Selection == 3)
         {
-          err = true;
+
+          err = false;
           tView = S.of(context).shipment;
 
-            if(subIten2Selection == 0)
-            {
+          groupFactoriesSector(subIten2Selection);
 
-                String lineFactory ="";
-
-                for(int i = 0; i < allLines.length; i++)
-                {
-                   lineFactory = allLines[i].factory;
-
-                   for(int y = 0; y < factoriesSector.length; y++)
-                   {
-                        if(factoriesSector[y].name==lineFactory)
-                        {
-                          allLines[i].sector = factoriesSector[y].sector;
-                          err = false;
-                        }
-
-
-                   }
-                  lineSector.add(allLines[i]);
-                }
-
-            }
-            else
-            {
-                lineSector.clear();
-                String factoryCurrent ="";
-                bool exist = false;
-                String sFactory = "";
-
-                for(int i = 0; i < allLines.length; i++)
-                {
-                    factoryCurrent = allLines[i].factory;
-                    exist = false;
-
-                          for(int y = 0; y <factoriesSector.length; y++)
-                          {
-                               if(factoriesSector[y].name == factoryCurrent)
-                               {
-                                 exist = true;
-                                 sFactory = factoriesSector[y].sector;
-                                 err = false;
-                               }
-                          }
-
-                    if(exist == true)
-                    {
-                        allLines[i].sector = sFactory;
-                        lineSector.add(allLines[i]);
-                    }
-                }
-
-            }
-
-            for (int i = 0; i < lineSector.length; i++)
-            {
-              element.add(lineSector[i].date);
-            }
-
-          if(dateSends.isEmpty)
-          dateSends = manageArrays.avoidRepeteat(element);
+          if(factoriesSector.isEmpty)
+          {
+            err = true;
+          }
+          else
+          {
+              groupLinesSector(subIten2Selection,element);
+          }
         }
 
 
         return view(tView,err,context);
 
-
       case 2:
         if (subIten1Selection == 0)
-           return sendMail(context);
+        {
+          groupFactoriesSector(subIten2Selection);
+          groupLinesSector(subIten2Selection,element);
+
+          return sendMail(context);
+        }
+
         if (subIten1Selection == 1)
           return conection(context);
     }
 
 }
+void groupFactoriesSector(int subIten2Selection) {
+
+  String sector = subIten2Selection.toString();
+  factoriesSector.clear();
+  if(subIten2Selection == 0)
+  {
+
+    for(int i = 0; i < allFactories.length;i++)
+    {
+      factoriesSector.add(allFactories[i]);
+    }
+  }
+  else
+  {
+
+    for(int i = 0; i < allFactories.length;i++)
+    {
+      if(allFactories[i].sector == sector)
+      {
+        factoriesSector.add(allFactories[i]);
+      }
+    }
+  }
+
+}
+
+void groupLinesSector(int subIten2Selection, List<String> element) {
+
+
+
+  dateSends.clear();
+  lineSector.clear();
+
+  if(subIten2Selection == 0)
+  {
+
+    String lineFactory ="";
+    for(int i = 0; i < allLines.length; i++)
+    {
+      lineFactory = allLines[i].factory;
+
+      for(int y = 0; y < allFactories.length; y++)
+      {
+        if(allFactories[y].name==lineFactory)
+        {
+          allLines[i].sector = allFactories[y].sector;
+          lineSector.add(allLines[i]);
+        }
+
+      }
+
+    }
+
+
+    for (int i = 0; i < lineSector.length; i++)
+    {
+      element.add(lineSector[i].date);
+    }
+
+  }
+  else
+  {
+    String factoryCurrent ="";
+    bool exist = false;
+    String sFactory = "";
+
+     if(factoriesSector.isEmpty)
+       groupFactoriesSector(0);
+
+    for(int i = 0; i < allLines.length; i++)
+    {
+       factoryCurrent = allLines[i].factory;
+       exist = false;
+
+          for(int y = 0; y <factoriesSector.length; y++)
+          {
+            if(factoriesSector[y].name == factoryCurrent)
+            {
+              exist = true;
+              sFactory = factoriesSector[y].sector;
+
+            }
+          }
+
+      if(exist == true)
+      {
+        allLines[i].sector = sFactory;
+        lineSector.add(allLines[i]);
+      }
+    }
+
+    for (int i = 0; i < lineSector.length; i++)
+    {
+      element.add(lineSector[i].date);
+    }
+
+  }
+
+    dateSends = manageArrays.avoidRepeteat(element);
+
+}
+
+
 
 
 
