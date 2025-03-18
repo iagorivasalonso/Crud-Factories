@@ -442,8 +442,6 @@ class _AppState extends State<App> {
                                     }
                                   }
                               ),
-
-                              const MenuDivider(),
                               for(int i = 0 ; i < sectors.length; i++)
                                 MenuButton(
                                     text: SizedBox(
@@ -645,7 +643,6 @@ class _AppState extends State<App> {
                                     }
                                   }
                               ),
-                              const MenuDivider(),
                               for(int i = 0 ; i < sectors.length; i++)
                                 MenuButton(
                                     text: SizedBox(
