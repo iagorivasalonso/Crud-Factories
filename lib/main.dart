@@ -34,7 +34,6 @@ class MyApp extends StatelessWidget {
         builder: (context) {
 
           MyWindowListener.context = context;
-
            _initializeWindow(context);
 
           return App();
