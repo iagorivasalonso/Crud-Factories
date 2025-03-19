@@ -8,7 +8,6 @@ import 'package:crud_factories/Alertdialogs/typeconnection.dart';
 import 'package:crud_factories/Alertdialogs/warning.dart';
 import 'package:crud_factories/Backend/CSV/chargueData%20csv.dart';
 import 'package:crud_factories/Backend/CSV/exportSectors.dart';
-import 'package:crud_factories/Backend/Global/textEditingController.dart';
 import 'package:crud_factories/Backend/Global/list.dart';
 import 'package:crud_factories/Backend/_selection_view.dart';
 import 'package:crud_factories/Backend/Global/variables.dart';

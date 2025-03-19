@@ -6,7 +6,6 @@ import 'package:crud_factories/Backend/CSV/exportEmpleoyes.dart';
 import 'package:crud_factories/Backend/CSV/exportFactories.dart';
 import 'package:crud_factories/Backend/CSV/exportLines.dart';
 import 'package:crud_factories/Backend/CSV/exportMails.dart';
-import 'package:crud_factories/Backend/Global/textEditingController.dart';
 import 'package:crud_factories/Backend/Global/list.dart';
 import 'package:crud_factories/Backend/SQL/deleteFactory.dart';
 import 'package:crud_factories/Backend/SQL/deleteLines.dart';

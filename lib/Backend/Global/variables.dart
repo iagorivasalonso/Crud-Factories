@@ -1,4 +1,9 @@
+import 'package:flutter/material.dart';
+
 var conn;
+
+
+TextEditingController controllerSearchSend = TextEditingController();
 
 String BaseDateSelected = "newMale";
 String routeFirst = "";
