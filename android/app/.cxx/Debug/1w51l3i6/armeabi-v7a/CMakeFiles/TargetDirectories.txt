@@ -1,0 +1,2 @@
+C:/Users/iagor/prueba/android/app/.cxx/Debug/1w51l3i6/armeabi-v7a/CMakeFiles/edit_cache.dir
+C:/Users/iagor/prueba/android/app/.cxx/Debug/1w51l3i6/armeabi-v7a/CMakeFiles/rebuild_cache.dir
