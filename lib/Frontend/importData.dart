@@ -347,7 +347,7 @@ class _newImportState extends State<newImport> {
                                           }
 
                                         }
-                                        String array =  S.of(context).emails;
+                                        String array =  S.of(context).mails;
 
                                         if(cantImport > 0)
                                         {
