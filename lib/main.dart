@@ -8,6 +8,7 @@ import 'Alertdialogs/closeApp.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:crud_factories/generated/l10n.dart';
 
+import 'Backend/Global/routes.dart';
 import 'Platform/appAndroid.dart';
 
 
@@ -58,6 +59,8 @@ class MyApp extends StatelessWidget {
                       GlobalCupertinoLocalizations.delegate,
                     ],
                     supportedLocales: S.delegate.supportedLocales,
+                    initialRoute: '/',
+                    routes: getAppRoutes(),
                     home: appAndroid(context),
             );
   }

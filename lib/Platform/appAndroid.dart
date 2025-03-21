@@ -38,20 +38,22 @@ class _appAndroidState extends State<appAndroid> {
                     ListTile(
                       title: Text(S.of(context).company),
                       onTap: () {
-                        Navigator.pop(context); // Cierra el Drawer
-                        // Navegar o realizar alguna acción
+                        Navigator.pop(context);
+                        Navigator.pushReplacementNamed(context,'/factory',arguments: -1);
                       },
                     ),
                     ListTile(
                       title: Text(S.of(context).mail),
                       onTap: (){
-
+                        Navigator.pop(context);
+                        Navigator.pushReplacementNamed(context,'/mail', arguments: -1);
                       },
                     ),
                     ListTile(
                       title: Text(S.of(context).shipment),
                       onTap: (){
-
+                        Navigator.pop(context);
+                        Navigator.pushReplacementNamed(context,'/sendMail', arguments: -1);
                       },
                     ),
                   ]
@@ -65,7 +67,8 @@ class _appAndroidState extends State<appAndroid> {
             ListTile(
               title: Text(S.of(context).import),
               onTap: (){
-
+                Navigator.pop(context);
+                Navigator.pushReplacementNamed(context,'/importData');
               },
             ),
             ExpansionTile(
@@ -74,27 +77,28 @@ class _appAndroidState extends State<appAndroid> {
                   ListTile(
                     title: Text(S.of(context).sectors),
                     onTap: () {
-                      Navigator.pop(context); // Cierra el Drawer
-                      // Navegar o realizar alguna acción
+                      Navigator.pop(context);
                     },
                   ),
                   ListTile(
                     title: Text(S.of(context).company),
                     onTap: () {
-                      Navigator.pop(context); // Cierra el Drawer
-                      // Navegar o realizar alguna acción
+                      Navigator.pop(context);
+                      Navigator.pushReplacementNamed(context,'/listFactories');
                     },
                   ),
                   ListTile(
                     title: Text(S.of(context).mail),
                     onTap: (){
-
+                      Navigator.pop(context);
+                      Navigator.pushReplacementNamed(context,'/listMails');
                     },
                   ),
                   ListTile(
                     title: Text(S.of(context).shipment),
                     onTap: (){
-
+                      Navigator.pop(context);
+                      Navigator.pushReplacementNamed(context,'/listSends');
                     },
                   ),
                 ]
@@ -102,19 +106,22 @@ class _appAndroidState extends State<appAndroid> {
             ListTile(
               title: Text(S.of(context).DB_connection),
               onTap: (){
-
+                Navigator.pop(context);
+                Navigator.pushReplacementNamed(context,'/conection');
               },
             ),
             ListTile(
               title: Text(S.of(context).sending_mails),
               onTap: (){
-
+                Navigator.pop(context);
+                Navigator.pushReplacementNamed(context,'/sendMail');
               },
             ),
             ListTile(
               title: Text(S.of(context).go_out),
               onTap: (){
-
+                Navigator.pop(context);
+                Navigator.pushReplacementNamed(context,'/exit');
               },
             ),
           ],
