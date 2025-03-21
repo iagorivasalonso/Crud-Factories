@@ -200,9 +200,9 @@ class S {
     return Intl.message('Editar', name: 'edit', desc: '', args: []);
   }
 
-  /// `mail`
+  /// `Email`
   String get mail {
-    return Intl.message('mail', name: 'mail', desc: '', args: []);
+    return Intl.message('Email', name: 'mail', desc: '', args: []);
   }
 
   /// `mails`
