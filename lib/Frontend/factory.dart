@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:adaptive_scrollbar/adaptive_scrollbar.dart';
 import 'package:crud_factories/Alertdialogs/confirm.dart';
 import 'package:crud_factories/Alertdialogs/create%20sector.dart';
@@ -172,7 +174,8 @@ class _newFactoryState extends State<newFactory> {
 
     final ShowPlatformDatePicker platformDatePicker = ShowPlatformDatePicker(buildContext: context);
 
-    return Scaffold(
+    return Platform.isWindows
+       ? Scaffold(
       body: AdaptiveScrollbar(
         controller: verticalScroll,
         width: widthBar,
@@ -1087,7 +1090,10 @@ class _newFactoryState extends State<newFactory> {
           ),
         ),
       ),
-    );
+    )
+       : Scaffold(
+           body: Text("factori"),
+        );
   }
 }
 

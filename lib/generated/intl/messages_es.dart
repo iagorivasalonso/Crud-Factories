@@ -234,7 +234,7 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "list_of": MessageLookupByLibrary.simpleMessage("Lista de"),
     "lists": MessageLookupByLibrary.simpleMessage("Listas"),
-    "mail": MessageLookupByLibrary.simpleMessage("mail"),
+    "mail": MessageLookupByLibrary.simpleMessage("Email"),
     "mails": MessageLookupByLibrary.simpleMessage("mails"),
     "march": MessageLookupByLibrary.simpleMessage("Marzo"),
     "may": MessageLookupByLibrary.simpleMessage("Mayo"),

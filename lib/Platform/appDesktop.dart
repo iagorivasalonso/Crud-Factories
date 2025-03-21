@@ -20,14 +20,14 @@ import 'package:crud_factories/helpers/localization_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:menu_bar/menu_bar.dart';
 
-class App extends StatefulWidget {
-  const App({super.key});
+class appDesktop extends StatefulWidget {
+  const appDesktop({super.key});
 
   @override
-  State<App> createState() => _AppState();
+  State<appDesktop> createState() => _appDesktopState();
 }
 
-class _AppState extends State<App> {
+class _appDesktopState extends State<appDesktop> {
 
   @override
   void initState() {
@@ -174,7 +174,7 @@ class _AppState extends State<App> {
                             MenuButton(
                                 text: SizedBox(
                                     width: wItem,
-                                    child: Text(S.of(context).email)),
+                                    child: Text(S.of(context).mail)),
                                 onTap: () async {
 
                                   if (saveChanges == false)
@@ -466,7 +466,7 @@ class _AppState extends State<App> {
                   MenuButton(
                       text: SizedBox(
                           width: wItem,
-                          child: Text(S.of(context).emails)),
+                          child: Text(S.of(context).mails)),
                       onTap: () async {
 
                                bool go = false;
@@ -495,7 +495,7 @@ class _AppState extends State<App> {
                                 }
                                 else
                                 {
-                                  String array = S.of(context).emails;
+                                  String array = S.of(context).mails;
                                   int dat = await noCategory(context, array);
 
                                   if(dat == 1)
@@ -678,11 +678,11 @@ class _AppState extends State<App> {
                   MenuButton(
                       text: SizedBox(
                           width: wItemMax,
-                          child: Text(S.of(context).sending_emails)),
+                          child: Text(S.of(context).sending_mails)),
                       onTap: () async {
                         if(mails.isEmpty)
                         {
-                          String action =S.of(context).no_have_registered_emails;
+                          String action =S.of(context).no_have_registered_mails;
                           error(context,action);
                         }
 

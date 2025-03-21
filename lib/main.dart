@@ -1,17 +1,25 @@
-import 'package:crud_factories/Frontend/app.dart';
+import 'dart:io';
+
+import 'package:crud_factories/Platform/appDesktop.dart';
 import 'package:fluent_ui/fluent_ui.dart';
+import 'package:flutter/material.dart';
 import 'package:window_manager/window_manager.dart';
 import 'Alertdialogs/closeApp.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:crud_factories/generated/l10n.dart';
+
+import 'Platform/appAndroid.dart';
 
 
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
 void main() async {
 
-  WidgetsFlutterBinding.ensureInitialized();
-  await windowManager.ensureInitialized();
+   if(Platform.isWindows)
+   {
+       WidgetsFlutterBinding.ensureInitialized();
+       await windowManager.ensureInitialized();
+   }
 
   runApp(MyApp());
 }
@@ -21,25 +29,37 @@ class MyApp extends StatelessWidget {
 
   Widget build(BuildContext context) {
 
-    return FluentApp(
-      debugShowCheckedModeBanner: false,
-      localizationsDelegates: const [
-        S.delegate,
-        ...GlobalMaterialLocalizations.delegates,
-        GlobalWidgetsLocalizations.delegate,
-        GlobalCupertinoLocalizations.delegate,
-      ],
-      supportedLocales: S.delegate.supportedLocales,
-      home: Builder(
-        builder: (context) {
+    return Platform.isWindows
+                ? FluentApp(
+                    debugShowCheckedModeBanner: false,
+                    localizationsDelegates: const [
+                      S.delegate,
+                      ...GlobalMaterialLocalizations.delegates,
+                      GlobalWidgetsLocalizations.delegate,
+                      GlobalCupertinoLocalizations.delegate,
+                    ],
+                    supportedLocales: S.delegate.supportedLocales,
+                    home: Builder(
+                      builder: (context) {
 
-          MyWindowListener.context = context;
-           _initializeWindow(context);
+                        MyWindowListener.context = context;
+                         _initializeWindow(context);
 
-          return App();
-        }
-      ),
-    );
+                        return appDesktop();
+                      }
+                    ),
+                )
+                : MaterialApp(
+                   onGenerateTitle: (context) => S.of(context).appTitle,
+                    localizationsDelegates: [
+                      S.delegate,
+                      GlobalMaterialLocalizations.delegate,
+                      GlobalWidgetsLocalizations.delegate,
+                      GlobalCupertinoLocalizations.delegate,
+                    ],
+                    supportedLocales: S.delegate.supportedLocales,
+                    home: appAndroid(context),
+            );
   }
 
   void _initializeWindow(BuildContext context){

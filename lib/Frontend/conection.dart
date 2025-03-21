@@ -117,7 +117,8 @@ class _conectionState extends State<conection> {
       }
     }
 
-    return Scaffold(
+    return Platform.isWindows
+      ? Scaffold(
       body: AdaptiveScrollbar(
         controller: verticalScroll,
         width: widthBar,
@@ -677,8 +678,12 @@ class _conectionState extends State<conection> {
           ),
         ),
       ),
-    );
+    )
+      : Scaffold(
+         body: Text("conection"),
+       );
   }
+
   actionsDB(String bd_action, String db, BuildContext context) async {
 
     var settings;

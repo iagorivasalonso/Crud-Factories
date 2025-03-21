@@ -91,7 +91,8 @@ class _sendMailState extends State<sendMail> {
            }
     }
 
-    return Scaffold(
+    return Platform.isWindows
+        ? Scaffold(
       body: AdaptiveScrollbar(
         controller: verticalScroll,
         width: widthBar,
@@ -110,8 +111,8 @@ class _sendMailState extends State<sendMail> {
                 scrollDirection: Axis.horizontal,
                 child: Container(
                   height: isList == false
-                            ? 835
-                            : 1105,
+                      ? 835
+                      : 1105,
                   width: 880,
                   child: Align(
                     alignment: Alignment.topLeft,
@@ -119,26 +120,26 @@ class _sendMailState extends State<sendMail> {
                       padding: const EdgeInsets.only(left: 30.0, top: 30.0),
                       child: Column(
                           children: [
-                         Row(
-                          children: [
-                            Padding(
-                              padding: const EdgeInsets.only(right: 10),
-                              child: Text(
-                                 S.of(context).sending_mails,
-                                style: TextStyle(fontWeight: FontWeight.bold),
-                              ),
-                            ),
-                          ],
-                        ),
-                        Row(
-                          children: [
-                            Column(
+                            Row(
                               children: [
                                 Padding(
-                                  padding: const EdgeInsets.only(top: 20.0, bottom: 20.0, left: 30.0),
-                                  child: otherMail == false
-                                    ? Row(
-                                       children: [
+                                  padding: const EdgeInsets.only(right: 10),
+                                  child: Text(
+                                    S.of(context).sending_mails,
+                                    style: TextStyle(fontWeight: FontWeight.bold),
+                                  ),
+                                ),
+                              ],
+                            ),
+                            Row(
+                              children: [
+                                Column(
+                                  children: [
+                                    Padding(
+                                      padding: const EdgeInsets.only(top: 20.0, bottom: 20.0, left: 30.0),
+                                      child: otherMail == false
+                                          ? Row(
+                                        children: [
                                           Padding(
                                             padding: const EdgeInsets.only(right: 10.0),
                                             child: Text(S.of(context).sender),
@@ -149,394 +150,133 @@ class _sendMailState extends State<sendMail> {
                                               width: 350,
                                               height: 40,
                                               child: Padding(
-                                                   padding: const EdgeInsets.only(left: 20.00),
-                                                      child: DropdownButtonHideUnderline(
-                                                          child: DropdownButton2<Mail>(
-                                                              hint:  Text(mails[0].addrres),
-                                                              items: mails.map((Mail itemMail) => DropdownMenuItem<Mail>(
-                                                                value:  itemMail,
-                                                                child: Text(itemMail.addrres),
-                                                )).toList(),
-                                                value: selectedMail,
-                                                onChanged: (Mail? mailChoose) {
-                                                  setState(() {
+                                                padding: const EdgeInsets.only(left: 20.00),
+                                                child: DropdownButtonHideUnderline(
+                                                  child: DropdownButton2<Mail>(
+                                                    hint:  Text(mails[0].addrres),
+                                                    items: mails.map((Mail itemMail) => DropdownMenuItem<Mail>(
+                                                      value:  itemMail,
+                                                      child: Text(itemMail.addrres),
+                                                    )).toList(),
+                                                    value: selectedMail,
+                                                    onChanged: (Mail? mailChoose) {
+                                                      setState(() {
 
-                                                    selectedMail=mailChoose;
-                                                    controllerMailFrom.text = mailChoose!.addrres;
-                                                    controllerPass.text = mailChoose!.password;
+                                                        selectedMail=mailChoose;
+                                                        controllerMailFrom.text = mailChoose!.addrres;
+                                                        controllerPass.text = mailChoose!.password;
 
-                                                    mailSave = true;
+                                                        mailSave = true;
 
-                                                  });
-                                                },
-                                                buttonStyleData: const ButtonStyleData(
-                                                  height: 50,
-                                                  width: 350,
-                                                  padding: EdgeInsets.only(left: 14, right: 14),
-                                                ),
-                                                dropdownStyleData: DropdownStyleData(
-                                                  maxHeight: 200,
-                                                  width: 330,
-                                                  scrollbarTheme: ScrollbarThemeData(
-                                                    thickness: MaterialStateProperty.all(6),
-                                                  ),
-                                                ),
-                                              ),
-                                            ),
-                                           ),
-                                         ),
-                                       ),
-                                    ],
-                                  )
-                                    : Row(
-                                         children: [
-                                            Row(
-                                              children: [
-                                                Padding(
-                                                  padding: const EdgeInsets.only(right: 10),
-                                                  child: Text(S.of(context).mail),
-                                                ),
-                                                Padding(
-                                                  padding: const EdgeInsets.only(left: 49.0),
-                                                  child: SizedBox(
-                                                    width: 450,
-                                                    height: 40,
-                                                    child: TextField(
-                                                      controller: controllerMailFrom,
-                                                      decoration: const InputDecoration(
-                                                        border: OutlineInputBorder(),
+                                                      });
+                                                    },
+                                                    buttonStyleData: const ButtonStyleData(
+                                                      height: 50,
+                                                      width: 350,
+                                                      padding: EdgeInsets.only(left: 14, right: 14),
+                                                    ),
+                                                    dropdownStyleData: DropdownStyleData(
+                                                      maxHeight: 200,
+                                                      width: 330,
+                                                      scrollbarTheme: ScrollbarThemeData(
+                                                        thickness: MaterialStateProperty.all(6),
                                                       ),
-                                                      onChanged: (s){
-                                                        if(controllerMailFrom.text.isEmpty)
-                                                        {
-                                                          saveChanges = false;
-                                                        }
-                                                        else
-                                                        {
-                                                          saveChanges = true;
-                                                        }
-                                                      },
                                                     ),
                                                   ),
                                                 ),
-                                              ],
-                                            ),
-
-
-                                         ],
-                                      ),
-                                ),
-                              ],
-                            ),
-                            if(mails.isNotEmpty)
-                            Column(
-                              children: [
-                                Padding(
-                                  padding: const EdgeInsets.only(top: 20.0, bottom: 20.0, left: 100.0),
-                                  child:  Row(
-                                    children: [
-                                      MaterialButton(
-                                          color: Colors.lightBlue,
-                                          child: otherMail == false
-                                                 ? Text(S.of(context).orther ,
-                                                      style: TextStyle(color: Colors.white),)
-                                                 : Text(S.of(context).volver,
-                                                            style: TextStyle(color: Colors.white),),
-                                          onPressed: () async {
-                                            setState(() {
-                                              otherMail =! otherMail;
-                                            });
-
-                                          }
-                                      )
-                                    ],
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ],
-                        ),
-                        if(otherMail==true)
-                        Padding(
-                              padding: const EdgeInsets.only(top: 35.0, left: 30.0),
-                              child: Row(
-                                children: [
-                                  Padding(
-                                    padding: const EdgeInsets.only(right: 10.0),
-                                    child: Text(S.of(context).password),
-                                  ),
-                                  Padding(
-                                    padding: const EdgeInsets.only(left: 10.0),
-                                    child: SizedBox(
-                                      width: 350,
-                                      height: 40,
-                                      child: TextField(
-                                        controller: controllerPass,
-                                        obscureText: true,
-                                        decoration: const InputDecoration(
-                                          border: OutlineInputBorder(),
-                                        ),
-                                        onChanged: (s) {
-                                          if(controllerSubject.text.isEmpty)
-                                          {
-                                            saveChanges = false;
-                                          }
-                                          else
-                                          {
-                                            saveChanges = true;
-                                          }
-                                        },
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                        Padding(
-                          padding: const EdgeInsets.only(top: 30.0, bottom: 30.0, left: 30.0),
-                          child: Column(
-                            children: [
-                              Row(
-                                children: [
-                                   Column(
-                                    children: [
-                                      Text(S.of(context).para),
-                                    ],
-                                  ),
-                                  Row(
-                                    children: [
-                                      Padding(
-                                        padding: const EdgeInsets.only(left: 50.0),
-                                        child: Row(
-                                          children: [
-                                            Radio(
-                                                value: false,
-                                                groupValue: isList,
-                                                onChanged: (value) {
-                                                  setState(() {
-                                                    isList = false;
-                                                  });
-                                                }),
-                                             Text(S.of(context).a_recipient),
-                                          ],
-                                        ),
-                                      ),
-                                      Padding(
-                                        padding: const EdgeInsets.only(left: 50.0),
-                                        child: Row(
-                                          children: [
-                                            Radio(
-                                                value: true,
-                                                groupValue: isList,
-                                                onChanged: (value) {
-                                                  setState(() {
-                                                    isList = true;
-                                                    saveChanges = false;
-                                                  });
-                                                }),
-                                            Text(S.of(context).multiple_recipients),
-                                          ],
-                                        ),
-                                      ),
-                                    ],
-                                  )
-                                ],
-                              ),
-                              Padding(
-                                padding: const EdgeInsets.only(top: 30.0),
-                                child: Column(
-                                  children: [
-                                    Container(
-                                      child: isList == false
-                                          ?  Row(
-                                        children: [
-                                          Text(S.of(context).send_a),
-                                          Padding(
-                                            padding: EdgeInsets.only(left: 34.0),
-                                            child: SizedBox(
-                                              width: 450,
-                                              height: 40,
-                                              child: TextField(
-                                                decoration: const InputDecoration(
-                                                  border: OutlineInputBorder(),
-                                                ),
-                                                controller: controllerMailTo,
-                                                onChanged: (s){
-                                                   if(controllerMailTo.text.isEmpty)
-                                                   {
-                                                     saveChanges = false;
-                                                   }
-                                                   else
-                                                   {
-                                                     saveChanges = true;
-                                                   }
-                                                },
                                               ),
                                             ),
                                           ),
                                         ],
                                       )
-                                          : Column(
+                                          : Row(
                                         children: [
-                                          Align(
-                                            alignment: Alignment.topLeft,
-                                            child: Column(
-                                              children: [
-                                                Row(
-                                                  children: [
-                                                    Text(S.of(context).select_shipment),
-                                                    Padding(
-                                                      padding: const EdgeInsets.only(left: 20.0),
-                                                      child: DropdownButtonHideUnderline(
-                                                        child: DropdownButton2<String>(
-                                                          hint: Text(S.of(context).select_shipment),
-                                                          items: dateSends.map((String itemSend) => DropdownMenuItem<String>(
-                                                            value:  itemSend,
-                                                            child: Text( itemSend,
-                                                              overflow: TextOverflow.ellipsis,
-                                                            ),
-                                                          ))
-                                                              .toList(),
-                                                          value: selectedSend,
-                                                          onChanged: (String? dateChoose) {
-                                                            setState(() {
-                                                              sendsDay.clear();
-                                                              selectedSend = dateChoose;
-
-                                                              for(int i = 0; i < lineSector.length; i++) {
-
-                                                                if(lineSector[i].date==dateChoose) {
-                                                                  sendsDay.add(lineSector[i]);
-
-                                                                }
-                                                              }
-
-                                                              selectedFactories.clear();
-                                                              String nameFactory = " ";
-
-                                                              for(int i = 0; i <sendsDay.length; i++)
-                                                              {
-                                                                nameFactory=sendsDay[i].factory;
-
-                                                                for(int x = 0 ; x < allFactories.length; x++)
-                                                                {
-                                                                  if(nameFactory == allFactories[x].name)
-                                                                  {
-                                                                    selectedFactories.add(allFactories[x]);
-                                                                  }
-
-                                                                }
-                                                              }
-                                                              cantFactories = selectedFactories.length;
-                                                            });
-                                                          },
-                                                              
-                                                          buttonStyleData: const ButtonStyleData(
-                                                            height: 50,
-                                                            width: 200,
-                                                            padding: EdgeInsets.only(left: 14, right: 14),
-                                                          ),
-                                                          dropdownStyleData: DropdownStyleData(
-                                                            maxHeight: 200,
-                                                            width: 200,
-                                                            scrollbarTheme: ScrollbarThemeData(
-                                                              thickness: MaterialStateProperty.all(6),
-                                                            ),
-                                                          ),
-                                                        ),
-                                                      ),
+                                          Row(
+                                            children: [
+                                              Padding(
+                                                padding: const EdgeInsets.only(right: 10),
+                                                child: Text(S.of(context).mail),
+                                              ),
+                                              Padding(
+                                                padding: const EdgeInsets.only(left: 49.0),
+                                                child: SizedBox(
+                                                  width: 450,
+                                                  height: 40,
+                                                  child: TextField(
+                                                    controller: controllerMailFrom,
+                                                    decoration: const InputDecoration(
+                                                      border: OutlineInputBorder(),
                                                     ),
-                                                  ],
-                                                ),
-                                                Align(
-                                                  alignment: Alignment.topLeft,
-                                                  child: Padding(
-                                                      padding: const EdgeInsets.only(top: 20.0, left: 150.0),
-                                                      child: isList == true
-                                                          ?  Column(
-                                                        children: [
-                                                          Padding(
-                                                            padding: const EdgeInsets.only(left: 40.0),
-                                                            child: Row(
-                                                              children: [
-                                                                SizedBox(
-                                                                  height: 200,
-                                                                  child: Scrollbar(
-                                                                    controller: verticalScrollTable,
-                                                                    child: SingleChildScrollView(
-                                                                      controller: verticalScrollTable,
-                                                                      scrollDirection: Axis.vertical,
-                                                                      child: DataTable(
-                                                                        columns: <DataColumn>[
-                                                                          for(int i=0 ; i < columnsTable.length; i++)
-                                                                            DataColumn(
-                                                                              label: SizedBox(
-                                                                                  width: 110,
-                                                                                  child: Text(columnsTable[i])
-                                                                              ),
-                                                                            ),
-
-                                                                        ],
-                                                                        rows: List<DataRow>.generate(selectedFactories.length,
-                                                                              (int index) =>  DataRow(
-                                                                              cells: <DataCell>[
-                                                                                DataCell(
-                                                                                  Text(selectedFactories[index].name),
-                                                                                ),
-                                                                                DataCell(
-                                                                                  Text(selectedFactories[index].mail),
-                                                                                ),
-                                                                              ]
-                                                                          ),
-                                                                        ),
-                                                                      ),
-                                                                    ),
-                                                                  ),
-                                                                ),
-                                                              ],
-                                                            ),
-                                                          ),
-                                                          Row(
-                                                            children: [
-                                                              Padding(
-                                                                padding: const EdgeInsets.only(top: 20.0),
-                                                                child: Text(LocalizationHelper.shippingFactory(context,cantFactories)),
-                                                              )
-                                                            ],
-                                                          ),
-                                                        ],
-                                                      )
-                                                          : Text(S.of(context).there_is_no_shipping_selected,
-                                                        style: TextStyle(color: Colors.red),)
+                                                    onChanged: (s){
+                                                      if(controllerMailFrom.text.isEmpty)
+                                                      {
+                                                        saveChanges = false;
+                                                      }
+                                                      else
+                                                      {
+                                                        saveChanges = true;
+                                                      }
+                                                    },
                                                   ),
-                                                )
-                                              ],
-                                            ),
+                                                ),
+                                              ),
+                                            ],
                                           ),
+
+
                                         ],
                                       ),
                                     ),
                                   ],
                                 ),
-                              ),
+                                if(mails.isNotEmpty)
+                                  Column(
+                                    children: [
+                                      Padding(
+                                        padding: const EdgeInsets.only(top: 20.0, bottom: 20.0, left: 100.0),
+                                        child:  Row(
+                                          children: [
+                                            MaterialButton(
+                                                color: Colors.lightBlue,
+                                                child: otherMail == false
+                                                    ? Text(S.of(context).orther ,
+                                                  style: TextStyle(color: Colors.white),)
+                                                    : Text(S.of(context).volver,
+                                                  style: TextStyle(color: Colors.white),),
+                                                onPressed: () async {
+                                                  setState(() {
+                                                    otherMail =! otherMail;
+                                                  });
+
+                                                }
+                                            )
+                                          ],
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                              ],
+                            ),
+                            if(otherMail==true)
                               Padding(
-                                padding: const EdgeInsets.only(top: 60.0, right: 10.0),
+                                padding: const EdgeInsets.only(top: 35.0, left: 30.0),
                                 child: Row(
                                   children: [
                                     Padding(
-                                      padding: const EdgeInsets.only(right: 10),
-                                      child: Text(S.of(context).affair),
+                                      padding: const EdgeInsets.only(right: 10.0),
+                                      child: Text(S.of(context).password),
                                     ),
                                     Padding(
-                                      padding: const EdgeInsets.only(left: 39.0),
+                                      padding: const EdgeInsets.only(left: 10.0),
                                       child: SizedBox(
-                                        width: 450,
+                                        width: 350,
                                         height: 40,
                                         child: TextField(
+                                          controller: controllerPass,
+                                          obscureText: true,
                                           decoration: const InputDecoration(
                                             border: OutlineInputBorder(),
                                           ),
-                                          controller: controllerSubject,
                                           onChanged: (s) {
                                             if(controllerSubject.text.isEmpty)
                                             {
@@ -550,295 +290,556 @@ class _sendMailState extends State<sendMail> {
                                         ),
                                       ),
                                     ),
-                                    Padding(
-                                      padding: const EdgeInsets.only(left: 100.0),
-                                      child: MaterialButton(
-                                        color: Colors.lightBlue,
-                                        child: Text(S.of(context).attach,
-                                          style:  TextStyle(color: Colors.white),),
-                                        onPressed: () {
-                                          setState(() {
-                                            _pickFile();
-                                          });
-
-                                        },
-                                      ),
-                                    ),
-
                                   ],
                                 ),
                               ),
-                             if(atach.isNotEmpty)
-                             Padding(
-                               padding: const EdgeInsets.only(left: 90.0,top: 10.0),
-                               child: Align(
-                                 alignment: Alignment.topLeft,
-                                 child: Column(
-                                   children: [
-                                     Row(
-                                       children: [
-                                        const Icon(
-                                             Icons.attach_file_rounded,
-                                             size: 20,
-                                         ),
-                                         SizedBox(
-                                           height: 40,
-                                           width: 450,
-                                           child: ListView.builder(
-                                             physics: const BouncingScrollPhysics(),
-                                             scrollDirection: Axis.horizontal,
-                                               itemCount: atach.length,
-                                              itemBuilder: (BuildContext context, index) {
-                                                    return Padding(
-                                                      padding: const EdgeInsets.all(2.0),
-                                                      child: Container(
-                                                          width: 130,
-                                                          decoration: BoxDecoration(
-                                                             color: Colors.lightBlue[100], //light blue
-                                                             borderRadius: BorderRadius.circular(20.0)
-                                                            ),
-                                                          child: Padding(
-                                                            padding: const EdgeInsets.only(left: 10.0),
-                                                            child: Row(
-                                                              children: [
-                                                                Expanded(
-                                                                  child: MouseRegion(
-                                                                    child: Text(atach[index].fileName!,
-                                                                      maxLines: 1,
-                                                                      overflow: TextOverflow.ellipsis,),
-                                                                      onHover: (s){
-                                                                         setState(() {
-                                                                           nameRoute = atach[index].fileName!;
-                                                                           marginBox = 150.0 * index;
-                                                                         });
+                            Padding(
+                              padding: const EdgeInsets.only(top: 30.0, bottom: 30.0, left: 30.0),
+                              child: Column(
+                                children: [
+                                  Row(
+                                    children: [
+                                      Column(
+                                        children: [
+                                          Text(S.of(context).para),
+                                        ],
+                                      ),
+                                      Row(
+                                        children: [
+                                          Padding(
+                                            padding: const EdgeInsets.only(left: 50.0),
+                                            child: Row(
+                                              children: [
+                                                Radio(
+                                                    value: false,
+                                                    groupValue: isList,
+                                                    onChanged: (value) {
+                                                      setState(() {
+                                                        isList = false;
+                                                      });
+                                                    }),
+                                                Text(S.of(context).a_recipient),
+                                              ],
+                                            ),
+                                          ),
+                                          Padding(
+                                            padding: const EdgeInsets.only(left: 50.0),
+                                            child: Row(
+                                              children: [
+                                                Radio(
+                                                    value: true,
+                                                    groupValue: isList,
+                                                    onChanged: (value) {
+                                                      setState(() {
+                                                        isList = true;
+                                                        saveChanges = false;
+                                                      });
+                                                    }),
+                                                Text(S.of(context).multiple_recipients),
+                                              ],
+                                            ),
+                                          ),
+                                        ],
+                                      )
+                                    ],
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.only(top: 30.0),
+                                    child: Column(
+                                      children: [
+                                        Container(
+                                          child: isList == false
+                                              ?  Row(
+                                            children: [
+                                              Text(S.of(context).send_a),
+                                              Padding(
+                                                padding: EdgeInsets.only(left: 34.0),
+                                                child: SizedBox(
+                                                  width: 450,
+                                                  height: 40,
+                                                  child: TextField(
+                                                    decoration: const InputDecoration(
+                                                      border: OutlineInputBorder(),
+                                                    ),
+                                                    controller: controllerMailTo,
+                                                    onChanged: (s){
+                                                      if(controllerMailTo.text.isEmpty)
+                                                      {
+                                                        saveChanges = false;
+                                                      }
+                                                      else
+                                                      {
+                                                        saveChanges = true;
+                                                      }
+                                                    },
+                                                  ),
+                                                ),
+                                              ),
+                                            ],
+                                          )
+                                              : Column(
+                                            children: [
+                                              Align(
+                                                alignment: Alignment.topLeft,
+                                                child: Column(
+                                                  children: [
+                                                    Row(
+                                                      children: [
+                                                        Text(S.of(context).select_shipment),
+                                                        Padding(
+                                                          padding: const EdgeInsets.only(left: 20.0),
+                                                          child: DropdownButtonHideUnderline(
+                                                            child: DropdownButton2<String>(
+                                                              hint: Text(S.of(context).select_shipment),
+                                                              items: dateSends.map((String itemSend) => DropdownMenuItem<String>(
+                                                                value:  itemSend,
+                                                                child: Text( itemSend,
+                                                                  overflow: TextOverflow.ellipsis,
+                                                                ),
+                                                              ))
+                                                                  .toList(),
+                                                              value: selectedSend,
+                                                              onChanged: (String? dateChoose) {
+                                                                setState(() {
+                                                                  sendsDay.clear();
+                                                                  selectedSend = dateChoose;
 
-                                                                     },
-                                                                    onExit: (s){
+                                                                  for(int i = 0; i < lineSector.length; i++) {
+
+                                                                    if(lineSector[i].date==dateChoose) {
+                                                                      sendsDay.add(lineSector[i]);
+
+                                                                    }
+                                                                  }
+
+                                                                  selectedFactories.clear();
+                                                                  String nameFactory = " ";
+
+                                                                  for(int i = 0; i <sendsDay.length; i++)
+                                                                  {
+                                                                    nameFactory=sendsDay[i].factory;
+
+                                                                    for(int x = 0 ; x < allFactories.length; x++)
+                                                                    {
+                                                                      if(nameFactory == allFactories[x].name)
+                                                                      {
+                                                                        selectedFactories.add(allFactories[x]);
+                                                                      }
+
+                                                                    }
+                                                                  }
+                                                                  cantFactories = selectedFactories.length;
+                                                                });
+                                                              },
+
+                                                              buttonStyleData: const ButtonStyleData(
+                                                                height: 50,
+                                                                width: 200,
+                                                                padding: EdgeInsets.only(left: 14, right: 14),
+                                                              ),
+                                                              dropdownStyleData: DropdownStyleData(
+                                                                maxHeight: 200,
+                                                                width: 200,
+                                                                scrollbarTheme: ScrollbarThemeData(
+                                                                  thickness: MaterialStateProperty.all(6),
+                                                                ),
+                                                              ),
+                                                            ),
+                                                          ),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                    Align(
+                                                      alignment: Alignment.topLeft,
+                                                      child: Padding(
+                                                          padding: const EdgeInsets.only(top: 20.0, left: 150.0),
+                                                          child: isList == true
+                                                              ?  Column(
+                                                            children: [
+                                                              Padding(
+                                                                padding: const EdgeInsets.only(left: 40.0),
+                                                                child: Row(
+                                                                  children: [
+                                                                    SizedBox(
+                                                                      height: 200,
+                                                                      child: Scrollbar(
+                                                                        controller: verticalScrollTable,
+                                                                        child: SingleChildScrollView(
+                                                                          controller: verticalScrollTable,
+                                                                          scrollDirection: Axis.vertical,
+                                                                          child: DataTable(
+                                                                            columns: <DataColumn>[
+                                                                              for(int i=0 ; i < columnsTable.length; i++)
+                                                                                DataColumn(
+                                                                                  label: SizedBox(
+                                                                                      width: 110,
+                                                                                      child: Text(columnsTable[i])
+                                                                                  ),
+                                                                                ),
+
+                                                                            ],
+                                                                            rows: List<DataRow>.generate(selectedFactories.length,
+                                                                                  (int index) =>  DataRow(
+                                                                                  cells: <DataCell>[
+                                                                                    DataCell(
+                                                                                      Text(selectedFactories[index].name),
+                                                                                    ),
+                                                                                    DataCell(
+                                                                                      Text(selectedFactories[index].mail),
+                                                                                    ),
+                                                                                  ]
+                                                                              ),
+                                                                            ),
+                                                                          ),
+                                                                        ),
+                                                                      ),
+                                                                    ),
+                                                                  ],
+                                                                ),
+                                                              ),
+                                                              Row(
+                                                                children: [
+                                                                  Padding(
+                                                                    padding: const EdgeInsets.only(top: 20.0),
+                                                                    child: Text(LocalizationHelper.shippingFactory(context,cantFactories)),
+                                                                  )
+                                                                ],
+                                                              ),
+                                                            ],
+                                                          )
+                                                              : Text(S.of(context).there_is_no_shipping_selected,
+                                                            style: TextStyle(color: Colors.red),)
+                                                      ),
+                                                    )
+                                                  ],
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.only(top: 60.0, right: 10.0),
+                                    child: Row(
+                                      children: [
+                                        Padding(
+                                          padding: const EdgeInsets.only(right: 10),
+                                          child: Text(S.of(context).affair),
+                                        ),
+                                        Padding(
+                                          padding: const EdgeInsets.only(left: 39.0),
+                                          child: SizedBox(
+                                            width: 450,
+                                            height: 40,
+                                            child: TextField(
+                                              decoration: const InputDecoration(
+                                                border: OutlineInputBorder(),
+                                              ),
+                                              controller: controllerSubject,
+                                              onChanged: (s) {
+                                                if(controllerSubject.text.isEmpty)
+                                                {
+                                                  saveChanges = false;
+                                                }
+                                                else
+                                                {
+                                                  saveChanges = true;
+                                                }
+                                              },
+                                            ),
+                                          ),
+                                        ),
+                                        Padding(
+                                          padding: const EdgeInsets.only(left: 100.0),
+                                          child: MaterialButton(
+                                            color: Colors.lightBlue,
+                                            child: Text(S.of(context).attach,
+                                              style:  TextStyle(color: Colors.white),),
+                                            onPressed: () {
+                                              setState(() {
+                                                _pickFile();
+                                              });
+
+                                            },
+                                          ),
+                                        ),
+
+                                      ],
+                                    ),
+                                  ),
+                                  if(atach.isNotEmpty)
+                                    Padding(
+                                      padding: const EdgeInsets.only(left: 90.0,top: 10.0),
+                                      child: Align(
+                                        alignment: Alignment.topLeft,
+                                        child: Column(
+                                          children: [
+                                            Row(
+                                              children: [
+                                                const Icon(
+                                                  Icons.attach_file_rounded,
+                                                  size: 20,
+                                                ),
+                                                SizedBox(
+                                                  height: 40,
+                                                  width: 450,
+                                                  child: ListView.builder(
+                                                      physics: const BouncingScrollPhysics(),
+                                                      scrollDirection: Axis.horizontal,
+                                                      itemCount: atach.length,
+                                                      itemBuilder: (BuildContext context, index) {
+                                                        return Padding(
+                                                          padding: const EdgeInsets.all(2.0),
+                                                          child: Container(
+                                                            width: 130,
+                                                            decoration: BoxDecoration(
+                                                                color: Colors.lightBlue[100], //light blue
+                                                                borderRadius: BorderRadius.circular(20.0)
+                                                            ),
+                                                            child: Padding(
+                                                              padding: const EdgeInsets.only(left: 10.0),
+                                                              child: Row(
+                                                                children: [
+                                                                  Expanded(
+                                                                    child: MouseRegion(
+                                                                      child: Text(atach[index].fileName!,
+                                                                        maxLines: 1,
+                                                                        overflow: TextOverflow.ellipsis,),
+                                                                      onHover: (s){
+                                                                        setState(() {
+                                                                          nameRoute = atach[index].fileName!;
+                                                                          marginBox = 150.0 * index;
+                                                                        });
+
+                                                                      },
+                                                                      onExit: (s){
+                                                                        setState(() {
+                                                                          nameRoute = "";
+                                                                        });
+                                                                      },
+                                                                    ),
+                                                                  ),
+                                                                  IconButton(
+                                                                    icon: const Icon(Icons.close,size: 15.0),
+                                                                    onPressed: (){
                                                                       setState(() {
-                                                                        nameRoute = "";
+                                                                        atach.removeAt(index);
                                                                       });
                                                                     },
-                                                                  ),
-                                                                ),
-                                                                IconButton(
-                                                                  icon: const Icon(Icons.close,size: 15.0),
-                                                                  onPressed: (){
-                                                                    setState(() {
-                                                                      atach.removeAt(index);
-                                                                    });
-                                                                  },
-                                                                )
-                                                              ],
+                                                                  )
+                                                                ],
+                                                              ),
                                                             ),
                                                           ),
-                                                          ),
 
-                                                    );
-                                              }
-                                           ),
-                                         ),
+                                                        );
+                                                      }
+                                                  ),
+                                                ),
 
-                                       ],
-                                     ),
-                                      Padding(
-                                       padding: const EdgeInsets.only(left: 40),
-                                       child: Row(
-                                         children: [
-                                            Padding(
-                                              padding: EdgeInsets.only( left: marginBox),
-                                              child: Text(nameRoute,
-                                                   style: const TextStyle(backgroundColor: Colors.amberAccent),
-                                                 ),
+                                              ],
                                             ),
+                                            Padding(
+                                              padding: const EdgeInsets.only(left: 40),
+                                              child: Row(
+                                                children: [
+                                                  Padding(
+                                                    padding: EdgeInsets.only( left: marginBox),
+                                                    child: Text(nameRoute,
+                                                      style: const TextStyle(backgroundColor: Colors.amberAccent),
+                                                    ),
+                                                  ),
 
-                                         ],
-                                       ),
-                                     )
-                                   ],
-                                 ),
-                               ),
-                             ),
-                            Padding(
-                                padding:  EdgeInsets.only(top: 40.0),
-                                child:  Row(
-                                  children: [
-                                    Text(
-                                      S.of(context).message,
-                                      style: TextStyle(fontWeight: FontWeight.bold),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              Padding(
-                                padding: const EdgeInsets.only(top: 20.0, left: 85.0),
-                                child: Row(
-                                  children: [
-                                    SizedBox(
-                                      width: 500,
-                                      height: 210,
-                                      child: TextField(
-                                        maxLines: 20,
-                                        minLines: 6,
-                                        decoration: const InputDecoration(
-                                          border: OutlineInputBorder(),
+                                                ],
+                                              ),
+                                            )
+                                          ],
                                         ),
-                                        controller: controllerMessage,
-                                        onChanged: (s) {
-                                          if(controllerMessage.text.isEmpty)
-                                          {
-                                            saveChanges = false;
-                                          }
-                                          else
-                                          {
-                                            saveChanges = true;
-                                          }
-                                        },
                                       ),
                                     ),
-                                  ],
-                                ),
-                              ),
-                              Row(
-                                children: [
                                   Padding(
-                                    padding: const EdgeInsets.only(left: 600.0, right: 30.0),
-                                    child: MaterialButton(
-                                      color: Colors.lightBlue,
-                                      child: Text(S.of(context).send_a,
-                                      style: const TextStyle(color: Colors.white),),
-                                      onPressed: () async {
-
-                                        String action ='';
-                                        int dat_correct = 2;
-                                        bool validMailTo = true;
-                                        bool validMailFrom = false;
-
-                                        if(otherMail == true)
-                                        {
-                                            if(validatorCamps.mailCorrect(controllerMailFrom.text) != true)
-                                            {
-                                              action = S.of(context).your_mail_is_invalid;
-                                              validMailFrom = await error(context,action);
-
-                                            }
-                                            else
-                                            {
-                                              validMailFrom = true;
-                                            }
-                                        }
-                                        else
-                                        {
-                                          validMailFrom = true;
-                                        }
-
-                                        if(validMailFrom == true)
-                                        {
-                                          if(isList == false)
-                                          {
-                                            if(validatorCamps.mailCorrect(controllerMailTo.text) != true)
-                                            {
-                                              action = S.of(context).The_recipient_is_not_a_valid_mail;
-                                              error(context,action);
-
-                                              validMailTo = false;
-                                            }
-                                            sendsDay.clear();
-                                          }
-                                          else
-                                          {
-                                            if(sendsDay.isEmpty)
-                                            {
-                                              action = S.of(context).You_must_select_a_correct_list;
-                                              error(context,action);
-
-                                              validMailTo = false;
-                                            }
-                                          }
-                                        }
-
-                                        if(validMailTo == true && validMailFrom == true)
-                                        {
-                                          String action1="";
-
-                                          if(controllerSubject.text.isEmpty)
-                                          {
-                                            dat_correct=dat_correct-1;
-
-                                             String array = S.of(context).affair;
-                                             action1 = LocalizationHelper.camp_empty_continue(context, array);
-                                             bool  correct= await warning(context, action1);
-
-                                             if(correct)
-                                             {
-                                               dat_correct++;
-                                             }
-
-                                          }
-                                          if(controllerMessage.text.isEmpty)
-                                          {
-                                            dat_correct=dat_correct-1;
-
-                                            String array = S.of(context).message;
-                                            action1 = LocalizationHelper.camp_empty_continue(context, array);
-                                            bool  correct= await warning(context, action1);
-
-                                            if(correct)
-                                            {
-                                              dat_correct++;
-                                            }
-                                          }
-                                          if(dat_correct==2)
-                                          {
-                                            String username = controllerMailFrom.text;
-                                            Codec<String, String> stringToBase64 = utf8.fuse(base64);
-                                            String password = " ";
-
-                                              if(otherMail == false)
+                                    padding:  EdgeInsets.only(top: 40.0),
+                                    child:  Row(
+                                      children: [
+                                        Text(
+                                          S.of(context).message,
+                                          style: TextStyle(fontWeight: FontWeight.bold),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.only(top: 20.0, left: 85.0),
+                                    child: Row(
+                                      children: [
+                                        SizedBox(
+                                          width: 500,
+                                          height: 210,
+                                          child: TextField(
+                                            maxLines: 20,
+                                            minLines: 6,
+                                            decoration: const InputDecoration(
+                                              border: OutlineInputBorder(),
+                                            ),
+                                            controller: controllerMessage,
+                                            onChanged: (s) {
+                                              if(controllerMessage.text.isEmpty)
                                               {
-                                                password = stringToBase64.decode(controllerPass.text);
+                                                saveChanges = false;
                                               }
                                               else
                                               {
-                                                password = controllerPass.text;
+                                                saveChanges = true;
+                                              }
+                                            },
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                  Row(
+                                    children: [
+                                      Padding(
+                                        padding: const EdgeInsets.only(left: 600.0, right: 30.0),
+                                        child: MaterialButton(
+                                            color: Colors.lightBlue,
+                                            child: Text(S.of(context).send_a,
+                                              style: const TextStyle(color: Colors.white),),
+                                            onPressed: () async {
+
+                                              String action ='';
+                                              int dat_correct = 2;
+                                              bool validMailTo = true;
+                                              bool validMailFrom = false;
+
+                                              if(otherMail == true)
+                                              {
+                                                if(validatorCamps.mailCorrect(controllerMailFrom.text) != true)
+                                                {
+                                                  action = S.of(context).your_mail_is_invalid;
+                                                  validMailFrom = await error(context,action);
+
+                                                }
+                                                else
+                                                {
+                                                  validMailFrom = true;
+                                                }
+                                              }
+                                              else
+                                              {
+                                                validMailFrom = true;
                                               }
 
-                                           saveChanges = false;
-                                           sendingMail(username,password);
-                                          }
+                                              if(validMailFrom == true)
+                                              {
+                                                if(isList == false)
+                                                {
+                                                  if(validatorCamps.mailCorrect(controllerMailTo.text) != true)
+                                                  {
+                                                    action = S.of(context).The_recipient_is_not_a_valid_mail;
+                                                    error(context,action);
+
+                                                    validMailTo = false;
+                                                  }
+                                                  sendsDay.clear();
+                                                }
+                                                else
+                                                {
+                                                  if(sendsDay.isEmpty)
+                                                  {
+                                                    action = S.of(context).You_must_select_a_correct_list;
+                                                    error(context,action);
+
+                                                    validMailTo = false;
+                                                  }
+                                                }
+                                              }
+
+                                              if(validMailTo == true && validMailFrom == true)
+                                              {
+                                                String action1="";
+
+                                                if(controllerSubject.text.isEmpty)
+                                                {
+                                                  dat_correct=dat_correct-1;
+
+                                                  String array = S.of(context).affair;
+                                                  action1 = LocalizationHelper.camp_empty_continue(context, array);
+                                                  bool  correct= await warning(context, action1);
+
+                                                  if(correct)
+                                                  {
+                                                    dat_correct++;
+                                                  }
+
+                                                }
+                                                if(controllerMessage.text.isEmpty)
+                                                {
+                                                  dat_correct=dat_correct-1;
+
+                                                  String array = S.of(context).message;
+                                                  action1 = LocalizationHelper.camp_empty_continue(context, array);
+                                                  bool  correct= await warning(context, action1);
+
+                                                  if(correct)
+                                                  {
+                                                    dat_correct++;
+                                                  }
+                                                }
+                                                if(dat_correct==2)
+                                                {
+                                                  String username = controllerMailFrom.text;
+                                                  Codec<String, String> stringToBase64 = utf8.fuse(base64);
+                                                  String password = " ";
+
+                                                  if(otherMail == false)
+                                                  {
+                                                    password = stringToBase64.decode(controllerPass.text);
+                                                  }
+                                                  else
+                                                  {
+                                                    password = controllerPass.text;
+                                                  }
+
+                                                  saveChanges = false;
+                                                  sendingMail(username,password);
+                                                }
 
 
-                                        }
-                                      }
+                                              }
+                                            }
+
+                                        ),
 
                                       ),
-
-                                  ),
-                                  MaterialButton(
-                                    color: Colors.lightBlue,
-                                    child: Padding(
-                                      padding: const EdgeInsets.only(right: 10.0),
-                                      child: Text(S.of(context).reboot,
-                                        style: const TextStyle(color: Colors.white),),
-                                    ),
-                                    onPressed: () {
-                                      setState(() {
-                                        isList = false;
-                                        saveChanges = false;
-                                       controllerMailFrom.text = "";
-                                       controllerPass.text ="";
-                                       controllerMailTo.text = "";
-                                       atach.clear();
-                                       controllerSubject.text = "";
-                                       controllerMessage.text = "";
-                                      });
-                                    },
+                                      MaterialButton(
+                                        color: Colors.lightBlue,
+                                        child: Padding(
+                                          padding: const EdgeInsets.only(right: 10.0),
+                                          child: Text(S.of(context).reboot,
+                                            style: const TextStyle(color: Colors.white),),
+                                        ),
+                                        onPressed: () {
+                                          setState(() {
+                                            isList = false;
+                                            saveChanges = false;
+                                            controllerMailFrom.text = "";
+                                            controllerPass.text ="";
+                                            controllerMailTo.text = "";
+                                            atach.clear();
+                                            controllerSubject.text = "";
+                                            controllerMessage.text = "";
+                                          });
+                                        },
+                                      ),
+                                    ],
                                   ),
                                 ],
                               ),
-                            ],
-                          ),
-                        ),
-                      ]),
+                            ),
+                          ]),
                     ),
                   ),
                 ),
@@ -847,6 +848,9 @@ class _sendMailState extends State<sendMail> {
           ),
         ),
       ),
+    )
+        : Scaffold(
+      body: Text("creart email"),
     );
   }
   void _pickFile() async {
