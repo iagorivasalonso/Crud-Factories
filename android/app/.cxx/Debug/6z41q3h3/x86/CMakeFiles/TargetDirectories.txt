@@ -1,0 +1,2 @@
+D:/Crud-Factories/android/app/.cxx/Debug/6z41q3h3/x86/CMakeFiles/edit_cache.dir
+D:/Crud-Factories/android/app/.cxx/Debug/6z41q3h3/x86/CMakeFiles/rebuild_cache.dir
