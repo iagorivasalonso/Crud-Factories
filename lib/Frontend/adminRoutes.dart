@@ -306,7 +306,7 @@ void campCharge(List<TextEditingController> _controllerNameRoute, List<TextEditi
     S.of(context).companies,
     S.of(context).employees,
     S.of(context).lines,
-    S.of(context).emails,
+    S.of(context).mails,
   ];
   for(int i = 0; i <routesManage.length; i++)
   {

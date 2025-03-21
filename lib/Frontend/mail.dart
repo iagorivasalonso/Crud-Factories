@@ -77,7 +77,7 @@ class _newMailState extends State<newMail> {
       action2 = S.of(context).undo;
     }
 
-    String name = S.of(context).email;
+    String name = S.of(context).mail;
     String title1 = "$title $name";
 
     return Scaffold(
@@ -120,7 +120,7 @@ class _newMailState extends State<newMail> {
                               children: [
                                 Padding(
                                   padding: const EdgeInsets.only(right: 10.0),
-                                  child: Text(S.of(context).new_email),
+                                  child: Text(S.of(context).new_mail),
                                 ),
                                 SizedBox(
                                   width: 450,
@@ -229,7 +229,7 @@ class _newMailState extends State<newMail> {
                                         String action = "";
 
                                         List <String> allKeys = [];
-                                        String nameCamp = S.of(context).email;
+                                        String nameCamp = S.of(context).mail;
 
                                         for (int i = 0; i < allFactories.length; i++)
                                         {
@@ -248,7 +248,7 @@ class _newMailState extends State<newMail> {
                                         {
                                                if(validatorCamps.mailCorrect(controllerMail.text) != true)
                                                {
-                                                    action = S.of(context).not_a_valid_email;
+                                                    action = S.of(context).not_a_valid_mail;
                                                     await error(context, action);
                                                }
                                                if(controllerPas.text.isEmpty || controllerPasVerificator.text.isEmpty)
@@ -300,7 +300,7 @@ class _newMailState extends State<newMail> {
 
                                                            if(errorExp != true && result != false)
                                                            {
-                                                             String array = S.of(context).emails;
+                                                             String array = S.of(context).mails;
                                                              String action = LocalizationHelper.no_file(context, array);
                                                              warning(context, action);
                                                            }

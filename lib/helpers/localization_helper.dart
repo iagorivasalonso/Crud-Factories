@@ -23,8 +23,8 @@ class LocalizationHelper {
 
     return Intl.plural(
       countMailSend,
-      one:  '${S.of(context).has_been_sent} $countMailSend ${S.of(context).email.toLowerCase()}',
-      other: '${S.of(context).have_been_sent} $countMailSend ${S.of(context).emails.toLowerCase()}',
+      one:  '${S.of(context).has_been_sent} $countMailSend ${S.of(context).mail.toLowerCase()}',
+      other: '${S.of(context).have_been_sent} $countMailSend ${S.of(context).mails.toLowerCase()}',
       name: "sendMails",
       args: [countMailSend],
       examples: const {"countMailSend": 0},

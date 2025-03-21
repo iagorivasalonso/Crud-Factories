@@ -33,7 +33,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "Import_data_in_CSV_format": MessageLookupByLibrary.simpleMessage(
       "Importar datos en formato CSV",
     ),
-    "The_recipient_is_not_a_valid_email": MessageLookupByLibrary.simpleMessage(
+    "The_recipient_is_not_a_valid_mail": MessageLookupByLibrary.simpleMessage(
       "El destinatario no es un correo electrónico válido",
     ),
     "The_sector_does_not_exist": MessageLookupByLibrary.simpleMessage(
@@ -160,8 +160,6 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "edit": MessageLookupByLibrary.simpleMessage("Editar"),
     "el_shipment_has": MessageLookupByLibrary.simpleMessage("El envío tiene"),
-    "email": MessageLookupByLibrary.simpleMessage("Email"),
-    "emails": MessageLookupByLibrary.simpleMessage("Emails"),
     "employees": MessageLookupByLibrary.simpleMessage("Empleados"),
     "enviado": MessageLookupByLibrary.simpleMessage("Enviado"),
     "error": MessageLookupByLibrary.simpleMessage("Error"),
@@ -236,6 +234,8 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "list_of": MessageLookupByLibrary.simpleMessage("Lista de"),
     "lists": MessageLookupByLibrary.simpleMessage("Listas"),
+    "mail": MessageLookupByLibrary.simpleMessage("mail"),
+    "mails": MessageLookupByLibrary.simpleMessage("mails"),
     "march": MessageLookupByLibrary.simpleMessage("Marzo"),
     "may": MessageLookupByLibrary.simpleMessage("Mayo"),
     "message": MessageLookupByLibrary.simpleMessage("Mensaje"),
@@ -252,16 +252,16 @@ class MessageLookup extends MessageLookupByLibrary {
     "name_sector": MessageLookupByLibrary.simpleMessage("Nombre del sector"),
     "newFemale": MessageLookupByLibrary.simpleMessage("Nueva"),
     "newMale": MessageLookupByLibrary.simpleMessage("Nuevo"),
-    "new_email": MessageLookupByLibrary.simpleMessage("Nuevo email"),
+    "new_mail": MessageLookupByLibrary.simpleMessage("Nuevo mail"),
     "no": MessageLookupByLibrary.simpleMessage("No"),
     "no_file_exists": MessageLookupByLibrary.simpleMessage(
       "No existe el archivo de",
     ),
     "no_has": MessageLookupByLibrary.simpleMessage("No tiene"),
-    "no_have_registered_emails": MessageLookupByLibrary.simpleMessage(
+    "no_have_registered_mails": MessageLookupByLibrary.simpleMessage(
       "No tienes correos electrónicos registrados",
     ),
-    "not_a_valid_email": MessageLookupByLibrary.simpleMessage(
+    "not_a_valid_mail": MessageLookupByLibrary.simpleMessage(
       "No es un correo electrónico válido",
     ),
     "not_a_valid_webpage": MessageLookupByLibrary.simpleMessage(
@@ -314,7 +314,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "send": MessageLookupByLibrary.simpleMessage("Enviar"),
     "send_a": MessageLookupByLibrary.simpleMessage("Enviar a"),
     "sender": MessageLookupByLibrary.simpleMessage("Remitente"),
-    "sending_emails": MessageLookupByLibrary.simpleMessage("Envío de emails"),
+    "sending_mails": MessageLookupByLibrary.simpleMessage("Envío de mails"),
     "sent": MessageLookupByLibrary.simpleMessage("Enviado"),
     "september": MessageLookupByLibrary.simpleMessage("Septiembre"),
     "server": MessageLookupByLibrary.simpleMessage("Servidor"),
@@ -335,10 +335,6 @@ class MessageLookup extends MessageLookupByLibrary {
     "theFemale": MessageLookupByLibrary.simpleMessage("La"),
     "theMale": MessageLookupByLibrary.simpleMessage("El"),
     "the_company": MessageLookupByLibrary.simpleMessage("La empresa"),
-    "the_email_has_been_successfully_sent":
-        MessageLookupByLibrary.simpleMessage(
-          "El correo electrónico se ha enviado correctamente",
-        ),
     "the_employee": MessageLookupByLibrary.simpleMessage("El empleado"),
     "the_employee_has_been_correctly_removed":
         MessageLookupByLibrary.simpleMessage(
@@ -349,6 +345,9 @@ class MessageLookup extends MessageLookupByLibrary {
       "El campo no puede estar en blanco",
     ),
     "the_format_of_the": MessageLookupByLibrary.simpleMessage("El formato de"),
+    "the_mail_has_been_successfully_sent": MessageLookupByLibrary.simpleMessage(
+      "El correo electrónico se ha enviado correctamente",
+    ),
     "the_port_is_not_correct": MessageLookupByLibrary.simpleMessage(
       "El puerto no es correcto",
     ),
@@ -369,7 +368,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "there_is_no_database_with_that_name": MessageLookupByLibrary.simpleMessage(
       "No existe una base de datos con ese nombre",
     ),
-    "there_is_no_emails_para_send": MessageLookupByLibrary.simpleMessage(
+    "there_is_no_mails_para_send": MessageLookupByLibrary.simpleMessage(
       "No hay correos electrónicos para enviar",
     ),
     "there_is_no_shipping_selected": MessageLookupByLibrary.simpleMessage(
@@ -423,11 +422,11 @@ class MessageLookup extends MessageLookupByLibrary {
         MessageLookupByLibrary.simpleMessage(
           "No tienes un archivo de rutas completo",
         ),
-    "you_do_not_have_emails_in_your_database":
+    "you_do_not_have_mails_in_your_database":
         MessageLookupByLibrary.simpleMessage(
           "No tienes correos electrónicos en tu base de datos",
         ),
-    "your_email_is_invalid": MessageLookupByLibrary.simpleMessage(
+    "your_mail_is_invalid": MessageLookupByLibrary.simpleMessage(
       "Tu correo electrónico no es válido",
     ),
   };

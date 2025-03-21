@@ -25,7 +25,7 @@ csvImportMails(BuildContext context, List<String> fileContent, List<Mail> mails)
     }
 
   } catch (e) {
-    String array = S.of(context).emails;
+    String array = S.of(context).mails;
 
     if(e.toString().contains("El sistema no puede encontrar el archivo especificado"))
     {

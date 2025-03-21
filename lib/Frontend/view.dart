@@ -283,7 +283,7 @@ class _viewState extends State<view> {
       mHeightList = mHeiht - 40;
     }
 
-    if (view == S.of(context).email) {
+    if (view == S.of(context).mail) {
       mHeightList = mHeiht;
     }
 
@@ -308,7 +308,7 @@ class _viewState extends State<view> {
     });
 
 
-    if (view == S.of(context).email)
+    if (view == S.of(context).mail)
     {
       if(mails.isEmpty)
       {
@@ -322,9 +322,9 @@ class _viewState extends State<view> {
 
       String action="";
 
-      if (view == S.of(context).email && mails.isEmpty)
+      if (view == S.of(context).mail && mails.isEmpty)
       {
-        action = S.of(context).you_do_not_have_emails_in_your_database;
+        action = S.of(context).you_do_not_have_mails_in_your_database;
         error(context, action);
       }
 
@@ -511,7 +511,7 @@ class _viewState extends State<view> {
                             color: view == S.of(context).company
                                 ? Colors.cyan
                                 : Colors.grey,
-                            height: view == S.of(context).email
+                            height: view == S.of(context).mail
                                 ? mHeiht - 40
                                 : opSelected == 0
                                 ? mHeightList - mHeightbutton
@@ -614,7 +614,7 @@ class _viewState extends State<view> {
                                         );
                                       },
                                     )
-                                        : view == S.of(context).email
+                                        : view == S.of(context).mail
                                         ? ListView.builder(
                                       itemCount: mails.length,
                                       itemBuilder: (context0, index) {
@@ -623,14 +623,14 @@ class _viewState extends State<view> {
                                           key: Key(mails[index].addrres),
                                           confirmDismiss: (direction) async {
                                             String pr = S.of(context).he;
-                                            String array0 = S.of(context).email;
+                                            String array0 = S.of(context).mail;
                                              array = "$pr $array0";
                                             String action1 = LocalizationHelper.ask_confirm_supr(context, array);
                                             return await warning(
                                                 context, action1);
                                           },
                                           onDismissed: (direction) async {
-                                            if (view == S.of(context).email)
+                                            if (view == S.of(context).mail)
                                             {
                                               String idSupr = mails[index].id;
                                               String act = S.of(context).has_been_deleted_successfully.toLowerCase();
@@ -803,7 +803,7 @@ class _viewState extends State<view> {
                     height: mHeiht,
                     child: view == S.of(context).company
                         ? newFactory(context,select,)
-                        : view == S.of(context).email
+                        : view == S.of(context).mail
                         ? newMail(context,select)
                         : newSend(context,selectCamp,  filter!, select)
                 ),

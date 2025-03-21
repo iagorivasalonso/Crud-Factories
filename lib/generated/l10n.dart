@@ -200,14 +200,14 @@ class S {
     return Intl.message('Editar', name: 'edit', desc: '', args: []);
   }
 
-  /// `Email`
-  String get email {
-    return Intl.message('Email', name: 'email', desc: '', args: []);
+  /// `mail`
+  String get mail {
+    return Intl.message('mail', name: 'mail', desc: '', args: []);
   }
 
-  /// `Emails`
-  String get emails {
-    return Intl.message('Emails', name: 'emails', desc: '', args: []);
+  /// `mails`
+  String get mails {
+    return Intl.message('mails', name: 'mails', desc: '', args: []);
   }
 
   /// `Empresa`
@@ -230,11 +230,11 @@ class S {
     return Intl.message('Envíos', name: 'shipments', desc: '', args: []);
   }
 
-  /// `Envío de emails`
-  String get sending_emails {
+  /// `Envío de mails`
+  String get sending_mails {
     return Intl.message(
-      'Envío de emails',
-      name: 'sending_emails',
+      'Envío de mails',
+      name: 'sending_mails',
       desc: '',
       args: [],
     );
@@ -335,9 +335,9 @@ class S {
     return Intl.message('Listas', name: 'lists', desc: '', args: []);
   }
 
-  /// `Nuevo email`
-  String get new_email {
-    return Intl.message('Nuevo email', name: 'new_email', desc: '', args: []);
+  /// `Nuevo mail`
+  String get new_mail {
+    return Intl.message('Nuevo mail', name: 'new_mail', desc: '', args: []);
   }
 
   /// `Número`
@@ -681,20 +681,20 @@ class S {
   }
 
   /// `No tienes correos electrónicos en tu base de datos`
-  String get you_do_not_have_emails_in_your_database {
+  String get you_do_not_have_mails_in_your_database {
     return Intl.message(
       'No tienes correos electrónicos en tu base de datos',
-      name: 'you_do_not_have_emails_in_your_database',
+      name: 'you_do_not_have_mails_in_your_database',
       desc: '',
       args: [],
     );
   }
 
   /// `No es un correo electrónico válido`
-  String get not_a_valid_email {
+  String get not_a_valid_mail {
     return Intl.message(
       'No es un correo electrónico válido',
-      name: 'not_a_valid_email',
+      name: 'not_a_valid_mail',
       desc: '',
       args: [],
     );
@@ -813,10 +813,10 @@ class S {
   }
 
   /// `No tienes correos electrónicos registrados`
-  String get no_have_registered_emails {
+  String get no_have_registered_mails {
     return Intl.message(
       'No tienes correos electrónicos registrados',
-      name: 'no_have_registered_emails',
+      name: 'no_have_registered_mails',
       desc: '',
       args: [],
     );
@@ -1223,10 +1223,10 @@ class S {
   }
 
   /// `Tu correo electrónico no es válido`
-  String get your_email_is_invalid {
+  String get your_mail_is_invalid {
     return Intl.message(
       'Tu correo electrónico no es válido',
-      name: 'your_email_is_invalid',
+      name: 'your_mail_is_invalid',
       desc: '',
       args: [],
     );
@@ -1243,30 +1243,30 @@ class S {
   }
 
   /// `El correo electrónico se ha enviado correctamente`
-  String get the_email_has_been_successfully_sent {
+  String get the_mail_has_been_successfully_sent {
     return Intl.message(
       'El correo electrónico se ha enviado correctamente',
-      name: 'the_email_has_been_successfully_sent',
+      name: 'the_mail_has_been_successfully_sent',
       desc: '',
       args: [],
     );
   }
 
   /// `No hay correos electrónicos para enviar`
-  String get there_is_no_emails_para_send {
+  String get there_is_no_mails_para_send {
     return Intl.message(
       'No hay correos electrónicos para enviar',
-      name: 'there_is_no_emails_para_send',
+      name: 'there_is_no_mails_para_send',
       desc: '',
       args: [],
     );
   }
 
   /// `El destinatario no es un correo electrónico válido`
-  String get The_recipient_is_not_a_valid_email {
+  String get The_recipient_is_not_a_valid_mail {
     return Intl.message(
       'El destinatario no es un correo electrónico válido',
-      name: 'The_recipient_is_not_a_valid_email',
+      name: 'The_recipient_is_not_a_valid_mail',
       desc: '',
       args: [],
     );

@@ -449,7 +449,7 @@ class _newFactoryState extends State<newFactory> {
                               children: [
                                 Padding(
                                   padding: const EdgeInsets.only(right: 10.0),
-                                  child: Text(S.of(context).email),
+                                  child: Text(S.of(context).mail),
                                 ),
                                 SizedBox(
                                   width: 300,
@@ -829,7 +829,7 @@ class _newFactoryState extends State<newFactory> {
                                         }
                                         if (validatorCamps.mailCorrect(controllerMail.text) != true) {
 
-                                          action = S.of(context).not_a_valid_email;
+                                          action = S.of(context).not_a_valid_mail;
                                           error(context, action);
 
                                         }

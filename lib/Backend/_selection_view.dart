@@ -55,7 +55,7 @@ FuntionSeleted(int itenSelection, int subIten1Selection,int subIten2Selection, d
         }
 
         if (subIten1Selection == 2)
-          tView = S.of(context).email;
+          tView = S.of(context).mail;
 
         if (subIten1Selection == 3)
         {

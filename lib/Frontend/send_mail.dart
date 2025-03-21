@@ -69,7 +69,7 @@ class _sendMailState extends State<sendMail> {
 
     BuildContext context = widget.context;
 
-    columnsTable = [S.of(context).company, S.of(context).email];
+    columnsTable = [S.of(context).company, S.of(context).mail];
 
     if(mails.isEmpty)
     {
@@ -124,7 +124,7 @@ class _sendMailState extends State<sendMail> {
                             Padding(
                               padding: const EdgeInsets.only(right: 10),
                               child: Text(
-                                 S.of(context).sending_emails,
+                                 S.of(context).sending_mails,
                                 style: TextStyle(fontWeight: FontWeight.bold),
                               ),
                             ),
@@ -194,7 +194,7 @@ class _sendMailState extends State<sendMail> {
                                               children: [
                                                 Padding(
                                                   padding: const EdgeInsets.only(right: 10),
-                                                  child: Text(S.of(context).email),
+                                                  child: Text(S.of(context).mail),
                                                 ),
                                                 Padding(
                                                   padding: const EdgeInsets.only(left: 49.0),
@@ -717,7 +717,7 @@ class _sendMailState extends State<sendMail> {
                                         {
                                             if(validatorCamps.mailCorrect(controllerMailFrom.text) != true)
                                             {
-                                              action = S.of(context).your_email_is_invalid;
+                                              action = S.of(context).your_mail_is_invalid;
                                               validMailFrom = await error(context,action);
 
                                             }
@@ -737,7 +737,7 @@ class _sendMailState extends State<sendMail> {
                                           {
                                             if(validatorCamps.mailCorrect(controllerMailTo.text) != true)
                                             {
-                                              action = S.of(context).The_recipient_is_not_a_valid_email;
+                                              action = S.of(context).The_recipient_is_not_a_valid_mail;
                                               error(context,action);
 
                                               validMailTo = false;
@@ -910,7 +910,7 @@ class _sendMailState extends State<sendMail> {
 
                       if(sendCorrect.contains("Message successfully sent"))
                       {
-                        action=S.of(context).the_email_has_been_successfully_sent;
+                        action=S.of(context).the_mail_has_been_successfully_sent;
                         confirm(context,action);
                       }
 
