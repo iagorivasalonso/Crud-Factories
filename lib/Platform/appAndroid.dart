@@ -53,7 +53,7 @@ class _appAndroidState extends State<appAndroid> {
                       title: Text(S.of(context).shipment),
                       onTap: (){
                         Navigator.pop(context);
-                        Navigator.pushReplacementNamed(context,'/sendMail', arguments: -1);
+                        Navigator.pushReplacementNamed(context,'/send', arguments: -1);
                       },
                     ),
                   ]
@@ -61,7 +61,8 @@ class _appAndroidState extends State<appAndroid> {
             ListTile(
               title: Text(S.of(context).routes),
               onTap: (){
-
+                Navigator.pop(context);
+                Navigator.pushReplacementNamed(context,'/listRoutes');
               },
             ),
             ListTile(
@@ -78,6 +79,7 @@ class _appAndroidState extends State<appAndroid> {
                     title: Text(S.of(context).sectors),
                     onTap: () {
                       Navigator.pop(context);
+                      Navigator.pushReplacementNamed(context,'/listSectors');
                     },
                   ),
                   ListTile(
@@ -107,7 +109,7 @@ class _appAndroidState extends State<appAndroid> {
               title: Text(S.of(context).DB_connection),
               onTap: (){
                 Navigator.pop(context);
-                Navigator.pushReplacementNamed(context,'/conection');
+                Navigator.pushReplacementNamed(context,'/conectionDB');
               },
             ),
             ListTile(

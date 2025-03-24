@@ -2,6 +2,8 @@
 
 import 'package:crud_factories/Frontend/Android/listMails.dart';
 import 'package:crud_factories/Frontend/Android/listSends.dart';
+import 'package:crud_factories/Frontend/adminRoutes.dart';
+import 'package:crud_factories/Frontend/adminSectors.dart';
 import 'package:crud_factories/Frontend/conection.dart';
 import 'package:crud_factories/Frontend/factory.dart';
 import 'package:crud_factories/Frontend/importData.dart';
@@ -21,10 +23,12 @@ Map<String,WidgetBuilder> getAppRoutes() {
     '/mail' :(context) => newMail(context, select),
     '/send' :(context) =>  newSend(context,"", "", select),
     '/importData' :(context) => newImport(context),
+    '/listSectors' :(context) => adminSectorAndroid(context),
+    '/listRoutes' :(context) => adminRoutesAndroid(context),
     '/listFactories' :(context) => listFactories(context) ,
     '/listMails' :(context) => listMails(context),
     '/listSends' :(context) => listSends(context),
-    '/conection' :(context) => conection(context),
+    '/conectionDB' :(context) => conection(context),
     '/sendMail' :(context) => sendMail(context),
     '/exit' :(context) {
         SystemNavigator.pop();
