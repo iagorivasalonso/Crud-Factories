@@ -18,6 +18,8 @@ import 'package:mailer/mailer.dart';
 import 'package:mailer/smtp_server/gmail.dart';
 import 'package:mailer/smtp_server/hotmail.dart';
 
+import '../Widgets/headViewsAndroid.dart';
+
 
 class newMail extends StatefulWidget {
 
@@ -362,7 +364,8 @@ class _newMailState extends State<newMail> {
       ),
     )
         : Scaffold(
-      body: Text("creart email"),
+           appBar: appBarAndroid(context, name: title1),
+           body: Text("creart email"),
     );
   }
 

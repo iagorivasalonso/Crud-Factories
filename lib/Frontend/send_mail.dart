@@ -13,6 +13,7 @@ import 'package:crud_factories/Functions/validatorCamps.dart';
 import 'package:crud_factories/Objects/Factory.dart';
 import 'package:crud_factories/Objects/Mail.dart';
 import 'package:crud_factories/Objects/LineSend.dart';
+import 'package:crud_factories/Widgets/headViewsAndroid.dart';
 import 'package:crud_factories/generated/l10n.dart';
 import 'package:crud_factories/helpers/localization_helper.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
@@ -850,7 +851,9 @@ class _sendMailState extends State<sendMail> {
       ),
     )
         : Scaffold(
-      body: Text("creart email"),
+          appBar: appBarAndroid(context, name: S.of(context).sending_mails),
+          body: Text("creart email"),
+
     );
   }
   void _pickFile() async {

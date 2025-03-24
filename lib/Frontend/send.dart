@@ -12,6 +12,7 @@ import 'package:crud_factories/Functions/manageArrays.dart';
 import 'package:crud_factories/Functions/manageState.dart';
 import 'package:crud_factories/Functions/validatorCamps.dart';
 import 'package:crud_factories/Objects/LineSend.dart';
+import 'package:crud_factories/Widgets/headViewsAndroid.dart';
 import 'package:crud_factories/generated/l10n.dart';
 import 'package:crud_factories/helpers/localization_helper.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
@@ -940,6 +941,7 @@ class _newSendState extends State<newSend> {
       ),
     )
         : Scaffold(
+             appBar: appBarAndroid(context, name: titleComplete),
              body: Text("creart email"),
     );
 

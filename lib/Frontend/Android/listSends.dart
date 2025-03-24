@@ -1,3 +1,5 @@
+import 'package:crud_factories/Widgets/headViewsAndroid.dart';
+import 'package:crud_factories/generated/l10n.dart';
 import 'package:flutter/material.dart';
 
 class listSends extends StatefulWidget {
@@ -17,9 +19,11 @@ class _listSendsState extends State<listSends> {
   Widget build(BuildContext context) {
 
     BuildContext context = widget.context;
+    String title = S.of(context).list_of_sends;
 
     return Scaffold(
-      body: Text("listsend"),
+      appBar: appBarAndroid(context, name: title),
+      body: Text("factori"),
     );
   }
 }

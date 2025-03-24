@@ -25,6 +25,7 @@ import 'package:crud_factories/Objects/Factory.dart';
 import 'package:crud_factories/Objects/Mail.dart';
 import 'package:crud_factories/Objects/LineSend.dart';
 import 'package:crud_factories/Objects/Sector.dart';
+import 'package:crud_factories/Widgets/headViewsAndroid.dart';
 import 'package:crud_factories/generated/l10n.dart';
 import 'package:crud_factories/helpers/localization_helper.dart';
 import 'package:file_picker/file_picker.dart';
@@ -71,7 +72,7 @@ class _newImportState extends State<newImport> {
 
     return Platform.isWindows
         ? Scaffold(
-      body: AdaptiveScrollbar(
+           body: AdaptiveScrollbar(
         controller: verticalScroll,
         width: widthBar,
         child: AdaptiveScrollbar(
@@ -620,8 +621,9 @@ class _newImportState extends State<newImport> {
       ),
     )
         : Scaffold(
-               body: Text("datos"),
-    );
+            appBar: appBarAndroid(context, name: S.of(context).import_data),
+            body: Text("conection"),
+       );
   }
 
 }

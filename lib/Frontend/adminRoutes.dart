@@ -5,6 +5,7 @@ import 'package:crud_factories/Backend/Global/files.dart';
 import 'package:crud_factories/Backend/Global/list.dart';
 import 'package:crud_factories/Objects/RouteCSV.dart';
 import 'package:crud_factories/Widgets/headAlertDialog.dart';
+import 'package:crud_factories/Widgets/headViewsAndroid.dart';
 import 'package:crud_factories/generated/l10n.dart';
 import 'package:crud_factories/helpers/localization_helper.dart';
 import 'package:file_picker/file_picker.dart';
@@ -311,8 +312,14 @@ class adminRoutesAndroid extends StatefulWidget {
 class _adminRoutesAndroidState extends State<adminRoutesAndroid> {
   @override
   Widget build(BuildContext context) {
+
     BuildContext context = widget.context;
-    return const Placeholder();
+    String title = S.of(context).route_selector;
+
+    return Scaffold(
+      appBar: appBarAndroid(context, name: title),
+      body: Text("factori"),
+    );
   }
 }
 

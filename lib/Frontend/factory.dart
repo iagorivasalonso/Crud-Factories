@@ -17,6 +17,7 @@ import 'package:crud_factories/Functions/createId.dart';
 import 'package:crud_factories/Functions/validatorCamps.dart';
 import 'package:crud_factories/Objects/Empleoye.dart';
 import 'package:crud_factories/Objects/Factory.dart';
+import 'package:crud_factories/Widgets/headViewsAndroid.dart';
 import 'package:crud_factories/generated/l10n.dart';
 import 'package:crud_factories/helpers/localization_helper.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
@@ -1092,6 +1093,7 @@ class _newFactoryState extends State<newFactory> {
       ),
     )
        : Scaffold(
+           appBar: appBarAndroid(context, name: title1),
            body: Text("factori"),
         );
   }

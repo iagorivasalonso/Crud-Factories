@@ -6,6 +6,7 @@ import 'package:crud_factories/Backend/Global/list.dart';
 import 'package:crud_factories/Backend/SQL/deleteSector.dart';
 import 'package:crud_factories/Backend/Global/variables.dart';
 import 'package:crud_factories/Widgets/headAlertDialog.dart';
+import 'package:crud_factories/Widgets/headViewsAndroid.dart';
 import 'package:crud_factories/generated/l10n.dart';
 import 'package:crud_factories/helpers/localization_helper.dart';
 import 'package:flutter/material.dart';
@@ -179,6 +180,11 @@ class _adminSectorAndroidState extends State<adminSectorAndroid> {
   Widget build(BuildContext context) {
 
     BuildContext context = widget.context;
-    return const Placeholder();
+    String title = S.of(context).sector_management;
+
+    return Scaffold(
+      appBar: appBarAndroid(context, name: title),
+      body: Text("factori"),
+    );
   }
 }

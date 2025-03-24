@@ -1,3 +1,5 @@
+import 'package:crud_factories/Widgets/headViewsAndroid.dart' show appBarAndroid;
+import 'package:crud_factories/generated/l10n.dart' show S;
 import 'package:flutter/material.dart';
 
 class listFactories extends StatefulWidget {
@@ -15,9 +17,11 @@ class _listFactoriesState extends State<listFactories> {
   Widget build(BuildContext context) {
 
     BuildContext context = widget.context;
+    String title = S.of(context).list_of_companies;
 
     return Scaffold(
-      body: Text("factorikidrf"),
+      appBar: appBarAndroid(context, name: title),
+      body: Text("factori"),
     );
 
   }

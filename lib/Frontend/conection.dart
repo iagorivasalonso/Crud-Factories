@@ -18,6 +18,7 @@ import 'package:crud_factories/Backend/CSV/exportConections.dart';
 import 'package:crud_factories/Functions/createId.dart';
 import 'package:crud_factories/Functions/validatorCamps.dart';
 import 'package:crud_factories/Objects/Conection.dart';
+import 'package:crud_factories/Widgets/headViewsAndroid.dart' show appBarAndroid;
 import 'package:crud_factories/generated/l10n.dart';
 import 'package:crud_factories/helpers/localization_helper.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
@@ -680,9 +681,11 @@ class _conectionState extends State<conection> {
       ),
     )
       : Scaffold(
+        appBar: appBarAndroid(context, name: S.of(context).database_connection),
          body: Text("conection"),
        );
   }
+
 
   actionsDB(String bd_action, String db, BuildContext context) async {
 
