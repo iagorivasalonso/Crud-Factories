@@ -163,3 +163,22 @@ Future<void> adminSector(BuildContext context) async {
   );
 
 }
+
+class adminSectorAndroid extends StatefulWidget {
+
+ BuildContext context;
+
+ adminSectorAndroid(this.context);
+
+  @override
+  State<adminSectorAndroid> createState() => _adminSectorAndroidState();
+}
+
+class _adminSectorAndroidState extends State<adminSectorAndroid> {
+  @override
+  Widget build(BuildContext context) {
+
+    BuildContext context = widget.context;
+    return const Placeholder();
+  }
+}

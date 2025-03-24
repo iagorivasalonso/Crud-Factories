@@ -296,6 +296,26 @@ Future<bool> adminRoutes(BuildContext context, [bool? sqlBd]) async {
   return route ?? false;
 }
 
+class adminRoutesAndroid extends StatefulWidget {
+
+
+  BuildContext context;
+
+  adminRoutesAndroid(this.context);
+
+
+  @override
+  State<adminRoutesAndroid> createState() => _adminRoutesAndroidState();
+}
+
+class _adminRoutesAndroidState extends State<adminRoutesAndroid> {
+  @override
+  Widget build(BuildContext context) {
+    BuildContext context = widget.context;
+    return const Placeholder();
+  }
+}
+
 void campCharge(List<TextEditingController> _controllerNameRoute, List<TextEditingController> _controllerRoute, BuildContext context) {
 
   allRoutes = [
@@ -314,7 +334,7 @@ void campCharge(List<TextEditingController> _controllerNameRoute, List<TextEditi
     _controllerRoute[i].text = routesManage[i].route;
   }
 }
-  void _pickFile(TextEditingController controllerRoute, BuildContext context) async {
+void _pickFile(TextEditingController controllerRoute, BuildContext context) async {
 
   FilePickerResult? result =  await FilePicker.platform.pickFiles(
     dialogTitle: S.of(context).select_file,
