@@ -230,10 +230,10 @@ class S {
     return Intl.message('Envíos', name: 'shipments', desc: '', args: []);
   }
 
-  /// `Envío de mails`
+  /// `Envío de emails`
   String get sending_mails {
     return Intl.message(
-      'Envío de mails',
+      'Envío de emails',
       name: 'sending_mails',
       desc: '',
       args: [],
@@ -333,6 +333,36 @@ class S {
   /// `Listas`
   String get lists {
     return Intl.message('Listas', name: 'lists', desc: '', args: []);
+  }
+
+  /// `Lista de empresas`
+  String get list_of_companies {
+    return Intl.message(
+      'Lista de empresas',
+      name: 'list_of_companies',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Lista de emails`
+  String get list_of_emails {
+    return Intl.message(
+      'Lista de emails',
+      name: 'list_of_emails',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Lista de envios`
+  String get list_of_sends {
+    return Intl.message(
+      'Lista de envios',
+      name: 'list_of_sends',
+      desc: '',
+      args: [],
+    );
   }
 
   /// `Nuevo mail`
