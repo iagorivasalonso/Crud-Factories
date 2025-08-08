@@ -19,17 +19,17 @@ Map<String,WidgetBuilder> getAppRoutes() {
   int select=-1;
 
   return {
-    '/factory' :(context) => newFactory(context,select),
-    '/mail' :(context) => newMail(context, select),
-    '/send' :(context) =>  newSend(context,"", "", select),
-    '/importData' :(context) => newImport(context),
-    '/listSectors' :(context) => adminSectorAndroid(context),
-    '/listRoutes' :(context) => adminRoutesAndroid(context),
-    '/listFactories' :(context) => listFactories(context) ,
-    '/listMails' :(context) => listMails(context),
-    '/listSends' :(context) => listSends(context),
-    '/conectionDB' :(context) => conection(context),
-    '/sendMail' :(context) => sendMail(context),
+    '/factory' :(context) => newFactory(select),
+    '/mail' :(context) => newMail(select),
+    '/send' :(context) =>  newSend("", "", select),
+    '/importData' :(context) => newImport(),
+    '/listSectors' :(context) => adminSectorAndroid(),
+    '/listRoutes' :(context) => adminRoutesAndroid(),
+    '/listFactories' :(context) => listFactories() ,
+    '/listMails' :(context) => listMails(),
+    '/listSends' :(context) => listSends(),
+    '/conectionDB' :(context) => conection(),
+    '/sendMail' :(context) => sendMail(),
     '/exit' :(context) {
         SystemNavigator.pop();
         return const SizedBox ();

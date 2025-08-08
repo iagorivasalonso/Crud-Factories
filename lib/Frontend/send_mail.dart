@@ -25,9 +25,8 @@ import 'package:mailer/smtp_server.dart';
 
 class sendMail extends StatefulWidget {
 
-  BuildContext context;
 
-  sendMail(this.context);
+  sendMail();
 
   @override
   State<sendMail> createState() => _sendMailState();
@@ -68,7 +67,7 @@ class _sendMailState extends State<sendMail> {
   @override
   Widget build(BuildContext context) {
 
-    BuildContext context = widget.context;
+    BuildContext context = context1;
 
     columnsTable = [S.of(context).company, S.of(context).mail];
 

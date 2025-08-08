@@ -802,10 +802,10 @@ class _viewState extends State<view> {
                     width: mWidthPanel,
                     height: mHeiht,
                     child: view == S.of(context).company
-                        ? newFactory(context,select,)
+                        ? newFactory(select,)
                         : view == S.of(context).mail
-                        ? newMail(context,select)
-                        : newSend(context,selectCamp,  filter!, select)
+                        ? newMail(select)
+                        : newSend(selectCamp,  filter!, select)
                 ),
             ],
           )

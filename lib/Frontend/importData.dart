@@ -33,9 +33,8 @@ import 'package:flutter/material.dart';
 
 class newImport extends StatefulWidget {
 
-  BuildContext context;
 
-    newImport(this.context);
+    newImport();
   @override
   State<newImport> createState() => _newImportState();
 }
@@ -53,7 +52,7 @@ class _newImportState extends State<newImport> {
   @override
   Widget build(BuildContext context) {
 
-    BuildContext context = widget.context;
+    BuildContext context = context1;
 
     List<Sector> sectorsNew = [];
     List<Factory> factoriesNew =[];

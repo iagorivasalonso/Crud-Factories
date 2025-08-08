@@ -1,5 +1,4 @@
 import 'dart:io';
-
 import 'package:crud_factories/Platform/appDesktop.dart';
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter/material.dart';
@@ -9,6 +8,7 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:crud_factories/generated/l10n.dart';
 
 import 'Backend/Global/routes.dart';
+import 'Backend/Global/variables.dart';
 import 'Platform/appAndroid.dart';
 
 
@@ -32,6 +32,7 @@ class MyApp extends StatelessWidget {
 
     return Platform.isWindows
                 ? FluentApp(
+                     navigatorKey: navigatorKey,
                     debugShowCheckedModeBanner: false,
                     localizationsDelegates: const [
                       S.delegate,
@@ -42,7 +43,6 @@ class MyApp extends StatelessWidget {
                     supportedLocales: S.delegate.supportedLocales,
                     home: Builder(
                       builder: (context) {
-
                         MyWindowListener.context = context;
                          _initializeWindow(context);
 

@@ -30,10 +30,9 @@ import 'package:show_platform_date_picker/show_platform_date_picker.dart';
 
 class newFactory extends StatefulWidget {
 
-  BuildContext context;
   int select;
 
-  newFactory(this.context, this.select);
+  newFactory(this.select);
 
   @override
   State<newFactory> createState() => _newFactoryState();
@@ -80,7 +79,7 @@ class _newFactoryState extends State<newFactory> {
   Widget build(BuildContext context) {
 
     int select = widget.select;
-    BuildContext context = widget.context;
+    BuildContext context = context1;
     sectorsString.clear();
 
     sectorsString.add(S.of(context).newMale);

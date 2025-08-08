@@ -167,9 +167,9 @@ Future<void> adminSector(BuildContext context) async {
 
 class adminSectorAndroid extends StatefulWidget {
 
- BuildContext context;
 
- adminSectorAndroid(this.context);
+
+ adminSectorAndroid();
 
   @override
   State<adminSectorAndroid> createState() => _adminSectorAndroidState();
@@ -179,7 +179,7 @@ class _adminSectorAndroidState extends State<adminSectorAndroid> {
   @override
   Widget build(BuildContext context) {
 
-    BuildContext context = widget.context;
+    BuildContext context = context1;
     String title = S.of(context).sector_management;
 
     return Scaffold(

@@ -27,9 +27,8 @@ import 'package:mysql1/mysql1.dart';
 
 class conection extends StatefulWidget {
 
-  BuildContext context;
 
-   conection(this.context);
+   conection();
 
 
   State<conection> createState() => _conectionState();
@@ -73,7 +72,7 @@ class _conectionState extends State<conection> {
   @override
   Widget build(BuildContext context) {
 
-    BuildContext context = widget.context;
+    BuildContext context = context1;
 
     if(action0.isEmpty)
     {

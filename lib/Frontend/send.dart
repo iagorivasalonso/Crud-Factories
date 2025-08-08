@@ -24,13 +24,12 @@ import 'package:flutter/material.dart';
 
 class newSend extends StatefulWidget {
 
-  BuildContext context;
   String selectCamp;
   String filter;
 
   int select;
 
-  newSend(this.context, this.selectCamp, this.filter, this.select);
+  newSend(this.selectCamp, this.filter, this.select);
 
   @override
   State<newSend> createState() => _newSendState();
@@ -67,7 +66,7 @@ class _newSendState extends State<newSend> {
   @override
   Widget build(BuildContext context) {
 
-    BuildContext context = widget.context;
+    BuildContext context = context1;
     String type = widget.filter;
     String selectCamp = widget.selectCamp;
     int select = widget.select;

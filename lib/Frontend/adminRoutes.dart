@@ -3,6 +3,7 @@ import 'package:crud_factories/Backend/CSV/chargueData%20csv.dart';
 import 'package:crud_factories/Backend/CSV/exportRoutes.dart';
 import 'package:crud_factories/Backend/Global/files.dart';
 import 'package:crud_factories/Backend/Global/list.dart';
+import 'package:crud_factories/Backend/Global/variables.dart';
 import 'package:crud_factories/Objects/RouteCSV.dart';
 import 'package:crud_factories/Widgets/headAlertDialog.dart';
 import 'package:crud_factories/Widgets/headViewsAndroid.dart';
@@ -300,9 +301,9 @@ Future<bool> adminRoutes(BuildContext context, [bool? sqlBd]) async {
 class adminRoutesAndroid extends StatefulWidget {
 
 
-  BuildContext context;
 
-  adminRoutesAndroid(this.context);
+
+  adminRoutesAndroid();
 
 
   @override
@@ -313,7 +314,7 @@ class _adminRoutesAndroidState extends State<adminRoutesAndroid> {
   @override
   Widget build(BuildContext context) {
 
-    BuildContext context = widget.context;
+    BuildContext context = context1;
     String title = S.of(context).route_selector;
 
     return Scaffold(

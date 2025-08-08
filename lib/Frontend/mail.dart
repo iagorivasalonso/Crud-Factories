@@ -23,11 +23,10 @@ import '../Widgets/headViewsAndroid.dart';
 
 class newMail extends StatefulWidget {
 
-  BuildContext context;
   int select;
 
 
-  newMail(this.context,this.select);
+  newMail(this.select);
 
 
   State<newMail> createState() => _newMailState();
@@ -49,7 +48,7 @@ class _newMailState extends State<newMail> {
   @override
   Widget build(BuildContext context) {
 
-    BuildContext context =widget.context;
+    BuildContext context = context1;
     int select = widget.select;
 
 

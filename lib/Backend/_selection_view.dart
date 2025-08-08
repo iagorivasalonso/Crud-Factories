@@ -23,18 +23,18 @@ FuntionSeleted(int itenSelection, int subIten1Selection,int subIten2Selection, d
           select = -1;
 
           if (subIten2Selection == 0)
-            return newFactory(context,select);
+            return newFactory(select);
           if (subIten2Selection == 1)
-            return newMail(context, select);
+            return newMail(select);
 
           if (subIten2Selection == 2)
-            return newSend(context,"", "", select);
+            return newSend("", "", select);
         }
 
 
 
         if (subIten1Selection == 2)
-          return newImport(context);
+          return newImport();
 
       case 1:
         String tView = '';
@@ -84,11 +84,11 @@ FuntionSeleted(int itenSelection, int subIten1Selection,int subIten2Selection, d
           groupFactoriesSector(subIten2Selection);
           groupLinesSector(subIten2Selection,element);
 
-          return sendMail(context);
+          return sendMail();
         }
 
         if (subIten1Selection == 1)
-          return conection(context);
+          return conection();
     }
 
 }
