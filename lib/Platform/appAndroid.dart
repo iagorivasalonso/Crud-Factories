@@ -3,9 +3,7 @@ import 'package:flutter/material.dart';
 
 class appAndroid extends StatefulWidget {
 
-  BuildContext context;
-
-  appAndroid(this.context);
+  appAndroid();
 
   @override
   State<appAndroid> createState() => _appAndroidState();
@@ -16,8 +14,6 @@ class _appAndroidState extends State<appAndroid> {
 
   @override
   Widget build(BuildContext context) {
-
-    BuildContext context = this.context;
 
     return Scaffold(
       appBar: AppBar(

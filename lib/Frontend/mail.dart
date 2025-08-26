@@ -46,9 +46,9 @@ class _newMailState extends State<newMail> {
 
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context0) {
 
-    BuildContext context = context1;
+    BuildContext context = Platform.isWindows ? context1 : context0;
     int select = widget.select;
 
 

@@ -76,10 +76,10 @@ class _newFactoryState extends State<newFactory> {
   String allAddress = "";
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context0) {
 
     int select = widget.select;
-    BuildContext context = context1;
+    BuildContext context = Platform.isWindows ? context1 : context0;
     sectorsString.clear();
 
     sectorsString.add(S.of(context).newMale);

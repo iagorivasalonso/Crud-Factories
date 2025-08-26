@@ -61,7 +61,7 @@ class MyApp extends StatelessWidget {
                     supportedLocales: S.delegate.supportedLocales,
                     initialRoute: '/',
                     routes: getAppRoutes(),
-                    home: appAndroid(context),
+                    home: appAndroid(),
             );
   }
 

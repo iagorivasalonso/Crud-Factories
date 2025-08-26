@@ -70,9 +70,9 @@ class _conectionState extends State<conection> {
 
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context0) {
 
-    BuildContext context = context1;
+    BuildContext context = Platform.isWindows ? context1 : context0;
 
     if(action0.isEmpty)
     {

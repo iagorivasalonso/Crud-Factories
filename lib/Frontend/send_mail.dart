@@ -65,9 +65,9 @@ class _sendMailState extends State<sendMail> {
   String nameRoute = "";
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context0) {
 
-    BuildContext context = context1;
+    BuildContext context = Platform.isWindows ? context1 : context0;
 
     columnsTable = [S.of(context).company, S.of(context).mail];
 

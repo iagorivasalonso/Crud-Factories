@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:crud_factories/Alertdialogs/confirm.dart';
 import 'package:crud_factories/Backend/CSV/chargueData%20csv.dart';
 import 'package:crud_factories/Backend/CSV/exportRoutes.dart';
@@ -312,9 +314,9 @@ class adminRoutesAndroid extends StatefulWidget {
 
 class _adminRoutesAndroidState extends State<adminRoutesAndroid> {
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context0) {
 
-    BuildContext context = context1;
+    BuildContext context = Platform.isWindows ? context1 : context0;
     String title = S.of(context).route_selector;
 
     return Scaffold(

@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:crud_factories/Alertdialogs/confirm.dart';
 import 'package:crud_factories/Alertdialogs/create%20sector.dart';
 import 'package:crud_factories/Alertdialogs/warning.dart';
@@ -177,9 +179,9 @@ class adminSectorAndroid extends StatefulWidget {
 
 class _adminSectorAndroidState extends State<adminSectorAndroid> {
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context0) {
 
-    BuildContext context = context1;
+    BuildContext context = Platform.isWindows ? context1 : context0;
     String title = S.of(context).sector_management;
 
     return Scaffold(

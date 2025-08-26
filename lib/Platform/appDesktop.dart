@@ -121,6 +121,8 @@ class _appDesktopState extends State<appDesktop> {
     double mWidth = MediaQuery.of(context).size.width;
     double mHeight = MediaQuery.of(context).size.height;
 
+    context1 = context;
+
     double wItem= 80;
     double wItemMax= 120;
     Color colorBar =Colors.white;

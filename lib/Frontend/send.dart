@@ -64,9 +64,9 @@ class _newSendState extends State<newSend> {
   int allLinesModify = 0;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context0) {
 
-    BuildContext context = context1;
+    BuildContext context = Platform.isWindows ? context1 : context0;
     String type = widget.filter;
     String selectCamp = widget.selectCamp;
     int select = widget.select;
