@@ -82,125 +82,210 @@ class _newImportState extends State<newImport> {
           child: SingleChildScrollView(
             controller: verticalScroll,
             scrollDirection: Axis.vertical,
-            child: Container(
-              width: 2000,
-              child: SingleChildScrollView(
-                controller: horizontalScroll,
-                scrollDirection: Axis.horizontal,
-                child: Container(
-                  height: 400,
-                  width: 736,
-                  child: Align(
-                    alignment: Alignment.topLeft,
-                    child:  Padding(
-                      padding: const EdgeInsets.only(left: 30.0,top: 30.0),
-                      child: Column(
-                        children: [
-                          Row(
+            child: SingleChildScrollView(
+              controller: horizontalScroll,
+              scrollDirection: Axis.horizontal,
+              child: Container(
+                height: 400,
+                width: 736,
+                child: Align(
+                  alignment: Alignment.topLeft,
+                  child:  Padding(
+                    padding: const EdgeInsets.only(left: 30.0,top: 30.0),
+                    child: Column(
+                      children: [
+                        Row(
+                          children: [
+                            Text(S.of(context).import_data,
+                              style: TextStyle(fontWeight: FontWeight.bold),),
+                          ],
+                        ),
+                        Padding(
+                          padding: EdgeInsets.only(top: 15.00),
+                          child: Column(
                             children: [
-                              Text(S.of(context).import_data,
-                                style: TextStyle(fontWeight: FontWeight.bold),),
+                              Row(
+                                children: [
+                                  Text(S.of(context).Import_data_in_CSV_format),
+                                ],
+                              ),
                             ],
                           ),
-                          Padding(
-                            padding: EdgeInsets.only(top: 15.00),
-                            child: Column(
-                              children: [
-                                Row(
-                                  children: [
-                                    Text(S.of(context).Import_data_in_CSV_format),
-                                  ],
-                                ),
-                              ],
-                            ),
 
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(top:80.0, bottom: 30.0),
+                          child: Row(
+                            children: [
+                              Padding(
+                                padding: const EdgeInsets.only(right:10),
+                                child: Text(S.of(context).route),
+                              ),
+                              SizedBox(
+                                width: 420,
+                                height: 40,
+                                child: TextField(
+                                  decoration:const InputDecoration(
+                                    border: OutlineInputBorder(),
+                                  ),
+                                  controller: controllerDatePicker,
+                                ),
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.only(left: 40.0),
+                                child: MaterialButton(
+                                  color: Colors.lightBlue,
+                                  child: Text(S.of(context).examine,
+                                    style: const TextStyle(color: Colors.white),
+                                  ),
+                                  onPressed: (){
+                                    _pickFile(context, controllerDatePicker,sectorsNew,factoriesNew,empleoyesNew,mailsNew,linesNew,conectionsNew);
+                                  },
+                                ),
+                              )
+                            ],
                           ),
-                          Padding(
-                            padding: const EdgeInsets.only(top:80.0, bottom: 30.0),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(top: 130.0,left: 400),
+                          child: SizedBox(
+                            width: 250,
                             child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                Padding(
-                                  padding: const EdgeInsets.only(right:10),
-                                  child: Text(S.of(context).route),
-                                ),
-                                SizedBox(
-                                  width: 420,
-                                  height: 40,
-                                  child: TextField(
-                                    decoration:const InputDecoration(
-                                      border: OutlineInputBorder(),
-                                    ),
-                                    controller: controllerDatePicker,
-                                  ),
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.only(left: 40.0),
-                                  child: MaterialButton(
-                                    color: Colors.lightBlue,
-                                    child: Text(S.of(context).examine,
-                                      style: const TextStyle(color: Colors.white),
-                                    ),
-                                    onPressed: (){
-                                      _pickFile(context, controllerDatePicker,sectorsNew,factoriesNew,empleoyesNew,mailsNew,linesNew,conectionsNew);
-                                    },
-                                  ),
-                                )
-                              ],
-                            ),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.only(top: 130.0,left: 400),
-                            child: SizedBox(
-                              width: 250,
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                children: [
-                                  MaterialButton(
-                                    color: Colors.lightBlue,
-                                    child: Text(S.of(context).import_data,
-                                      style:  const TextStyle(color: Colors.white) ,),
-                                    onPressed: () async {
+                                MaterialButton(
+                                  color: Colors.lightBlue,
+                                  child: Text(S.of(context).import_data,
+                                    style:  const TextStyle(color: Colors.white) ,),
+                                  onPressed: () async {
 
-                                      String action = '';
-                                      String current = '';
-                                      String current1 = '';
-                                      bool repeat = false;
-                                      int cantImport = 0;
+                                    String action = '';
+                                    String current = '';
+                                    String current1 = '';
+                                    bool repeat = false;
+                                    int cantImport = 0;
 
-                                      if(sectorsNew.isNotEmpty)
+                                    if(sectorsNew.isNotEmpty)
+                                    {
+                                      repeat = false;
+
+                                      for(int i = 0; i < sectorsNew.length; i++)
                                       {
                                         repeat = false;
+                                        current = sectorsNew[i].name;
 
-                                        for(int i = 0; i < sectorsNew.length; i++)
+                                        for (int i = 0; i < sectors.length; i++)
                                         {
-                                          repeat = false;
-                                          current = sectorsNew[i].name;
-
-                                          for (int i = 0; i < sectors.length; i++)
+                                          if(sectors[i].name == current)
                                           {
-                                            if(sectors[i].name == current)
+                                            repeat = true;
+                                          }
+
+                                        }
+                                        if(repeat == false)
+                                        {
+                                          if(sectors.isNotEmpty)
+                                          {
+                                            String idLast = sectors[sectors.length-1].id;
+                                            sectorsNew[i].id = createId(idLast);
+                                          }
+                                          else
+                                          {
+                                            sectorsNew[i].id ="1";
+                                          }
+
+                                          cantImport++;
+                                          sectors.add(sectorsNew[i]);
+                                        }
+                                      }
+                                      String array =  S.of(context).sectors;
+
+                                      if(cantImport > 0)
+                                      {
+                                        action = LocalizationHelper.importData(context,array, cantImport);
+                                        confirm(context,action);
+                                      }
+                                      else
+                                      {
+                                        action = LocalizationHelper.no_do_import(context, array);
+                                        confirm(context, action);
+                                      }
+
+                                      if(conn != null)
+                                      {
+                                        sqlCreateSector(sectorsNew);
+                                      }
+                                      else
+                                      {
+                                        await csvExportatorSectors(sectors);
+                                      }
+
+                                    }
+
+                                    if(empleoyesNew.isNotEmpty)
+                                    {
+                                      if(allFactories.isNotEmpty)
+                                      {
+                                        for(int i = 0; i < empleoyesNew.length; i++)
+                                        {
+                                          current = empleoyesNew[i].idFactory;
+                                          bool repeat = false;
+
+                                          for(int x = 0; x < allFactories.length; x++)
+                                          {
+                                            if(current == allFactories[x].id)
                                             {
                                               repeat = true;
                                             }
-
                                           }
+
                                           if(repeat == false)
                                           {
-                                            if(sectors.isNotEmpty)
+                                            empleoyesNew.removeAt(i);
+                                            String stringDialog = LocalizationHelper.empleoyesBeFactory(context, current);
+                                            repeat = await noFind(context, true, stringDialog);
+                                          }
+                                        }
+
+                                        for(int i = 0; i < empleoyesNew.length; i++)
+                                        {
+                                          repeat = false;
+                                          current = empleoyesNew[i].name;
+                                          current1 = empleoyesNew[i].idFactory;
+
+                                          if(lineSector.isNotEmpty)
+                                          {
+                                            for(int x = 0; x <empleoyes.length; x++)
                                             {
-                                              String idLast = sectors[sectors.length-1].id;
-                                              sectorsNew[i].id = createId(idLast);
+                                              if(empleoyes[x].name == current  && empleoyes[x].idFactory == current1)
+                                              {
+                                                repeat = true;
+                                              }
+                                            }
+                                          }
+
+                                          if(repeat == false)
+                                          {
+                                            if(empleoyes.isNotEmpty)
+                                            {
+                                              String idLast = empleoyes[empleoyes.length-1].id;
+                                              empleoyesNew[i].id = createId(idLast);
                                             }
                                             else
                                             {
-                                              sectorsNew[i].id ="1";
+                                              empleoyesNew[i].id ="1";
                                             }
 
+                                            int idFactEmp = int.parse(empleoyesNew[i].idFactory)+idEndList;
+                                            empleoyesNew[i].idFactory = idFactEmp.toString();
+
                                             cantImport++;
-                                            sectors.add(sectorsNew[i]);
+                                            empleoyes.add(empleoyesNew[i]);
                                           }
+
+
                                         }
-                                        String array =  S.of(context).sectors;
+                                        String array =  S.of(context).employees;
 
                                         if(cantImport > 0)
                                         {
@@ -215,117 +300,88 @@ class _newImportState extends State<newImport> {
 
                                         if(conn != null)
                                         {
-                                          sqlCreateSector(sectorsNew);
+                                          sqlCreateEmpleoye(empleoyesNew);
                                         }
                                         else
                                         {
-                                          await csvExportatorSectors(sectors);
+                                          await csvExportatorEmpleoyes(empleoyes);
+                                        }
+                                      }
+                                      else
+                                      {
+                                        String array =S.of(context).employees;
+                                        action = LocalizationHelper.no_companies_without(context, array);
+                                        error(context, action);
+                                      }
+                                    }
+                                    if(mailsNew.isNotEmpty)
+                                    {
+                                      for(int i = 0; i <mailsNew.length; i++)
+                                      {
+                                        repeat = false;
+                                        current = mailsNew[i].addrres;
+
+                                        for(int x = 0; x <mails.length; x++)
+                                        {
+                                          if(mails[x].addrres == current)
+                                          {
+                                            repeat = true;
+                                          }
                                         }
 
-                                      }
-
-                                      if(empleoyesNew.isNotEmpty)
-                                      {
-                                        if(allFactories.isNotEmpty)
+                                        if(repeat == false)
                                         {
-                                          for(int i = 0; i < empleoyesNew.length; i++)
+                                          if(mails.isNotEmpty)
                                           {
-                                            current = empleoyesNew[i].idFactory;
-                                            bool repeat = false;
-
-                                            for(int x = 0; x < allFactories.length; x++)
-                                            {
-                                              if(current == allFactories[x].id)
-                                              {
-                                                repeat = true;
-                                              }
-                                            }
-
-                                            if(repeat == false)
-                                            {
-                                              empleoyesNew.removeAt(i);
-                                              String stringDialog = LocalizationHelper.empleoyesBeFactory(context, current);
-                                              repeat = await noFind(context, true, stringDialog);
-                                            }
-                                          }
-
-                                          for(int i = 0; i < empleoyesNew.length; i++)
-                                          {
-                                            repeat = false;
-                                            current = empleoyesNew[i].name;
-                                            current1 = empleoyesNew[i].idFactory;
-
-                                            if(lineSector.isNotEmpty)
-                                            {
-                                              for(int x = 0; x <empleoyes.length; x++)
-                                              {
-                                                if(empleoyes[x].name == current  && empleoyes[x].idFactory == current1)
-                                                {
-                                                  repeat = true;
-                                                }
-                                              }
-                                            }
-
-                                            if(repeat == false)
-                                            {
-                                              if(empleoyes.isNotEmpty)
-                                              {
-                                                String idLast = empleoyes[empleoyes.length-1].id;
-                                                empleoyesNew[i].id = createId(idLast);
-                                              }
-                                              else
-                                              {
-                                                empleoyesNew[i].id ="1";
-                                              }
-
-                                              int idFactEmp = int.parse(empleoyesNew[i].idFactory)+idEndList;
-                                              empleoyesNew[i].idFactory = idFactEmp.toString();
-
-                                              cantImport++;
-                                              empleoyes.add(empleoyesNew[i]);
-                                            }
-
-
-                                          }
-                                          String array =  S.of(context).employees;
-
-                                          if(cantImport > 0)
-                                          {
-                                            action = LocalizationHelper.importData(context,array, cantImport);
-                                            confirm(context,action);
+                                            String idLast = mails[mails.length-1].id;
+                                            mailsNew[i].id = createId(idLast);
                                           }
                                           else
                                           {
-                                            action = LocalizationHelper.no_do_import(context, array);
-                                            confirm(context, action);
+                                            mailsNew[i].id ="1";
                                           }
 
-                                          if(conn != null)
-                                          {
-                                            sqlCreateEmpleoye(empleoyesNew);
-                                          }
-                                          else
-                                          {
-                                            await csvExportatorEmpleoyes(empleoyes);
-                                          }
+                                          cantImport++;
+                                          mails.add(mailsNew[i]);
                                         }
-                                        else
-                                        {
-                                          String array =S.of(context).employees;
-                                          action = LocalizationHelper.no_companies_without(context, array);
-                                          error(context, action);
-                                        }
+
                                       }
-                                      if(mailsNew.isNotEmpty)
+                                      String array =  S.of(context).mails;
+
+                                      if(cantImport > 0)
                                       {
-                                        for(int i = 0; i <mailsNew.length; i++)
+
+                                        action = LocalizationHelper.importData(context,array, cantImport);
+                                        confirm(context,action);
+                                      }
+                                      else
+                                      {
+                                        action = LocalizationHelper.no_do_import(context, array);
+                                        confirm(context, action);
+                                      }
+
+
+                                      if(conn != null)
+                                      {
+                                        sqlCreateMail(mailsNew);
+                                      }
+                                      else
+                                      {
+                                        await  csvExportatorMails(mails);
+                                      }
+                                    }
+                                    if(linesNew.isNotEmpty)
+                                    {
+                                      if(allFactories.isNotEmpty)
+                                      {
+                                        for(int i = 0; i < linesNew.length; i++)
                                         {
+                                          current = linesNew[i].factory;
                                           repeat = false;
-                                          current = mailsNew[i].addrres;
 
-                                          for(int x = 0; x <mails.length; x++)
+                                          for(int x = 0; x < allFactories.length; x++)
                                           {
-                                            if(mails[x].addrres == current)
+                                            if(current == allFactories[x].name)
                                             {
                                               repeat = true;
                                             }
@@ -333,26 +389,48 @@ class _newImportState extends State<newImport> {
 
                                           if(repeat == false)
                                           {
-                                            if(mails.isNotEmpty)
+                                            linesNew.removeAt(i);
+                                            String stringDialog = LocalizationHelper.factorybeBD(context, current);
+                                            repeat = await noFind(context, true, stringDialog);
+                                          }
+                                        }
+                                        for(int i = 0; i < linesNew.length; i++)
+                                        {
+                                          repeat = false;
+                                          current = linesNew[i].date;
+                                          current1 = linesNew[i].factory;
+
+                                          if(lineSector.isNotEmpty)
+                                          {
+                                            for(int x = 0; x <lineSector.length; x++)
                                             {
-                                              String idLast = mails[mails.length-1].id;
-                                              mailsNew[i].id = createId(idLast);
+                                              if(lineSector[x].date == current  && lineSector[x].factory == current1)
+                                              {
+                                                repeat = true;
+                                              }
+                                            }
+                                          }
+
+                                          if(repeat == false)
+                                          {
+                                            if(lineSector.isNotEmpty)
+                                            {
+                                              String idLast = lineSector[lineSector.length-1].id;
+                                              linesNew[i].id = createId(idLast);
                                             }
                                             else
                                             {
-                                              mailsNew[i].id ="1";
+                                              linesNew[i].id ="1";
                                             }
-
                                             cantImport++;
-                                            mails.add(mailsNew[i]);
+                                            lineSector.add(linesNew[i]);
                                           }
 
                                         }
-                                        String array =  S.of(context).mails;
+                                        String array =  S.of(context).lines;
 
                                         if(cantImport > 0)
                                         {
-
                                           action = LocalizationHelper.importData(context,array, cantImport);
                                           confirm(context,action);
                                         }
@@ -362,254 +440,173 @@ class _newImportState extends State<newImport> {
                                           confirm(context, action);
                                         }
 
-
                                         if(conn != null)
                                         {
-                                          sqlCreateMail(mailsNew);
+                                          sqlCreateLine(linesNew,context);
                                         }
                                         else
                                         {
-                                          await  csvExportatorMails(mails);
+                                          await  csvExportatorLines(lineSector);;
                                         }
                                       }
-                                      if(linesNew.isNotEmpty)
+                                      else
                                       {
-                                        if(allFactories.isNotEmpty)
-                                        {
-                                          for(int i = 0; i < linesNew.length; i++)
-                                          {
-                                            current = linesNew[i].factory;
-                                            repeat = false;
-
-                                            for(int x = 0; x < allFactories.length; x++)
-                                            {
-                                              if(current == allFactories[x].name)
-                                              {
-                                                repeat = true;
-                                              }
-                                            }
-
-                                            if(repeat == false)
-                                            {
-                                              linesNew.removeAt(i);
-                                              String stringDialog = LocalizationHelper.factorybeBD(context, current);
-                                              repeat = await noFind(context, true, stringDialog);
-                                            }
-                                          }
-                                          for(int i = 0; i < linesNew.length; i++)
-                                          {
-                                            repeat = false;
-                                            current = linesNew[i].date;
-                                            current1 = linesNew[i].factory;
-
-                                            if(lineSector.isNotEmpty)
-                                            {
-                                              for(int x = 0; x <lineSector.length; x++)
-                                              {
-                                                if(lineSector[x].date == current  && lineSector[x].factory == current1)
-                                                {
-                                                  repeat = true;
-                                                }
-                                              }
-                                            }
-
-                                            if(repeat == false)
-                                            {
-                                              if(lineSector.isNotEmpty)
-                                              {
-                                                String idLast = lineSector[lineSector.length-1].id;
-                                                linesNew[i].id = createId(idLast);
-                                              }
-                                              else
-                                              {
-                                                linesNew[i].id ="1";
-                                              }
-                                              cantImport++;
-                                              lineSector.add(linesNew[i]);
-                                            }
-
-                                          }
-                                          String array =  S.of(context).lines;
-
-                                          if(cantImport > 0)
-                                          {
-                                            action = LocalizationHelper.importData(context,array, cantImport);
-                                            confirm(context,action);
-                                          }
-                                          else
-                                          {
-                                            action = LocalizationHelper.no_do_import(context, array);
-                                            confirm(context, action);
-                                          }
-
-                                          if(conn != null)
-                                          {
-                                            sqlCreateLine(linesNew,context);
-                                          }
-                                          else
-                                          {
-                                            await  csvExportatorLines(lineSector);;
-                                          }
-                                        }
-                                        else
-                                        {
-                                          String array = S.of(context).lines;
-                                          action = LocalizationHelper.no_companies_without(context, array);
-                                          error(context, action);
-                                        }
-
+                                        String array = S.of(context).lines;
+                                        action = LocalizationHelper.no_companies_without(context, array);
+                                        error(context, action);
                                       }
-                                      if(conectionsNew.isNotEmpty)
+
+                                    }
+                                    if(conectionsNew.isNotEmpty)
+                                    {
+                                      repeat = false;
+
+                                      for(int i = 0; i <conectionsNew.length; i++)
                                       {
                                         repeat = false;
+                                        current = conectionsNew[i].database;
 
-                                        for(int i = 0; i <conectionsNew.length; i++)
+                                        for(int x = 0; x <conections.length; x++)
+                                        {
+                                          if(conections[x].database == current)
+                                          {
+                                            repeat= true;
+                                          }
+                                        }
+                                        if(repeat == false)
+                                        {
+                                          if(conections.isNotEmpty)
+                                          {
+                                            String idLast = conections[conections.length-1].id;
+                                            conectionsNew[i].id = createId(idLast);
+                                          }
+                                          else
+                                          {
+                                            conectionsNew[i].id ="1";
+                                          }
+
+                                          cantImport++;
+                                          conections.add(conectionsNew[i]);
+                                        }
+
+                                      }
+                                      String array =  S.of(context).connections;
+                                      if(cantImport > 0)
+                                      {
+
+                                        action = LocalizationHelper.importData(context,array, cantImport);
+                                        confirm(context, action);
+                                      }
+                                      else
+                                      {
+                                        action = LocalizationHelper.no_do_import(context, array);
+                                        confirm(context, action);
+                                      }
+
+                                      await csvExportatorConections(conections);
+
+                                    }
+                                    if(factoriesNew.isNotEmpty)
+                                    {
+                                      if(sectors.isNotEmpty)
+                                      {
+                                        for(int i = 0; i < factoriesNew.length; i++)
+                                        {
+                                          current = factoriesNew[i].sector;
+                                          repeat = false;
+
+                                          for(int x = 0; x < sectors.length; x++)
+                                          {
+                                            if(current == sectors[x].id)
+                                            {
+                                              repeat = true;
+                                            }
+                                          }
+
+                                          if(repeat == false)
+                                          {
+                                            factoriesNew.removeAt(i);
+                                            String stringDialog =S.of(context).The_sector_does_not_exist;
+                                            repeat = await noFind(context, true, stringDialog);
+                                          }
+                                        }
+
+                                        for(int i = 0; i <factoriesNew.length; i++)
                                         {
                                           repeat = false;
-                                          current = conectionsNew[i].database;
+                                          current = factoriesNew[i].name;
 
-                                          for(int x = 0; x <conections.length; x++)
+                                          for(int x = 0; x <allFactories.length; x++)
                                           {
-                                            if(conections[x].database == current)
+                                            if(allFactories[x].name == current)
                                             {
                                               repeat= true;
                                             }
+
                                           }
+
                                           if(repeat == false)
                                           {
-                                            if(conections.isNotEmpty)
+                                            if(allFactories.isNotEmpty)
                                             {
-                                              String idLast = conections[conections.length-1].id;
-                                              conectionsNew[i].id = createId(idLast);
+                                              String idLast = allFactories[allFactories.length-1].id;
+                                              factoriesNew[i].id = createId(idLast);
                                             }
                                             else
                                             {
-                                              conectionsNew[i].id ="1";
+                                              factoriesNew[i].id ="1";
                                             }
 
                                             cantImport++;
-                                            conections.add(conectionsNew[i]);
+                                            allFactories.add(factoriesNew[i]);
+
                                           }
 
                                         }
-                                        String array =  S.of(context).connections;
                                         if(cantImport > 0)
                                         {
-
+                                          String array =  S.of(context).companies;
                                           action = LocalizationHelper.importData(context,array, cantImport);
                                           confirm(context, action);
                                         }
                                         else
                                         {
-                                          action = LocalizationHelper.no_do_import(context, array);
+                                          action = S.of(context).there_is_no_companies_to_import;
                                           confirm(context, action);
                                         }
 
-                                        await csvExportatorConections(conections);
-
-                                      }
-                                      if(factoriesNew.isNotEmpty)
-                                      {
-                                        if(sectors.isNotEmpty)
+                                        if(conn != null)
                                         {
-                                          for(int i = 0; i < factoriesNew.length; i++)
-                                          {
-                                            current = factoriesNew[i].sector;
-                                            repeat = false;
-
-                                            for(int x = 0; x < sectors.length; x++)
-                                            {
-                                              if(current == sectors[x].id)
-                                              {
-                                                repeat = true;
-                                              }
-                                            }
-
-                                            if(repeat == false)
-                                            {
-                                              factoriesNew.removeAt(i);
-                                              String stringDialog =S.of(context).The_sector_does_not_exist;
-                                              repeat = await noFind(context, true, stringDialog);
-                                            }
-                                          }
-
-                                          for(int i = 0; i <factoriesNew.length; i++)
-                                          {
-                                            repeat = false;
-                                            current = factoriesNew[i].name;
-
-                                            for(int x = 0; x <allFactories.length; x++)
-                                            {
-                                              if(allFactories[x].name == current)
-                                              {
-                                                repeat= true;
-                                              }
-
-                                            }
-
-                                            if(repeat == false)
-                                            {
-                                              if(allFactories.isNotEmpty)
-                                              {
-                                                String idLast = allFactories[allFactories.length-1].id;
-                                                factoriesNew[i].id = createId(idLast);
-                                              }
-                                              else
-                                              {
-                                                factoriesNew[i].id ="1";
-                                              }
-
-                                              cantImport++;
-                                              allFactories.add(factoriesNew[i]);
-
-                                            }
-
-                                          }
-                                          if(cantImport > 0)
-                                          {
-                                            String array =  S.of(context).companies;
-                                            action = LocalizationHelper.importData(context,array, cantImport);
-                                            confirm(context, action);
-                                          }
-                                          else
-                                          {
-                                            action = S.of(context).there_is_no_companies_to_import;
-                                            confirm(context, action);
-                                          }
-
-                                          if(conn != null)
-                                          {
-                                            sqlCeateFactory(factoriesNew);
-                                          }
-                                          else
-                                          {
-                                            await csvExportatorFactories(allFactories);
-                                          }
+                                          sqlCeateFactory(factoriesNew);
                                         }
                                         else
                                         {
-                                          action =action = S.of(context).Cannot_Load_Companies_because_it_does_not_have_sectors;
-                                          error(context, action);
+                                          await csvExportatorFactories(allFactories);
                                         }
                                       }
-                                    },
-                                  ),
-                                  MaterialButton(
-                                    color: Colors.lightBlue,
-                                    child: Text(S.of(context).delete,
-                                      style: const TextStyle(color: Colors.white),),
-                                    onPressed: () {
-                                      setState(() {
-                                        controllerDatePicker.text = "";
-                                      });
-                                    },
-                                  ),
-                                ],
-                              ),
+                                      else
+                                      {
+                                        action =action = S.of(context).Cannot_Load_Companies_because_it_does_not_have_sectors;
+                                        error(context, action);
+                                      }
+                                    }
+                                  },
+                                ),
+                                MaterialButton(
+                                  color: Colors.lightBlue,
+                                  child: Text(S.of(context).delete,
+                                    style: const TextStyle(color: Colors.white),),
+                                  onPressed: () {
+                                    setState(() {
+                                      controllerDatePicker.text = "";
+                                    });
+                                  },
+                                ),
+                              ],
                             ),
                           ),
-                        ],
-                      ),
+                        ),
+                      ],
                     ),
                   ),
                 ),
