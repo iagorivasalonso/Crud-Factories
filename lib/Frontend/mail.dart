@@ -11,6 +11,9 @@ import 'package:crud_factories/Backend/Global/variables.dart';
 import 'package:crud_factories/Backend/CSV/exportMails.dart';
 import 'package:crud_factories/Functions/validatorCamps.dart';
 import 'package:crud_factories/Objects/Mail.dart';
+import 'package:crud_factories/Widgets/headView.dart';
+import 'package:crud_factories/Widgets/textfield.dart';
+import 'package:crud_factories/Widgets/textFieldPassword.dart';
 import 'package:crud_factories/generated/l10n.dart';
 import 'package:crud_factories/helpers/localization_helper.dart';
 import 'package:flutter/material.dart';
@@ -19,6 +22,7 @@ import 'package:mailer/smtp_server/gmail.dart';
 import 'package:mailer/smtp_server/hotmail.dart';
 
 import '../Widgets/headViewsAndroid.dart';
+import '../Widgets/materialButton.dart';
 
 
 class newMail extends StatefulWidget {
@@ -52,15 +56,7 @@ class _newMailState extends State<newMail> {
     int select = widget.select;
 
 
-    void campCharge() {
-          if(saveChanges == false)
-          {
-              controllerMail.text = mails[select].addrres;
-              controllerCompany.text = mails[select].company;
-              controllerPas.text = "";
-              controllerPasVerificator.text = "";
-          }
-    }
+
 
     String action = "";
     String action2 = "";
@@ -74,7 +70,7 @@ class _newMailState extends State<newMail> {
     else {
       title = S.of(context).edit;
 
-      campCharge();
+      campCharge(context,select,controllerMail,controllerPas,controllerPasVerificator);
 
       action = S.of(context).update;
       action2 = S.of(context).undo;
@@ -108,110 +104,26 @@ class _newMailState extends State<newMail> {
                     padding: const EdgeInsets.only(left: 30.0, top: 30.0),
                     child: Column(
                       children: [
-                        Row(
-                          children: [
-                            Text('$title1',
-                              style: const TextStyle(
-                                  fontWeight: FontWeight.bold),),
-                          ],
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.only(
-                              left: 30, top: 20.0, bottom: 30.0),
-                          child: Row(
-                            children: [
-                              Padding(
-                                padding: const EdgeInsets.only(right: 10.0),
-                                child: Text(S.of(context).new_mail),
-                              ),
-                              SizedBox(
-                                width: 450,
-                                height: 40,
-                                child: TextField(
-                                  controller: controllerMail,
-                                  decoration: const InputDecoration(
-                                    border: OutlineInputBorder(),
-                                  ),
-                                  onChanged: (s){
-                                    if(saveChanges == false)
-                                    {
-                                      if(select != -1)
-                                      {
-                                        if(controllerMail.text == mails[select].addrres)
-                                        {
-                                          saveChanges = false;
-                                        }
-                                        else
-                                        {
-                                          saveChanges = true;
-                                        }
-                                      }
-                                      else
-                                      {
-                                        if(controllerMail.text.isEmpty)
-                                        {
-                                          saveChanges = false;
-                                        }
-                                        else
-                                        {
-                                          saveChanges = true;
-                                        }
-                                      }
-
-                                    }
-                                  },
-                                ),
-                              ),
-                            ],
-                          ),
+                        headView(
+                            title: title1
                         ),
 
-                        Padding(
-                          padding: const EdgeInsets.only(
-                              left: 30, top: 20.0, bottom: 30.0),
-                          child: Row(
-                            children: [
-                              Padding(
-                                padding: const EdgeInsets.only(right: 10.0),
-                                child: Text(S.of(context).password),
-                              ),
-                              SizedBox(
-                                width: 400,
-                                height: 40,
-                                child: TextField(
-                                  controller: controllerPas,
-                                  obscureText: true,
-                                  decoration: const InputDecoration(
-                                    border: OutlineInputBorder(),
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
+                        defaultTextfield(
+                            nameCamp: S.of(context).new_mail,
+                            oldCamp: mails[select].addrres,
+                            controllerCamp: controllerMail,
                         ),
-                        Padding(
-                          padding: const EdgeInsets.only(
-                              left: 30, top: 20.0, bottom: 20.0),
-                          child: Row(
-                            children: [
-                              Padding(
-                                padding: const EdgeInsets.only(right: 10.0),
-                                child: Text(S.of(context).verify_password),
-                              ),
-                              SizedBox(
-                                width: 400,
-                                height: 40,
-                                child: TextField(
-                                  controller: controllerPasVerificator,
-                                  obscureText: true,
-                                  decoration: const InputDecoration(
-                                    border: OutlineInputBorder(),
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
+
+                        textfieldPassword(
+                            nameCamp: S.of(context).password,
+                            controllerCamp: controllerPas,
                         ),
+
+                        textfieldPassword(
+                            nameCamp: S.of(context).verify_password,
+                            controllerCamp: controllerPasVerificator,
+                        ),
+
                         Padding(
                           padding: const EdgeInsets.only(left: 600, top: 80),
                           child: SizedBox(
@@ -220,130 +132,26 @@ class _newMailState extends State<newMail> {
                               mainAxisAlignment: MainAxisAlignment
                                   .spaceBetween,
                               children: [
-                                MaterialButton(
-                                    color: Colors.lightBlue,
-                                    child: Text(action,
-                                        style: const TextStyle(
-                                            color: Colors.white)
+                                materialButton(
+                                    nameAction: action,
+                                    function: () => _onSaveMail(
+                                      context,
+                                      select,
+                                      controllerMail,
+                                      controllerPas,
+                                      controllerPasVerificator,
                                     ),
-                                    onPressed: () async {
-                                      List <Mail> current = [];
-                                      String action = "";
+                                ),
 
-                                      List <String> allKeys = [];
-                                      String nameCamp = S.of(context).mail;
-
-                                      for (int i = 0; i < allFactories.length; i++)
-                                      {
-                                        allKeys.add(allFactories[i].name);
-                                      }
-
-
-                                      String campOld = " ";
-                                      if(select != -1)
-                                      {
-                                        campOld = mails[select].addrres;
-                                      }
-
-
-                                      if((validatorCamps.primaryKeyCorrect(controllerMail.text,nameCamp,allKeys,campOld,context) ==true) )
-                                      {
-                                        if(validatorCamps.mailCorrect(controllerMail.text) != true)
-                                        {
-                                          action = S.of(context).not_a_valid_mail;
-                                          await error(context, action);
-                                        }
-                                        if(controllerPas.text.isEmpty || controllerPasVerificator.text.isEmpty)
-                                        {
-
-                                          if(controllerPas.text.isEmpty)
-                                          {
-                                            String array = S.of(context).password;
-                                            action = LocalizationHelper.camp_empty(context, array);
-                                            await error(context, action);
-                                          }
-                                          else
-                                          {
-                                            String array = S.of(context).verify_password;
-                                            action = LocalizationHelper.camp_empty(context, array);
-                                            error(context, action);
-                                          }
-                                        }
-                                        else
-                                        {
-                                          if (controllerPas.text == controllerPasVerificator.text)
-                                          {
-                                            final result = await testMail();
-
-                                            if (result == false)
-                                            {
-                                              String action = S.of(context).connection_cannot_be_established;
-                                              error(context, action);
-                                            }
-                                            else
-                                            {
-                                              if (conn != null)
-                                              {
-                                                if (select == -1)
-                                                {
-                                                  sqlCreateMail(current);
-                                                }
-                                                else
-                                                {
-                                                  current.add(mails[select]);
-                                                  sqlModifyMail(current);
-                                                }
-                                              }
-                                              else
-                                              {
-                                                mails = mails + current;
-
-                                                bool errorExp = await csvExportatorMails(mails);
-
-                                                if(errorExp != true && result != false)
-                                                {
-                                                  String array = S.of(context).mails;
-                                                  String action = LocalizationHelper.no_file(context, array);
-                                                  warning(context, action);
-                                                }
-                                              }
-
-                                              if (result == false)
-                                              {
-                                                action = S.of(context).the_user_or_password_are_incorrect;
-                                                error(context, action);
-                                              }
-                                            }
-                                          }
-                                          else
-                                          {
-                                            action = S.of(context).passwords_do_not_match;
-                                            error(context, action);
-                                          }
-
-                                        }
-
-                                      }
-
-                                    }),
-                                MaterialButton(
-                                  color: Colors.lightBlue,
-                                  child: Text(action2,
-                                    style: const TextStyle(
-                                        color: Colors.white),),
-                                  onPressed: () async {
-                                    setState(() {
-                                      if (select == -1) {
-                                        controllerMail.text = "";
-                                        controllerPas.text = "";
-                                        controllerPasVerificator.text = "";
-                                      }
-                                      else {
-                                        campCharge();
-                                      }
-                                      saveChanges = false;
-                                    });
-                                  },
+                                materialButton(
+                                  nameAction: action2,
+                                  function: () => _onResetMail(
+                                    context,
+                                    select,
+                                    controllerMail,
+                                    controllerPas,
+                                    controllerPasVerificator,
+                                  ),
                                 ),
                               ],
                             ),
@@ -364,48 +172,179 @@ class _newMailState extends State<newMail> {
            body: Text("creart email"),
     );
   }
+}
+
+Future<void>_onResetMail(BuildContext context,int select, TextEditingController controllerMail, TextEditingController controllerPas, TextEditingController controllerPasVerificator) async {
+
+  if (select == -1) {
+    controllerMail.text = "";
+    controllerPas.text = "";
+    controllerPasVerificator.text = "";
+  }
+  else {
+    campCharge(context,select,controllerMail,controllerPas,controllerPasVerificator);
+
+  }
+  saveChanges = false;
+}
 
 
+Future<void> _onSaveMail(BuildContext context, int select,TextEditingController controllerMail, TextEditingController controllerPas, TextEditingController controllerPasVerificator) async {
 
-  Future<bool> testMail() async {
+  List <Mail> current = [];
+  String action = "";
 
-    bool connectEmail = false;
-    String username = controllerMail.text;
-    String password = "";
-    String company = " ";
+  List <String> allKeys = [];
+  String nameCamp = S.of(context).mail;
 
-    if (controllerPas.text == controllerPasVerificator.text) {
-      password = controllerPas.text;
+  for (int i = 0; i < allFactories.length; i++)
+  {
+    allKeys.add(allFactories[i].name);
+  }
+
+
+  String campOld = " ";
+  if(select != -1)
+  {
+    campOld = mails[select].addrres;
+  }
+
+
+  if((validatorCamps.primaryKeyCorrect(controllerMail.text,nameCamp,allKeys,campOld,context) ==true) )
+  {
+    if(validatorCamps.mailCorrect(controllerMail.text) != true)
+    {
+      action = S.of(context).not_a_valid_mail;
+      await error(context, action);
+    }
+    if(controllerPas.text.isEmpty || controllerPasVerificator.text.isEmpty)
+    {
+
+      if(controllerPas.text.isEmpty)
+      {
+        String array = S.of(context).password;
+        action = LocalizationHelper.camp_empty(context, array);
+        await error(context, action);
+      }
+      else
+      {
+        String array = S.of(context).verify_password;
+        action = LocalizationHelper.camp_empty(context, array);
+        error(context, action);
+      }
+    }
+    else
+    {
+      if (controllerPas.text == controllerPasVerificator.text)
+      {
+        final result = await testMail(context,controllerMail,controllerPas,controllerPasVerificator);
+
+        if (result == false)
+        {
+          String action = S.of(context).connection_cannot_be_established;
+          error(context, action);
+        }
+        else
+        {
+          if (conn != null)
+          {
+            if (select == -1)
+            {
+              sqlCreateMail(current);
+            }
+            else
+            {
+              current.add(mails[select]);
+              sqlModifyMail(current);
+            }
+          }
+          else
+          {
+            mails = mails + current;
+
+            bool errorExp = await csvExportatorMails(mails);
+
+            if(errorExp != true && result != false)
+            {
+              String array = S.of(context).mails;
+              String action = LocalizationHelper.no_file(context, array);
+              warning(context, action);
+            }
+          }
+
+          if (result == false)
+          {
+            action = S.of(context).the_user_or_password_are_incorrect;
+            error(context, action);
+          }
+        }
+      }
+      else
+      {
+        action = S.of(context).passwords_do_not_match;
+        error(context, action);
+      }
+
     }
 
-    List <String> separeAddrres = username.split("@");
-    List <String> extCompany = separeAddrres[1].split(".");
-
-    company = extCompany[0];
-
-    try {
-      final message = Message()
-        ..from = Address(username, separeAddrres[0])
-        ..recipients.add(username)
-        ..subject = S.of(context).connection_test
-        ..text = S.of(context).this_is_a_connection_test_from_the_application;
-
-
-      if (company == "gmail") {
-        final smtpServer = gmail(username, password);
-        final sendReport = await send(message, smtpServer);
-      }
-      if (company == "hotmail") {
-        final smtpServer = hotmail(username, password);
-        final sendReport = await send(message, smtpServer);
-
-      }
-      connectEmail = true;
-    } catch (e) {
-      print(e);
-      connectEmail = false;
-    }
-
-    return connectEmail;
   }
 }
+
+Future testMail(context,controllerMail,controllerPas,controllerPasVerificator) async {
+
+  bool connectEmail = false;
+  String username = controllerMail.text;
+  String password = "";
+  String company = " ";
+
+  if (controllerPas.text == controllerPasVerificator.text) {
+    password = controllerPas.text;
+  }
+
+  List <String> separeAddrres = username.split("@");
+  List <String> extCompany = separeAddrres[1].split(".");
+
+  company = extCompany[0];
+
+  try {
+    final message = Message()
+      ..from = Address(username, separeAddrres[0])
+      ..recipients.add(username)
+      ..subject = S.of(context).connection_test
+      ..text = S.of(context).this_is_a_connection_test_from_the_application;
+
+
+    if (company == "gmail") {
+      final smtpServer = gmail(username, password);
+      final sendReport = await send(message, smtpServer);
+    }
+    if (company == "hotmail") {
+      final smtpServer = hotmail(username, password);
+      final sendReport = await send(message, smtpServer);
+
+    }
+    connectEmail = true;
+  } catch (e) {
+    print(e);
+    connectEmail = false;
+  }
+
+  return connectEmail;
+}
+
+void campCharge(
+    BuildContext context,
+    int select,
+    TextEditingController controllerMail,
+    TextEditingController controllerPas,
+    TextEditingController controllerPasVerificator
+              ) {
+
+  if(saveChanges == false)
+  {
+    controllerMail.text = mails[select].addrres;
+    controllerPas.text = "";
+    controllerPasVerificator.text = "";
+  }
+}
+
