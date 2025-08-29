@@ -57,7 +57,6 @@ class _newMailState extends State<newMail> {
 
 
 
-
     String action = "";
     String action2 = "";
     String title = "";
@@ -99,40 +98,41 @@ class _newMailState extends State<newMail> {
                 height: 475,
                 width: 890,
                 child: Align(
-                  alignment: Alignment.topRight,
+                  alignment: Alignment.topLeft,
                   child: Padding(
                     padding: const EdgeInsets.only(left: 30.0, top: 30.0),
-                    child: Column(
-                      children: [
-                        headView(
-                            title: title1
-                        ),
+                    child: SizedBox(
+                      width: 700,
+                      child: Column(
+                        children: [
+                          headView(
+                              title: title1
+                          ),
 
-                        defaultTextfield(
-                            nameCamp: S.of(context).new_mail,
-                            controllerCamp: controllerMail,
-                            campOld: select == -1 ? '' : mails[select].addrres,
-                        ),
+                          defaultTextfield(
+                              nameCamp: S.of(context).new_mail,
+                              controllerCamp: controllerMail,
+                              campOld: select == -1 ? '' : mails[select].addrres,
+                          ),
 
-                        textfieldPassword(
-                            nameCamp: S.of(context).password,
-                            controllerCamp: controllerPas,
-                        ),
+                          textfieldPassword(
+                              nameCamp: S.of(context).password,
+                              controllerCamp: controllerPas,
+                          ),
 
-                        textfieldPassword(
-                            nameCamp: S.of(context).verify_password,
-                            controllerCamp: controllerPasVerificator,
-                        ),
-
-                        Padding(
-                          padding: const EdgeInsets.only(left: 600, top: 80),
-                          child: SizedBox(
-                            width: 200,
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment
-                                  .spaceBetween,
-                              children: [
-                                materialButton(
+                          textfieldPassword(
+                              nameCamp: S.of(context).verify_password,
+                              controllerCamp: controllerPasVerificator,
+                          ),
+                          Align(
+                            alignment: Alignment.topRight,
+                            child: SizedBox(
+                              width: 200,
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment
+                                    .spaceBetween,
+                                children: [
+                                  materialButton(
                                     nameAction: action,
                                     function: () => _onSaveMail(
                                       context,
@@ -141,23 +141,25 @@ class _newMailState extends State<newMail> {
                                       controllerPas,
                                       controllerPasVerificator,
                                     ),
-                                ),
-
-                                materialButton(
-                                  nameAction: action2,
-                                  function: () => _onResetMail(
-                                    context,
-                                    select,
-                                    controllerMail,
-                                    controllerPas,
-                                    controllerPasVerificator,
                                   ),
-                                )
-                              ],
+
+                                  materialButton(
+                                    nameAction: action2,
+                                    function: () => _onResetMail(
+                                      context,
+                                      select,
+                                      controllerMail,
+                                      controllerPas,
+                                      controllerPasVerificator,
+                                    ),
+                                  )
+                                ],
+                              ),
                             ),
                           ),
-                        ),
-                      ],
+
+                        ],
+                      ),
                     ),
                   ),
                 ),
