@@ -6,21 +6,21 @@ Padding textfieldPassword({
 }){
 
   return  Padding(
-    padding: const EdgeInsets.only(
-        left: 30, top: 20.0, bottom: 30.0),
+    padding: const EdgeInsets.only(left: 30.0, top: 20.0, bottom: 30.0,right: 90.0),
     child: Row(
       children: [
         Padding(
           padding: const EdgeInsets.only(right: 10.0),
           child: Text(nameCamp),
         ),
-        SizedBox(
-          width: 450,
-          height: 40,
-          child: TextField(
-            obscureText: true,
-            decoration: const InputDecoration(
-              border: OutlineInputBorder(),
+        Expanded(
+          child: SizedBox(
+            width: 40,
+            child: TextField(
+              obscureText: true,
+              decoration: const InputDecoration(
+                border: OutlineInputBorder(),
+              ),
             ),
           ),
         ),

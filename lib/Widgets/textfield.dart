@@ -7,51 +7,33 @@ Padding defaultTextfield({
   required TextEditingController controllerCamp,
 }){
 
-  return  Padding(
-    padding: const EdgeInsets.only(
-        left: 30, top: 20.0, bottom: 30.0),
+  return Padding(
+    padding: const EdgeInsets.only(left: 35.0, top: 20.0, bottom: 30.0, right: 90.0),
     child: Row(
       children: [
         Padding(
           padding: const EdgeInsets.only(right: 10.0),
-          child: Text(nameCamp),
+          child: SizedBox(
+            width: 100,
+            child: Text(nameCamp),
+          ),
         ),
-        SizedBox(
-          width: 450,
-          height: 40,
-          child: TextField(
-            controller: controllerCamp,
-            decoration: const InputDecoration(
-              border: OutlineInputBorder(),
+        Expanded(
+          child: SizedBox(
+            height: 40,
+            child: TextField(
+              controller: controllerCamp,
+              decoration: const InputDecoration(
+                border: OutlineInputBorder(),
+              ),
+              onChanged: (s) {
+                if (campOld.isNotEmpty) {
+                  saveChanges = controllerCamp.text != campOld;
+                } else {
+                  saveChanges = controllerCamp.text.isNotEmpty;
+                }
+              },
             ),
-            onChanged: (s){
-              if(saveChanges == false)
-              {
-                if(campOld.isNotEmpty)
-                {
-                  if(controllerCamp == campOld)
-                  {
-                    saveChanges = false;
-                  }
-                  else
-                  {
-                    saveChanges = true;
-                  }
-                }
-                else
-                {
-                  if(controllerCamp.text.isEmpty)
-                  {
-                    saveChanges = false;
-                  }
-                  else
-                  {
-                    saveChanges = true;
-                  }
-                }
-
-              }
-            },
           ),
         ),
       ],
