@@ -110,8 +110,8 @@ class _newMailState extends State<newMail> {
 
                         defaultTextfield(
                             nameCamp: S.of(context).new_mail,
-                            oldCamp: mails[select].addrres,
                             controllerCamp: controllerMail,
+                            campOld: select == -1 ? '' : mails[select].addrres,
                         ),
 
                         textfieldPassword(
@@ -152,7 +152,7 @@ class _newMailState extends State<newMail> {
                                     controllerPas,
                                     controllerPasVerificator,
                                   ),
-                                ),
+                                )
                               ],
                             ),
                           ),
