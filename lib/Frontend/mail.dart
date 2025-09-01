@@ -21,6 +21,8 @@ import 'package:mailer/mailer.dart';
 import 'package:mailer/smtp_server/gmail.dart';
 import 'package:mailer/smtp_server/hotmail.dart';
 
+import '../Backend/Global/controllers/Mail.dart';
+import '../Backend/Global/controllersprovisional.dart';
 import '../Widgets/headViewsAndroid.dart';
 import '../Widgets/materialButton.dart';
 
@@ -55,12 +57,15 @@ class _newMailState extends State<newMail> {
     BuildContext context = Platform.isWindows ? context1 : context0;
     int select = widget.select;
 
-
-
-
     String action = "";
     String action2 = "";
     String title = "";
+
+    final controllers = MailControllers(
+      mail: controllerMail,
+      password: controllerPas,
+      passwordVerify: controllerPas,
+    );
 
     if (select == -1) {
       title = S.of(context).newMale;
@@ -70,7 +75,7 @@ class _newMailState extends State<newMail> {
     else {
       title = S.of(context).edit;
 
-      campCharge(context,select,controllerMail,controllerPas,controllerPasVerificator);
+      campCharge(context,select,controllers);
 
       action = S.of(context).update;
       action2 = S.of(context).undo;
@@ -99,65 +104,64 @@ class _newMailState extends State<newMail> {
                 height: 475,
                 width: 890,
                 child: Align(
-                  alignment: Alignment.topRight,
+                  alignment: Alignment.topLeft,
                   child: Padding(
                     padding: const EdgeInsets.only(left: 30.0, top: 30.0),
-                    child: Column(
-                      children: [
-                        headView(
-                            title: title1
-                        ),
+                    child: SizedBox(
+                      width: 700,
+                      child: Column(
+                        children: [
+                          headView(
+                              title: title1
+                          ),
 
-                        defaultTextfield(
-                            nameCamp: S.of(context).new_mail,
-                            controllerCamp: controllerMail,
-                            campOld: select == -1 ? '' : mails[select].addrres,
-                        ),
+                          defaultTextfield(
+                              nameCamp: S.of(context).new_mail,
+                              controllerCamp: controllerMail,
+                              campOld: select == -1 ? '' : mails[select].addrres,
+                          ),
 
-                        textfieldPassword(
-                            nameCamp: S.of(context).password,
-                            controllerCamp: controllerPas,
-                        ),
+                          textfieldPassword(
+                              nameCamp: S.of(context).password,
+                              controllerCamp: controllerPas,
+                          ),
 
-                        textfieldPassword(
-                            nameCamp: S.of(context).verify_password,
-                            controllerCamp: controllerPasVerificator,
-                        ),
-
-                        Padding(
-                          padding: const EdgeInsets.only(left: 600, top: 80),
-                          child: SizedBox(
-                            width: 200,
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment
-                                  .spaceBetween,
-                              children: [
-                                materialButton(
+                          textfieldPassword(
+                              nameCamp: S.of(context).verify_password,
+                              controllerCamp: controllerPasVerificator,
+                          ),
+                          Align(
+                            alignment: Alignment.topRight,
+                            child: SizedBox(
+                              width: 200,
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment
+                                    .spaceBetween,
+                                children: [
+                                  materialButton(
                                     nameAction: action,
                                     function: () => _onSaveMail(
                                       context,
                                       select,
-                                      controllerMail,
-                                      controllerPas,
-                                      controllerPasVerificator,
+                                      controllers,
                                     ),
-                                ),
-
-                                materialButton(
-                                  nameAction: action2,
-                                  function: () => _onResetMail(
-                                    context,
-                                    select,
-                                    controllerMail,
-                                    controllerPas,
-                                    controllerPasVerificator,
                                   ),
-                                )
-                              ],
+                            
+                                  materialButton(
+                                    nameAction: action2,
+                                    function: () => _onResetMail(
+                                      context,
+                                      select,
+                                      controllers,
+                                    ),
+                                  )
+                                ],
+                              ),
                             ),
                           ),
-                        ),
-                      ],
+
+                        ],
+                      ),
                     ),
                   ),
                 ),
@@ -174,22 +178,22 @@ class _newMailState extends State<newMail> {
   }
 }
 
-Future<void>_onResetMail(BuildContext context,int select, TextEditingController controllerMail, TextEditingController controllerPas, TextEditingController controllerPasVerificator) async {
+Future<void>_onResetMail(BuildContext context,int select,  MailControllers controllers) async {
 
   if (select == -1) {
-    controllerMail.text = "";
-    controllerPas.text = "";
-    controllerPasVerificator.text = "";
+    controllers.mail.text = "";
+    controllers.password.text = "";
+    controllers.passwordVerify.text = "";
   }
   else {
-    campCharge(context,select,controllerMail,controllerPas,controllerPasVerificator);
+    campCharge(context,select,controllers);
 
   }
   saveChanges = false;
 }
 
 
-Future<void> _onSaveMail(BuildContext context, int select,TextEditingController controllerMail, TextEditingController controllerPas, TextEditingController controllerPasVerificator) async {
+Future<void> _onSaveMail(BuildContext context, int select,MailControllers controllers) async {
 
   List <Mail> current = [];
   String action = "";
@@ -210,17 +214,17 @@ Future<void> _onSaveMail(BuildContext context, int select,TextEditingController 
   }
 
 
-  if((validatorCamps.primaryKeyCorrect(controllerMail.text,nameCamp,allKeys,campOld,context) ==true) )
+  if((validatorCamps.primaryKeyCorrect(controllers.mail.text,nameCamp,allKeys,campOld,context) ==true) )
   {
-    if(validatorCamps.mailCorrect(controllerMail.text) != true)
+    if(validatorCamps.mailCorrect(controllers.mail.text) != true)
     {
       action = S.of(context).not_a_valid_mail;
       await error(context, action);
     }
-    if(controllerPas.text.isEmpty || controllerPasVerificator.text.isEmpty)
+    if(controllers.password.text.isEmpty || controllers.passwordVerify.text.isEmpty)
     {
 
-      if(controllerPas.text.isEmpty)
+      if(controllers.password.text.isEmpty)
       {
         String array = S.of(context).password;
         action = LocalizationHelper.camp_empty(context, array);
@@ -235,9 +239,9 @@ Future<void> _onSaveMail(BuildContext context, int select,TextEditingController 
     }
     else
     {
-      if (controllerPas.text == controllerPasVerificator.text)
+      if (controllers.password.text == controllers.passwordVerify.text)
       {
-        final result = await testMail(context,controllerMail,controllerPas,controllerPasVerificator);
+        final result = await testMail(context,controllers);
 
         if (result == false)
         {
@@ -290,15 +294,15 @@ Future<void> _onSaveMail(BuildContext context, int select,TextEditingController 
   }
 }
 
-Future testMail(context,controllerMail,controllerPas,controllerPasVerificator) async {
+Future testMail(context,controllers) async {
 
   bool connectEmail = false;
-  String username = controllerMail.text;
+  String username = controllers.mail.text;
   String password = "";
-  String company = " ";
+  String company = "";
 
-  if (controllerPas.text == controllerPasVerificator.text) {
-    password = controllerPas.text;
+  if (controllers.password.text == controllers.passwordVerify.text) {
+    password =  controllers.password.text;
   }
 
   List <String> separeAddrres = username.split("@");
@@ -335,16 +339,14 @@ Future testMail(context,controllerMail,controllerPas,controllerPasVerificator) a
 void campCharge(
     BuildContext context,
     int select,
-    TextEditingController controllerMail,
-    TextEditingController controllerPas,
-    TextEditingController controllerPasVerificator
+    MailControllers controllers,
               ) {
 
   if(saveChanges == false)
   {
-    controllerMail.text = mails[select].addrres;
-    controllerPas.text = "";
-    controllerPasVerificator.text = "";
+    controllers.mail.text = mails[select].addrres;
+    controllers.password.text = "";
+    controllers.passwordVerify.text = "";
   }
 }
 
