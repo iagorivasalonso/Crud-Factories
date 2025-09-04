@@ -20,9 +20,7 @@ import 'package:flutter/material.dart';
 import 'package:mailer/mailer.dart';
 import 'package:mailer/smtp_server/gmail.dart';
 import 'package:mailer/smtp_server/hotmail.dart';
-
 import '../Backend/Global/controllers/Mail.dart';
-import '../Backend/Global/controllersprovisional.dart';
 import '../Widgets/headViewsAndroid.dart';
 import '../Widgets/materialButton.dart';
 
