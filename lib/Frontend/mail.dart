@@ -61,7 +61,7 @@ class _newMailState extends State<newMail> {
     String action2 = "";
     String title = "";
 
-    final controllers = MailControllers(
+    final controllers = MailController(
       mail: controllerMail,
       password: controllerPas,
       passwordVerify: controllerPas,
@@ -135,8 +135,8 @@ class _newMailState extends State<newMail> {
                             child: SizedBox(
                               width: 200,
                               child: Row(
-                                mainAxisAlignment: MainAxisAlignment
-                                    .spaceBetween,
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+
                                 children: [
                                   materialButton(
                                     nameAction: action,
@@ -178,7 +178,7 @@ class _newMailState extends State<newMail> {
   }
 }
 
-Future<void>_onResetMail(BuildContext context,int select,  MailControllers controllers) async {
+Future<void>_onResetMail(BuildContext context,int select,  MailController controllers) async {
 
   if (select == -1) {
     controllers.mail.text = "";
@@ -193,7 +193,7 @@ Future<void>_onResetMail(BuildContext context,int select,  MailControllers contr
 }
 
 
-Future<void> _onSaveMail(BuildContext context, int select,MailControllers controllers) async {
+Future<void> _onSaveMail(BuildContext context, int select,MailController controllers) async {
 
   List <Mail> current = [];
   String action = "";
@@ -339,14 +339,14 @@ Future testMail(context,controllers) async {
 void campCharge(
     BuildContext context,
     int select,
-    MailControllers controllers,
+    MailController controllers,
               ) {
 
   if(saveChanges == false)
   {
     controllers.mail.text = mails[select].addrres;
-    controllers.password.text = "";
-    controllers.passwordVerify.text = "";
+    controllers.password.clear();
+    controllers.passwordVerify.clear();
   }
 }
 
