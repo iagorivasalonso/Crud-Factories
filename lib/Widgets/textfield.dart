@@ -8,7 +8,7 @@ Padding defaultTextfield({
 }){
 
   return Padding(
-    padding: const EdgeInsets.only(left: 35.0, top: 20.0, bottom: 30.0, right: 90.0),
+    padding: const EdgeInsets.only(left: 35.0, top: 20.0, bottom: 30.0, right: 40.0),
     child: Row(
       children: [
         Padding(
