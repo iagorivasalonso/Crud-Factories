@@ -22,6 +22,7 @@ import 'package:mailer/smtp_server/gmail.dart';
 import 'package:mailer/smtp_server/hotmail.dart';
 import '../Backend/Global/controllers/Mail.dart';
 import '../Widgets/headViewsAndroid.dart';
+import '../Widgets/layoutVariant.dart';
 import '../Widgets/materialButton.dart';
 
 
@@ -49,6 +50,27 @@ class _newMailState extends State<newMail> {
   late TextEditingController controllerPasVerificator = new TextEditingController();
 
 
+  late final MailController controllers;
+
+  @override
+  void initState() {
+    super.initState();
+    controllers = MailController(
+      mail: TextEditingController(),
+      password: TextEditingController(),
+      passwordVerify: TextEditingController(),
+    );
+  }
+
+  @override
+  void dispose() {
+    controllers.mail.dispose();
+    controllers.password.dispose();
+    controllers.passwordVerify.dispose();
+
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context0) {
 
@@ -58,12 +80,6 @@ class _newMailState extends State<newMail> {
     String action = "";
     String action2 = "";
     String title = "";
-
-    final controllers = MailController(
-      mail: controllerMail,
-      password: controllerPas,
-      passwordVerify: controllerPas,
-    );
 
     if (select == -1) {
       title = S.of(context).newMale;
@@ -115,18 +131,47 @@ class _newMailState extends State<newMail> {
 
                           defaultTextfield(
                               nameCamp: S.of(context).new_mail,
-                              controllerCamp: controllerMail,
+                              controllerCamp: controllers.mail,
                               campOld: select == -1 ? '' : mails[select].addrres,
                           ),
 
                           textfieldPassword(
                               nameCamp: S.of(context).password,
-                              controllerCamp: controllerPas,
+                              controllerCamp: controllers.password,
                           ),
 
                           textfieldPassword(
                               nameCamp: S.of(context).verify_password,
-                              controllerCamp: controllerPasVerificator,
+                              controllerCamp: controllers.passwordVerify,
+                          ),
+
+                          Padding(
+                            padding: const EdgeInsets.only(left: 500.0),
+                            child: layoutVariant(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              items: [
+                                    materialButton(
+                                    nameAction: action,
+                                    function: () => _onSaveMail(
+                                      context,
+                                      select,
+                                      controllers,
+                                    ),
+                                  ),
+
+                            Padding(
+                                  padding: const EdgeInsets.only(left: 20.0),
+                                  child: materialButton(
+                                      nameAction: action2,
+                                      function: () => _onResetMail(
+                                        context,
+                                        select,
+                                        controllers,
+                                      ),
+                                    )
+                                  ),
+                              ],
+                            ),
                           ),
                           Align(
                             alignment: Alignment.topRight,
@@ -136,23 +181,7 @@ class _newMailState extends State<newMail> {
                                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
 
                                 children: [
-                                  materialButton(
-                                    nameAction: action,
-                                    function: () => _onSaveMail(
-                                      context,
-                                      select,
-                                      controllers,
-                                    ),
-                                  ),
-                            
-                                  materialButton(
-                                    nameAction: action2,
-                                    function: () => _onResetMail(
-                                      context,
-                                      select,
-                                      controllers,
-                                    ),
-                                  )
+
                                 ],
                               ),
                             ),
@@ -176,21 +205,6 @@ class _newMailState extends State<newMail> {
   }
 }
 
-Future<void>_onResetMail(BuildContext context,int select,  MailController controllers) async {
-
-  if (select == -1) {
-    controllers.mail.text = "";
-    controllers.password.text = "";
-    controllers.passwordVerify.text = "";
-  }
-  else {
-    campCharge(context,select,controllers);
-
-  }
-  saveChanges = false;
-}
-
-
 Future<void> _onSaveMail(BuildContext context, int select,MailController controllers) async {
 
   List <Mail> current = [];
@@ -199,18 +213,12 @@ Future<void> _onSaveMail(BuildContext context, int select,MailController control
   List <String> allKeys = [];
   String nameCamp = S.of(context).mail;
 
-  for (int i = 0; i < allFactories.length; i++)
-  {
-    allKeys.add(allFactories[i].name);
-  }
-
 
   String campOld = " ";
   if(select != -1)
   {
     campOld = mails[select].addrres;
   }
-
 
   if((validatorCamps.primaryKeyCorrect(controllers.mail.text,nameCamp,allKeys,campOld,context) ==true) )
   {
@@ -332,6 +340,21 @@ Future testMail(context,controllers) async {
   }
 
   return connectEmail;
+}
+
+
+Future<void>_onResetMail(BuildContext context,int select,  MailController controllers) async {
+
+  if (select == -1) {
+    controllers.mail.text = "";
+    controllers.password.text = "";
+    controllers.passwordVerify.text = "";
+  }
+  else {
+    campCharge(context,select,controllers);
+
+  }
+  saveChanges = false;
 }
 
 void campCharge(

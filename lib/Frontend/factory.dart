@@ -1,5 +1,3 @@
-
-
 import 'dart:io';
 
 import 'package:adaptive_scrollbar/adaptive_scrollbar.dart';
@@ -8,6 +6,7 @@ import 'package:crud_factories/Alertdialogs/create%20sector.dart';
 import 'package:crud_factories/Alertdialogs/error.dart';
 import 'package:crud_factories/Alertdialogs/warning.dart';
 import 'package:crud_factories/Backend/CSV/exportEmpleoyes.dart';
+import 'package:crud_factories/Backend/Global/controllers/Factory.dart';
 import 'package:crud_factories/Backend/Global/list.dart';
 import 'package:crud_factories/Backend/SQL/createEmpleoye.dart';
 import 'package:crud_factories/Backend/SQL/createFactory.dart';
@@ -19,8 +18,12 @@ import 'package:crud_factories/Functions/createId.dart';
 import 'package:crud_factories/Functions/validatorCamps.dart';
 import 'package:crud_factories/Objects/Empleoye.dart';
 import 'package:crud_factories/Objects/Factory.dart';
-import 'package:crud_factories/Widgets/headViewsAndroid.dart';
+import 'package:crud_factories/Objects/Sector.dart';
+import 'package:crud_factories/Widgets/headView.dart';
 import 'package:crud_factories/Widgets/layoutVariant.dart';
+import 'package:crud_factories/Widgets/textfield.dart';
+import 'package:crud_factories/Widgets/headViewsAndroid.dart';
+import 'package:crud_factories/Widgets/textfieldCalendar.dart';
 import 'package:crud_factories/generated/l10n.dart';
 import 'package:crud_factories/helpers/localization_helper.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
@@ -28,13 +31,9 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:show_platform_date_picker/show_platform_date_picker.dart';
 
-import '../Backend/Global/controllers/Factory.dart';
 import '../Widgets/dropDownButton.dart';
-import '../Widgets/headView.dart';
 import '../Widgets/listElements.dart';
 import '../Widgets/materialButton.dart';
-import '../Widgets/textfield.dart';
-import '../Widgets/textfieldCalendar.dart';
 
 
 
@@ -58,7 +57,7 @@ class _newFactoryState extends State<newFactory> {
 
   late TextEditingController controllerName = new TextEditingController();
   late TextEditingController controllerHighDate = TextEditingController();
-
+  late TextEditingController controllerSector = TextEditingController();
   late TextEditingController controllerTelephone1 = TextEditingController();
   late TextEditingController controllerTelephone2 = TextEditingController();
   late TextEditingController controllerMail = TextEditingController();
@@ -76,24 +75,15 @@ class _newFactoryState extends State<newFactory> {
   List<String> idsDelete = [];
   List<String> sectorsString = [];
 
-
-  DateTime seletedDate = DateTime.now();
+  DateTime seletedDate =DateTime.now();
 
   int contactSelect = 0;
-  String id = "";
-  String date = "";
-
-
+  String id ="";
+  String date="";
+  String sector = " ";
+  Sector? selectedSector;
   String tmp = " ";
   String allAddress = "";
-
-  get sectorChoose => null;
-  String? selectedSector;
-  String sector = "Seleccione un sector"; //
-
-  TextEditingController controllerSector = TextEditingController();
-  bool saveChanges = false;
-  int select = -1; // o el valor que uses
   late final factoryController controllers;
 
   @override
@@ -139,449 +129,371 @@ class _newFactoryState extends State<newFactory> {
   }
   @override
   Widget build(BuildContext context0) {
+
     int select = widget.select;
     BuildContext context = Platform.isWindows ? context1 : context0;
     sectorsString.clear();
 
-    sectorsString.add(S
-        .of(context)
-        .newMale);
+    sectorsString.add(S.of(context).newMale);
 
-    for (int i = 0; i < sectors.length; i++) {
-      sectorsString.add(sectors[i].name);
-    }
-
-    void campCharge() {
-      if (saveChanges == false) {
-        id = allFactories[select].id;
-        controllerName.text = allFactories[select].name;
-        controllerHighDate.text = allFactories[select].highDate;
-        tmp = allFactories[select].sector;
-        controllerSector.text = tmp;
-
-        for (int i = 0; i < sectors.length; i++) {
-          if (tmp == sectors[i].id) {
-            sector = sectors[i].name;
-          }
-        }
-
-        controllerTelephone1.text = allFactories[select].thelephones[0];
-        controllerTelephone2.text = allFactories[select].thelephones[1];
-        controllerMail.text = allFactories[select].mail;
-        controllerWeb.text = allFactories[select].web;
-
-        var address = allFactories[select].address['street']!;
-        var number = allFactories[select].address['number']!;
-        var apartament = allFactories[select].address['apartament']!;
-
-        if (apartament == "") {
-          allAddress = '$address,$number';
-        }
-        else {
-          allAddress = '$address,$number-$apartament';
-        }
-        controllerAdrress.text = allAddress!;
-        controllerCity.text = allFactories[select].address['city']!;
-        controllerPostalCode.text = allFactories[select].address['postalCode']!;
-        controllerProvince.text = allFactories[select].address['province']!;
-
-
-        int idFactory = select + 1;
-
-
-        contacsPreEdit.clear();
-        contacsCurrent.clear();
-
-
-        for (int i = 0; i < empleoyes.length; i++) {
-          if (empleoyes[i].idFactory == idFactory.toString()) {
-            contacsPreEdit.add(empleoyes[i]);
-            contacsCurrent.add(empleoyes[i]);
-          }
-        }
+      for(int i = 0; i < sectors.length; i++)
+      {
+          sectorsString.add(sectors[i].name);
       }
+
+    void campCharge () {
+print(controllerEmpleoyeeNew.text);
+      if(saveChanges == false)
+      {
+            id = allFactories[select].id;
+            controllerName.text = allFactories[select].name;
+            controllerHighDate.text = allFactories[select].highDate;
+            tmp = allFactories[select].sector;
+            controllerSector.text = tmp;
+
+            for(int i = 0; i <sectors.length; i++)
+            {
+              if(tmp == sectors[i].id)
+              {
+                sector = sectors[i].name;
+              }
+            }
+
+            controllerTelephone1.text = allFactories[select].thelephones[0];
+            controllerTelephone2.text = allFactories[select].thelephones[1];
+            controllerMail.text = allFactories[select].mail;
+            controllerWeb.text = allFactories[select].web;
+
+            var address = allFactories[select].address['street']!;
+            var number = allFactories[select].address['number']!;
+            var apartament = allFactories[select].address['apartament']!;
+
+            if (apartament == "")
+            {
+              allAddress = '$address,$number';
+            }
+            else
+            {
+              allAddress = '$address,$number-$apartament';
+            }
+            controllerAdrress.text = allAddress!;
+            controllerCity.text = allFactories[select].address['city']!;
+            controllerPostalCode.text = allFactories[select].address['postalCode']!;
+            controllerProvince.text = allFactories[select].address['province']!;
+
+
+            int idFactory = select +1;
+
+
+            contacsPreEdit.clear();
+            contacsCurrent.clear();
+
+
+
+            for (int i = 0; i < empleoyes.length; i++)
+            {
+              if(empleoyes[i].idFactory == idFactory.toString())
+              {
+                contacsPreEdit.add(empleoyes[i]);
+                contacsCurrent.add(empleoyes[i]);
+              }
+            }
+
+      }
+
     }
-    String action = S
-        .of(context)
-        .update;
+    String action = S.of(context).update;
     String action2 = "";
     String title = "";
 
     if (select == -1) {
-      title = S
-          .of(context)
-          .newFemale;
-      action = S
-          .of(context)
-          .create;
-      action2 = S
-          .of(context)
-          .delete;
-      sector = S
-          .of(context)
-          .select;
+      title = S.of(context).newFemale;
+      action = S.of(context).create;
+      action2 = S.of(context).delete;
+      sector = S.of(context).select;
     }
     else {
-      title = S
-          .of(context)
-          .edit;
+      title = S.of(context).edit;
 
-      campCharge();
+        campCharge();
 
-      action = S
-          .of(context)
-          .update;
-      action2 = S
-          .of(context)
-          .undo;
-    }
+      action = S.of(context).update;
+      action2 = S.of(context).undo;
+   }
 
-    String name = S
-        .of(context)
-        .company;
+    String name = S.of(context).company;
     String title1 = "$title $name";
 
-
     return Platform.isWindows
-        ? Scaffold(
-        body: AdaptiveScrollbar(
+       ? Scaffold(
+      body: AdaptiveScrollbar(
+        controller: verticalScroll,
+        width: widthBar,
+        child: AdaptiveScrollbar(
+          controller: horizontalScroll,
+          width: widthBar,
+          position: ScrollbarPosition.bottom,
+          underSpacing: EdgeInsets.only(bottom: 8),
+          child: SingleChildScrollView(
             controller: verticalScroll,
-            width: widthBar,
-            child: AdaptiveScrollbar(
+            scrollDirection: Axis.vertical,
+            child: SingleChildScrollView(
               controller: horizontalScroll,
-              width: widthBar,
-              position: ScrollbarPosition.bottom,
-              underSpacing: EdgeInsets.only(bottom: 8),
-              child: SingleChildScrollView(
-                controller: verticalScroll,
-                scrollDirection: Axis.vertical,
-                child: SingleChildScrollView(
-                  controller: horizontalScroll,
-                  scrollDirection: Axis.horizontal,
-                  child: Container(
-                    height: 1605,
-                    width: 856,
-                    child: Align(
-                      alignment: Alignment.topLeft,
-                      child: Padding(
-                          padding: const EdgeInsets.only(left: 30.0, top: 30.0),
-                          child: Column(
-                              children: [
-                                headView(
-                                    title: title1
+              scrollDirection: Axis.horizontal,
+              child: Container(
+                height: 1005,
+                width: 856,
+                child: Align(
+                  alignment: Alignment.topLeft,
+                  child: Padding(
+                    padding: const EdgeInsets.only(left: 30.0, top: 30.0),
+                    child: Column(
+                      children: [
+                        headView(
+                            title: title1
+                        ),
+
+                        defaultTextfield(
+                          nameCamp: S.of(context).name,
+                          controllerCamp: controllers.name,
+                          campOld: select == -1 ? '' : allFactories[select].name,
+                        ),
+
+                        Padding(
+                          padding: const EdgeInsets.only(
+                              top: 20.0, left: 30.0, bottom: 30.0),
+                          child: Row(
+                            children: [
+                               layoutVariant(
+                                   items: [
+                                     textfieldCalendar(
+                                         nameCamp: S.of(context).discharge_date,
+                                         campOld: "",
+                                         controllerCamp: controllers.highDate
+                                     ),
+
+                                     GenericDropdown<Sector>(
+                                       items: sectors,
+                                       selectedItem: selectedSector,
+                                       hint: sector,
+                                       itemLabel: (sector) => sector.name,
+                                       onChanged: (sectorChoose) => _onSectorChanged(context, sectorChoose,select),
+                                     ),
+
+                            ]),
+                            ],
+                          ),
+                        ),
+
+                        headView(
+                            title: S.of(context).contact
+                        ),
+
+                        Row(
+                            children: [
+                              Flexible(
+                                child: defaultTextfield(
+                                  nameCamp: S.of(context).phone_1,
+                                  controllerCamp: controllers.telephone1,
+                                  campOld: select == -1 ? '' : allFactories[select].thelephones[0],
                                 ),
+                              ),
 
-                                defaultTextfield(
-                                  nameCamp: S
-                                      .of(context)
-                                      .name,
-                                  controllerCamp: controllerName,
-                                  campOld: select == -1
-                                      ? ''
-                                      : allFactories[select]
-                                      .name,
+                              Flexible(
+                                child: defaultTextfield(
+                                  nameCamp: S.of(context).phone_2,
+                                  controllerCamp: controllers.telephone2,
+                                  campOld: select == -1 ? '' : allFactories[select].thelephones[1],
                                 ),
-                                layoutVariant(
-                                    items:
-                                    [
-                                      SizedBox(
-                                        child: select == -1
-                                            ? textfieldCalendar(
-                                            nameCamp: S
-                                                .of(context)
-                                                .date,
-                                            campOld: '',
-                                            controllerCamp: controllerHighDate
-                                        )
-                                            : defaultTextfield(
-                                          nameCamp: S
-                                              .of(context)
-                                              .date,
-                                          controllerCamp: controllerHighDate,
-                                          campOld: allFactories[select]
-                                              .highDate,
-                                        ),
-                                      ),
-                                      SizedBox(
-                                        width: 200,
-                                        height: 40,
-                                        child: Padding(
-                                          padding: const EdgeInsets.only(
-                                              left: 20.00),
-                                          child: DropdownButtonHideUnderline(
-                                            child: DropdownButton2<String>(
-                                              hint: Text(sector),
-                                              items: sectorsString.map((
-                                                  String itemSector) =>
-                                                  DropdownMenuItem<String>(
-                                                    value: itemSector,
-                                                    child: Text(itemSector),
-                                                  )).toList(),
-                                              value: selectedSector,
-                                              onChanged: (
-                                                  String? sectorChoose) async {
-                                                _selectSector(
-                                                    context, sectorChoose,
-                                                    select, controllerSector);
-                                              },
-                                              buttonStyleData: const ButtonStyleData(
-                                                height: 50,
-                                                width: 200,
-                                                padding: EdgeInsets.only(
-                                                    left: 14, right: 14),
-                                              ),
-                                              dropdownStyleData: DropdownStyleData(
-                                                maxHeight: 200,
-                                                width: 180,
-                                                scrollbarTheme: ScrollbarThemeData(
-                                                  thickness: MaterialStateProperty
-                                                      .all(6),
-                                                ),
-                                              ),
-                                            ),
-                                          ),
-                                        ),
-                                      ),
+                              ),
+                            ]
+                        ),
 
-                                    ]),
-                                headView(
-                                    title: S
-                                        .of(context)
-                                        .contact
+                        Row(
+                            children: [
+                              Flexible(
+                                child: defaultTextfield(
+                                  nameCamp: S.of(context).mail,
+                                  controllerCamp: controllerMail,
+                                  campOld: select == -1 ? '' : allFactories[select].mail,
                                 ),
+                              ),
 
-                                layoutVariant(
-                                  items: [
-                                    Flexible(
-                                      child: defaultTextfield(
-                                        nameCamp: S
-                                            .of(context)
-                                            .phone_1,
-                                        controllerCamp: controllerTelephone1,
-                                        campOld: select == -1
-                                            ? ''
-                                            : allFactories[select]
-                                            .thelephones[0],
-                                      ),
-                                    ),
-
-                                    Flexible(
-                                      child: defaultTextfield(
-                                        nameCamp: S
-                                            .of(context)
-                                            .phone_2,
-                                        controllerCamp: controllerTelephone2,
-                                        campOld: select == -1
-                                            ? ''
-                                            : allFactories[select]
-                                            .thelephones[1],
-                                      ),
-                                    ),
-                                  ],
+                              Flexible(
+                                child: defaultTextfield(
+                                  nameCamp: S.of(context).web_page,
+                                  controllerCamp: controllerWeb,
+                                  campOld: select == -1 ? '' : allFactories[select].web,
                                 ),
+                              ),
+                            ]
+                        ),
 
-                                layoutVariant(
-                                  items: [
-                                    Flexible(
-                                      child: defaultTextfield(
-                                        nameCamp: S
-                                            .of(context)
-                                            .mail,
-                                        controllerCamp: controllerMail,
-                                        campOld: select == -1
-                                            ? ''
-                                            : allFactories[select].mail,
-                                      ),
-                                    ),
+                        defaultTextfield(
+                          nameCamp: S.of(context).address,
+                          controllerCamp: controllers.address,
+                          campOld: select == -1 ? '' : allFactories[select].address['city']!,
+                        ),
 
-                                    Flexible(
-                                      child: defaultTextfield(
-                                        nameCamp: S
-                                            .of(context)
-                                            .web_page,
-                                        controllerCamp: controllerWeb,
-                                        campOld: select == -1
-                                            ? ''
-                                            : allFactories[select].web,
-                                      ),
-                                    ),
-                                  ],
-                                ),
 
-                                defaultTextfield(
-                                  nameCamp: S
-                                      .of(context)
-                                      .address,
-                                  controllerCamp: controllerAdrress,
-                                  campOld: select == -1 ? '' : allAddress!,
-                                ),
-                                defaultTextfield(
-                                  nameCamp: S
-                                      .of(context)
-                                      .address,
-                                  controllerCamp: controllerAdrress,
-                                  campOld: select == -1 ? '' : allAddress!,
-                                ),
+                        defaultTextfield(
+                          nameCamp: S.of(context).province,
+                          controllerCamp: controllers.province,
+                          campOld: select == -1 ? '' : allFactories[select].address['province']!,
+                        ),
 
-                                layoutVariant(
-                                  items: [
-                                    Flexible(
-                                      child: defaultTextfield(
-                                        nameCamp: S
-                                            .of(context)
-                                            .city,
-                                        controllerCamp: controllerCity,
-                                        campOld: select == -1
-                                            ? ''
-                                            : allFactories[select]
-                                            .address['city']!,
-                                      ),
-                                    ),
 
-                                    Flexible(
-                                      child: defaultTextfield(
-                                        nameCamp: S
-                                            .of(context)
-                                            .postal_code,
-                                        controllerCamp: controllerPostalCode,
-                                        campOld: select == -1
-                                            ? ''
-                                            : allFactories[select]
-                                            .address['postalCode']!,
-                                      ),
-                                    ),
-                                  ],
-                                ),
+                        layoutVariant(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          items: [
+                            Flexible(
+                              child: defaultTextfield(
+                                nameCamp: S.of(context).employees,
+                                controllerCamp: controllers.employeeNew,
+                                campOld: '',
+                              ),
+                            ),
 
-                                Padding(
-                                  padding: EdgeInsets.only(right: 400.0),
-                                  child: defaultTextfield(
-                                    nameCamp: S
-                                        .of(context)
-                                        .province,
-                                    controllerCamp: controllerProvince,
-                                    campOld: select == -1
-                                        ? ''
-                                        : allFactories[select]
-                                        .address['province']!,
-                                  ),
-                                ),
-
-                                Row(
+                            SizedBox(
+                              width: 50,
+                              child: Padding(
+                                padding: const EdgeInsets.symmetric(horizontal: 1.0),
+                                child: Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  crossAxisAlignment: CrossAxisAlignment.stretch,
                                   children: [
-                                    Text(
-                                      S
-                                          .of(context)
-                                          .company_contacts,
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.bold),
+                                    Padding(
+                                      padding: const EdgeInsets.only(top: 25.0),
+                                      child: materialButton(
+                                        icon: const Icon(Icons.add),
+                                        function: () => _addEmplepoye(controllers, contacsCurrent, id),
+                                      ),
+                                    ),
+                                    const SizedBox(height: 12),
+                                    materialButton(
+                                      icon: const Icon(Icons.delete),
+                                      function: () => _deleteEmplepoye(
+                                          contacsCurrent,
+                                          idsDelete,
+                                          contactSelect,
+                                          context
+                                      ),
                                     ),
                                   ],
                                 ),
+                              ),
+                            ),
 
-                                layoutVariant(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  items: [
-                                    Flexible(
-                                      child: defaultTextfield(
-                                        nameCamp: S
-                                            .of(context)
-                                            .employees,
-                                        controllerCamp: controllerEmpleoyeeNew,
-                                        campOld: '',
-                                      ),
-                                    ),
+                            // Aquí se llama al widget de la lista
+                            Flexible(
+                              child: ContactList(contacsCurrent: contacsCurrent),
+                            ),
+                          ],
+                        ),
 
-                                    SizedBox(
-                                      width: 50,
-                                      child: Padding(
-                                        padding: const EdgeInsets.symmetric(
-                                            horizontal: 1.0),
-                                        child: Column(
-                                          mainAxisSize: MainAxisSize.min,
-                                          crossAxisAlignment: CrossAxisAlignment
-                                              .stretch,
-                                          children: [
-                                            Padding(
-                                              padding: const EdgeInsets.only(
-                                                  top: 25.0),
-                                              child: materialButton(
-                                                icon: const Icon(Icons.add),
-                                                function: () =>
-                                                    _addEmplepoye(controllers,
-                                                        contacsCurrent, id),
-                                              ),
-                                            ),
-                                            const SizedBox(height: 12),
-                                            materialButton(
-                                              icon: const Icon(Icons.delete),
-                                              function: () =>
-                                                  _deleteEmplepoye(
-                                                      contacsCurrent, idsDelete,
-                                                      contactSelect, context),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                    ),
-                                    listElements(
-                                        contacsCurrent: contacsCurrent,
-                                        contactsSelect: contactSelect,
-                                        contactSelect: contactSelect
-                                    ),
-                                  ],
-                                ),
-                                Align(
-                                  alignment: Alignment.topRight,
-                                  child: SizedBox(
-                                    width: 20,
-                                    child: Row(
-                                      mainAxisAlignment: MainAxisAlignment
-                                          .spaceBetween,
-                                      children: [
-                                        materialButton(
-                                            nameAction: action,
-                                            function: () =>
-                                                _onSaveFactory(
-                                                    context,
-                                                    select,
-                                                    controllers,
-                                                    contacsPreEdit,
-                                                    contacsCurrent,
-                                                    idsDelete
-                                                )
-                                        ),
 
-                                        materialButton(
-                                          nameAction: action2,
-                                          function: () =>
-                                              _onResetFactory(
-                                                  context,
-                                                  select,
-                                                  controllers,
-                                                  contacsCurrent
-                                              ),
+                        Padding(
+                          padding: const EdgeInsets.only(left: 550.0),
+                          child: SizedBox(
+                            width: 200,
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                materialButton(
+                                    nameAction: action,
+                                    function: () =>
+                                        _onSaveFactory(
+                                            context,
+                                            select,
+                                            controllers,
+                                            contacsPreEdit,
+                                            contacsCurrent,
+                                            idsDelete
                                         )
-                                      ],
-                                    ),
-                                  ),
                                 ),
-                              ]
-                          )
-                      ),
+
+                                materialButton(
+                                  nameAction: action2,
+                                  function: () =>
+                                      _onResetFactory(
+                                          context,
+                                          select,
+                                          controllers,
+                                          contacsCurrent
+                                      ),
+                                )
+                              ],
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
                   ),
                 ),
               ),
-            )
-        )
+            ),
+          ),
+        ),
+      ),
     )
-        : Scaffold(
-      appBar: appBarAndroid(context, name: title1),
-      body: Text("factori"),
-    );
+       : Scaffold(
+           appBar: appBarAndroid(context, name: title1),
+           body: Text("factori"),
+        );
   }
 
+  Future<void> _onSectorChanged(BuildContext context,Sector? sectorChoose,int select) async {
+    if (saveChanges == false && select != -1) {
+      saveChanges = true;
+    }
+
+
+    if (sectorChoose == S.of(context).newMale)
+    {
+      String modif = S.of(context).newMale;
+      bool create = await createSector(context, modif);
+
+      if (create == true) {
+        setState(() {
+          String action = S.of(context).the_sector_has_been_created_successfully;
+          confirm(context, action);
+        });
+      }
+    }
+    else
+    {
+      selectedSector = sectorChoose;
+
+      setState(() {
+        controllerSector.text = sectorChoose!.name;
+      });
+
+    }
+  }
+
+  Future<void> _addEmplepoye(factoryController controllers,
+      List<Empleoye> contacsCurrent, String id) async {
+    setState(() {
+      saveChanges = true;
+      String idNew = "";
+      contacsCurrent.clear();
+
+      if (empleoyes.isNotEmpty) {
+        String idLast = empleoyes.last.id;
+        idNew = createId(idLast);
+      } else {
+        idNew = "1";
+      }
+
+      contacsCurrent.add(Empleoye(
+        id: idNew,
+        name: controllers.employeeNew.text,
+        idFactory: id,
+      ));
+      print(contacsCurrent);
+      controllers.employeeNew.clear();
+    });
+  }
 
   Future<void> _deleteEmplepoye(List<Empleoye> contacsCurrent,
       List<String> idsDelete, int contactSelect, BuildContext context) async {
@@ -600,57 +512,6 @@ class _newFactoryState extends State<newFactory> {
       }
     });
   }
-
-  Future<void> _addEmplepoye(factoryController controllers,
-      List<Empleoye> contacsCurrent, String id) async {
-    setState(() {
-      saveChanges = true;
-      String idNew = "";
-
-      if (empleoyes.isNotEmpty) {
-        String idLast = empleoyes.last.id;
-        idNew = createId(idLast);
-      } else {
-        idNew = "1";
-      }
-
-      contacsCurrent.add(Empleoye(
-        id: idNew,
-        name: controllers.employeeNew.text,
-        idFactory: id,
-      ));
-
-      controllers.employeeNew.clear();
-    });
-  }
-
-  Future<void> _onResetFactory(BuildContext context, int select,
-      factoryController controllers, List<Empleoye> contacsCurrent) async {
-    if (select == -1) {
-      controllers.name.clear();
-      controllers.highDate.clear();
-      controllers.telephone1.clear();
-      controllers.telephone2.clear();
-      controllers.mail.clear();
-      controllers.web.clear();
-      controllers.web.clear();
-      controllers.city.clear();
-      controllers.postalCode.clear();
-      controllers.province.clear();
-      controllers.contacts.clear();
-      controllers.employee.clear();
-      setState(() {
-        contacsCurrent.clear();
-      });
-      controllers.employeeNew.clear();
-    }
-    else {
-      //campCharge();
-    }
-
-    saveChanges = false;
-  }
-
 
   Future<void> _onSaveFactory(BuildContext context, int select,
       factoryController controllers, contacsPreEdit, contacsCurrent,
@@ -900,38 +761,35 @@ class _newFactoryState extends State<newFactory> {
     }
   }
 
-  Future<void> _selectSector(BuildContext context,
-      String? sectorChoose,
-      int select,
-      TextEditingController controllerSector,) async {
-    if (saveChanges == false && select != -1) {
-      saveChanges = true;
+  Future<void> _onResetFactory(BuildContext context, int select,
+      factoryController controllers, List<Empleoye> contacsCurrent) async {
+    if (select == -1) {
+      controllers.name.clear();
+      controllers.highDate.clear();
+      controllers.telephone1.clear();
+      controllers.telephone2.clear();
+      controllers.mail.clear();
+      controllers.web.clear();
+      controllers.web.clear();
+      controllers.city.clear();
+      controllers.postalCode.clear();
+      controllers.province.clear();
+      controllers.contacts.clear();
+      controllers.employee.clear();
+      setState(() {
+        contacsCurrent.clear();
+      });
+      controllers.employeeNew.clear();
+    }
+    else {
+      //campCharge();
     }
 
-
-    selectedSector = sectorChoose;
-    setState(() {
-
-      controllerSector.text = sectorChoose!;
-    });
-
-    if (sectorChoose == S
-        .of(context)
-        .newMale) {
-      String modif = S
-          .of(context)
-          .newMale;
-      bool create = await createSector(context, modif);
-
-      if (create == true) {
-        setState(() {
-          String action = S
-              .of(context)
-              .the_sector_has_been_created_successfully;
-          confirm(context, action);
-        });
-      }
-    }
+    saveChanges = false;
   }
+
+
 }
+
+
 
