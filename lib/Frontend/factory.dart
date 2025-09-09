@@ -384,48 +384,46 @@ print(controllerEmpleoyeeNew.text);
                               ),
                             ),
 
-                            // Aquí se llama al widget de la lista
                             Flexible(
                               child: ContactList(contacsCurrent: contacsCurrent),
                             ),
                           ],
                         ),
 
+                    Padding(
+                      padding: const EdgeInsets.only(left: 600.0),
+                      child: layoutVariant(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        items: [
+                          materialButton(
+                              nameAction: action,
+                              function: () =>
+                                  _onSaveFactory(
+                                      context,
+                                      select,
+                                      controllers,
+                                      contacsPreEdit,
+                                      contacsCurrent,
+                                      idsDelete
+                                  )
+                          ),
 
-                        Padding(
-                          padding: const EdgeInsets.only(left: 550.0),
-                          child: SizedBox(
-                            width: 200,
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                materialButton(
-                                    nameAction: action,
-                                    function: () =>
-                                        _onSaveFactory(
-                                            context,
-                                            select,
-                                            controllers,
-                                            contacsPreEdit,
-                                            contacsCurrent,
-                                            idsDelete
-                                        )
-                                ),
-
-                                materialButton(
-                                  nameAction: action2,
-                                  function: () =>
-                                      _onResetFactory(
-                                          context,
-                                          select,
-                                          controllers,
-                                          contacsCurrent
-                                      ),
-                                )
-                              ],
+                          Padding(
+                            padding: const EdgeInsets.only(left: 20.0),
+                            child: materialButton(
+                              nameAction: action2,
+                              function: () =>
+                                  _onResetFactory(
+                                      context,
+                                      select,
+                                      controllers,
+                                      contacsCurrent
+                                  ),
                             ),
                           ),
-                        ),
+                        ],
+                      ),
+                    ),
                       ],
                     ),
                   ),
