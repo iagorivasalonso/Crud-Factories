@@ -142,7 +142,7 @@ class _newFactoryState extends State<newFactory> {
       }
 
     void campCharge () {
-print(controllerEmpleoyeeNew.text);
+
       if(saveChanges == false)
       {
             id = allFactories[select].id;
