@@ -240,7 +240,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "list_of_sends": MessageLookupByLibrary.simpleMessage("Lista de envios"),
     "lists": MessageLookupByLibrary.simpleMessage("Listas"),
     "mail": MessageLookupByLibrary.simpleMessage("Email"),
-    "mails": MessageLookupByLibrary.simpleMessage("mails"),
+    "mails": MessageLookupByLibrary.simpleMessage("emails"),
     "march": MessageLookupByLibrary.simpleMessage("Marzo"),
     "may": MessageLookupByLibrary.simpleMessage("Mayo"),
     "message": MessageLookupByLibrary.simpleMessage("Mensaje"),
@@ -340,6 +340,10 @@ class MessageLookup extends MessageLookupByLibrary {
     "theFemale": MessageLookupByLibrary.simpleMessage("La"),
     "theMale": MessageLookupByLibrary.simpleMessage("El"),
     "the_company": MessageLookupByLibrary.simpleMessage("La empresa"),
+    "the_connection_test_was_sent_successfully":
+        MessageLookupByLibrary.simpleMessage(
+          "la prueba de conexion se envio correctamente",
+        ),
     "the_employee": MessageLookupByLibrary.simpleMessage("El empleado"),
     "the_employee_has_been_correctly_removed":
         MessageLookupByLibrary.simpleMessage(
