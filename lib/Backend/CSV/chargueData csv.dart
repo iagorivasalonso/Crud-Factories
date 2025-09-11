@@ -28,7 +28,7 @@ Future<bool> chargueDataCSV(BuildContext context) async {
     Directory currentDir = Directory.current;
     Directory parentDir = currentDir.parent;
 
-    routeFirst = '${parentDir.path}routes.csv';
+    routeFirst = r'C:\datosApp\routes.csv';
     fRoutes = File(routeFirst);
   }
 
