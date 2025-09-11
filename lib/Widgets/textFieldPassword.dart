@@ -18,6 +18,7 @@ Padding textfieldPassword({
             width: 40,
             child: TextField(
               obscureText: true,
+              controller: controllerCamp,
               decoration: const InputDecoration(
                 border: OutlineInputBorder(),
               ),
