@@ -205,9 +205,9 @@ class S {
     return Intl.message('Email', name: 'mail', desc: '', args: []);
   }
 
-  /// `mails`
+  /// `emails`
   String get mails {
-    return Intl.message('mails', name: 'mails', desc: '', args: []);
+    return Intl.message('emails', name: 'mails', desc: '', args: []);
   }
 
   /// `Empresa`
@@ -797,6 +797,16 @@ class S {
     return Intl.message(
       'No se pudo conectar con el servidor',
       name: 'could_not_connect_with_the_server',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `la prueba de conexion se envio correctamente`
+  String get the_connection_test_was_sent_successfully {
+    return Intl.message(
+      'la prueba de conexion se envio correctamente',
+      name: 'the_connection_test_was_sent_successfully',
       desc: '',
       args: [],
     );
