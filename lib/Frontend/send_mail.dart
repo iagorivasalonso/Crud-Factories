@@ -31,6 +31,7 @@ import '../Widgets/layoutVariant.dart';
 import '../Widgets/materialButton.dart';
 import '../Widgets/tableElements.dart';
 import '../Widgets/textArea.dart';
+import '../Widgets/textFieldPassword.dart';
 import '../Widgets/textfield.dart';
 
 
@@ -52,11 +53,7 @@ class _sendMailState extends State<sendMail> {
   final ScrollController verticalScroll = ScrollController();
   final ScrollController verticalScrollTable = ScrollController();
 
-  late TextEditingController controllerMailFrom = TextEditingController();
-  late TextEditingController controllerPass = TextEditingController();
-  late TextEditingController controllerMailTo = TextEditingController();
-  late TextEditingController controllerSubject = TextEditingController();
-  late TextEditingController controllerMessage= TextEditingController();
+
 
   double widthBar = 10.0;
 
@@ -88,6 +85,7 @@ class _sendMailState extends State<sendMail> {
       message: TextEditingController()
 
     );
+
   }
 
   @override
@@ -101,14 +99,20 @@ class _sendMailState extends State<sendMail> {
     super.dispose();
   }
 
-  String? selectedOption = "e";
+  String? selectedOption;
+
+
+
 
   @override
   Widget build(BuildContext context0) {
 
     BuildContext context = Platform.isWindows ? context1 : context0;
 
-    columnsTable = [S.of(context).company, S.of(context).mail];
+    if(selectedOption==null)
+    {
+      selectedOption =S.of(context).a_recipient;
+    }
 
     if(mails.isEmpty)
     {
@@ -162,66 +166,61 @@ class _sendMailState extends State<sendMail> {
                               title: S.of(context).sending_mails
                           ),
 
-                          layoutVariant(
-                              items: [
-                                Flexible(
-                                  flex: 4,
-                                  child: otherMail== false
-                                     ? Padding(
-                                       padding: const EdgeInsets.only(left: 30.0),
-                                       child: GenericDropdown<Mail>(
-                                            items: mails,
-                                            camp: S.of(context).sender,
-                                            selectedItem: selectedMail,
-                                            hint: mails[0].addrres,
-                                            itemLabel: (Mail) => Mail.addrres,
-                                            onChanged: (mailChoose) => _onMailChanged(mailChoose),
-                                        ),
-                                     )
-                                    : Row(
-                                      children: [
-                                          Flexible(
-                                            child: defaultTextfield(
-                                              nameCamp: S.of(context).mail,
-                                              controllerCamp: controllers.mail,
-                                              campOld: '',
-                                            ),
-                                          ),
-
-                                        Flexible(
-                                          child: defaultTextfield(
-                                            nameCamp: S.of(context).password,
-                                            controllerCamp: controllers.password,
-                                            campOld: '',
-                                          ),
-                                        ),
-                                        ]
-                                  ),
-
-
+                    layoutVariant(
+                      items: [
+                        Flexible(
+                          flex: 8,
+                          child: otherMail == false
+                              ? GenericDropdown<Mail>(
+                                items: mails,
+                                camp: S.of(context).sender,
+                                selectedItem: selectedMail,
+                                hint: mails[0].addrres,
+                                itemLabel: (Mail) => Mail.addrres,
+                                onChanged: (mailChoose) => _onMailChanged(mailChoose),
+                              )
+                              : Row(
+                            children: [
+                              Expanded(
+                                child: defaultTextfield(
+                                  nameCamp: S.of(context).mail,
+                                  controllerCamp: controllers.mail,
+                                  campOld: '',
                                 ),
+                              ),
+                              const SizedBox(width: 16),
+                              Expanded(
+                                child: textfieldPassword(
+                                  nameCamp: S.of(context).password,
+                                  controllerCamp: controllers.password,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
 
-                                Flexible(
-                                  flex: 1,
-                                  child: Padding(
-                                    padding: const EdgeInsets.only(top: 20),
-                                    child: SizedBox(
-                                      width: 70,
-                                      child: materialButton(
-                                          nameAction:  otherMail == false ? S.of(context).orther : S.of(context).volver,
-                                          function: () async {
-                                            setState(() {
-                                              otherMail = !otherMail;
-                                            });
-                                          }
-                                          ),
-                                    ),
-                                ),
-                                ),
-                              ],
+
+                        Flexible(
+                          flex: 1,
+                          child: Padding(
+                            padding: const EdgeInsets.only(top: 20),
+                            child: materialButton(
+                              nameAction: otherMail == false
+                                  ? S.of(context).orther
+                                  : S.of(context).volver,
+                              function: () async {
+                                setState(() {
+                                  otherMail = !otherMail;
+                                });
+                              },
                             ),
+                          ),
+                        ),
+                      ],
+                    ),
 
-                          Padding(
+
+                    Padding(
                             padding: const EdgeInsets.only(left: 30.0),
                             child: GenericRadioGroup<String>(
                               items: [S.of(context).a_recipient,S.of(context).multiple_recipients],
@@ -308,12 +307,12 @@ class _sendMailState extends State<sendMail> {
                           ),
 
                           Padding(
-                            padding: const EdgeInsets.only(left: 600.0,top:  20.0),
+                            padding: const EdgeInsets.only(left: 650.0,top:  20.0),
                             child: layoutVariant(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               items: [
                                 materialButton(
-                                    nameAction: S.of(context).send_a,
+                                    nameAction: S.of(context).send,
                                     function: () => _onSendMail(context,controllers,otherMail,selectedOption),
 
                                 ),
@@ -322,7 +321,7 @@ class _sendMailState extends State<sendMail> {
                                   padding: const EdgeInsets.only(left: 20.0),
                                   child: materialButton(
                                       nameAction: S.of(context).reboot,
-                                      function: () => _onResetMail(controllers),
+                                      function: () => _onResetMail(context,controllers,setState,selectedOption),
 
                                   ),
                                 ),
@@ -344,7 +343,7 @@ class _sendMailState extends State<sendMail> {
     );
   }
 
-    Future<void> sendingMail(String username, String password) async {
+  Future<void> sendingMail(String username, String password) async {
 
     String action =" ";
     String sendCorrect = " ";
@@ -382,7 +381,7 @@ class _sendMailState extends State<sendMail> {
            error(context,action);
          }
      }
-    Future<void>_onMailChanged(Mail? mailChoose) async {
+  Future<void>_onMailChanged(Mail? mailChoose) async {
 
       setState(() {
         selectedMail = mailChoose;
@@ -390,7 +389,7 @@ class _sendMailState extends State<sendMail> {
         controllers.mail.text = mailChoose!.addrres;
 
         Codec<String, String> stringToBase64 = utf8.fuse(base64);
-        String password = stringToBase64.decode(controllerPass.text);
+        String password = stringToBase64.decode(controllers.password.text);
 
         controllers.password.text = password;
 
@@ -429,7 +428,6 @@ Future<void> _onSendMail(BuildContext context,MailController controllers, bool o
          if(validatorCamps.mailCorrect(controllers.mail.text) != true)
          {
              correct = false;
-
              action = S.of(context).your_mail_is_invalid;
              error(context,action);
          }
@@ -478,7 +476,9 @@ Future<void> _onSendMail(BuildContext context,MailController controllers, bool o
       ..recipients.add(controllers.mailTo!.text)
       ..subject = controllers.subject!.text
       ..text = controllers.message!.text
-      ..attachments = controllers.attachments.cast<Attachment>();
+      ..attachments = controllers.attachments
+          .map((file) => FileAttachment(file))
+          .toList();
 
       final result = await sendingMail(context,controllers,message);
 
@@ -510,7 +510,6 @@ Future sendingMail(context,controllers, Message message) async {
       print(username);
       print(password);
       final smtpServer = gmail(username, password);
-print(smtpServer);
       final sendReport = await send(message, smtpServer);
 
     }
@@ -526,7 +525,7 @@ print(smtpServer);
   return connectEmail;
 }
 
-Future<void> _onResetMail(MailController controllers) async {
+Future<void> _onResetMail(BuildContext context,MailController controllers, Function(VoidCallback) setState, String? selectedOption) async {
 
   controllers.mail.text = "";
   controllers.password.text = "";
@@ -534,6 +533,8 @@ Future<void> _onResetMail(MailController controllers) async {
   controllers.subject!.text ="";
   controllers.message!.text="";
   controllers.attachments.clear();
+
+  selectedOption = S.of(context).a_recipient;
 
 }
 
