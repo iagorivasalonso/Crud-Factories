@@ -313,7 +313,7 @@ class _sendMailState extends State<sendMail> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               items: [
                                 materialButton(
-                                    nameAction: "action",
+                                    nameAction: S.of(context).send_a,
                                     function: () => _onSendMail(context,controllers,otherMail,selectedOption),
 
                                 ),
@@ -321,8 +321,8 @@ class _sendMailState extends State<sendMail> {
                                 Padding(
                                   padding: const EdgeInsets.only(left: 20.0),
                                   child: materialButton(
-                                      nameAction: "action2",
-                                      function: () => _onResetMail(),
+                                      nameAction: S.of(context).reboot,
+                                      function: () => _onResetMail(controllers),
 
                                   ),
                                 ),
@@ -383,6 +383,7 @@ class _sendMailState extends State<sendMail> {
          }
      }
     Future<void>_onMailChanged(Mail? mailChoose) async {
+
       setState(() {
         selectedMail = mailChoose;
 
@@ -485,8 +486,7 @@ Future<void> _onSendMail(BuildContext context,MailController controllers, bool o
       {
         action=S.of(context).the_mail_has_been_successfully_sent;
         confirm(context,action);
-
-  }
+      }
 
   }
 
@@ -526,7 +526,15 @@ print(smtpServer);
   return connectEmail;
 }
 
-Future<void> _onResetMail() async {
+Future<void> _onResetMail(MailController controllers) async {
+
+  controllers.mail.text = "";
+  controllers.password.text = "";
+  controllers.mailTo!.text = "";
+  controllers.subject!.text ="";
+  controllers.message!.text="";
+  controllers.attachments.clear();
+
 }
 
 
