@@ -1,9 +1,8 @@
 import 'package:crud_factories/Backend/Global/variables.dart';
-import 'package:crud_factories/Frontend/factory.dart' show setState;
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:show_platform_date_picker/show_platform_date_picker.dart' show ShowPlatformDatePicker;
-/**
+
 Padding textfieldCalendar({
   required String nameCamp,
   required String campOld,
@@ -55,52 +54,4 @@ Padding textfieldCalendar({
     ),
   );
 }
-*/
-Padding tableElements<T>({
-  required List<String>columnsTable,
-  required List<T>contentTable,
-  required TextEditingController controllerCamp,
-  required List<String> Function(T) rowBuilder,
-}) {
-  final ScrollController verticalScrollTable = ScrollController();
 
-  return Padding(
-    padding: const EdgeInsets.only(left: 40.0),
-    child: Row(
-        children: [
-          SizedBox(
-            height: 200,
-            child: Scrollbar(
-              controller: verticalScrollTable,
-              child: SingleChildScrollView(
-                controller: verticalScrollTable,
-                scrollDirection: Axis.vertical,
-                child: DataTable(
-                  columns: <DataColumn>[
-                    for(int i = 0; i < columnsTable.length; i++)
-                      DataColumn(
-                        label: SizedBox(
-                            width: 110,
-                            child: Text(columnsTable[i])
-                        ),
-                      ),
-
-                  ],
-                  rows: List<DataRow>.generate(
-                      contentTable.length, (int index) {
-                    final cells = rowBuilder(contentTable[index]);
-                    return DataRow(
-                        cells: [
-                          for (final cell in cells) DataCell(Text(cell)),
-                        ]
-                    );
-                  }
-                  ),
-                ),
-              ),
-            ),
-          ),
-        ]
-    ),
-  );
-}

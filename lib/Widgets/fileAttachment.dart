@@ -34,6 +34,8 @@ class Fileattachment extends StatefulWidget {
 }
 
 class _FileattachmentState extends State<Fileattachment> {
+  get camp => null;
+
 
   Future<void> _pickFile(BuildContext context) async {
     FilePickerResult? result = await FilePicker.platform.pickFiles(
@@ -63,83 +65,60 @@ class _FileattachmentState extends State<Fileattachment> {
   Widget build(BuildContext context0) {
 
     BuildContext context = Platform.isWindows ? context1 : context0;
-
     return Column(
-      crossAxisAlignment: CrossAxisAlignment.start, // importante
+      crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisSize: MainAxisSize.min,
       children: [
-        Row(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Flexible(
-              flex: 4,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start, // 👈 alineamos los hijos a la izquierda
-                children: [
-                  Padding(
-                    padding: EdgeInsetsGeometry.only(top: 12),
-                      child:defaultTextfield(
-                        nameCamp: S.of(context).affair,
-                        controllerCamp: widget.camp,
-                        campOld: '',
-                      ),
-
-                  ),
-                  const SizedBox(height: 6),
-                  // 👇 fila horizontal de archivos justo debajo del TextField
-                  if (widget.attachments != null && widget.attachments!.isNotEmpty)
-                    SingleChildScrollView(
-                      scrollDirection: Axis.horizontal,
-                      child: Row(
-                        mainAxisSize: MainAxisSize.min, // el Row solo ocupa el ancho de los chips
-                        children: List.generate(widget.attachments!.length, (index) {
-                          final file = widget.attachments![index];
-                          return Container(
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(6),
-                            ),
-                            child: Row(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                Text(
-                                  file.path.split('/').last,
-                                  maxLines: 1,
-                                  overflow: TextOverflow.ellipsis,
-                                ),
-                                const SizedBox(width: 4),
-                                GestureDetector(
-                                  onTap: () {
-                                    setState(() {
-                                      widget.attachments!.removeAt(index);
-                                      widget.onFilesChanged?.call(widget.attachments!);
-                                    });
-                                  },
-                                  child: const Icon(Icons.close, size: 15),
-                                ),
-                              ],
-                            ),
-                          );
-                        }),
-                      ),
-                    ),
-                ],
-              ),
-            ),
-            const SizedBox(width: 10),
-            Flexible(
-              flex: 1,
-              child: Align(
-                alignment: Alignment.topCenter, // 👈 pega al tope del Row
-                child: materialButton(
-                  nameAction: S.of(context).attach,
-                  function: () async {
-                    _pickFile(context);
-                  },
+        Padding(
+          padding: const EdgeInsets.only(top:10.0,bottom:5.0 ),
+          child: Row(
+            children: [
+              Expanded(
+                flex: 3,
+                child: defaultTextfield(
+                  nameCamp: S.of(context).affair,
+                  controllerCamp: widget.camp,
+                  campOld: '',
                 ),
+
               ),
-            ),
-          ],
+              const SizedBox(width: 8),
+              materialButton(
+                 nameAction: S.of(context).attach,
+                 function: () async {
+                   _pickFile(context);
+                 },
+              ),
+            ],
+          ),
         ),
+
+        // Lista de adjuntos
+        if (widget.attachments != null && widget.attachments!.isNotEmpty)
+          SizedBox(
+            height: 32,
+            child: ListView.builder(
+              scrollDirection: Axis.horizontal,
+              itemCount: widget.attachments!.length,
+              itemBuilder: (context, index) {
+                final file = widget.attachments![index];
+                return Padding(
+                  padding: const EdgeInsets.only(right: 4),
+                  child: Chip(
+                    label: Text(file.path.split('/').last),
+                    onDeleted: () {
+                      setState(() {
+                        widget.attachments!.removeAt(index);
+                      });
+                    },
+                  ),
+                );
+              },
+            ),
+          ),
       ],
     );
+
+
   }
 }

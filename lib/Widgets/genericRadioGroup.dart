@@ -3,6 +3,7 @@ import 'package:fluent_ui/fluent_ui.dart';
 class GenericRadioGroup<T> extends StatelessWidget {
   final List<T> items;
   final T? selectedItem;
+  final String camp;
   final String Function(T item) label;
   final ValueChanged<T?> onChanged;
   final Axis direction;
@@ -14,6 +15,7 @@ class GenericRadioGroup<T> extends StatelessWidget {
     required this.label,
     required this.onChanged,
     this.direction = Axis.vertical,
+    required this.camp,
   });
 
   @override
@@ -22,7 +24,7 @@ class GenericRadioGroup<T> extends StatelessWidget {
       return Padding(
         padding: direction == Axis.vertical
             ? const EdgeInsets.only(bottom: 8.0)
-            : const EdgeInsets.only(right: 16.0),
+            : const EdgeInsets.only(right: 50.0),
         child: RadioButton(
           checked: selectedItem == item,
           onChanged: (bool? value) {
@@ -34,10 +36,23 @@ class GenericRadioGroup<T> extends StatelessWidget {
     }).toList();
 
     return direction == Axis.vertical
-        ? Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: children,
-    )
-        : Row(children: children);
+        ? Column()
+        : Padding(
+          padding: const EdgeInsets.only(top:20),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+
+              Padding(
+                padding: const EdgeInsets.only(right: 20),
+                child: Text(
+                  camp,
+                ),
+              ),
+
+          ...children,
+                ],
+              ),
+        );
   }
 }

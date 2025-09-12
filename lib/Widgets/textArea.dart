@@ -11,7 +11,7 @@ Row textArea({
     crossAxisAlignment: CrossAxisAlignment.start,
     children: [
       Padding(
-        padding: const EdgeInsets.only(right: 10.0),
+        padding: const EdgeInsets.only(right: 10.0,left: 10.0),
         child: SizedBox(
           width: 100,
           child: Text(nameCamp),
