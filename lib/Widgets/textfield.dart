@@ -8,16 +8,20 @@ Padding defaultTextfield({
 }){
 
   return Padding(
-    padding: const EdgeInsets.only(left: 35.0, top: 20.0, bottom: 0.0, right: 40.0),
+    padding: const EdgeInsets.only(left: 35.0, top: 20.0,right: 40.0),
     child: Row(
+      crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         Padding(
           padding: const EdgeInsets.only(right: 10.0),
           child: SizedBox(
             width: 100,
-            child: Text(nameCamp),
+            child: Text(
+              nameCamp,
+            ),
+            ),
           ),
-        ),
+
         Expanded(
           child: SizedBox(
             height: 40,
@@ -25,6 +29,8 @@ Padding defaultTextfield({
               controller: controllerCamp,
               decoration: const InputDecoration(
                 border: OutlineInputBorder(),
+                isDense: true,
+                contentPadding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
               ),
               onChanged: (s) {
                 if (campOld.isNotEmpty) {
