@@ -55,21 +55,6 @@ class _newFactoryState extends State<newFactory> {
 
   double widthBar = 10.0;
 
-  late TextEditingController controllerName = new TextEditingController();
-  late TextEditingController controllerHighDate = TextEditingController();
-  late TextEditingController controllerSector = TextEditingController();
-  late TextEditingController controllerTelephone1 = TextEditingController();
-  late TextEditingController controllerTelephone2 = TextEditingController();
-  late TextEditingController controllerMail = TextEditingController();
-  late TextEditingController controllerWeb = TextEditingController();
-  late TextEditingController controllerAdrress = TextEditingController();
-  late TextEditingController controllerCity = TextEditingController();
-  late TextEditingController controllerPostalCode = TextEditingController();
-  late TextEditingController controllerProvince = TextEditingController();
-  List<TextEditingController> controllerContacs = [];
-  late TextEditingController controllerEmpleoyee = TextEditingController();
-  late TextEditingController controllerEmpleoyeeNew = TextEditingController();
-
   List<Empleoye> contacsCurrent = [];
   List<Empleoye> contacsPreEdit = [];
   List<String> idsDelete = [];
@@ -146,10 +131,10 @@ class _newFactoryState extends State<newFactory> {
       if(saveChanges == false)
       {
             id = allFactories[select].id;
-            controllerName.text = allFactories[select].name;
-            controllerHighDate.text = allFactories[select].highDate;
+            controllers.name.text = allFactories[select].name;
+            controllers.highDate.text = allFactories[select].highDate;
             tmp = allFactories[select].sector;
-            controllerSector.text = tmp;
+            controllers.sector.text = tmp;
 
             for(int i = 0; i <sectors.length; i++)
             {
@@ -159,10 +144,10 @@ class _newFactoryState extends State<newFactory> {
               }
             }
 
-            controllerTelephone1.text = allFactories[select].thelephones[0];
-            controllerTelephone2.text = allFactories[select].thelephones[1];
-            controllerMail.text = allFactories[select].mail;
-            controllerWeb.text = allFactories[select].web;
+            controllers.telephone1.text = allFactories[select].thelephones[0];
+            controllers.telephone1.text = allFactories[select].thelephones[1];
+            controllers.mail.text = allFactories[select].mail;
+            controllers.web.text = allFactories[select].web;
 
             var address = allFactories[select].address['street']!;
             var number = allFactories[select].address['number']!;
@@ -176,10 +161,10 @@ class _newFactoryState extends State<newFactory> {
             {
               allAddress = '$address,$number-$apartament';
             }
-            controllerAdrress.text = allAddress!;
-            controllerCity.text = allFactories[select].address['city']!;
-            controllerPostalCode.text = allFactories[select].address['postalCode']!;
-            controllerProvince.text = allFactories[select].address['province']!;
+            controllers.address.text = allAddress!;
+            controllers.city.text = allFactories[select].address['city']!;
+            controllers.postalCode.text = allFactories[select].address['postalCode']!;
+            controllers.province.text = allFactories[select].address['province']!;
 
 
             int idFactory = select +1;
@@ -260,27 +245,29 @@ class _newFactoryState extends State<newFactory> {
                         ),
 
                         Padding(
-                          padding: const EdgeInsets.only(
-                              top: 20.0, left: 30.0, bottom: 30.0),
-                          child: Row(
-                            children: [
-                               layoutVariant(
-                                   items: [
-                                     textfieldCalendar(
-                                         nameCamp: S.of(context).discharge_date,
-                                         campOld: "",
-                                         controllerCamp: controllers.highDate
-                                     ),
+                          padding: const EdgeInsets.only(top: 20.0, left: 30.0, bottom: 30.0),
+                          child: layoutVariant(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            items: [
 
-                                     GenericDropdown<Sector>(
-                                       items: sectors,
-                                       selectedItem: selectedSector,
-                                       hint: sector,
-                                       itemLabel: (sector) => sector.name,
-                                       onChanged: (sectorChoose) => _onSectorChanged(context, sectorChoose,select),
-                                     ),
+                              textfieldCalendar(
+                                nameCamp: S.of(context).discharge_date,
+                                campOld: "",
+                                controllerCamp: controllers.highDate,
+                              ),
 
-                            ]),
+                              const SizedBox(width: 16), // separación
+                              Expanded(
+                                child: GenericDropdown<Sector>(
+                                  items: sectors,
+                                  camp:S.of(context).sector,
+                                  selectedItem: selectedSector,
+                                  hint: sector,
+                                  itemLabel: (sector) => sector.name,
+                                  onChanged: (sectorChoose) =>
+                                      _onSectorChanged(context, sectorChoose, select),
+                                ),
+                              ),
                             ],
                           ),
                         ),
@@ -314,7 +301,7 @@ class _newFactoryState extends State<newFactory> {
                               Flexible(
                                 child: defaultTextfield(
                                   nameCamp: S.of(context).mail,
-                                  controllerCamp: controllerMail,
+                                  controllerCamp: controllers.mail,
                                   campOld: select == -1 ? '' : allFactories[select].mail,
                                 ),
                               ),
@@ -322,7 +309,7 @@ class _newFactoryState extends State<newFactory> {
                               Flexible(
                                 child: defaultTextfield(
                                   nameCamp: S.of(context).web_page,
-                                  controllerCamp: controllerWeb,
+                                  controllerCamp: controllers.web,
                                   campOld: select == -1 ? '' : allFactories[select].web,
                                 ),
                               ),
@@ -390,7 +377,7 @@ class _newFactoryState extends State<newFactory> {
                           ],
                         ),
 
-                    Padding(
+                           Padding(
                       padding: const EdgeInsets.only(left: 600.0),
                       child: layoutVariant(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -463,7 +450,7 @@ class _newFactoryState extends State<newFactory> {
       selectedSector = sectorChoose;
 
       setState(() {
-        controllerSector.text = sectorChoose!.name;
+        controllers.sector.text = sectorChoose!.name;
       });
 
     }

@@ -44,12 +44,6 @@ class _newMailState extends State<newMail> {
 
   double widthBar = 10.0;
 
-  late TextEditingController controllerMail = new TextEditingController();
-  late TextEditingController controllerCompany = new TextEditingController();
-  late TextEditingController controllerPas = new TextEditingController();
-  late TextEditingController controllerPasVerificator = new TextEditingController();
-
-
   late final MailController controllers;
 
   @override
@@ -66,7 +60,7 @@ class _newMailState extends State<newMail> {
   void dispose() {
     controllers.mail.dispose();
     controllers.password.dispose();
-    controllers.passwordVerify.dispose();
+    controllers.passwordVerify!.dispose();
 
     super.dispose();
   }
@@ -142,7 +136,7 @@ class _newMailState extends State<newMail> {
 
                           textfieldPassword(
                               nameCamp: S.of(context).verify_password,
-                              controllerCamp: controllers.passwordVerify,
+                              controllerCamp: controllers.passwordVerify!,
                           ),
 
                           Padding(
@@ -173,20 +167,6 @@ class _newMailState extends State<newMail> {
                               ],
                             ),
                           ),
-                          Align(
-                            alignment: Alignment.topRight,
-                            child: SizedBox(
-                              width: 200,
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-
-                                children: [
-
-                                ],
-                              ),
-                            ),
-                          ),
-
                         ],
                       ),
                     ),
@@ -227,7 +207,7 @@ Future<void> _onSaveMail(BuildContext context, int select,MailController control
       action = S.of(context).not_a_valid_mail;
       await error(context, action);
     }
-    if(controllers.password.text.isEmpty || controllers.passwordVerify.text.isEmpty)
+    if(controllers.password.text.isEmpty || controllers.passwordVerify!.text.isEmpty)
     {
 
       if(controllers.password.text.isEmpty)
@@ -245,9 +225,24 @@ Future<void> _onSaveMail(BuildContext context, int select,MailController control
     }
     else
     {
-      if (controllers.password.text == controllers.passwordVerify.text)
+      if (controllers.password.text == controllers.passwordVerify!.text)
       {
-        final result = await testMail(context,controllers);
+
+        String username = controllers.mail.text;
+        String password = "";
+        String company = "";
+
+
+        List <String> separeAddrres = username.split("@");
+
+        final message = Message()
+          ..from = Address(username, separeAddrres[0])
+          ..recipients.add(username)
+          ..subject = S.of(context).connection_test
+          ..text = S.of(context).this_is_a_connection_test_from_the_application;
+
+
+        final result = await sendingMail(context,controllers,message);
 
         if (result == false)
         {
@@ -256,37 +251,43 @@ Future<void> _onSaveMail(BuildContext context, int select,MailController control
         }
         else
         {
-          if (conn != null)
-          {
-            if (select == -1)
-            {
-              sqlCreateMail(current);
-            }
-            else
-            {
-              current.add(mails[select]);
-              sqlModifyMail(current);
-            }
-          }
-          else
-          {
-            mails = mails + current;
+                if (conn != null)
+                {
+                  if (select == -1)
+                  {
+                    sqlCreateMail(current);
+                  }
+                  else
+                  {
+                    current.add(mails[select]);
+                    sqlModifyMail(current);
+                  }
+                }
+                else
+                {
+                  mails = mails + current;
 
-            bool errorExp = await csvExportatorMails(mails);
+                  bool errorExp = await csvExportatorMails(mails);
 
-            if(errorExp != true && result != false)
-            {
-              String array = S.of(context).mails;
-              String action = LocalizationHelper.no_file(context, array);
-              warning(context, action);
-            }
-          }
+                  if(errorExp != true && result != false)
+                  {
+                    String array = S.of(context).mails;
+                    String action = LocalizationHelper.no_file(context, array);
+                    warning(context, action);
+                  }
+                }
 
-          if (result == false)
-          {
-            action = S.of(context).the_user_or_password_are_incorrect;
-            error(context, action);
-          }
+                if (result == false)
+                {
+                  action = S.of(context).the_user_or_password_are_incorrect;
+                  error(context, action);
+                }
+                else
+                {
+                     action = S.of(context).the_connection_test_was_sent_successfully;
+                     confirm(context, action);
+                }
+
         }
       }
       else
@@ -300,44 +301,32 @@ Future<void> _onSaveMail(BuildContext context, int select,MailController control
   }
 }
 
-Future testMail(context,controllers) async {
+Future sendingMail(context,controllers, Message message) async {
 
   bool connectEmail = false;
   String username = controllers.mail.text;
-  String password = "";
-  String company = "";
-
-  if (controllers.password.text == controllers.passwordVerify.text) {
-    password =  controllers.password.text;
-  }
+  String password = controllers.password.text;
 
   List <String> separeAddrres = username.split("@");
   List <String> extCompany = separeAddrres[1].split(".");
 
-  company = extCompany[0];
+  String company = extCompany[0];
 
-  try {
-    final message = Message()
-      ..from = Address(username, separeAddrres[0])
-      ..recipients.add(username)
-      ..subject = S.of(context).connection_test
-      ..text = S.of(context).this_is_a_connection_test_from_the_application;
+      try {
 
+            if (company == "gmail") {
+              final smtpServer = gmail(username, password);
+              final sendReport = await send(message, smtpServer);
+            }
+            if (company == "hotmail") {
+              final smtpServer = hotmail(username, password);
+              final sendReport = await send(message, smtpServer);
+            }
 
-    if (company == "gmail") {
-      final smtpServer = gmail(username, password);
-      final sendReport = await send(message, smtpServer);
-    }
-    if (company == "hotmail") {
-      final smtpServer = hotmail(username, password);
-      final sendReport = await send(message, smtpServer);
-
-    }
-    connectEmail = true;
-  } catch (e) {
-    print(e);
-    connectEmail = false;
-  }
+            connectEmail = true;
+      } catch (e) {
+           connectEmail = false;
+      }
 
   return connectEmail;
 }
@@ -348,7 +337,7 @@ Future<void>_onResetMail(BuildContext context,int select,  MailController contro
   if (select == -1) {
     controllers.mail.text = "";
     controllers.password.text = "";
-    controllers.passwordVerify.text = "";
+    controllers.passwordVerify!.text = "";
   }
   else {
     campCharge(context,select,controllers);
@@ -367,7 +356,7 @@ void campCharge(
   {
     controllers.mail.text = mails[select].addrres;
     controllers.password.clear();
-    controllers.passwordVerify.clear();
+    controllers.passwordVerify!.clear();
   }
 }
 
