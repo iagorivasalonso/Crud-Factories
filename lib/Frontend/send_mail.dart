@@ -185,7 +185,6 @@ class _sendMailState extends State<sendMail> {
                                 child: defaultTextfield(
                                   nameCamp: S.of(context).mail,
                                   controllerCamp: controllers.mail,
-                                  campOld: '',
                                 ),
                               ),
                               const SizedBox(width: 16),
@@ -249,7 +248,6 @@ class _sendMailState extends State<sendMail> {
                                 child: defaultTextfield(
                                   nameCamp: S.of(context).a_recipient,
                                   controllerCamp: controllers.mailTo!,
-                                  campOld: '',
                                 ),
                               ),
                             )
