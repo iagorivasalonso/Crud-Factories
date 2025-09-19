@@ -30,7 +30,6 @@ class _ContactListState extends State<ContactList> {
           itemBuilder: (BuildContext context, int index) {
             final employee = widget.contacsCurrent[index];
             final isSelected = index == contactSelect;
-
             return GestureDetector(
               onTap: () {
                 setState(() {
