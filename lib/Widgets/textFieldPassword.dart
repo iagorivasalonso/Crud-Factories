@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 Padding textfieldPassword({
   required String nameCamp,
   required TextEditingController controllerCamp,
+  bool? campEdit,
 }){
 
   return  Padding(
@@ -24,6 +25,7 @@ Padding textfieldPassword({
           child: SizedBox(
             height: 40,
             child: TextField(
+              enabled: campEdit,
               obscureText: true,
               controller: controllerCamp,
               decoration: const InputDecoration(

@@ -3,8 +3,9 @@ import 'package:flutter/material.dart';
 
 Padding defaultTextfield({
   required String nameCamp,
-  required String campOld,
+  String? campOld,
   required TextEditingController controllerCamp,
+  bool? campEdit,
 }){
 
   return Padding(
@@ -26,6 +27,7 @@ Padding defaultTextfield({
           child: SizedBox(
             height: 40,
             child: TextField(
+              enabled: campEdit,
               controller: controllerCamp,
               decoration: const InputDecoration(
                 border: OutlineInputBorder(),
@@ -33,7 +35,7 @@ Padding defaultTextfield({
                 contentPadding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
               ),
               onChanged: (s) {
-                if (campOld.isNotEmpty) {
+                if (campOld!.isNotEmpty) {
                   saveChanges = controllerCamp.text != campOld;
                 } else {
                   saveChanges = controllerCamp.text.isNotEmpty;
