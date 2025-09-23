@@ -245,19 +245,23 @@ class _newFactoryState extends State<newFactory> {
                         ),
 
                         Padding(
-                          padding: const EdgeInsets.only(top: 20.0, left: 30.0, bottom: 30.0),
+                          padding: const EdgeInsets.only(top: 20.0, bottom: 30.0),
                           child: layoutVariant(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             items: [
 
-                              textfieldCalendar(
-                                nameCamp: S.of(context).discharge_date,
-                                campOld: "",
-                                controllerCamp: controllers.highDate,
+                              Flexible(
+                                child: SizedBox(
+                                  width: 600,
+                                  child: textfieldCalendar(
+                                    nameCamp: S.of(context).discharge_date,
+                                    campOld: "",
+                                    controllerCamp: controllers.highDate,
+                                  ),
+                                ),
                               ),
-
-                              const SizedBox(width: 16), // separación
-                              Expanded(
+                              SizedBox(width: 100),
+                              Flexible(
                                 child: GenericDropdown<Sector>(
                                   items: sectors,
                                   camp:S.of(context).sector,
@@ -378,37 +382,37 @@ class _newFactoryState extends State<newFactory> {
                         ),
 
                            Padding(
-                      padding: const EdgeInsets.only(left: 600.0),
-                      child: layoutVariant(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        items: [
-                          materialButton(
-                              nameAction: action,
-                              function: () =>
-                                  _onSaveFactory(
-                                      context,
-                                      select,
-                                      controllers,
-                                      contacsPreEdit,
-                                      contacsCurrent,
-                                      idsDelete
-                                  )
-                          ),
-
-                          Padding(
-                            padding: const EdgeInsets.only(left: 20.0),
-                            child: materialButton(
-                              nameAction: action2,
-                              function: () =>
-                                  _onResetFactory(
-                                      context,
-                                      select,
-                                      controllers,
-                                      contacsCurrent
+                              padding: const EdgeInsets.only(left: 600.0),
+                              child: Row(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  materialButton(
+                                      nameAction: action,
+                                      function: () =>
+                                          _onSaveFactory(
+                                              context,
+                                              select,
+                                              controllers,
+                                              contacsPreEdit,
+                                              contacsCurrent,
+                                              idsDelete
+                                          )
                                   ),
-                            ),
-                          ),
-                        ],
+
+                                  Padding(
+                                    padding: const EdgeInsets.only(left: 20.0),
+                                    child: materialButton(
+                                      nameAction: action2,
+                                      function: () =>
+                                          _onResetFactory(
+                                              context,
+                                              select,
+                                              controllers,
+                                              contacsCurrent
+                                          ),
+                                    ),
+                                  ),
+                                ],
                       ),
                     ),
                       ],

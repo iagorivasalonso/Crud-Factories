@@ -306,9 +306,9 @@ class _sendMailState extends State<sendMail> {
 
                           Padding(
                             padding: const EdgeInsets.only(left: 650.0,top:  20.0),
-                            child: layoutVariant(
+                            child: Row(
                               crossAxisAlignment: CrossAxisAlignment.start,
-                              items: [
+                              children: [
                                 materialButton(
                                     nameAction: S.of(context).send,
                                     function: () => _onSendMail(context,controllers,otherMail,selectedOption),
