@@ -205,9 +205,9 @@ class S {
     return Intl.message('Email', name: 'mail', desc: '', args: []);
   }
 
-  /// `emails`
+  /// `Emails`
   String get mails {
-    return Intl.message('emails', name: 'mails', desc: '', args: []);
+    return Intl.message('Emails', name: 'mails', desc: '', args: []);
   }
 
   /// `Empresa`
@@ -253,6 +253,16 @@ class S {
   /// `Fecha`
   String get date {
     return Intl.message('Fecha', name: 'date', desc: '', args: []);
+  }
+
+  /// `Editar envio`
+  String get edit_shipment {
+    return Intl.message(
+      'Editar envio',
+      name: 'edit_shipment',
+      desc: '',
+      args: [],
+    );
   }
 
   /// `Filtrar`
@@ -368,6 +378,16 @@ class S {
   /// `Nuevo mail`
   String get new_mail {
     return Intl.message('Nuevo mail', name: 'new_mail', desc: '', args: []);
+  }
+
+  /// `Nuevo envio`
+  String get new_shipment {
+    return Intl.message(
+      'Nuevo envio',
+      name: 'new_shipment',
+      desc: '',
+      args: [],
+    );
   }
 
   /// `Número`
