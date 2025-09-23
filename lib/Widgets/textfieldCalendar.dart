@@ -5,7 +5,7 @@ import 'package:show_platform_date_picker/show_platform_date_picker.dart' show S
 
 Padding textfieldCalendar({
   required String nameCamp,
-  required String campOld,
+  String? campOld,
   required TextEditingController controllerCamp,
 }){
   final ShowPlatformDatePicker platformDatePicker = ShowPlatformDatePicker(buildContext: context1);
@@ -13,45 +13,51 @@ Padding textfieldCalendar({
   DateTime seletedDate =DateTime.now();
 
   return Padding(
-    padding: const EdgeInsets.only(
-        top: 20.0, left: 30.0, bottom: 30.0),
+    padding: const EdgeInsets.only(left: 35.0, top: 20.0,right: 40.0),
     child: Row(
+      crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         Padding(
           padding: const EdgeInsets.only(right: 10.0),
-          child: Text(nameCamp),
-        ),
-        SizedBox(
-          width: 200,
-          height: 40,
-          child: TextField(
-            controller: controllerCamp,
-            decoration:  InputDecoration(
-              border: const OutlineInputBorder(),
-              icon: const Icon(Icons.calendar_today)
+          child: SizedBox(
+            width: 100,
+            child: Text(
+              nameCamp,
             ),
-            onTap: () async {
+          ),
+        ),
 
-                DateTime? dateSelected = await  platformDatePicker.showPlatformDatePicker(
+        Expanded(
+          child: SizedBox(
+            height: 40,
+            child: TextField(
+              controller: controllerCamp,
+              decoration: const InputDecoration(
+                border: OutlineInputBorder(),
+                icon: const Icon(Icons.calendar_today),
+                isDense: true,
+                contentPadding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+              ),
+              onTap: () async {
+                DateTime? dateSelected = await platformDatePicker.showPlatformDatePicker(
                   context1,
                   seletedDate,
                   DateTime(DateTime.now().year - 10),
                   DateTime(DateTime.now().year + 1),
                 );
+
                 if (dateSelected != null) {
-                  final String formattedDate = DateFormat('dd-MM-yyyy').format(dateSelected);
+                  final String formattedDate =
+                  DateFormat('dd-MM-yyyy').format(dateSelected);
                   controllerCamp.text = formattedDate;
                 }
-            },
+              },
+            ),
           ),
         ),
-        Padding(
-          padding: EdgeInsets.only(left: 200.0),
-          child: Text(campOld),
-        ),
-
       ],
     ),
   );
+
 }
 
