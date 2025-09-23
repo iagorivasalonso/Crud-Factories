@@ -141,9 +141,9 @@ class _newMailState extends State<newMail> {
 
                           Padding(
                             padding: const EdgeInsets.only(left: 500.0),
-                            child: layoutVariant(
+                            child: Row(
                               crossAxisAlignment: CrossAxisAlignment.start,
-                              items: [
+                              children: [
                                     materialButton(
                                     nameAction: action,
                                     function: () => _onSaveMail(
