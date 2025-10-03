@@ -1,9 +1,11 @@
 import 'dart:io';
 import 'package:fluent_ui/fluent_ui.dart' hide Checkbox;
 import 'package:flutter/material.dart' hide Scrollbar;
+import 'package:mailer/mailer.dart';
 import '../Backend/Global/controllers/LineSend.dart';
 import '../Backend/Global/variables.dart';
 import '../Functions/manageState.dart';
+import '../generated/l10n.dart';
 import '../helpers/localization_helper.dart';
 
 class customDataTable extends StatelessWidget {
@@ -14,7 +16,8 @@ class customDataTable extends StatelessWidget {
   final List<String> states;
   final List<bool> sendValues;
   final List<LineSendController> linesControllers;
-
+  final String mesage;
+  final String selectedItem;
   final void Function(int, String) onObservationChanged;
   final void Function(int, String) onStateChanged;
   final void Function(int, bool) onSendChanged;
@@ -26,8 +29,10 @@ class customDataTable extends StatelessWidget {
     required this.columns,
     required this.showSectorColumn,
     required this.states,
+    required this.selectedItem,
     required this.sendValues,
     required this.linesControllers,
+    required this.mesage,
     required this.onObservationChanged,
     required this.onStateChanged,
     required this.onSendChanged,
@@ -35,60 +40,68 @@ class customDataTable extends StatelessWidget {
   });
 
 
+
+
   @override
   Widget build(BuildContext context0) {
 
    BuildContext context = Platform.isWindows ? context1 : context0;
 
-   int cantFactory = linesControllers.length;
-   String stringFactories = LocalizationHelper.factoriesBD(context,cantFactory);
- 
     return Container(
-      child: Padding(
-          padding: const EdgeInsets.only(top: 40, left: 90, bottom: 30),
-          child: Column(
+      width: 900,
+      child: Column(
+        children: [
+          Row(
             children: [
-              Row(
-                children: [
-                  Scrollbar(
-                      controller: scrollController,
-                      thumbVisibility: true,       ///vere como queda
-                      child: SizedBox(
-                        height: 250,
-                        child: SingleChildScrollView(
-                            controller: scrollController,
-                            scrollDirection: Axis.vertical,
-                            child: DataTable(
-                                columns: columns
-                                    .map((c)=> DataColumn(
-                                    label: SizedBox(width: 100, child: Text(c)),
-                                   ),
-                                    ).toList(),
-                                rows: tableLinesNew(),
-                            ),
-                      ),
-                   ),
+              Scrollbar(
+                  controller: scrollController,
+                  thumbVisibility: true,       ///vere como queda
+                  child: SizedBox(
+                    height: 250,
+                    child: SingleChildScrollView(
+                        controller: scrollController,
+                        scrollDirection: Axis.vertical,
+                        child: DataTable(
+                            columns: columns
+                                .map((c)=> DataColumn(
+                                label: SizedBox(width: 100, child: Text(c)),
+                               ),
+                                ).toList(),
+                            rows: tableLinesNew(),
                         ),
-                ],
-              ),
-              Padding(
-                padding: const EdgeInsets.only(top: 15.0),
-                child: Row(
-                  children: [
-                    Text(stringFactories),
-                    Checkbox(
-                      value: sendValues.every((v) => v), // true si todos están seleccionados
-                      onChanged: (value) {
-                        if (value != null) {
-                          onSelectedAllChanged(value);
-                        }
-                      },
+                  ),
+               ),
                     ),
-                  ],
-                ),
-              )
             ],
           ),
+          Padding(
+            padding: const EdgeInsets.only(top: 15.0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(mesage),
+                Column(
+                  children: [
+                    Row(
+                      children: [
+                        Text(S.of(context).select_all),
+                        Checkbox(
+                          value: sendValues.every((v) => v), // true si todos están seleccionados
+                          onChanged: (value) {
+                            if (value != null) {
+                              onSelectedAllChanged(value);
+                            }
+                          },
+                        ),
+                      ],
+                    ),
+
+                  ],
+                ),
+              ],
+            ),
+          )
+        ],
       ),
     );
   }
@@ -104,10 +117,11 @@ class customDataTable extends StatelessWidget {
 
             if (showSectorColumn)
             DataCell(
-                Text("linesControllers[index].sector.text")
+                Text(linesControllers[index].sector.text)
             ),
             DataCell(
               TextField(
+                controller: linesControllers[index].observations,
                 decoration: const InputDecoration(
                   border: OutlineInputBorder(),
                   isDense: true,
@@ -119,9 +133,9 @@ class customDataTable extends StatelessWidget {
                 SizedBox(
                   height: 40,
                   child: DropdownButtonFormField<String>(
-                    value: states.contains(linesControllers[index].state.text)
-                        ? linesControllers[index].state.text
-                        : states.first,
+                    value:  linesControllers[index].state.text.isNotEmpty
+                                    ? linesControllers[index].state.text
+                                    : "Preparado",
                     items: states
                         .map((option) => DropdownMenuItem<String>(
                       value: option,
