@@ -11,7 +11,7 @@ class LineSend {
   String factory;
   String? sector; //  Atributo opcional
   String observations;
-  LineSendState state;
+  String state;
 
 
   LineSend({

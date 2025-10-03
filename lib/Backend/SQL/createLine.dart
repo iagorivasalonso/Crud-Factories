@@ -12,7 +12,7 @@ Future<void> sqlCreateLine(List<LineSend> lines, BuildContext context) async {
          String id = lines[i].id;
          String date = lines[i].date;
          String factory = lines[i].factory;
-         String state = manageState.parseState(lines[i].state.toString(),context,false).name;
+         String state = manageState.parseState(lines[i].state.toString(),context,false);
          String observations = lines[i].observations;
 
          var result = await conn.query(

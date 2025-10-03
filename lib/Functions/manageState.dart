@@ -4,8 +4,8 @@ import 'package:flutter/src/widgets/framework.dart';
 
 class manageState {
 
-  static LineSendState parseState(String value, BuildContext context, bool chargueLines) {
-    LineSendState result = LineSendState.pending;
+  static String parseState(String value, BuildContext context, bool chargueLines) {
+    String result = S.of(context).prepared;
 
     String prepared = S.of(context).prepared.toLowerCase();
     String sent = S.of(context).sent.toLowerCase();
@@ -26,21 +26,21 @@ class manageState {
     String valueLower = value.toLowerCase().trim();
 
     if (valueLower == prepared) {
-      result = LineSendState.prepared;
+      result = S.of(context).prepared;
     } else if (valueLower == sent) {
-      result = LineSendState.sent;
+      result = S.of(context).sent;
     } else if (valueLower == inProgress) {
-      result = LineSendState.in_progress;
+      result = S.of(context).in_progress;
     } else if (valueLower == returned) {
-      result = LineSendState.returned;
+      result = S.of(context).returned;
     } else if (valueLower == heResponded) {
-      result = LineSendState.has_responded;
+      result = S.of(context).he_responded;
     }
 
     return result;
   }
 
-  static String seeLanguage (BuildContext context, option){{
+  static String seeLanguage (BuildContext context, option){
      
       final localizations = S.of(context);
 
@@ -63,4 +63,4 @@ class manageState {
           }
 
   }
-}
+
