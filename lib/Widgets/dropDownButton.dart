@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 
 class GenericDropdown<T> extends StatelessWidget {
+
   final String camp;
+  final String? opDefault;
   final List<T> items;
   final T? selectedItem;
   final ValueChanged<T?> onChanged;
@@ -12,6 +14,7 @@ class GenericDropdown<T> extends StatelessWidget {
   const GenericDropdown({
     Key? key,
     required this.camp,
+    this.opDefault,
     required this.items,
     required this.selectedItem,
     required this.onChanged,
@@ -21,6 +24,14 @@ class GenericDropdown<T> extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
+
+
+    final dropdownItems = [
+
+
+    ];
+
     return Row(
       children: [
         Flexible(
@@ -34,13 +45,19 @@ class GenericDropdown<T> extends StatelessWidget {
             child: DropdownButton2<T>(
               isExpanded: true,
               hint: Text(hint),
-              items: items
-                  .map(
-                    (item) => DropdownMenuItem<T>(
-                  value: item,
-                  child: Text(itemLabel(item)),
-                ),
-              ).toList(),
+              items:  [
+               if (opDefault != null && opDefault!.isNotEmpty)
+                  DropdownMenuItem<T>(
+                      value: null,
+                      child: Text(opDefault!),
+                  ),
+                      ...items.map(
+                      (item) => DropdownMenuItem<T>(
+                      value: item,
+                      child: Text(itemLabel(item)),
+                      ),
+                  ),
+              ],
               value: selectedItem,
               onChanged: onChanged,
               buttonStyleData: const ButtonStyleData(
