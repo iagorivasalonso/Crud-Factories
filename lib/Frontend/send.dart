@@ -23,7 +23,7 @@ import 'package:intl/intl.dart';
 import 'package:show_platform_date_picker/show_platform_date_picker.dart';
 import 'package:adaptive_scrollbar/adaptive_scrollbar.dart';
 import 'package:flutter/material.dart';
-
+import 'package:collection/collection.dart';
 import '../Widgets/CustomDataTable.dart';
 import '../Widgets/dropDownButton.dart' show GenericDropdown;
 import '../Widgets/headView.dart' show headView;
@@ -53,7 +53,8 @@ class _newSendState extends State<newSend> {
   double widthBar = 10.0;
   String tView ="";
   Sector? selectedSector = null;
-  String sector = "Todos";
+  String selectedItem = "Preparado";
+  String sector = "";
   String stringFactories ="";
    int cantFactory= 0;
   List<String> stateSends =[];
@@ -61,6 +62,7 @@ class _newSendState extends State<newSend> {
   String action1 = "";
   String action2 = "";
   int allLinesCreated = 0;
+  bool allSectors = true;
 
   List<String> sectorsString = [];
   List<bool> send=[];
@@ -102,6 +104,7 @@ class _newSendState extends State<newSend> {
     String selectCamp = widget.selectCamp;
     String filter = widget.filter;
 
+
     DateTime date = DateTime.now();
 
     if(select == -1)
@@ -111,21 +114,31 @@ class _newSendState extends State<newSend> {
       action1 = S.of(context).newMale;
       action2 = S.of(context).reboot;
 
+      if(sector.isEmpty)
+         sector = S.of(context).sector;
+
+      if(selectedSector==null)
+        factoriesSector = allFactories;
+
       stateSends = [S.of(context).prepared, S.of(context).sent, S.of(context).in_progress, S.of(context).returned, S.of(context).he_responded, S.of(context).pending];
       List<LineSend>linesNew = [];
 
+          if(controllerSearchSend.text.isEmpty)
+          {
+            controllerSearchSend.text=DateFormat('dd-MM-yyyy').format( DateTime.now());
+          }
            if(selectedSector==S.of(context).allMale)
            {
                factoriesSector = allFactories;
            }
            else
            {
-                   if(selectedSector!=null)
-                   {
+                if(selectedSector!=null)
+                {
                      factoriesSector = allFactories.where((factory){
                        return factory.sector == selectedSector!.id;
                      }).toList();
-                   }
+                }
            }
 
 
@@ -138,12 +151,16 @@ class _newSendState extends State<newSend> {
                   id: idLine.toString(),
                   date: formattedDate,
                   factory: factoriesSector[i].name,
+                  sector: factoriesSector[i].sector,
                   observations: linesControllers[i].observations.text,
                   state: manageState.parseState(stateSends[0],context,false)));
+
           }
 
-          loadLinesFromModel(linesNew, linesControllers);
-          print(linesControllers[1]);
+          cantFactory = factoriesSector.length;
+          stringFactories = LocalizationHelper.factoriesBD(context, cantFactory);
+
+          loadLinesFromModel(context, linesNew, linesControllers);
     }
     else
     {
@@ -159,16 +176,18 @@ class _newSendState extends State<newSend> {
          {
               linesSelected = allLines.where((line) {
                     return line.date == selectCamp;
+
                     }).toList();
          }
          else
          {
              linesSelected = allLines.where((line) {
                   return line.factory == selectCamp;
+
                  }).toList();
          }
 
-        loadLinesFromModel(linesSelected, linesControllers);
+        loadLinesFromModel(context, linesSelected, linesControllers);
         controllerSearchSend.text = selectCamp;
     }
 
@@ -190,9 +209,9 @@ class _newSendState extends State<newSend> {
               scrollDirection: Axis.horizontal,
               child: SizedBox(
                 height: select == -1
-                    ? 710
+                    ? 600
                     : 630,
-                width: 1400,
+                width: 1100,
                 child: Align(
                     alignment: Alignment.topLeft,
                     child: Padding(
@@ -204,643 +223,324 @@ class _newSendState extends State<newSend> {
                                 title: tView
                             ),
 
-                            Padding(
-                                padding: EdgeInsetsGeometry.only(top:20.0),
-                                child: select== -1
-                                     ? textfieldCalendar(
-                                          nameCamp: S.of(context).date,
-                                          controllerCamp: controllerSearchSend, campOld: '',
-                                     )
-                                     :defaultTextfield(
-                                           nameCamp: filter,
-                                         controllerCamp: controllerSearchSend
-                                )   ,
-                            )
-                            /*
-                            Row(
-                              children: [
-                                Text(titleComplete,
-                                  style: const TextStyle(
-                                      fontWeight: FontWeight.bold),),
-                              ],
-                            ),
-                            Padding(
-                              padding: EdgeInsets.only(top: 20.0),
-                              child: Row(
-                                children: [
-
-                                  SizedBox(
-                                    width: 500,
-                                    height: 40,
-                                    child: TextField(
-                                      controller: controllerSearch,
-                                      decoration: InputDecoration(
-                                        border: const OutlineInputBorder(),
-                                        icon: select == -1
-                                            ? const Icon(Icons.calendar_today)
-                                            : null,
-                                      ),
-                                      onTap: () async {
-                                        if(select == -1)
-                                        {
-                                          DateTime? dateSelected = await  platformDatePicker.showPlatformDatePicker(
-                                            context,
-                                            seletedDate,
-                                            DateTime(DateTime.now().year - 10),
-                                            DateTime(DateTime.now().year + 1),
-                                          );
-
-                                          if (dateSelected != null) {
-                                            setState(() {
-                                              date = DateFormat('dd-MM-yyyy').format(dateSelected);
-                                            });
-                                          }
-                                        }
-
-                                      },
-                                    ),
-                                  ),
-
-                                ],
+                            Container(
+                              width: 500,
+                              child: select == -1
+                                  ? textfieldCalendar(
+                                nameCamp: S.of(context).date,
+                                controllerCamp: controllerSearchSend,
+                              )
+                              : defaultTextfield(
+                                  nameCamp: filter,
+                                  controllerCamp: controllerSearchSend
                               ),
                             ),
+
                             if(select == -1)
+                              Flexible(
+                                child: Padding(
+                                  padding: const EdgeInsets.only(left: 40.0, top: 20.0),
+                                  child: SizedBox(
+                                    height: 40,
+                                    width: 300,
+                                    child: GenericDropdown<Sector>(
+                                      items: sectors,
+                                      camp:S.of(context).sector,
+                                      opDefault: S.of(context).allMale,
+                                      selectedItem: selectedSector,
+                                      hint: sector,
+                                      itemLabel: (sector) => sector.name,
+                                      onChanged: (sectorChoose) =>
+                                          _onSectorChanged(context, sectorChoose, select),
+                                    ),
+                                  ),
+                                ),
+                              ),
+
                               Padding(
-                                padding: const EdgeInsets.only( top: 30.0),
-                                child: DropdownButtonHideUnderline(
-                                  child: Row(
-                                    children: [
-                                      Padding(
-                                        padding: EdgeInsets.only(left: 20.0, right: 30.0),
-                                        child: Text(S.of(context).sector),
-                                      ),
-                                      DropdownButton2<String>(
-                                        hint:  Text(S.of(context).allMale),
-                                        items: sectorsString.map((String itemSector) => DropdownMenuItem<String>(
-                                          value:  itemSector,
-                                          child: Text(itemSector),
-                                        )).toList(),
-                                        value: selectedSector,
-                                        onChanged: (String? sectorChoose) {
-                                          setState(() {
-
-                                            selectedSector = sectorChoose!;
-
-                                            do{
-                                              print(selectedSector);
-                                              factoriesSector.clear();
-                                              if (selectedSector == S.of(context).allMale)
-                                              {
-
-                                                campsTable = [
-                                                  S.of(context).company,
-                                                  S.of(context).sector,
-                                                  S.of(context).observations,
-                                                  S.of(context).state,
-                                                  S.of(context).select
-                                                ];
-
-                                                for(int i = 0; i < allFactories.length;i++)
-                                                {
-                                                  factoriesSector.add(allFactories[i]);
-                                                }
-
-                                                cantFactory = factoriesSector.length;
-                                              }
-                                              else
-                                              {
-
-
-                                                int  sSelected = 0;
-                                                for(int i = 0; i <sectors.length; i++)
-                                                {
-                                                  if(sectors[i].name == selectedSector)
-                                                  {
-                                                    sSelected = i;
-                                                  }
-                                                }
-                                                int factoriesSelected = sSelected + 1;
-
-                                                campsTable = [
-                                                  S.of(context).company,
-                                                  S.of(context).observations,
-                                                  S.of(context).state,
-                                                  S.of(context).select
-                                                ];
-
-                                                for(int i = 0; i < allFactories.length;i++)
-                                                {
-                                                  if(allFactories[i].sector == factoriesSelected.toString())
-                                                  {
-                                                    factoriesSector.add(allFactories[i]);
-                                                  }
-                                                }
-
-                                                cantFactory = factoriesSector.length;
-
-                                                if(cantFactory == 0)
-                                                {
-                                                  String array = S.of(context).companies;
-                                                  String action = LocalizationHelper.no_array_departament(context, array);
-                                                  error(context, action);
-                                                  selectedSector = S.of(context).allMale;
-                                                }
-                                              }
-
-                                            } while (cantFactory == 0);
-
-
-
-                                            stringFactories = LocalizationHelper.factoriesBD(context,cantFactory);
-
-                                          });
-                                        },
-                                        buttonStyleData: const ButtonStyleData(
-                                          height: 50,
-                                          width: 220,
-                                          padding: EdgeInsets.only(left: 14, right: 14),
-                                        ),
-                                        dropdownStyleData: DropdownStyleData(
-                                          maxHeight: 200,
-                                          width: 200,
-                                          scrollbarTheme: ScrollbarThemeData(
-                                            thickness: MaterialStateProperty.all(6),
-                                          ),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
+                                padding: const EdgeInsets.only(top: 40, left: 90, bottom: 30),
+                                child: select == -1
+                                     ? customDataTable(
+                                       scrollController: verticalScrollTable,
+                                       columns: allSectors == false
+                                                 ? [S.of(context).company, S.of(context).observations, S.of(context).state, S.of(context).select]
+                                                 : [S.of(context).company, S.of(context).sector ,S.of(context).observations, S.of(context).state, S.of(context).select],
+                                       showSectorColumn: allSectors,
+                                       states: stateSends,
+                                       sendValues: send,
+                                       linesControllers: linesControllers,
+                                       mesage: stringFactories,
+                                       selectedItem:selectedItem,
+                                       onObservationChanged: (int , String ) {  },
+                                       onStateChanged: (index , value ) {
+                                         setState(() {
+                                           linesControllers[index].state.text = value;
+                                           selectedItem = value; //
+                                         });
+                                       },
+                                       onSendChanged: (i, value) {
+                                           send[i] = value;
+                                           saveChanges = true;
+                                           setState(() {});
+                                       },
+                                       onSelectedAllChanged: (value) {
+                                            for (int i = 0; i < send.length; i++)
+                                            {
+                                              send[i] = value;
+                                            }
+                                        saveChanges = true;
+                                        setState(() {});
+                                       },
+                                    )
+                                    : null,
                               ),
-                            Padding(
-                              padding: const EdgeInsets.only(top: 40.0),
-                              child: Row(
-                                children: [
-                                  Text(list_def,
-                                    style: const TextStyle(
-                                        fontWeight: FontWeight.bold),),
-                                ],
-                              ),
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.only(top: 40.0, left: 90.0,bottom: 30.0),
-                              child: Scrollbar(
-                                controller: verticalScrollTable,
-                                child: SizedBox(
-                                  height: 250,
-                                  child: SingleChildScrollView(
-                                      controller: verticalScrollTable,
-                                      scrollDirection: Axis.vertical,
-                                      child: Align(
-                                        alignment: Alignment.topLeft,
-                                        child: DataTable(
-                                          columns: List<DataColumn>.generate(campsTable.length, (index) =>
-                                              DataColumn(
-                                                  label: SizedBox(
-                                                      width: 100,
-                                                      child: Text(campsTable[index])))
+
+                                  Padding(
+                                      padding: const EdgeInsets.only(left: 750.0),
+                                      child: Row(
+                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        children: [
+                                          materialButton(
+                                              nameAction: action1,
+                                              function: () => _onSaveSend(context,select,controllerSearchSend,linesControllers)
                                           ),
-                                          rows: select == -1
-                                              ? List<DataRow>.generate(factoriesSector.length, (indexRow) =>
-                                              DataRow(
-                                                  cells: <DataCell>[
-                                                    DataCell(
-                                                      Text(factoriesSector[indexRow].name),
-                                                    ),
-                                                    if(selectedSector==S.of(context).allMale)
-                                                      DataCell(
-                                                        Text(sectors[int.parse(factoriesSector[indexRow].sector)-1].name),
-                                                      ),
-                                                    DataCell(
-                                                      Padding(
-                                                        padding: const EdgeInsets.all(8.0),
-                                                        child: TextField(
-                                                          controller: _controllersObserLine[indexRow],
-                                                          decoration: InputDecoration(
-                                                            border: OutlineInputBorder(),
-                                                          ),
-                                                          onChanged: (s){
-                                                            setState(() {
-                                                              lineEdit[indexRow]=true;
-                                                              saveChanges = true;
-                                                            });
-                                                          },
-                                                        ),
-                                                      ),
-                                                    ),
-                                                    DataCell(
-                                                      Padding(
-                                                        padding: const EdgeInsets.all(1.0),
-                                                        child: SizedBox(
-                                                          height: 40,
-                                                          child: DropdownButtonFormField<String>(
-                                                            value: stateSends.contains(_controllerStateLine[indexRow].text)
-                                                                ?manageState.seeLanguage(context, _controllerStateLine[indexRow].text)
-                                                                : stateSends.isNotEmpty
-                                                                ? stateSends[0]
-                                                                : null,
-                                                            decoration: InputDecoration(
-                                                              border: OutlineInputBorder(),
-                                                            ),
-                                                            items: stateSends.map((option) {
-                                                              return DropdownMenuItem<String>(
-                                                                value: option,
-                                                                child: Text(manageState.seeLanguage(context, option), style: TextStyle(fontSize: 12),),
-                                                              );
-                                                            }).toList(),
-                                                            onChanged: (newValue) {
-                                                              setState(() {
 
-                                                                _controllerStateLine[indexRow].text = newValue!;
-
-                                                                lineEdit[indexRow] = true;
-
-                                                                if(saveChanges == false)
-                                                                {
-                                                                  if (_controllerStateLine[indexRow].text == lineSelected[indexRow].state)
-                                                                  {
-                                                                    saveChanges = false;
-                                                                  } else
-                                                                  {
-                                                                    saveChanges = true;
-                                                                  }
-                                                                }
-                                                              });
-
-                                                            },
-                                                          ),
-                                                        ),
-                                                      ),
-                                                    ),
-                                                    DataCell(
-                                                      CheckboxListTile(
-                                                        value: Send[indexRow],
-                                                        onChanged:( bool? value) {
-                                                          setState(() {
-                                                            Send[indexRow] = value!;
-                                                            allSelect = true;
-                                                            saveChanges = true;
-                                                          });
-                                                        },
-                                                      ),
-                                                    ),
-                                                  ]
-                                              )
-                                          )
-                                              : List<DataRow>.generate(lineSelected.length, (indexRow) =>
-                                              DataRow(
-                                                  cells:  <DataCell>[
-                                                    DataCell(
-                                                        Text(campKey[indexRow])
-                                                    ),
-                                                    if(subIten2Select == 0 && type == S.of(context).date)
-                                                      DataCell(
-                                                          Text(_controllersSectorLine[indexRow].text)
-                                                      ),
-                                                    DataCell(
-                                                      Padding(
-                                                        padding: const EdgeInsets.all(8.0),
-                                                        child: TextField(
-                                                          controller: _controllersObserLine[indexRow],
-                                                          decoration: InputDecoration(
-                                                            border: OutlineInputBorder(),
-                                                          ),
-                                                          onChanged: (s){
-                                                            lineEdit[indexRow]=true;
-
-                                                            if(saveChanges == false)
-                                                            {
-                                                              if(_controllersObserLine[indexRow].text == lineSelected[indexRow].observations)
-                                                              {
-                                                                saveChanges = false;
-                                                              }
-                                                              else
-                                                              {
-                                                                saveChanges = true;
-                                                              }
-                                                            }
-                                                          },
-                                                        ),
-                                                      ),
-                                                    ),
-                                                    DataCell(
-                                                      Padding(
-                                                        padding: const EdgeInsets.all(1.0),
-                                                        child: SizedBox(
-                                                          height: 40,
-                                                          child: DropdownButtonFormField<String>(
-                                                            value: stateSends.contains(_controllerStateLine[indexRow].text)
-                                                                ?manageState.seeLanguage(context, _controllerStateLine[indexRow].text)
-                                                                : stateSends.isNotEmpty
-                                                                ? stateSends[0]
-                                                                : null,
-                                                            decoration: InputDecoration(
-                                                              border: OutlineInputBorder(),
-                                                            ),
-                                                            items: stateSends.map((option) {
-                                                              return DropdownMenuItem<String>(
-                                                                value: option,
-                                                                child: Text(manageState.seeLanguage(context, option), style: TextStyle(fontSize: 12),),
-                                                              );
-                                                            }).toList(),
-                                                            onChanged: (newValue) {
-                                                              setState(() {
-
-                                                                _controllerStateLine[indexRow].text = newValue!;
-
-                                                                lineEdit[indexRow] = true;
-
-                                                                if(saveChanges == false)
-                                                                {
-                                                                  if (_controllerStateLine[indexRow].text == lineSelected[indexRow].state)
-                                                                  {
-                                                                    saveChanges = false;
-                                                                  } else
-                                                                  {
-                                                                    saveChanges = true;
-                                                                  }
-                                                                }
-                                                              });
-
-                                                            },
-                                                          ),
-                                                        ),
-                                                      ),
-                                                    ),
-                                                  ]
-                                              )
-                                          ),
-                                        ),
+                                          Padding(
+                                            padding: const EdgeInsets.only(left: 20.0),
+                                            child: materialButton(
+                                              nameAction: action2,
+                                              function: () => _onResetCamps(context)
+                                              ),
                                       )
+                                     ],
                                   ),
-                                ),
-                              ),
+                                 ),
+                              ]
                             ),
-                            Align(
-                                alignment: Alignment.topLeft,
-                                child: Row(
-                                  children: [
-                                    Column(
-                                      children: [
-                                        Row(
-                                          children: [
-                                            Text(stringFactories),
-                                          ],
-                                        ),
-                                      ],
-                                    ),
-                                    if(select == -1)
-                                      Padding(
-                                        padding: const EdgeInsets.only(left: 500.0),
-                                        child: Row(
-                                          children: [
-                                            Padding(
-                                              padding: EdgeInsets.only(right: 15.0),
-                                              child: Text(S.of(context).select_all),
-                                            ),
-                                            Checkbox(
-                                              value: allSelect,
-                                              onChanged: (value) {
-                                                setState(() {
-
-                                                  for(int i = 0 ; i<Send.length; i++)
-                                                  {
-                                                    Send[i] = value!;
-                                                  }
-                                                  allSelect = value!;
-
-                                                });
-                                              },
-                                            )
-                                          ],
-                                        ),
-                                      ),
-                                  ],
-                                )
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.only(top: 70.0, right: 50.0),
-                              child: SizedBox(
-                                width: 200,
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    MaterialButton(
-                                      color: Colors.lightBlue,
-                                      child: Text(action1,
-                                        style: const TextStyle(color: Colors.white),
-                                      ),
-                                      onPressed: () async {
-                                        List <LineSend> current = [];
-
-                                        setState(() {
-                                          String idNew = "";
-
-                                          if(lineSector.isNotEmpty)
-                                          {
-                                            String idLast = lineSector[lineSector.length-1].id;
-                                            idNew = createId(idLast);
-                                          }
-                                          else
-                                          {
-                                            idNew ="1";
-                                          }
-
-                                          int idInit = int.parse(idNew);
-
-                                          if(select == -1)
-                                          {
-
-                                            if (validatorCamps.dateCorrect(controllerSearch.text) == false)
-                                            {
-
-                                              String array = S.of(context).date;
-                                              String action = LocalizationHelper.format_must(context, array);
-
-                                              String format = 'DD-MM-AAAA';
-                                              error(context, action, format);
-                                            }
-                                            else
-                                            {
-                                              for(int i = 0; i < allFactories.length; i++)
-                                              {
-                                                if(Send[i] == true)
-                                                {
-                                                  int idNew = idInit + current.length;
-                                                  allLines ++;
-
-                                                  current.add(
-                                                    LineSend(
-                                                        id: idNew.toString(),
-                                                        date: controllerSearch.text,
-                                                        factory: allFactories[i].name,
-                                                        observations: _controllersObserLine[i].text,
-                                                        state:manageState.parseState(_controllerStateLine[i].text,context,true)),
-                                                  );
-
-                                                  manageArrays.addDateSend(controllerSearch.text);
-                                                }
-                                              }
-                                              String action = LocalizationHelper.sendsFactory(context, allLines);
-                                              confirm(context,action);
-                                            }
-
-                                          }
-                                          else
-                                          {
-
-                                            if(saveChanges == true)
-                                            {
-                                              for(int i = 0; i <lineEdit.length; i++)
-                                              {
-                                                if(lineEdit[i]==true)
-                                                {
-                                                  allLinesModify++;
-                                                }
-                                              }
-
-
-                                              String id='';
-                                              for (int i = 0; i < lineSelected.length; i++)
-                                              {
-
-                                                id=lineSelected[i].id;
-
-                                                for (int y = 0; y < lineSelected.length; y++)
-                                                {
-
-                                                  if(lineSelected[i].id == id)
-                                                  {
-                                                    print(_controllerStateLine[i].text);
-                                                    lineSelected[i].state = manageState.parseState(_controllerStateLine[i].text,context,false);
-                                                    lineSelected[i].observations = _controllersObserLine[i].text;
-                                                  }
-                                                }
-
-                                              }
-
-
-                                              String action ='';
-                                              if (allLinesModify == 0)
-                                              {
-                                                action = S.of(context).has_no_line_to_modify;
-                                                error(context, action);
-                                              }
-                                              else
-                                              {
-                                                action = LocalizationHelper.cantLinesModify(context, allLinesModify);
-                                                confirm(context,action);
-
-                                                allLinesModify = 0;
-                                              }
-
-                                            }
-
-                                          }
-                                          lineEdit = List.generate(lineSector.length, (index) => false);
-
-                                        });
-                                        if (conn != null)
-                                        {
-                                          if(select==-1)
-                                          {
-                                            sqlCreateLine(current,context);
-                                          }
-                                          else
-                                          {
-                                            sqlModifyLines(lineSelected, context);
-                                          }
-                                        }
-                                        else
-                                        {
-                                          lineSector = lineSector + current;
-
-                                          bool errorExp = await csvExportatorLines(lineSector);
-
-                                          String array = S.of(context).shipments;
-
-                                          if(errorExp == false)
-                                          {
-                                            if(select == -1)
-                                            {
-                                              Send = List.generate(allFactories.length, (index) => false);
-                                              lineEdit = List.generate(allFactories.length, (index) => false);
-
-                                              resetCamps();
-                                            }
-                                          }
-                                          else
-                                          {
-                                            String action = LocalizationHelper.no_file(context, array);
-                                            error(context, action);
-                                          }
-                                          allLines = 0;
-                                          saveChanges = false;
-                                        }
-                                      },
-                                    ),
-
-                                    MaterialButton(
-                                      color: Colors.lightBlue,
-                                      child: Text(action2,
-                                        style: const TextStyle(color: Colors.white),
-                                      ),
-                                      onPressed: () {
-                                        setState(() {
-                                          if (select == -1)
-                                          {
-                                            resetCamps();
-                                          }
-                                          else
-                                          {
-                                            for(int i = 0 ; i < lineSelected.length; i++)
-                                            {
-                                              if(lineEdit[i]==true)
-                                              {
-                                                _controllersObserLine[i].text = lineSelected[i].observations;
-                                                _controllerStateLine[i].text = manageState.parseState(_controllerStateLine[i].text,context,false).name;
-                                              }
-                                            }
-                                          }
-
-                                          saveChanges = false;
-
-                                        });
-
-                                      },
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ),*/
-                          ]
                       ),
                     )
                 ),
               ),
             ),
           ),
-        ),
-      ),
-    )
-        : Scaffold(
+        )
+    ) : Scaffold(
              appBar: appBarAndroid(context, name: "sasd"),
              body: Text("creart email"),
     );
 
   }
 
-  void loadLinesFromModel(List<LineSend> lines, List<LineSendController> controllersLines) {
+  Future<void> loadLinesFromModel(BuildContext context, List<LineSend> lines, List<LineSendController> controllersLines) async {
 
-    for(int i = 0; i<lines.length; i++)
+
+        for(int i = 0; i<lines.length; i++)
+        {
+            Sector? sectorSelected = sectors.firstWhereOrNull(
+                  (sector) => sector.id == lines[i].sector!,
+            );
+
+            controllersLines[i].date.text = lines[i].date;
+            controllersLines[i].factory.text = lines[i].factory;
+
+            if (sectorSelected != null)
+            {
+              controllersLines[i].sector.text = sectorSelected.name;
+            }
+            else
+            {
+              controllersLines[i].sector.text = S.of(context).The_sector_does_not_exist;
+            }
+
+            controllersLines[i].observations.text = lines[i].observations;
+        }
+
+  }
+
+  Future<void> _onSectorChanged(BuildContext context,Sector? sectorChoose,int select) async {
+
+    setState(() {
+      if (sectorChoose != null) {
+        selectedSector = sectorChoose;
+        allSectors = false;
+      } else {
+        selectedSector = null;
+        allSectors = true;
+      }
+    });
+  }
+
+  Future<void> _onSaveSend(BuildContext context,int select, controllerSearch, List<LineSendController> linesControllers) async {
+
+    List <LineSend> current = [];
+
+
+      String idNew = "";
+
+      if(allLines.isNotEmpty)
+      {
+        String idLast = allLines[allLines.length-1].id;
+        idNew = createId(idLast);
+      }
+      else
+      {
+        idNew ="1";
+      }
+
+      int idInit = int.parse(idNew);
+
+      if(select == -1)
+      {
+              if (validatorCamps.dateCorrect(controllerSearch.text) == false)
+              {
+
+                String array = S.of(context).date;
+                String action = LocalizationHelper.format_must(context, array);
+
+                String format = 'DD-MM-AAAA';
+                error(context, action, format);
+              }
+              else
+              {
+                 setState(() {
+                   for(int i = 0; i < factoriesSector.length; i++)
+                   {
+                     if(send[i] == true)
+                     {
+                       int idNew = idInit + current.length;
+                       allLinesCreated ++;
+
+                       current.add(
+                         LineSend(
+                             id: idNew.toString(),
+                             date: controllerSearch.text,
+                             factory: factoriesSector[i].name,
+                             observations: linesControllers[i].observations.text,
+                             state:manageState.parseState(linesControllers[i].state.text,context,true)),
+                       );
+                     }
+                   }
+
+                   String action = LocalizationHelper.sendsFactory(context, allLinesCreated);
+                   confirm(context,action);
+                 });
+
+
+                _onResetCamps(context);
+              }
+      }
+      else
+      {
+/*
+            if(saveChanges == true)
+            {
+                      for(int i = 0; i <lineEdit.length; i++)
+                      {
+                        if(lineEdit[i]==true)
+                        {
+                          allLinesModify++;
+                        }
+                      }
+
+
+                      String id='';
+                      for (int i = 0; i < lineSelected.length; i++)
+                      {
+
+                        id=lineSelected[i].id;
+
+                        for (int y = 0; y < lineSelected.length; y++)
+                        {
+
+                          if(lineSelected[i].id == id)
+                          {
+                            lineSelected[i].state = manageState.parseState(_controllerStateLine[i].text,context,false);
+                            lineSelected[i].observations = _controllersObserLine[i].text;
+                          }
+                        }
+
+                      }
+
+
+                      String action ='';
+                      if (allLinesModify == 0)
+                      {
+                        action = S.of(context).has_no_line_to_modify;
+                        error(context, action);
+                      }
+                      else
+                      {
+                        action = LocalizationHelper.cantLinesModify(context, allLinesModify);
+                        confirm(context,action);
+
+                        allLinesModify = 0;
+                      }
+
+            }
+*/
+      }
+
+
+    if (conn != null)
     {
-      controllersLines[i].date.text = lines[i].date;
-      controllersLines[i].factory.text = lines[i].factory;
-      controllersLines[i].sector.text = "";
-      controllersLines[i].observations.text = lines[i].observations;
+      if(select==-1)
+      {
+        sqlCreateLine(current,context);
+      }
+      else
+      {
+       // sqlModifyLines(lineSelected, context);
+      }
     }
+    else
+    {
+      allLines = allLines + current;
+
+      bool errorExp = await csvExportatorLines(allLines);
+
+      String array = S.of(context).shipments;
+
+      if(errorExp == false)
+      {
+        if(select == -1)
+        {
+          send = List.generate(allFactories.length, (index) => false);
+         // lineEdit = List.generate(allFactories.length, (index) => false);
+
+          //resetCamps();
+        }
+      }
+      else
+      {
+        String action = LocalizationHelper.no_file(context, array);
+        error(context, action);
+      }
+      allLinesCreated = 0;
+      saveChanges = false;
+    }
+  }
+
+  Future<void> _onResetCamps(BuildContext context) async {
+
+     setState(() {
+
+       controllerSearchSend.text=DateFormat('dd-MM-yyyy').format( DateTime.now());
+
+       for(int i = 0; i < factoriesSector.length; i++)
+       {
+         linesControllers[i].observations.text="";
+         send[i] = false;
+         linesControllers[i].state.text = stateSends.first;
+         selectedItem = S.of(context).prepared;
+       }
+     });
 
   }
 }
+
+
+
+
+
 
 
