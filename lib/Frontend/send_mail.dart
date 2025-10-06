@@ -33,6 +33,7 @@ import '../Widgets/tableElements.dart';
 import '../Widgets/textArea.dart';
 import '../Widgets/textFieldPassword.dart';
 import '../Widgets/textfield.dart';
+import 'mail.dart';
 
 
 
@@ -341,44 +342,6 @@ class _sendMailState extends State<sendMail> {
     );
   }
 
-  Future<void> sendingMail(String username, String password) async {
-
-    String action =" ";
-    String sendCorrect = " ";
-    String company =" ";
-
-         try {
-               List <String> separeAddrres = username.split("@");
-               List <String> extCompany = separeAddrres[1].split(".");
-
-                company = extCompany[0];
-
-                if(sendsDay.isEmpty)
-                {
-                      if(company == "gmail")
-                      {
-
-                      }
-                      else if (company == "hotmail")
-                      {
-
-
-                      }
-
-                      if(sendCorrect.contains("Message successfully sent"))
-                      {
-                        action=S.of(context).the_mail_has_been_successfully_sent;
-                        confirm(context,action);
-                      }
-
-                }
-
-
-         }catch (e) {
-           action = S.of(context).There_is_no_connection_to_the_server;
-           error(context,action);
-         }
-     }
   Future<void>_onMailChanged(Mail? mailChoose) async {
 
       setState(() {
@@ -488,39 +451,6 @@ Future<void> _onSendMail(BuildContext context,MailController controllers, bool o
 
   }
 
-}
-
-
-Future sendingMail(context,controllers, Message message) async {
-
-  bool connectEmail = true;
-  String username = controllers.mail.text;
-  String password = controllers.password.text;
-
-  List <String> separeAddrres = username.split("@");
-  List <String> extCompany = separeAddrres[1].split(".");
-
-  String company = extCompany[0];
-
-  try {
-
-    if (company == "gmail") {
-      print(username);
-      print(password);
-      final smtpServer = gmail(username, password);
-      final sendReport = await send(message, smtpServer);
-
-    }
-
-
-
-    connectEmail = true;
-  } catch (e) {
-    print(e);
-    connectEmail = false;
-  }
-
-  return connectEmail;
 }
 
 Future<void> _onResetMail(BuildContext context,MailController controllers, Function(VoidCallback) setState, String? selectedOption) async {
