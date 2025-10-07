@@ -120,8 +120,6 @@ void groupFactoriesSector(int subIten2Selection) {
 
 void groupLinesSector(int subIten2Selection, List<String> element) {
 
-
-
   dateSends.clear();
   lineSector.clear();
 
@@ -142,9 +140,7 @@ void groupLinesSector(int subIten2Selection, List<String> element) {
         }
 
       }
-
     }
-
 
     for (int i = 0; i < lineSector.length; i++)
     {
@@ -189,9 +185,7 @@ void groupLinesSector(int subIten2Selection, List<String> element) {
     }
 
   }
-
     dateSends = manageArrays.avoidRepeteat(element);
-
 }
 
 
