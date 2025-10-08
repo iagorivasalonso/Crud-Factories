@@ -7,7 +7,7 @@ class manageArrays {
 
     List<String> elementsDiferent =[];
     bool disting = false;
-print(allElements);
+
     for(int i = 0; i < allElements.length; i++)
     {
 
