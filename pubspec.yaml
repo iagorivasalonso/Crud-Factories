@@ -10,7 +10,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  fluent_ui: ^4.6.2
+  fluent_ui: ^4.13.0
   flutter_localizations:
     sdk: flutter
   intl: any
