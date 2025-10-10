@@ -55,7 +55,6 @@ class _newSendState extends State<newSend> {
   Sector? selectedSector = null;
   String selectedItem = "Preparado";
   List<LineSend> linesSelected = [];
-  List<LineSend> linesSave = [];
   String sector = "";
   String campKey = " ";
   String stringFactories ="";
@@ -112,7 +111,7 @@ class _newSendState extends State<newSend> {
 
 
     DateTime date = DateTime.now();
-
+    stateSends = [S.of(context).prepared, S.of(context).sent, S.of(context).in_progress, S.of(context).returned, S.of(context).he_responded, S.of(context).pending];
     if(select == -1)
     {
       tView = S.of(context).new_shipment;
@@ -126,7 +125,7 @@ class _newSendState extends State<newSend> {
       if(selectedSector==null)
         factoriesSector = allFactories;
 
-      stateSends = [S.of(context).prepared, S.of(context).sent, S.of(context).in_progress, S.of(context).returned, S.of(context).he_responded, S.of(context).pending];
+
       List<LineSend>linesNew = [];
 
           if(controllerSearchSend.text.isEmpty)
@@ -176,7 +175,7 @@ class _newSendState extends State<newSend> {
       action1 = S.of(context).save;
       action2 = S.of(context).undo;
 
-        List<LineSend> linesSelected = [];
+      linesSelected = [];
 
          if(filter == S.of(context).date)
          {
@@ -203,16 +202,6 @@ class _newSendState extends State<newSend> {
              stringFactories = LocalizationHelper.sendsFactory(context, cantFactory);
 
          }
-      linesSave = linesSelected
-          .map((line) => LineSend(
-        id: line.id,
-        date: line.date,
-        factory: line.factory,
-        sector: line.sector,
-        observations: line.observations,
-        state: line.state,
-      ))
-          .toList();
 
           loadLinesFromModel(context, linesSelected, linesControllers);
 
@@ -327,7 +316,6 @@ class _newSendState extends State<newSend> {
                                        },
                                        onSendChanged: (i, value) {
                                            send[i] = value;
-
                                            saveChanges = true;
                                            setState(() {});
                                        },
