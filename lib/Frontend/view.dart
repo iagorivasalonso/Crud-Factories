@@ -491,8 +491,7 @@ class _viewState extends State<view> {
                                                 top: 15.0,
                                                 left: 40.0,
                                                 right: 40.0),
-                                            child: TextField(
-                                              controller: controllerSearchSend,
+                                            child: TextField(//AQUI LO TEBNIA MAL
                                               onChanged: (value) =>view == S.of(context).company
                                                    ? _runFilter(context, view, value, textFilterFactory, factoryName, filter)
                                                    : _runFilter( context, view, value, textFilterFactory, factoryName,filter),
