@@ -47,12 +47,12 @@ class LocalizationHelper {
 
   static String sendsFactory( BuildContext context,int countSendFactory) {
 
-    String preVar = S.of(context).the_shipment_contains;
+    String preVar = S.of(context).this_company_was_made_to_this_company;
 
     return Intl.plural(
       countSendFactory,
-      one: '$preVar $countSendFactory ${S.of(context).company.toLowerCase()}',
-      other: '$preVar $countSendFactory ${S.of(context).companies.toLowerCase()}',
+      one: '$preVar $countSendFactory ${S.of(context).sends.toLowerCase()}',
+      other: '$preVar $countSendFactory ${S.of(context).sends.toLowerCase()}',
       name: "sendsFactory",
       args: [countSendFactory],
       examples: const {"countSendFactory": 0},
