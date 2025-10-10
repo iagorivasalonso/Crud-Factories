@@ -53,8 +53,10 @@ class _newSendState extends State<newSend> {
   double widthBar = 10.0;
   String tView ="";
   Sector? selectedSector = null;
-  String selectedItem = "Preparado";
+  String selectedItem = "";
+  List<LineSend> linesSelected = [];
   String sector = "";
+  String campKey = " ";
   String stringFactories ="";
    int cantFactory= 0;
   List<String> stateSends =[];
@@ -65,7 +67,10 @@ class _newSendState extends State<newSend> {
   bool allSectors = true;
 
   List<String> sectorsString = [];
-  List<bool> send=[];
+  List<bool> send = [];
+
+  List<bool> observationModify = [];
+  List<bool> stateModify = [];
 
   late List<LineSendController> linesControllers;
   @override
@@ -174,21 +179,53 @@ class _newSendState extends State<newSend> {
 
          if(filter == S.of(context).date)
          {
-              linesSelected = allLines.where((line) {
+              linesSelected = lineSector.where((line) {
                     return line.date == selectCamp;
 
                     }).toList();
+
+               campKey = S.of(context).company;
+
+              cantFactory = linesSelected.length;
+              stringFactories = LocalizationHelper.sendsDay(context, cantFactory);
          }
          else
          {
-             linesSelected = allLines.where((line) {
+             linesSelected = lineSector.where((line) {
                   return line.factory == selectCamp;
 
                  }).toList();
+
+             campKey = S.of(context).date;
+
+             cantFactory = linesSelected.length;
+             stringFactories = LocalizationHelper.sendsFactory(context, cantFactory);
+
          }
 
-        loadLinesFromModel(context, linesSelected, linesControllers);
-        controllerSearchSend.text = selectCamp;
+          loadLinesFromModel(context, linesSelected, linesControllers);
+
+
+          if(subIten2Select != 0)
+          {
+            String sector = linesControllers[1].sector.text.toLowerCase();
+            tView = "$tView ${S.of(context).de.toLowerCase()} $sector";
+            allSectors = false;
+          }
+          else
+          {
+            allSectors = true;
+          }
+
+
+
+          if(observationModify.isEmpty)
+             observationModify = List.generate(linesSelected.length, (index) => false);
+
+             if(stateModify.isEmpty)
+             stateModify = List.generate(linesSelected.length, (index) => false);
+
+            controllerSearchSend.text = selectCamp;
     }
 
     return Platform.isWindows
