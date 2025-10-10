@@ -259,8 +259,7 @@ class _newSendState extends State<newSend> {
 
                               Padding(
                                 padding: const EdgeInsets.only(top: 40, left: 90, bottom: 30),
-                                child: select == -1
-                                     ? customDataTable(
+                                child: customDataTable(
                                        scrollController: verticalScrollTable,
                                        columns: allSectors == false
                                                  ? [S.of(context).company, S.of(context).observations, S.of(context).state, S.of(context).select]
@@ -280,6 +279,7 @@ class _newSendState extends State<newSend> {
                                        },
                                        onSendChanged: (i, value) {
                                            send[i] = value;
+
                                            saveChanges = true;
                                            setState(() {});
                                        },
@@ -291,8 +291,7 @@ class _newSendState extends State<newSend> {
                                         saveChanges = true;
                                         setState(() {});
                                        },
-                                    )
-                                    : null,
+                                    ),
                               ),
 
                                   Padding(
@@ -302,14 +301,17 @@ class _newSendState extends State<newSend> {
                                         children: [
                                           materialButton(
                                               nameAction: action1,
-                                              function: () => _onSaveSend(context,select,controllerSearchSend,linesControllers)
+                                              function: () =>
+                                              _onSaveSend(context,select,controllerSearchSend,linesControllers)
                                           ),
 
                                           Padding(
                                             padding: const EdgeInsets.only(left: 20.0),
                                             child: materialButton(
                                               nameAction: action2,
-                                              function: () => _onResetCamps(context)
+                                              function: () =>
+                                              ///CAMBIAR
+                                              _onSaveSend(context,select,controllerSearchSend,linesControllers)
                                               ),
                                       )
                                      ],
@@ -374,7 +376,7 @@ class _newSendState extends State<newSend> {
 
     List <LineSend> current = [];
 
-
+    setState(() {
       String idNew = "";
 
       if(allLines.isNotEmpty)
@@ -402,31 +404,35 @@ class _newSendState extends State<newSend> {
               }
               else
               {
-                 setState(() {
-                   for(int i = 0; i < factoriesSector.length; i++)
-                   {
-                     if(send[i] == true)
-                     {
-                       int idNew = idInit + current.length;
-                       allLinesCreated ++;
 
-                       current.add(
-                         LineSend(
-                             id: idNew.toString(),
-                             date: controllerSearch.text,
-                             factory: factoriesSector[i].name,
-                             observations: linesControllers[i].observations.text,
-                             state:manageState.parseState(linesControllers[i].state.text,context,true)),
-                       );
-                     }
-                   }
+                for(int i = 0; i < factoriesSector.length; i++)
+                {
+                  if(send[i] == true)
+                  {
+                    int idNew = idInit + current.length;
+                    allLinesCreated ++;
 
-                   String action = LocalizationHelper.sendsFactory(context, allLinesCreated);
-                   confirm(context,action);
-                 });
+                    current.add(
+                      LineSend(
+                          id: idNew.toString(),
+                          date: controllerSearch.text,
+                          factory: factoriesSector[i].name,
+                          observations: linesControllers[i].observations.text,
+                          state:manageState.parseState(linesControllers[i].state.text,context,true)),
+                    );
+
+                    linesControllers[i].observations.text="";
+                    send[i] = false;
+                    linesControllers[i].state.text = stateSends.first;
+                    selectedItem = "Preparado";
+                    print( linesControllers[i].state.text);
 
 
-                _onResetCamps(context);
+
+                  }
+                }
+                String action = LocalizationHelper.sendsFactory(context, allLinesCreated);
+                confirm(context,action);
               }
       }
       else
@@ -480,7 +486,7 @@ class _newSendState extends State<newSend> {
 */
       }
 
-
+    });
     if (conn != null)
     {
       if(select==-1)
@@ -520,25 +526,8 @@ class _newSendState extends State<newSend> {
     }
   }
 
-  Future<void> _onResetCamps(BuildContext context) async {
 
-     setState(() {
-
-       controllerSearchSend.text=DateFormat('dd-MM-yyyy').format( DateTime.now());
-
-       for(int i = 0; i < factoriesSector.length; i++)
-       {
-         linesControllers[i].observations.text="";
-         send[i] = false;
-         linesControllers[i].state.text = stateSends.first;
-         selectedItem = S.of(context).prepared;
-       }
-     });
-
-  }
 }
-
-
 
 
 
