@@ -5,11 +5,9 @@ import 'package:crud_factories/Alertdialogs/error.dart';
 import 'package:crud_factories/Backend/Global/controllers/LineSend.dart';
 import 'package:crud_factories/Backend/Global/list.dart';
 import 'package:crud_factories/Backend/SQL/createLine.dart';
-import 'package:crud_factories/Backend/SQL/modifyLines.dart';
 import 'package:crud_factories/Backend/Global/variables.dart';
 import 'package:crud_factories/Backend/CSV/exportLines.dart';
 import 'package:crud_factories/Functions/createId.dart';
-import 'package:crud_factories/Functions/manageArrays.dart';
 import 'package:crud_factories/Functions/manageState.dart';
 import 'package:crud_factories/Functions/validatorCamps.dart';
 import 'package:crud_factories/Objects/LineSend.dart';
@@ -18,12 +16,11 @@ import 'package:crud_factories/Widgets/headViewsAndroid.dart';
 import 'package:crud_factories/Widgets/textfield.dart';
 import 'package:crud_factories/generated/l10n.dart';
 import 'package:crud_factories/helpers/localization_helper.dart';
-import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:intl/intl.dart';
-import 'package:show_platform_date_picker/show_platform_date_picker.dart';
 import 'package:adaptive_scrollbar/adaptive_scrollbar.dart';
 import 'package:flutter/material.dart';
 import 'package:collection/collection.dart';
+import '../Backend/SQL/modifyLines.dart';
 import '../Widgets/CustomDataTable.dart';
 import '../Widgets/dropDownButton.dart' show GenericDropdown;
 import '../Widgets/headView.dart' show headView;
@@ -53,9 +50,12 @@ class _newSendState extends State<newSend> {
   double widthBar = 10.0;
   String tView ="";
   Sector? selectedSector = null;
-  String selectedItem = "Preparado";
+  String selectedItem = "";
+  List<LineSend> linesSelected = [];
+  List<LineSend> linesSave = [];
   String sector = "";
-  String stringFactories ="";
+  String campKey = " ";
+  String messageResult ="";
    int cantFactory= 0;
   List<String> stateSends =[];
   String tList = "";
@@ -65,7 +65,10 @@ class _newSendState extends State<newSend> {
   bool allSectors = true;
 
   List<String> sectorsString = [];
-  List<bool> send=[];
+  List<bool> send = [];
+
+  List<bool> observationModify = [];
+  List<bool> stateModify = [];
 
   late List<LineSendController> linesControllers;
   @override
@@ -107,6 +110,11 @@ class _newSendState extends State<newSend> {
 
     DateTime date = DateTime.now();
 
+    stateSends = [S.of(context).prepared, S.of(context).sent, S.of(context).in_progress, S.of(context).returned, S.of(context).he_responded, S.of(context).pending];
+
+    if(selectedItem.isEmpty)
+      selectedItem = S.of(context).prepared;
+
     if(select == -1)
     {
       tView = S.of(context).new_shipment;
@@ -120,12 +128,12 @@ class _newSendState extends State<newSend> {
       if(selectedSector==null)
         factoriesSector = allFactories;
 
-      stateSends = [S.of(context).prepared, S.of(context).sent, S.of(context).in_progress, S.of(context).returned, S.of(context).he_responded, S.of(context).pending];
+
       List<LineSend>linesNew = [];
 
           if(controllerSearchSend.text.isEmpty)
           {
-            controllerSearchSend.text=DateFormat('dd-MM-yyyy').format( DateTime.now());
+            controllerSearchSend.text = DateFormat('dd-MM-yyyy').format( DateTime.now());
           }
            if(selectedSector==S.of(context).allMale)
            {
@@ -158,11 +166,11 @@ class _newSendState extends State<newSend> {
           }
 
           cantFactory = factoriesSector.length;
-          stringFactories = LocalizationHelper.factoriesBD(context, cantFactory);
+          messageResult = LocalizationHelper.factoriesBD(context, cantFactory);
 
           loadLinesFromModel(context, linesNew, linesControllers);
     }
-    else
+    else if(saveChanges ==false)
     {
 
       tView = S.of(context).edit_shipment;
@@ -170,26 +178,64 @@ class _newSendState extends State<newSend> {
       action1 = S.of(context).save;
       action2 = S.of(context).undo;
 
-        List<LineSend> linesSelected = [];
+      linesSelected.clear();
+      linesControllers.clear();
 
          if(filter == S.of(context).date)
          {
+              campKey = S.of(context).company;
+
               linesSelected = allLines.where((line) {
                     return line.date == selectCamp;
 
                     }).toList();
+
+              int cant = linesSelected.length;
+              messageResult = LocalizationHelper.sendsDay(context, cant);
          }
          else
          {
+             campKey = S.of(context).date;
+
              linesSelected = allLines.where((line) {
                   return line.factory == selectCamp;
 
                  }).toList();
+print(S.of(context).send.toLowerCase());
+             int cant = linesSelected.length;
+             messageResult = LocalizationHelper.sendsFactory(context, cant);
          }
 
-        loadLinesFromModel(context, linesSelected, linesControllers);
-        controllerSearchSend.text = selectCamp;
-    }
+              linesControllers = List.generate(linesSelected.length,
+                      (_) => LineSendController(
+                      date: TextEditingController(),
+                      factory: TextEditingController(),
+                      sector: TextEditingController(),
+                      observations: TextEditingController(),
+                      state: TextEditingController()
+                  ));
+
+                   observationModify = List.generate(linesSelected.length, (index) => false);
+                   stateModify =  List.generate(linesSelected.length, (index) => false);
+
+                    linesSave = linesSelected
+                        .map((line) => LineSend(
+                      id: line.id,
+                      date: line.date,
+                      factory: line.factory,
+                      sector: line.sector,
+                      observations: line.observations,
+                      state: line.state,
+                    )).toList();
+
+                    if(linesSave.isEmpty)
+                    {
+                      linesSave = linesSelected;
+                    }
+
+              loadLinesFromModel(context, linesSelected, linesControllers);
+              controllerSearchSend.text = selectCamp;
+          }
 
     return Platform.isWindows
         ? Scaffold(
@@ -259,18 +305,19 @@ class _newSendState extends State<newSend> {
 
                               Padding(
                                 padding: const EdgeInsets.only(top: 40, left: 90, bottom: 30),
-                                child: customDataTable(
+                                child: select == -1
+                                     ? customDataTable(
                                        scrollController: verticalScrollTable,
                                        columns: allSectors == false
                                                  ? [S.of(context).company, S.of(context).observations, S.of(context).state, S.of(context).select]
                                                  : [S.of(context).company, S.of(context).sector ,S.of(context).observations, S.of(context).state, S.of(context).select],
                                        showSectorColumn: allSectors,
+                                       select: -1,
                                        states: stateSends,
                                        sendValues: send,
+                                       selectedItem: selectedItem,
                                        linesControllers: linesControllers,
-                                       mesage: stringFactories,
-                                       selectedItem:selectedItem,
-                                       onObservationChanged: (int , String ) {  },
+                                       mesage: messageResult,
                                        onStateChanged: (index , value ) {
                                          setState(() {
                                            linesControllers[index].state.text = value;
@@ -279,7 +326,6 @@ class _newSendState extends State<newSend> {
                                        },
                                        onSendChanged: (i, value) {
                                            send[i] = value;
-
                                            saveChanges = true;
                                            setState(() {});
                                        },
@@ -291,8 +337,54 @@ class _newSendState extends State<newSend> {
                                         saveChanges = true;
                                         setState(() {});
                                        },
-                                    ),
-                              ),
+                                    )
+
+                                    : customDataTable(
+                                    scrollController: verticalScrollTable,
+                                    columns: allSectors == false
+                                      ? [campKey, S.of(context).observations, S.of(context).state]
+                                      : [campKey, S.of(context).sector ,S.of(context).observations, S.of(context).state],
+                                         showSectorColumn: allSectors,
+                                        states: stateSends,
+                                        selectedItem: selectedItem,
+                                        linesControllers: linesControllers,
+                                        mesage: messageResult,
+                                        onObservationChanged: (index , String ) {
+                                          if(linesControllers[index].observations.text!=linesSelected[index].observations)
+                                          {
+                                             linesSelected[index].observations=linesControllers[index].observations.text;
+                                             observationModify[index] = true;
+
+                                             setState(() {
+                                               saveChanges = true;
+                                             });
+                                          }
+                                          else
+                                          {
+                                            observationModify[index] = false;
+                                          }
+
+
+                                        },
+                                        onStateChanged: (index , value ) {
+                                          setState(() {
+                                            linesControllers[index].state.text = value;
+                                            selectedItem = value; //
+
+                                              if(linesControllers[index].state.text != linesSelected[index].state)
+                                              {
+                                                linesSelected[index].state=linesControllers[index].state.text;
+                                                stateModify[index] = true;
+                                                saveChanges = true;
+                                              }
+                                              else
+                                              {
+                                                stateModify[index] = false;
+                                              }
+                                          });
+                                        }, sendValues: [], onSendChanged: (int p1, bool p2) {  }, onSelectedAllChanged: (value) {  },
+                                   ),
+                                  ),
 
                                   Padding(
                                       padding: const EdgeInsets.only(left: 750.0),
@@ -310,8 +402,7 @@ class _newSendState extends State<newSend> {
                                             child: materialButton(
                                               nameAction: action2,
                                               function: () =>
-                                              ///CAMBIAR
-                                              _onSaveSend(context,select,controllerSearchSend,linesControllers)
+                                              _onResetCamps(context, select),
                                               ),
                                       )
                                      ],
@@ -336,7 +427,8 @@ class _newSendState extends State<newSend> {
   Future<void> loadLinesFromModel(BuildContext context, List<LineSend> lines, List<LineSendController> controllersLines) async {
 
 
-        for(int i = 0; i<lines.length; i++)
+
+        for(int i = 0; i<lines.length && i < controllersLines.length; i++)
         {
             Sector? sectorSelected = sectors.firstWhereOrNull(
                   (sector) => sector.id == lines[i].sector!,
@@ -379,114 +471,67 @@ class _newSendState extends State<newSend> {
     setState(() {
       String idNew = "";
 
-      if(allLines.isNotEmpty)
-      {
-        String idLast = allLines[allLines.length-1].id;
+      if (allLines.isNotEmpty) {
+        String idLast = allLines[allLines.length - 1].id;
         idNew = createId(idLast);
       }
-      else
-      {
-        idNew ="1";
+      else {
+        idNew = "1";
       }
 
       int idInit = int.parse(idNew);
 
-      if(select == -1)
-      {
-              if (validatorCamps.dateCorrect(controllerSearch.text) == false)
-              {
+      if (select == -1) {
+        if (validatorCamps.dateCorrect(controllerSearch.text) == false) {
+          String array = S
+              .of(context)
+              .date;
+          String action = LocalizationHelper.format_must(context, array);
 
-                String array = S.of(context).date;
-                String action = LocalizationHelper.format_must(context, array);
+          String format = 'DD-MM-AAAA';
+          error(context, action, format);
+        }
+        else {
+          for (int i = 0; i < factoriesSector.length; i++) {
+            if (send[i] == true) {
+              int idNew = idInit + current.length;
+              allLinesCreated ++;
 
-                String format = 'DD-MM-AAAA';
-                error(context, action, format);
-              }
-              else
-              {
+              current.add(
+                LineSend(
+                    id: idNew.toString(),
+                    date: controllerSearch.text,
+                    factory: factoriesSector[i].name,
+                    observations: linesControllers[i].observations.text,
+                    state: manageState.parseState(
+                        linesControllers[i].state.text, context, true)),
+              );
 
-                for(int i = 0; i < factoriesSector.length; i++)
-                {
-                  if(send[i] == true)
-                  {
-                    int idNew = idInit + current.length;
-                    allLinesCreated ++;
-
-                    current.add(
-                      LineSend(
-                          id: idNew.toString(),
-                          date: controllerSearch.text,
-                          factory: factoriesSector[i].name,
-                          observations: linesControllers[i].observations.text,
-                          state:manageState.parseState(linesControllers[i].state.text,context,true)),
-                    );
-
-                    linesControllers[i].observations.text="";
-                    send[i] = false;
-                    linesControllers[i].state.text = stateSends.first;
-                    selectedItem = "Preparado";
-                    print( linesControllers[i].state.text);
-
-
-
-                  }
-                }
-                String action = LocalizationHelper.sendsFactory(context, allLinesCreated);
-                confirm(context,action);
-              }
-      }
-      else
-      {
-/*
-            if(saveChanges == true)
-            {
-                      for(int i = 0; i <lineEdit.length; i++)
-                      {
-                        if(lineEdit[i]==true)
-                        {
-                          allLinesModify++;
-                        }
-                      }
-
-
-                      String id='';
-                      for (int i = 0; i < lineSelected.length; i++)
-                      {
-
-                        id=lineSelected[i].id;
-
-                        for (int y = 0; y < lineSelected.length; y++)
-                        {
-
-                          if(lineSelected[i].id == id)
-                          {
-                            lineSelected[i].state = manageState.parseState(_controllerStateLine[i].text,context,false);
-                            lineSelected[i].observations = _controllersObserLine[i].text;
-                          }
-                        }
-
-                      }
-
-
-                      String action ='';
-                      if (allLinesModify == 0)
-                      {
-                        action = S.of(context).has_no_line_to_modify;
-                        error(context, action);
-                      }
-                      else
-                      {
-                        action = LocalizationHelper.cantLinesModify(context, allLinesModify);
-                        confirm(context,action);
-
-                        allLinesModify = 0;
-                      }
-
+              linesControllers[i].observations.text = "";
+              send[i] = false;
+              linesControllers[i].state.text = stateSends.first;
+              selectedItem = S.of(context).prepared;
             }
-*/
+          }
+          String action = LocalizationHelper.sendsFactory(context, allLinesCreated);
+          confirm(context, action);
+        }
       }
+      else {
+        for (int i = 0; i < linesSelected.length; i++) {
+          if (observationModify[i] || stateModify[i]) {
+            String id = linesSelected[i].id;
 
+            for (int x = 0; x < allLines.length; x++) {
+              if (allLines[x].id.trim() == id) {
+                allLines[x] = linesSelected[i];
+              }
+            }
+          }
+        }
+      }
     });
+
     if (conn != null)
     {
       if(select==-1)
@@ -495,7 +540,7 @@ class _newSendState extends State<newSend> {
       }
       else
       {
-       // sqlModifyLines(lineSelected, context);
+         sqlModifyLines(linesSelected, context);
       }
     }
     else
@@ -511,9 +556,6 @@ class _newSendState extends State<newSend> {
         if(select == -1)
         {
           send = List.generate(allFactories.length, (index) => false);
-         // lineEdit = List.generate(allFactories.length, (index) => false);
-
-          //resetCamps();
         }
       }
       else
@@ -526,7 +568,31 @@ class _newSendState extends State<newSend> {
     }
   }
 
+  Future<void> _onResetCamps(BuildContext context, int select) async {
 
+    setState(() {
+      if (select == -1)
+      {
+              controllerSearchSend.text = DateFormat('dd-MM-yyyy').format(DateTime.now());
+
+              for (int i = 0; i < factoriesSector.length; i++)
+              {
+                  linesControllers[i].observations.text = "";
+                  send[i] = false;
+                  linesControllers[i].state.text = stateSends.first;
+                  selectedItem = S.of(context).prepared;
+              }
+      }
+      else
+      {
+              for(int i = 0; i < linesSelected.length; i++)
+              {
+                linesControllers[i].observations.text = linesSave[i].observations;
+                linesControllers[i].state.text = linesSave[i].state;
+              }
+      }
+    });
+  }
 }
 
 
