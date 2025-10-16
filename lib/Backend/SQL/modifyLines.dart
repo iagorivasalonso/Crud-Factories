@@ -13,7 +13,7 @@ Future<void> sqlModifyLines(List<LineSend> lineSelected, BuildContext context) a
         String date = lineSelected[i].date;
         String factory = lineSelected[i].factory;
         String observations = lineSelected[i].observations;
-        String state = manageState.parseState(lineSelected[i].state.toString(),context,false);
+        String state = lineSelected[i].state;
 
         var result = await conn.query('update linesends set date=?,factory=?, observations=?,  state=? where id=?', [date, factory, observations,state, id]);
       }

@@ -22,10 +22,9 @@ csvImportLines(BuildContext context, List<String> fileContent, List<LineSend> li
               date:select[1],
               factory:select[2] ,
               observations: select[3] ,
-              state: manageState.parseState(select[4],context,
-                  true),
+              state: select[4],
           ));
-
+print(line);
     }
 
   } catch (e) {
