@@ -318,8 +318,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "select_shipment": MessageLookupByLibrary.simpleMessage(
       "Seleccionar envío",
     ),
-    "send": MessageLookupByLibrary.simpleMessage("Enviar"),
+    "send": MessageLookupByLibrary.simpleMessage("Envio"),
     "send_a": MessageLookupByLibrary.simpleMessage("Enviar a"),
+    "send_shipment": MessageLookupByLibrary.simpleMessage("Envio"),
     "sender": MessageLookupByLibrary.simpleMessage("Remitente"),
     "sending_mails": MessageLookupByLibrary.simpleMessage("Envío de emails"),
     "sends": MessageLookupByLibrary.simpleMessage("Envios"),
@@ -386,8 +387,12 @@ class MessageLookup extends MessageLookupByLibrary {
     "there_is_no_shipping_selected": MessageLookupByLibrary.simpleMessage(
       "No hay ningún envío seleccionado",
     ),
-    "this_company_was_made_to_this_company":
-        MessageLookupByLibrary.simpleMessage("A esta empresa se le realizaron"),
+    "these_companies_were_made": MessageLookupByLibrary.simpleMessage(
+      "A esta empresa se le realizaron",
+    ),
+    "this_company_was_made": MessageLookupByLibrary.simpleMessage(
+      "A esta empresa se le realizó",
+    ),
     "this_day_they_were_made": MessageLookupByLibrary.simpleMessage(
       "Este día se realizaron",
     ),

@@ -47,29 +47,28 @@ class LocalizationHelper {
 
   static String sendsFactory( BuildContext context,int countSendFactory) {
 
-    String preVar = S.of(context).this_company_was_made_to_this_company;
 
     return Intl.plural(
       countSendFactory,
-      one: '$preVar $countSendFactory ${S.of(context).sends.toLowerCase()}',
-      other: '$preVar $countSendFactory ${S.of(context).sends.toLowerCase()}',
+      one: '${S.of(context).this_company_was_made}  $countSendFactory ${S.of(context).shipment.toLowerCase()}',
+      other: '${S.of(context).these_companies_were_made} $countSendFactory ${S.of(context).sends.toLowerCase()}',
       name: "sendsFactory",
       args: [countSendFactory],
       examples: const {"countSendFactory": 0},
     );
   }
-
   static String sendsDay( BuildContext context,int countSendDay) {
 
     return Intl.plural(
       countSendDay,
-      one: '${S.of(context).this_day_was_made} $countSendDay ${S.of(context).shipment.toLowerCase()}',
-      other: '${S.of(context).this_day_they_were_made} $countSendDay ${S.of(context).shipments.toLowerCase()}',
+      one: '${S.of(context).this_day_was_made} $countSendDay ${S.of(context).send.toLowerCase()}',
+      other: '${S.of(context).this_day_they_were_made} $countSendDay ${S.of(context).sends.toLowerCase()}',
       name: "sendsDay",
       args: [countSendDay],
       examples: const {"countSendDay": 0},
     );
   }
+
 
   static String cantLinesModify( BuildContext context,int countSendDay) {
 

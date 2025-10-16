@@ -74,11 +74,6 @@ class S {
     return Intl.message('Base de datos', name: 'data_base', desc: '', args: []);
   }
 
-  /// `Eliminar`
-  String get delete {
-    return Intl.message('Eliminar', name: 'delete', desc: '', args: []);
-  }
-
   /// `Calle`
   String get street {
     return Intl.message('Calle', name: 'street', desc: '', args: []);
@@ -197,6 +192,11 @@ class S {
   /// `Editar`
   String get edit {
     return Intl.message('Editar', name: 'edit', desc: '', args: []);
+  }
+
+  /// `Eliminar`
+  String get delete {
+    return Intl.message('Eliminar', name: 'delete', desc: '', args: []);
   }
 
   /// `Email`
@@ -579,9 +579,14 @@ class S {
     return Intl.message('Remitente', name: 'sender', desc: '', args: []);
   }
 
-  /// `Enviar`
+  /// `Envio`
   String get send {
-    return Intl.message('Enviar', name: 'send', desc: '', args: []);
+    return Intl.message('Envio', name: 'send', desc: '', args: []);
+  }
+
+  /// `Envio`
+  String get send_shipment {
+    return Intl.message('Envio', name: 'send_shipment', desc: '', args: []);
   }
 
   /// `Enviar a`
@@ -1356,11 +1361,21 @@ class S {
     );
   }
 
+  /// `A esta empresa se le realizó`
+  String get this_company_was_made {
+    return Intl.message(
+      'A esta empresa se le realizó',
+      name: 'this_company_was_made',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `A esta empresa se le realizaron`
-  String get this_company_was_made_to_this_company {
+  String get these_companies_were_made {
     return Intl.message(
       'A esta empresa se le realizaron',
-      name: 'this_company_was_made_to_this_company',
+      name: 'these_companies_were_made',
       desc: '',
       args: [],
     );
