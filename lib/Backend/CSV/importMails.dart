@@ -1,46 +1,49 @@
 import 'dart:convert';
+import 'dart:io';
 import 'package:crud_factories/Backend/Global/list.dart';
 import 'package:crud_factories/Backend/Global/files.dart';
 import 'package:crud_factories/Objects/Mail.dart';
 import 'package:crud_factories/generated/l10n.dart';
 import 'package:flutter/material.dart';
 
-csvImportMails(BuildContext context, List<String> fileContent, List<Mail> mails) async {
+
+Future<void >csvImportMails(BuildContext context, List<String> fileContent, List<Mail> mails) async {
 
   try {
 
-    final content = await fMails.readAsString(encoding: utf8);
-    final lines = const LineSplitter().convert(content);
-
-    for (int i = 0; i < lines.length; i++)
-    {
-      List<String> select  = lines[i].split(";");
-
-          mails.add(Mail(
-              id: select[0].trim(),
-              addrres: select[1].trim(),
-              company: select[2].trim(),
-              password: select[3].trim()
-          ));
-    }
+    mails.addAll(await readMailsFromCsv(fMails));
 
   } catch (e) {
     String array = S.of(context).mails;
 
-    if(e.toString().contains("El sistema no puede encontrar el archivo especificado"))
-    {
-      String noFile =  S.of(context).file_not_found;
-      errorFiles.add("$noFile $array");
+    if(e.toString().contains("El sistema no puede encontrar el archivo especificado")) {
+      errorFiles.add("${S.of(context).file_not_found} $array");
     }
-    else
-    {
-      if(e.toString().contains("Invalid value"))
-      {
-        String errorFile =  S.of(context).file_format_error;
-        errorFiles.add("$errorFile $array");
-      }
+    else if(e.toString().contains("Invalid value")) {
+      errorFiles.add("${S.of(context).file_format_error} $array");
     }
   }
+}
 
-  return mails;
+Future<List<Mail>> readMailsFromCsv(File file) async {
+
+  final content = await file.readAsString(encoding: utf8);
+  final lines = const LineSplitter()
+      .convert(content)
+      .where((line) => line.trim().isNotEmpty)
+      .toList();
+
+  final mail = <Mail>[];
+
+  for( final line in lines) {
+    final parts = line.split(";");
+    if (parts.length < 4) continue;
+    mail.add(Mail(
+      id: parts[0].trim(),
+      addrres: parts[1].trim(),
+      company: parts[2].trim(),
+      password: parts[3].trim()
+    ));
+  }
+  return mail;
 }

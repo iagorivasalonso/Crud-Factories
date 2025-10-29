@@ -28,14 +28,14 @@ Future<bool> chargueDataCSV(BuildContext context) async {
     Directory currentDir = Directory.current;
     Directory parentDir = currentDir.parent;
 
-    routeFirst = r'C:\datosApp\routes.csv';
+    routeFirst = parentDir.path;
     fRoutes = File(routeFirst);
   }
 
   final filePathRoutes = fRoutes;
 
   try {
-    routesManage.add(await csvImportRoutes(context,fileContent, routesManage));
+    await csvImportRoutes(context, routesManage);
   } catch (Exeption) {
 
   }
@@ -85,50 +85,21 @@ Future<bool> chargueDataCSV(BuildContext context) async {
 
      if(isCorrect = true)
      {
-       conections.clear();
-       fConections = File(routesManage[1].route);
-
-       try {
-         conections.add(await csvImportConections(context,fileContent, conections));
-       } catch (Exeption) {
-
-       }
-
-       try {
-
-         dynamic routeServer = routesManage[2].route;
-
-         fServer = File(routeServer);
-
-       } catch (Exeption) {
-
-       }
-
-
-
        sectors.clear();
        fSectors = File(routesManage[3].route);
 
        try {
-         sectors.add(await csvImportSectors(context,fileContent, sectors));
+         await csvImportSectors(context, sectors);
        } catch (Exeption) {
 
        }
 
-       allFactories.clear();
-       fFactories = File(routesManage[4].route);
+
+       mails.clear();
+       fMails = File(routesManage[7].route);
 
        try {
-         allFactories.add(await csvImportFactories(context,fileContent, allFactories));
-       } catch (Exeption) {
-
-       }
-
-       empleoyes.clear();
-       fEmpleoyes = File(routesManage[5].route);
-
-       try {
-         empleoyes.add(await csvImportEmpleoyes(context,fileContent, empleoyes));
+         await csvImportMails(context,fileContent, mails);
        } catch (Exeption) {
 
        }
@@ -137,20 +108,33 @@ Future<bool> chargueDataCSV(BuildContext context) async {
        fLines = File(routesManage[6].route);
 
        try {
-         allLines.add(await csvImportLines(context,fileContent, allLines));
+         await csvImportLines(context, allLines);
        } catch (Exeption) {
 
        }
-       mails.clear();
 
-       fMails = File(routesManage[7].route);
+       conections.clear();
+       fConections = File(routesManage[1].route);
 
        try {
-         mails.add(await csvImportMails(context,fileContent, mails));
+         await csvImportConections(context,conections);
        } catch (Exeption) {
 
        }
 
+       try {
+
+         dynamic routeServer = routesManage[2].route;
+         fServer = File(routeServer);
+
+       } catch (Exeption) {
+
+       }
+
+       allFactories.clear();
+       fFactories = File(routesManage[4].route);
+
+       await csvImportFactories(context, allFactories);
      }
   }
   else

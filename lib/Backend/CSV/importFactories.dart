@@ -1,57 +1,60 @@
 import 'dart:convert';
+import 'dart:io';
 import 'package:crud_factories/Backend/Global/list.dart';
 import 'package:crud_factories/Backend/Global/files.dart';
 import 'package:crud_factories/Objects/Factory.dart';
 import 'package:crud_factories/generated/l10n.dart';
 import 'package:flutter/material.dart';
 
-csvImportFactories(BuildContext context, List<String> fileContent, List<Factory> factories) async {
+
+Future<void> csvImportFactories(BuildContext context, List<Factory> factories) async {
 
   try {
 
-    final content = await fFactories.readAsString(encoding: utf8);
-    final lines = const LineSplitter().convert(content);
-
-    for (int i = 0; i < lines.length; i++) {
-
-      List<String> select = lines[i].split(";");
-
-          factories.add(Factory(
-            id: select[0],
-            name: select[1],
-            highDate: select[2],
-            sector: select[3],
-            thelephones: [select[4], select[5]],
-            mail: select[6],
-            web: select[7],
-            address: {
-              'street': select[8],
-              'number': select[9],
-              'apartament': select[10],
-              'city': select[11],
-              'postalCode': select[12],
-              'province': select[13],
-            },
-          ));
-    }
+    factories.addAll(await readFactoriesFromCsv(fFactories));
 
   } catch (e) {
     String array = S.of(context).companies;
 
-    if(e.toString().contains("El sistema no puede encontrar el archivo especificado"))
-    {
-      String noFile =  S.of(context).file_not_found;
-      errorFiles.add("$noFile $array");
+    if(e.toString().contains("El sistema no puede encontrar el archivo especificado")) {
+      errorFiles.add("${S.of(context).file_not_found} $array");
     }
-    else
-    {
-      if(e.toString().contains("Invalid value"))
-      {
-        String errorFile =  S.of(context).file_format_error;
-        errorFiles.add("$errorFile $array");
-      }
+    else if(e.toString().contains("Invalid value")) {
+      errorFiles.add("${S.of(context).file_format_error} $array");
     }
   }
+}
 
-  return factories;
+Future<List<Factory>> readFactoriesFromCsv(File file) async {
+
+  final content = await file.readAsString(encoding: utf8);
+  final lines = const LineSplitter()
+      .convert(content)
+      .where((line) => line.trim().isNotEmpty)
+      .toList();
+
+  final factory = <Factory>[];
+
+  for( final line in lines) {
+    final parts = line.split(";");
+    if (parts.length < 14) continue;
+    factory.add(Factory(
+      id: parts[0],
+      name: parts[1],
+      highDate: parts[2],
+      sector: parts[3],
+      thelephones: [parts[4], parts[5]],
+      mail: parts[6],
+      web: parts[7],
+      address: {
+        'street': parts[8],
+        'number': parts[9],
+        'apartament': parts[10],
+        'city': parts[11],
+        'postalCode': parts[12],
+        'province': parts[13],
+      },
+    ));
+  }
+  return factory;
 }
