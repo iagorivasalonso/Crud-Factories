@@ -219,7 +219,7 @@ class _sendMailState extends State<sendMail> {
                       ],
                     ),
 
-
+                    if(allLines.isNotEmpty)
                     Padding(
                             padding: const EdgeInsets.only(left: 30.0),
                             child: GenericRadioGroup<String>(
