@@ -170,7 +170,7 @@ class _sendMailState extends State<sendMail> {
                     layoutVariant(
                       items: [
                         Flexible(
-                          flex: 8,
+                          flex: 9,
                           child: otherMail == false
                               ? GenericDropdown<Mail>(
                                 items: mails,
@@ -199,11 +199,11 @@ class _sendMailState extends State<sendMail> {
                           ),
                         ),
 
-
+                        if(mails.isNotEmpty)
                         Flexible(
                           flex: 1,
                           child: Padding(
-                            padding: const EdgeInsets.only(top: 20),
+                            padding: const EdgeInsets.only(top: 20,left:22),
                             child: materialButton(
                               nameAction: otherMail == false
                                   ? S.of(context).orther
@@ -215,7 +215,7 @@ class _sendMailState extends State<sendMail> {
                               },
                             ),
                           ),
-                        ),
+                        )
                       ],
                     ),
 
