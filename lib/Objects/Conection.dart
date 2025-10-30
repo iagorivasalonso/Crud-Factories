@@ -1,5 +1,7 @@
 
-class Conection {
+import 'package:crud_factories/Frontend/importData.dart';
+
+class Conection extends BaseEntity {
 
   String id;
   String database;

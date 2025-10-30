@@ -1,4 +1,6 @@
-class Empleoye {
+import '../Frontend/importData.dart';
+
+class Empleoye extends BaseEntity {
 
   String id;
   String name;

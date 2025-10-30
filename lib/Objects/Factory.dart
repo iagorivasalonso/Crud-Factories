@@ -1,4 +1,6 @@
-class Factory {
+import '../Frontend/importData.dart';
+
+class Factory extends BaseEntity {
 
   String id;
   String name;
