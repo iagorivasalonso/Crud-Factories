@@ -8,11 +8,11 @@ import 'package:crud_factories/Backend/CSV/exportEmpleoyes.dart';
 import 'package:crud_factories/Backend/CSV/exportRoutes.dart';
 import 'package:crud_factories/Backend/CSV/exportSectors.dart';
 import 'package:crud_factories/Backend/CSV/importConections.dart';
-import 'package:crud_factories/Backend/CSV/importEmpleoyes.dart';
 import 'package:crud_factories/Backend/CSV/importFactories.dart';
 import 'package:crud_factories/Backend/CSV/importMails.dart';
 import 'package:crud_factories/Backend/CSV/importRoutes.dart';
 import 'package:crud_factories/Backend/CSV/importSectors.dart' show readSectorsFromCsv;
+import 'package:crud_factories/Backend/Global/controllers/List.dart' show ListController;
 import 'package:crud_factories/Backend/Global/list.dart';
 import 'package:crud_factories/Backend/SQL/createEmpleoye.dart';
 import 'package:crud_factories/Backend/SQL/createFactory.dart';
@@ -36,6 +36,7 @@ import 'package:crud_factories/generated/l10n.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 
+import '../Backend/CSV/importEmpleoyes.dart';
 import '../Backend/CSV/importLines.dart';
 import '../Objects/RouteCSV.dart' show RouteCSV;
 import '../helpers/localization_helper.dart';
@@ -53,24 +54,30 @@ class _newImportState extends State<newImport> {
   final ScrollController horizontalScroll = ScrollController();
   final ScrollController verticalScroll = ScrollController();
 
-  TextEditingController controllerDatePicker = new TextEditingController();
-
   double widthBar = 10.0;
   int idEndList = 0;
 
+  TextEditingController controllerDatePicker = new TextEditingController();
+
+  late ListController listController;
+
+  @override
+  void initState (){
+
+     listController = new ListController(
+         routesNew: [],
+         sectorsNew: [],
+         empleoyesNew: [],
+         mailsNew: [],
+         linesNew: [],
+         conectionsNew: [],
+         factoriesNew: []);
+  }
   @override
   Widget build(BuildContext context0) {
 
     BuildContext context = Platform.isWindows ? context1 : context0;
 
-    List<Sector> sectorsNew = [];
-
-    List<Empleoye> empleoyesNew = [];
-    List<RouteCSV> routesNew = [];
-    List<Mail> mailsNew = [];
-    List<LineSend> linesNew = [];
-    List<Conection> conectionsNew = [];
-    List<Factory> factoriesNew =[];
     if(idEndList == 0)
     {
       for(int i = 0; i < allFactories.length; i++)
@@ -149,7 +156,7 @@ class _newImportState extends State<newImport> {
                                     style: const TextStyle(color: Colors.white),
                                   ),
                                   onPressed: (){
-                                    _pickFile(context, controllerDatePicker,routesNew,sectorsNew,factoriesNew,empleoyesNew,mailsNew,linesNew,conectionsNew);
+                                    _pickFile(context, controllerDatePicker,listController);
                                   },
                                 ),
                               )
@@ -166,148 +173,8 @@ class _newImportState extends State<newImport> {
                                 MaterialButton(
                                   color: Colors.lightBlue,
                                   child: Text(S.of(context).import_data,
-                                    style:  const TextStyle(color: Colors.white) ,),
-                                  onPressed: () async {
-                                    String array = '';
-                                    int count = 0;
-                                    String action = "";
-
-                                    if (routesNew.isNotEmpty)
-                                    {
-                                        array = S.of(context).routes;
-                                        count += await processImport(
-                                          newList: routesNew,
-                                          existingList: routesManage,
-                                          getKey: (r) => r.route,
-                                          setId: (r, id) => r.id = id,
-                                          csvExport: csvExportatorRoutes,
-                                          conn: conn,
-                                      );
-                                    }
-
-                                    if (sectorsNew.isNotEmpty)
-                                    {
-                                        array = S.of(context).sectors;
-                                        count += await processImport(
-                                          newList: sectorsNew,
-                                          existingList: sectors,
-                                          getKey: (s) => s.name,
-                                          setId: (s, id) => s.id = id,
-                                          csvExport: csvExportatorSectors,
-                                          sqlExport: sqlCreateSector,
-                                          conn: conn,
-                                        );
-                                    }
-
-                                    if (empleoyesNew.isNotEmpty)
-                                    {
-                                         List<Empleoye> tmp =
-                                             empleoyesNew.where((e) => allFactories.any((f)=> f.id == e.idFactory))
-                                             .toList();
-
-                                         empleoyesNew = tmp;
-
-                                         if(empleoyesNew.isNotEmpty)
-                                         {
-                                           array = S.of(context).mails;
-                                           count += await processImport(
-                                             newList: empleoyesNew,
-                                             existingList: empleoyes,
-                                             getKey: (e) => e.name,
-                                             setId: (e, id) => e.id = id,
-                                             csvExport: csvExportatorEmpleoyes,
-                                             sqlExport: sqlCreateEmpleoye,
-                                             conn: conn,
-                                           );
-                                         }
-                                    }
-
-                                    if (mailsNew.isNotEmpty)
-                                    {
-                                        array = S.of(context).mails;
-                                        count += await processImport(
-                                          newList: mailsNew,
-                                          existingList: mails,
-                                          getKey: (m) => m.addrres,
-                                          setId: (s, id) => s.id = id,
-                                          csvExport: csvExportatorMails,
-                                          sqlExport: sqlCreateMail,
-                                          conn: conn,
-                                        );
-                                    }
-
-                                    if (linesNew.isNotEmpty)
-                                    {
-                                        List<LineSend> tmp =
-                                        linesNew.where((l) => allFactories.any((e)=> l.factory == e.id))
-                                            .toList();
-
-                                        linesNew = tmp;
-
-                                        if(linesNew.isNotEmpty)
-                                        {
-                                          array = S.of(context).lines;
-                                          count += await processImport(
-                                            newList: linesNew,
-                                            existingList: allLines,
-                                            getKey: (l) => l.factory,
-                                            setId: (e, id) => e.id = id,
-                                            csvExport: csvExportatorLines,
-                                            sqlExport: (lines) => sqlCreateLine(lines, context),
-                                            conn: conn,
-                                          );
-                                        }
-                                    }
-
-                                    if (conectionsNew.isNotEmpty)
-                                    {
-                                      array = S.of(context).connection;
-                                      count += await processImport(
-                                        newList: conectionsNew,
-                                        existingList: conections,
-                                        getKey: (c) => c.database,
-                                        setId: (c, id) => c.id = id,
-                                        csvExport: csvExportatorConections,
-                                        conn: conn,
-                                      );
-                                    }
-
-                                    if (factoriesNew.isNotEmpty)
-                                    {
-                                      List<Factory> tmp =
-                                      factoriesNew.where((f) => sectors.any((e)=> f.sector == e.id))
-                                          .toList();
-
-                                      factoriesNew = tmp;
-
-                                      if(factoriesNew.isNotEmpty)
-                                      {
-                                        array = S.of(context).company;
-                                        count += await processImport(
-                                          newList: factoriesNew,
-                                          existingList: allFactories,
-                                          getKey: (f) => f.name,
-                                          setId: (e, id) => e.id = id,
-                                          csvExport: csvExportatorFactories,
-                                          sqlExport: sqlCeateFactory,
-                                          conn: conn,
-                                        );
-                                      }
-                                    }
-
-                                    array = array.toLowerCase();
-
-                                    if(count > 0)
-                                    {
-                                      action = LocalizationHelper.importData(context,array, count);
-                                      confirm(context,action);
-                                    }
-                                    else
-                                    {
-                                      action = LocalizationHelper.no_do_import(context, array);
-                                      confirm(context, action);
-                                    }
-                                  }
+                                   style:  const TextStyle(color: Colors.white) ,),
+                                  onPressed: ()=> _onSaveList(context,listController)
                                 ),
                                 MaterialButton(
                                   color: Colors.lightBlue,
@@ -341,11 +208,150 @@ class _newImportState extends State<newImport> {
 
 }
 
-Future<void> _onSaveList() async {
+Future<void> _onSaveList(BuildContext context, ListController listController) async {
 
+  String array = '';
+  int count = 0;
+  String action = "";
+
+  if (listController.routesNew.isNotEmpty)
+  {
+    array = S.of(context).routes;
+    count += await processImport(
+      newList: listController.routesNew,
+      existingList: routesManage,
+      getKey: (r) => r.route,
+      setId: (r, id) => r.id = id,
+      csvExport: csvExportatorRoutes,
+      conn: conn,
+    );
+  }
+
+  if (listController.sectorsNew.isNotEmpty)
+  {
+    array = S.of(context).sectors;
+    count += await processImport(
+      newList: listController.sectorsNew,
+      existingList: sectors,
+      getKey: (s) => s.name,
+      setId: (s, id) => s.id = id,
+      csvExport: csvExportatorSectors,
+      sqlExport: sqlCreateSector,
+      conn: conn,
+    );
+  }
+
+  if (listController.empleoyesNew.isNotEmpty)
+  {
+    List<Empleoye> tmp =
+    listController.empleoyesNew.where((e) => allFactories.any((f)=> f.id == e.idFactory))
+        .toList();
+
+    List<Empleoye> empleoyesNew = tmp;
+
+    if(empleoyesNew.isNotEmpty)
+    {
+      array = S.of(context).mails;
+      count += await processImport(
+        newList: empleoyesNew,
+        existingList: empleoyes,
+        getKey: (e) => e.name,
+        setId: (e, id) => e.id = id,
+        csvExport: csvExportatorEmpleoyes,
+        sqlExport: sqlCreateEmpleoye,
+        conn: conn,
+      );
+    }
+  }
+
+  if (listController.mailsNew.isNotEmpty)
+  {
+    array = S.of(context).mails;
+    count += await processImport(
+      newList: listController.mailsNew,
+      existingList: mails,
+      getKey: (m) => m.addrres,
+      setId: (s, id) => s.id = id,
+      csvExport: csvExportatorMails,
+      sqlExport: sqlCreateMail,
+      conn: conn,
+    );
+  }
+
+  if (listController.linesNew.isNotEmpty)
+  {
+    List<LineSend> tmp =
+    listController.linesNew.where((l) => allFactories.any((e)=> l.factory == e.id))
+        .toList();
+
+    List<LineSend> linesNew = tmp;
+
+    if(linesNew.isNotEmpty)
+    {
+      array = S.of(context).lines;
+      count += await processImport(
+        newList: linesNew,
+        existingList: allLines,
+        getKey: (l) => l.factory,
+        setId: (e, id) => e.id = id,
+        csvExport: csvExportatorLines,
+        sqlExport: (lines) => sqlCreateLine(lines, context),
+        conn: conn,
+      );
+    }
+  }
+
+  if (listController.conectionsNew.isNotEmpty)
+  {
+    array = S.of(context).connection;
+    count += await processImport(
+      newList: listController.conectionsNew,
+      existingList: conections,
+      getKey: (c) => c.database,
+      setId: (c, id) => c.id = id,
+      csvExport: csvExportatorConections,
+      conn: conn,
+    );
+  }
+
+  if (listController.factoriesNew.isNotEmpty)
+  {
+    List<Factory> tmp =
+    listController.factoriesNew.where((f) => sectors.any((e)=> f.sector == e.id))
+        .toList();
+
+    List<Factory> factoriesNew = tmp;
+
+    if(listController.factoriesNew.isNotEmpty)
+    {
+      array = S.of(context).company;
+      count += await processImport(
+        newList: factoriesNew,
+        existingList: allFactories,
+        getKey: (f) => f.name,
+        setId: (e, id) => e.id = id,
+        csvExport: csvExportatorFactories,
+        sqlExport: sqlCeateFactory,
+        conn: conn,
+      );
+    }
+  }
+
+  array = array.toLowerCase();
+
+  if(count > 0)
+  {
+    action = LocalizationHelper.importData(context,array, count);
+    confirm(context,action);
+  }
+  else
+  {
+    action = LocalizationHelper.no_do_import(context, array);
+    confirm(context, action);
+  }
 }
 
-Future<void> _pickFile(BuildContext context, TextEditingController controllerDatePicker,List<RouteCSV> routesNew,List<Sector> sectors, List<Factory> factories, List<Empleoye> empleoyes, List<Mail> mails, List<LineSend> lines, List<Conection> conections) async {
+Future<void> _pickFile(BuildContext context, TextEditingController controllerDatePicker, ListController listController) async {
 
 
   FilePickerResult? result =  await FilePicker.platform.pickFiles(
@@ -370,35 +376,35 @@ Future<void> _pickFile(BuildContext context, TextEditingController controllerDat
     switch(parts.length)
     {
       case 2:
-        sectors.addAll(await readSectorsFromCsv(file));
+        listController.sectorsNew.addAll(await readSectorsFromCsv(file));
         break;
 
       case 3:
         if(file.path.contains('routes.csv'))
         {
 
-          routesCSV.addAll(await readRoutesFromCsv(file));
+          listController.routesNew.addAll(await readRoutesFromCsv(file));
         }
         else
         {
-          empleoyes.addAll(await readEmpleoyeFromCsv(file));
+          listController.empleoyesNew.addAll(await readEmpleoyeFromCsv(file));
         }
         break;
 
       case 4:
-        mails.addAll(await readMailsFromCsv(file));
+        listController.mailsNew.addAll(await readMailsFromCsv(file));
         break;
 
       case 5:
-        lines.addAll(await readLinesFromCsv(file));
+        listController.linesNew.addAll(await readLinesFromCsv(file));
         break;
 
       case 6:
-        conections.addAll(await readConectionsFromCsv(file));
+        listController.conectionsNew.addAll(await readConectionsFromCsv(file));
         break;
 
       case 14:
-        factories.addAll(await readFactoriesFromCsv(file));
+        listController.factoriesNew.addAll(await readFactoriesFromCsv(file));
         break;
 
       default:
