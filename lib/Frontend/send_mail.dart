@@ -26,7 +26,7 @@ import 'package:mailer/src/entities/attachment.dart';
 
 import '../Backend/Global/controllers/Mail.dart';
 import '../Widgets/dropDownButton.dart';
-import '../Widgets/fileAttachment.dart';
+import '../Widgets/FilePickerField.dart';
 import '../Widgets/layoutVariant.dart';
 import '../Widgets/materialButton.dart';
 import '../Widgets/tableElements.dart';
@@ -284,11 +284,12 @@ class _sendMailState extends State<sendMail> {
                           ),
 
 
-                          Fileattachment(
+                          FilePickerField(
                             camp: controllers.subject!,
                             multiple: true,
                             attachments: controllers.attachments,
                             allowedExtensions: ['pdf', 'csv', 'jpg'], // extensiones permitidas
+                            actionName: S.of(context).attach,
                             onFilesChanged: (files) {
                               setState(() {
                                 controllers.attachments.addAll(files);

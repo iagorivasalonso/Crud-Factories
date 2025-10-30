@@ -8,40 +8,40 @@ import 'package:flutter/material.dart' hide IconButton;
 import '../Backend/Global/variables.dart';
 import 'materialButton.dart';
 
-class Fileattachment extends StatefulWidget {
+class FilePickerField extends StatefulWidget {
 
   final TextEditingController camp;
-  final List<String>? allowedExtensions;
+  final List<String> allowedExtensions;
+  final String actionName;
   final bool multiple;
   final List<File>? attachments;
   final File? singleAttachment;
   final void Function(List<File>)? onFilesChanged;
   final void Function(File?)? onFileChange;
 
-  const Fileattachment({
+  const FilePickerField({
     super.key,
     required this.camp,
-    this.allowedExtensions,
+    required this.allowedExtensions,
+    required this.actionName,
     this.multiple = true,
     this.attachments,
     this.singleAttachment,
     this.onFileChange,
-    this.onFilesChanged
+    this.onFilesChanged,
   });
 
   @override
-  State<Fileattachment> createState() => _FileattachmentState();
+  State<FilePickerField> createState() => _FilePickerFieldState();
 }
 
-class _FileattachmentState extends State<Fileattachment> {
-  get camp => null;
+class _FilePickerFieldState extends State<FilePickerField> {
+
 
 
   Future<void> _pickFile(BuildContext context) async {
     FilePickerResult? result = await FilePicker.platform.pickFiles(
-      dialogTitle: S
-          .of(context)
-          .select_file,
+      dialogTitle: S.of(context).select_file,
       type: widget.allowedExtensions != null
           ? FileType.custom
           : FileType.any,
@@ -83,11 +83,14 @@ class _FileattachmentState extends State<Fileattachment> {
 
               ),
               const SizedBox(width: 8),
-              materialButton(
-                 nameAction: S.of(context).attach,
-                 function: () async {
-                   _pickFile(context);
-                 },
+              Padding(
+                padding: const EdgeInsets.only(top: 8),
+                child: materialButton(
+                   nameAction: widget.actionName,
+                   function: () async {
+                     _pickFile(context);
+                   },
+                ),
               ),
             ],
           ),
