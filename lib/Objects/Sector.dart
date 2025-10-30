@@ -1,4 +1,6 @@
-class Sector {
+import '../Frontend/importData.dart';
+
+class Sector extends BaseEntity {
 
   String id;
   String name;

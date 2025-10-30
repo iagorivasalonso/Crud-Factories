@@ -1,8 +1,10 @@
-class RouteCSV {
+import '../Frontend/importData.dart';
 
-  final String id;
-  final String name;
-  final String route;
+class RouteCSV extends BaseEntity {
+
+  String id;
+  String name;
+  String route;
 
   RouteCSV ({
     required this.id,

@@ -1,10 +1,12 @@
 import 'package:crud_factories/generated/l10n.dart';
 import 'package:flutter/src/widgets/framework.dart';
 
+import '../Frontend/importData.dart';
+
 
 enum LineSendState {prepared, pending, sent, in_progress, returned,has_responded}
 
-class LineSend {
+class LineSend extends BaseEntity {
 
   String id;
   String date;

@@ -1,5 +1,7 @@
 
-class Mail {
+import '../Frontend/importData.dart';
+
+class Mail extends BaseEntity {
 
    String id;
    String addrres;
