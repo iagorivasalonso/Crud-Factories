@@ -40,7 +40,7 @@ Future<List<Mail>> readMailsFromCsv(File file) async {
     if (parts.length < 4) continue;
     mail.add(Mail(
       id: parts[0].trim(),
-      addrres: parts[1].trim(),
+      address: parts[1].trim(),
       company: parts[2].trim(),
       password: parts[3].trim()
     ));

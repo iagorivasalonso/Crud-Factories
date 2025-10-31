@@ -123,7 +123,7 @@ class _sendMailState extends State<sendMail> {
     {
            if (selectedMail==null)
            {
-               controllers.mailTo!.text = mails[0].addrres;
+               controllers.mailTo!.text = mails[0].address;
                controllers.password.text =  mails[0].password;
                mailSave = true;
            }
@@ -176,8 +176,8 @@ class _sendMailState extends State<sendMail> {
                                 items: mails,
                                 camp: S.of(context).sender,
                                 selectedItem: selectedMail,
-                                hint: mails[0].addrres,
-                                itemLabel: (Mail) => Mail.addrres,
+                                hint: mails[0].address,
+                                itemLabel: (Mail) => Mail.address,
                                 onChanged: (mailChoose) => _onMailChanged(mailChoose),
                               )
                               : Row(
@@ -348,7 +348,7 @@ class _sendMailState extends State<sendMail> {
       setState(() {
         selectedMail = mailChoose;
 
-        controllers.mail.text = mailChoose!.addrres;
+        controllers.mail.text = mailChoose!.address;
 
         Codec<String, String> stringToBase64 = utf8.fuse(base64);
         String password = stringToBase64.decode(controllers.password.text);
@@ -431,10 +431,10 @@ Future<void> _onSendMail(BuildContext context,MailController controllers, bool o
 
   if(correct)
   {
-    List <String> separeAddrres = controllers.mailTo!.text.split("@");
+    List <String> separeaddress = controllers.mailTo!.text.split("@");
 
     final message = Message()
-      ..from = Address(controllers.mailTo!.text, separeAddrres[0])
+      ..from = Address(controllers.mailTo!.text, separeaddress[0])
       ..recipients.add(controllers.mailTo!.text)
       ..subject = controllers.subject!.text
       ..text = controllers.message!.text

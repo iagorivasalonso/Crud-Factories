@@ -579,14 +579,9 @@ class S {
     return Intl.message('Remitente', name: 'sender', desc: '', args: []);
   }
 
-  /// `Envio`
+  /// `Enviar`
   String get send {
-    return Intl.message('Envio', name: 'send', desc: '', args: []);
-  }
-
-  /// `Envio`
-  String get send_shipment {
-    return Intl.message('Envio', name: 'send_shipment', desc: '', args: []);
+    return Intl.message('Enviar', name: 'send', desc: '', args: []);
   }
 
   /// `Enviar a`
@@ -1511,6 +1506,16 @@ class S {
     );
   }
 
+  /// `No pertenece al sector`
+  String get does_not_belong_to_the_sector {
+    return Intl.message(
+      'No pertenece al sector',
+      name: 'does_not_belong_to_the_sector',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `No hay empresas para importar`
   String get there_is_no_companies_to_import {
     return Intl.message(
@@ -1651,6 +1656,41 @@ class S {
       desc: '',
       args: [],
     );
+  }
+
+  /// `No puede cargar`
+  String get cant_not_load {
+    return Intl.message(
+      'No puede cargar',
+      name: 'cant_not_load',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Porque no tiene`
+  String get because_it_does_not_have {
+    return Intl.message(
+      'Porque no tiene',
+      name: 'because_it_does_not_have',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `en  el departamento`
+  String get in_the_department {
+    return Intl.message(
+      'en  el departamento',
+      name: 'in_the_department',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `La linea`
+  String get the_line {
+    return Intl.message('La linea', name: 'the_line', desc: '', args: []);
   }
 
   /// `no puede quedar vacío`

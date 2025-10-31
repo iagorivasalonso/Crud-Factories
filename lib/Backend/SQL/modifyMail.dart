@@ -7,7 +7,7 @@ Future<void> sqlModifyMail(List<Mail> mail) async {
 
     String id = mail[0].id;
     String company = mail[0].company;
-    String email = mail[0].addrres;
+    String email = mail[0].address;
     String password = mail[0].password;
 
     var result = await conn.query('update mails set company=?,mail=?,password=? where id=?', [company,email,password, id]);

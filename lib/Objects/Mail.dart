@@ -4,13 +4,13 @@ import '../Frontend/importData.dart';
 class Mail extends BaseEntity {
 
    String id;
-   String addrres;
+   String address;
    String company;
    String password;
 
    Mail({
     required this.id,
-    required this.addrres,
+    required this.address,
     required this.company,
     required this.password
 });

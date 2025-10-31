@@ -72,6 +72,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "april": MessageLookupByLibrary.simpleMessage("Abril"),
     "attach": MessageLookupByLibrary.simpleMessage("Adjuntar"),
     "august": MessageLookupByLibrary.simpleMessage("Agosto"),
+    "because_it_does_not_have": MessageLookupByLibrary.simpleMessage(
+      "Porque no tiene",
+    ),
     "can_not_go_blank_fields": MessageLookupByLibrary.simpleMessage(
       "No pueden quedar campos en blanco",
     ),
@@ -80,6 +83,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "cannot_go_empty": MessageLookupByLibrary.simpleMessage(
       "no puede quedar vacío",
     ),
+    "cant_not_load": MessageLookupByLibrary.simpleMessage("No puede cargar"),
     "careful": MessageLookupByLibrary.simpleMessage("Cuidado"),
     "category_error": MessageLookupByLibrary.simpleMessage(
       "Error de categoría",
@@ -158,6 +162,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "does_not_belong_to_the_company": MessageLookupByLibrary.simpleMessage(
       "No pertenece a la empresa",
     ),
+    "does_not_belong_to_the_sector": MessageLookupByLibrary.simpleMessage(
+      "No pertenece al sector",
+    ),
     "edit": MessageLookupByLibrary.simpleMessage("Editar"),
     "edit_shipment": MessageLookupByLibrary.simpleMessage("Editar envio"),
     "el_shipment_has": MessageLookupByLibrary.simpleMessage("El envío tiene"),
@@ -212,6 +219,9 @@ class MessageLookup extends MessageLookupByLibrary {
         MessageLookupByLibrary.simpleMessage(
           "En la base de datos. ¿Qué desea hacer?",
         ),
+    "in_the_department": MessageLookupByLibrary.simpleMessage(
+      "en  el departamento",
+    ),
     "invalid_connection": MessageLookupByLibrary.simpleMessage(
       "Conexión no válida",
     ),
@@ -318,9 +328,8 @@ class MessageLookup extends MessageLookupByLibrary {
     "select_shipment": MessageLookupByLibrary.simpleMessage(
       "Seleccionar envío",
     ),
-    "send": MessageLookupByLibrary.simpleMessage("Envio"),
+    "send": MessageLookupByLibrary.simpleMessage("Enviar"),
     "send_a": MessageLookupByLibrary.simpleMessage("Enviar a"),
-    "send_shipment": MessageLookupByLibrary.simpleMessage("Envio"),
     "sender": MessageLookupByLibrary.simpleMessage("Remitente"),
     "sending_mails": MessageLookupByLibrary.simpleMessage("Envío de emails"),
     "sends": MessageLookupByLibrary.simpleMessage("Envios"),
@@ -358,6 +367,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "El campo no puede estar en blanco",
     ),
     "the_format_of_the": MessageLookupByLibrary.simpleMessage("El formato de"),
+    "the_line": MessageLookupByLibrary.simpleMessage("La linea"),
     "the_mail_has_been_successfully_sent": MessageLookupByLibrary.simpleMessage(
       "El correo electrónico se ha enviado correctamente",
     ),

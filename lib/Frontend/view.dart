@@ -619,7 +619,7 @@ class _viewState extends State<view> {
                                       itemBuilder: (context0, index) {
                                         String array = "";
                                         return Dismissible(
-                                          key: Key(mails[index].addrres),
+                                          key: Key(mails[index].address),
                                           confirmDismiss: (direction) async {
                                             String pr = S.of(context).he;
                                             String array0 = S.of(context).mail;
@@ -651,7 +651,7 @@ class _viewState extends State<view> {
                                           child: GestureDetector(
                                             child: defaultCard(
                                                 title: mails[index].company,
-                                                description: mails[index].addrres,
+                                                description: mails[index].address,
                                                 color: index == cardIndex
                                                     ? Colors.white
                                                     : Colors.grey),

@@ -11,7 +11,7 @@ Future<bool> csvExportatorMails(List<Mail> mails) async {
     for (int i = 0; i <mails.length; i++)
     {
         "id": mails[i].id,
-        "addrres": mails[i].addrres,
+        "address": mails[i].address,
         "company": mails[i].company,
         "password": mails[i].password
     },
@@ -24,7 +24,7 @@ Future<bool> csvExportatorMails(List<Mail> mails) async {
     List<dynamic> row = [];
 
     row.add(associateList[i]["id"]);
-    row.add(associateList[i]["addrres"]);
+    row.add(associateList[i]["address"]);
     row.add(associateList[i]["company"]);
     row.add(associateList[i]["password"]);
     rows.add(row);

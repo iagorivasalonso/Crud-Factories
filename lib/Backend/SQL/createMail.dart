@@ -9,7 +9,7 @@ Future<void> sqlCreateMail(List<Mail> mails) async {
       {
          String id = mails[i].id;
          String company = mails[i].company;
-         String email = mails[i].addrres;
+         String email = mails[i].address;
          String password = mails[i].password;
 
          var result = await conn.query(

@@ -12,7 +12,7 @@ sqlImportMails() async {
     {
       mails.add(Mail(
           id: row[0].toString(),
-          addrres: row[2],
+          address: row[2],
           company: row[1],
           password: row[3]
       ));

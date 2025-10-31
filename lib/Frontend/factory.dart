@@ -687,7 +687,7 @@ class _newFactoryState extends State<newFactory> {
 
         if (conn != null) {
           if (select == -1) {
-            sqlCeateFactory(current);
+            sqlCreateFactory(current);
           }
           else {
             current.add(

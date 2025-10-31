@@ -133,6 +133,45 @@ class LocalizationHelper {
     );
   }
 
+  static String linesBeFactory( BuildContext context,String line) {
+
+    String preVar = S.of(context).the_line;
+    String postVar = S.of(context).does_not_belong_to_the_company.toLowerCase();
+
+    return Intl.message(
+      '$preVar $line $postVar',
+      name: 'linesBeFactory',
+      args: [line, preVar, postVar],
+      examples: const {'line': 'line','preVar': 'the line', 'postVar': 'does not belong to the compani'},
+    );
+  }
+
+  static String factoryBeSector( BuildContext context,String factory) {
+
+    String preVar = S.of(context).the_company;
+    String postVar = S.of(context).does_not_belong_to_the_sector.toLowerCase();
+
+    return Intl.message(
+      '$preVar $factory $postVar',
+      name: 'factoryBeSector',
+      args: [factory, preVar, postVar],
+      examples: const {'factory': 'factory','preVar': 'the company', 'postVar': 'does not belong to the sector'},
+    );
+  }
+
+  static String fieldInAnother( BuildContext context,String array, String arrayFather) {
+
+    String preVar = S.of(context).can_not_load;
+    String postVar = S.of(context).because_it_does_not_have.toLowerCase();
+
+
+    return Intl.message(
+      '$preVar $array $postVar $arrayFather',
+      name: 'factoryBeSector',
+      args: [factory, preVar, postVar],
+      examples: const {'no_load': 'factory','preVar': 'no_load', 'postVar': 'arrayFather'},
+    );
+  }
   static String camp_empty( BuildContext context,String camp) {
 
     String preVar = S.of(context).the_field;

@@ -126,7 +126,7 @@ class _newMailState extends State<newMail> {
                           defaultTextfield(
                               nameCamp: S.of(context).new_mail,
                               controllerCamp: controllers.mail,
-                              campOld: select == -1 ? '' : mails[select].addrres,
+                              campOld: select == -1 ? '' : mails[select].address,
                           ),
 
                           textfieldPassword(
@@ -197,7 +197,7 @@ Future<void> _onSaveMail(BuildContext context, int select,MailController control
   String campOld = " ";
   if(select != -1)
   {
-    campOld = mails[select].addrres;
+    campOld = mails[select].address;
   }
 
   if((validatorCamps.primaryKeyCorrect(controllers.mail.text,nameCamp,allKeys,campOld,context) ==true) )
@@ -233,10 +233,10 @@ Future<void> _onSaveMail(BuildContext context, int select,MailController control
         String company = "";
 
 
-        List <String> separeAddrres = username.split("@");
+        List <String> separeaddress = username.split("@");
 
         final message = Message()
-          ..from = Address(username, separeAddrres[0])
+          ..from = Address(username, separeaddress[0])
           ..recipients.add(username)
           ..subject = S.of(context).connection_test
           ..text = S.of(context).this_is_a_connection_test_from_the_application;
@@ -307,8 +307,8 @@ Future sendingMail(context,controllers, Message message) async {
   String username = controllers.mail.text;
   String password = controllers.password.text;
 
-  List <String> separeAddrres = username.split("@");
-  List <String> extCompany = separeAddrres[1].split(".");
+  List <String> separeaddress = username.split("@");
+  List <String> extCompany = separeaddress[1].split(".");
 
   String company = extCompany[0];
 
@@ -354,7 +354,7 @@ void campCharge(
 
   if(saveChanges == false)
   {
-    controllers.mail.text = mails[select].addrres;
+    controllers.mail.text = mails[select].address;
     controllers.password.clear();
     controllers.passwordVerify!.clear();
   }
