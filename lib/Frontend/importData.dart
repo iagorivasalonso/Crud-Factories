@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:adaptive_scrollbar/adaptive_scrollbar.dart';
 import 'package:crud_factories/Alertdialogs/confirm.dart';
 import 'package:crud_factories/Alertdialogs/error.dart';
-import 'package:crud_factories/Alertdialogs/noFind.dart';
+import 'package:crud_factories/Alertdialogs/noFind.dart' show noFind;
 import 'package:crud_factories/Backend/CSV/exportEmpleoyes.dart';
 import 'package:crud_factories/Backend/CSV/exportRoutes.dart';
 import 'package:crud_factories/Backend/CSV/exportSectors.dart';
@@ -25,20 +25,15 @@ import 'package:crud_factories/Backend/CSV/exportFactories.dart';
 import 'package:crud_factories/Backend/CSV/exportLines.dart';
 import 'package:crud_factories/Backend/CSV/exportMails.dart';
 import 'package:crud_factories/Functions/createId.dart';
-import 'package:crud_factories/Objects/Conection.dart';
 import 'package:crud_factories/Objects/Empleoye.dart';
 import 'package:crud_factories/Objects/Factory.dart';
-import 'package:crud_factories/Objects/Mail.dart';
 import 'package:crud_factories/Objects/LineSend.dart';
-import 'package:crud_factories/Objects/Sector.dart';
 import 'package:crud_factories/Widgets/headViewsAndroid.dart';
 import 'package:crud_factories/generated/l10n.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
-
 import '../Backend/CSV/importEmpleoyes.dart';
 import '../Backend/CSV/importLines.dart';
-import '../Objects/RouteCSV.dart' show RouteCSV;
 import '../helpers/localization_helper.dart';
 
 class newImport extends StatefulWidget {
@@ -72,19 +67,21 @@ class _newImportState extends State<newImport> {
          linesNew: [],
          conectionsNew: [],
          factoriesNew: []);
+
+     if(idEndList == 0)
+     {
+       for(int i = 0; i < allFactories.length; i++)
+       {
+         idEndList = int.parse(allFactories[i].id);
+       }
+     }
+
   }
   @override
   Widget build(BuildContext context0) {
 
     BuildContext context = Platform.isWindows ? context1 : context0;
 
-    if(idEndList == 0)
-    {
-      for(int i = 0; i < allFactories.length; i++)
-      {
-        idEndList = int.parse(allFactories[i].id);
-      }
-    }
 
     return Platform.isWindows
         ? Scaffold(
@@ -210,13 +207,15 @@ class _newImportState extends State<newImport> {
 
 Future<void> _onSaveList(BuildContext context, ListController listController) async {
 
-  String array = '';
+
   int count = 0;
-  String action = "";
+  List<String> stringDialog = [];
+
+  Map<String,int> importedCount = {};
 
   if (listController.routesNew.isNotEmpty)
   {
-    array = S.of(context).routes;
+    final entityName = S.of(context).routes;
     count += await processImport(
       newList: listController.routesNew,
       existingList: routesManage,
@@ -225,11 +224,12 @@ Future<void> _onSaveList(BuildContext context, ListController listController) as
       csvExport: csvExportatorRoutes,
       conn: conn,
     );
+    importedCount[entityName] = count;
   }
 
   if (listController.sectorsNew.isNotEmpty)
   {
-    array = S.of(context).sectors;
+    final entityName = S.of(context).sectors;
     count += await processImport(
       newList: listController.sectorsNew,
       existingList: sectors,
@@ -239,71 +239,116 @@ Future<void> _onSaveList(BuildContext context, ListController listController) as
       sqlExport: sqlCreateSector,
       conn: conn,
     );
+    importedCount[entityName] = count;
   }
 
   if (listController.empleoyesNew.isNotEmpty)
   {
+    final entityName = S.of(context).employees;
     List<Empleoye> tmp =
     listController.empleoyesNew.where((e) => allFactories.any((f)=> f.id == e.idFactory))
         .toList();
 
+    List<Empleoye> empExc =
+    listController.empleoyesNew.where((e) => !allFactories.any((f)=> f.id == e.idFactory))
+        .toList();
+
     List<Empleoye> empleoyesNew = tmp;
 
-    if(empleoyesNew.isNotEmpty)
+
+    if (allFactories.isNotEmpty)
     {
-      array = S.of(context).mails;
-      count += await processImport(
-        newList: empleoyesNew,
-        existingList: empleoyes,
-        getKey: (e) => e.name,
-        setId: (e, id) => e.id = id,
-        csvExport: csvExportatorEmpleoyes,
-        sqlExport: sqlCreateEmpleoye,
-        conn: conn,
-      );
+      if(empleoyesNew.isNotEmpty)
+      {
+        count += await processImport(
+          newList: empleoyesNew,
+          existingList: empleoyes,
+          getKey: (e) => e.name,
+          setId: (e, id) => e.id = id,
+          csvExport: csvExportatorEmpleoyes,
+          sqlExport: sqlCreateEmpleoye,
+          conn: conn,
+        );
+        importedCount[entityName] = count;
+        if(empExc.isNotEmpty)
+        {
+          for(int i = 0; i <empExc.length; i++)
+          {
+            stringDialog.add(LocalizationHelper.empleoyesBeFactory(context, empExc[i].name));
+          }
+        }
+      }
     }
+    else
+    {
+       stringDialog.add(LocalizationHelper.fieldInAnother(context, entityName.toLowerCase(), S.of(context).companies.toLowerCase()));
+    }
+
   }
 
   if (listController.mailsNew.isNotEmpty)
   {
-    array = S.of(context).mails;
+    final entityName = S.of(context).mails;
     count += await processImport(
       newList: listController.mailsNew,
       existingList: mails,
-      getKey: (m) => m.addrres,
+      getKey: (m) => m.address,
       setId: (s, id) => s.id = id,
       csvExport: csvExportatorMails,
       sqlExport: sqlCreateMail,
       conn: conn,
     );
+    importedCount[entityName] = count;
   }
 
   if (listController.linesNew.isNotEmpty)
   {
+    final entityName = S.of(context).lines;
     List<LineSend> tmp =
-    listController.linesNew.where((l) => allFactories.any((e)=> l.factory == e.id))
+    listController.linesNew.where((l) =>
+        allFactories.any((e) => l.factory == e.name))
         .toList();
+
+    List<LineSend> linesExcl =
+    listController.linesNew.where((l) => !allFactories.any((e) => l.factory == e.name))
+        .toList();
+
 
     List<LineSend> linesNew = tmp;
 
-    if(linesNew.isNotEmpty)
+    if (allFactories.isNotEmpty)
     {
-      array = S.of(context).lines;
-      count += await processImport(
-        newList: linesNew,
-        existingList: allLines,
-        getKey: (l) => l.factory,
-        setId: (e, id) => e.id = id,
-        csvExport: csvExportatorLines,
-        sqlExport: (lines) => sqlCreateLine(lines, context),
-        conn: conn,
-      );
+      if(linesNew.isNotEmpty)
+      {
+        count += await processImport(
+          newList: linesNew,
+          existingList: allLines,
+          getKey: (l) => l.factory,
+          setId: (e, id) => e.id = id,
+          csvExport: csvExportatorLines,
+          sqlExport: (lines) => sqlCreateLine(lines, context),
+          conn: conn,
+        );
+        importedCount[entityName] = count;
+
+        if(linesExcl.isNotEmpty)
+        {
+          for(int i = 0; i <linesExcl.length; i++)
+          {
+            stringDialog.add(LocalizationHelper.factoryBeSector(context, linesExcl[i].factory));
+          }
+        }
+      }
+    }
+    else
+    {
+       stringDialog.add(LocalizationHelper.fieldInAnother(context, entityName.toLowerCase(), S.of(context).companies.toLowerCase()));
     }
   }
 
   if (listController.conectionsNew.isNotEmpty)
   {
-    array = S.of(context).connection;
+    final entityName = S.of(context).connection;
     count += await processImport(
       newList: listController.conectionsNew,
       existingList: conections,
@@ -312,43 +357,68 @@ Future<void> _onSaveList(BuildContext context, ListController listController) as
       csvExport: csvExportatorConections,
       conn: conn,
     );
+    importedCount[entityName] = count;
   }
 
   if (listController.factoriesNew.isNotEmpty)
   {
-    List<Factory> tmp =
-    listController.factoriesNew.where((f) => sectors.any((e)=> f.sector == e.id))
+    final entityName = S.of(context).company;
+    List<Factory> tmp = listController.factoriesNew.where((f) => sectors.any((e)=> f.sector == e.id))
+        .toList();
+
+    List<Factory> factExc = listController.factoriesNew.where((f) => !sectors.any((e)=> f.sector == e.id))
         .toList();
 
     List<Factory> factoriesNew = tmp;
 
-    if(listController.factoriesNew.isNotEmpty)
-    {
-      array = S.of(context).company;
-      count += await processImport(
-        newList: factoriesNew,
-        existingList: allFactories,
-        getKey: (f) => f.name,
-        setId: (e, id) => e.id = id,
-        csvExport: csvExportatorFactories,
-        sqlExport: sqlCeateFactory,
-        conn: conn,
-      );
-    }
+       if(sectors.isNotEmpty)
+       {
+         if(listController.factoriesNew.isNotEmpty)
+         {
+           count += await processImport(
+             newList: factoriesNew,
+             existingList: allFactories,
+             getKey: (f) => f.name,
+             setId: (e, id) => e.id = id,
+             csvExport: csvExportatorFactories,
+             sqlExport: sqlCreateFactory,
+             conn: conn,
+           );
+           importedCount[entityName] = count;
+         }
+
+         if(factExc.isNotEmpty)
+         {
+           for(int i = 0; i <factExc.length; i++)
+           {
+             stringDialog.add(LocalizationHelper.factoryBeSector(context, factExc[i].name));
+           }
+         }
+       }
+       else
+       {
+         stringDialog.add(LocalizationHelper.fieldInAnother(context, entityName.toLowerCase(), S.of(context).sector.toLowerCase()));
+       }
   }
 
-  array = array.toLowerCase();
 
-  if(count > 0)
+
+  if(count > 0 && importedCount.isNotEmpty)
   {
-    action = LocalizationHelper.importData(context,array, count);
-    confirm(context,action);
+        String message = importedCount.entries
+                    .map((e) => LocalizationHelper.importData(context,e.key,e.value))
+                    .join();
+
+        confirm(context,message);
   }
   else
   {
-    action = LocalizationHelper.no_do_import(context, array);
-    confirm(context, action);
+       for (int i = 0; i<stringDialog.length; i++)
+       {
+           await noFind(context, true, stringDialog[i]);
+       }
   }
+  stringDialog.clear();
 }
 
 Future<void> _pickFile(BuildContext context, TextEditingController controllerDatePicker, ListController listController) async {
