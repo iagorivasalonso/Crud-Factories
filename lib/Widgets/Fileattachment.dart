@@ -4,26 +4,24 @@ import 'package:crud_factories/Widgets/textfield.dart';
 import 'package:crud_factories/generated/l10n.dart';
 import 'package:file_picker/file_picker.dart' show FilePickerResult, FilePicker, FileType;
 import 'package:flutter/material.dart' hide IconButton;
-
+import 'package:path/path.dart' as p;
 import '../Backend/Global/variables.dart';
 import 'materialButton.dart';
 
-class FilePickerField extends StatefulWidget {
+class Fileattachment extends StatefulWidget {
 
   final TextEditingController camp;
   final List<String> allowedExtensions;
-  final String actionName;
   final bool multiple;
   final List<File>? attachments;
   final File? singleAttachment;
   final void Function(List<File>)? onFilesChanged;
   final void Function(File?)? onFileChange;
 
-  const FilePickerField({
+  const Fileattachment({
     super.key,
     required this.camp,
     required this.allowedExtensions,
-    required this.actionName,
     this.multiple = true,
     this.attachments,
     this.singleAttachment,
@@ -32,19 +30,19 @@ class FilePickerField extends StatefulWidget {
   });
 
   @override
-  State<FilePickerField> createState() => _FilePickerFieldState();
+  State<Fileattachment> createState() => _FilePickerFieldState();
 }
 
-class _FilePickerFieldState extends State<FilePickerField> {
+class _FilePickerFieldState extends State<Fileattachment> {
 
 
 
   Future<void> _pickFile(BuildContext context) async {
     FilePickerResult? result = await FilePicker.platform.pickFiles(
-      dialogTitle: S.of(context).select_file,
-      type: widget.allowedExtensions != null
-          ? FileType.custom
-          : FileType.any,
+      dialogTitle: S
+          .of(context)
+          .select_file,
+      type: FileType.custom,
       allowedExtensions: widget.allowedExtensions,
       allowMultiple: widget.multiple,
     );
@@ -84,9 +82,9 @@ class _FilePickerFieldState extends State<FilePickerField> {
               ),
               const SizedBox(width: 8),
               Padding(
-                padding: const EdgeInsets.only(top: 8),
+                padding: const EdgeInsets.only(top: 15.0),
                 child: materialButton(
-                   nameAction: widget.actionName,
+                   nameAction: S.of(context).attach,
                    function: () async {
                      _pickFile(context);
                    },
@@ -98,25 +96,28 @@ class _FilePickerFieldState extends State<FilePickerField> {
 
         // Lista de adjuntos
         if (widget.attachments != null && widget.attachments!.isNotEmpty)
-          SizedBox(
-            height: 32,
-            child: ListView.builder(
-              scrollDirection: Axis.horizontal,
-              itemCount: widget.attachments!.length,
-              itemBuilder: (context, index) {
-                final file = widget.attachments![index];
-                return Padding(
-                  padding: const EdgeInsets.only(right: 4),
-                  child: Chip(
-                    label: Text(file.path.split('/').last),
-                    onDeleted: () {
-                      setState(() {
-                        widget.attachments!.removeAt(index);
-                      });
-                    },
-                  ),
-                );
-              },
+          Padding(
+            padding: const EdgeInsets.only(left: 145),
+            child: SizedBox(
+              height: 32,
+              child: ListView.builder(
+                scrollDirection: Axis.horizontal,
+                itemCount: widget.attachments!.length,
+                itemBuilder: (context, index) {
+                  final file = widget.attachments![index];
+                  return Padding(
+                    padding: const EdgeInsets.only(right: 8.0),
+                    child: Chip(
+                      label: Text(p.basename(file.path)),
+                      onDeleted: () {
+                        setState(() {
+                          widget.attachments!.removeAt(index);
+                        });
+                      },
+                    ),
+                  );
+                },
+              ),
             ),
           ),
       ],
