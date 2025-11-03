@@ -7,6 +7,7 @@ import 'package:crud_factories/Frontend/send.dart';
 import 'package:crud_factories/Frontend/send_mail.dart';
 import 'package:crud_factories/Frontend/view.dart';
 import 'package:crud_factories/Functions/manageArrays.dart';
+import 'package:crud_factories/Objects/Factory.dart';
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter/src/widgets/framework.dart';
 
@@ -98,22 +99,11 @@ void groupFactoriesSector(int subIten2Selection) {
   factoriesSector.clear();
   if(subIten2Selection == 0)
   {
-
-    for(int i = 0; i < allFactories.length;i++)
-    {
-      factoriesSector.add(allFactories[i]);
-    }
+      factoriesSector = allFactories;
   }
   else
   {
-
-    for(int i = 0; i < allFactories.length;i++)
-    {
-      if(allFactories[i].sector == sector)
-      {
-        factoriesSector.add(allFactories[i]);
-      }
-    }
+    factoriesSector = allFactories.where((f) =>f.sector == sector).toList();
   }
 
 }
@@ -125,67 +115,32 @@ void groupLinesSector(int subIten2Selection, List<String> element) {
 
   if(subIten2Selection == 0)
   {
-
-    String lineFactory ="";
-    for(int i = 0; i < allLines.length; i++)
-    {
-      lineFactory = allLines[i].factory;
-
-      for(int y = 0; y < allFactories.length; y++)
-      {
-        if(allFactories[y].name==lineFactory)
-        {
-          allLines[i].sector = allFactories[y].sector;
-          lineSector.add(allLines[i]);
-        }
-
-      }
-    }
-
-    for (int i = 0; i < lineSector.length; i++)
-    {
-      element.add(lineSector[i].date);
-    }
-
+      factoriesSector = factoriesSector;
   }
   else
   {
-    String factoryCurrent ="";
-    bool exist = false;
-    String sFactory = "";
-
-     if(factoriesSector.isEmpty)
-       groupFactoriesSector(0);
-
-    for(int i = 0; i < allLines.length; i++)
-    {
-       factoryCurrent = allLines[i].factory;
-       exist = false;
-
-          for(int y = 0; y <factoriesSector.length; y++)
-          {
-            if(factoriesSector[y].name == factoryCurrent)
-            {
-              exist = true;
-              sFactory = factoriesSector[y].sector;
-
-            }
-          }
-
-      if(exist == true)
-      {
-        allLines[i].sector = sFactory;
-        lineSector.add(allLines[i]);
-      }
+    if (factoriesSector.isEmpty) {
+      groupFactoriesSector(0);
     }
-
-    for (int i = 0; i < lineSector.length; i++)
-    {
-      element.add(lineSector[i].date);
-    }
-
   }
-    dateSends = manageArrays.avoidRepeteat(element);
+
+  for(var line in allLines)
+  {
+    final matches = factoriesSector.where(
+            (f) => f.name == line.factory
+    );
+
+    if(matches.isNotEmpty)
+    {
+      final factory = matches.first;
+      line.sector = factory.sector;
+      lineSector.add(line);
+    }
+  }
+
+  dateSends = manageArrays.avoidRepeteat(
+    lineSector.map((line) => line.date).toList(),
+  );
 }
 
 

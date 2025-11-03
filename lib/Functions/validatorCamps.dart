@@ -7,43 +7,16 @@ class validatorCamps {
 
   static bool primaryKeyCorrect(String camp, String nameCamp, List <String> allKeys, String campOld, BuildContext context) {
 
-        bool keyCorrect = false;
+   bool keyCorrect= false;
 
-        if(camp.isEmpty)
-        {
-             String action = LocalizationHelper.camp_empty(context, nameCamp);
-             error(context, action);
-        }
-        else
-        {
-
-              if(allKeys.isNotEmpty)
-              {
-                    if(campOld == camp)
-                    {
-                      keyCorrect = true;
-                    }
-                    else
-                    {
-                          keyCorrect = true;
-
-                          for(int i = 0; i <allKeys.length;i++)
-                          {
-                                if(allKeys[i]==camp)
-                                {
-                                  String action = S.of(context).this_field_cannot_be_repeated;
-                                  error(context, action);
-                                  keyCorrect = false;
-                                }
-                          }
-                    }
-              }
-              else
-              {
-                keyCorrect = true;
-              }
-
-        }
+   if(allKeys.isEmpty || campOld == camp){
+     keyCorrect = true;
+   }  else if (allKeys.contains(camp)) {
+     error(context, S.of(context).this_field_cannot_be_repeated);
+     keyCorrect = false;
+   } else {
+     keyCorrect = true;
+   }
 
     return keyCorrect;
   }
