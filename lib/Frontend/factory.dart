@@ -380,8 +380,7 @@ class _newFactoryState extends State<newFactory> {
                             ),
                           ],
                         ),
-
-                           Padding(
+                        Padding(
                               padding: const EdgeInsets.only(left: 600.0),
                               child: Row(
                                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -413,8 +412,8 @@ class _newFactoryState extends State<newFactory> {
                                     ),
                                   ),
                                 ],
-                      ),
-                    ),
+                          ),
+                        ),
                       ],
                     ),
                   ),
