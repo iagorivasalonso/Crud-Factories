@@ -30,10 +30,10 @@ import 'package:crud_factories/Objects/Factory.dart';
 import 'package:crud_factories/Objects/LineSend.dart';
 import 'package:crud_factories/Widgets/headViewsAndroid.dart';
 import 'package:crud_factories/generated/l10n.dart';
-import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
-import '../Backend/CSV/importEmpleoyes.dart';
-import '../Backend/CSV/importLines.dart';
+import '../Widgets/CSVPickerField.dart';
+import '../Widgets/headView.dart';
+import '../Widgets/materialButton.dart';
 import '../helpers/localization_helper.dart';
 
 class newImport extends StatefulWidget {
@@ -52,10 +52,10 @@ class _newImportState extends State<newImport> {
   double widthBar = 10.0;
   int idEndList = 0;
 
-  TextEditingController controllerDatePicker = new TextEditingController();
 
   late ListController listController;
 
+  late TextEditingController controllerImportPicker = TextEditingController();
   @override
   void initState (){
 
@@ -99,92 +99,55 @@ class _newImportState extends State<newImport> {
             child: SingleChildScrollView(
               controller: horizontalScroll,
               scrollDirection: Axis.horizontal,
-              child: Container(
-                height: 400,
-                width: 736,
+              child: SizedBox(
+                width: 800,
+                height: 470,
                 child: Align(
                   alignment: Alignment.topLeft,
                   child:  Padding(
                     padding: const EdgeInsets.only(left: 30.0,top: 30.0),
                     child: Column(
                       children: [
-                        Row(
-                          children: [
-                            Text(S.of(context).import_data,
-                              style: TextStyle(fontWeight: FontWeight.bold),),
-                          ],
+                        headView(
+                            title: S.of(context).import_data
                         ),
-                        Padding(
-                          padding: EdgeInsets.only(top: 15.00),
-                          child: Column(
-                            children: [
-                              Row(
-                                children: [
-                                  Text(S.of(context).Import_data_in_CSV_format),
-                                ],
-                              ),
-                            ],
-                          ),
 
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.only(top:80.0, bottom: 30.0),
-                          child: Row(
+                        Row(
                             children: [
-                              Padding(
-                                padding: const EdgeInsets.only(right:10),
-                                child: Text(S.of(context).route),
-                              ),
-                              SizedBox(
-                                width: 420,
-                                height: 40,
-                                child: TextField(
-                                  decoration:const InputDecoration(
-                                    border: OutlineInputBorder(),
-                                  ),
-                                  controller: controllerDatePicker,
-                                ),
-                              ),
-                              Padding(
-                                padding: const EdgeInsets.only(left: 40.0),
-                                child: MaterialButton(
-                                  color: Colors.lightBlue,
-                                  child: Text(S.of(context).examine,
-                                    style: const TextStyle(color: Colors.white),
-                                  ),
-                                  onPressed: (){
-                                    _pickFile(context, controllerDatePicker,listController);
-                                  },
-                                ),
-                              )
-                            ],
-                          ),
+                               Text(S.of(context).Import_data_in_CSV_format)
+                            ] ,
                         ),
+
+                        CSVPickerField(
+                            controller: controllerImportPicker,
+                            listController: listController,
+                            campName: S.of(context).route,
+                            actionName: S.of(context).examine,
+                        ),
+
                         Padding(
-                          padding: const EdgeInsets.only(top: 130.0,left: 400),
-                          child: SizedBox(
-                            width: 250,
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                MaterialButton(
-                                  color: Colors.lightBlue,
-                                  child: Text(S.of(context).import_data,
-                                   style:  const TextStyle(color: Colors.white) ,),
-                                  onPressed: ()=> _onSaveList(context,listController)
-                                ),
-                                MaterialButton(
-                                  color: Colors.lightBlue,
-                                  child: Text(S.of(context).delete,
-                                    style: const TextStyle(color: Colors.white),),
-                                  onPressed: () {
+                          padding: const EdgeInsets.only(left: 555.0, top: 300.0),
+                          child: Row(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              materialButton(
+                                  nameAction: S.of(context).import_data,
+                                  function: () => _onSaveList(context, listController)
+                              ),
+
+                              Padding(
+                                padding: const EdgeInsets.only(left: 20.0),
+                                child: materialButton(
+                                  nameAction:S.of(context).delete,
+                                  function: () async{
                                     setState(() {
-                                      controllerDatePicker.text = "";
+                                      controllerImportPicker.text = "";
                                     });
                                   },
+
                                 ),
-                              ],
-                            ),
+                              ),
+                            ],
                           ),
                         ),
                       ],
@@ -420,73 +383,6 @@ Future<void> _onSaveList(BuildContext context, ListController listController) as
   }
   stringDialog.clear();
 }
-
-Future<void> _pickFile(BuildContext context, TextEditingController controllerDatePicker, ListController listController) async {
-
-
-  FilePickerResult? result =  await FilePicker.platform.pickFiles(
-    dialogTitle: 'select file',
-    type: FileType.custom,
-    allowedExtensions: ['csv'],
-  );
-
-  if(result == null) return;
-
-  final file = File(result.files.single.path!);
-
-
-  controllerDatePicker.text =file.path!;
-
-  final content = await file.readAsString(encoding: utf8);
-  final linesSend = const LineSplitter().convert(content);
-  final parts = linesSend.first.split(";");
-
-  try{
-
-    switch(parts.length)
-    {
-      case 2:
-        listController.sectorsNew.addAll(await readSectorsFromCsv(file));
-        break;
-
-      case 3:
-        if(file.path.contains('routes.csv'))
-        {
-
-          listController.routesNew.addAll(await readRoutesFromCsv(file));
-        }
-        else
-        {
-          listController.empleoyesNew.addAll(await readEmpleoyeFromCsv(file));
-        }
-        break;
-
-      case 4:
-        listController.mailsNew.addAll(await readMailsFromCsv(file));
-        break;
-
-      case 5:
-        listController.linesNew.addAll(await readLinesFromCsv(file));
-        break;
-
-      case 6:
-        listController.conectionsNew.addAll(await readConectionsFromCsv(file));
-        break;
-
-      case 14:
-        listController.factoriesNew.addAll(await readFactoriesFromCsv(file));
-        break;
-
-      default:
-        String action = S.of(context).file_not_found;
-        error(context, action);
-        break;
-    }
-  }catch (e) {
-    error(context, S.of(context).file_not_found);
-  }
-
-  }
 
 abstract class BaseEntity {
   late String id;
