@@ -178,10 +178,10 @@ class MessageLookup extends MessageLookupByLibrary {
     "february": MessageLookupByLibrary.simpleMessage("Febrero"),
     "file": MessageLookupByLibrary.simpleMessage("Archivo"),
     "file_format_error": MessageLookupByLibrary.simpleMessage(
-      "Error en el formato del archivo de",
+      "Error en el formato del archivo",
     ),
     "file_not_found": MessageLookupByLibrary.simpleMessage(
-      "No se encontró el archivo de",
+      "No se encontró el archivo",
     ),
     "filter": MessageLookupByLibrary.simpleMessage("Filtrar"),
     "filter_by": MessageLookupByLibrary.simpleMessage("Filtrar por"),

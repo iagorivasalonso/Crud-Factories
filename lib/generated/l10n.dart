@@ -1718,20 +1718,20 @@ class S {
     return Intl.message('El campo', name: 'the_field', desc: '', args: []);
   }
 
-  /// `No se encontró el archivo de`
+  /// `No se encontró el archivo`
   String get file_not_found {
     return Intl.message(
-      'No se encontró el archivo de',
+      'No se encontró el archivo',
       name: 'file_not_found',
       desc: '',
       args: [],
     );
   }
 
-  /// `Error en el formato del archivo de`
+  /// `Error en el formato del archivo`
   String get file_format_error {
     return Intl.message(
-      'Error en el formato del archivo de',
+      'Error en el formato del archivo',
       name: 'file_format_error',
       desc: '',
       args: [],
