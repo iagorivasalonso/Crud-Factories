@@ -30,7 +30,10 @@ import 'package:crud_factories/Objects/Factory.dart';
 import 'package:crud_factories/Objects/LineSend.dart';
 import 'package:crud_factories/Widgets/headViewsAndroid.dart';
 import 'package:crud_factories/generated/l10n.dart';
+import 'package:file_picker/file_picker.dart' show FilePickerResult, FileType, FilePicker;
 import 'package:flutter/material.dart';
+import '../Backend/CSV/importEmpleoyes.dart';
+import '../Backend/CSV/importLines.dart';
 import '../Widgets/CSVPickerField.dart';
 import '../Widgets/headView.dart';
 import '../Widgets/materialButton.dart';
@@ -120,12 +123,12 @@ class _newImportState extends State<newImport> {
 
                         CSVPickerField(
                             controller: controllerImportPicker,
-                            listController: listController,
                             campName: S.of(context).route,
                             actionName: S.of(context).examine,
+                            function: () => _pickFile(context, controllerImportPicker, listController)
                         ),
 
-                        Padding(
+                Padding(
                           padding: const EdgeInsets.only(left: 555.0, top: 300.0),
                           child: Row(
                             crossAxisAlignment: CrossAxisAlignment.start,
@@ -164,6 +167,72 @@ class _newImportState extends State<newImport> {
             appBar: appBarAndroid(context, name: S.of(context).import_data),
             body: Text("conection"),
        );
+  }
+
+}
+Future<void> _pickFile(BuildContext context, TextEditingController controllerDatePicker, ListController listController) async {
+
+
+  FilePickerResult? result =  await FilePicker.platform.pickFiles(
+    dialogTitle: 'select file',
+    type: FileType.custom,
+    allowedExtensions: ['csv'],
+  );
+
+  if(result == null) return;
+
+  final file = File(result.files.single.path!);
+
+
+  controllerDatePicker.text =file.path!;
+
+  final content = await file.readAsString(encoding: utf8);
+  final linesSend = const LineSplitter().convert(content);
+  final parts = linesSend.first.split(";");
+
+  try{
+
+    switch(parts.length)
+    {
+      case 2:
+        listController.sectorsNew.addAll(await readSectorsFromCsv(file));
+        break;
+
+      case 3:
+        if(file.path.contains('routes.csv'))
+        {
+
+          listController.routesNew.addAll(await readRoutesFromCsv(file));
+        }
+        else
+        {
+          listController.empleoyesNew.addAll(await readEmpleoyeFromCsv(file));
+        }
+        break;
+
+      case 4:
+        listController.mailsNew.addAll(await readMailsFromCsv(file));
+        break;
+
+      case 5:
+        listController.linesNew.addAll(await readLinesFromCsv(file));
+        break;
+
+      case 6:
+        listController.conectionsNew.addAll(await readConectionsFromCsv(file));
+        break;
+
+      case 14:
+        listController.factoriesNew.addAll(await readFactoriesFromCsv(file));
+        break;
+
+      default:
+        String action = S.of(context).file_not_found;
+        error(context, action);
+        break;
+    }
+  }catch (e) {
+    error(context, S.of(context).file_not_found);
   }
 
 }
