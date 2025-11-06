@@ -103,33 +103,40 @@ class _newImportState extends State<newImport> {
               controller: horizontalScroll,
               scrollDirection: Axis.horizontal,
               child: SizedBox(
-                width: 800,
+                width: 770,
                 height: 470,
                 child: Align(
                   alignment: Alignment.topLeft,
                   child:  Padding(
                     padding: const EdgeInsets.only(left: 30.0,top: 30.0),
                     child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         headView(
                             title: S.of(context).import_data
                         ),
 
-                        Row(
-                            children: [
-                               Text(S.of(context).Import_data_in_CSV_format)
-                            ] ,
+                        Padding(
+                          padding: const EdgeInsets.only(top:10.0, bottom: 30.0),
+                          child: Row(
+                              children: [
+                                 Text(S.of(context).Import_data_in_CSV_format)
+                              ] ,
+                          ),
                         ),
 
-                        CSVPickerField(
-                            controller: controllerImportPicker,
-                            campName: S.of(context).route,
-                            actionName: S.of(context).examine,
-                            function: () => _pickFile(context, controllerImportPicker, listController)
+                        SizedBox(
+                          width: 700,
+                          child: CSVPickerField(
+                              controller: controllerImportPicker,
+                              campName: S.of(context).route,
+                              actionName: S.of(context).examine,
+                              function: () => _pickFile(context, controllerImportPicker, listController)
+                          ),
                         ),
 
-                Padding(
-                          padding: const EdgeInsets.only(left: 555.0, top: 300.0),
+                       Padding(
+                          padding: const EdgeInsets.only(left: 520.0, top: 260.0),
                           child: Row(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
