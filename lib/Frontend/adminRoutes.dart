@@ -259,6 +259,7 @@ Future<bool> adminRoutes(BuildContext context, [bool? sqlBd]) async {
 
                                       await confirm(context, action);
                                       chargueDataCSV(context);
+                                   print(routesNew);
                                       csvExportatorRoutes(routesNew);
 
 
