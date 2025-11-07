@@ -28,7 +28,7 @@ Future<bool> adminRoutes(BuildContext context, [bool? sqlBd]) async {
 
   if(onlySql == false)
   {
-    currentRoutes = allRoutes;
+    currentRoutes = allRoutesOrdened;
   }
   else
   {
@@ -41,11 +41,11 @@ Future<bool> adminRoutes(BuildContext context, [bool? sqlBd]) async {
     _controllerRoute.add(TextEditingController());
   }
 
-  if(routesManage.isEmpty)
+  if(routesCSV.isEmpty)
   {
     for(int i = 0; i <currentRoutes.length; i++)
     {
-      _controllerNameRoute[i].text = allRoutes[i];
+      _controllerNameRoute[i].text = allRoutesOrdened[i];
 
          if(i == 0)
          {
@@ -115,7 +115,7 @@ Future<bool> adminRoutes(BuildContext context, [bool? sqlBd]) async {
                                            onChanged: (value) {
                                              setState(() {
                                                onlySql = false;
-                                               currentRoutes = allRoutes;
+                                               currentRoutes = allRoutesOrdened;
                                              });
                                            }),
                                      ),
@@ -301,48 +301,14 @@ Future<bool> adminRoutes(BuildContext context, [bool? sqlBd]) async {
   return route ?? false;
 }
 
-class adminRoutesAndroid extends StatefulWidget {
-
-
-
-
-  adminRoutesAndroid();
-
-
-  @override
-  State<adminRoutesAndroid> createState() => _adminRoutesAndroidState();
-}
-
-class _adminRoutesAndroidState extends State<adminRoutesAndroid> {
-  @override
-  Widget build(BuildContext context0) {
-
-    BuildContext context = Platform.isWindows ? context1 : context0;
-    String title = S.of(context).route_selector;
-
-    return Scaffold(
-      appBar: appBarAndroid(context, name: title),
-      body: Text("factori"),
-    );
-  }
-}
 
 void campCharge(List<TextEditingController> _controllerNameRoute, List<TextEditingController> _controllerRoute, BuildContext context) {
 
-  allRoutes = [
-    S.of(context).routes,
-    S.of(context).connections,
-    S.of(context).server,
-    S.of(context).sectors,
-    S.of(context).companies,
-    S.of(context).employees,
-    S.of(context).lines,
-    S.of(context).mails,
-  ];
-  for(int i = 0; i <routesManage.length; i++)
+
+  for(int i = 0; i <routesCSV.length; i++)
   {
-     _controllerNameRoute[i].text = allRoutes[i];
-    _controllerRoute[i].text = routesManage[i].route;
+     _controllerNameRoute[i].text = routesCSV[i].name;
+    _controllerRoute[i].text = routesCSV[i].route;
   }
 }
 void _pickFile(TextEditingController controllerRoute, BuildContext context) async {
