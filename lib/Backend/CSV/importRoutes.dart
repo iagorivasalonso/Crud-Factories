@@ -7,11 +7,11 @@ import 'package:crud_factories/generated/l10n.dart';
 import 'package:fluent_ui/fluent_ui.dart';
 
 
-Future<void>csvImportRoutes(BuildContext context, List<RouteCSV> routesManage) async {
+Future<void>csvImportRoutes(BuildContext context, List<RouteCSV> routesCsv) async {
 
   try {
 
-    routesManage.addAll(await readRoutesFromCsv(fRoutes));
+    routesCsv.addAll(await readRoutesFromCsv(fRoutes));
 
   } catch (e) {
         String array = S.of(context).routes;
@@ -37,7 +37,7 @@ Future<List<RouteCSV>> readRoutesFromCsv(File file) async {
 
   for( final line in lines) {
     final parts = line.split(";");
-    if (parts.length < 4) continue;
+   if (parts.length < 3) continue;
     route.add(RouteCSV(
       id: parts[0].trim(),
       name: parts[1].trim(),
