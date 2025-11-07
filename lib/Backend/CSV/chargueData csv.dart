@@ -35,25 +35,18 @@ Future<bool> chargueDataCSV(BuildContext context) async {
 
   if (await fRoutes.exists())
   {
-
         await csvImportRoutes(context, routesCSV);
-
-
   } else
   {
-
     errorFiles.add(S.of(context).route_file_cannot_be_read);
   }
-
-
-
 
   if (await routesCSV.isNotEmpty)
   {
 
      if(routesCSV.isNotEmpty)
      {
-       List<String> namesRoutesOrdened= ['Routes', 'Conections', 'serverSql', 'Sectors', 'Factories', 'Empleoyes', 'Lines', 'Mails'];
+       List<String> namesRoutesOrdened = ['Routes', 'Conections', 'serverSql', 'Sectors', 'Factories', 'Empleoyes', 'Lines', 'Mails'];
 
        List<RouteCSV> tmp = reorderRouter(namesRoutesOrdened, routesCSV);
 
