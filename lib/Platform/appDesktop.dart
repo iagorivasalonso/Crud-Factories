@@ -89,7 +89,9 @@ class _appDesktopState extends State<appDesktop> {
                  errors(context, errorFiles);
 
                  setState(() {
-                   adminRoutes(context,sqlBd);
+                   itenSelect = 0;
+                   subIten1Select = 1;
+                   subIten2Select = -1;
                  });
                }
 
@@ -104,7 +106,9 @@ class _appDesktopState extends State<appDesktop> {
                     if(rutesComplete == true)
                     {
                       setState(() {
-                        adminRoutes(context,sqlBd);
+                        itenSelect = 0;
+                        subIten1Select = 1;
+                        subIten2Select = -1;
                       });
                     }
                }
@@ -257,7 +261,9 @@ class _appDesktopState extends State<appDesktop> {
                           child: Text(S.of(context).routes)),
                       onTap: () async {
                         setState(() {
-                          adminRoutes(context);
+                          itenSelect = 0;
+                          subIten1Select = 1;
+                          subIten2Select = -1;
                         });
 
                       }

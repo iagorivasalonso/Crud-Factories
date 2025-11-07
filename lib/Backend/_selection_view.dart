@@ -11,6 +11,7 @@ import 'package:crud_factories/Objects/Factory.dart';
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter/src/widgets/framework.dart';
 
+import '../Frontend/adminRoutes.dart';
 import '../generated/l10n.dart';
 
 FuntionSeleted(int itenSelection, int subIten1Selection,int subIten2Selection, double mWidth, double mHeight, BuildContext context) {
@@ -32,7 +33,8 @@ FuntionSeleted(int itenSelection, int subIten1Selection,int subIten2Selection, d
             return newSend("", "", select);
         }
 
-
+        if (subIten1Selection == 1)
+          return adminRoutes();
 
         if (subIten1Selection == 2)
           return newImport();
