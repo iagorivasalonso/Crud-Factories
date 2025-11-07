@@ -17,13 +17,12 @@ import 'package:flutter/src/widgets/framework.dart';
 
 Future<bool> chargueDataCSV(BuildContext context) async {
 
-  routesManage.clear();
+  routesCSV.clear();
   bool isCorrect = true;
 
-  allRoutes = ['Routes', 'Conections', 'serverSql', 'Sectors', 'Factories', 'Empleoyes', 'Lines', 'Mails'];
-  SQLRoutes = ['Routes', 'Conections', 'serverSql'];
 
-  if (routesManage.isEmpty)
+
+  if (routesCSV.isEmpty)
   {
     Directory currentDir = Directory.current;
     Directory parentDir = currentDir.parent;
@@ -32,50 +31,33 @@ Future<bool> chargueDataCSV(BuildContext context) async {
     fRoutes = File(routeFirst);
   }
 
-  final filePathRoutes = fRoutes;
+  fRoutes = File('${fRoutes.path}/rutas.csv');
 
-  try {
-    await csvImportRoutes(context, routesManage);
-  } catch (Exeption) {
-
-  }
-
-  if (await filePathRoutes.exists())
+  if (await fRoutes.exists())
   {
 
-     if(routesManage.isNotEmpty)
+        await csvImportRoutes(context, routesCSV);
+
+
+  } else
+  {
+
+    errorFiles.add(S.of(context).route_file_cannot_be_read);
+  }
+
+
+
+
+  if (await routesCSV.isNotEmpty)
+  {
+
+     if(routesCSV.isNotEmpty)
      {
-         String current = " ";
-         List<RouteCSV> routesOrd = [];
+       List<String> namesRoutesOrdened= ['Routes', 'Conections', 'serverSql', 'Sectors', 'Factories', 'Empleoyes', 'Lines', 'Mails'];
 
-         for(int i = 0; i < allRoutes.length; i++)
-         {
-               current = allRoutes[i];
-               bool exist = false;
+       List<RouteCSV> tmp = reorderRouter(namesRoutesOrdened, routesCSV);
 
-               for(int y = 0; y < routesManage.length; y++)
-               {
-                     if(current == routesManage[y].name)
-                     {
-                       routesOrd.add(routesManage[y]);
-                       exist = true;
-                       break;
-                     }
-               }
-               if(!exist)
-               {
-                 routesOrd.add(RouteCSV(
-                   id: '',
-                   name: '',
-                   route: '',
-                 ));
-               }
-               else
-               {
-                 routesManage = routesOrd;
-               }
-         }
-
+       routesCSV = tmp;
      }
      else
      {
@@ -83,10 +65,10 @@ Future<bool> chargueDataCSV(BuildContext context) async {
         isCorrect = false;
      }
 
-     if(isCorrect = true)
+     if(isCorrect)
      {
        sectors.clear();
-       fSectors = File(routesManage[3].route);
+       fSectors = File(routesCSV[3].route);
 
        try {
          await csvImportSectors(context, sectors);
@@ -96,7 +78,7 @@ Future<bool> chargueDataCSV(BuildContext context) async {
 
 
        mails.clear();
-       fMails = File(routesManage[7].route);
+       fMails = File(routesCSV[7].route);
 
        try {
          await csvImportMails(context,fileContent, mails);
@@ -105,7 +87,7 @@ Future<bool> chargueDataCSV(BuildContext context) async {
        }
 
        allLines.clear();
-       fLines = File(routesManage[6].route);
+       fLines = File(routesCSV[6].route);
 
        try {
          await csvImportLines(context, allLines);
@@ -114,7 +96,7 @@ Future<bool> chargueDataCSV(BuildContext context) async {
        }
 
        conections.clear();
-       fConections = File(routesManage[1].route);
+       fConections = File(routesCSV[1].route);
 
        try {
          await csvImportConections(context,conections);
@@ -124,7 +106,7 @@ Future<bool> chargueDataCSV(BuildContext context) async {
 
        try {
 
-         dynamic routeServer = routesManage[2].route;
+         dynamic routeServer = routesCSV[2].route;
          fServer = File(routeServer);
 
        } catch (Exeption) {
@@ -132,7 +114,7 @@ Future<bool> chargueDataCSV(BuildContext context) async {
        }
 
        allFactories.clear();
-       fFactories = File(routesManage[4].route);
+       fFactories = File(routesCSV[4].route);
 
        await csvImportFactories(context, allFactories);
      }
@@ -144,4 +126,24 @@ Future<bool> chargueDataCSV(BuildContext context) async {
   }
 
   return isCorrect;
+}
+
+List<RouteCSV> reorderRouter ( List<String> orderRoutes, List<RouteCSV> routesCsv) {
+
+   final routeMap = {
+     for(var r in routesCsv)
+        if(r.name.isNotEmpty)
+           r.name:r
+   };
+
+   final reordered = orderRoutes.map((name) {
+     final existingRoute = routeMap[name];
+     if (existingRoute != null) {
+       return existingRoute;
+     } else {
+       return RouteCSV(name: name, id: '', route: '');
+     }
+   }).toList();
+
+   return reordered;
 }

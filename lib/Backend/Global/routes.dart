@@ -24,7 +24,7 @@ Map<String,WidgetBuilder> getAppRoutes() {
     '/send' :(context) =>  newSend("", "", select),
     '/importData' :(context) => newImport(),
     '/listSectors' :(context) => adminSectorAndroid(),
-    '/listRoutes' :(context) => adminRoutesAndroid(),
+  //  '/listRoutes' :(context) => adminRoutes(),
     '/exit' :(context) {
         SystemNavigator.pop();
         return const SizedBox ();
