@@ -257,7 +257,7 @@ Future<void> _onSaveList(BuildContext context, ListController listController) as
     final entityName = S.of(context).routes;
     count += await processImport(
       newList: listController.routesNew,
-      existingList: routesManage,
+      existingList: routesCSV,
       getKey: (r) => r.route,
       setId: (r, id) => r.id = id,
       csvExport: csvExportatorRoutes,

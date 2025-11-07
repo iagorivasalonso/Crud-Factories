@@ -48,15 +48,15 @@ class _appDesktopState extends State<appDesktop> {
           {
                 String name = '';
 
-                for(int i = 0; i < routesManage.length; i++)
+                for(int i = 0; i < routesCSV.length; i++)
                 {
-                   name = routesManage[i].name;
+                   name = routesCSV[i].name;
 
                    for (int y = 0; y < SQLRoutes.length; y++)
                    {
                       if(SQLRoutes[y] == name)
                       {
-                        routesCurrent.add(routesManage[i]);
+                        routesCurrent.add(routesCSV[i]);
                       }
                    }
                 }
@@ -68,7 +68,7 @@ class _appDesktopState extends State<appDesktop> {
           }
           else
           {
-             routesCurrent = routesManage;
+             routesCurrent = routesCSV;
           }
 
 
