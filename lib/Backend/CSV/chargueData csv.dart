@@ -20,46 +20,61 @@ Future<bool> chargueDataCSV(BuildContext context) async {
   routesCSV.clear();
   bool isCorrect = true;
 
+  File tmp = File('${fRoutes.path}/routes.csv');
 
-
-  if (routesCSV.isEmpty)
+  if (!await tmp.exists())
   {
     Directory currentDir = Directory.current;
     Directory parentDir = currentDir.parent;
 
     routeFirst = parentDir.path;
     fRoutes = File(routeFirst);
+
+    tmp = File('${fRoutes.path}/routes.csv');
+
+    try {
+      await tmp.create(recursive: true);
+      isCorrect = true;
+    } catch (e) {
+      errorFiles.add(S.of(context).error_creating_file);
+      isCorrect = false;
+    }
+
   }
+  else
+  {
+      errorFiles.add(S.of(context).error_creating_file);
+      isCorrect = true;
+  }
+  fRoutes = tmp;
 
-  fRoutes = File('${fRoutes.path}/rutas.csv');
-
-  if (await fRoutes.exists())
+  if (isCorrect)
   {
         await csvImportRoutes(context, routesCSV);
-  } else
+        isCorrect = true;
+  }
+  else
   {
     errorFiles.add(S.of(context).route_file_cannot_be_read);
+    isCorrect = false;
   }
 
-  if (await routesCSV.isNotEmpty)
+  if(isCorrect)
   {
-
-     if(routesCSV.isNotEmpty)
-     {
-       List<String> namesRoutesOrdened = ['Routes', 'Conections', 'serverSql', 'Sectors', 'Factories', 'Empleoyes', 'Lines', 'Mails'];
+       namesRoutesOrdened = [S.of(context).routes,S.of(context).connections,S.of(context).server,S.of(context).sector,S.of(context).companies,S.of(context).employees,S.of(context).lines, S.of(context).mails];
 
        List<RouteCSV> tmp = reorderRouter(namesRoutesOrdened, routesCSV);
-
        routesCSV = tmp;
-     }
-     else
-     {
-       errorFiles.add(S.of(context).route_file_cannot_be_read);
-        isCorrect = false;
-     }
+  }
+  else
+  {
 
-     if(isCorrect)
-     {
+      errorFiles.add(S.of(context).route_file_cannot_be_read);
+      isCorrect = false;
+  }
+
+   if(isCorrect)
+   {
        sectors.clear();
        fSectors = File(routesCSV[3].route);
 
@@ -111,12 +126,10 @@ Future<bool> chargueDataCSV(BuildContext context) async {
 
        await csvImportFactories(context, allFactories);
      }
-  }
-  else
-  {
-     isCorrect = false;
-
-  }
+   else
+   {
+         isCorrect = false;
+   }
 
   return isCorrect;
 }
