@@ -136,25 +136,29 @@ class _newImportState extends State<newImport> {
                         ),
 
                        Padding(
-                          padding: const EdgeInsets.only(left: 520.0, top: 260.0),
+                          padding: const EdgeInsets.only(left: 500.0, top: 260.0),
                           child: Row(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              materialButton(
-                                  nameAction: S.of(context).import_data,
-                                  function: () => _onSaveList(context, listController)
+                              Flexible(
+                                child: materialButton(
+                                    nameAction: S.of(context).import_data,
+                                    function: () => _onSaveList(context, listController)
+                                ),
                               ),
 
-                              Padding(
-                                padding: const EdgeInsets.only(left: 20.0),
-                                child: materialButton(
-                                  nameAction:S.of(context).delete,
-                                  function: () async{
-                                    setState(() {
-                                      controllerImportPicker.text = "";
-                                    });
-                                  },
+                              Flexible(
+                                child: Padding(
+                                  padding: const EdgeInsets.only(left: 20.0),
+                                  child: materialButton(
+                                    nameAction:S.of(context).delete,
+                                    function: () async{
+                                      setState(() {
+                                        controllerImportPicker.text = "";
+                                      });
+                                    },
 
+                                  ),
                                 ),
                               ),
                             ],
@@ -181,7 +185,7 @@ Future<void> _pickFile(BuildContext context, TextEditingController controllerDat
 
 
   FilePickerResult? result =  await FilePicker.platform.pickFiles(
-    dialogTitle: 'select file',
+    dialogTitle: S.of(context).select_file,
     type: FileType.custom,
     allowedExtensions: ['csv'],
   );
