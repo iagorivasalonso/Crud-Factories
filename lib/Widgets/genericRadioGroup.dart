@@ -39,20 +39,15 @@ class GenericRadioGroup<T> extends StatelessWidget {
         ? Column()
         : Padding(
           padding: const EdgeInsets.only(top:20),
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.center,
+          child: Wrap(
+            crossAxisAlignment: WrapCrossAlignment.center,
+            spacing: 20,
+            runSpacing: 8,
             children: [
-
-              Padding(
-                padding: const EdgeInsets.only(right: 20),
-                child: Text(
-                  camp,
-                ),
-              ),
-
-          ...children,
-                ],
-              ),
+              Text(camp),
+              ...children,
+            ],
+          ),
         );
   }
 }

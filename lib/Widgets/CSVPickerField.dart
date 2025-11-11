@@ -42,9 +42,12 @@ class _CSVPickerFieldState extends State<CSVPickerField> {
     return Row(
       children: [
         Expanded(
-          child: defaultTextfield(
+          child: Padding(
+            padding: const EdgeInsets.only(right: 35.0),
+            child: defaultTextfield(
               nameCamp: campName,
-              controllerCamp:  controllerImportPicker
+              controllerCamp: controllerImportPicker,
+            ),
           ),
         ),
 
