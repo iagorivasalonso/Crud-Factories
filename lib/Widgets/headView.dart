@@ -5,9 +5,11 @@ Row headView({
 }) {
   return Row(
     children: [
-      Text('$title',
-        style: const TextStyle(
-            fontWeight: FontWeight.bold),),
+      Expanded(child: Text(title,
+        style: const TextStyle(fontWeight: FontWeight.bold),
+        maxLines: 1,
+        overflow: TextOverflow.ellipsis,)
+      ),
     ],
   );
 }
