@@ -40,6 +40,7 @@ Future<bool> createSector(BuildContext  context, String modif) async {
     edit = false;
   }
 
+  controllerSector.text = "";
   bool? sector = await showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -62,23 +63,23 @@ Future<bool> createSector(BuildContext  context, String modif) async {
                        ),
                        Flexible(
                          flex:1,
-                         child: Padding(
-                           padding: const EdgeInsets.symmetric(horizontal: 35.0),
-                           child: defaultTextfield(
-                             nameCamp:"",
-                             controllerCamp: controllerSector,
+                         child: SizedBox(
+                           width: 350.0,
+                           child: Padding(
+                             padding: const EdgeInsets.symmetric(horizontal: 35.0),
+                             child: defaultTextfield(
+                               nameCamp:"",
+                               controllerCamp: controllerSector,
+                             ),
                            ),
                          ),
                        ),
-
+                       const SizedBox(height: 30),
                        Flexible(
                          flex: 1,
-                         child: Padding(
-                           padding: const EdgeInsets.only(top: 25.0, left: 150.0, right: 150),
-                           child: materialButton(
-                             nameAction: S.of(context).create,
-                             function: () => importSector(),
-                           ),
+                         child: materialButton(
+                           nameAction: S.of(context).create,
+                           function: () => importSector(),
                          ),
                        ),
                      ],
