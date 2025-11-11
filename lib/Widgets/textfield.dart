@@ -13,6 +13,7 @@ Padding defaultTextfield({
     child: Row(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
+        if(nameCamp.isNotEmpty)
         Padding(
           padding: const EdgeInsets.only(right: 10.0),
           child: SizedBox(

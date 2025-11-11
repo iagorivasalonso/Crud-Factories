@@ -130,6 +130,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "No se pudo eliminar la base de datos",
     ),
     "create": MessageLookupByLibrary.simpleMessage("Crear"),
+    "create_sector": MessageLookupByLibrary.simpleMessage("Crear sector"),
     "created": MessageLookupByLibrary.simpleMessage("Creado"),
     "creation_of_the_sector": MessageLookupByLibrary.simpleMessage(
       "Creación del sector",

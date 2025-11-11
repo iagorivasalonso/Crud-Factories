@@ -9,9 +9,10 @@ MaterialButton materialButton({
 
 }){
 
-  return   MaterialButton(
+  return  MaterialButton(
       color: Colors.lightBlue,
       child: Row(
+        mainAxisSize: MainAxisSize.min, //
         children: [
           if (icon != null)
             nameAction == null
@@ -24,7 +25,7 @@ MaterialButton materialButton({
           if (nameAction != null)
           Text(nameAction!,
           style: const TextStyle(
-          color: Colors.white)
+          color: Colors.white),
             ),
         ],
       ),
