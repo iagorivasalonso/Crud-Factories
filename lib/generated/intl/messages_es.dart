@@ -171,6 +171,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "employees": MessageLookupByLibrary.simpleMessage("Empleados"),
     "enviado": MessageLookupByLibrary.simpleMessage("Enviado"),
     "error": MessageLookupByLibrary.simpleMessage("Error"),
+    "error_creating_file": MessageLookupByLibrary.simpleMessage(
+      "Error al crear el archivo",
+    ),
     "error_modifying_the_database_name": MessageLookupByLibrary.simpleMessage(
       "Error al modificar el el nombre de la base de datos",
     ),

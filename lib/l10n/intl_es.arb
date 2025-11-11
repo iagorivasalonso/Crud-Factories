@@ -226,6 +226,7 @@
   "You_cannot_leave_the_field_empty_you_want_to_continue": "No puede dejar el campo vacío. ¿Desea continuar?",
   "the_field": "El campo",
   "file_not_found": "No se encontró el archivo",
+  "error_creating_file": "Error al crear el archivo",
   "file_format_error": "Error en el formato del archivo",
   "it_has_been": "Ha sido",
   "has_been_removed": "Se ha eliminado",

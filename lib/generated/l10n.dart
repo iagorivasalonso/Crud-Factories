@@ -1728,6 +1728,16 @@ class S {
     );
   }
 
+  /// `Error al crear el archivo`
+  String get error_creating_file {
+    return Intl.message(
+      'Error al crear el archivo',
+      name: 'error_creating_file',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Error en el formato del archivo`
   String get file_format_error {
     return Intl.message(
