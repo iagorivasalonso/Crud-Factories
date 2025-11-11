@@ -16,7 +16,7 @@ Future<bool> noFind(BuildContext context, bool noDat, String stringDialog) async
             height: 190,
             child: Column(
               children: [
-                headAlert(title: S.of(context).error),
+                headDialog(title: S.of(context).error),
                 Expanded(child: Padding(
                     padding: const EdgeInsets.only(left: 30, top: 25, bottom: 15),
                     child:  Text(stringDialog,

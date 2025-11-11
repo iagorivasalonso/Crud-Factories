@@ -22,7 +22,7 @@ Future<bool> error(BuildContext  context, String action, [format]) async {
                   : dialogHeight,
               child: Column(
                 children: [
-                  headAlert(title: S.of(context).error),
+                  headDialog(title: S.of(context).error),
                   Expanded(
                     child: Padding(
                       padding:  const EdgeInsets.only(left: 25,top: 20, bottom: 10.0 ,right: 20),

@@ -17,7 +17,7 @@ Future<bool> confirmDelete(BuildContext  context, String array) async {
                height: 175,
                child: Column(
                  children: [
-                   headAlert(title:S.of(context).delete),
+                   headDialog(title:S.of(context).delete),
                    Expanded(
                      child: Padding(
                        padding:  const EdgeInsets.only(left: 25,top: 25, bottom: 15),

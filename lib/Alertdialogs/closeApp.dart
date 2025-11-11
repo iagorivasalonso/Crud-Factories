@@ -17,7 +17,7 @@ void closeAlert(BuildContext  context) {
                 height: 175,
                 child: Column(
                   children: [
-                   headAlert(title:S.of(context).Application_exit),
+                   headDialog(title:S.of(context).Application_exit),
                     Expanded(child: Padding(
                       padding: EdgeInsets.only(left: 25,top: 25, bottom: 15),
                       child: Text(S.of(context).desea_go_out,

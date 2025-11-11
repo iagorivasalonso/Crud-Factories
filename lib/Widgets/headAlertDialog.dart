@@ -2,7 +2,7 @@
 import 'package:crud_factories/generated/l10n.dart';
 import 'package:flutter/material.dart';
 
-StatefulBuilder headAlert({
+StatefulBuilder headDialog({
 
   required String title}) {
 

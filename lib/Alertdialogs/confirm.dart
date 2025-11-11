@@ -22,7 +22,7 @@ Future<bool> confirm(BuildContext  context, String action) async {
                      : dialogHeight,
                  child: Column(
                      children: [
-                       headAlert(title:S.of(context).confirm),
+                       headDialog(title:S.of(context).confirm),
                        Expanded(child: Padding(
                          padding: const EdgeInsets.only(left: 25,right: 15, top:25),
                          child: Text(action,

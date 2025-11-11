@@ -17,7 +17,7 @@ Future<bool> warning(BuildContext  context,String action) async{
              height: 185,
              child: Column(
                children: [
-                 headAlert(title: S.of(context).careful),
+                 headDialog(title: S.of(context).careful),
                  Expanded(
                    child: Padding(
                      padding:  const EdgeInsets.only(left: 25,top: 25),

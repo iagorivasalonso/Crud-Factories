@@ -16,7 +16,7 @@ Future<bool> typeConection (BuildContext  context) async {
               height: 175,
               child: Column(
                 children: [
-                  headAlert(title: S.of(context).font_type),
+                  headDialog(title: S.of(context).font_type),
                   Expanded(
                     child: Padding(
                       padding:  EdgeInsets.only(left: 25,top: 25, bottom: 15),

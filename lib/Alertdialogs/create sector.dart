@@ -9,8 +9,12 @@ import 'package:crud_factories/Backend/Global/variables.dart';
 import 'package:crud_factories/Functions/createId.dart';
 import 'package:crud_factories/Objects/Sector.dart';
 import 'package:crud_factories/Widgets/headAlertDialog.dart';
+import 'package:crud_factories/Widgets/headView.dart';
 import 'package:crud_factories/generated/l10n.dart';
 import 'package:flutter/material.dart';
+
+import '../Widgets/materialButton.dart';
+import '../Widgets/textfield.dart' show defaultTextfield;
 
 
 Future<bool> createSector(BuildContext  context, String modif) async {
@@ -23,7 +27,7 @@ Future<bool> createSector(BuildContext  context, String modif) async {
 
   if(modif!=S.of(context).newMale.toLowerCase())
   {
-     titleAlert = S.of(context).modification_of_the_sector;
+     titleAlert = S.of(context).create_sector;
      controllerSector.text=modif!;
 
      edit = true;
@@ -42,45 +46,56 @@ Future<bool> createSector(BuildContext  context, String modif) async {
         return StatefulBuilder(
           builder: (BuildContext context, void Function(void Function()) setState) => Dialog(
             shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(0)),
-            child: SizedBox(
-              width: 350,
-              height: 230,
-              child: Column(
-                children: [
-                  headAlert(title: titleAlert),
-                  Expanded(
-                    child: Padding(
-                      padding: const EdgeInsets.only(right: 120,top: 25),
-                      child: Text(S.of(context).name_sector,
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                    ),
+            child: ConstrainedBox(
+                constraints: BoxConstraints(
+                  maxHeight: MediaQuery.of(context).size.height * 0.4,
+                  maxWidth: 400,
+                ),
+                child: Column(
+                     children: [
+                       headDialog(title: titleAlert),
+                       Padding(
+                         padding: const EdgeInsets.only(top:20.0,left: 40.0),
+                         child: headView(
+                             title: titleAlert
+                         ),
+                       ),
+                       Flexible(
+                         flex:1,
+                         child: Padding(
+                           padding: const EdgeInsets.symmetric(horizontal: 35.0),
+                           child: defaultTextfield(
+                             nameCamp:"",
+                             controllerCamp: controllerSector,
+                           ),
+                         ),
+                       ),
+
+                       Flexible(
+                         flex: 1,
+                         child: Padding(
+                           padding: const EdgeInsets.only(top: 25.0, left: 150.0, right: 150),
+                           child: materialButton(
+                             nameAction: S.of(context).create,
+                             function: () => importSector(),
+                           ),
+                         ),
+                       ),
+                     ],
                   ),
-                  Expanded(
-                      child: SizedBox(
-                        height: 40,
-                        width: 200,
-                        child: TextField(
-                          controller: controllerSector,
-                          decoration: const InputDecoration(
-                              border: OutlineInputBorder()
-                          ),
-                        ),
-                      )
-                  ),
-                  Expanded(
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Expanded(
-                          child: Padding(
-                            padding: const EdgeInsets.only(left: 110, right: 110),
-                            child: MaterialButton(
-                                child: Text(S.of(context).acept,
-                                  style: const TextStyle(color: Colors.white),),
-                                color: Colors.lightBlue,
-                                onPressed:() async {
+            )
+          ),
+        );
+      });
+
+     return sector?? false;
+
+}
+
+importSector() {
+}
+
+/*
                                   List<Sector> currentSector = [];
 
                                   if(controllerSector.text.isNotEmpty)
@@ -170,23 +185,4 @@ Future<bool> createSector(BuildContext  context, String modif) async {
                                   }
 
 
-
-
-                                }
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  )
-                ],
-              ),
-            ),
-          ),
-        );
-      });
-
-     return sector?? false;
-
-}
-
+*/

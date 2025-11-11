@@ -110,7 +110,7 @@ class _adminRoutesState extends State<adminRoutes> {
                 ),
                 child: Column(
                   children: [
-                    headAlert(title: S.of(context).route_selector),
+                    headDialog(title: S.of(context).route_selector),
                     const SizedBox(height: 10),
                     Padding(
                       padding: const EdgeInsets.only(left: 30.0),

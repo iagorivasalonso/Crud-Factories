@@ -17,7 +17,7 @@ Future<int> noCategory(BuildContext  context, String array) async {
               height: 175,
               child: Column(
                 children: [
-                  headAlert(title:S.of(context).category_error),
+                  headDialog(title:S.of(context).category_error),
                   Expanded(
                     child: Padding(
                       padding: const EdgeInsets.only(left: 25,right: 15 ,top: 25, bottom: 15),

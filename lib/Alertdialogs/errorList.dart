@@ -20,7 +20,7 @@ Future<bool> errors(BuildContext context, List<String> errorFiles) async {
             height: dialogHeight,
             child: Column(
               children: [
-                headAlert(title: S.of(context).error),
+                headDialog(title: S.of(context).error),
                 Expanded(
                   flex: 2,
                   child: Padding(
