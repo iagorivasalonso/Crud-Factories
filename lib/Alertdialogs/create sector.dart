@@ -40,55 +40,9 @@ Future<bool> createSector(BuildContext  context, String modif) async {
     edit = false;
   }
 
-  bool? sector = await showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return StatefulBuilder(
-          builder: (BuildContext context, void Function(void Function()) setState) => Dialog(
-            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(0)),
-            child: ConstrainedBox(
-                constraints: BoxConstraints(
-                  maxHeight: MediaQuery.of(context).size.height * 0.4,
-                  maxWidth: 400,
-                ),
-                child: Column(
-                     children: [
-                       headDialog(title: titleAlert),
-                       Padding(
-                         padding: const EdgeInsets.only(top:20.0,left: 40.0),
-                         child: headView(
-                             title: titleAlert
-                         ),
-                       ),
-                       Flexible(
-                         flex:1,
-                         child: Padding(
-                           padding: const EdgeInsets.symmetric(horizontal: 35.0),
-                           child: defaultTextfield(
-                             nameCamp:"",
-                             controllerCamp: controllerSector,
-                           ),
-                         ),
-                       ),
 
-                       Flexible(
-                         flex: 1,
-                         child: Padding(
-                           padding: const EdgeInsets.only(top: 25.0, left: 150.0, right: 150),
-                           child: materialButton(
-                             nameAction: S.of(context).create,
-                             function: () => importSector(),
-                           ),
-                         ),
-                       ),
-                     ],
-                  ),
-            )
-          ),
-        );
-      });
 
-     return sector?? false;
+     return  false;
 
 }
 
