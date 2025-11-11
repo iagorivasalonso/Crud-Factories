@@ -90,9 +90,6 @@ class _adminRoutesState extends State<adminRoutes> {
       }
     }
 
-
-
-
       return Text("");
     }
 
@@ -135,9 +132,7 @@ class _adminRoutesState extends State<adminRoutes> {
                         ),
                       ),
                     ),
-
                     const SizedBox(height: 10),
-
                     Flexible(
                       flex:3,
                       child: Padding(
@@ -165,7 +160,6 @@ class _adminRoutesState extends State<adminRoutes> {
                         ),
                       ),
                     ),
-
                     const SizedBox(height: 10),
                     Padding(
                       padding: const EdgeInsets.only(left: 150.0),
@@ -173,12 +167,12 @@ class _adminRoutesState extends State<adminRoutes> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           materialButton(
-                            nameAction: "action",
+                            nameAction: S.of(context).import,
                             function: () => importedRoutes(context,routeControllers),
                           ),
                           const SizedBox(width: 20),
                           materialButton(
-                            nameAction: "re",
+                            nameAction: S.of(context).cancel,
                             function: () => reloadRoutes(),
                           ),
                         ],
