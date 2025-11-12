@@ -36,7 +36,7 @@ Padding defaultTextfield({
                 contentPadding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
               ),
               onChanged: (s) {
-                if (campOld!.isNotEmpty) {
+                if (campOld?.isNotEmpty ?? false) {
                   saveChanges = controllerCamp.text != campOld;
                 } else {
                   saveChanges = controllerCamp.text.isNotEmpty;
