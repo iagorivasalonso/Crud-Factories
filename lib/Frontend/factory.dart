@@ -265,6 +265,7 @@ class _newFactoryState extends State<newFactory> {
                                 child: GenericDropdown<Sector>(
                                   items: sectors,
                                   camp:S.of(context).sector,
+                                  opDefault: S.of(context).newMale,
                                   selectedItem: selectedSector,
                                   hint: sector,
                                   itemLabel: (sector) => sector.name,
@@ -436,16 +437,13 @@ class _newFactoryState extends State<newFactory> {
     }
 
 
-    if (sectorChoose == S.of(context).newMale)
+    if (sectorChoose == null)
     {
-      String modif = S.of(context).newMale;
+      String modif = "";
       bool create = await createSector(context, modif);
 
       if (create == true) {
-        setState(() {
-          String action = S.of(context).the_sector_has_been_created_successfully;
-          confirm(context, action);
-        });
+        setState(() {});
       }
     }
     else
