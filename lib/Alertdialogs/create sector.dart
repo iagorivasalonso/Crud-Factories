@@ -78,7 +78,7 @@ Future<bool> createSector(BuildContext  context, String campOld) async {
                          flex: 1,
                          child: materialButton(
                            nameAction: action,
-                           function: () => importSector(context,controllerSector,campOld),
+                           function: () => saveSector(context,controllerSector,campOld),
                          ),
                        ),
                      ],
@@ -92,7 +92,7 @@ Future<bool> createSector(BuildContext  context, String campOld) async {
 
 }
 
-Future<void> importSector(BuildContext context,TextEditingController controllerSector, String campOld) async {
+Future<void> saveSector(BuildContext context,TextEditingController controllerSector, String campOld) async {
 
   List<Sector> currentSector = [];
 
