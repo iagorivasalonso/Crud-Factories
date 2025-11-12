@@ -17,30 +17,29 @@ import '../Widgets/materialButton.dart';
 import '../Widgets/textfield.dart' show defaultTextfield;
 
 
-Future<bool> createSector(BuildContext  context, String modif) async {
+Future<bool> createSector(BuildContext  context, String campOld) async {
 
   late TextEditingController controllerSector = TextEditingController();
 
-  bool repeat = false;
-  String titleAlert="";
-  bool edit = false;
+  String titleAlert = "";
+  String action = "";
 
-  if(modif!=S.of(context).newMale.toLowerCase())
+
+  if(campOld.isNotEmpty)
   {
-     titleAlert = S.of(context).create_sector;
-     controllerSector.text=modif!;
+     titleAlert = S.of(context).edit;
+     controllerSector.text=campOld!;
 
-     edit = true;
+     action = S.of(context).save;
+
   }
   else
   {
     titleAlert = S.of(context).creation_of_the_sector;
-    modif = S.of(context).newMale;
 
-    edit = false;
+    action = S.of(context).create_sector;
   }
 
-  controllerSector.text = "";
   bool? sector = await showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -58,7 +57,7 @@ Future<bool> createSector(BuildContext  context, String modif) async {
                        Padding(
                          padding: const EdgeInsets.only(top:20.0,left: 40.0),
                          child: headView(
-                             title: titleAlert
+                             title: S.of(context).name_sector
                          ),
                        ),
                        Flexible(
@@ -78,8 +77,8 @@ Future<bool> createSector(BuildContext  context, String modif) async {
                        Flexible(
                          flex: 1,
                          child: materialButton(
-                           nameAction: S.of(context).create,
-                           function: () => importSector(),
+                           nameAction: action,
+                           function: () => importSector(context,controllerSector,campOld),
                          ),
                        ),
                      ],
@@ -93,97 +92,101 @@ Future<bool> createSector(BuildContext  context, String modif) async {
 
 }
 
-importSector() {
+Future<void> importSector(BuildContext context,TextEditingController controllerSector, String campOld) async {
+
+  List<Sector> currentSector = [];
+
+    if(campOld.isEmpty)
+    {
+      if(controllerSector.text.isNotEmpty)
+      {
+        bool repeat = sectors.any((sector) => sector.name == controllerSector.text);
+
+        if(repeat == true)
+        {
+          String action = S.of(context).that_sector_already_exists;
+          await error(context, action);
+        }
+        else
+        {
+
+          String idNew = "";
+
+          if(sectors.isNotEmpty)
+          {
+            String idLast = sectors[sectors.length-1].id;
+            idNew = createId(idLast);
+          }
+          else
+          {
+            idNew ="1";
+          }
+
+          currentSector.add(Sector(
+            id: idNew,
+            name: controllerSector.text,
+          ));
+
+          Navigator.of(context).pop(true);
+
+          if(conn != null)
+          {
+            sqlCreateSector(currentSector);
+          }
+          else
+          {
+            sectors += currentSector;
+            csvExportatorSectors(sectors);
+          }
+
+          String action = S.of(context).the_sector_has_been_created_successfully;
+          confirm(context, action);
+        }
+      }
+      else
+      {
+        String action = S.of(context).the_field_cannot_be_blank;
+        await error(context,action);
+      }
+    }
+    else
+    {
+      if (campOld != controllerSector.text)
+      {
+        bool repeat = sectors.any((sector) => sector.name == controllerSector.text);
+
+        if(repeat)
+        {
+          String action = S.of(context).that_sector_already_exists;
+          await error(context, action);
+        }
+        else
+        {
+
+          final sector1 = sectors.firstWhere((s) => s.name == campOld);
+
+          if (sector1 == null) {
+            final action = S.of(context).sector;
+            await error(context, action);
+            return;
+          }
+          sector1.name = controllerSector.text;
+          currentSector = [sector1];
+
+          if(conn != null)
+          {
+            sqlModifySector(currentSector);
+          }
+          else
+          {
+            csvExportatorSectors(sectors);
+          }
+          String action = S.of(context).sector_edited_correctly;
+          await confirm(context, action);
+        }
+        Navigator.of(context).pop(true);
+      }
+    }
+
+
 }
-
-/*
-                                  List<Sector> currentSector = [];
-
-                                  if(controllerSector.text.isNotEmpty)
-                                  {
-                                    if(edit == false)
-                                    {
-                                      for(int i = 0; i < sectors.length; i++)
-                                      {
-                                        if(controllerSector.text == sectors[i].name)
-                                        {
-                                          repeat = true ;
-                                        }
-
-                                      }
-
-                                      if(repeat == false)
-                                      {
-
-                                        String idNew = "";
-
-                                        if(sectors.isNotEmpty)
-                                        {
-                                          String idLast = sectors[sectors.length-1].id;
-                                          idNew = createId(idLast);
-                                        }
-                                        else
-                                        {
-                                          idNew ="1";
-                                        }
-                                        currentSector.add(Sector(
-                                          id: idNew,
-                                          name: controllerSector.text,
-                                        ));
-
-                                        Navigator.of(context).pop(true);
-
-                                        if(conn != null)
-                                        {
-                                          sqlCreateSector(currentSector);
-                                        }
-                                        else
-                                        {
-                                          sectors += currentSector;
-                                          csvExportatorSectors(sectors);
-                                        }
-
-                                          String action = S.of(context).the_sector_has_been_created_successfully;
-                                          confirm(context, action);
-                                      }
-                                      else
-                                      {
-                                        String action = S.of(context).that_sector_already_exists;
-                                        await error(context, action);
-                                      }
-
-                                    }
-                                    else
-                                    {
-
-                                      for(int i = 0; i < sectors.length; i++)
-                                      {
-                                        if(modif == sectors[i].name)
-                                        {
-                                          sectors[i].name = controllerSector.text;
-                                          currentSector.add(sectors[i]);
-                                        }
-                                      }
-
-                                      Navigator.of(context).pop(true);
-
-                                      if(conn != null)
-                                      {
-                                        sqlModifySector(currentSector);
-                                      }
-                                      else
-                                      {
-                                        csvExportatorSectors(sectors);
-                                      }
-                                    }
-
-
-                                  }
-                                  else
-                                  {
-                                     String action = S.of(context).the_field_cannot_be_blank;
-                                     await error(context,action);
-                                  }
-
-
-*/
