@@ -96,7 +96,7 @@ Future<void> saveSector(BuildContext context,TextEditingController controllerSec
 
   List<Sector> currentSector = [];
 
-    if(campOld.isEmpty)
+    if(campOld.isEmpty || sectors.isEmpty)
     {
       if(controllerSector.text.isNotEmpty)
       {
