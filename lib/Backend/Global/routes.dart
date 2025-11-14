@@ -23,7 +23,7 @@ Map<String,WidgetBuilder> getAppRoutes() {
     '/mail' :(context) => newMail(select),
     '/send' :(context) =>  newSend("", "", select),
     '/importData' :(context) => newImport(),
-    '/listSectors' :(context) => adminSectorAndroid(),
+    //'/listSectors' :(context) => adminSectorAndroid(),
   //  '/listRoutes' :(context) => adminRoutes(),
     '/exit' :(context) {
         SystemNavigator.pop();
