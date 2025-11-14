@@ -8,155 +8,63 @@ import 'package:crud_factories/Backend/Global/list.dart';
 import 'package:crud_factories/Backend/SQL/deleteSector.dart';
 import 'package:crud_factories/Backend/Global/variables.dart';
 import 'package:crud_factories/Widgets/headAlertDialog.dart';
-import 'package:crud_factories/Widgets/headViewsAndroid.dart';
+import 'package:crud_factories/Widgets/tableEditSector.dart';
 import 'package:crud_factories/generated/l10n.dart';
-import 'package:crud_factories/helpers/localization_helper.dart';
 import 'package:flutter/material.dart';
+
+import '../Alertdialogs/error.dart';
+import '../Widgets/materialButton.dart';
 
 
 Future<void> adminSector(BuildContext context) async {
 
-  double mWidth = 400;
-
   return showDialog(
     context: context,
     builder: (BuildContext context) {
-
-      final screenWith = MediaQuery.of(context).size.width;
-
       return StatefulBuilder(
         builder: (BuildContext context, void Function(void Function()) setState) => Dialog(
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(0)),
-          child: SizedBox(
-            width: mWidth,
-            height: 350,
+          child: ConstrainedBox(
+            constraints: BoxConstraints(
+              maxHeight: MediaQuery.of(context).size.height * 0.6,
+              maxWidth: 400,
+            ),
             child: Column(
               children: [
-                headAlert(title: S.of(context).sector_management),
+                headDialog(title: S.of(context).sector_management),
                 const SizedBox(height: 60),
                 Flexible(
                   flex: 1,
                   child: Padding(
                     padding: const EdgeInsets.only(left: 30.0, right: 30.0),
-                    child: ListView.builder(
-                      itemCount: sectors.length,
-                      itemBuilder: (BuildContext context, int index) {
-                        return ListTile(
-                          title: Text(sectors[index].name),
-                          trailing: screenWith > 330.0
-                              ? Row(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              IconButton(
-                                icon: Icon(Icons.edit, color: Colors.blue),
-                                onPressed: () async {
-
-                                  String modif = sectors[index].name;
-                                  bool? mod = await createSector(context, modif);
-
-                                  if (mod == true) {
-                                    setState(() {});
-                                  }
-                                },
-                              ),
-                              IconButton(
-                                icon: Icon(Icons.delete, color: Colors.red),
-                                onPressed: () async {
-
-                                  String pr = S.of(context).he;
-                                  String array0 = S.of(context).sector;
-                                  String array = "$pr $array0";
-                                  String action1 = LocalizationHelper.ask_confirm_supr(context, array);
-
-                                  bool correct = await warning(context, action1);
-                                  String search = sectors[index].name;
-                                  String idSupr = "";
-
-                                  if (correct)
-                                  {
-
-                                    if (sectors.length == 1)
-                                    {
-                                      Navigator.of(context).pop(false);
-                                    }
-
-                                    setState(() {
-                                      sectors.removeAt(index);
-                                      String action = S.of(context).the_sector_has_been_created_successfully;
-                                      confirm(context, action);
-                                    });
-                                  }
-
-                                  if (conn != null)
-                                  {
-
-                                    for (int i = 0; i < sectors.length; i++)
-                                    {
-                                      if (search == sectors[i].name)
-                                      {
-                                        idSupr = sectors[i].id;
-                                      }
-                                    }
-
-                                    sqlDeleteSector(idSupr);
-                                  }
-                                  else
-                                  {
-                                     csvExportatorSectors(sectors);
-                                  }
-                                },
-                              ),
-                            ],
-                          )
-                              : null,
-                        );
-                      },
-                    ),
+                    child: tableEditSector(
+                      sectors: sectors,
+                      onEdit: (index) => _onEditSector(context, index, setState),
+                      onDelete: (index) => _onDeleteSector(context, index, setState),
+                    )
                   ),
                 ),
-               Expanded(
-                 child: Padding(padding: const EdgeInsets.only(left: 30.0, right: 10.0,top: 44),
-                 child: Row(
-                   children: [
-                     Expanded(
-                       child: Padding(
-                         padding: const EdgeInsets.only(left: 70, right: 15),
-                         child: MaterialButton(
-                           color: Colors.lightBlue,
-                           child:  Text(S.of(context).create,
-                             style: TextStyle(color: Colors.white),
-                           ),
-                           onPressed: () async {
-                             String modif = S.of(context).newMale;
-                             bool create = await createSector(context, modif);
+                const SizedBox(height: 30),
+                Padding(
+                  padding: const EdgeInsets.only(left: 110.0),
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      materialButton(
+                        nameAction: S.of(context).create,
+                        function: () => _onCreateSector(context, setState),
+                      ),
+                      const SizedBox(width: 20),
+                      materialButton(
+                        nameAction: S.of(context).close,
+                        function:  () {
+                          Navigator.of(context).pop(false);
+                        },
+                      ),
+                    ],
+                  ),
+                ),
 
-                             if (create == true) {
-                               setState(() {});
-                             }
-
-                           }
-                         ),
-                       ),
-                     ),
-
-                     Expanded(
-                       child: Padding(
-                         padding: const EdgeInsets.only(left: 5, right: 70),
-                         child: MaterialButton(
-                           color: Colors.lightBlue,
-                           onPressed: () {
-                             Navigator.of(context).pop(false);
-                           },
-                           child: Text(S.of(context).close,
-                             style: TextStyle(color: Colors.white),
-                           ),
-                         ),
-                       ),
-                     ),
-                   ],
-                 ),
-                             ),
-               )
               ],
             ),
           ),
@@ -167,26 +75,55 @@ Future<void> adminSector(BuildContext context) async {
 
 }
 
-class adminSectorAndroid extends StatefulWidget {
+Future <void> _onCreateSector(BuildContext context, void Function(void Function()) setState) async {
 
+      String modif = "";
+      bool create = await createSector(context, modif);
 
+      if (create == true) {
+        setState(() {});
+      }
 
- adminSectorAndroid();
-
-  @override
-  State<adminSectorAndroid> createState() => _adminSectorAndroidState();
 }
 
-class _adminSectorAndroidState extends State<adminSectorAndroid> {
-  @override
-  Widget build(BuildContext context0) {
+Future <void> _onEditSector(BuildContext context, int index, void Function(void Function()) setState) async {
 
-    BuildContext context = Platform.isWindows ? context1 : context0;
-    String title = S.of(context).sector_management;
+   try {
+         String modif = sectors[index].name;
+         bool? mod = await createSector(context, modif);
 
-    return Scaffold(
-      appBar: appBarAndroid(context, name: title),
-      body: Text("factori"),
-    );
+         if( mod == true)
+         {
+           setState((){});
+         }
+
+   } catch (e){
+       String action = S.of(context).could_not_be_edited;
+       error(context,action);
+   }
+}
+
+Future <void> _onDeleteSector(BuildContext context, int index, void Function(void Function()) setState) async {
+
+  String idSupr = sectors[index].id;
+
+
+  if (sectors.length == 1)
+  {
+    Navigator.of(context).pop(false);
   }
-}
+
+  setState((){
+       sectors.removeAt(index);
+    });
+
+  confirm(context, S.of(context).the_sector_has_been_successfully_removed);
+
+    if (conn != null)
+    {
+      sqlDeleteSector(idSupr);
+    }
+    else
+    {
+      csvExportatorSectors(sectors);
+    }
