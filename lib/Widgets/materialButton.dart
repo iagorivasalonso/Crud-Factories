@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 MaterialButton materialButton({
   String? nameAction,
   Widget? icon,
-  required Future<void> Function() function,
+  required VoidCallback  function,
 
 }){
 
@@ -29,10 +29,8 @@ MaterialButton materialButton({
             ),
         ],
       ),
-  onPressed: () async {
-    await function();
+  onPressed: function,
 
-  }
   );
 }
 
