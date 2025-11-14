@@ -104,26 +104,25 @@ Future <void> _onEditSector(BuildContext context, int index, void Function(void 
 }
 
 Future <void> _onDeleteSector(BuildContext context, int index, void Function(void Function()) setState) async {
-
   String idSupr = sectors[index].id;
 
 
-  if (sectors.length == 1)
-  {
+  if (sectors.length == 1) {
     Navigator.of(context).pop(false);
   }
 
-  setState((){
-       sectors.removeAt(index);
-    });
+  setState(() {
+    sectors.removeAt(index);
+  });
 
-  confirm(context, S.of(context).the_sector_has_been_successfully_removed);
+  confirm(context, S
+      .of(context)
+      .the_sector_has_been_successfully_removed);
 
-    if (conn != null)
-    {
-      sqlDeleteSector(idSupr);
-    }
-    else
-    {
-      csvExportatorSectors(sectors);
-    }
+  if (conn != null) {
+    sqlDeleteSector(idSupr);
+  }
+  else {
+    csvExportatorSectors(sectors);
+  }
+}
