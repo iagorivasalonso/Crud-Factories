@@ -120,6 +120,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "could_not_be_deleted": MessageLookupByLibrary.simpleMessage(
       "No se pudo eliminar",
     ),
+    "could_not_be_edited": MessageLookupByLibrary.simpleMessage(
+      "No se pudo editar",
+    ),
     "could_not_connect_with_the_server": MessageLookupByLibrary.simpleMessage(
       "No se pudo conectar con el servidor",
     ),
@@ -322,6 +325,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "saved": MessageLookupByLibrary.simpleMessage("Guardado"),
     "search": MessageLookupByLibrary.simpleMessage("Buscar..."),
     "sector": MessageLookupByLibrary.simpleMessage("Sector"),
+    "sector_edited_correctly": MessageLookupByLibrary.simpleMessage(
+      "sector editado correctamente",
+    ),
     "sector_management": MessageLookupByLibrary.simpleMessage(
       "Gestión de sectores",
     ),
@@ -381,6 +387,10 @@ class MessageLookup extends MessageLookupByLibrary {
     "the_sector_has_been_created_successfully":
         MessageLookupByLibrary.simpleMessage(
           "El sector se ha creado correctamente",
+        ),
+    "the_sector_has_been_successfully_removed":
+        MessageLookupByLibrary.simpleMessage(
+          "El sector se ha eliminado correctamente",
         ),
     "the_shipment_contains": MessageLookupByLibrary.simpleMessage(
       "El envío contiene",

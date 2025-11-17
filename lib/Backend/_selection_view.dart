@@ -1,11 +1,13 @@
 import 'package:crud_factories/Backend/Global/list.dart';
+import 'package:crud_factories/Frontend/Views/listFactories.dart';
+import 'package:crud_factories/Frontend/Views/listMails.dart';
+import 'package:crud_factories/Frontend/Views/listSends.dart';
 import 'package:crud_factories/Frontend/conection.dart';
 import 'package:crud_factories/Frontend/mail.dart';
 import 'package:crud_factories/Frontend/factory.dart';
 import 'package:crud_factories/Frontend/importData.dart';
 import 'package:crud_factories/Frontend/send.dart';
 import 'package:crud_factories/Frontend/send_mail.dart';
-import 'package:crud_factories/Frontend/view.dart';
 import 'package:crud_factories/Functions/manageArrays.dart';
 import 'package:crud_factories/Objects/Factory.dart';
 import 'package:fluent_ui/fluent_ui.dart';
@@ -55,10 +57,12 @@ FuntionSeleted(int itenSelection, int subIten1Selection,int subIten2Selection, d
             {
                 err = true;
             }
+
+            return listFactories(context,err);
         }
 
         if (subIten1Selection == 2)
-          tView = S.of(context).mail;
+          return listMails();
 
         if (subIten1Selection == 3)
         {
@@ -76,10 +80,10 @@ FuntionSeleted(int itenSelection, int subIten1Selection,int subIten2Selection, d
           {
               groupLinesSector(subIten2Selection,element);
           }
+          return listSends();
         }
 
 
-        return view(tView,err,context);
 
       case 2:
         if (subIten1Selection == 0)
