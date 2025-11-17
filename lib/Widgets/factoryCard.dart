@@ -30,9 +30,10 @@ Card factoryCard({
                 ],
               ),
               Row(
-                children: [
+                children:[
+                  if(address != null)
                   Expanded(
-                    child: Text(address!,
+                    child: Text(address,
                    maxLines: 1,
                    overflow: TextOverflow.ellipsis,),
                   )
@@ -60,7 +61,7 @@ Card factoryCard({
                         Align(
                           alignment: Alignment.topRight,
                           child: SizedBox(
-                            child: Text(city!,
+                            child: Text(city ?? '',
                               maxLines: 1,
                               overflow: TextOverflow.ellipsis,),),
                         ),
