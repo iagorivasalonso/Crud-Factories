@@ -164,6 +164,26 @@ class S {
     return Intl.message('Crear', name: 'create', desc: '', args: []);
   }
 
+  /// `Crear sector`
+  String get create_sector {
+    return Intl.message(
+      'Crear sector',
+      name: 'create_sector',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `sector editado correctamente`
+  String get sector_edited_correctly {
+    return Intl.message(
+      'sector editado correctamente',
+      name: 'sector_edited_correctly',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `¿Desea completarlo?`
   String get want_to_complete_it {
     return Intl.message(
@@ -704,6 +724,16 @@ class S {
     );
   }
 
+  /// `El sector se ha eliminado correctamente`
+  String get the_sector_has_been_successfully_removed {
+    return Intl.message(
+      'El sector se ha eliminado correctamente',
+      name: 'the_sector_has_been_successfully_removed',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Esta es una prueba de conexión desde la aplicación`
   String get this_is_a_connection_test_from_the_application {
     return Intl.message(
@@ -811,6 +841,16 @@ class S {
     return Intl.message(
       'No se pudo eliminar',
       name: 'could_not_be_deleted',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `No se pudo editar`
+  String get could_not_be_edited {
+    return Intl.message(
+      'No se pudo editar',
+      name: 'could_not_be_edited',
       desc: '',
       args: [],
     );
