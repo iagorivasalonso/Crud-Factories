@@ -1,7 +1,6 @@
 
 
-import 'package:crud_factories/Frontend/Android/listMails.dart';
-import 'package:crud_factories/Frontend/Android/listSends.dart';
+
 import 'package:crud_factories/Frontend/adminRoutes.dart';
 import 'package:crud_factories/Frontend/adminSectors.dart';
 import 'package:crud_factories/Frontend/conection.dart';
@@ -12,7 +11,6 @@ import 'package:crud_factories/Frontend/send.dart';
 import 'package:crud_factories/Frontend/send_mail.dart';
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter/services.dart';
-import '../../Frontend/Android/listFactories.dart';
 
 Map<String,WidgetBuilder> getAppRoutes() {
 
