@@ -63,7 +63,7 @@ class _listMailsState extends State<listMails> {
     BuildContext context = context1;
 
     double mWidth = MediaQuery.of(context).size.width;
-    double mWidthList = 280;
+    double mWidthList = mWidth > 280 ? 250 : 0;
 
     return Row(
       children: [

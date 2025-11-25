@@ -109,7 +109,7 @@ class _listFactoriesState extends State<listFactories> {
 
     BuildContext context = Platform.isWindows ? context1 : context0;
     double mWidth = MediaQuery.of(context).size.width;
-    double mWidthList = 280;
+    double mWidthList = mWidth > 280 ? 250 : 0;
 
     final filterOptions = [
       S.of(context).name,

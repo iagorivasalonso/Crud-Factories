@@ -98,7 +98,7 @@ class _listSendsState extends State<listSends> {
         .of(context)
         .size
         .width;
-    double mWidthList = 280;
+    double mWidthList = mWidth > 280 ? 250 : 0;
 
     final filterOptions = [
       S.of(context).date,
