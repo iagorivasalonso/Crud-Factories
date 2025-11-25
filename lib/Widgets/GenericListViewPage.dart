@@ -34,7 +34,7 @@ class _GenericListViewPageState<T> extends State<GenericListViewPage<T>> {
   late List<T> displayItems;
   String? selectedFilter;
   String searchText = '';
-
+  int opSelected = 0;
   @override
   void initState() {
     super.initState();
@@ -67,82 +67,129 @@ class _GenericListViewPageState<T> extends State<GenericListViewPage<T>> {
 
   @override
   Widget build(BuildContext context0) {
+
     BuildContext context = Platform.isWindows ? context1 : context0;
 
-    return Column(
-      children: [
-        if (widget.filters.isNotEmpty)
-          Container(
-            color: Colors.blue,
-            child: Column(
-              children: [
-                Material(
-                  color: Colors.transparent,
-                  child: Padding(
-                    padding: const EdgeInsets.only(left: 10.0,right: 10.0),
-                    child: GenericDropdown<String>(
-                      items: widget.filters,
-                      camp: "Filtro",
-                      selectedItem: selectedFilter,
-                      hint: S.of(context).name,
-                      itemLabel: (item) => item,
-                      onChanged: (value) {
-                        setState(() {
-                          selectedFilter = value;
-                          _runFilter(searchText);
-                        });
-                      },
-                    ),
-                  ),
-                ),
-                Material(
-                  color: Colors.transparent,
-                  child: SizedBox(
-                    width: 150,
-                    child: Padding(
-                      padding: const EdgeInsets.only(top: 20.0,bottom: 30.0),
-                      child: TextField(
-                        decoration: InputDecoration(
-                          hintText: S.of(context).search,
-                          border: OutlineInputBorder(),
-                          isDense: true,
-                          contentPadding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-                        ),
-                        onChanged: (value) {
-                          _runFilter(value);
-                        },
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
+    List<String> opSearch = [S.of(context).allMale, S.of(context).filter];
 
-        Expanded(
-          child: ListView.builder(
-            itemCount: displayItems.length,
-            itemBuilder: (context, index) {
-              final item = displayItems[index];
-              return Dismissible(
-                key: ValueKey(item.hashCode),
-                background: Container(color: Colors.redAccent),
-                onDismissed: (_) async {
-                  if (widget.onDelete != null) await widget.onDelete!(item);
-                  setState(() => displayItems.removeAt(index));
-                },
-                child: GestureDetector(
-                  onTap: () async {
-                    if (widget.onTap != null) await widget.onTap!(item, index);
-                    if (widget.onSelect != null) widget.onSelect!(index);
-                  },
-                  child: widget.itemBuilder(item, index),
-                ),
-              );
-            },
-          ),
-        ),
-      ],
-    );
+
+     return LayoutBuilder(
+         builder: (context0,constrains) {
+           final height = constrains.maxHeight;
+           final width = constrains.maxWidth;
+
+           return Column(
+             children: [
+               Row(
+                 children: [
+                   for(int index = 0; index < opSearch.length; index++)
+                   GestureDetector(
+                     child: Material(
+                       child: Container(
+                          height: 40,
+                          width: width * 0.5,
+                          color: index == opSelected
+                               ? Colors.lightGreen
+                               : Colors.white,
+                          child: Center(
+                            child: Text(opSearch[index],
+                               style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 12.0,
+                                  color: index == opSelected
+                                         ? Colors.white
+                                         : Colors.black,
+                             ),
+                             maxLines: 1,
+                             overflow: TextOverflow.ellipsis),
+                          ),
+                       ),
+                     ),
+                     onTap:() {
+                       setState(() {
+                         opSelected = index;
+                       });
+                     }
+                   ),
+                 ],
+               ),
+               if (opSelected==1)
+                 Container(
+                   color: Colors.greenAccent,
+                   child: Column(
+                     children: [
+                       Material(
+                         color: Colors.transparent,
+                         child: Padding(
+                           padding: const EdgeInsets.only(left: 15.0,top: 10.0),
+                           child: GenericDropdown<String>(
+                             items: widget.filters,
+                             camp: S.of(context).filter,
+                             selectedItem: selectedFilter,
+                             hint: S.of(context).name,
+                             itemLabel: (item) => item,
+                             onChanged: (value) {
+                               setState(() {
+                                 selectedFilter = value;
+                                 _runFilter(searchText);
+                               });
+                             },
+                           ),
+                         ),
+                       ),
+                       Material(
+                         color: Colors.transparent,
+                         child: SizedBox(
+                           width: 150,
+                           child: Padding(
+                             padding: const EdgeInsets.only(top: 20.0,bottom: 30.0),
+                             child: TextField(
+                               decoration: InputDecoration(
+                                 hintText: S.of(context).search,
+                                 border: OutlineInputBorder(),
+                                 isDense: true,
+                                 contentPadding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+                               ),
+                               onChanged: (value) {
+                                 _runFilter(value);
+                               },
+                             ),
+                           ),
+                         ),
+                       ),
+                     ],
+                   ),
+                 ),
+
+               Expanded(
+                 child: ListView.builder(
+                   itemCount: displayItems.length,
+                   itemBuilder: (context, index) {
+                     final item = displayItems[index];
+                     return Dismissible(
+                       key: ValueKey(item.hashCode),
+                       background: Container(color: Colors.redAccent),
+                       onDismissed: (_) async {
+                         if (widget.onDelete != null) await widget.onDelete!(item);
+                         setState(() => displayItems.removeAt(index));
+                       },
+                       child: GestureDetector(
+                         onTap: () async {
+                           if (widget.onTap != null) await widget.onTap!(item, index);
+                           if (widget.onSelect != null) widget.onSelect!(index);
+                         },
+                         child: widget.itemBuilder(item, index),
+                       ),
+                     );
+                   },
+                 ),
+               ),
+             ],
+           );
+         });
+    /*
+
+
+     */
   }
 }
