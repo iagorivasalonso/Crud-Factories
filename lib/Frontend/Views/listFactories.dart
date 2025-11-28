@@ -9,6 +9,7 @@ import 'package:flutter/material.dart';
 import '../../Alertdialogs/warning.dart';
 import '../../Backend/CSV/exportFactories.dart';
 import '../../Backend/SQL/deleteFactory.dart';
+import '../../Functions/changesNoSave.dart';
 import '../../Widgets/GenericListViewPage.dart';
 import '../../Widgets/factoryCard.dart';
 import '../../helpers/localization_helper.dart';
@@ -96,11 +97,14 @@ class _listFactoriesState extends State<listFactories> {
 
   }
 
-  Future<void>_onTap(int index)  async {
+  Future<void>_onTap(int index, BuildContext context)  async {
 
         selectCard = index;
-     // saveChanges = !await changesNoSave(context);
 
+        if (saveChanges) {
+          saveChanges = !await changesNoSave(context);
+          return;
+        }
   }
 
 
@@ -110,7 +114,7 @@ class _listFactoriesState extends State<listFactories> {
     BuildContext context = Platform.isWindows ? context1 : context0;
     double mWidth = MediaQuery.of(context).size.width;
     double mWidthList = mWidth > 280 ? 250 : 0;
-
+    print("cambios ~$saveChanges");
     final filterOptions = [
       S.of(context).name,
       S.of(context).address,
@@ -134,7 +138,7 @@ class _listFactoriesState extends State<listFactories> {
                     ),
                     onFilter: _onFilter,
                     onDelete: _onDelete,
-                    onTap: (factory, index) => _onTap(index),
+                    onTap: (factory, index) => _onTap(index,context),
                     onSelect: (index) {
                       setState(() {
                        // selectedIndex = index;

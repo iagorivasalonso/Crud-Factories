@@ -9,6 +9,7 @@ import 'package:crud_factories/generated/l10n.dart';
 import 'package:flutter/material.dart';
 
 import '../../Alertdialogs/warning.dart';
+import '../../Functions/changesNoSave.dart';
 import '../../Objects/Mail.dart';
 import '../../Widgets/GenericListViewPage.dart';
 import '../../helpers/localization_helper.dart';
@@ -50,11 +51,13 @@ class _listMailsState extends State<listMails> {
 
   }
 
-  Future<void>_onTap(int index)  async {
+  Future<void>_onTap(int index, BuildContext context)  async {
 
     selectCard = index;
-    // saveChanges = !await changesNoSave(context);
-
+    if (saveChanges) {
+      saveChanges = !await changesNoSave(context);
+      return;
+    }
   }
 
   @override
@@ -80,7 +83,7 @@ class _listMailsState extends State<listMails> {
                      : Colors.grey,
             ),
             onDelete: _onDelete,
-            onTap: (factory, index) => _onTap(index),
+            onTap: (factory, index) => _onTap(index, context),
             onSelect: (index) {
               setState(() {
                 selectCard = index;
