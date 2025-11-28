@@ -29,7 +29,7 @@ class _listSendsState extends State<listSends> {
   List<cardSend> displayLines = [];
   String selectedFilter = "Fecha";
   String selectCamp = "";
-  int select = 1;
+  int select = 0;
   // valor inicial
 
   @override

@@ -28,7 +28,7 @@ class listFactories extends StatefulWidget {
 class _listFactoriesState extends State<listFactories> {
 
   late List<Factory> displayFactories;
-  int selectCard = -1;
+  int selectCard = 0;
 
   @override
   void initState() {

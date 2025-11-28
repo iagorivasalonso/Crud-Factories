@@ -25,7 +25,7 @@ class listMails extends StatefulWidget {
 
 class _listMailsState extends State<listMails> {
 
-  int selectCard = -1;
+  int selectCard = 0;
 
 
   Future<void>_onDelete(Mail mail)  async {
