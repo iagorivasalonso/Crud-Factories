@@ -72,21 +72,27 @@ class _GenericListViewPageState<T> extends State<GenericListViewPage<T>> {
 
     List<String> opSearch = [S.of(context).allMale, S.of(context).filter];
 
-
+     double heightButons = 40;
+     double heightpanel = 150;
+     double heightFilters = heightpanel + heightButons;
+print(opSelected);
      return LayoutBuilder(
          builder: (context0,constrains) {
-           final height = constrains.maxHeight;
+           final height = widget.filters.isNotEmpty
+                          ? constrains.maxHeight -heightFilters
+                          : constrains.maxHeight;
            final width = constrains.maxWidth;
 
            return Column(
              children: [
+               if(widget.filters.isNotEmpty)
                Row(
                  children: [
                    for(int index = 0; index < opSearch.length; index++)
                    GestureDetector(
                      child: Material(
                        child: Container(
-                          height: 40,
+                          height: heightButons,
                           width: width * 0.5,
                           color: index == opSelected
                                ? Colors.lightGreen
@@ -114,9 +120,11 @@ class _GenericListViewPageState<T> extends State<GenericListViewPage<T>> {
                  ],
                ),
                if (opSelected==1)
-                 Container(
+               Container(
+                   height:heightpanel,
                    color: Colors.greenAccent,
                    child: Column(
+                     mainAxisSize: MainAxisSize.min,
                      children: [
                        Material(
                          color: Colors.transparent,
@@ -161,7 +169,10 @@ class _GenericListViewPageState<T> extends State<GenericListViewPage<T>> {
                    ),
                  ),
 
-               Expanded(
+               SizedBox(
+                 height: opSelected == 0 && widget.filters.isNotEmpty
+                         ? height + heightpanel
+                         : height,
                  child: ListView.builder(
                    itemCount: displayItems.length,
                    itemBuilder: (context, index) {
@@ -187,9 +198,5 @@ class _GenericListViewPageState<T> extends State<GenericListViewPage<T>> {
              ],
            );
          });
-    /*
-
-
-     */
   }
 }

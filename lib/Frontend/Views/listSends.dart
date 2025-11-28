@@ -107,7 +107,8 @@ class _listSendsState extends State<listSends> {
 
     return Row(
       children: [
-        SizedBox(
+        Container(
+          color: Colors.grey,
           width: mWidthList,
           child: GenericListViewPage<cardSend>(
             itens: displayLines,
@@ -117,7 +118,9 @@ class _listSendsState extends State<listSends> {
                 defaultCard(
                   title: send.title,
                   description: send.description,
-                  color: Colors.transparent,
+                  color: selectCard  == index
+                      ? Colors.white
+                      : Colors.grey,
                 ),
             onDelete: _onDelete,
             onFilter: _onFilter,

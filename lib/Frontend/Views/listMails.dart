@@ -67,21 +67,23 @@ class _listMailsState extends State<listMails> {
 
     return Row(
       children: [
-        SizedBox(
+        Container(
+          color: Colors.grey,
           width: mWidthList,
           child: GenericListViewPage<Mail>(
             itens: mails,
-            defaultFilter: S.of(context).address,
             itemBuilder: (mail, index) => defaultCard(
               title: mail.address,
               description: mail.company,
-              color: Colors.transparent,
+              color: selectCard  == index
+                     ? Colors.white
+                     : Colors.grey,
             ),
             onDelete: _onDelete,
             onTap: (factory, index) => _onTap(index),
             onSelect: (index) {
               setState(() {
-                // selectedIndex = index;
+                selectCard = index;
               });
             },
           ),
