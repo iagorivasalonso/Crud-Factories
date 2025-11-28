@@ -1,11 +1,7 @@
-import 'package:crud_factories/Backend/CSV/exportLines.dart';
 import 'package:crud_factories/Backend/Global/variables.dart';
-import 'package:crud_factories/Backend/SQL/deleteLines.dart';
 import 'package:crud_factories/Frontend/send.dart';
-import 'package:crud_factories/Widgets/headViewsAndroid.dart';
 import 'package:crud_factories/generated/l10n.dart';
 import 'package:flutter/material.dart';
-
 import '../../Alertdialogs/warning.dart';
 import '../../Backend/Global/list.dart';
 import '../../Functions/changesNoSave.dart';
@@ -40,7 +36,6 @@ class _listSendsState extends State<listSends> {
     displayLines = List.from(resultSend);
 
 
-    // 🔥 Seleccionar automáticamente la primera empresa
     if (displayLines.isNotEmpty) {
       selectCard = 0;
       select = 0;
@@ -104,7 +99,12 @@ class _listSendsState extends State<listSends> {
     if (selectedFilter == S.of(context).company) {
       selectCamp = resultSend[select].title;
     }
-    // saveChanges = !await changesNoSave(context);
+
+    if (saveChanges) {
+      saveChanges = !await changesNoSave(context);
+      return;
+    }
+    resultSend = chargueList(context1, selectedFilter);
 
   }
   @override

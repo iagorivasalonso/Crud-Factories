@@ -199,7 +199,7 @@ class customDataTable extends StatelessWidget {
 
                 ),
                 onChanged: (s){
-                  onObservationChanged;
+                  saveChanges = true;
                 },
               ),
             ),
