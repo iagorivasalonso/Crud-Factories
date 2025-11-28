@@ -8,9 +8,9 @@ import 'package:flutter/material.dart';
 
 import '../../Alertdialogs/warning.dart';
 import '../../Backend/Global/list.dart';
+import '../../Functions/changesNoSave.dart';
 import '../../Functions/manageArrays.dart';
 import '../../Objects/LineSend.dart';
-import '../../Objects/Mail.dart';
 import '../../Widgets/GenericListViewPage.dart';
 import '../../Widgets/defaultCard.dart';
 import '../../helpers/localization_helper.dart';
@@ -25,10 +25,10 @@ class listSends extends StatefulWidget {
 
 class _listSendsState extends State<listSends> {
 
-  int selectCard = -1;
+  int selectCard = 0;
   List<cardSend> displayLines = [];
   String selectedFilter = "Fecha";
-  String selectCamp = "";
+  String selectCamp ="";
   int select = 0;
   // valor inicial
 
@@ -38,6 +38,22 @@ class _listSendsState extends State<listSends> {
     super.initState();
     resultSend = chargueList(context1, selectedFilter);
     displayLines = List.from(resultSend);
+
+
+    // 🔥 Seleccionar automáticamente la primera empresa
+    if (displayLines.isNotEmpty) {
+      selectCard = 0;
+      select = 0;
+
+      if (selectedFilter == S
+          .of(context1)
+          .date) {
+        selectCamp = resultSend[0].description;
+      } else {
+        selectCamp = resultSend[0].title;
+      }
+    }
+
   }
   Future<void>_onDelete(cardSend line)  async {
 
@@ -58,6 +74,7 @@ class _listSendsState extends State<listSends> {
         csvExportatorLines(listSend)
       }*/
     }
+
 
   }
 
@@ -98,7 +115,7 @@ class _listSendsState extends State<listSends> {
         .of(context)
         .size
         .width;
-    double mWidthList = mWidth > 280 ? 250 : 0;
+    double mWidthList = mWidth > 280 ? 280 : 0;
 
     final filterOptions = [
       S.of(context).date,
