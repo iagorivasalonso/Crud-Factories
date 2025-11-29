@@ -29,11 +29,14 @@ class listFactories extends StatefulWidget {
 class _listFactoriesState extends State<listFactories> {
 
   late List<Factory> displayFactories;
-  int selectCard = 0;
+  int selectCard = -1;
 
   @override
   void initState() {
     displayFactories = List.from(factoriesSector);
+    if (displayFactories.isNotEmpty) {
+      selectCard = 0;
+    }
     super.initState();
   }
 
