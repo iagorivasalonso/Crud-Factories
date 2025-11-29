@@ -48,31 +48,29 @@ class _listFactoriesState extends State<listFactories> {
     setState(() {
       displayFactories = factoriesSector.where((factory) {
 
-        switch (filter) {
+        final filterMap = {
+          'Name': factory.name,
+          'Nombre': factory.name,
 
-          case 'Name':
-          case 'Nombre': // si usas traducciones
-            return _contains(factory.name, lowerSearch);
+          'Address': factory.allAdress(),
+          'Dirección': factory.allAdress(),
 
-          case 'Address':
-          case 'Dirección':
-            return _contains(factory.allAdress(), lowerSearch);
+          'Phone': factory.thelephones.isNotEmpty ? factory.thelephones[0] : '',
+          'Teléfono': factory.thelephones.isNotEmpty ? factory.thelephones[0] : '',
 
-          case 'Phone':
-          case 'Teléfono':
-            return factory.thelephones.isNotEmpty &&
-                _contains(factory.thelephones[0], lowerSearch);
+          'City': factory.address['city'] ?? '',
+          'Ciudad': factory.address['city'] ?? '',
+        };
 
-          case 'City':
-          case 'Ciudad':
-            return _contains(factory.address['city']!, lowerSearch);
+        final fieldText = filterMap[filter] ?? factory.name;
 
-          default:
-            return _contains(factory.name, lowerSearch);
-        }
+        // Aplicar el contains seguro
+        return _contains(fieldText, lowerSearch);
+
       }).toList();
     });
   }
+
 
 
   Future<void>_onDelete(Factory factory)  async {
