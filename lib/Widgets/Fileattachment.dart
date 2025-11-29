@@ -71,16 +71,15 @@ class _FilePickerFieldState extends State<Fileattachment> {
           padding: const EdgeInsets.only(top:10.0,bottom:5.0 ),
           child: Row(
             children: [
-              Expanded(
-                flex: 3,
+              SizedBox(
+                width: 600,
                 child: defaultTextfield(
                   nameCamp: S.of(context).affair,
                   controllerCamp: widget.camp,
                   campOld: '',
                 ),
-
               ),
-              const SizedBox(width: 30),
+              const SizedBox(width: 100),
               Padding(
                 padding: const EdgeInsets.only(top: 15.0),
                 child: materialButton(
