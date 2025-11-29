@@ -92,6 +92,7 @@ print(opSelected);
                    GestureDetector(
                      child: Material(
                        child: Container(
+
                           height: heightButons,
                           width: width * 0.5,
                           color: index == opSelected
@@ -169,7 +170,12 @@ print(opSelected);
                    ),
                  ),
 
-               SizedBox(
+               Container(
+                 decoration: const BoxDecoration(
+                     border: Border(
+                       right: BorderSide(width: 5, color: Colors.grey),
+                     )
+                 ),
                  height: opSelected == 0 && widget.filters.isNotEmpty
                          ? height + heightpanel
                          : height,
