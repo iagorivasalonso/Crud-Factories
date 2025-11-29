@@ -140,7 +140,7 @@ class _newMailState extends State<newMail> {
                           ),
 
                           Padding(
-                            padding: const EdgeInsets.only(left: 500.0),
+                            padding: const EdgeInsets.only(left: 500.0, top: 20.0),
                             child: Row(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
@@ -153,17 +153,17 @@ class _newMailState extends State<newMail> {
                                     ),
                                   ),
 
-                            Padding(
-                                  padding: const EdgeInsets.only(left: 20.0),
-                                  child: materialButton(
-                                      nameAction: action2,
-                                      function: () => _onResetMail(
-                                        context,
-                                        select,
-                                        controllers,
+                                Padding(
+                                      padding: const EdgeInsets.only(left: 20.0),
+                                      child: materialButton(
+                                          nameAction: action2,
+                                          function: () => _onResetMail(
+                                            context,
+                                            select,
+                                            controllers,
+                                          ),
+                                        )
                                       ),
-                                    )
-                                  ),
                               ],
                             ),
                           ),
