@@ -16,8 +16,6 @@ import '../../helpers/localization_helper.dart';
 
 class listMails extends StatefulWidget {
 
-
-
   listMails();
 
   @override
@@ -83,7 +81,7 @@ class _listMailsState extends State<listMails> {
                      : Colors.grey,
             ),
             onDelete: _onDelete,
-            onTap: (factory, index) => _onTap(index, context),
+            onTap: (mail, index) => _onTap(index, context),
             onSelect: (index) {
               setState(() {
                 selectCard = index;
