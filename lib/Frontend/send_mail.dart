@@ -123,7 +123,7 @@ class _sendMailState extends State<sendMail> {
     {
            if (selectedMail==null)
            {
-               controllers.mailTo!.text = mails[0].address;
+               controllers.mail.text = mails[0].address;
                controllers.password.text =  mails[0].password;
                mailSave = true;
            }
