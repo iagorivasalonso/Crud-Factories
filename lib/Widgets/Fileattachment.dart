@@ -80,7 +80,7 @@ class _FilePickerFieldState extends State<Fileattachment> {
                 ),
 
               ),
-              const SizedBox(width: 8),
+              const SizedBox(width: 30),
               Padding(
                 padding: const EdgeInsets.only(top: 15.0),
                 child: materialButton(

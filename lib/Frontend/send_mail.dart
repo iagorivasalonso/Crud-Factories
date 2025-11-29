@@ -167,75 +167,81 @@ class _sendMailState extends State<sendMail> {
                               title: S.of(context).sending_mails
                           ),
 
-                    layoutVariant(
-                      items: [
-                        Flexible(
-                          flex: 9,
-                          child: otherMail == false
-                              ? GenericDropdown<Mail>(
-                                items: mails,
-                                camp: S.of(context).sender,
-                                selectedItem: selectedMail,
-                                hint: mails[0].address,
-                                itemLabel: (Mail) => Mail.address,
-                                onChanged: (mailChoose) => _onMailChanged(mailChoose),
-                              )
-                              : Row(
-                            children: [
-                              Expanded(
-                                child: defaultTextfield(
-                                  nameCamp: S.of(context).mail,
-                                  controllerCamp: controllers.mail,
-                                ),
-                              ),
-                              const SizedBox(width: 16),
-                              Expanded(
-                                child: textfieldPassword(
-                                  nameCamp: S.of(context).password,
-                                  controllerCamp: controllers.password,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-
-                        if(mails.isNotEmpty)
-                        Flexible(
-                          flex: 1,
-                          child: Padding(
-                            padding: const EdgeInsets.only(top: 20,left:22),
-                            child: materialButton(
-                              nameAction: otherMail == false
-                                  ? S.of(context).orther
-                                  : S.of(context).volver,
-                              function: () async {
-                                setState(() {
-                                  otherMail = !otherMail;
-                                });
-                              },
-                            ),
-                          ),
-                        )
-                      ],
-                    ),
-
-                    if(allLines.isNotEmpty)
-                    Padding(
+                          Padding(
                             padding: const EdgeInsets.only(left: 30.0),
-                            child: GenericRadioGroup<String>(
-                              items: [S.of(context).a_recipient,S.of(context).multiple_recipients],
-                              camp: S.of(context).select,
-                              selectedItem: selectedOption,
-                              label: (item) => item,
-                              onChanged: (value) {
-                                if (value != null) {
-                                  setState(() {
-                                    selectedOption = value;
-                                  });
-                                }
-                              },
-                              direction: Axis.horizontal,
+                            child: layoutVariant(
+                              items: [
+                                Flexible(
+                                  flex: 9,
+                                  child: otherMail == false
+                                      ? GenericDropdown<Mail>(
+                                        items: mails,
+                                        camp: S.of(context).sender,
+                                        selectedItem: selectedMail,
+                                        hint: mails[0].address,
+                                        itemLabel: (Mail) => Mail.address,
+                                        onChanged: (mailChoose) => _onMailChanged(mailChoose),
+                                      )
+                                      : Row(
+                                          children: [
+                                            Expanded(
+                                              child: defaultTextfield(
+                                                nameCamp: S.of(context).mail,
+                                                controllerCamp: controllers.mail,
+                                              ),
+                                            ),
+                                            const SizedBox(width: 16),
+                                            Expanded(
+                                              child: textfieldPassword(
+                                                nameCamp: S.of(context).password,
+                                                controllerCamp: controllers.password,
+                                              ),
+                                            ),
+                                          ],
+                                  ),
+                                ),
+
+                                if(mails.isNotEmpty)
+                                Flexible(
+                                  flex: 1,
+                                  child: Padding(
+                                    padding: const EdgeInsets.only(top: 10,left:22),
+                                    child: materialButton(
+                                      nameAction: otherMail == false
+                                          ? S.of(context).orther
+                                          : S.of(context).volver,
+                                      function: () async {
+                                        setState(() {
+                                          otherMail = !otherMail;
+                                        });
+                                      },
+                                    ),
+                                  ),
+                                )
+                              ],
                             ),
+                          ),
+
+                          if(allLines.isNotEmpty)
+                          Align(
+                            alignment: Alignment.topLeft,
+                            child: Padding(
+                                    padding: const EdgeInsets.only(left: 30.0),
+                                    child: GenericRadioGroup<String>(
+                                      items: [S.of(context).a_recipient,S.of(context).multiple_recipients],
+                                      camp: S.of(context).select,
+                                      selectedItem: selectedOption,
+                                      label: (item) => item,
+                                      onChanged: (value) {
+                                        if (value != null) {
+                                          setState(() {
+                                            selectedOption = value;
+                                          });
+                                        }
+                                      },
+                                      direction: Axis.horizontal,
+                                    ),
+                                  ),
                           ),
 
 
@@ -245,7 +251,7 @@ class _sendMailState extends State<sendMail> {
                             ? Align(
                               alignment: Alignment.topLeft,
                               child: SizedBox(
-                                width: 800,
+                                width: 600,
                                 child: defaultTextfield(
                                   nameCamp: S.of(context).a_recipient,
                                   controllerCamp: controllers.mailTo!,
@@ -284,17 +290,20 @@ class _sendMailState extends State<sendMail> {
                           ),
 
 
-                          Fileattachment(
-                            camp: controllers.subject!,
-                            multiple: true,
-                            attachments: controllers.attachments,
-                            allowedExtensions: ['pdf', 'csv', 'jpg'], // extensiones permitidas
-                            onFilesChanged: (files) {
-                              setState(() {
-                                controllers.attachments.addAll(files);
-                              });
-                            },
-                          ),
+                        Align(
+                              alignment: Alignment.topLeft,
+                              child: Fileattachment(
+                                camp: controllers.subject!,
+                                multiple: true,
+                                attachments: controllers.attachments,
+                                allowedExtensions: ['pdf', 'csv', 'jpg'], // extensiones permitidas
+                                onFilesChanged: (files) {
+                                  setState(() {
+                                    controllers.attachments.addAll(files);
+                                  });
+                                },
+                              ),
+                            ),
 
                           Padding(
                             padding: const EdgeInsets.only(left: 30.0,top: 30.0),
