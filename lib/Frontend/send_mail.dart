@@ -172,7 +172,7 @@ class _sendMailState extends State<sendMail> {
                             child: layoutVariant(
                               items: [
                                 Flexible(
-                                  flex: 5,
+                                  flex: 4,
                                   child: otherMail == false
                                       ? GenericDropdown<Mail>(
                                         items: mails,
