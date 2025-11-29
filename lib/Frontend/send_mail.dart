@@ -172,7 +172,7 @@ class _sendMailState extends State<sendMail> {
                             child: layoutVariant(
                               items: [
                                 Flexible(
-                                  flex: 9,
+                                  flex: 5,
                                   child: otherMail == false
                                       ? GenericDropdown<Mail>(
                                         items: mails,
@@ -205,7 +205,7 @@ class _sendMailState extends State<sendMail> {
                                 Flexible(
                                   flex: 1,
                                   child: Padding(
-                                    padding: const EdgeInsets.only(top: 10,left:22),
+                                    padding: const EdgeInsets.only(top: 10),
                                     child: materialButton(
                                       nameAction: otherMail == false
                                           ? S.of(context).orther
@@ -226,7 +226,7 @@ class _sendMailState extends State<sendMail> {
                           Align(
                             alignment: Alignment.topLeft,
                             child: Padding(
-                                    padding: const EdgeInsets.only(left: 30.0),
+                                    padding: const EdgeInsets.only(left: 30.0,bottom: 10.0),
                                     child: GenericRadioGroup<String>(
                                       items: [S.of(context).a_recipient,S.of(context).multiple_recipients],
                                       camp: S.of(context).select,
@@ -264,16 +264,13 @@ class _sendMailState extends State<sendMail> {
                                  alignment: Alignment.topLeft,
                                  child: SizedBox(
                                       width: 420,
-                                      child: Padding(
-                                        padding: const EdgeInsets.only(left: 20.0),
-                                        child: GenericDropdown<String>(
-                                          items: dateSends,
-                                          camp: S.of(context).multiple_recipients,
-                                          selectedItem: selectedSend,
-                                          hint: S.of(context).select,
-                                          itemLabel: (dateSend) => dateSend,
-                                          onChanged: _onDateSelect,
-                                        ),
+                                      child: GenericDropdown<String>(
+                                        items: dateSends,
+                                        camp: S.of(context).multiple_recipients,
+                                        selectedItem: selectedSend,
+                                        hint: S.of(context).select,
+                                        itemLabel: (dateSend) => dateSend,
+                                        onChanged: _onDateSelect,
                                       ),
                                     ),
                                ),
