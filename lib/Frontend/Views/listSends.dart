@@ -32,23 +32,23 @@ class _listSendsState extends State<listSends> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    resultSend = chargueList(context1, selectedFilter);
-    displayLines = List.from(resultSend);
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      setState(() {
+        resultSend = chargueList(context, selectedFilter);
+        displayLines = List.from(resultSend);
 
+        if (displayLines.isNotEmpty) {
+          selectCard = 0;
+          select = 0;
 
-    if (displayLines.isNotEmpty) {
-      selectCard = 0;
-      select = 0;
-
-      if (selectedFilter == S
-          .of(context1)
-          .date) {
-        selectCamp = resultSend[0].description;
-      } else {
-        selectCamp = resultSend[0].title;
-      }
-    }
-
+          if (selectedFilter == S.of(context).date) {
+            selectCamp = resultSend[0].description;
+          } else {
+            selectCamp = resultSend[0].title;
+          }
+        }
+      });
+    });
   }
   Future<void>_onDelete(cardSend line)  async {
 
@@ -152,7 +152,7 @@ class _listSendsState extends State<listSends> {
 
         SizedBox(
           width: mWidth - mWidthList,
-          child: newSend(selectCamp,  selectedFilter!, select)
+          child: newSend(selectCamp,  selectedFilter, select)
         ),
       ],
     );
