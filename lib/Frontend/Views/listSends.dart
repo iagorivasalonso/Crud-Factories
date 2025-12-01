@@ -32,22 +32,21 @@ class _listSendsState extends State<listSends> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
+
       setState(() {
-        resultSend = chargueList(context, selectedFilter);
+        resultSend = chargueList(context1, selectedFilter);
         displayLines = List.from(resultSend);
 
         if (displayLines.isNotEmpty) {
           selectCard = 0;
           select = 0;
 
-          if (selectedFilter == S.of(context).date) {
+          if (selectedFilter == S.of(context1).date) {
             selectCamp = resultSend[0].description;
           } else {
             selectCamp = resultSend[0].title;
           }
         }
-      });
     });
   }
   Future<void>_onDelete(cardSend line)  async {
@@ -121,7 +120,7 @@ class _listSendsState extends State<listSends> {
       S.of(context).date,
       S.of(context).company,
     ];
-
+print(selectedFilter);
     return Row(
       children: [
         Container(
