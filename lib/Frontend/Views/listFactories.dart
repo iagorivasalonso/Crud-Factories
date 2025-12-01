@@ -29,7 +29,9 @@ class listFactories extends StatefulWidget {
 class _listFactoriesState extends State<listFactories> {
 
   late List<Factory> displayFactories;
-  int selectCard = -1;
+  int select = 0;
+  int selectCard = 0;
+  late Factory factorySelect;
 
   @override
   void initState() {
@@ -37,6 +39,7 @@ class _listFactoriesState extends State<listFactories> {
     if (displayFactories.isNotEmpty) {
       selectCard = 0;
     }
+    factorySelect = displayFactories[0];
     super.initState();
   }
 
@@ -100,8 +103,10 @@ class _listFactoriesState extends State<listFactories> {
 
   Future<void>_onTap(int index, BuildContext context)  async {
 
-        selectCard = index;
+       factorySelect = displayFactories[index];
 
+        selectCard = index;
+           print(displayFactories[index].name);
         if (saveChanges) {
           saveChanges = !await changesNoSave(context);
           return;
@@ -115,7 +120,7 @@ class _listFactoriesState extends State<listFactories> {
     BuildContext context = Platform.isWindows ? context1 : context0;
     double mWidth = MediaQuery.of(context).size.width;
     double mWidthList = mWidth > 280 ? 250 : 0;
-    print("cambios ~$saveChanges");
+
     final filterOptions = [
       S.of(context).name,
       S.of(context).address,
@@ -150,7 +155,7 @@ class _listFactoriesState extends State<listFactories> {
 
           SizedBox(
             width: mWidth-mWidthList,
-            child: newFactory(selectCard),
+            child: newFactory(select,factorySelect),
           ),
       ],
     );

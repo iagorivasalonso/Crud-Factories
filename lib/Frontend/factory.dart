@@ -41,8 +41,10 @@ import '../Widgets/materialButton.dart';
 class newFactory extends StatefulWidget {
 
   int select;
+  Factory? factorySelect;
 
-  newFactory(this.select);
+
+  newFactory(this.select,[this.factorySelect]);
 
   @override
   State<newFactory> createState() => _newFactoryState();
@@ -115,8 +117,8 @@ class _newFactoryState extends State<newFactory> {
   @override
   Widget build(BuildContext context0) {
 
-    int select = widget.select;
     BuildContext context = Platform.isWindows ? context1 : context0;
+    int select = widget.select;
     sectorsString.clear();
 
     sectorsString.add(S.of(context).newMale);
@@ -130,10 +132,9 @@ class _newFactoryState extends State<newFactory> {
 
       if(saveChanges == false)
       {
-            id = allFactories[select].id;
-            controllers.name.text = allFactories[select].name;
-            controllers.highDate.text = allFactories[select].highDate;
-            tmp = allFactories[select].sector;
+            controllers.name.text = widget.factorySelect!.name;
+            controllers.highDate.text = widget.factorySelect!.highDate;
+            tmp = widget.factorySelect!.sector;
             controllers.sector.text = tmp;
 
             for(int i = 0; i <sectors.length; i++)
@@ -144,14 +145,14 @@ class _newFactoryState extends State<newFactory> {
               }
             }
 
-            controllers.telephone1.text = allFactories[select].thelephones[0];
-            controllers.telephone1.text = allFactories[select].thelephones[1];
-            controllers.mail.text = allFactories[select].mail;
-            controllers.web.text = allFactories[select].web;
+            controllers.telephone1.text = widget.factorySelect!.thelephones[0];
+            controllers.telephone1.text =  widget.factorySelect!.thelephones[1];
+            controllers.mail.text =  widget.factorySelect!.mail;
+            controllers.web.text =  widget.factorySelect!.web;
 
-            var address = allFactories[select].address['street']!;
-            var number = allFactories[select].address['number']!;
-            var apartament = allFactories[select].address['apartament']!;
+            var address =  widget.factorySelect!.address['street']!;
+            var number =  widget.factorySelect!.address['number']!;
+            var apartament =  widget.factorySelect!.address['apartament']!;
 
             if (apartament == "")
             {
@@ -162,12 +163,12 @@ class _newFactoryState extends State<newFactory> {
               allAddress = '$address,$number-$apartament';
             }
             controllers.address.text = allAddress!;
-            controllers.city.text = allFactories[select].address['city']!;
-            controllers.postalCode.text = allFactories[select].address['postalCode']!;
-            controllers.province.text = allFactories[select].address['province']!;
+            controllers.city.text =  widget.factorySelect!.address['city']!;
+            controllers.postalCode.text =  widget.factorySelect!.address['postalCode']!;
+            controllers.province.text =  widget.factorySelect!.address['province']!;
 
 
-            int idFactory = select +1;
+            int idFactory = widget.select +1;
 
 
             contacsPreEdit.clear();
@@ -190,6 +191,7 @@ class _newFactoryState extends State<newFactory> {
     String action = S.of(context).update;
     String action2 = "";
     String title = "";
+
 
     if (select == -1) {
       title = S.of(context).newFemale;
