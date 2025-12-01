@@ -243,7 +243,7 @@ class _newFactoryState extends State<newFactory> {
                         defaultTextfield(
                           nameCamp: S.of(context).name,
                           controllerCamp: controllers.name,
-                          campOld: select == -1 ? '' : allFactories[select].name,
+                          campOld: select == -1 ? '' : widget.factorySelect!.name,
                         ),
 
                         Padding(
@@ -289,7 +289,7 @@ class _newFactoryState extends State<newFactory> {
                                 child: defaultTextfield(
                                   nameCamp: S.of(context).phone_1,
                                   controllerCamp: controllers.telephone1,
-                                  campOld: select == -1 ? '' : allFactories[select].thelephones[0],
+                                  campOld: select == -1 ? '' : widget.factorySelect!.thelephones[0],
                                 ),
                               ),
 
@@ -297,7 +297,7 @@ class _newFactoryState extends State<newFactory> {
                                 child: defaultTextfield(
                                   nameCamp: S.of(context).phone_2,
                                   controllerCamp: controllers.telephone2,
-                                  campOld: select == -1 ? '' : allFactories[select].thelephones[1],
+                                  campOld: select == -1 ? '' : widget.factorySelect!.thelephones[1],
                                 ),
                               ),
                             ]
@@ -309,7 +309,7 @@ class _newFactoryState extends State<newFactory> {
                                 child: defaultTextfield(
                                   nameCamp: S.of(context).mail,
                                   controllerCamp: controllers.mail,
-                                  campOld: select == -1 ? '' : allFactories[select].mail,
+                                  campOld: select == -1 ? '' : widget.factorySelect!.mail,
                                 ),
                               ),
 
@@ -317,7 +317,7 @@ class _newFactoryState extends State<newFactory> {
                                 child: defaultTextfield(
                                   nameCamp: S.of(context).web_page,
                                   controllerCamp: controllers.web,
-                                  campOld: select == -1 ? '' : allFactories[select].web,
+                                  campOld: select == -1 ? '' : widget.factorySelect!.web,
                                 ),
                               ),
                             ]
@@ -326,14 +326,14 @@ class _newFactoryState extends State<newFactory> {
                         defaultTextfield(
                           nameCamp: S.of(context).address,
                           controllerCamp: controllers.address,
-                          campOld: select == -1 ? '' : allFactories[select].address['city']!,
+                          campOld: select == -1 ? '' : widget.factorySelect!.address['city']!,
                         ),
 
 
                         defaultTextfield(
                           nameCamp: S.of(context).province,
                           controllerCamp: controllers.province,
-                          campOld: select == -1 ? '' : allFactories[select].address['province']!,
+                          campOld: select == -1 ? '' : widget.factorySelect!.address['province']!,
                         ),
 
 
