@@ -79,13 +79,13 @@ class _listFactoriesState extends State<listFactories> {
 
 
 
-  Future<void>_onDelete(Factory factory)  async {
+  Future<void>_onDelete(BuildContext context, Factory factory)  async {
 
     final confirmDelete = await warning(
       context,
       LocalizationHelper.delete_factory(context, factory.name),
     );
-
+print(confirmDelete);
     if (confirmDelete) {
       setState(() {
         factoriesSector.remove(factory);
@@ -104,9 +104,8 @@ class _listFactoriesState extends State<listFactories> {
   Future<void>_onTap(int index, BuildContext context)  async {
 
        factorySelect = displayFactories[index];
-
         selectCard = index;
-           print(displayFactories[index].name);
+
         if (saveChanges) {
           saveChanges = !await changesNoSave(context);
           return;
@@ -143,7 +142,7 @@ class _listFactoriesState extends State<listFactories> {
                         city: factory.address['city'],
                     ),
                     onFilter: _onFilter,
-                    onDelete: _onDelete,
+                    onDelete: (factory) => _onDelete(context, factory),
                     onTap: (factory, index) => _onTap(index,context),
                     onSelect: (index) {
                       setState(() {
