@@ -529,6 +529,8 @@ print(S.of(context).send.toLowerCase());
             }
           }
         }
+        String action = LocalizationHelper.cantLinesModify(context, linesSelected.length);
+        confirm(context,action);
       }
     });
 
