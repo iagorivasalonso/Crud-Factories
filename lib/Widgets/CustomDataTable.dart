@@ -198,8 +198,10 @@ class customDataTable extends StatelessWidget {
                   contentPadding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
 
                 ),
-                onChanged: (s){
-                  saveChanges = true;
+                onChanged: (value){
+                  if (onObservationChanged != null) {
+                    onObservationChanged!(index, value);
+                  }
                 },
               ),
             ),
