@@ -447,6 +447,7 @@ print(S.of(context).send.toLowerCase());
             }
 
             controllersLines[i].observations.text = lines[i].observations;
+            controllersLines[i].state.text = lines[i].state;
         }
 
   }
