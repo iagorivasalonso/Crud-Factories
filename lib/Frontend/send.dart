@@ -518,6 +518,7 @@ print(S.of(context).send.toLowerCase());
         }
       }
       else {
+        int allLinesMod = 0;
         for (int i = 0; i < linesSelected.length; i++) {
           if (observationModify[i] || stateModify[i]) {
             String id = linesSelected[i].id;
@@ -525,11 +526,12 @@ print(S.of(context).send.toLowerCase());
             for (int x = 0; x < allLines.length; x++) {
               if (allLines[x].id.trim() == id) {
                 allLines[x] = linesSelected[i];
+                allLinesMod++;
               }
             }
           }
         }
-        String action = LocalizationHelper.cantLinesModify(context, linesSelected.length);
+        String action = LocalizationHelper.cantLinesModify(context, allLinesMod);
         confirm(context,action);
       }
     });
@@ -538,7 +540,7 @@ print(S.of(context).send.toLowerCase());
     {
       if(select==-1)
       {
-        sqlCreateLine(current,context);
+        csvExportatorLines(current);
       }
       else
       {
