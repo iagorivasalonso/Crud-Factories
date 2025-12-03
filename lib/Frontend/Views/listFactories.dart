@@ -77,27 +77,29 @@ class _listFactoriesState extends State<listFactories> {
     });
   }
 
+  Future<bool>_onDelete(BuildContext context, Factory factory)  async {
+
+        final confirmDelete = await warning(
+          context,
+          LocalizationHelper.confirm_delete(context,"${factory.name}"),
+        );
+
+        if (confirmDelete)
+        {
+          setState(() {
+            factoriesSector.remove(factory);
+            allFactories.remove(factory);
+          });
+          return true;
+        }
 
 
-  Future<void>_onDelete(BuildContext context, Factory factory)  async {
-
-    final confirmDelete = await warning(
-      context,
-      LocalizationHelper.delete_factory(context, factory.name),
-    );
-print(confirmDelete);
-    if (confirmDelete) {
-      setState(() {
-        factoriesSector.remove(factory);
-        allFactories.remove(factory);
-      });
-
-      if (conn != null) {
-        await sqlDeleteFactory(factory.id);
-      } else {
-        csvExportatorFactories(factoriesSector);
-      }
-    }
+        if (conn != null) {
+          await sqlDeleteFactory(factory.id);
+        } else {
+          csvExportatorFactories(factoriesSector);
+        }
+        return false;
 
   }
 

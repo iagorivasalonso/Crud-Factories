@@ -26,32 +26,34 @@ class _listMailsState extends State<listMails> {
 
   int selectCard = 0;
 
-
-  Future<void>_onDelete(Mail mail)  async {
+  Future<bool>_onDelete(BuildContext context,Mail mail)  async {
 
     final confirmDelete = await warning(
       context,
-      LocalizationHelper.delete_factory(context, mail.address),
+      LocalizationHelper.confirm_delete(context,"${mail.address}"),
     );
 
     if (confirmDelete) {
       setState(() {
-        factoriesSector.remove(factory);
-        allFactories.remove(factory);
+        mails.remove(mail);
       });
-
-      if (conn != null) {
-        await sqlDeleteMail(mail.id);
-      } else {
-        csvExportatorMails(mails);
-      }
+      return true;
     }
+
+
+    if (conn != null) {
+      await sqlDeleteMail(mail.id);
+    } else {
+      csvExportatorMails(mails);
+    }
+    return false;
 
   }
 
   Future<void>_onTap(int index, BuildContext context)  async {
 
     selectCard = index;
+
     if (saveChanges) {
       saveChanges = !await changesNoSave(context);
       return;
@@ -80,7 +82,7 @@ class _listMailsState extends State<listMails> {
                      ? Colors.white
                      : Colors.grey,
             ),
-            onDelete: _onDelete,
+            onDelete: (mail) => _onDelete(context, mail),
             onTap: (mail, index) => _onTap(index, context),
             onSelect: (index) {
               setState(() {

@@ -3,7 +3,9 @@ import 'package:crud_factories/Frontend/send.dart';
 import 'package:crud_factories/generated/l10n.dart';
 import 'package:flutter/material.dart';
 import '../../Alertdialogs/warning.dart';
+import '../../Backend/CSV/exportLines.dart';
 import '../../Backend/Global/list.dart';
+import '../../Backend/SQL/deleteLines.dart';
 import '../../Functions/changesNoSave.dart';
 import '../../Functions/manageArrays.dart';
 import '../../Objects/LineSend.dart';
@@ -49,27 +51,43 @@ class _listSendsState extends State<listSends> {
         }
     });
   }
-  Future<void>_onDelete(cardSend line)  async {
+
+  Future<bool> _onDelete(BuildContext context, cardSend line)  async {
+
+    List<LineSend> linesToDelete = allLines
+        .where((l) => l.state.toLowerCase() == "devuelto" && l.date ==line.description)
+        .toList();
 
     final confirmDelete = await warning(
       context,
-      LocalizationHelper.delete_factory(context, line.title),
+      LocalizationHelper.confirm_delete(context,S.of(context).You_can_only_delete_the_lines_that_were_returned_Do_you_want_to_delete),
     );
-
-    if (confirmDelete) {
+    if (confirmDelete)
+    {
       setState(() {
-        factoriesSector.remove(factory);
-        allFactories.remove(factory);
+        allLines.removeWhere((l) =>
+        l.state.toLowerCase() == "devuelto" &&
+            l.date == line.description);
       });
-/*
-      if (conn != null) {
-        await sqlDeleteLines(idsDelete)
-      } else {
-        csvExportatorLines(listSend)
-      }*/
+      //return true;
     }
 
 
+        if (conn != null) {
+
+          List<String> idsDelete = [];
+
+          for(int i = 0; i < linesToDelete.length; i++)
+          {
+            idsDelete.add(linesToDelete[i].id);
+          }
+           await sqlDeleteLines(idsDelete);
+
+        } else {
+          csvExportatorLines(allLines);
+        }
+
+    return false;
   }
 
 
@@ -138,8 +156,8 @@ print(selectedFilter);
                       ? Colors.white
                       : Colors.grey,
                 ),
-            onDelete: _onDelete,
             onFilter: _onFilter,
+            onDelete: (line) => _onDelete(context,line),
             onTap: (send, index) => _onTap(index,context),
             onSelect: (index) {
               setState(() {
