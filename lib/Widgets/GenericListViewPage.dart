@@ -10,7 +10,7 @@ class GenericListViewPage<T> extends StatefulWidget {
   final Widget Function(T item, int index) itemBuilder;
   final Future<void> Function(T item, int index)? onTap;
   final Future<void> Function(String filter, String search)? onFilter;
-  final Future<void> Function(T item)? onDelete;
+  final Future<bool> Function(T item)? onDelete;
   final void Function(int index)? onSelect;
   final String defaultFilter;
 
@@ -186,8 +186,14 @@ print(opSelected);
                      return Dismissible(
                        key: ValueKey(item.hashCode),
                        background: Container(color: Colors.redAccent),
+                       confirmDismiss: (direction) async {
+                         if (widget.onDelete != null) {
+                           return await widget.onDelete!(item);
+                         }
+                         return false;
+                       },
                        onDismissed: (_) async {
-                         if (widget.onDelete != null) await widget.onDelete!(item);
+                         if (widget.onDelete != null)
                          setState(() => displayItems.removeAt(index));
                        },
                        child: GestureDetector(
