@@ -328,16 +328,16 @@ class LocalizationHelper {
   }
 
 
-  static String delete_factory( BuildContext context,String array) {
+  static String confirm_delete( BuildContext context,String array) {
 
-    String preVar = S.of(context).the_company;
-    String postVar = S.of(context).has_been_deleted_successfully.toLowerCase();
-print(array);
+    String preVar = "${S.of(context).do_you_really_want_to_delete}";
+    String postVar = "?";
+
     return Intl.message(
       '$preVar $array  $postVar',
       name: '$preVar $array $postVar',
       args: [array],
-      examples: const {'deleteFactory': 'deleteFactory','preVar': 'the company','postVar':'has been successfully deleted'},
+      examples: const {'confirmdeletearray': 'delete','preVar': 'do_you_really_want_to_delete','postVar':'?'},
     );
   }
   static String no_array_BD( BuildContext context,String array) {
