@@ -15,13 +15,19 @@ import '../../helpers/localization_helper.dart';
 
 class listSends extends StatefulWidget {
 
-  listSends();
+  BuildContext context;
+  List<LineSend> list;
+  List<String> dateSends;
+
+  listSends(this.context , this.list, this.dateSends);
 
   @override
   State<listSends> createState() => _listSendsState();
 }
 
 class _listSendsState extends State<listSends> {
+  late ValueNotifier<List<cardSend>> displayLinesNotifier;
+  late ValueNotifier<List<String>> dateSendsNotifier;
 
   int selectCard = 0;
   List<cardSend> displayLines = [];
@@ -31,26 +37,62 @@ class _listSendsState extends State<listSends> {
   // valor inicial
 
   @override
+  @override
   void initState() {
-    // TODO: implement initState
     super.initState();
 
-      setState(() {
-        resultSend = chargueList(context1, selectedFilter);
-        displayLines = List.from(resultSend);
+    final newDates = widget.list
+        .map((l) => l.date)
+        .toSet()
+        .toList();
 
-        if (displayLines.isNotEmpty) {
-          selectCard = 0;
-          select = 0;
 
-          if (selectedFilter == S.of(context1).date) {
-            selectCamp = resultSend[0].description;
-          } else {
-            selectCamp = resultSend[0].title;
-          }
-        }
-    });
+    dateSendsNotifier = ValueNotifier(newDates);
+
+
+    displayLinesNotifier = ValueNotifier(
+      chargueList(context1, selectedFilter, widget.list, widget.dateSends),
+    );
+
+
+    resultSend = displayLinesNotifier.value;
+
+    if (resultSend.isNotEmpty) {
+      selectCard = 0;
+      select = 0;
+
+      if (selectedFilter == S.of(context1).date) {
+        selectCamp = resultSend[0].description;
+      } else {
+        selectCamp = resultSend[0].title;
+      }
+    }
   }
+  @override
+  void didUpdateWidget(covariant listSends oldWidget) {
+    super.didUpdateWidget(oldWidget);
+
+    if (oldWidget.list != widget.list || oldWidget.dateSends != widget.dateSends) {
+
+      final newDates = widget.list.map((l) => l.date).toSet().toList();
+      dateSendsNotifier.value = newDates;
+
+      displayLinesNotifier.value =
+          chargueList(context1, selectedFilter, widget.list, newDates);
+
+
+      resultSend = displayLinesNotifier.value;
+      if (resultSend.isNotEmpty) {
+        selectCard = 0;
+        select = 0;
+        selectCamp = selectedFilter == S.of(context1).date
+            ? resultSend[0].description
+            : resultSend[0].title;
+      }
+    }
+  }
+
+
 
   Future<bool> _onDelete(BuildContext context, cardSend line)  async {
 
@@ -95,14 +137,11 @@ class _listSendsState extends State<listSends> {
     selectedFilter = filter;
     final lowerSearch = search.toLowerCase();
 
+    final listFiltered = chargueList(context1, selectedFilter, widget.list, widget.dateSends)
+        .where((element) => element.description.toLowerCase().contains(lowerSearch))
+        .toList();
 
-    setState(() {
-      displayLines = chargueList(context1, selectedFilter)
-          .where((element) =>
-          element.description.toLowerCase().contains(lowerSearch))
-          .toList();
-
-    });
+    displayLinesNotifier.value = List.from(listFiltered);
 
   }
   Future<void>_onTap(int index, BuildContext context)  async {
@@ -121,12 +160,14 @@ class _listSendsState extends State<listSends> {
       saveChanges = !await changesNoSave(context);
       return;
     }
-    resultSend = chargueList(context1, selectedFilter);
+    resultSend = chargueList(context1, selectedFilter,widget.list,widget.dateSends);
 
   }
   @override
   Widget build(BuildContext context) {
+
     BuildContext context = context1;
+
 
     double mWidth = MediaQuery
         .of(context)
@@ -138,33 +179,31 @@ class _listSendsState extends State<listSends> {
       S.of(context).date,
       S.of(context).company,
     ];
-print(selectedFilter);
     return Row(
       children: [
         Container(
           color: Colors.grey,
           width: mWidthList,
-          child: GenericListViewPage<cardSend>(
-            itens: displayLines,
-            defaultFilter: selectedFilter,
-            filters: filterOptions,
-            itemBuilder: (send, index) =>
-                defaultCard(
+          child: ValueListenableBuilder<List<cardSend>>(
+            valueListenable: displayLinesNotifier,
+            builder: (_, display, __) {
+              return GenericListViewPage<cardSend>(
+                itens: display,
+                defaultFilter: selectedFilter,
+                filters: filterOptions,
+                itemBuilder: (send, index) => defaultCard(
                   title: send.title,
                   description: send.description,
-                  color: selectCard  == index
-                      ? Colors.white
-                      : Colors.grey,
+                  color: selectCard == index ? Colors.white : Colors.grey,
                 ),
-            onFilter: _onFilter,
-            onDelete: (line) => _onDelete(context,line),
-            onTap: (send, index) => _onTap(index,context),
-            onSelect: (index) {
-              setState(() {
-                // selectedIndex = index;
-              });
+                onFilter: _onFilter,
+                onDelete: (line) => _onDelete(context, line),
+                onTap: (send, index) => _onTap(index, context),
+                onSelect: (_) {},
+              );
             },
           ),
+
         ),
 
         SizedBox(
@@ -177,10 +216,10 @@ print(selectedFilter);
   
 }
 
-List<cardSend> chargueList (BuildContext context, String filter) {
+List<cardSend> chargueList (BuildContext context, String filter, List<LineSend> list, List<String> dateSends) {
 
     List<cardSend> allCards = [];
-
+print("deben ser ess$dateSends");
     if(filter == S.of(context).date)
     {
         for(int i = 0; i < dateSends.length; i++)
@@ -197,13 +236,13 @@ List<cardSend> chargueList (BuildContext context, String filter) {
 
     if(filter == S.of(context).company)
     {
-       List <String> tmp = lineSector.map((e) => e.factory).toList();
+       List <String> tmp = list.map((e) => e.factory).toList();
 
        List<String> factories = manageArrays.avoidRepeteat(tmp);
 
        for (String current in factories)
        {
-         int count = lineSector.where((e) => e.factory == current).length;
+         int count = list.where((e) => e.factory == current).length;
 
          allCards.add(
            cardSend(
@@ -216,4 +255,5 @@ List<cardSend> chargueList (BuildContext context, String filter) {
     resultSend = allCards;
     return allCards;
 }
+
 
