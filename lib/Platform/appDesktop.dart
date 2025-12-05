@@ -131,7 +131,6 @@ class _appDesktopState extends State<appDesktop> {
     double wItemMax= 120;
     Color colorBar =Colors.white;
 
-
     List<BarButton> _menuBarButtons() {
       return [
         BarButton (
@@ -458,12 +457,10 @@ class _appDesktopState extends State<appDesktop> {
                                             : wItem,
                                         child: Text(sectors[i].name)),
                                     onTap: (){
-                                      controllerSearchSend.clear();
                                       setState(() {
                                         itenSelect = 1;
                                         subIten1Select = 1;
                                         subIten2Select = i + 1;
-
                                       });
                                     }
                                 ),
@@ -699,6 +696,7 @@ class _appDesktopState extends State<appDesktop> {
                           setState(() {
                             itenSelect = 2;
                             subIten1Select = 0;
+                            subIten2Select = -1;
                           });
                         }
                         else
@@ -710,6 +708,7 @@ class _appDesktopState extends State<appDesktop> {
                             setState(() {
                               itenSelect = 2;
                               subIten1Select = 0;
+                              subIten2Select = -1;
                             });
                           }
                         }
@@ -727,6 +726,7 @@ class _appDesktopState extends State<appDesktop> {
                           setState(() {
                             itenSelect = 2;
                             subIten1Select = 1;
+                            subIten2Select = -1;
                           });
                         }
                         else
@@ -738,6 +738,7 @@ class _appDesktopState extends State<appDesktop> {
                             setState(() {
                               itenSelect = 2;
                               subIten1Select = 1;
+                              subIten2Select = -1;
                             });
                           }
                         }
