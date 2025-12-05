@@ -14,9 +14,14 @@ import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter/src/widgets/framework.dart';
 
 import '../Frontend/adminRoutes.dart';
+import '../Objects/LineSend.dart';
 import '../generated/l10n.dart';
 
 FuntionSeleted(int itenSelection, int subIten1Selection,int subIten2Selection, double mWidth, double mHeight, BuildContext context) {
+
+  List<Factory> allFactoriesOriginal = [];
+
+  allFactoriesOriginal = allFactories.map((f) => f.copyWith()).toList();
 
   List<String> element = [];
   int select=-1;
@@ -43,7 +48,6 @@ FuntionSeleted(int itenSelection, int subIten1Selection,int subIten2Selection, d
 
       case 1:
         String tView = '';
-        bool err = false;
         factoriesSector.clear();
 
         if (subIten1Selection == 1)
@@ -51,14 +55,9 @@ FuntionSeleted(int itenSelection, int subIten1Selection,int subIten2Selection, d
             tView = S.of(context).company;
 
 
-            groupFactoriesSector(subIten2Selection);
+            groupFactoriesSector(subIten2Selection,allFactoriesOriginal);
 
-            if(factoriesSector.isEmpty)
-            {
-                err = true;
-            }
-
-            return listFactories(context,err);
+            return listFactories(context,List.from(factoriesSector));
         }
 
         if (subIten1Selection == 2)
@@ -67,20 +66,13 @@ FuntionSeleted(int itenSelection, int subIten1Selection,int subIten2Selection, d
         if (subIten1Selection == 3)
         {
 
-          err = false;
           tView = S.of(context).shipment;
 
-          groupFactoriesSector(subIten2Selection);
+          groupFactoriesSector(subIten2Selection,allFactoriesOriginal);
 
-          if(factoriesSector.isEmpty)
-          {
-            err = true;
-          }
-          else
-          {
-              groupLinesSector(subIten2Selection,element);
-          }
-          return listSends();
+          List<LineSend> filteredLines = groupLinesSector();
+print(dateSends);
+          return listSends(context,List.from(filteredLines),List.from(dateSends));
         }
 
 
@@ -88,8 +80,7 @@ FuntionSeleted(int itenSelection, int subIten1Selection,int subIten2Selection, d
       case 2:
         if (subIten1Selection == 0)
         {
-          groupFactoriesSector(subIten2Selection);
-          groupLinesSector(subIten2Selection,element);
+          groupFactoriesSector(subIten2Selection,allFactoriesOriginal);
 
           return sendMail();
         }
@@ -99,54 +90,48 @@ FuntionSeleted(int itenSelection, int subIten1Selection,int subIten2Selection, d
     }
 
 }
-void groupFactoriesSector(int subIten2Selection) {
+void groupFactoriesSector(int subIten2Selection, List<Factory> allFactoriesOriginal) {
 
   String sector = subIten2Selection.toString();
   factoriesSector.clear();
+
   if(subIten2Selection == 0)
   {
-      factoriesSector = allFactories;
+    factoriesSector  = allFactoriesOriginal
+        .map((f) => f.copyWith())
+        .toList();
   }
   else
   {
-    factoriesSector = allFactories.where((f) =>f.sector == sector).toList();
+    factoriesSector  = allFactoriesOriginal
+        .where((s) => s.sector == sector)
+        .map((f) => f.copyWith())
+        .toList();
+
   }
 
 }
 
-void groupLinesSector(int subIten2Selection, List<String> element) {
+List<LineSend> groupLinesSector() {
 
   dateSends.clear();
   lineSector.clear();
 
-  if(subIten2Selection == 0)
+  for(int i = 0; i <factoriesSector.length; i++)
   {
-      factoriesSector = factoriesSector;
-  }
-  else
-  {
-    if (factoriesSector.isEmpty) {
-      groupFactoriesSector(0);
-    }
-  }
+    final factory = factoriesSector[i].name;
 
-  for(var line in allLines)
-  {
-    final matches = factoriesSector.where(
-            (f) => f.name == line.factory
-    );
+      final lines = allLines.
+            where((sl) => sl.factory == factory).toList();
 
-    if(matches.isNotEmpty)
-    {
-      final factory = matches.first;
-      line.sector = factory.sector;
-      lineSector.add(line);
-    }
+      lineSector.addAll(lines);
   }
 
   dateSends = manageArrays.avoidRepeteat(
     lineSector.map((line) => line.date).toList(),
   );
+
+  return lineSector;
 }
 
 
