@@ -90,7 +90,7 @@ class _adminRoutesState extends State<adminRoutes> {
       }
     }
 
-      return Text("");
+      return SizedBox.shrink();
     }
 
     Future<void> _showRouteDialog(BuildContext context) async {

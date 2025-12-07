@@ -259,11 +259,11 @@ class _appDesktopState extends State<appDesktop> {
                           width: wItem,
                           child: Text(S.of(context).routes)),
                       onTap: () async {
-                        setState(() {
-                          itenSelect = 0;
-                          subIten1Select = 1;
-                          subIten2Select = -1;
-                        });
+
+                        showDialog(
+                          context: context,
+                          builder: (context) => const adminRoutes(),
+                        );
 
                       }
                   ),
