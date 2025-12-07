@@ -185,7 +185,7 @@ class _newSendState extends State<newSend> {
          {
               campKey = S.of(context).company;
 
-              linesSelected = allLines.where((line) {
+              linesSelected = lineSector.where((line) {
                     return line.date == selectCamp;
 
                     }).toList();
@@ -197,11 +197,11 @@ class _newSendState extends State<newSend> {
          {
              campKey = S.of(context).date;
 
-             linesSelected = allLines.where((line) {
+             linesSelected = lineSector.where((line) {
                   return line.factory == selectCamp;
 
                  }).toList();
-print(S.of(context).send.toLowerCase());
+
              int cant = linesSelected.length;
              messageResult = LocalizationHelper.sendsFactory(context, cant);
          }
@@ -428,14 +428,14 @@ print(S.of(context).send.toLowerCase());
 
 
 
-        for(int i = 0; i<lines.length && i < controllersLines.length; i++)
+        for(int i = 0; i<linesSelected.length && i < controllersLines.length; i++)
         {
             Sector? sectorSelected = sectors.firstWhereOrNull(
                   (sector) => sector.id == lines[i].sector!,
             );
 
-            controllersLines[i].date.text = lines[i].date;
-            controllersLines[i].factory.text = lines[i].factory;
+            controllersLines[i].date.text = linesSelected[i].date;
+            controllersLines[i].factory.text = linesSelected[i].factory;
 
             if (sectorSelected != null)
             {
@@ -446,8 +446,8 @@ print(S.of(context).send.toLowerCase());
               controllersLines[i].sector.text = S.of(context).The_sector_does_not_exist;
             }
 
-            controllersLines[i].observations.text = lines[i].observations;
-            controllersLines[i].state.text = lines[i].state;
+            controllersLines[i].observations.text = linesSelected[i].observations;
+            controllersLines[i].state.text = linesSelected[i].state;
         }
 
   }
