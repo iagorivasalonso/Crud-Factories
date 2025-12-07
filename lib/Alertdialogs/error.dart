@@ -18,7 +18,9 @@ Future<bool> error(BuildContext  context, String action, [format]) async {
             child: SizedBox(
               width: 400,
               height: format == null
-                  ? 175
+                  ? action.length < 57
+                      ? 175
+                      : 200
                   : dialogHeight,
               child: Column(
                 children: [
