@@ -145,16 +145,18 @@ class _listSendsState extends State<listSends> {
 
   }
   Future<void>_onTap(int index, BuildContext context)  async {
+   setState(() {
+     selectCard = index;
+     select = index;
 
-    selectCard = index;
-    select = index;
+     if (selectedFilter == S.of(context).date) {
+       selectCamp = resultSend[select].description;
+     }
+     if (selectedFilter == S.of(context).company) {
+       selectCamp = resultSend[select].title;
+     }
 
-    if (selectedFilter == S.of(context).date) {
-      selectCamp = resultSend[select].description;
-    }
-    if (selectedFilter == S.of(context).company) {
-      selectCamp = resultSend[select].title;
-    }
+   });
 
     if (saveChanges) {
       saveChanges = !await changesNoSave(context);

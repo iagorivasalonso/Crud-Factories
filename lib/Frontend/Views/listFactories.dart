@@ -38,7 +38,17 @@ class _listFactoriesState extends State<listFactories> {
   @override
   void initState() {
     super.initState();
-    factorySelect =widget.list[0];
+
+    factorySelect = widget.list.isNotEmpty ? widget.list[0] : null;
+
+    // Inicializar el ValueNotifier
+    displayFactoriesNotifier = ValueNotifier<List<Factory>>(widget.list);
+
+  }
+
+  void didUpdateWidget(covariant listFactories oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    displayFactoriesNotifier = ValueNotifier<List<Factory>>(widget.list);
   }
 
   bool _contains(String text, String search) {
@@ -143,7 +153,7 @@ class _listFactoriesState extends State<listFactories> {
             SizedBox(
               width: mWidthList,
               child: GenericListViewPage<Factory>(
-                itens: widget.list,
+                itens: displayFactoriesNotifier.value,
                 filters: filterOptions,
                 defaultFilter: S.of(context).name,
                 itemBuilder: (factory, index) => factoryCard(
