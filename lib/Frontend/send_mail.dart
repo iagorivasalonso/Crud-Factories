@@ -168,7 +168,9 @@ class _sendMailState extends State<sendMail> {
                           ),
 
                           Padding(
-                            padding: const EdgeInsets.only(left: 30.0),
+                            padding: otherMail == false
+                                     ? const EdgeInsets.only(left: 30.0)
+                                     : const EdgeInsets.only(left: 3.0),
                             child: layoutVariant(
                               items: [
                                 Flexible(
@@ -205,7 +207,9 @@ class _sendMailState extends State<sendMail> {
                                 Flexible(
                                   flex: 1,
                                   child: Padding(
-                                    padding: const EdgeInsets.only(top: 10),
+                                    padding: otherMail == false
+                                                 ? const EdgeInsets.only(top: 10)
+                                                 :  const EdgeInsets.only(top: 20),
                                     child: materialButton(
                                       nameAction: otherMail == false
                                           ? S.of(context).orther
