@@ -348,10 +348,10 @@ class _newFactoryState extends State<newFactory> {
                               ),
                             ),
 
-                            SizedBox(
-                              width: 50,
-                              child: Padding(
-                                padding: const EdgeInsets.symmetric(horizontal: 1.0),
+                            Padding(
+                              padding: const EdgeInsets.only(left: 22.0),
+                              child: SizedBox(
+                                width: 50,
                                 child: Column(
                                   mainAxisSize: MainAxisSize.min,
                                   crossAxisAlignment: CrossAxisAlignment.stretch,

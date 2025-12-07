@@ -21,9 +21,12 @@ class _ContactListState extends State<ContactList> {
       child: Container(
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(5),
-          border: Border.all(color: Colors.black, width: 1.0),
+          border: Border.all(
+            color:const Color(0xFFB0B0B0),
+            width: 1.0,
+          ),
         ),
-        width: 250,
+        width: 340,
         height: 170,
         child: ListView.builder(
           itemCount: widget.contacsCurrent.length,
