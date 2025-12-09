@@ -1,3 +1,4 @@
+import 'package:crud_factories/Alertdialogs/error.dart';
 import 'package:crud_factories/Backend/Global/list.dart';
 import 'package:crud_factories/Frontend/Views/listFactories.dart';
 import 'package:crud_factories/Frontend/Views/listMails.dart';
@@ -15,7 +16,6 @@ import 'package:flutter/src/widgets/framework.dart';
 
 import '../Frontend/adminRoutes.dart';
 import '../Objects/LineSend.dart';
-import '../generated/l10n.dart';
 
 FuntionSeleted(int itenSelection, int subIten1Selection,int subIten2Selection, double mWidth, double mHeight, BuildContext context) {
 
@@ -23,7 +23,6 @@ FuntionSeleted(int itenSelection, int subIten1Selection,int subIten2Selection, d
 
   allFactoriesOriginal = allFactories.map((f) => f.copyWith()).toList();
 
-  List<String> element = [];
   int select=-1;
 
     switch (itenSelection) {
@@ -47,15 +46,19 @@ FuntionSeleted(int itenSelection, int subIten1Selection,int subIten2Selection, d
           return newImport();
 
       case 1:
-        String tView = '';
         factoriesSector.clear();
 
         if (subIten1Selection == 1)
         {
-            tView = S.of(context).company;
-
-
             groupFactoriesSector(subIten2Selection,allFactoriesOriginal);
+
+            if(factoriesSector.isEmpty)
+            {
+              WidgetsBinding.instance?.addPostFrameCallback((_) async {
+                error(context, "no hay Empresas en el sector, se mostraran todas las Empresas");
+              });
+              factoriesSector = allFactories;
+            }
 
             return listFactories(context,List.from(factoriesSector));
         }
@@ -65,11 +68,22 @@ FuntionSeleted(int itenSelection, int subIten1Selection,int subIten2Selection, d
 
         if (subIten1Selection == 3)
         {
+          groupFactoriesSector(subIten2Selection,allFactoriesOriginal);
 
-          tView = S.of(context).shipment;
-          
+          List<LineSend> filteredLines = groupLinesSector();
 
-          //return listSends(context,List.from(filteredLines),List.from(dateSends));
+          if(filteredLines.isEmpty)
+          {
+            WidgetsBinding.instance?.addPostFrameCallback((_) async {
+              error(context, "no hay lineas en el sector, se mostraran todas las lineas");
+            });
+
+             groupFactoriesSector(0,allFactoriesOriginal);
+
+             filteredLines = groupLinesSector();
+          }
+
+          return listSends(context,List.from(filteredLines),List.from(dateSends));
         }
 
 
