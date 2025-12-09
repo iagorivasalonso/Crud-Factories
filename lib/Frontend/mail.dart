@@ -140,7 +140,7 @@ class _newMailState extends State<newMail> {
                           ),
 
                           Padding(
-                            padding: const EdgeInsets.only(left: 500.0, top: 20.0),
+                            padding: const EdgeInsets.only(left: 500.0, top: 150.0),
                             child: Row(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
