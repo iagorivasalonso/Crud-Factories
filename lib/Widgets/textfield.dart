@@ -9,7 +9,7 @@ Padding defaultTextfield({
 }){
 
   return Padding(
-    padding: const EdgeInsets.only(left: 35.0, top: 20.0,right: 4.0),
+    padding: const EdgeInsets.only(left: 35.0, top: 20.0,right: 40.0),
     child: Row(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
