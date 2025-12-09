@@ -283,8 +283,9 @@ class _newFactoryState extends State<newFactory> {
                             title: S.of(context).contact
                         ),
 
-                        Row(
-                            children: [
+                        layoutVariant(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            items: [
                               Flexible(
                                 child: defaultTextfield(
                                   nameCamp: S.of(context).phone_1,
@@ -303,8 +304,9 @@ class _newFactoryState extends State<newFactory> {
                             ]
                         ),
 
-                        Row(
-                            children: [
+                        layoutVariant(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            items: [
                               Flexible(
                                 child: defaultTextfield(
                                   nameCamp: S.of(context).mail,
@@ -326,14 +328,39 @@ class _newFactoryState extends State<newFactory> {
                         defaultTextfield(
                           nameCamp: S.of(context).address,
                           controllerCamp: controllers.address,
-                          campOld: select == -1 ? '' : widget.factorySelect!.address['city']!,
+                          campOld: select == -1 ? '' : allAddress,
+                        ),
+                        layoutVariant(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            items: [
+                              Flexible(
+                                child: defaultTextfield(
+                                  nameCamp: S.of(context).city,
+                                  controllerCamp: controllers.city,
+                                  campOld: select == -1 ? '' : widget.factorySelect!.address['city']
+                                ),
+                              ),
+
+                              Flexible(
+                                child: defaultTextfield(
+                                  nameCamp: S.of(context).postal_code,
+                                  controllerCamp: controllers.postalCode,
+                                  campOld: select == -1 ? '' : widget.factorySelect!.address['city'],
+                                ),
+                              ),
+                            ]
                         ),
 
-
-                        defaultTextfield(
-                          nameCamp: S.of(context).province,
-                          controllerCamp: controllers.province,
-                          campOld: select == -1 ? '' : widget.factorySelect!.address['province']!,
+                        Align(
+                          alignment: Alignment.topLeft,
+                          child: SizedBox(
+                            width: 400,
+                            child: defaultTextfield(
+                              nameCamp: S.of(context).province,
+                              controllerCamp: controllers.province,
+                              campOld: select == -1 ? '' : widget.factorySelect!.address['province']!,
+                            ),
+                          ),
                         ),
 
 
