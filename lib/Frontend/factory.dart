@@ -137,7 +137,6 @@ class _newFactoryState extends State<newFactory> {
                 sector = sectors[i].name;
               }
             }
-             print(sector);
             controllers.telephone1.text = widget.factorySelect!.thelephones[0];
             controllers.telephone1.text =  widget.factorySelect!.thelephones[1];
             controllers.mail.text =  widget.factorySelect!.mail;
@@ -498,7 +497,7 @@ class _newFactoryState extends State<newFactory> {
         name: controllers.employeeNew.text,
         idFactory: id,
       ));
-      print(contacsCurrent);
+
       controllers.employeeNew.clear();
     });
   }

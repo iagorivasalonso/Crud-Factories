@@ -40,7 +40,6 @@ final file = File(filePath.path);
     fRoutes = File(routeFirst);
   }
 
-  print(csv);
   file.writeAsString(csv);
 
   return err;

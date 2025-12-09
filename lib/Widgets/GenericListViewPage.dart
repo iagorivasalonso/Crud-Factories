@@ -75,7 +75,7 @@ class _GenericListViewPageState<T> extends State<GenericListViewPage<T>> {
      double heightButons = 40;
      double heightpanel = 150;
      double heightFilters = heightpanel + heightButons;
-print(opSelected);
+
      return LayoutBuilder(
          builder: (context0,constrains) {
            final height = widget.filters.isNotEmpty

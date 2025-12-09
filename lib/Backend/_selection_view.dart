@@ -12,8 +12,6 @@ import 'package:crud_factories/Frontend/send_mail.dart';
 import 'package:crud_factories/Functions/manageArrays.dart';
 import 'package:crud_factories/Objects/Factory.dart';
 import 'package:fluent_ui/fluent_ui.dart';
-import 'package:flutter/src/widgets/framework.dart';
-
 import '../Frontend/adminRoutes.dart';
 import '../Objects/LineSend.dart';
 
@@ -140,7 +138,6 @@ List<LineSend> groupLinesSector() {
     }
 
     lineSector.addAll(lines);
-    print(lines);
   }
 
   dateSends = manageArrays.avoidRepeteat(

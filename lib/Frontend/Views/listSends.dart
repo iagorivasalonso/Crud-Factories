@@ -221,7 +221,7 @@ class _listSendsState extends State<listSends> {
 List<cardSend> chargueList (BuildContext context, String filter, List<LineSend> list, List<String> dateSends) {
 
     List<cardSend> allCards = [];
-print("deben ser ess$dateSends");
+
     if(filter == S.of(context).date)
     {
         for(int i = 0; i < dateSends.length; i++)
