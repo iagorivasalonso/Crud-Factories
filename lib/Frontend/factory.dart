@@ -121,12 +121,6 @@ class _newFactoryState extends State<newFactory> {
     int select = widget.select;
     sectorsString.clear();
 
-    sectorsString.add(S.of(context).newMale);
-
-      for(int i = 0; i < sectors.length; i++)
-      {
-          sectorsString.add(sectors[i].name);
-      }
 
     void campCharge () {
 
@@ -135,7 +129,6 @@ class _newFactoryState extends State<newFactory> {
             controllers.name.text = widget.factorySelect!.name;
             controllers.highDate.text = widget.factorySelect!.highDate;
             tmp = widget.factorySelect!.sector;
-            controllers.sector.text = tmp;
 
             for(int i = 0; i <sectors.length; i++)
             {
@@ -144,7 +137,7 @@ class _newFactoryState extends State<newFactory> {
                 sector = sectors[i].name;
               }
             }
-
+             print(sector);
             controllers.telephone1.text = widget.factorySelect!.thelephones[0];
             controllers.telephone1.text =  widget.factorySelect!.thelephones[1];
             controllers.mail.text =  widget.factorySelect!.mail;
@@ -267,7 +260,7 @@ class _newFactoryState extends State<newFactory> {
                                 child: GenericDropdown<Sector>(
                                   items: sectors,
                                   camp:S.of(context).sector,
-                                  opDefault: S.of(context).newMale,
+                                  opDefault: select == -1 ? S.of(context).newMale : sector,
                                   selectedItem: selectedSector,
                                   hint: sector,
                                   itemLabel: (sector) => sector.name,
