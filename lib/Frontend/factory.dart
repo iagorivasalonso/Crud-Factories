@@ -404,7 +404,7 @@ class _newFactoryState extends State<newFactory> {
                           ],
                         ),
                         Padding(
-                              padding: const EdgeInsets.only(left: 600.0),
+                              padding: const EdgeInsets.only(left: 600.0, top:100.0),
                               child: Row(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
