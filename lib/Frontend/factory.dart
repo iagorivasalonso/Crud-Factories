@@ -1,4 +1,3 @@
-import 'dart:io';
 
 import 'package:adaptive_scrollbar/adaptive_scrollbar.dart';
 import 'package:crud_factories/Alertdialogs/confirm.dart';
@@ -26,11 +25,8 @@ import 'package:crud_factories/Widgets/headViewsAndroid.dart';
 import 'package:crud_factories/Widgets/textfieldCalendar.dart';
 import 'package:crud_factories/generated/l10n.dart';
 import 'package:crud_factories/helpers/localization_helper.dart';
-import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
-import 'package:show_platform_date_picker/show_platform_date_picker.dart';
-
+import '../Functions/isNotAndroid.dart';
 import '../Widgets/dropDownButton.dart';
 import '../Widgets/listElements.dart';
 import '../Widgets/materialButton.dart';
@@ -117,7 +113,8 @@ class _newFactoryState extends State<newFactory> {
   @override
   Widget build(BuildContext context0) {
 
-    BuildContext context = Platform.isWindows ? context1 : context0;
+
+    BuildContext context = isNotAndroid() ? context0 :  context1;
     int select = widget.select;
     sectorsString.clear();
 
@@ -203,7 +200,7 @@ class _newFactoryState extends State<newFactory> {
     String name = S.of(context).company;
     String title1 = "$title $name";
 
-    return Platform.isWindows
+    return !isNotAndroid()
        ? Scaffold(
       body: AdaptiveScrollbar(
         controller: verticalScroll,

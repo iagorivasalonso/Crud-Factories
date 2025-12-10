@@ -21,6 +21,7 @@ import 'package:adaptive_scrollbar/adaptive_scrollbar.dart';
 import 'package:flutter/material.dart';
 import 'package:collection/collection.dart';
 import '../Backend/SQL/modifyLines.dart';
+import '../Functions/isNotAndroid.dart';
 import '../Widgets/CustomDataTable.dart';
 import '../Widgets/dropDownButton.dart' show GenericDropdown;
 import '../Widgets/headView.dart' show headView;
@@ -102,7 +103,7 @@ class _newSendState extends State<newSend> {
   @override
   Widget build(BuildContext context0) {
 
-    BuildContext context = Platform.isWindows ? context1 : context0;
+    BuildContext context = isNotAndroid() ? context0 :  context1;
     int select = widget.select;
     String selectCamp = widget.selectCamp;
     String filter = widget.filter;
@@ -237,7 +238,7 @@ class _newSendState extends State<newSend> {
               controllerSearchSend.text = selectCamp;
           }
 
-    return Platform.isWindows
+    return !isNotAndroid()
         ? Scaffold(
       body: AdaptiveScrollbar(
         controller: verticalScroll,

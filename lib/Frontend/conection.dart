@@ -27,6 +27,7 @@ import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 import 'package:mysql1/mysql1.dart';
 
+import '../Functions/isNotAndroid.dart';
 import '../Widgets/dropDownButton.dart';
 import '../Widgets/headView.dart';
 import '../Widgets/materialButton.dart';
@@ -93,7 +94,7 @@ class _conectionState extends State<conection> {
   @override
   Widget build(BuildContext context0) {
 
-    BuildContext context = Platform.isWindows ? context1 : context0;
+    BuildContext context = isNotAndroid() ? context0 :  context1;
 
     if(action0.isEmpty)
     {
@@ -138,7 +139,7 @@ class _conectionState extends State<conection> {
       }
     }
 
-    return Platform.isWindows
+    return !isNotAndroid()
       ? Scaffold(
       body: AdaptiveScrollbar(
         controller: verticalScroll,

@@ -34,6 +34,7 @@ import 'package:file_picker/file_picker.dart' show FilePickerResult, FileType, F
 import 'package:flutter/material.dart';
 import '../Backend/CSV/importEmpleoyes.dart';
 import '../Backend/CSV/importLines.dart';
+import '../Functions/isNotAndroid.dart';
 import '../Widgets/CSVPickerField.dart';
 import '../Widgets/headView.dart';
 import '../Widgets/materialButton.dart';
@@ -83,10 +84,10 @@ class _newImportState extends State<newImport> {
   @override
   Widget build(BuildContext context0) {
 
-    BuildContext context = Platform.isWindows ? context1 : context0;
+    BuildContext context = isNotAndroid() ? context0 :  context1;
 
 
-    return Platform.isWindows
+    return  !isNotAndroid()
         ? Scaffold(
            body: AdaptiveScrollbar(
         controller: verticalScroll,

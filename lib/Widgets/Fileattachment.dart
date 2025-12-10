@@ -1,5 +1,6 @@
 
 import 'dart:io';
+import 'package:crud_factories/Functions/isNotAndroid.dart' show isNotAndroid;
 import 'package:crud_factories/Widgets/textfield.dart';
 import 'package:crud_factories/generated/l10n.dart';
 import 'package:file_picker/file_picker.dart' show FilePickerResult, FilePicker, FileType;
@@ -62,7 +63,8 @@ class _FilePickerFieldState extends State<Fileattachment> {
   @override
   Widget build(BuildContext context0) {
 
-    BuildContext context = Platform.isWindows ? context1 : context0;
+    BuildContext context = isNotAndroid() ? context0 :  context1;
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisSize: MainAxisSize.min,

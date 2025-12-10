@@ -25,6 +25,7 @@ import 'package:mailer/smtp_server/gmail.dart';
 import 'package:mailer/src/entities/attachment.dart';
 
 import '../Backend/Global/controllers/Mail.dart';
+import '../Functions/isNotAndroid.dart';
 import '../Widgets/dropDownButton.dart';
 import '../Widgets/Fileattachment.dart';
 import '../Widgets/layoutVariant.dart';
@@ -108,7 +109,7 @@ class _sendMailState extends State<sendMail> {
   @override
   Widget build(BuildContext context0) {
 
-    BuildContext context = Platform.isWindows ? context1 : context0;
+    BuildContext context = isNotAndroid() ? context0 :  context1;
 
     if(selectedOption==null)
     {
@@ -136,7 +137,7 @@ class _sendMailState extends State<sendMail> {
     }
 
 
-    return Platform.isWindows
+    return !isNotAndroid()
         ? Scaffold(
       body: AdaptiveScrollbar(
         controller: verticalScroll,
@@ -291,7 +292,7 @@ class _sendMailState extends State<sendMail> {
                           ),
 
 
-                        Align(
+                          Align(
                               alignment: Alignment.topLeft,
                               child: Fileattachment(
                                 camp: controllers.subject!,

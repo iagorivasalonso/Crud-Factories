@@ -21,6 +21,7 @@ import 'package:mailer/mailer.dart';
 import 'package:mailer/smtp_server/gmail.dart';
 import 'package:mailer/smtp_server/hotmail.dart';
 import '../Backend/Global/controllers/Mail.dart';
+import '../Functions/isNotAndroid.dart';
 import '../Widgets/headViewsAndroid.dart';
 import '../Widgets/layoutVariant.dart';
 import '../Widgets/materialButton.dart';
@@ -68,7 +69,7 @@ class _newMailState extends State<newMail> {
   @override
   Widget build(BuildContext context0) {
 
-    BuildContext context = Platform.isWindows ? context1 : context0;
+    BuildContext context = isNotAndroid() ? context0 :  context1;
     int select = widget.select;
 
     String action = "";
@@ -92,7 +93,7 @@ class _newMailState extends State<newMail> {
     String name = S.of(context).mail;
     String title1 = "$title $name";
 
-    return Platform.isWindows
+    return !isNotAndroid()
         ? Scaffold(
       body: AdaptiveScrollbar(
         controller: verticalScroll,
