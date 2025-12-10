@@ -25,13 +25,6 @@ class GenericDropdown<T> extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
 
-
-
-    final dropdownItems = [
-
-
-    ];
-
     return Row(
       children: [
         Flexible(
