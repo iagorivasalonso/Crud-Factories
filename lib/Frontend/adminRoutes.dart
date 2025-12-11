@@ -4,6 +4,7 @@ import 'dart:io';
 
 import 'package:crud_factories/Backend/Global/files.dart';
 import 'package:file_picker/file_picker.dart' show FilePickerResult, FilePicker, FileType;
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 
 import '../Alertdialogs/confirm.dart';
@@ -78,11 +79,11 @@ class _adminRoutesState extends State<adminRoutes> {
   @override
   Widget build(BuildContext context0) {
 
-    BuildContext context = Platform.isWindows ? context1 : context0;
+    BuildContext context = context1;
 
     for (int i = 0; i < routesCSV.length; i++)
     {
-      routeControllers[i].name.text =  routesCSV[i].name;
+      routeControllers[i].name.text =  namesRoutesOrdened[i];
 
       if(routesCSV[i].route.isNotEmpty)
       {
