@@ -81,17 +81,9 @@ class _adminRoutesState extends State<adminRoutes> {
 
     BuildContext context = context1;
 
-    for (int i = 0; i < routesCSV.length; i++)
-    {
-      routeControllers[i].name.text =  namesRoutesOrdened[i];
+    chargueRoutes();
 
-      if(routesCSV[i].route.isNotEmpty)
-      {
-        routeControllers[i].router.text = routesCSV[i].route;
-      }
-    }
-
-      return SizedBox.shrink();
+    return SizedBox.shrink();
     }
 
     Future<void> _showRouteDialog(BuildContext context) async {
@@ -174,7 +166,7 @@ class _adminRoutesState extends State<adminRoutes> {
                           const SizedBox(width: 20),
                           materialButton(
                             nameAction: S.of(context).cancel,
-                            function: () => reloadRoutes(),
+                            function: () => chargueRoutes(),
                           ),
                         ],
                       ),
@@ -263,8 +255,17 @@ class _adminRoutesState extends State<adminRoutes> {
 
 
   }
-  Future<void> reloadRoutes() async {
+  Future<void> chargueRoutes() async {
 
+    for (int i = 0; i < routesCSV.length; i++)
+    {
+      routeControllers[i].name.text =  namesRoutesOrdened[i];
+
+      if(routesCSV[i].route.isNotEmpty)
+      {
+        routeControllers[i].router.text = routesCSV[i].route;
+      }
+    }
 
   }
 
