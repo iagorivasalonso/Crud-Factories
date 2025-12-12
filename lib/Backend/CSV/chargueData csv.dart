@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:crud_factories/Backend/CSV/importConections.dart';
@@ -12,6 +13,8 @@ import 'package:crud_factories/Backend/Global/list.dart';
 import 'package:crud_factories/Backend/Global/variables.dart';
 import 'package:crud_factories/Objects/RouteCSV.dart';
 import 'package:crud_factories/generated/l10n.dart';
+import 'package:flutter/foundation.dart' show kIsWeb;
+import 'package:flutter/services.dart';
 import 'package:flutter/src/widgets/framework.dart';
 
 
@@ -20,33 +23,36 @@ Future<bool> chargueDataCSV(BuildContext context) async {
   routesCSV.clear();
   bool isCorrect = true;
 
-  File tmp = File('${fRoutes.path}/routes.csv');
-
-  if (!await tmp.exists())
+  if(!kIsWeb)
   {
-    Directory currentDir = Directory.current;
-    Directory parentDir = currentDir.parent;
+    File tmp = File('${fRoutes.path}/routes.csv');
 
-    routeFirst = parentDir.path;
-    fRoutes = File(routeFirst);
+    if (!await tmp.exists())
+    {
+      Directory currentDir = Directory.current;
+      Directory parentDir = currentDir.parent;
 
-    tmp = File('${fRoutes.path}/routes.csv');
+      routeFirst = parentDir.path;
+      fRoutes = File(routeFirst);
 
-    try {
-      await tmp.create(recursive: true);
-      isCorrect = true;
-    } catch (e) {
-      errorFiles.add(S.of(context).error_creating_file);
-      isCorrect = false;
+      tmp = File('${fRoutes.path}/routes.csv');
+
+      try {
+        await tmp.create(recursive: true);
+        isCorrect = true;
+      } catch (e) {
+        errorFiles.add(S.of(context).error_creating_file);
+        isCorrect = false;
+      }
+
     }
-
-  }
-  else
-  {
+    else
+    {
       errorFiles.add(S.of(context).error_creating_file);
       isCorrect = true;
+    }
+    fRoutes = tmp;
   }
-  fRoutes = tmp;
 
   if (isCorrect)
   {
@@ -61,25 +67,24 @@ Future<bool> chargueDataCSV(BuildContext context) async {
 
   if(isCorrect)
   {
-       namesRoutesOrdened = [S.of(context).routes,S.of(context).connections,S.of(context).server,S.of(context).sector,S.of(context).companies,S.of(context).employees,S.of(context).lines, S.of(context).mails];
+       namesRoutesOrdened = [S.of(context).routes,S.of(context).connections,S.of(context).server,S.of(context).sectors,S.of(context).companies,S.of(context).employees,S.of(context).lines, S.of(context).mails];
 
        List<RouteCSV> tmp = reorderRouter(namesRoutesOrdened, routesCSV);
        routesCSV = tmp;
   }
   else
   {
-
       errorFiles.add(S.of(context).route_file_cannot_be_read);
       isCorrect = false;
   }
 
-   if(isCorrect)
+   if(isCorrect && !kIsWeb)
    {
        sectors.clear();
        fSectors = File(routesCSV[3].route);
 
        try {
-         await csvImportSectors(context, sectors);
+        await csvImportSectors(context, sectors);
        } catch (Exeption) {
 
        }
@@ -89,7 +94,7 @@ Future<bool> chargueDataCSV(BuildContext context) async {
        fMails = File(routesCSV[7].route);
 
        try {
-         await csvImportMails(context,fileContent, mails);
+         await csvImportMails(context, mails);
        } catch (Exeption) {
 
        }

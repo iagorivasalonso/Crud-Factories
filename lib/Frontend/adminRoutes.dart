@@ -4,7 +4,8 @@ import 'dart:io';
 
 import 'package:crud_factories/Backend/Global/files.dart';
 import 'package:file_picker/file_picker.dart' show FilePickerResult, FilePicker, FileType;
-import 'package:flutter/foundation.dart' show kIsWeb;
+import 'package:flutter/foundation.dart';
+
 import 'package:flutter/material.dart';
 
 import '../Alertdialogs/confirm.dart';
@@ -180,6 +181,7 @@ class _adminRoutesState extends State<adminRoutes> {
       );
 
     }
+
   Future<void> _pickFile(BuildContext context,index, routeControllers, listControllers) async {
 
 
@@ -187,34 +189,64 @@ class _adminRoutesState extends State<adminRoutes> {
       dialogTitle: S.of(context).select_file,
       type: FileType.custom,
       allowedExtensions: ['csv','exe'],
+       withData: true,
     );
 
     if(result == null) return;
 
-    final file = File(result.files.single.path!);
-    routeControllers[index].router.text = file.path;
+    final platformFile = result.files.single;
 
-    String prepareExt = file.toString().split(".").toString();
-    String ext = prepareExt[prepareExt.length-1];
 
-    if(ext == ".csv")
+    String ext = platformFile.name.split('.').last.toLowerCase();
+
+    if(ext == "csv")
     {
+      try {
 
-      final content = await file.readAsString(encoding: utf8);
+        String content;
+        String fullPath;
 
-      final lines = const LineSplitter().convert(content);
-      final parts = lines.first.split(";");
 
-      try{
+        if(kIsWeb)
+        {
+           content = utf8.decode(platformFile.bytes!);
+           fullPath = platformFile.name;
+        }
+        else
+        {
+          final file = File(platformFile.path!);
+          content = await file.readAsString(encoding: utf8);
+          fullPath = platformFile.path!;
+        }
+print("web$index");
+        routeControllers[index].router.text = fullPath;
 
         switch(index)
         {
           case 0:
-            listController.routesNew.addAll(await readRoutesFromCsv(file));
+
+            if(kIsWeb)
+            {
+              await csvImportRoutes(context,listController.routesNew, content);
+            }
+            else
+            {
+              listController.routesNew.addAll(await readRoutesFromCsvContent(content));
+            }
+
             break;
 
           case 1:
-            listController.conectionsNew.addAll(await readConectionsFromCsv(file));
+
+            if(kIsWeb)
+            {
+              await csvImportConections(context,listController.conectionsNew, content);
+            }
+            else
+            {
+              listController.conectionsNew.addAll(await readConectionsFromCsvContent(content));
+            }
+
             break;
 
           case 2:
@@ -222,23 +254,67 @@ class _adminRoutesState extends State<adminRoutes> {
             break;
 
           case 3:
-            listController.sectorsNew.addAll(await readSectorsFromCsv(file));
+
+             if(kIsWeb)
+             {
+               await csvImportSectors(context, listController.sectorsNew, content);
+             }
+             else
+             {
+               listController.sectorsNew.addAll(await readSectorsFromCsvContent(content));
+             }
+
             break;
 
           case 4:
-            listController.factoriesNew.addAll(await readFactoriesFromCsv(file));
+
+            if(kIsWeb)
+            {
+              await csvImportFactories(context, listController.factoriesNew,content);
+            }
+            else
+            {
+              listController.factoriesNew.addAll(await readFactoriesFromCsvContent(content));
+            }
+
             break;
 
           case 5:
-            listController.empleoyesNew.addAll(await readEmpleoyeFromCsv(file));
+
+            if(kIsWeb)
+            {
+              await csvImportEmpleoyes(context, listController.empleoyesNew, content);
+            }
+            else
+            {
+              listController.empleoyesNew.addAll(await readEmpleoyeFromCsvContent(content));
+            }
+
             break;
 
           case 6:
-            listController.linesNew.addAll(await readLinesFromCsv(file));
+
+            if(kIsWeb)
+            {
+              await csvImportLines(context, listController.linesNew, content);
+            }
+            else
+            {
+              listController.linesNew.addAll(await readLinesFromCsvContent(content));
+            }
+
+            //
             break;
 
           case 7:
-            listController.mailsNew.addAll(await readMailsFromCsv(file));
+            if(kIsWeb)
+            {
+              await csvImportMails(context, listController.mailsNew, content);
+            }
+            else
+            {
+              listController.mailsNew.addAll(await readMailsFromCsvContent(content));
+            }
             break;
 
           default:
@@ -246,15 +322,14 @@ class _adminRoutesState extends State<adminRoutes> {
             error(context, action);
             break;
         }
-      }catch (e) {
+      } catch (e) {
         error(context, S.of(context).file_not_found);
-      }
+        }
+
     }
 
-
-
-
   }
+
   Future<void> chargueRoutes() async {
 
     for (int i = 0; i < routesCSV.length; i++)
@@ -293,12 +368,14 @@ class _adminRoutesState extends State<adminRoutes> {
 
     await confirm(context, action);
     chargueDataCSV(context);
-    csvExportatorRoutes(routesNew);
+   // csvExportatorRoutes(routesNew);
 
 
     setState((){
       Navigator.of(context).pop(true);
     });
   }
+
+
 }
 
