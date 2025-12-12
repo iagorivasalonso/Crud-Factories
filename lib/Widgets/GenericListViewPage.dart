@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import '../Backend/Global/variables.dart';
+import '../Functions/isNotAndroid.dart';
 import '../generated/l10n.dart';
 import 'dropDownButton.dart';
 
@@ -68,7 +69,7 @@ class _GenericListViewPageState<T> extends State<GenericListViewPage<T>> {
   @override
   Widget build(BuildContext context0) {
 
-    BuildContext context = Platform.isWindows ? context1 : context0;
+    BuildContext context = isNotAndroid() ? context0 :  context1;
 
     List<String> opSearch = [S.of(context).allMale, S.of(context).filter];
 
