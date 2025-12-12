@@ -43,7 +43,7 @@ class _CSVPickerFieldState extends State<CSVPickerField> {
       children: [
         Expanded(
           child: Padding(
-            padding: const EdgeInsets.only(right: 35.0),
+            padding: const EdgeInsets.only(right: 3.0),
             child: defaultTextfield(
               nameCamp: campName,
               controllerCamp: controllerImportPicker,
