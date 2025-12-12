@@ -109,7 +109,7 @@ class _adminRoutesState extends State<adminRoutes> {
                     Padding(
                       padding: const EdgeInsets.only(left: 30.0),
                       child: SizedBox(
-                        width: 320,
+                        width: 325,
                         child: GenericRadioGroup<String>(
                           items: [S.of(context).csv, S.of(context).sql],
                           camp: S.of(context).select,
