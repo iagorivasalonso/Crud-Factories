@@ -28,6 +28,7 @@ dependencies:
   flutter_email_sender: ^7.0.0
   l10n_flutter: ^1.0.7
   intl_utils: ^2.8.9
+  universal_html: ^2.0.9
 
 dev_dependencies:
   flutter_test:
