@@ -6,11 +6,31 @@ import 'package:crud_factories/Functions/manageState.dart';
 import 'package:crud_factories/Objects/LineSend.dart';
 import 'package:crud_factories/generated/l10n.dart';
 import 'package:flutter/material.dart';
-Future<void> csvImportLines(BuildContext context, List<LineSend> line ) async {
+Future<void> csvImportLines(BuildContext context, List<LineSend> line, [dynamic fileOrContent] ) async {
 
   try {
 
-     line.addAll(await readLinesFromCsv(fLines));
+    List<LineSend> imported;
+
+    if (fileOrContent == null)
+    {
+      imported = await readLinesFromCsv(fLines);
+    }
+    else if (fileOrContent is File)
+    {
+      imported = await readLinesFromCsv(fileOrContent);
+    }
+    else if (fileOrContent is String)
+    {
+      imported = await readLinesFromCsvContent(fileOrContent);
+    }
+    else
+    {
+      throw Exception("Invalid value");
+    }
+    allLines.addAll(imported);
+
+
 
   } catch (e) {
     String array = S.of(context).lines;
@@ -28,6 +48,11 @@ Future<void> csvImportLines(BuildContext context, List<LineSend> line ) async {
 Future<List<LineSend>> readLinesFromCsv(File file) async {
 
   final content = await file.readAsString(encoding: utf8);
+  return readLinesFromCsvContent(content);
+}
+
+Future<List<LineSend>> readLinesFromCsvContent(String content) async {
+
   final lines = const LineSplitter()
       .convert(content)
       .where((line) => line.trim().isNotEmpty)

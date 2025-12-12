@@ -7,11 +7,28 @@ import 'package:crud_factories/generated/l10n.dart';
 import 'package:fluent_ui/fluent_ui.dart';
 
 
-Future<void>csvImportRoutes(BuildContext context, List<RouteCSV> routesCsv) async {
+Future<void>csvImportRoutes(BuildContext context, List<RouteCSV> routes, [dynamic fileOrContent]) async {
 
   try {
+    List<RouteCSV> imported;
 
-    routesCsv.addAll(await readRoutesFromCsv(fRoutes));
+    if (fileOrContent == null)
+    {
+      imported = await readRoutesFromCsv(fRoutes);
+    }
+    else if (fileOrContent is File)
+    {
+      imported = await readRoutesFromCsv(fileOrContent);
+    }
+    else if (fileOrContent is String)
+    {
+      imported = await readRoutesFromCsvContent(fileOrContent);
+    }
+    else
+    {
+      throw Exception("Invalid value");
+    }
+    routesCSV.addAll(imported);
 
   } catch (e) {
         String array = S.of(context).routes;
@@ -28,21 +45,30 @@ Future<void>csvImportRoutes(BuildContext context, List<RouteCSV> routesCsv) asyn
 Future<List<RouteCSV>> readRoutesFromCsv(File file) async {
 
   final content = await file.readAsString(encoding: utf8);
+  return readRoutesFromCsvContent(content);
+}
+
+Future<List<RouteCSV>> readRoutesFromCsvContent(String content) async {
+
   final lines = const LineSplitter()
       .convert(content)
       .where((line) => line.trim().isNotEmpty)
       .toList();
 
-  final route = <RouteCSV>[];
+  final routes = <RouteCSV>[];
 
-  for( final line in lines) {
+  for (final line in lines) {
     final parts = line.split(";");
-   if (parts.length < 3) continue;
-    route.add(RouteCSV(
+    if (parts.length < 3) continue;
+    final routePath = parts[2].trim();   //seguridad solo para rutas por si faltan otros archivos
+    final safePath = routePath.isEmpty ? "<EMPTY>" : routePath;
+    routes.add(RouteCSV(
       id: parts[0].trim(),
       name: parts[1].trim(),
-      route: parts[2].trim(),
+      route: safePath,
     ));
   }
-  return route;
+
+  return routes;
+
 }

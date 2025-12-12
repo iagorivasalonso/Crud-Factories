@@ -4,6 +4,8 @@ import 'package:crud_factories/Backend/Global/variables.dart';
 import 'package:crud_factories/Objects/RouteCSV.dart';
 import 'package:csv/csv.dart';
 
+import 'exportatorList.dart';
+
 Future<bool> csvExportatorRoutes(List<RouteCSV> routes) async {
 
   bool err = false;
@@ -29,18 +31,12 @@ Future<bool> csvExportatorRoutes(List<RouteCSV> routes) async {
     row.add(associateList[i]["route"]);
     rows.add(row);
   }
+  final filePath = fRoutes;
+  routeFirst = filePath.path;
 
- String csv = const ListToCsvConverter(fieldDelimiter: ';').convert(rows);
-final filePath = fRoutes;
+  String csv = const ListToCsvConverter(fieldDelimiter: ';').convert(rows);
+  err = await csvExport(filePath,csv);
 
-routeFirst = filePath.path;
-final file = File(filePath.path);
-  if(await fRoutes.exists()!)
-  {
-    fRoutes = File(routeFirst);
-  }
-
-  file.writeAsString(csv);
 
   return err;
 }

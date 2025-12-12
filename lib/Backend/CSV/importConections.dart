@@ -6,11 +6,31 @@ import 'package:crud_factories/Objects/Conection.dart';
 import 'package:crud_factories/generated/l10n.dart';
 import 'package:flutter/material.dart';
 
-Future<void>csvImportConections(BuildContext context,List<Conection> conections) async {
+import '../../Objects/RouteCSV.dart';
+
+Future<void>csvImportConections(BuildContext context,List<Conection> conection,[dynamic fileOrContent]) async {
 
   try {
 
-    conections.addAll(await readConectionsFromCsv(fConections));
+    List<Conection> imported;
+
+    if (fileOrContent == null)
+    {
+      imported = await readConectionsFromCsv(fConections);
+    }
+    else if (fileOrContent is File)
+    {
+      imported = await readConectionsFromCsv(fileOrContent);
+    }
+    else if (fileOrContent is String)
+    {
+      imported = await readConectionsFromCsvContent(fileOrContent);
+    }
+    else
+    {
+      throw Exception("Invalid value");
+    }
+    conections.addAll(imported);
 
   } catch (e) {
     String array = S.of(context).connections;
@@ -23,10 +43,15 @@ Future<void>csvImportConections(BuildContext context,List<Conection> conections)
     }
   }
 }
-
 Future<List<Conection>> readConectionsFromCsv(File file) async {
 
   final content = await file.readAsString(encoding: utf8);
+  return readConectionsFromCsvContent(content);
+}
+
+
+Future<List<Conection>> readConectionsFromCsvContent(String content) async {
+
   final lines = const LineSplitter()
       .convert(content)
       .where((line) => line.trim().isNotEmpty)

@@ -1,17 +1,38 @@
 import 'dart:convert';
 import 'dart:io';
-import 'package:crud_factories/Backend/Global/list.dart';
+
 import 'package:crud_factories/Backend/Global/files.dart';
 import 'package:crud_factories/Objects/Mail.dart';
 import 'package:crud_factories/generated/l10n.dart';
 import 'package:flutter/material.dart';
 
+import '../Global/list.dart';
 
-Future<void >csvImportMails(BuildContext context, List<String> fileContent, List<Mail> mails) async {
+
+Future<void >csvImportMails(BuildContext context, List<Mail> mailf,[dynamic fileOrContent]) async {
 
   try {
 
-    mails.addAll(await readMailsFromCsv(fMails));
+    List<Mail> imported;
+
+    if (fileOrContent == null)
+    {
+      imported = await readMailsFromCsv(fMails);
+    }
+    else if (fileOrContent is File)
+    {
+      imported = await readMailsFromCsv(fileOrContent);
+    }
+    else if (fileOrContent is String)
+    {
+      imported = await readMailsFromCsvContent(fileOrContent);
+    }
+    else
+    {
+      throw Exception("Invalid value");
+    }
+    mails.addAll(imported);
+
 
   } catch (e) {
     String array = S.of(context).mails;
@@ -28,6 +49,11 @@ Future<void >csvImportMails(BuildContext context, List<String> fileContent, List
 Future<List<Mail>> readMailsFromCsv(File file) async {
 
   final content = await file.readAsString(encoding: utf8);
+  return readMailsFromCsvContent(content);
+}
+
+Future<List<Mail>> readMailsFromCsvContent(String content) async {
+
   final lines = const LineSplitter()
       .convert(content)
       .where((line) => line.trim().isNotEmpty)

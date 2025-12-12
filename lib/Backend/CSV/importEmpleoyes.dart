@@ -7,11 +7,30 @@ import 'package:crud_factories/generated/l10n.dart';
 import 'package:flutter/material.dart';
 
 
-Future<void>csvImportEmpleoyes(BuildContext context, List<Empleoye> empleoyes) async {
+Future<void>csvImportEmpleoyes(BuildContext context, List<Empleoye> empleoye, [dynamic fileOrContent]) async {
 
   try {
+    List<Empleoye> imported;
 
-   empleoyes.addAll(await readEmpleoyeFromCsv(fEmpleoyes));
+    if (fileOrContent == null)
+    {
+      imported = await readEmpleoyeFromCsv(fEmpleoyes);
+    }
+    else if (fileOrContent is File)
+    {
+      imported = await readEmpleoyeFromCsv(fileOrContent);
+    }
+    else if (fileOrContent is String)
+    {
+      imported = await readEmpleoyeFromCsvContent(fileOrContent);
+    }
+    else
+    {
+      throw Exception("Invalid value");
+    }
+    empleoyes.addAll(imported);
+
+
 
   } catch (e) {
     String array = S.of(context).employees;
@@ -28,6 +47,11 @@ Future<void>csvImportEmpleoyes(BuildContext context, List<Empleoye> empleoyes) a
 Future<List<Empleoye>> readEmpleoyeFromCsv(File file) async {
 
   final content = await file.readAsString(encoding: utf8);
+  return readEmpleoyeFromCsvContent(content);
+}
+
+Future<List<Empleoye>> readEmpleoyeFromCsvContent(String content) async {
+
   final lines = const LineSplitter()
       .convert(content)
       .where((line) => line.trim().isNotEmpty)

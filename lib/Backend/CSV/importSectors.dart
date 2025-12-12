@@ -7,11 +7,29 @@ import 'package:crud_factories/generated/l10n.dart';
 import 'package:fluent_ui/fluent_ui.dart';
 
 
-Future<void> csvImportSectors(BuildContext context, List<Sector> sector) async {
+Future<void> csvImportSectors(BuildContext context, List<Sector> sector, [dynamic fileOrContent]) async {
 
   try {
 
-    sectors.addAll(await readSectorsFromCsv(fSectors));
+    List<Sector> imported;
+
+    if (fileOrContent == null)
+    {
+      imported = await readSectorsFromCsv(fSectors);
+    }
+    else if (fileOrContent is File)
+    {
+      imported = await readSectorsFromCsv(fileOrContent);
+    }
+    else if (fileOrContent is String)
+    {
+      imported = await readSectorsFromCsvContent(fileOrContent);
+    }
+    else
+    {
+      throw Exception("Invalid value");
+    }
+    sectors.addAll(imported);
 
   } catch (e) {
     String array = S.of(context).sectors;
@@ -28,6 +46,12 @@ Future<void> csvImportSectors(BuildContext context, List<Sector> sector) async {
 Future<List<Sector>> readSectorsFromCsv(File file) async {
 
   final content = await file.readAsString(encoding: utf8);
+  return readSectorsFromCsvContent(content);
+}
+
+
+Future<List<Sector>> readSectorsFromCsvContent(String content) async {
+
   final lines = const LineSplitter()
       .convert(content)
       .where((line) => line.trim().isNotEmpty)

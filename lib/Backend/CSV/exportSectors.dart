@@ -27,7 +27,7 @@ Future<bool> csvExportatorSectors(List<Sector> sectors) async {
   }
 
   String csv = const ListToCsvConverter(fieldDelimiter: ';').convert(rows);
-
+//aqui ver si es destop o web
   if(await fSectors.exists())
   {
      fSectors.writeAsString(csv);
@@ -36,6 +36,7 @@ Future<bool> csvExportatorSectors(List<Sector> sectors) async {
   {
      err = true;
   }
+  //si es web una funcion que pueda meter varios objectos line,factories, mails..
 
  return err;
 }

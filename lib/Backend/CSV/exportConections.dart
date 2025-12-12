@@ -2,6 +2,8 @@ import 'package:crud_factories/Backend/Global/files.dart';
 import 'package:crud_factories/Objects/Conection.dart';
 import 'package:csv/csv.dart';
 
+import 'exportatorList.dart';
+
 Future<bool> csvExportatorConections(List<Conection> conections) async {
 
   bool err = false;
@@ -35,16 +37,8 @@ Future<bool> csvExportatorConections(List<Conection> conections) async {
   }
 
   String csv = const ListToCsvConverter(fieldDelimiter: ';').convert(rows);
-  fConections.writeAsString(csv);
+  err = await csvExport(fConections,csv);
 
-  if(await fConections.exists())
-  {
-    fConections.writeAsString(csv);
-  }
-  else
-  {
-    err = true;
-  }
 
   return err;
 }

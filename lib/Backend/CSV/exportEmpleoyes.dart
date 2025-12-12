@@ -2,6 +2,8 @@ import 'package:crud_factories/Backend/Global/files.dart';
 import 'package:crud_factories/Objects/Empleoye.dart';
 import 'package:csv/csv.dart';
 
+import 'exportatorList.dart';
+
 Future<bool> csvExportatorEmpleoyes(List<Empleoye> empleoyes) async {
 
   bool err = false;
@@ -29,15 +31,8 @@ Future<bool> csvExportatorEmpleoyes(List<Empleoye> empleoyes) async {
   }
 
   String csv = const ListToCsvConverter(fieldDelimiter: ';').convert(rows);
+  err = await csvExport(fConections,csv);
 
-  if(await fEmpleoyes.exists())
-  {
-     fEmpleoyes.writeAsString(csv);
-  }
-  else
-  {
-     err = true;
-  }
 
   return err;
 }

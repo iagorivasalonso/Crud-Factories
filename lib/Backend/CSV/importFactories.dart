@@ -7,11 +7,28 @@ import 'package:crud_factories/generated/l10n.dart';
 import 'package:flutter/material.dart';
 
 
-Future<void> csvImportFactories(BuildContext context, List<Factory> factories) async {
+Future<void> csvImportFactories(BuildContext context, List<Factory> Factories,  [dynamic fileOrContent]) async {
 
   try {
+    List<Factory> imported;
 
-    factories.addAll(await readFactoriesFromCsv(fFactories));
+    if (fileOrContent == null)
+    {
+      imported = await readFactoriesFromCsv(fFactories);
+    }
+    else if (fileOrContent is File)
+    {
+      imported = await readFactoriesFromCsv(fileOrContent);
+    }
+    else if (fileOrContent is String)
+    {
+      imported = await readFactoriesFromCsvContent(fileOrContent);
+    }
+    else
+    {
+      throw Exception("Invalid value");
+    }
+    allFactories.addAll(imported);
 
   } catch (e) {
     String array = S.of(context).companies;
@@ -28,11 +45,16 @@ Future<void> csvImportFactories(BuildContext context, List<Factory> factories) a
 Future<List<Factory>> readFactoriesFromCsv(File file) async {
 
   final content = await file.readAsString(encoding: utf8);
+  return readFactoriesFromCsvContent(content);
+}
+
+Future<List<Factory>> readFactoriesFromCsvContent(String content) async {
+
   final lines = const LineSplitter()
       .convert(content)
       .where((line) => line.trim().isNotEmpty)
       .toList();
-
+print(lines);
   final factory = <Factory>[];
 
   for( final line in lines) {
