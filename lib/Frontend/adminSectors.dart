@@ -1,5 +1,4 @@
 import 'package:crud_factories/Alertdialogs/confirm.dart';
-import 'package:crud_factories/Alertdialogs/create%20sector.dart';
 import 'package:crud_factories/Backend/CSV/exportSectors.dart';
 import 'package:crud_factories/Backend/Global/list.dart';
 import 'package:crud_factories/Backend/SQL/deleteSector.dart';
@@ -9,6 +8,7 @@ import 'package:crud_factories/Widgets/tableEditSector.dart';
 import 'package:crud_factories/generated/l10n.dart';
 import 'package:flutter/material.dart';
 
+import '../Alertdialogs/createSector.dart';
 import '../Alertdialogs/error.dart';
 import '../Widgets/materialButton.dart';
 

@@ -1,6 +1,5 @@
 import 'package:crud_factories/Alertdialogs/closeApp.dart';
 import 'package:crud_factories/Alertdialogs/confirm.dart';
-import 'package:crud_factories/Alertdialogs/create%20sector.dart';
 import 'package:crud_factories/Alertdialogs/error.dart';
 import 'package:crud_factories/Alertdialogs/errorList.dart';
 import 'package:crud_factories/Alertdialogs/noCategory.dart';
@@ -19,6 +18,8 @@ import 'package:crud_factories/generated/l10n.dart';
 import 'package:crud_factories/helpers/localization_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:menu_bar/menu_bar.dart';
+
+import '../Alertdialogs/createSector.dart';
 
 class appDesktop extends StatefulWidget {
   const appDesktop({super.key});
