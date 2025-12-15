@@ -63,9 +63,12 @@ class _adminRoutesState extends State<adminRoutes> {
         linesNew: [],
         conectionsNew: [],
         factoriesNew: []);
+
     WidgetsBinding.instance.addPostFrameCallback((_) {
+      chargueRoutes();
       _showRouteDialog(context);
     });
+
     routeControllers[0].router.text = fRoutes.path;
   }
 
@@ -81,8 +84,6 @@ class _adminRoutesState extends State<adminRoutes> {
   Widget build(BuildContext context0) {
 
     BuildContext context = context1;
-
-    chargueRoutes();
 
     return SizedBox.shrink();
     }
@@ -368,7 +369,7 @@ print("web$index");
 
     await confirm(context, action);
     chargueDataCSV(context);
-   // csvExportatorRoutes(routesNew);
+    csvExportatorRoutes(routesNew);
 
 
     setState((){
