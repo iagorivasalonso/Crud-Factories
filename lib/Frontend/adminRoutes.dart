@@ -1,9 +1,7 @@
 
-import 'dart:convert';
-import 'dart:io';
-
 import 'package:crud_factories/Backend/Global/files.dart';
 import 'package:file_picker/file_picker.dart' show FilePickerResult, FilePicker, FileType;
+import 'package:file_picker/src/platform_file.dart';
 import 'package:flutter/foundation.dart';
 
 import 'package:flutter/material.dart';
@@ -11,14 +9,8 @@ import 'package:flutter/material.dart';
 import '../Alertdialogs/confirm.dart';
 import '../Alertdialogs/error.dart';
 import '../Backend/CSV/chargueData csv.dart';
-import '../Backend/CSV/exportRoutes.dart';
-import '../Backend/CSV/importConections.dart';
-import '../Backend/CSV/importEmpleoyes.dart';
-import '../Backend/CSV/importFactories.dart';
-import '../Backend/CSV/importLines.dart';
-import '../Backend/CSV/importMails.dart';
-import '../Backend/CSV/importRoutes.dart';
-import '../Backend/CSV/importSectors.dart';
+
+import '../Backend/CSV/importFiles.dart';
 import '../Backend/Global/controllers/List.dart';
 import '../Backend/Global/controllers/Router.dart';
 import '../Backend/Global/list.dart';
@@ -195,137 +187,9 @@ class _adminRoutesState extends State<adminRoutes> {
 
     final platformFile = result.files.single;
 
-
-    String ext = platformFile.name.split('.').last.toLowerCase();
-
-    if(ext == "csv")
-    {
-      try {
-
-        String content;
-        String fullPath;
+    importFiles(context,platformFile,listControllers,index);
 
 
-        if(kIsWeb)
-        {
-           content = utf8.decode(platformFile.bytes!);
-           fullPath = platformFile.name;
-        }
-        else
-        {
-          final file = File(platformFile.path!);
-          content = await file.readAsString(encoding: utf8);
-          fullPath = platformFile.path!;
-        }
-print("web$index");
-        routeControllers[index].router.text = fullPath;
-
-        switch(index)
-        {
-          case 0:
-
-            if(kIsWeb)
-            {
-              await csvImportRoutes(context,listController.routesNew, content);
-            }
-            else
-            {
-              listController.routesNew.addAll(await readRoutesFromCsvContent(content));
-            }
-
-            break;
-
-          case 1:
-
-            if(kIsWeb)
-            {
-              await csvImportConections(context,listController.conectionsNew, content);
-            }
-            else
-            {
-              listController.conectionsNew.addAll(await readConectionsFromCsvContent(content));
-            }
-
-            break;
-
-          case 2:
-
-            break;
-
-          case 3:
-
-             if(kIsWeb)
-             {
-               await csvImportSectors(context, listController.sectorsNew, content);
-             }
-             else
-             {
-               listController.sectorsNew.addAll(await readSectorsFromCsvContent(content));
-             }
-
-            break;
-
-          case 4:
-
-            if(kIsWeb)
-            {
-              await csvImportFactories(context, listController.factoriesNew,content);
-            }
-            else
-            {
-              listController.factoriesNew.addAll(await readFactoriesFromCsvContent(content));
-            }
-
-            break;
-
-          case 5:
-
-            if(kIsWeb)
-            {
-              await csvImportEmpleoyes(context, listController.empleoyesNew, content);
-            }
-            else
-            {
-              listController.empleoyesNew.addAll(await readEmpleoyeFromCsvContent(content));
-            }
-
-            break;
-
-          case 6:
-
-            if(kIsWeb)
-            {
-              await csvImportLines(context, listController.linesNew, content);
-            }
-            else
-            {
-              listController.linesNew.addAll(await readLinesFromCsvContent(content));
-            }
-
-            //
-            break;
-
-          case 7:
-            if(kIsWeb)
-            {
-              await csvImportMails(context, listController.mailsNew, content);
-            }
-            else
-            {
-              listController.mailsNew.addAll(await readMailsFromCsvContent(content));
-            }
-            break;
-
-          default:
-            String action = S.of(context).file_not_found;
-            error(context, action);
-            break;
-        }
-      } catch (e) {
-        error(context, S.of(context).file_not_found);
-        }
-
-    }
 
   }
 
@@ -377,4 +241,6 @@ print("web$index");
 
 
 }
+
+
 

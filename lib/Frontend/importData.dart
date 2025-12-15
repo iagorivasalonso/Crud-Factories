@@ -11,7 +11,7 @@ import 'package:crud_factories/Backend/CSV/importConections.dart';
 import 'package:crud_factories/Backend/CSV/importFactories.dart';
 import 'package:crud_factories/Backend/CSV/importMails.dart';
 import 'package:crud_factories/Backend/CSV/importRoutes.dart';
-import 'package:crud_factories/Backend/CSV/importSectors.dart' show readSectorsFromCsv;
+import 'package:crud_factories/Backend/CSV/importSectors.dart' show readSectorsFromCsv, csvImportSectors, readSectorsFromCsvContent;
 import 'package:crud_factories/Backend/Global/controllers/List.dart' show ListController;
 import 'package:crud_factories/Backend/Global/list.dart';
 import 'package:crud_factories/Backend/SQL/createEmpleoye.dart';
@@ -31,6 +31,7 @@ import 'package:crud_factories/Objects/LineSend.dart';
 import 'package:crud_factories/Widgets/headViewsAndroid.dart';
 import 'package:crud_factories/generated/l10n.dart';
 import 'package:file_picker/file_picker.dart' show FilePickerResult, FileType, FilePicker;
+import 'package:flutter/foundation.dart' hide Factory;
 import 'package:flutter/material.dart';
 import '../Backend/CSV/importEmpleoyes.dart';
 import '../Backend/CSV/importLines.dart';
@@ -199,43 +200,95 @@ Future<void> _pickFile(BuildContext context, TextEditingController controllerDat
   controllerDatePicker.text =file.path!;
 
   final content = await file.readAsString(encoding: utf8);
-  final linesSend = const LineSplitter().convert(content);
-  final parts = linesSend.first.split(";");
+  final lines = const LineSplitter().convert(content);
+  final parts = lines.first.split(";");
 
+
+  print("W$parts");
   try{
 
     switch(parts.length)
     {
       case 2:
-        listController.sectorsNew.addAll(await readSectorsFromCsv(file));
+        if(kIsWeb)
+        {
+          await csvImportSectors(context, listController.sectorsNew, content);
+        }
+        else
+        {
+          listController.sectorsNew.addAll(await readSectorsFromCsvContent(content));
+        }
         break;
 
       case 3:
         if(file.path.contains('routes.csv'))
         {
 
-          listController.routesNew.addAll(await readRoutesFromCsv(file));
+          if(kIsWeb)
+          {
+            await csvImportRoutes(context, listController.routesNew, content);
+          }
+          else
+          {
+            listController.routesNew.addAll(await readRoutesFromCsvContent(content));
+          }
         }
         else
         {
-          listController.empleoyesNew.addAll(await readEmpleoyeFromCsv(file));
+          if(kIsWeb)
+          {
+            await csvImportEmpleoyes(context, listController.empleoyesNew, content);
+          }
+          else
+          {
+            listController.empleoyesNew.addAll(await readEmpleoyeFromCsvContent(content));
+          }
+
         }
         break;
 
       case 4:
-        listController.mailsNew.addAll(await readMailsFromCsv(file));
+        if(kIsWeb)
+        {
+          await csvImportMails(context, listController.mailsNew, content);
+        }
+        else
+        {
+          listController.mailsNew.addAll(await readMailsFromCsvContent(content));
+        }
         break;
 
       case 5:
-        listController.linesNew.addAll(await readLinesFromCsv(file));
+        if(kIsWeb)
+        {
+          await csvImportLines(context, listController.linesNew, content);
+        }
+        else
+        {
+          listController.linesNew.addAll(await readLinesFromCsvContent(content));
+        }
         break;
 
       case 6:
-        listController.conectionsNew.addAll(await readConectionsFromCsv(file));
+        if(kIsWeb)
+        {
+          await csvImportConections(context,listController.conectionsNew, content);
+        }
+        else
+        {
+          listController.conectionsNew.addAll(await readConectionsFromCsvContent(content));
+        }
         break;
 
       case 14:
-        listController.factoriesNew.addAll(await readFactoriesFromCsv(file));
+        if(kIsWeb)
+        {
+          await csvImportFactories(context, listController.factoriesNew,content);
+        }
+        else
+        {
+          listController.factoriesNew.addAll(await readFactoriesFromCsvContent(content));
+        }
         break;
 
       default:
@@ -250,7 +303,6 @@ Future<void> _pickFile(BuildContext context, TextEditingController controllerDat
 }
 
 Future<void> _onSaveList(BuildContext context, ListController listController) async {
-
 
   int count = 0;
   List<String> stringDialog = [];
