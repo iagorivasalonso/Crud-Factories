@@ -20,7 +20,6 @@ import 'package:flutter/src/widgets/framework.dart';
 
 Future<bool> chargueDataCSV(BuildContext context) async {
 
-  //routesCSV.clear();
   bool isCorrect = true;
 
   if(!kIsWeb)
@@ -35,6 +34,7 @@ Future<bool> chargueDataCSV(BuildContext context) async {
       routeFirst = parentDir.path;
       fRoutes = File(routeFirst);
 
+      tmp = File('${fRoutes.path}/routes.csv');
 
       try {
         await tmp.create(recursive: true);
