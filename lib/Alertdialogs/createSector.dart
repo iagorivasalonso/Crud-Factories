@@ -1,6 +1,7 @@
 
 import 'package:crud_factories/Alertdialogs/confirm.dart';
 import 'package:crud_factories/Alertdialogs/error.dart';
+import 'package:crud_factories/Alertdialogs/warning.dart';
 import 'package:crud_factories/Backend/CSV/exportSectors.dart';
 import 'package:crud_factories/Backend/Global/list.dart';
 import 'package:crud_factories/Backend/SQL/createSector.dart';
@@ -15,6 +16,7 @@ import 'package:flutter/material.dart';
 
 import '../Widgets/materialButton.dart';
 import '../Widgets/textfield.dart' show defaultTextfield;
+import '../helpers/localization_helper.dart';
 
 
 Future<bool> createSector(BuildContext  context, String campOld) async {
@@ -136,7 +138,26 @@ Future<void> saveSector(BuildContext context,TextEditingController controllerSec
           else
           {
             sectors += currentSector;
-            csvExportatorSectors(sectors);
+          bool errorExp = await csvExportatorSectors(sectors);
+          String array = S.of(context).sector;
+           if  (errorExp == false)
+           {
+
+              String actionArray = S
+                  .of(context)
+                  .saved;
+              String pr = S
+                  .of(context)
+                  .theFemale;
+
+              String action = LocalizationHelper.manage_array(
+                  context, array, actionArray, pr);
+              await confirm(context, action);
+            }
+      else {
+        String action = LocalizationHelper.no_file(context, array);
+        warning(context, action);
+      }
           }
 
           String action = S.of(context).the_sector_has_been_created_successfully;
