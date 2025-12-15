@@ -1,7 +1,6 @@
 
 import 'package:adaptive_scrollbar/adaptive_scrollbar.dart';
 import 'package:crud_factories/Alertdialogs/confirm.dart';
-import 'package:crud_factories/Alertdialogs/create%20sector.dart';
 import 'package:crud_factories/Alertdialogs/error.dart';
 import 'package:crud_factories/Alertdialogs/warning.dart';
 import 'package:crud_factories/Backend/CSV/exportEmpleoyes.dart';
@@ -26,6 +25,7 @@ import 'package:crud_factories/Widgets/textfieldCalendar.dart';
 import 'package:crud_factories/generated/l10n.dart';
 import 'package:crud_factories/helpers/localization_helper.dart';
 import 'package:flutter/material.dart';
+import '../Alertdialogs/createSector.dart';
 import '../Functions/isNotAndroid.dart';
 import '../Widgets/dropDownButton.dart';
 import '../Widgets/listElements.dart';
