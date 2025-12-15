@@ -20,7 +20,7 @@ import 'package:flutter/src/widgets/framework.dart';
 
 Future<bool> chargueDataCSV(BuildContext context) async {
 
-  routesCSV.clear();
+  //routesCSV.clear();
   bool isCorrect = true;
 
   if(!kIsWeb)
@@ -35,7 +35,6 @@ Future<bool> chargueDataCSV(BuildContext context) async {
       routeFirst = parentDir.path;
       fRoutes = File(routeFirst);
 
-      tmp = File('${fRoutes.path}/routes.csv');
 
       try {
         await tmp.create(recursive: true);
@@ -89,14 +88,6 @@ Future<bool> chargueDataCSV(BuildContext context) async {
 
        }
 
-       empleoyes.clear();
-       fSectors = File(routesCSV[3].route);
-
-       try {
-         await csvImportEmpleoyes(context, empleoyes);
-       } catch (Exeption) {
-
-       }
 
        mails.clear();
        fMails = File(routesCSV[7].route);

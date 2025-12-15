@@ -63,12 +63,10 @@ class _adminRoutesState extends State<adminRoutes> {
         linesNew: [],
         conectionsNew: [],
         factoriesNew: []);
-
     WidgetsBinding.instance.addPostFrameCallback((_) {
       chargueRoutes();
       _showRouteDialog(context);
     });
-
     routeControllers[0].router.text = fRoutes.path;
   }
 
@@ -369,7 +367,7 @@ print("web$index");
 
     await confirm(context, action);
     chargueDataCSV(context);
-    csvExportatorRoutes(routesNew);
+   // csvExportatorRoutes(routesNew);
 
 
     setState((){
