@@ -2,7 +2,7 @@ import 'package:crud_factories/Backend/Global/files.dart';
 import 'package:crud_factories/Objects/Conection.dart';
 import 'package:csv/csv.dart';
 
-import 'exportatorList.dart';
+import 'export.dart';
 
 Future<bool> csvExportatorConections(List<Conection> conections) async {
 
@@ -37,8 +37,7 @@ Future<bool> csvExportatorConections(List<Conection> conections) async {
   }
 
   String csv = const ListToCsvConverter(fieldDelimiter: ';').convert(rows);
-  err = await csvExport(fConections,csv);
-
+  err =  !await csvExport(csv, file: fConections);
 
   return err;
 }

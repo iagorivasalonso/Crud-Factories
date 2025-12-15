@@ -2,7 +2,7 @@ import 'package:crud_factories/Backend/Global/files.dart';
 import 'package:crud_factories/Objects/LineSend.dart';
 import 'package:csv/csv.dart';
 
-import 'exportatorList.dart';
+import 'export.dart';
 
 Future<bool>  csvExportatorLines(List<LineSend> listSend) async {
 
@@ -35,7 +35,7 @@ Future<bool>  csvExportatorLines(List<LineSend> listSend) async {
   }
 
   String csv = const ListToCsvConverter(fieldDelimiter: ';').convert(rows);
-  err = await csvExport(fLines,csv);
+  err = !await csvExport(csv, file: fLines);
 
 
   return err;

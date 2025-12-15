@@ -1,6 +1,10 @@
+import 'dart:developer';
+
 import 'package:crud_factories/Backend/Global/files.dart';
 import 'package:crud_factories/Objects/Sector.dart';
 import 'package:csv/csv.dart';
+
+import 'export.dart';
 
 Future<bool> csvExportatorSectors(List<Sector> sectors) async {
 
@@ -27,16 +31,8 @@ Future<bool> csvExportatorSectors(List<Sector> sectors) async {
   }
 
   String csv = const ListToCsvConverter(fieldDelimiter: ';').convert(rows);
-//aqui ver si es destop o web
-  if(await fSectors.exists())
-  {
-     fSectors.writeAsString(csv);
-  }
-  else
-  {
-     err = true;
-  }
-  //si es web una funcion que pueda meter varios objectos line,factories, mails..
+  err =! await csvExport(csv, file: fSectors);
+
 
  return err;
 }
