@@ -88,6 +88,14 @@ Future<bool> chargueDataCSV(BuildContext context) async {
 
        }
 
+       empleoyes.clear();
+       fEmpleoyes = File(routesCSV[3].route);
+
+       try {
+         await csvImportEmpleoyes(context, empleoyes);
+       } catch (Exeption) {
+
+       }
 
        mails.clear();
        fMails = File(routesCSV[7].route);
