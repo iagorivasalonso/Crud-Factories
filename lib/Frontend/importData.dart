@@ -194,16 +194,11 @@ Future<void> _pickFile(BuildContext context, TextEditingController controllerDat
 
   if(result == null) return;
 
-  final file = File(result.files.single.path!);
+  final platformFile = result.files.single;
 
 
- controllerDatePicker.text =file.path!;
+ controllerDatePicker.text =platformFile.name;
 
-  final platformFile = PlatformFile(
-    name: file.path.split(Platform.pathSeparator).last,
-    path: file.path,
-    size: await file.length(),
-  );
 
   importFiles(context,platformFile);
 
