@@ -268,27 +268,25 @@ Future<void> _onSaveMail(BuildContext context, int select,MailController control
                 {
                   mails = mails + current;
 
+                  if (result == false)
+                  {
+                    action = S.of(context).the_user_or_password_are_incorrect;
+                    error(context, action);
+                  }
+                  else
+                  {
+                    action = S.of(context).the_connection_test_was_sent_successfully;
+                    confirm(context, action);
+                  }
+                }
                   bool errorExp = await csvExportatorMails(mails);
 
-                  if(errorExp != true && result != false)
+                  if(errorExp != false)
                   {
                     String array = S.of(context).mails;
                     String action = LocalizationHelper.no_file(context, array);
                     warning(context, action);
                   }
-                }
-
-                if (result == false)
-                {
-                  action = S.of(context).the_user_or_password_are_incorrect;
-                  error(context, action);
-                }
-                else
-                {
-                     action = S.of(context).the_connection_test_was_sent_successfully;
-                     confirm(context, action);
-                }
-
         }
       }
       else
