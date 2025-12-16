@@ -135,8 +135,6 @@ class _adminRoutesState extends State<adminRoutes> {
                                 function: () => _pickFile(
                                   context,
                                   index,
-                                  routeControllers,
-                                  listController,
                                 ),
                               ),
                             );
@@ -152,7 +150,7 @@ class _adminRoutesState extends State<adminRoutes> {
                         children: [
                           materialButton(
                             nameAction: S.of(context).import,
-                            function: () => importedRoutes(context,routeControllers),
+                            function: () => importedRoutes(context),
                           ),
                           const SizedBox(width: 20),
                           materialButton(
@@ -172,7 +170,7 @@ class _adminRoutesState extends State<adminRoutes> {
 
     }
 
-  Future<void> _pickFile(BuildContext context,index, routeControllers, listControllers) async {
+  Future<void> _pickFile(BuildContext context,index) async {
 
 
     FilePickerResult? result =  await FilePicker.platform.pickFiles(
@@ -187,6 +185,7 @@ class _adminRoutesState extends State<adminRoutes> {
     final platformFile = result.files.single;
 
     importFiles(context,platformFile);
+     routeControllers[index].router.text =platformFile.name;
 
   }
 
@@ -204,7 +203,7 @@ class _adminRoutesState extends State<adminRoutes> {
 
   }
 
-  Future<void> importedRoutes(BuildContext context, List<RouterController> routeControllers) async{
+  Future<void> importedRoutes(BuildContext context) async{
 
     List<RouteCSV> routesNew = [];
 
