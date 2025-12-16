@@ -32,8 +32,7 @@ class adminRoutes extends StatefulWidget {
 
 class _adminRoutesState extends State<adminRoutes> {
 
-  late List<RouterController> routeControllers;
-  late ListController listController;
+
 
   String? get selectedOption => null;
 
@@ -187,9 +186,7 @@ class _adminRoutesState extends State<adminRoutes> {
 
     final platformFile = result.files.single;
 
-    importFiles(context,platformFile,listControllers,index);
-
-
+    importFiles(context,platformFile);
 
   }
 

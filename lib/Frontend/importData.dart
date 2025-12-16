@@ -31,9 +31,11 @@ import 'package:crud_factories/Objects/LineSend.dart';
 import 'package:crud_factories/Widgets/headViewsAndroid.dart';
 import 'package:crud_factories/generated/l10n.dart';
 import 'package:file_picker/file_picker.dart' show FilePickerResult, FileType, FilePicker;
+import 'package:file_picker/src/platform_file.dart';
 import 'package:flutter/foundation.dart' hide Factory;
 import 'package:flutter/material.dart';
 import '../Backend/CSV/importEmpleoyes.dart';
+import '../Backend/CSV/importFiles.dart';
 import '../Backend/CSV/importLines.dart';
 import '../Functions/isNotAndroid.dart';
 import '../Widgets/CSVPickerField.dart';
@@ -57,8 +59,6 @@ class _newImportState extends State<newImport> {
   double widthBar = 10.0;
   int idEndList = 0;
 
-
-  late ListController listController;
 
   late TextEditingController controllerImportPicker = TextEditingController();
   @override
@@ -133,7 +133,7 @@ class _newImportState extends State<newImport> {
                               controller: controllerImportPicker,
                               campName: S.of(context).route,
                               actionName: S.of(context).examine,
-                              function: () => _pickFile(context, controllerImportPicker, listController)
+                              function: () => _pickFile(context, controllerImportPicker)
                           ),
                         ),
 
@@ -145,7 +145,7 @@ class _newImportState extends State<newImport> {
                               Flexible(
                                 child: materialButton(
                                     nameAction: S.of(context).import_data,
-                                    function: () => _onSaveList(context, listController)
+                                    function: () => _onSaveList(context)
                                 ),
                               ),
 
@@ -183,7 +183,7 @@ class _newImportState extends State<newImport> {
   }
 
 }
-Future<void> _pickFile(BuildContext context, TextEditingController controllerDatePicker, ListController listController) async {
+Future<void> _pickFile(BuildContext context, TextEditingController controllerDatePicker) async {
 
 
   FilePickerResult? result =  await FilePicker.platform.pickFiles(
@@ -197,112 +197,19 @@ Future<void> _pickFile(BuildContext context, TextEditingController controllerDat
   final file = File(result.files.single.path!);
 
 
-  controllerDatePicker.text =file.path!;
+ controllerDatePicker.text =file.path!;
 
-  final content = await file.readAsString(encoding: utf8);
-  final lines = const LineSplitter().convert(content);
-  final parts = lines.first.split(";");
+  final platformFile = PlatformFile(
+    name: file.path.split(Platform.pathSeparator).last,
+    path: file.path,
+    size: await file.length(),
+  );
 
-
-  print("W$parts");
-  try{
-
-    switch(parts.length)
-    {
-      case 2:
-        if(kIsWeb)
-        {
-          await csvImportSectors(context, listController.sectorsNew, content);
-        }
-        else
-        {
-          listController.sectorsNew.addAll(await readSectorsFromCsvContent(content));
-        }
-        break;
-
-      case 3:
-        if(file.path.contains('routes.csv'))
-        {
-
-          if(kIsWeb)
-          {
-            await csvImportRoutes(context, listController.routesNew, content);
-          }
-          else
-          {
-            listController.routesNew.addAll(await readRoutesFromCsvContent(content));
-          }
-        }
-        else
-        {
-          if(kIsWeb)
-          {
-            await csvImportEmpleoyes(context, listController.empleoyesNew, content);
-          }
-          else
-          {
-            listController.empleoyesNew.addAll(await readEmpleoyeFromCsvContent(content));
-          }
-
-        }
-        break;
-
-      case 4:
-        if(kIsWeb)
-        {
-          await csvImportMails(context, listController.mailsNew, content);
-        }
-        else
-        {
-          listController.mailsNew.addAll(await readMailsFromCsvContent(content));
-        }
-        break;
-
-      case 5:
-        if(kIsWeb)
-        {
-          await csvImportLines(context, listController.linesNew, content);
-        }
-        else
-        {
-          listController.linesNew.addAll(await readLinesFromCsvContent(content));
-        }
-        break;
-
-      case 6:
-        if(kIsWeb)
-        {
-          await csvImportConections(context,listController.conectionsNew, content);
-        }
-        else
-        {
-          listController.conectionsNew.addAll(await readConectionsFromCsvContent(content));
-        }
-        break;
-
-      case 14:
-        if(kIsWeb)
-        {
-          await csvImportFactories(context, listController.factoriesNew,content);
-        }
-        else
-        {
-          listController.factoriesNew.addAll(await readFactoriesFromCsvContent(content));
-        }
-        break;
-
-      default:
-        String action = S.of(context).file_not_found;
-        error(context, action);
-        break;
-    }
-  }catch (e) {
-    error(context, S.of(context).file_not_found);
-  }
+  importFiles(context,platformFile);
 
 }
 
-Future<void> _onSaveList(BuildContext context, ListController listController) async {
+Future<void> _onSaveList(BuildContext context) async {
 
   int count = 0;
   List<String> stringDialog = [];

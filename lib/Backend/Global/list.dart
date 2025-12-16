@@ -7,6 +7,8 @@ import 'package:crud_factories/Objects/RouteCSV.dart';
 import 'package:crud_factories/Objects/Sector.dart';
 
 import '../../Frontend/Views/listSends.dart';
+import 'controllers/List.dart';
+import 'controllers/Router.dart';
 
 List<Sector> sectors = [];
 List<Factory> allFactories = [];
@@ -25,3 +27,6 @@ List<String> dateSends = [];
 List <String> SQLRoutes = [];
 List <String> allRoutesOrdened = [];
 List <String> currentRoutes = [];
+
+late List<RouterController> routeControllers;
+late ListController listController;
