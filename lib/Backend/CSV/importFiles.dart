@@ -54,8 +54,8 @@ print(parts);
           }
           break;
 
-        case 1:
-          if (parts[2].contains(".csv")) {
+        case 3:
+          if (parts[1].contains("R")) {
             if (kIsWeb) {
               await csvImportRoutes(context, listController.routesNew, content);
             }
