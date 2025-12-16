@@ -394,7 +394,6 @@ Future<void> _onSendMail(BuildContext context,MailController controllers, bool o
   bool correct = true;
   String action = '';
 
-
    if(otherMail)
    {
          if(validatorCamps.mailCorrect(controllers.mail.text) != true)
@@ -449,7 +448,8 @@ Future<void> _onSendMail(BuildContext context,MailController controllers, bool o
       ..subject = controllers.subject!.text
       ..text = controllers.message!.text
       ..attachments = controllers.attachments
-          .map((file) => FileAttachment(file))
+          .where((f) => f.path != null)
+          .map((file) => FileAttachment(File(file.path!)))
           .toList();
 
       final result = await sendingMail(context,controllers,message);

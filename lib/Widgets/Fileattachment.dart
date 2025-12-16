@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:crud_factories/Functions/isNotAndroid.dart' show isNotAndroid;
 import 'package:crud_factories/Widgets/textfield.dart';
 import 'package:crud_factories/generated/l10n.dart';
-import 'package:file_picker/file_picker.dart' show FilePickerResult, FilePicker, FileType;
+import 'package:file_picker/file_picker.dart' show FilePickerResult, FilePicker, FileType, PlatformFile;
 import 'package:flutter/material.dart' hide IconButton;
 import 'package:path/path.dart' as p;
 import '../Backend/Global/variables.dart';
@@ -14,10 +14,10 @@ class Fileattachment extends StatefulWidget {
   final TextEditingController camp;
   final List<String> allowedExtensions;
   final bool multiple;
-  final List<File>? attachments;
-  final File? singleAttachment;
-  final void Function(List<File>)? onFilesChanged;
-  final void Function(File?)? onFileChange;
+  final List<PlatformFile>? attachments;
+  final PlatformFile? singleAttachment;
+  final void Function(List<PlatformFile>)? onFilesChanged;
+  final void Function(PlatformFile?)? onFileChange;
 
   const Fileattachment({
     super.key,
@@ -46,17 +46,16 @@ class _FilePickerFieldState extends State<Fileattachment> {
       type: FileType.custom,
       allowedExtensions: widget.allowedExtensions,
       allowMultiple: widget.multiple,
+      withData: true,
     );
 
     if (result == null) return;
 
     if (widget.multiple) {
-      final files = result.paths.map((p) => File(p!)).toList();
-      widget.onFilesChanged?.call(files);
+      widget.onFilesChanged?.call(result.files);
     }
     else {
-      final file = File(result.files.single.path!);
-      widget.onFileChange?.call(file);
+      widget.onFileChange?.call(result.files.single);
     }
   }
 
@@ -109,7 +108,7 @@ class _FilePickerFieldState extends State<Fileattachment> {
                   return Padding(
                     padding: const EdgeInsets.only(right: 8.0),
                     child: Chip(
-                      label: Text(p.basename(file.path)),
+                      label: Text(p.basename(file.name)),
                       onDeleted: () {
                         setState(() {
                           widget.attachments!.removeAt(index);

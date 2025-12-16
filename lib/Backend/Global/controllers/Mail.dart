@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:file_picker/file_picker.dart';
 import 'package:fluent_ui/fluent_ui.dart';
 
 class MailController {
@@ -10,7 +11,7 @@ class MailController {
   final TextEditingController? mailTo;
   final TextEditingController? subject;
   final TextEditingController? message;
-  final List<File> attachments;
+  final List<PlatformFile> attachments;
 
   MailController({
     required this.mail,
@@ -19,7 +20,7 @@ class MailController {
     this.mailTo,
     this.subject,
     this.message,
-    List<File>? attachments,
+    List<PlatformFile>? attachments,
 
 
   }) :attachments = attachments ?? [];
