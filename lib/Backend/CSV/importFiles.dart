@@ -40,99 +40,94 @@ Future<void> importFiles(  BuildContext context, PlatformFile platformFile) asyn
     final lines = const LineSplitter().convert(content);
 
     final parts = lines.first.split(";");
-    try {
+          try {
 
-print(parts);
-      switch (parts.length) {
-        case 2:
 
-          if (kIsWeb) {
-            await csvImportSectors(context, listController.sectorsNew, content);
-          }
-          else {
-            listController.sectorsNew.addAll(await readSectorsFromCsvContent(content));
-          }
-          break;
+                  switch (parts.length) {
+                    case 2:
 
-        case 3:
-          if (parts[1].contains("R")) {
-            if (kIsWeb) {
-              await csvImportRoutes(context, listController.routesNew, content);
-            }
-            else {
-              listController.routesNew.addAll(
-                  await readRoutesFromCsvContent(content));
-            }
-          }
-          else {
-            if (kIsWeb) {
-              await csvImportEmpleoyes(
-                  context, listController.empleoyesNew, content);
-            }
-            else {
-              listController.empleoyesNew.addAll(
-                  await readEmpleoyeFromCsvContent(content));
-            }
-          }
-          break;
+                      if (kIsWeb) {
+                        await csvImportSectors(context, listController.sectorsNew, content);
+                      }
+                      else {
+                        listController.sectorsNew.addAll(await readSectorsFromCsvContent(content));
+                      }
+                      break;
 
-        case 4:
-          if (kIsWeb) {
-            await csvImportMails(context, listController.mailsNew, content);
-          }
-          else {
-            listController.mailsNew.addAll(
-                await readMailsFromCsvContent(content));
-          }
-          break;
+                    case 3:
+                      if (parts[1].contains("R")) {
+                        if (kIsWeb) {
+                          await csvImportRoutes(context, listController.routesNew, content);
+                        }
+                        else {
+                          listController.routesNew.addAll(
+                              await readRoutesFromCsvContent(content));
+                        }
+                      }
+                      else {
+                        if (kIsWeb) {
+                          await csvImportEmpleoyes(
+                              context, listController.empleoyesNew, content);
+                        }
+                        else {
+                          listController.empleoyesNew.addAll(
+                              await readEmpleoyeFromCsvContent(content));
+                        }
+                      }
+                      break;
 
-        case 5:
-          if (kIsWeb) {
-            await csvImportLines(context, listController.linesNew, content);
-          }
-          else {
-            listController.linesNew.addAll(
-                await readLinesFromCsvContent(content));
-          }
-          break;
+                    case 4:
+                      if (kIsWeb) {
+                        await csvImportMails(context, listController.mailsNew, content);
+                      }
+                      else {
+                        listController.mailsNew.addAll(
+                            await readMailsFromCsvContent(content));
+                      }
+                      break;
 
-        case 6:
-          if (kIsWeb) {
-            await csvImportConections(
-                context, listController.conectionsNew, content);
-          }
-          else {
-            listController.conectionsNew.addAll(
-                await readConectionsFromCsvContent(content));
-          }
-          break;
+                    case 5:
+                      if (kIsWeb) {
+                        await csvImportLines(context, listController.linesNew, content);
+                      }
+                      else {
+                        listController.linesNew.addAll(
+                            await readLinesFromCsvContent(content));
+                      }
+                      break;
 
-        case 14:
-          if (kIsWeb) {
-            await csvImportFactories(
-                context, listController.factoriesNew, content);
-          }
-          else {
-            listController.factoriesNew.addAll(
-                await readFactoriesFromCsvContent(content));
-          }
-          break;
+                    case 6:
+                      if (kIsWeb) {
+                        await csvImportConections(
+                            context, listController.conectionsNew, content);
+                      }
+                      else {
+                        listController.conectionsNew.addAll(
+                            await readConectionsFromCsvContent(content));
+                      }
+                      break;
 
-        default:
-          String action = S.of(context).file_not_found;
-          error(context, action);
-          break;
-      }
-    }catch (e) {
-  error(context, S.of(context).file_not_found);
-  }
+                    case 14:
+                      if (kIsWeb) {
+                        await csvImportFactories(
+                            context, listController.factoriesNew, content);
+                      }
+                      else {
+                        listController.factoriesNew.addAll(
+                            await readFactoriesFromCsvContent(content));
+                      }
+                      break;
+
+                    default:
+                      String action = S.of(context).file_not_found;
+                      error(context, action);
+                      break;
+                  }
+          }catch (e) {
+                 error(context, S.of(context).file_not_found);
+          }
    }
-  else
-  {
 
-    print(platformFile.path);
-
-  }
 
 
   }
