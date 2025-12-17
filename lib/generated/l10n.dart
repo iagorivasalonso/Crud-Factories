@@ -704,6 +704,36 @@ class S {
     return Intl.message('Debe de tener', name: 'must_have', desc: '', args: []);
   }
 
+  /// `Datos no encontrados`
+  String get data_not_found {
+    return Intl.message(
+      'Datos no encontrados',
+      name: 'data_not_found',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `No se encontraron datos en memoria. ¿Qué desea hacer?`
+  String get no_data_in_memory {
+    return Intl.message(
+      'No se encontraron datos en memoria. ¿Qué desea hacer?',
+      name: 'no_data_in_memory',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Ver demo`
+  String get view_demo {
+    return Intl.message('Ver demo', name: 'view_demo', desc: '', args: []);
+  }
+
+  /// `Cargar datos`
+  String get load_data {
+    return Intl.message('Cargar datos', name: 'load_data', desc: '', args: []);
+  }
+
   /// `El empleado se ha eliminado correctamente`
   String get the_employee_has_been_correctly_removed {
     return Intl.message(

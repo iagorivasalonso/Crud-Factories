@@ -143,6 +143,9 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "csv": MessageLookupByLibrary.simpleMessage("CSV"),
     "data_base": MessageLookupByLibrary.simpleMessage("Base de datos"),
+    "data_not_found": MessageLookupByLibrary.simpleMessage(
+      "Datos no encontrados",
+    ),
     "database_connection": MessageLookupByLibrary.simpleMessage(
       "Conexión a base de datos",
     ),
@@ -260,6 +263,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "list_of_emails": MessageLookupByLibrary.simpleMessage("Lista de emails"),
     "list_of_sends": MessageLookupByLibrary.simpleMessage("Lista de envios"),
     "lists": MessageLookupByLibrary.simpleMessage("Listas"),
+    "load_data": MessageLookupByLibrary.simpleMessage("Cargar datos"),
     "mail": MessageLookupByLibrary.simpleMessage("Email"),
     "mails": MessageLookupByLibrary.simpleMessage("Emails"),
     "march": MessageLookupByLibrary.simpleMessage("Marzo"),
@@ -281,6 +285,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "new_mail": MessageLookupByLibrary.simpleMessage("Nuevo mail"),
     "new_shipment": MessageLookupByLibrary.simpleMessage("Nuevo envio"),
     "no": MessageLookupByLibrary.simpleMessage("No"),
+    "no_data_in_memory": MessageLookupByLibrary.simpleMessage(
+      "No se encontraron datos en memoria. ¿Qué desea hacer?",
+    ),
     "no_file_exists": MessageLookupByLibrary.simpleMessage(
       "No existe el archivo de",
     ),
@@ -442,6 +449,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "verify_password": MessageLookupByLibrary.simpleMessage(
       "Verificar contraseña",
     ),
+    "view_demo": MessageLookupByLibrary.simpleMessage("Ver demo"),
     "volver": MessageLookupByLibrary.simpleMessage("Volver"),
     "want_to_complete_it": MessageLookupByLibrary.simpleMessage(
       "¿Desea completarlo?",
