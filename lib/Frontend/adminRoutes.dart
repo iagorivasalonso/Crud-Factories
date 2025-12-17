@@ -10,6 +10,7 @@ import '../Alertdialogs/confirm.dart';
 import '../Alertdialogs/error.dart';
 import '../Backend/CSV/chargueData csv.dart';
 
+import '../Backend/CSV/exportRoutes.dart';
 import '../Backend/CSV/importFiles.dart';
 import '../Backend/Global/controllers/List.dart';
 import '../Backend/Global/controllers/Router.dart';
@@ -224,11 +225,9 @@ class _adminRoutesState extends State<adminRoutes> {
     String actionArray = S.of(context).saved;
 
     String action = LocalizationHelper.manage_array(context, array, actionArray);
-
+    csvExportatorRoutes(routesNew);
     await confirm(context, action);
     chargueDataCSV(context);
-   // csvExportatorRoutes(routesNew);
-
 
     setState((){
       Navigator.of(context).pop(true);
