@@ -1,8 +1,10 @@
 import 'package:crud_factories/Backend/Global/files.dart';
 import 'package:crud_factories/Objects/LineSend.dart';
 import 'package:csv/csv.dart';
+import 'package:flutter/foundation.dart';
 
 import 'export.dart';
+import 'export_web.dart';
 
 Future<bool>  csvExportatorLines(List<LineSend> listSend) async {
 
@@ -35,7 +37,14 @@ Future<bool>  csvExportatorLines(List<LineSend> listSend) async {
   }
 
   String csv = const ListToCsvConverter(fieldDelimiter: ';').convert(rows);
-  err = !await csvExport(csv, file: fLines);
+
+
+  if (kIsWeb) {
+    err =  await csvExportweb(csv, fileName: fLines.path);
+  } else {
+    err = !await csvExport(csv,file: fLines);
+  }
+
 
 
   return err;

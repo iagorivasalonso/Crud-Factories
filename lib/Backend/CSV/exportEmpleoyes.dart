@@ -1,8 +1,10 @@
 import 'package:crud_factories/Backend/Global/files.dart';
 import 'package:crud_factories/Objects/Empleoye.dart';
 import 'package:csv/csv.dart';
+import 'package:flutter/foundation.dart';
 
 import 'export.dart';
+import 'export_web.dart';
 
 Future<bool> csvExportatorEmpleoyes(List<Empleoye> empleoyes) async {
 
@@ -31,8 +33,12 @@ Future<bool> csvExportatorEmpleoyes(List<Empleoye> empleoyes) async {
   }
 
   String csv = const ListToCsvConverter(fieldDelimiter: ';').convert(rows);
-  err = !await csvExport(csv, file: fEmpleoyes);
 
+  if (kIsWeb) {
+    err =  await csvExportweb(csv, fileName: fEmpleoyes.path);
+  } else {
+    err = !await csvExport(csv,file: fEmpleoyes);
+  }
 
   return err;
 }

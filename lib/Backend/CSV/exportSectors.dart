@@ -3,8 +3,10 @@ import 'dart:developer';
 import 'package:crud_factories/Backend/Global/files.dart';
 import 'package:crud_factories/Objects/Sector.dart';
 import 'package:csv/csv.dart';
+import 'package:flutter/foundation.dart';
 
 import 'export.dart';
+import 'export_web.dart';
 
 Future<bool> csvExportatorSectors(List<Sector> sectors) async {
 
@@ -31,10 +33,17 @@ Future<bool> csvExportatorSectors(List<Sector> sectors) async {
   }
 
   String csv = const ListToCsvConverter(fieldDelimiter: ';').convert(rows);
-  err =! await csvExport(csv, file: fSectors);
 
 
- return err;
+  if (kIsWeb) {
+    err =  await csvExportweb(csv, fileName: fSectors.path);
+  } else {
+    err = !await csvExport(csv,file: fSectors);
+  }
+
+
+
+  return err;
 }
 
 

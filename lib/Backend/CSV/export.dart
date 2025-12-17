@@ -1,5 +1,4 @@
 
-
 import 'dart:io';
 
 Future<bool> csvExport(String csv, {required File file,}) async {
@@ -9,7 +8,6 @@ Future<bool> csvExport(String csv, {required File file,}) async {
       print('CSV IO error: el archivo no existe');
       return false;
     }
-
 
     await file.writeAsString(csv);
     return true;

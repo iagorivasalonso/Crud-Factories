@@ -1,8 +1,10 @@
 import 'package:crud_factories/Backend/Global/files.dart';
 import 'package:crud_factories/Objects/Factory.dart';
 import 'package:csv/csv.dart';
+import 'package:flutter/foundation.dart' hide Factory;
 
 import 'export.dart';
+import 'export_web.dart';
 
 Future<bool> csvExportatorFactories(List<Factory> factories) async {
 
@@ -53,8 +55,12 @@ Future<bool> csvExportatorFactories(List<Factory> factories) async {
   }
 
   String csv = const ListToCsvConverter(fieldDelimiter: ';').convert(rows);
-  err = !await csvExport(csv, file: fFactories);
 
+  if (kIsWeb) {
+    err =  await csvExportweb(csv, fileName: fFactories.path);
+  } else {
+    err = !await csvExport(csv,file: fFactories);
+  }
 
   return err;
 }

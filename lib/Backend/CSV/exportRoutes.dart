@@ -1,8 +1,10 @@
 import 'dart:io';
+import 'package:crud_factories/Backend/CSV/export_web.dart';
 import 'package:crud_factories/Backend/Global/files.dart';
 import 'package:crud_factories/Backend/Global/variables.dart';
 import 'package:crud_factories/Objects/RouteCSV.dart';
 import 'package:csv/csv.dart';
+import 'package:flutter/foundation.dart';
 
 import 'export.dart';
 
@@ -35,7 +37,14 @@ Future<bool> csvExportatorRoutes(List<RouteCSV> routes) async {
   routeFirst = filePath.path;
 
   String csv = const ListToCsvConverter(fieldDelimiter: ';').convert(rows);
-  err = !await csvExport(csv, file: filePath);
+
+  if (kIsWeb) {
+    err =  await csvExportweb(csv, fileName: routeFirst);
+  } else {
+    final filePath = fRoutes;
+    err = !await csvExport(csv,file: filePath);
+  }
+
 
 
   return err;
