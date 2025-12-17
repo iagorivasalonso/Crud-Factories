@@ -1566,6 +1566,16 @@ class S {
     );
   }
 
+  /// `El archivo ya existe`
+  String get file_already_exists {
+    return Intl.message(
+      'El archivo ya existe',
+      name: 'file_already_exists',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Se guardarán en un archivo temporal`
   String get They_will_be_saved_in_a_temporary_file {
     return Intl.message(

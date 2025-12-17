@@ -210,6 +210,7 @@
   "Import_data_in_CSV_format": "Importar datos en formato CSV",
   "The_sector_does_not_exist": "El sector no existe",
   "no_file_exists": "No existe el archivo de",
+  "file_already_exists": "El archivo ya existe",
   "They_will_be_saved_in_a_temporary_file": "Se guardarán en un archivo temporal",
   "does_not_belong_to_the_company": "No pertenece a la empresa",
   "does_not_belong_to_the_sector": "No pertenece al sector",
