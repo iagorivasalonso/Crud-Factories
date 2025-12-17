@@ -133,6 +133,18 @@ class LocalizationHelper {
     );
   }
 
+  static String arrayBeApp( BuildContext context,String array) {
+
+    String preVar = S.of(context).there_is_no;
+    String postVar = S.of(context).all_the_sector_will_be_showcased.toLowerCase();
+
+    return Intl.message(
+      '$preVar $array $postVar $array',
+      name: 'arrayBeApp',
+      args: [array, preVar, postVar],
+      examples: const {'list': 'list','preVar': 'there is not', 'postVar': 'all itens be '},
+    );
+  }
   static String linesBeFactory( BuildContext context,String line) {
 
     String preVar = S.of(context).the_line;

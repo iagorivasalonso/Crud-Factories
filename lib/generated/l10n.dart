@@ -714,6 +714,16 @@ class S {
     );
   }
 
+  /// `En el sector, se mostrarán todas las`
+  String get all_the_sector_will_be_showcased {
+    return Intl.message(
+      'En el sector, se mostrarán todas las',
+      name: 'all_the_sector_will_be_showcased',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `El sector se ha creado correctamente`
   String get the_sector_has_been_created_successfully {
     return Intl.message(

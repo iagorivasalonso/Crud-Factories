@@ -11,9 +11,11 @@ import 'package:crud_factories/Frontend/send.dart';
 import 'package:crud_factories/Frontend/send_mail.dart';
 import 'package:crud_factories/Functions/manageArrays.dart';
 import 'package:crud_factories/Objects/Factory.dart';
+import 'package:crud_factories/helpers/localization_helper.dart';
 import 'package:fluent_ui/fluent_ui.dart';
 import '../Frontend/adminRoutes.dart';
 import '../Objects/LineSend.dart';
+import '../generated/l10n.dart';
 
 FuntionSeleted(int itenSelection, int subIten1Selection,int subIten2Selection, double mWidth, double mHeight, BuildContext context) {
 
@@ -53,7 +55,8 @@ FuntionSeleted(int itenSelection, int subIten1Selection,int subIten2Selection, d
             if(factoriesSector.isEmpty)
             {
               WidgetsBinding.instance?.addPostFrameCallback((_) async {
-                error(context, "no hay Empresas en el sector, se mostraran todas las Empresas");
+                error(context, LocalizationHelper.arrayBeApp(context, S.of(context).companies.toLowerCase()));
+
               });
               factoriesSector = allFactories;
             }
@@ -73,7 +76,7 @@ FuntionSeleted(int itenSelection, int subIten1Selection,int subIten2Selection, d
           if(filteredLines.isEmpty)
           {
             WidgetsBinding.instance?.addPostFrameCallback((_) async {
-              error(context, "no hay lineas en el sector, se mostraran todas las lineas");
+              error(context,LocalizationHelper.arrayBeApp(context, S.of(context).lines.toLowerCase()));
             });
 
              groupFactoriesSector(0,allFactoriesOriginal);

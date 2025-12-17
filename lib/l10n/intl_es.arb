@@ -108,6 +108,7 @@
   "it_must_be_numerical": "Debe de ser numérico",
   "must_have": "Debe de tener",
   "the_employee_has_been_correctly_removed": "El empleado se ha eliminado correctamente",
+  "all_the_sector_will_be_showcased": "En el sector, se mostrarán todas las",
   "the_sector_has_been_created_successfully": "El sector se ha creado correctamente",
   "the_sector_has_been_successfully_removed": "El sector se ha eliminado correctamente",
   "this_is_a_connection_test_from_the_application": "Esta es una prueba de conexión desde la aplicación",

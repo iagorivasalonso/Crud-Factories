@@ -68,6 +68,9 @@ class MessageLookup extends MessageLookupByLibrary {
         MessageLookupByLibrary.simpleMessage(
           "Todos los cambios se perderán. ¿Desea continuar?",
         ),
+    "all_the_sector_will_be_showcased": MessageLookupByLibrary.simpleMessage(
+      "En el sector, se mostrarán todas las",
+    ),
     "appTitle": MessageLookupByLibrary.simpleMessage("Mi aplicación"),
     "april": MessageLookupByLibrary.simpleMessage("Abril"),
     "attach": MessageLookupByLibrary.simpleMessage("Adjuntar"),
