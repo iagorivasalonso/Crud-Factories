@@ -47,6 +47,7 @@ class _listSendsState extends State<listSends> {
         .toSet()
         .toList();
 
+      selectedFilter = S.of(context1).date;
 
     dateSendsNotifier = ValueNotifier(newDates);
 
@@ -70,6 +71,9 @@ class _listSendsState extends State<listSends> {
   }
   @override
   void didUpdateWidget(covariant listSends oldWidget) {
+
+
+
     super.didUpdateWidget(oldWidget);
 
     if (oldWidget.list != widget.list || oldWidget.dateSends != widget.dateSends) {
