@@ -7,6 +7,7 @@ import '../../Backend/CSV/exportLines.dart';
 import '../../Backend/Global/list.dart';
 import '../../Backend/SQL/deleteLines.dart';
 import '../../Functions/changesNoSave.dart';
+import '../../Functions/isNotAndroid.dart';
 import '../../Functions/manageArrays.dart';
 import '../../Objects/LineSend.dart';
 import '../../Widgets/GenericListViewPage.dart';
@@ -165,9 +166,9 @@ class _listSendsState extends State<listSends> {
 
   }
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context0) {
 
-    BuildContext context = context1;
+    BuildContext context = isNotAndroid() ? context0 :  context1;
 
     if(selectedFilter.isEmpty)
       selectedFilter = S.of(context).date;

@@ -10,6 +10,7 @@ import 'package:flutter/material.dart';
 
 import '../../Alertdialogs/warning.dart';
 import '../../Functions/changesNoSave.dart';
+import '../../Functions/isNotAndroid.dart';
 import '../../Objects/Mail.dart';
 import '../../Widgets/GenericListViewPage.dart';
 import '../../helpers/localization_helper.dart';
@@ -61,9 +62,9 @@ class _listMailsState extends State<listMails> {
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context0) {
 
-    BuildContext context = context1;
+    BuildContext context = isNotAndroid() ? context0 :  context1;
 
     double mWidth = MediaQuery.of(context).size.width;
     double mWidthList = mWidth > 280 ? 250 : 0;
