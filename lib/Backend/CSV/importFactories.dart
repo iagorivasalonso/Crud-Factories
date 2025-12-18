@@ -54,7 +54,7 @@ Future<List<Factory>> readFactoriesFromCsvContent(String content) async {
       .convert(content)
       .where((line) => line.trim().isNotEmpty)
       .toList();
-print(lines);
+
   final factory = <Factory>[];
 
   for( final line in lines) {
