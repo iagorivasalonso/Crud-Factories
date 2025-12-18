@@ -3,7 +3,7 @@ import 'package:adaptive_scrollbar/adaptive_scrollbar.dart';
 import 'package:crud_factories/Alertdialogs/confirm.dart';
 import 'package:crud_factories/Alertdialogs/confirmDelete.dart';
 import 'package:crud_factories/Alertdialogs/error.dart';
-import 'package:crud_factories/Backend/CSV/chargueData%20csv.dart';
+import 'package:crud_factories/Backend/CSV/chargueDataCsv.dart';
 import 'package:crud_factories/Backend/Global/controllers/Conection.dart';
 import 'package:crud_factories/Backend/Global/files.dart';
 import 'package:crud_factories/Backend/Global/list.dart';

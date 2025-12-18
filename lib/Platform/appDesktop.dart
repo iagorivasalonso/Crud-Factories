@@ -5,7 +5,6 @@ import 'package:crud_factories/Alertdialogs/errorList.dart';
 import 'package:crud_factories/Alertdialogs/noCategory.dart';
 import 'package:crud_factories/Alertdialogs/typeconnection.dart';
 import 'package:crud_factories/Alertdialogs/warning.dart';
-import 'package:crud_factories/Backend/CSV/chargueData%20csv.dart';
 import 'package:crud_factories/Backend/CSV/exportSectors.dart';
 import 'package:crud_factories/Backend/Global/list.dart';
 import 'package:crud_factories/Backend/_selection_view.dart';
@@ -20,6 +19,7 @@ import 'package:flutter/material.dart';
 import 'package:menu_bar/menu_bar.dart';
 
 import '../Alertdialogs/createSector.dart';
+import '../Backend/CSV/chargueDataCsv.dart';
 
 class appDesktop extends StatefulWidget {
   const appDesktop({super.key});
