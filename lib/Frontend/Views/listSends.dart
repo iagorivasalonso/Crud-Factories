@@ -31,7 +31,7 @@ class _listSendsState extends State<listSends> {
 
   int selectCard = 0;
   List<cardSend> displayLines = [];
-  String selectedFilter = "Fecha";
+  String selectedFilter = "";
   String selectCamp ="";
   int select = 0;
   // valor inicial
@@ -48,7 +48,6 @@ class _listSendsState extends State<listSends> {
 
 
     dateSendsNotifier = ValueNotifier(newDates);
-
 
     displayLinesNotifier = ValueNotifier(
       chargueList(context1, selectedFilter, widget.list, widget.dateSends),
@@ -97,7 +96,7 @@ class _listSendsState extends State<listSends> {
   Future<bool> _onDelete(BuildContext context, cardSend line)  async {
 
     List<LineSend> linesToDelete = allLines
-        .where((l) => l.state.toLowerCase() == "devuelto" && l.date ==line.description)
+        .where((l) => l.state == S.of(context).returned && l.date ==line.description)
         .toList();
 
     final confirmDelete = await warning(
@@ -108,7 +107,7 @@ class _listSendsState extends State<listSends> {
     {
       setState(() {
         allLines.removeWhere((l) =>
-        l.state.toLowerCase() == "devuelto" &&
+        l.state == S.of(context).returned &&
             l.date == line.description);
       });
       //return true;
@@ -170,6 +169,8 @@ class _listSendsState extends State<listSends> {
 
     BuildContext context = context1;
 
+    if(selectedFilter.isEmpty)
+      selectedFilter = S.of(context).date;
 
     double mWidth = MediaQuery
         .of(context)
