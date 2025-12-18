@@ -123,7 +123,6 @@ class _listFactoriesState extends State<listFactories> {
       factorySelect = widget.list[index];
     });
 
-        //selectCard = index;
 
         if (saveChanges) {
           saveChanges = !await changesNoSave(context);
