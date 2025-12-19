@@ -3,8 +3,10 @@ import 'package:crud_factories/Objects/Factory.dart';
 import 'package:csv/csv.dart';
 import 'package:flutter/foundation.dart' hide Factory;
 
-import 'export/export.dart';
-import 'export/export_web.dart';
+import 'Export General/export.dart';
+import 'Export General/export_web.dart';
+
+
 
 Future<bool> csvExportatorFactories(List<Factory> factories) async {
 
