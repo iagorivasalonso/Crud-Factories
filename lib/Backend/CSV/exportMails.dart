@@ -1,10 +1,10 @@
-import 'package:crud_factories/Backend/CSV/export.dart';
+import 'package:crud_factories/Backend/CSV/export/export.dart';
 import 'package:crud_factories/Backend/Global/files.dart';
 import 'package:crud_factories/Objects/Mail.dart';
 import 'package:csv/csv.dart';
 import 'package:flutter/foundation.dart';
 
-import 'export_web.dart';
+import 'export/export_web.dart';
 
 Future<bool> csvExportatorMails(List<Mail> mails) async {
 

@@ -3,8 +3,8 @@ import 'package:crud_factories/Objects/LineSend.dart';
 import 'package:csv/csv.dart';
 import 'package:flutter/foundation.dart';
 
-import 'export.dart';
-import 'export_web.dart';
+import 'export/export.dart';
+import 'export/export_web.dart';
 
 Future<bool>  csvExportatorLines(List<LineSend> listSend) async {
 
