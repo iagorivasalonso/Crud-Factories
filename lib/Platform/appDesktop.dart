@@ -20,6 +20,7 @@ import 'package:menu_bar/menu_bar.dart';
 
 import '../Alertdialogs/createSector.dart';
 import '../Backend/CSV/chargueDataCsv.dart';
+import '../Backend/Global/controllers/List.dart';
 
 class appDesktop extends StatefulWidget {
   const appDesktop({super.key});
@@ -29,13 +30,22 @@ class appDesktop extends StatefulWidget {
 }
 
 class _appDesktopState extends State<appDesktop> {
-
+  late TextEditingController controllerImportPicker = TextEditingController();
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
 
     WidgetsBinding.instance?.addPostFrameCallback((_) async {
+
+      listController = new ListController(
+          routesNew: [],
+          sectorsNew: [],
+          empleoyesNew: [],
+          mailsNew: [],
+          linesNew: [],
+          conectionsNew: [],
+          factoriesNew: []);
 
           String action = "";
           List<RouteCSV> routesCurrent = [];
