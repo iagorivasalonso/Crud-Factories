@@ -136,7 +136,7 @@ class _listFactoriesState extends State<listFactories> {
     BuildContext context = isNotAndroid() ? context0 :  context1;
 
     double mWidth = MediaQuery.of(context).size.width;
-    double mWidthList = mWidth > 280 ? 270 : 0;
+    double mWidthList = mWidth > 280 ? 250 : 0;
 
 
     final filterOptions = [
