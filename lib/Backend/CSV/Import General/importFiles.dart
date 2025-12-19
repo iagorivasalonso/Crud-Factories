@@ -5,16 +5,16 @@ import 'package:crud_factories/Backend/CSV/importFactories.dart';
 import 'package:file_picker/file_picker.dart' show PlatformFile;
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter/foundation.dart';
-import '../../Alertdialogs/error.dart';
-import '../../generated/l10n.dart';
-import '../Global/controllers/List.dart';
-import '../Global/list.dart';
-import 'importConections.dart';
-import 'importEmpleoyes.dart';
-import 'importLines.dart';
-import 'importMails.dart';
-import 'importRoutes.dart';
-import 'importSectors.dart';
+import '../../../Alertdialogs/error.dart';
+import '../../../generated/l10n.dart';
+import '../../Global/controllers/List.dart';
+import '../../Global/list.dart';
+import '../importConections.dart';
+import '../importEmpleoyes.dart';
+import '../importLines.dart';
+import '../importMails.dart';
+import '../importRoutes.dart';
+import '../importSectors.dart';
 
 Future<void> importFiles(  BuildContext context, PlatformFile platformFile) async {
 
@@ -45,13 +45,7 @@ Future<void> importFiles(  BuildContext context, PlatformFile platformFile) asyn
 
                   switch (parts.length) {
                     case 2:
-
-                      if (kIsWeb) {
                         await csvImportSectors(context, listController.sectorsNew, content);
-                      }
-                      else {
-                        listController.sectorsNew.addAll(await readSectorsFromCsvContent(content));
-                      }
                       break;
 
                     case 3:

@@ -35,7 +35,7 @@ import 'package:file_picker/src/platform_file.dart';
 import 'package:flutter/foundation.dart' hide Factory;
 import 'package:flutter/material.dart';
 import '../Backend/CSV/importEmpleoyes.dart';
-import '../Backend/CSV/importFiles.dart';
+import '../Backend/CSV/Import General/importFiles.dart';
 import '../Backend/CSV/importLines.dart';
 import '../Functions/isNotAndroid.dart';
 import '../Widgets/CSVPickerField.dart';
@@ -64,14 +64,7 @@ class _newImportState extends State<newImport> {
   @override
   void initState (){
 
-     listController = new ListController(
-         routesNew: [],
-         sectorsNew: [],
-         empleoyesNew: [],
-         mailsNew: [],
-         linesNew: [],
-         conectionsNew: [],
-         factoriesNew: []);
+
 
      if(idEndList == 0)
      {
