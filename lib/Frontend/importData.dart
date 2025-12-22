@@ -213,7 +213,7 @@ Future<void> _onSaveList(BuildContext context) async {
       getKey: (r) => r.route,
       setId: (r, id) => r.id = id,
       csvExport: csvExportatorRoutes,
-      conn: conn,
+      conn: executeQuery,
     );
     importedCount[entityName] = count;
   }
@@ -228,7 +228,7 @@ Future<void> _onSaveList(BuildContext context) async {
       setId: (s, id) => s.id = id,
       csvExport: csvExportatorSectors,
       sqlExport: sqlCreateSector,
-      conn: conn,
+      conn: executeQuery,
     );
     importedCount[entityName] = count;
   }
@@ -258,7 +258,7 @@ Future<void> _onSaveList(BuildContext context) async {
           setId: (e, id) => e.id = id,
           csvExport: csvExportatorEmpleoyes,
           sqlExport: sqlCreateEmpleoye,
-          conn: conn,
+          conn: executeQuery,
         );
         importedCount[entityName] = count;
         if(empExc.isNotEmpty)
@@ -287,7 +287,7 @@ Future<void> _onSaveList(BuildContext context) async {
       setId: (s, id) => s.id = id,
       csvExport: csvExportatorMails,
       sqlExport: sqlCreateMail,
-      conn: conn,
+      conn: executeQuery,
     );
     importedCount[entityName] = count;
   }
@@ -318,7 +318,7 @@ Future<void> _onSaveList(BuildContext context) async {
           setId: (e, id) => e.id = id,
           csvExport: csvExportatorLines,
           sqlExport: (lines) => sqlCreateLine(lines, context),
-          conn: conn,
+          conn: executeQuery,
         );
         importedCount[entityName] = count;
 
@@ -346,7 +346,7 @@ Future<void> _onSaveList(BuildContext context) async {
       getKey: (c) => c.database,
       setId: (c, id) => c.id = id,
       csvExport: csvExportatorConections,
-      conn: conn,
+      conn: executeQuery,
     );
     importedCount[entityName] = count;
   }
@@ -373,7 +373,7 @@ Future<void> _onSaveList(BuildContext context) async {
              setId: (e, id) => e.id = id,
              csvExport: csvExportatorFactories,
              sqlExport: sqlCreateFactory,
-             conn: conn,
+             conn: executeQuery,
            );
            importedCount[entityName] = count;
          }

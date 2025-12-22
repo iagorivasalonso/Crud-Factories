@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 import 'package:crud_factories/Backend/Global/list.dart';
 import 'package:crud_factories/Objects/RouteCSV.dart';
 import 'package:crud_factories/generated/l10n.dart';
@@ -15,95 +16,126 @@ import 'Import General/importCsvSafe.dart';
 Future<bool> chargueDataCSV(BuildContext context) async {
 
   bool isCorrect = true;
-
-  routesCSV =  await createDefaultData();
+  fRoutes = new File("assets/dataDefault/routes.csv");
+  routesCSV =  await createDefaultData(fRoutes);
 
   if (routesCSV.isEmpty) {
     errorFiles.add(S.of(context).route_file_cannot_be_read);
     return false;
   }
-  final platformFile = PlatformFile(
-    name: routesCSV[0].route.split('/').last,
-    path: kIsWeb ? null : routesCSV[0].route,
-    bytes: utf8.encode(await rootBundle.loadString('assets/dataDefault/routes.csv'),),
-    size: 0,
-  );
 
-  isCorrect = await importCsvSafe(context, platformFile);
-
-  if (!isCorrect) {
-    errorFiles.add(S.of(context).route_file_cannot_be_read);
-    return false;
-  }
-  else
+  if (isCorrect)
   {
+
+    final bytes = Uint8List.fromList(
+      utf8.encode(
+        await rootBundle.loadString(routesCSV[6].route),
+      ),
+    );
 
     try {
       final platformFile = PlatformFile(
         name: routesCSV[0].route.split('/').last,
         path: kIsWeb ? null : routesCSV[1].route,
-        bytes: utf8.encode(await rootBundle.loadString(routesCSV[1].route),),
-        size: 0,);
+          bytes: bytes,
+          size: bytes.length
+      );
       bool result = await importCsvSafe(context, platformFile);
     } catch (e, s) {
-      print("Error al importar conexiones");
+      errorFiles.add("Error al importar conexiones");
     }
 
     try {
+      final bytes = Uint8List.fromList(
+        utf8.encode(
+          await rootBundle.loadString(routesCSV[6].route),
+        ),
+      );
       final platformFile = PlatformFile(
         name: routesCSV[0].route.split('/').last,
         path: kIsWeb ? null : routesCSV[3].route,
-        bytes: utf8.encode(await rootBundle.loadString(routesCSV[3].route),),
-        size: 0,);
+          bytes: bytes,
+          size: bytes.length
+      );
       bool result = await importCsvSafe(context, platformFile);
     } catch (e, s) {
-      print("Error al importar sectors");
+      errorFiles.add("Error al importar sectors");
     }
 
 
     try {
+      final bytes = Uint8List.fromList(
+        utf8.encode(
+          await rootBundle.loadString(routesCSV[6].route),
+        ),
+      );
+
       final platformFile = PlatformFile(
         name: routesCSV[0].route.split('/').last,
         path: kIsWeb ? null : routesCSV[4].route,
-        bytes: utf8.encode(await rootBundle.loadString(routesCSV[4].route),),
-        size: 0,);
+          bytes: bytes,
+          size: bytes.length
+      );
       bool result = await importCsvSafe(context, platformFile);
     } catch (e, s) {
-      print("Error al importar factories");
+      errorFiles.add("Error al importar factories");
     }
 
     try {
+
+      final bytes = Uint8List.fromList(
+        utf8.encode(
+          await rootBundle.loadString(routesCSV[6].route),
+        ),
+      );
+
       final platformFile = PlatformFile(
         name: routesCSV[0].route.split('/').last,
         path: kIsWeb ? null : routesCSV[5].route,
-        bytes: utf8.encode(await rootBundle.loadString(routesCSV[5].route),),
-        size: 0,);
+        bytes: bytes,
+        size: bytes.length,
+      );
       bool result = await importCsvSafe(context, platformFile);
     } catch (e, s) {
-      print("Error al importar empleados");
+      errorFiles.add("Error al importar empleados");
     }
 
     try {
+      final bytes = Uint8List.fromList(
+        utf8.encode(
+          await rootBundle.loadString(routesCSV[6].route),
+        ),
+      );
+
       final platformFile = PlatformFile(
         name: routesCSV[0].route.split('/').last,
         path: kIsWeb ? null : routesCSV[5].route,
-        bytes: utf8.encode(await rootBundle.loadString(routesCSV[5].route),),
-        size: 0,);
+        bytes: bytes,
+        size: bytes.length
+      );
       bool result = await importCsvSafe(context, platformFile);
+      print(routesCSV[5].route);
     } catch (e, s) {
-      print("Error al importar lineas");
+      print(e);
+    errorFiles.add("Error al importar lineas");
     }
   }
 
   try {
+    final bytes = Uint8List.fromList(
+      utf8.encode(
+        await rootBundle.loadString(routesCSV[6].route),
+      ),
+    );
     final platformFile = PlatformFile(
       name: routesCSV[0].route.split('/').last,
       path: kIsWeb ? null : routesCSV[6].route,
-      bytes: utf8.encode(await rootBundle.loadString(routesCSV[6].route),),
-      size: 0,);
+      bytes: bytes,
+      size: bytes.length
+    );
     bool result = await importCsvSafe(context, platformFile);
   } catch (e, s) {
-    print("Error al importar emails");
+    errorFiles.add("Error al importar emails");
   }
 
 
@@ -116,19 +148,13 @@ Future<bool> chargueDataCSV(BuildContext context) async {
        routesCSV = tmp;
        print(tmp);
   }
-  else
-  {
-      errorFiles.add(S.of(context).route_file_cannot_be_read);
-      isCorrect = false;
-
-  }
 
   return isCorrect;
 }
 
-Future<List<RouteCSV>> createDefaultData() async {
+Future<List<RouteCSV>> createDefaultData(File fRoutes) async {
 
-  final rawData = await rootBundle.loadString('assets/dataDefault/routes.csv');
+  final rawData = await rootBundle.loadString(fRoutes.path);
 
   final converter = CsvToListConverter(fieldDelimiter: ';');
   final List<List<dynamic>> listData = converter.convert(rawData);
