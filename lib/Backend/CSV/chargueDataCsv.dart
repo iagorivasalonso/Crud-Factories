@@ -42,7 +42,7 @@ Future<bool> chargueDataCSV(BuildContext context) async {
       );
       bool result = await importCsvSafe(context, platformFile);
     } catch (e, s) {
-      errorFiles.add("Error al importar conexiones");
+      errorFiles.add(S.of(context).error_importing + " " + S.of(context).connections);
     }
 
     try {
@@ -59,7 +59,7 @@ Future<bool> chargueDataCSV(BuildContext context) async {
       );
       bool result = await importCsvSafe(context, platformFile);
     } catch (e, s) {
-      errorFiles.add("Error al importar sectors");
+      errorFiles.add(S.of(context).error_importing + " " + S.of(context).sectors);
     }
 
 
@@ -78,7 +78,7 @@ Future<bool> chargueDataCSV(BuildContext context) async {
       );
       bool result = await importCsvSafe(context, platformFile);
     } catch (e, s) {
-      errorFiles.add("Error al importar factories");
+      errorFiles.add(S.of(context).error_importing + " " + S.of(context).companies);
     }
 
     try {
@@ -97,7 +97,7 @@ Future<bool> chargueDataCSV(BuildContext context) async {
       );
       bool result = await importCsvSafe(context, platformFile);
     } catch (e, s) {
-      errorFiles.add("Error al importar empleados");
+      errorFiles.add(S.of(context).error_importing + " " + S.of(context).employees);
     }
 
     try {
@@ -116,8 +116,9 @@ Future<bool> chargueDataCSV(BuildContext context) async {
       bool result = await importCsvSafe(context, platformFile);
 
     } catch (e, s) {
+
       print(e);
-    errorFiles.add("Error al importar lineas");
+      errorFiles.add(S.of(context).error_importing + " " + S.of(context).lines);
     }
   }
 
@@ -135,7 +136,7 @@ Future<bool> chargueDataCSV(BuildContext context) async {
     );
     bool result = await importCsvSafe(context, platformFile);
   } catch (e, s) {
-    errorFiles.add("Error al importar emails");
+    errorFiles.add(S.of(context).error_importing + " " + S.of(context).mails);
   }
 
 

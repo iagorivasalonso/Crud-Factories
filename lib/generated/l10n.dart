@@ -1838,6 +1838,16 @@ class S {
     );
   }
 
+  /// `Error al importar`
+  String get error_importing {
+    return Intl.message(
+      'Error al importar',
+      name: 'error_importing',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Ha sido`
   String get it_has_been {
     return Intl.message('Ha sido', name: 'it_has_been', desc: '', args: []);

@@ -184,6 +184,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "error_creating_file": MessageLookupByLibrary.simpleMessage(
       "Error al crear el archivo",
     ),
+    "error_importing": MessageLookupByLibrary.simpleMessage(
+      "Error al importar",
+    ),
     "error_modifying_the_database_name": MessageLookupByLibrary.simpleMessage(
       "Error al modificar el el nombre de la base de datos",
     ),

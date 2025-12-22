@@ -238,6 +238,7 @@
   "file_not_found": "No se encontró el archivo",
   "error_creating_file": "Error al crear el archivo",
   "file_format_error": "Error en el formato del archivo",
+  "error_importing": "Error al importar",
   "it_has_been": "Ha sido",
   "has_been_removed": "Se ha eliminado",
   "have_been_removed": "Se han eliminado",
