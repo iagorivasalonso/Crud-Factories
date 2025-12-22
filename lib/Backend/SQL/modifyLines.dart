@@ -1,6 +1,7 @@
 import 'package:crud_factories/Backend/Global/variables.dart';
 import 'package:crud_factories/Functions/manageState.dart';
 import 'package:crud_factories/Objects/LineSend.dart';
+import 'package:flutter/foundation.dart' as foundation;
 import 'package:flutter/material.dart';
 
 Future<void> sqlModifyLines(List<LineSend> lineSelected, BuildContext context) async {
@@ -15,7 +16,8 @@ Future<void> sqlModifyLines(List<LineSend> lineSelected, BuildContext context) a
         String observations = lineSelected[i].observations;
         String state = lineSelected[i].state;
 
-        var result = await conn.query('update linesends set date=?,factory=?, observations=?,  state=? where id=?', [date, factory, observations,state, id]);
+        if (!foundation.kIsWeb)
+        var result = await executeQuery.query('update linesends set date=?,factory=?, observations=?,  state=? where id=?', [date, factory, observations,state, id]);
       }
 
   } catch(SQLExeption){

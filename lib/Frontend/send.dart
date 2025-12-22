@@ -538,7 +538,7 @@ class _newSendState extends State<newSend> {
       }
     });
 
-    if (conn != null)
+    if (executeQuery != null)
     {
       if(select==-1)
       {

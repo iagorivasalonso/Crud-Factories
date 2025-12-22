@@ -1,16 +1,19 @@
-import 'package:crud_factories/Backend/Global/list.dart';
 import 'package:crud_factories/Backend/Global/variables.dart';
 import 'package:crud_factories/Objects/Factory.dart';
+import 'package:flutter/foundation.dart' as foundation;
+
+import '../Global/list.dart';
 
 sqlImportFactories() async {
 
   try {
 
-    var result = await conn.query('select * from factories');
+    if (!foundation.kIsWeb) {
+      var result = await executeQuery.query('select * from factories');
 
-    for (var row in result)
-    {
-      allFactories.add(Factory(
+      for (var row in result)
+      {
+        allFactories.add(Factory(
           id: row[0].toString(),
           name: row[1],
           highDate: row[2],
@@ -26,8 +29,10 @@ sqlImportFactories() async {
             'postalCode':row[12],
             'province':row[13]
           },
-      ));
+        ));
+      }
     }
+
   }catch(Exeption){
 
     print(Exeption);

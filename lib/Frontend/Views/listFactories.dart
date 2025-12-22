@@ -108,7 +108,7 @@ class _listFactoriesState extends State<listFactories> {
       return true;
     }
 
-    if (conn != null) {
+    if (executeQuery != null) {
       await sqlDeleteFactory(factory.id);
     } else {
       csvExportatorFactories(factoriesSector);

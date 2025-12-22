@@ -1,12 +1,13 @@
 import 'package:crud_factories/Backend/Global/list.dart';
 import 'package:crud_factories/Backend/Global/variables.dart';
 import 'package:crud_factories/Objects/Mail.dart';
+import 'package:flutter/foundation.dart' as foundation;
 
 sqlImportMails() async {
 
   try {
-
-    var result = await conn.query('select * from mails');
+    if (!foundation.kIsWeb) {
+    var result = await executeQuery.query('select * from mails');
 
     for (var row in result)
     {
@@ -18,6 +19,8 @@ sqlImportMails() async {
       ));
     }
 
+
+    }
   }catch(Exeption){
 
   }

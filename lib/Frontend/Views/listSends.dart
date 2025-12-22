@@ -119,7 +119,7 @@ class _listSendsState extends State<listSends> {
     }
 
 
-        if (conn != null) {
+        if (executeQuery != null) {
 
           List<String> idsDelete = [];
 

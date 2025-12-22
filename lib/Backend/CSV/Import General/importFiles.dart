@@ -50,66 +50,35 @@ Future<void> importFiles(  BuildContext context, PlatformFile platformFile) asyn
 
                     case 3:
                       if (parts[1].contains("R")) {
-                        if (kIsWeb) {
-                          await csvImportRoutes(context, listController.routesNew, content);
-                        }
-                        else {
-                          listController.routesNew.addAll(
-                              await readRoutesFromCsvContent(content));
-                        }
-                      }
-                      else {
-                        if (kIsWeb) {
+                        await csvImportRoutes(
+                            context, listController.routesNew, content);
+                      } else {
+
                           await csvImportEmpleoyes(
                               context, listController.empleoyesNew, content);
-                        }
-                        else {
-                          listController.empleoyesNew.addAll(
-                              await readEmpleoyeFromCsvContent(content));
-                        }
+
                       }
                       break;
 
                     case 4:
-                      if (kIsWeb) {
                         await csvImportMails(context, listController.mailsNew, content);
-                      }
-                      else {
-                        listController.mailsNew.addAll(
-                            await readMailsFromCsvContent(content));
-                      }
+
                       break;
 
                     case 5:
-                      if (kIsWeb) {
                         await csvImportLines(context, listController.linesNew, content);
-                      }
-                      else {
-                        listController.linesNew.addAll(
-                            await readLinesFromCsvContent(content));
-                      }
                       break;
 
                     case 6:
-                      if (kIsWeb) {
                         await csvImportConections(
                             context, listController.conectionsNew, content);
-                      }
-                      else {
-                        listController.conectionsNew.addAll(
-                            await readConectionsFromCsvContent(content));
-                      }
+
                       break;
 
                     case 14:
-                      if (kIsWeb) {
                         await csvImportFactories(
                             context, listController.factoriesNew, content);
-                      }
-                      else {
-                        listController.factoriesNew.addAll(
-                            await readFactoriesFromCsvContent(content));
-                      }
+
                       break;
 
                     default:

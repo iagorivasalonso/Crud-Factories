@@ -25,12 +25,12 @@ Future<String> createTables(BuildContext context) async {
   String err ="";
 
   try {
-    await conn.query('CREATE TABLE IF NOT EXISTS sectors '
+    await executeQuery.query('CREATE TABLE IF NOT EXISTS sectors '
         '(id int NOT NULL AUTO_INCREMENT PRIMARY KEY,'
         ' sector varchar(50) NOT NULL)'
     );
 
-    await conn.query('CREATE TABLE IF NOT EXISTS factories '
+    await executeQuery.query('CREATE TABLE IF NOT EXISTS factories '
         '(id int NOT NULL AUTO_INCREMENT PRIMARY KEY,'
         ' name varchar(255) NOT NULL, '
         ' highDate varchar(12) NOT NULL,'
@@ -48,7 +48,7 @@ Future<String> createTables(BuildContext context) async {
         ' FOREIGN KEY fk_sectors(sector) REFERENCES sectors(id))'
     );
 
-    await conn.query('CREATE TABLE IF NOT EXISTS empleoyes '
+    await executeQuery.query('CREATE TABLE IF NOT EXISTS empleoyes '
         '(id int NOT NULL AUTO_INCREMENT PRIMARY KEY,'
         ' name varchar(50) NOT NULL,'
         ' idFactory int(11) NOT NULL,'
@@ -56,7 +56,7 @@ Future<String> createTables(BuildContext context) async {
         ' ON DELETE CASCADE)'
     );
 
-    await conn.query('CREATE TABLE IF NOT EXISTS lineSends '
+    await executeQuery.query('CREATE TABLE IF NOT EXISTS lineSends '
         '(id int NOT NULL AUTO_INCREMENT PRIMARY KEY,'
         ' date varchar(12) NOT NULL, '
         ' factory varchar(255) NOT NULL,'
@@ -64,7 +64,7 @@ Future<String> createTables(BuildContext context) async {
         ' state varchar(20) NOT NULL)'
     );
 
-    await conn.query('CREATE TABLE IF NOT EXISTS mails '
+    await executeQuery.query('CREATE TABLE IF NOT EXISTS mails '
         '(id int NOT NULL AUTO_INCREMENT PRIMARY KEY,'
         ' company varchar(20) NOT NULL, '
         ' email varchar(50) NOT NULL,'
@@ -80,13 +80,13 @@ Future<String> createTables(BuildContext context) async {
   return err;
 }
 
-Future<String> deleteDB(BuildContext context, String nameBD, conn) async {
+Future<String> deleteDB(BuildContext context, String nameBD) async {
 
   String err="";
 
   try {
 
-    await conn.query('DROP DATABASE $nameBD');
+    await executeQuery.query('DROP DATABASE $nameBD');
 
   }catch(SQLException){
 
@@ -100,7 +100,7 @@ Future<String> deleteDB(BuildContext context, String nameBD, conn) async {
 Future<String> editDB(BuildContext context, String nameBD, String nameBDnew) async {
 
   String err="";
-  var showTablesVar = await conn.query('SHOW TABLES');
+  var showTablesVar = await executeQuery.query('SHOW TABLES');
   String sTablesLine = showTablesVar.toString();
   String tmp= sTablesLine.substring(1,sTablesLine.length-1);
 
@@ -120,15 +120,15 @@ Future<String> editDB(BuildContext context, String nameBD, String nameBDnew) asy
 
   try {
 
-    await conn.query('CREATE DATABASE $nameBDnew');
+    await executeQuery.query('CREATE DATABASE $nameBDnew');
 
     for(int i = 0; i < nameTables.length; i++)
     {
       String nameTable = nameTables[i];
-      await conn.query('RENAME TABLE $nameBD.$nameTable TO $nameBDnew.$nameTable');
+      await executeQuery.query('RENAME TABLE $nameBD.$nameTable TO $nameBDnew.$nameTable');
     }
 
-    await conn.query('DROP DATABASE $nameBD');
+    await executeQuery.query('DROP DATABASE $nameBD');
 
   }catch(SQLException){
 

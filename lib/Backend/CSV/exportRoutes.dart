@@ -36,14 +36,14 @@ Future<bool> csvExportatorRoutes(List<RouteCSV> routes) async {
     rows.add(row);
   }
   final filePath = fRoutes;
-  routeFirst = filePath.path;
+
 
   String csv = const ListToCsvConverter(fieldDelimiter: ';').convert(rows);
 
   if (kIsWeb) {
-    err =  await csvExportweb(csv, fileName: fSectors.path);
+    err =  await csvExportweb(csv, fileName: fRoutes.path);
   } else {
-    err = !await csvExport(csv,file: fSectors);
+    err = !await csvExport(csv,file: filePath);
   }
 
 

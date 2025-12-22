@@ -1,5 +1,6 @@
 import 'package:crud_factories/Backend/Global/variables.dart';
 import 'package:crud_factories/Objects/Mail.dart';
+import 'package:flutter/foundation.dart' as foundation;
 
 Future<void> sqlModifyMail(List<Mail> mail) async {
 
@@ -10,7 +11,8 @@ Future<void> sqlModifyMail(List<Mail> mail) async {
     String email = mail[0].address;
     String password = mail[0].password;
 
-    var result = await conn.query('update mails set company=?,mail=?,password=? where id=?', [company,email,password, id]);
+    if (!foundation.kIsWeb)
+    var result = await executeQuery.query('update mails set company=?,mail=?,password=? where id=?', [company,email,password, id]);
 
   } catch(SQLExeption){
 

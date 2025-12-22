@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-var conn;
+var executeQuery;
 
 
 TextEditingController controllerSearchSend = TextEditingController();

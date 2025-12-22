@@ -1,22 +1,26 @@
 import 'package:crud_factories/Backend/Global/list.dart';
 import 'package:crud_factories/Backend/Global/variables.dart';
 import 'package:crud_factories/Objects/Empleoye.dart';
+import 'package:flutter/foundation.dart' as foundation;
 
 sqlImportEmpleoyes() async {
 
   try {
-    var result = await conn.query('select * from empleoyes');
+    if (!foundation.kIsWeb) {
+      var result = await executeQuery.query('select * from empleoyes');
 
-    for (var row in result) {
-      empleoyes.add(Empleoye(
-        id: row[0].toString(),
-        name: row[1],
-        idFactory: row[2].toString()
-      ));
+      for (var row in result) {
+        empleoyes.add(Empleoye(
+            id: row[0].toString(),
+            name: row[1],
+            idFactory: row[2].toString()
+        ));
+      }
     }
-  } catch (Exeption) {
+    } catch (Exeption) {
 
   }
+
 }
 
 

@@ -1,5 +1,7 @@
 import 'package:crud_factories/Backend/Global/variables.dart';
 import 'package:crud_factories/Objects/Factory.dart';
+import 'package:flutter/foundation.dart' as foundation;
+
 
 Future<void> sqlModifyFActory(List<Factory> factories) async {
 
@@ -20,7 +22,8 @@ Future<void> sqlModifyFActory(List<Factory> factories) async {
     String province = factories[0].address['province'].toString();
     String postalCode = factories[0].address['postalCode'].toString();
 
-    var result = await conn.query('update factories set name=?,highDate=?,sector=?,telephone1=?,telephone2=?,mail=?,web=?,address=?,number=?,apartament=?,city=?,province=?,postalcode=? where id=?', [name, highDate, sector, telephone1, telephone2, mail, web, address, number, apartament ,city, province, postalCode, id]);
+    if (!foundation.kIsWeb)
+    var result = await executeQuery.query('update factories set name=?,highDate=?,sector=?,telephone1=?,telephone2=?,mail=?,web=?,address=?,number=?,apartament=?,city=?,province=?,postalcode=? where id=?', [name, highDate, sector, telephone1, telephone2, mail, web, address, number, apartament ,city, province, postalCode, id]);
 
   } catch(SQLExeption){
 

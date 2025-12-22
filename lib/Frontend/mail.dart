@@ -252,7 +252,7 @@ Future<void> _onSaveMail(BuildContext context, int select,MailController control
         }
         else
         {
-                if (conn != null)
+                if (executeQuery != null)
                 {
                   if (select == -1)
                   {

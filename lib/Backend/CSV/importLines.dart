@@ -71,5 +71,6 @@ Future<List<LineSend>> readLinesFromCsvContent(String content) async {
       state: parts[4],
     ));
   }
+
   return lineSend;
 }

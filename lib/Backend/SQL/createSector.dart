@@ -1,6 +1,7 @@
 
 import 'package:crud_factories/Backend/Global/variables.dart';
 import 'package:crud_factories/Objects/Sector.dart';
+import 'package:flutter/foundation.dart' as foundation;
 
 Future<void> sqlCreateSector(List<Sector> sectors) async {
 
@@ -11,7 +12,8 @@ Future<void> sqlCreateSector(List<Sector> sectors) async {
       String id = sectors[i].id;
       String name = sectors[i].name;
 
-      var result = await conn.query(
+      if (!foundation.kIsWeb)
+      var result = await executeQuery.query(
           'insert into sectors (id,sector) values (?,?)',
           [id,name]);
     }

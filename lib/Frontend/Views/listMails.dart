@@ -42,7 +42,7 @@ class _listMailsState extends State<listMails> {
     }
 
 
-    if (conn != null) {
+    if (executeQuery != null) {
       await sqlDeleteMail(mail.id);
     } else {
       csvExportatorMails(mails);
