@@ -114,7 +114,7 @@ Future<bool> chargueDataCSV(BuildContext context) async {
         size: bytes.length
       );
       bool result = await importCsvSafe(context, platformFile);
-      print(routesCSV[5].route);
+
     } catch (e, s) {
       print(e);
     errorFiles.add("Error al importar lineas");
@@ -146,7 +146,6 @@ Future<bool> chargueDataCSV(BuildContext context) async {
 
        List<RouteCSV> tmp = reorderRouter(namesRoutesOrdened, routesCSV);
        routesCSV = tmp;
-       print(tmp);
   }
 
   return isCorrect;
