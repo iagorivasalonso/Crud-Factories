@@ -1,5 +1,6 @@
 import 'package:crud_factories/Backend/Global/variables.dart';
 import 'package:crud_factories/Objects/Factory.dart';
+import 'package:flutter/foundation.dart' as foundation;
 
 Future<void> sqlCreateFactory(List<Factory> factories) async {
 
@@ -22,7 +23,8 @@ Future<void> sqlCreateFactory(List<Factory> factories) async {
           String province = factories[i].address['province'].toString();
           String postalCode = factories[i].address['postalCode'].toString();
 
-          var result = await conn.query(
+          if (!foundation.kIsWeb)
+             var result = await executeQuery.query(
               'insert into factories (id,name,highDate,sector,telephone1,telephone2,mail,web,address,number,apartament,city,province,postalcode) values (?,?,?,?,?,?,?,?,?,?,?,?,?,?)',
               [id,name,highDate,sector,telephone1,telephone2,mail,web,address,number,apartament,city,province,postalCode]);
        }

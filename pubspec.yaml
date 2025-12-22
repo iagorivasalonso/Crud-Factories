@@ -29,6 +29,7 @@ dependencies:
   l10n_flutter: ^1.0.7
   intl_utils: ^2.8.9
   universal_html: ^2.0.9
+  http: ^1.1.0
 
 dev_dependencies:
   flutter_test:

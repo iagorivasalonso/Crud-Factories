@@ -131,7 +131,7 @@ Future<void> saveSector(BuildContext context,TextEditingController controllerSec
 
           Navigator.of(context).pop(true);
 
-          if(conn != null)
+          if(executeQuery != null)
           {
             sqlCreateSector(currentSector);
           }
@@ -194,7 +194,7 @@ Future<void> saveSector(BuildContext context,TextEditingController controllerSec
           sector1.name = controllerSector.text;
           currentSector = [sector1];
 
-          if(conn != null)
+          if(executeQuery != null)
           {
             sqlModifySector(currentSector);
           }

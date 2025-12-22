@@ -24,9 +24,12 @@ import 'package:crud_factories/Widgets/layoutVariant.dart';
 import 'package:crud_factories/generated/l10n.dart';
 import 'package:crud_factories/helpers/localization_helper.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
+import 'package:flutter/foundation.dart';
+import 'package:flutter/foundation.dart' as foundation;
 import 'package:flutter/material.dart';
 import 'package:mysql1/mysql1.dart';
 
+import '../Backend/SQL/DBaPI.dart';
 import '../Functions/isNotAndroid.dart';
 import '../Widgets/dropDownButton.dart';
 import '../Widgets/headView.dart';
@@ -117,7 +120,7 @@ class _conectionState extends State<conection> {
     }
 
 
-    if(conn != null && action0 == S.of(context).edit)
+    if(executeQuery != null && action0 == S.of(context).edit)
     {
       action1 = S.of(context).disconnect;
 
@@ -331,7 +334,7 @@ class _conectionState extends State<conection> {
 
     setState(() {
 
-      if(conn != null)
+      if(executeQuery != null)
       {
 
         if(action0==S.of(context).volver)
@@ -454,7 +457,7 @@ class _conectionState extends State<conection> {
         });
       }
 
-      if(conn != null && action0 != S.of(context).volver)
+      if(executeQuery != null && action0 != S.of(context).volver)
       {
         bd_action = S.of(context).disconnect;
         db = "";
@@ -490,7 +493,7 @@ class _conectionState extends State<conection> {
     String err ="";
     try{
 
-      if(conn != null)
+      if(executeQuery != null)
       {
         if(action2 == S.of(context).delete)
         {
@@ -502,13 +505,13 @@ class _conectionState extends State<conection> {
           if(confirm1 == true)
           {
 
-            err = await deleteDB(context, nameBD,conn);
+            err = await deleteDB(context, nameBD);
 
             if(err.isEmpty)
             {
 
               setState(() {
-                conn = null;
+                executeQuery = null;
                 action1 =  S.of(context).newFemale;
 
                 selectedConection = null;
@@ -546,20 +549,40 @@ class _conectionState extends State<conection> {
   }
 
 
-  actionsDB(String bd_action, String db, BuildContext context) async {
+  Future<void>actionsDB(String bd_action, String db, BuildContext context) async {
 
     var settings;
 
     try {
+          if(!kIsWeb)
+          {
+            settings = ConnectionSettings(
+              host: host,
+              port: port,
+              user: user,
+              password: password,
+              db: db,
+            );
+            executeQuery = await MySqlConnection.connect(settings);
+          }
+          else
+          {
 
-      settings = ConnectionSettings(
-        host: host,
-        port: port,
-        user: user,
-        password: password,
-        db: db,
-      );
-      conn = await MySqlConnection.connect(settings);
+              if (selectedConection == null) {
+                error(context, "Debes seleccionar una conexión");
+                return;
+              }
+
+              if (selectedConection != null) {
+                await DbApi.actionApi(
+                  context,
+                  bd_action,
+                  selectedConection!,
+                );
+                return;
+              }
+
+          }
 
     } on Exception catch( e){
 
@@ -579,7 +602,7 @@ class _conectionState extends State<conection> {
 
       try{
         sleep(Duration(seconds:5));
-        conn = await MySqlConnection.connect(settings);
+        executeQuery = await MySqlConnection.connect(settings);
 
       } catch(exeption){
 
@@ -625,8 +648,8 @@ class _conectionState extends State<conection> {
     }
 
     if (bd_action == S.of(context).newFemale) {
-      String err = await createDB(context, bdName, conn);
-      conn = null;
+      String err = await createDB(context, bdName, executeQuery);
+      executeQuery = null;
 
       if (err.isEmpty) {
         setState(() {
@@ -638,7 +661,7 @@ class _conectionState extends State<conection> {
       String action = S.of(context).has_closed_the_connection;
       confirm(context, action);
       editText = true;
-      conn = null;
+      executeQuery = null;
 
       sectors.clear();
       allFactories.clear();
@@ -654,7 +677,7 @@ class _conectionState extends State<conection> {
       
     } else if (bd_action == S.of(context).connection)
     {
-      if (conn != null)
+      if (executeQuery != null)
       {
         String conected = S.of(context).is_connected_to;
         String action1 = '$conected $bdName';
@@ -709,7 +732,7 @@ class _conectionState extends State<conection> {
           String action1 = LocalizationHelper.manage_array(context, array, actionArray);
 
           confirm(context, action1);
-          conn = null;
+          executeQuery = null;
 
           setState(() {
             editText = false;

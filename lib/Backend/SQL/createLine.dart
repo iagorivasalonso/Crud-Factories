@@ -2,6 +2,7 @@ import 'package:crud_factories/Backend/Global/variables.dart';
 import 'package:crud_factories/Functions/manageState.dart';
 import 'package:crud_factories/Objects/LineSend.dart';
 import 'package:fluent_ui/fluent_ui.dart';
+import 'package:flutter/foundation.dart' as foundation;
 
 Future<void> sqlCreateLine(List<LineSend> lines, BuildContext context) async {
 
@@ -15,7 +16,8 @@ Future<void> sqlCreateLine(List<LineSend> lines, BuildContext context) async {
          String state = manageState.parseState(lines[i].state.toString(),context,false);
          String observations = lines[i].observations;
 
-         var result = await conn.query(
+         if (!foundation.kIsWeb)
+         var result = await executeQuery.query(
              'insert into lineSends (id,date,factory,state,observations) values (?,?,?,?,?)',
              [id,date,factory,state,observations]);
     }

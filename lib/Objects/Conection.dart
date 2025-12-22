@@ -19,4 +19,11 @@ class Conection extends BaseEntity {
     required this.password
 });
 
+  Map<String, dynamic> toJson() => {
+    'host': host,
+    'port': port,
+    'user': user,
+    'password': password,
+    'database': database,
+  };
 }

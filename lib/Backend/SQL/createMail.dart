@@ -1,5 +1,6 @@
 import 'package:crud_factories/Backend/Global/variables.dart';
 import 'package:crud_factories/Objects/Mail.dart';
+import 'package:flutter/foundation.dart' as foundation;
 
 Future<void> sqlCreateMail(List<Mail> mails) async {
 
@@ -12,7 +13,8 @@ Future<void> sqlCreateMail(List<Mail> mails) async {
          String email = mails[i].address;
          String password = mails[i].password;
 
-         var result = await conn.query(
+         if (!foundation.kIsWeb)
+         var result = await executeQuery.query(
            'insert into mails (id,company,email,password) values (?,?,?,?)',
            [id,company,email,password]);
     }
