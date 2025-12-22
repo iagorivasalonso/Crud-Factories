@@ -607,7 +607,7 @@ class _newFactoryState extends State<newFactory> {
         }
         List<String> num = adrress2[0].split(",");
 
-        if (conn != null) {
+        if (executeQuery != null) {
           Set<Empleoye> contacsPreEdit1 = contacsPreEdit.toSet();
           Set<Empleoye> contacsCurrent1 = contacsCurrent.toSet();
 
@@ -700,7 +700,7 @@ class _newFactoryState extends State<newFactory> {
         }
         saveChanges = false;
 
-        if (conn != null) {
+        if (executeQuery != null) {
           if (select == -1) {
             sqlCreateFactory(current);
           }
