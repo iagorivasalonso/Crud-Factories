@@ -74,6 +74,8 @@ class _conectionState extends State<conection> {
      controllers.port.dispose();
      controllers.user.dispose();
      controllers.password.dispose();
+
+     super.dispose();
    }
   int select = - 1;
   String action0 = "";
