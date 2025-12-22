@@ -82,8 +82,7 @@ Future<void> importFiles(  BuildContext context, PlatformFile platformFile) asyn
                       break;
 
                     default:
-                      String action = S.of(context).file_not_found;
-                      error(context, action);
+
                       break;
                   }
           }catch (e) {
