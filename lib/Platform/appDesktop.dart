@@ -37,6 +37,9 @@ class _appDesktopState extends State<appDesktop> {
     super.initState();
 
     WidgetsBinding.instance?.addPostFrameCallback((_) async {
+      bool isChargue = await chargueDataCSV(context);
+
+      bool sqlBd = await typeConection(context);
 
       listController = new ListController(
           routesNew: [],
@@ -50,9 +53,7 @@ class _appDesktopState extends State<appDesktop> {
           String action = "";
           List<RouteCSV> routesCurrent = [];
 
-          bool isChargue = await chargueDataCSV(context);
 
-          bool sqlBd = await typeConection(context);
 
 
           if (sqlBd == true)
