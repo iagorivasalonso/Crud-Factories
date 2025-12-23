@@ -26,19 +26,20 @@ class Factory extends BaseEntity {
 
   String allAdress() {
 
-    String address1= address['street'].toString();
-    String number= address['number'].toString();
-    String apartament = address['apartament']!;
+    final street = address['street'] ?? '';
+    final number = address['number'] ?? '';
+    final apartament = address['apartament'] ?? '';
+
 
     String addressComplete='';
 
      if(apartament=="")
      {
-       addressComplete=  '$address1, $number';
+       addressComplete=  '$street, $number';
      }
      else
      {
-       addressComplete='$address1, $number - $apartament';
+       addressComplete='$street, $number - $apartament';
      }
 
     return addressComplete;
