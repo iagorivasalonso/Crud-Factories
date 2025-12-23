@@ -3,6 +3,7 @@ import 'package:fluent_ui/fluent_ui.dart' hide Checkbox;
 import 'package:flutter/material.dart' hide Scrollbar;
 import '../Backend/Global/controllers/LineSend.dart';
 import '../Backend/Global/variables.dart';
+import '../Functions/isNotAndroid.dart';
 import '../Functions/manageState.dart';
 import '../generated/l10n.dart';
 
@@ -45,7 +46,7 @@ class customDataTable extends StatelessWidget {
   @override
   Widget build(BuildContext context0) {
 
-   BuildContext context = Platform.isWindows ? context1 : context0;
+    BuildContext context = isNotAndroid() ? context0 :  context1;
 
     return Container(
       width: 900,
