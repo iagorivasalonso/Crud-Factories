@@ -1,8 +1,8 @@
-1;2025-01-10;Fábrica Atlántica;Entregado;Enviado
-2;2025-01-10;Industrias Norte;No disponible;Devuelto
-3;2025-01-11;Metal Centro;Recibido;Enviado
-4;2025-01-12;Metal Centro;Acuse firmado;Enviado
-5;2025-01-13;Fábrica Atlántica;Error destinatario;Devuelto
-6;2025-01-14;Industrias Norte;Reprogramado;Enviado
-7;2025-01-13;Metal Centro;Rechazado;Devuelto
-8;2025-01-14;Textiles Levante;Oficina central;Enviado
+1;2025-01-10;Fábrica Atlántica;Entregado;Sent
+2;2025-01-10;Industrias Norte;No disponible;Returned
+3;2025-01-11;Metal Centro;Recibido;Sent
+4;2025-01-12;Metal Centro;Acuse firmado;Sent
+5;2025-01-13;Fábrica Atlántica;Error destinatario;Returned
+6;2025-01-14;Industrias Norte;Reprogramado;Sent
+7;2025-01-13;Metal Centro;Rechazado;Returned
+8;2025-01-14;Textiles Levante;Oficina central;Sent
