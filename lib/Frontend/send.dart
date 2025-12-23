@@ -51,7 +51,7 @@ class _newSendState extends State<newSend> {
   double widthBar = 10.0;
   String tView ="";
   Sector? selectedSector = null;
-  String selectedItem = "";
+  String selectedItem = LineSendState.prepared.name;
   List<LineSend> linesSelected = [];
   List<LineSend> linesSave = [];
   String sector = "";
@@ -113,8 +113,7 @@ class _newSendState extends State<newSend> {
 
     stateSends = [S.of(context).prepared, S.of(context).sent, S.of(context).in_progress, S.of(context).returned, S.of(context).he_responded, S.of(context).pending];
 
-    if(selectedItem.isEmpty)
-      selectedItem = S.of(context).prepared;
+
 
     if(select == -1)
     {
