@@ -34,7 +34,7 @@ class DbApi {
         headers: {'Content-Type': 'application/json'},
         body: jsonEncode(body),
       );
-
+print(res.body);
       final data = jsonDecode(res.body);
       if (res.statusCode != 200) {
         throw data['error'];

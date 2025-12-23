@@ -367,6 +367,8 @@ class _conectionState extends State<conection> {
     String bd_action = "";
     String db = "";
 
+
+
     try{
 
       host = controllers.host.text;
@@ -552,7 +554,8 @@ class _conectionState extends State<conection> {
 
 
   Future<void>actionsDB(String bd_action, String db, BuildContext context) async {
-
+    const create = 'create';
+    const connect = 'connect';
     var settings;
 
     try {
@@ -578,10 +581,10 @@ class _conectionState extends State<conection> {
               if (selectedConection != null) {
                 await DbApi.actionApi(
                   context,
-                  bd_action,
+                  connect,
                   selectedConection!,
                 );
-                return;
+
               }
 
           }
@@ -676,17 +679,19 @@ class _conectionState extends State<conection> {
       });
 
       chargueDataCSV(context);
-      
-    } else if (bd_action == S.of(context).connection)
+
+    } else if (bd_action ==S.of(context).connection)
     {
-      if (executeQuery != null)
-      {
+      print("entrs");
+      if (kIsWeb)
+      {    selectedDb = selectedConection!.database;
+        print("entr1");
         String conected = S.of(context).is_connected_to;
         String action1 = '$conected $bdName';
         BaseDateSelected = bdName;
 
 
-        String err = await createTables(context);
+        String err = '';
         if (err.isEmpty) {
           confirm(context, action1);
           editText = false;
@@ -697,11 +702,13 @@ class _conectionState extends State<conection> {
           mails.clear();
           allLines.clear();
 
-          sqlImportSetors();
-          sqlImportFactories();
-          sqlImportEmpleoyes();
-          sqlImportMails();
-          sqlImportLines(context);
+          // Esperamos a que las funciones de carga terminen
+          await sqlImportSetors();
+          await sqlImportFactories();
+          await sqlImportEmpleoyes();
+          await sqlImportMails();
+          await sqlImportLines();
+
 
           setState(() {
             action1 = S.of(context).connect;
