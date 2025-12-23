@@ -546,7 +546,7 @@ class _newSendState extends State<newSend> {
       }
       else
       {
-         sqlModifyLines(linesSelected, context);
+         sqlModifyLines(linesSelected);
       }
     }
     else
