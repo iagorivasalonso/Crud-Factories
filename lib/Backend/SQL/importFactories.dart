@@ -63,16 +63,14 @@ Future<void> _loadFactoriesFromApi(String baseUrl) async {
 
     for (final row in factoriesList) {
       // Protege thelephones
-      final rawPhones = row['thelephones'];
-      final phonesList = (rawPhones is List)
-          ? rawPhones.map((e) => e.toString()).toList()
-          : <String>[];
+      List<String> phonesList = (row['phones'] as List<String>? ?? [])
+          .map((p) => p.toString())
+          .toList();
 
-      // Protege address
-      final rawAddress = row['address'];
-      final addressMap = (rawAddress is Map)
-          ? rawAddress.map((k, v) => MapEntry(k.toString(), v.toString()))
-          : <String, String>{};
+// Rellenar hasta tener al menos 2 elementos
+      while (phonesList.length < 2) {
+        phonesList.add(''); // teléfono vacío
+      }
 
       allFactories.add(Factory(
         id: row['id']?.toString() ?? '',
@@ -82,7 +80,14 @@ Future<void> _loadFactoriesFromApi(String baseUrl) async {
         thelephones: phonesList,
         mail: row['mail'] ?? '',
         web: row['web'] ?? '',
-        address: addressMap,
+        address: {
+          'street': row['address'] ?? '',
+          'number': row['number'] ?? '',
+          'apartament': row['apartament'] ?? '',
+          'city': row['city'] ?? '',
+          'postalCode': row['postalcode'] ?? '',
+          'province': row['province'] ?? '',
+        },
       ));
     }
 
