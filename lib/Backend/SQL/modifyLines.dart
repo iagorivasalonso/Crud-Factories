@@ -1,27 +1,48 @@
-import 'package:crud_factories/Backend/Global/variables.dart';
-import 'package:crud_factories/Functions/manageState.dart';
-import 'package:crud_factories/Objects/LineSend.dart';
+import 'dart:convert';
+
 import 'package:flutter/foundation.dart' as foundation;
-import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 
-Future<void> sqlModifyLines(List<LineSend> lineSelected, BuildContext context) async {
+import '../../Objects/LineSend.dart';
+import '../Global/variables.dart';
 
-  try{
+Future<void> sqlModifyLines(List<LineSend> linesList) async {
+  if (linesList.isEmpty) return;
 
-      for (int i = 0; i <lineSelected.length; i++)
-      {
-        String id = lineSelected[i].id;
-        String date = lineSelected[i].date;
-        String factory = lineSelected[i].factory;
-        String observations = lineSelected[i].observations;
-        String state = lineSelected[i].state;
+  try {
+    for (final line in linesList) {
+      final String id = line.id;
+      final String date = line.date;
+      final String factory = line.factory;
+      final String observations = line.observations;
+      final String state = line.state;
 
-        if (!foundation.kIsWeb)
-        var result = await executeQuery.query('update linesends set date=?,factory=?, observations=?,  state=? where id=?', [date, factory, observations,state, id]);
+      if (!foundation.kIsWeb) {
+        await executeQuery.query(
+          'UPDATE linesends SET date=?, factory=?, observations=?, state=? WHERE id=?',
+          [date, factory, observations, state, id],
+        );
+      } else {
+        final uri = Uri.parse('http://localhost:3000/$selectedDb/lines/$id');
+        final res = await http.put(
+          uri,
+          headers: {'Content-Type': 'application/json'},
+          body: jsonEncode({
+            'date': date,
+            'factory': factory,
+            'observations': observations,
+            'state': state,
+          }),
+        );
+
+        if (res.statusCode != 200) {
+          throw Exception('HTTP ${res.statusCode}: ${res.body}');
+        }
       }
+    }
 
-  } catch(SQLExeption){
-
+    print('Lines modificadas: ${linesList.length}');
+  } catch (e) {
+    print('ERROR al modificar lines: $e');
   }
 }
-

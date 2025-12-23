@@ -1,34 +1,62 @@
-import 'package:crud_factories/Backend/Global/list.dart';
+import 'dart:convert';
+import 'package:flutter/foundation.dart';
+import 'package:http/http.dart' as http;
 import 'package:crud_factories/Backend/Global/variables.dart';
-import 'package:crud_factories/Functions/manageState.dart';
+import 'package:crud_factories/Backend/Global/list.dart';
 import 'package:crud_factories/Objects/LineSend.dart';
-import 'package:fluent_ui/fluent_ui.dart';
-import 'package:flutter/foundation.dart' as foundation;
 
+Future<void> sqlImportLines() async {
+  const String baseUrl = 'http://localhost:3000';
+  if (selectedDb.isEmpty) return;
 
-sqlImportLines(BuildContext context) async {
+  if (kIsWeb) {
+    await _loadLinesFromApi(baseUrl);
+  } else {
+    await _loadLinesFromDb();
+  }
+}
 
+Future<void> _loadLinesFromDb() async {
   try {
+    final result = await executeQuery.query('SELECT * FROM linesends');
+    for (final row in result) {
+      allLines.add(LineSend(
+        id: row[0].toString(),
+        date: row[1],
+        factory: row[2],
+        observations: row[3],
+        state: row[4],
+      ));
+    }
+    debugPrint('Lines cargadas desde DB: ${allLines.length}');
+  } catch (e, stack) {
+    debugPrint('DB ERROR: $e');
+    debugPrintStack(stackTrace: stack);
+  }
+}
 
-    if (!foundation.kIsWeb) {
-      var result = await executeQuery.query('select * from linesends');
+Future<void> _loadLinesFromApi(String baseUrl) async {
+  try {
+    final uri = Uri.parse('$baseUrl/$selectedDb/lines?db=$selectedDb');
+    final res = await http.get(uri);
 
-      for (var row in result)
-      {
-        allLines.add(LineSend(
-          id: row[0].toString(),
-          date: row[1],
-          factory: row[2],
-          observations: row[3],
-          state: manageState.parseState(row[4],context,true),)
-        );
-      }
+    if (res.statusCode != 200) {
+      throw Exception('HTTP ${res.statusCode}: ${res.body}');
     }
 
-
-  }catch(Exeption){
-print(Exeption);
+    final List<dynamic> data = jsonDecode(res.body);
+    for (final row in data) {
+      allLines.add(LineSend(
+        id: row['id'].toString(),
+        date: row['date'],
+        factory: row['factory'],
+        observations: row['observations'],
+        state: row['state'],
+      ));
+    }
+    debugPrint('Lines cargadas desde API: ${allLines.length}');
+  } catch (e, stack) {
+    debugPrint('API ERROR: $e');
+    debugPrintStack(stackTrace: stack);
   }
-
-
 }

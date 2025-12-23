@@ -1,20 +1,29 @@
-import 'package:crud_factories/Backend/Global/variables.dart';
 import 'package:flutter/foundation.dart' as foundation;
+import 'package:crud_factories/Backend/Global/variables.dart';
+import 'package:crud_factories/Objects/LineSend.dart';
+import 'package:http/http.dart' as http;
 
 Future<void> sqlDeleteLines(List<String> idsDelete) async {
+  if (idsDelete.isEmpty) return;
 
-  try{
-    String id = " ";
+  try {
+    for (final item in idsDelete) {
+      final String id = item;
 
-    for (int i = 0; i<idsDelete.length; i++)
-    {
-      id = idsDelete[i];
+      if (!foundation.kIsWeb) {
+        await executeQuery.query('DELETE FROM linesends WHERE id=?', [id]);
+      } else {
+        final uri = Uri.parse('http://localhost:3000/$selectedDb/lines/$id');
+        final res = await http.delete(uri);
 
-      if (!foundation.kIsWeb)
-      var result = await executeQuery.query('delete from lineSends where id=? ',[id]);
+        if (res.statusCode != 200) {
+          throw Exception('HTTP ${res.statusCode}: ${res.body}');
+        }
+      }
     }
 
-  } catch(SQLExeption) {
-
+    print('Lines eliminadas: ${idsDelete.length}');
+  } catch (e) {
+    print('ERROR al eliminar lines: $e');
   }
 }

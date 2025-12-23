@@ -1,14 +1,26 @@
-import 'package:crud_factories/Backend/Global/variables.dart';
 import 'package:flutter/foundation.dart' as foundation;
+import 'package:crud_factories/Backend/Global/variables.dart';
+import 'package:crud_factories/Objects/Mail.dart';
+import 'package:http/http.dart' as http;
 
 Future<void> sqlDeleteMail(String id) async {
 
-  try{
 
-    if (!foundation.kIsWeb)
-    var result = await executeQuery.query('delete from mails where id=? ',[id]);
+  try {
 
-  } catch(SQLExeption) {
+      if (!foundation.kIsWeb) {
+        await executeQuery.query('DELETE FROM mails WHERE id=?', [id]);
+      } else {
+        final uri = Uri.parse('http://localhost:3000/$selectedDb/mails/$id');
+        final res = await http.delete(uri);
 
+        if (res.statusCode != 200) {
+          throw Exception('HTTP ${res.statusCode}: ${res.body}');
+        }
+    }
+
+    print('Mails eliminados: ${id}');
+  } catch (e) {
+    print('ERROR al eliminar mails: $e');
   }
 }

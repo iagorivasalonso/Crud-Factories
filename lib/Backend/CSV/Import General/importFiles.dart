@@ -38,7 +38,7 @@ Future<void> importFiles(  BuildContext context, PlatformFile platformFile) asyn
     }
 
     final lines = const LineSplitter().convert(content);
-
+print(lines);
     final parts = lines.first.split(";");
           try {
 

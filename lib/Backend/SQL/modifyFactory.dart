@@ -1,32 +1,68 @@
+import 'dart:convert';
+
+import 'package:crud_factories/Backend/Global/list.dart';
 import 'package:crud_factories/Backend/Global/variables.dart';
 import 'package:crud_factories/Objects/Factory.dart';
 import 'package:flutter/foundation.dart' as foundation;
+import 'package:http/http.dart' as http;
+
+Future<void> sqlModifyFActory(List<Factory> factory) async {
 
 
-Future<void> sqlModifyFActory(List<Factory> factories) async {
+  try {
 
-  try{
+      final String id = factory[0].id;
+      final String name = factory[0].name;
+      final String highDate = factory[0].highDate;
+      final String sector = factory[0].sector;
+      final List<String> thelephones = factory[0].thelephones;
+      final String mail = factory[0].mail;
+      final String web = factory[0].web;
+      final Map<String, dynamic> address = factory[0].address;
 
-    String id = factories[0].id;
-    String name = factories[0].name;
-    String highDate = factories[0].highDate;
-    String sector = factories[0].sector;
-    String telephone1 = factories[0].thelephones[0];
-    String telephone2 = factories[0].thelephones[1];
-    String mail = factories[0].mail;
-    String web = factories[0].web;
-    String address = factories[0].address['street'].toString();
-    String number = factories[0].address['number'].toString();
-    String apartament = factories[0].address['apartament'].toString();
-    String city = factories[0].address['city'].toString();
-    String province = factories[0].address['province'].toString();
-    String postalCode = factories[0].address['postalCode'].toString();
+      if (!foundation.kIsWeb) {
+        await executeQuery.query(
+          'UPDATE factories SET name=?, highDate=?, sector=?, thelephones=?, mail=?, web=?, street=?, number=?, apartament=?, city=?, postalCode=?, province=? WHERE id=?',
+          [
+            name,
+            highDate,
+            sector,
+            thelephones.join(','), // si tu DB almacena como texto
+            mail,
+            web,
+            address['street'],
+            address['number'],
+            address['apartament'],
+            address['city'],
+            address['postalCode'],
+            address['province'],
+            id
+          ],
+        );
+      } else {
+        final uri = Uri.parse('http://localhost:3000/$selectedDb/factories/$id');
+        final res = await http.put(
+          uri,
+          headers: {'Content-Type': 'application/json'},
+          body: jsonEncode({
+            'name': name,
+            'highDate': highDate,
+            'sector': sector,
+            'thelephones': thelephones,
+            'mail': mail,
+            'web': web,
+            'address': address,
+          }),
+        );
 
-    if (!foundation.kIsWeb)
-    var result = await executeQuery.query('update factories set name=?,highDate=?,sector=?,telephone1=?,telephone2=?,mail=?,web=?,address=?,number=?,apartament=?,city=?,province=?,postalcode=? where id=?', [name, highDate, sector, telephone1, telephone2, mail, web, address, number, apartament ,city, province, postalCode, id]);
+        if (res.statusCode != 200) {
+          throw Exception('HTTP ${res.statusCode}: ${res.body}');
+        }
 
-  } catch(SQLExeption){
+    }
 
+    print('Factories modificadas: ${factory.length}');
+  } catch (e) {
+    print('ERROR al modificar factories: $e');
   }
 }
-
