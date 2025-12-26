@@ -16,7 +16,7 @@ import '../importMails.dart';
 import '../importRoutes.dart';
 import '../importSectors.dart';
 
-Future<void> importFiles(  BuildContext context, PlatformFile platformFile) async {
+Future<void> importFiles(  BuildContext context, PlatformFile platformFile,[bool importOrtherFiles = false]) async {
 
   String ext = platformFile.name.split('.').last.toLowerCase();
 
@@ -38,46 +38,57 @@ Future<void> importFiles(  BuildContext context, PlatformFile platformFile) asyn
     }
 
     final lines = const LineSplitter().convert(content);
-print(lines);
     final parts = lines.first.split(";");
           try {
 
 
                   switch (parts.length) {
                     case 2:
-                        await csvImportSectors(context, listController.sectorsNew, content);
+                        if (importOrtherFiles ==  false)
+                             await csvImportSectors(context, listController.sectorsNew, content);
+                        else
+                             listController.sectorsNew.addAll(await readSectorsFromCsvContent(content));
                       break;
 
                     case 3:
                       if (parts[1].contains("R")) {
-                        await csvImportRoutes(
-                            context, listController.routesNew, content);
+                        await csvImportRoutes(context, listController.routesNew, content);
                       } else {
-
-                          await csvImportEmpleoyes(
-                              context, listController.empleoyesNew, content);
-
+                        if (importOrtherFiles ==  false)
+                              await csvImportEmpleoyes(context, listController.empleoyesNew, content);
+                        else
+                             listController.empleoyesNew.addAll(await readEmpleoyeFromCsvContent(content));
                       }
                       break;
 
                     case 4:
-                        await csvImportMails(context, listController.mailsNew, content);
+                      if (importOrtherFiles ==  false)
+                           await csvImportMails(context, listController.mailsNew, content);
+                      else
+                        listController.mailsNew.addAll(await readMailsFromCsvContent(content));
 
                       break;
 
                     case 5:
+                      if (importOrtherFiles ==  false)
                         await csvImportLines(context, listController.linesNew, content);
+                      else
+                        listController.linesNew.addAll(await readLinesFromCsvContent(content));
                       break;
 
                     case 6:
-                        await csvImportConections(
-                            context, listController.conectionsNew, content);
-
+                      if (importOrtherFiles ==  false)
+                        await csvImportConections(context, listController.conectionsNew, content);
+                      else
+                        listController.conectionsNew.addAll(await readConectionsFromCsvContent(content));
                       break;
 
                     case 14:
-                        await csvImportFactories(
-                            context, listController.factoriesNew, content);
+
+                      if (importOrtherFiles ==  false)
+                             await csvImportFactories(context, listController.factoriesNew, content);
+                       else
+                              listController.factoriesNew.addAll(await readFactoriesFromCsvContent(content));
 
                       break;
 

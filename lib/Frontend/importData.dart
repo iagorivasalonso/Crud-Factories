@@ -191,8 +191,8 @@ Future<void> _pickFile(BuildContext context, TextEditingController controllerDat
 
  controllerDatePicker.text =platformFile.name;
 
-
-  importFiles(context,platformFile);
+   bool importOrtherData = true;
+  importFiles(context,platformFile,importOrtherData);
 
 }
 
