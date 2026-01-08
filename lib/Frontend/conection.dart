@@ -66,8 +66,10 @@ class _conectionState extends State<conection> {
         user: TextEditingController(),
         password: TextEditingController()
     );
+
+    _restoreLastConection();
   }
-  
+
   void dispose ()  {
      controllers.nameBD.dispose();
      controllers.host.dispose();
@@ -79,7 +81,6 @@ class _conectionState extends State<conection> {
    }
   int select = - 1;
   String action0 = "";
-  String action1 = "";
   String action2 = "";
 
   String bdName = "";
@@ -96,11 +97,21 @@ class _conectionState extends State<conection> {
   bool conectNew = false;
 
 
+  String get action1 {
+    if (selectedConection == null) {
+      return S.of(context1).newFemale;
+    }
+
+    return executeQuery == null
+        ? S.of(context1).connect
+        : S.of(context1).disconnect;
+  }
+
   @override
   Widget build(BuildContext context0) {
 
     BuildContext context = isNotAndroid() ? context0 :  context1;
-
+       print(BaseDateSelected);
     if(action0.isEmpty)
     {
       action0 = S.of(context).edit;
@@ -111,10 +122,9 @@ class _conectionState extends State<conection> {
       selectedConection = null;
     }
 
-     if(action1.isEmpty)
-     {
-       action1 = S.of(context).newFemale;
-     }
+
+
+
 
     if(action2.isEmpty)
     {
@@ -122,27 +132,7 @@ class _conectionState extends State<conection> {
     }
 
 
-    if(executeQuery != null && action0 == S.of(context).edit)
-    {
-      action1 = S.of(context).disconnect;
 
-      for(int i = 0; i <conections.length; i++)
-      {
-
-        if(BaseDateSelected==conections[i].database)
-        {
-          selectedConection= conections[i];
-
-          controllers.nameBD.text = conections[i].database;
-          controllers.host.text = conections[i].host;
-          controllers.port.text = conections[i].port;
-          controllers.user.text = conections[i].user;
-          controllers.password.text = conections[i].password;
-          nameBDOld = conections[i].database;
-          editText = false;
-        }
-      }
-    }
 
     return !isNotAndroid()
       ? Scaffold(
@@ -196,7 +186,7 @@ class _conectionState extends State<conection> {
                              padding: const EdgeInsets.only(top: 30.0),
                              child: materialButton(
                                nameAction: S.of(context).edit,
-                               function: () => _onSelectAction(context),
+                               function: () => null, //_onSelectAction(context),
 
                              ),
                            ),
@@ -304,7 +294,6 @@ class _conectionState extends State<conection> {
 
       try{
 
-        action1 = S.of(context).connect;
         select=int.parse(conectionChoose!.id)-1;
 
         selectedConection = conectionChoose;
@@ -332,35 +321,7 @@ class _conectionState extends State<conection> {
     });
 
   }
-  Future<void> _onSelectAction(BuildContext context) async{
 
-    setState(() {
-
-      if(executeQuery != null)
-      {
-
-        if(action0==S.of(context).volver)
-        {
-          editText = false;
-          action0 = S.of(context).edit;
-          action1 = S.of(context).disconnect;
-          action2 = S.of(context).delete;
-        }
-        else
-        {
-          editText = true;
-          action0 = S.of(context).volver;
-          action1 = S.of(context).save;
-          action2 = S.of(context).cancel;
-        }
-      }
-      else
-      {
-        String action1 = S.of(context).not_connected_to_any_database;
-        error(context, action1);
-      }
-    });
-  }
 
   Future<void> _onConect(BuildContext context) async {
 
@@ -428,11 +389,6 @@ class _conectionState extends State<conection> {
             bd_action = S.of(context).newFemale;
             db = "test";
 
-            setState(() {
-              action1 = S.of(context).connect;
-            });
-
-
           }
           if(action1 == S.of(context).save)
           {
@@ -456,14 +412,12 @@ class _conectionState extends State<conection> {
 
         setState(() {
           action0 = S.of(context).edit;
-          action1 = S.of(context).disconnect;
           action2 = S.of(context).delete;
         });
       }
 
       if(executeQuery != null && action0 != S.of(context).volver)
       {
-        bd_action = S.of(context).disconnect;
         db = "";
       }
       else if(action1 == S.of(context).connect)
@@ -516,7 +470,6 @@ class _conectionState extends State<conection> {
 
               setState(() {
                 executeQuery = null;
-                action1 =  S.of(context).newFemale;
 
                 selectedConection = null;
 
@@ -554,8 +507,7 @@ class _conectionState extends State<conection> {
 
 
   Future<void>actionsDB(String bd_action, String db, BuildContext context) async {
-    const create = 'create';
-    const connect = 'connect';
+
     var settings;
 
     try {
@@ -569,24 +521,6 @@ class _conectionState extends State<conection> {
               db: db,
             );
             executeQuery = await MySqlConnection.connect(settings);
-          }
-          else
-          {
-
-              if (selectedConection == null) {
-                error(context, "Debes seleccionar una conexión");
-                return;
-              }
-
-              if (selectedConection != null) {
-                await DbApi.actionApi(
-                  context,
-                  connect,
-                  selectedConection!,
-                );
-
-              }
-
           }
 
     } on Exception catch( e){
@@ -656,11 +590,7 @@ class _conectionState extends State<conection> {
       String err = await createDB(context, bdName, executeQuery);
       executeQuery = null;
 
-      if (err.isEmpty) {
-        setState(() {
-          action1 = S.of(context).connect;
-        });
-      }
+
     } else if (bd_action ==S.of(context).disconnect)
     {
       String action = S.of(context).has_closed_the_connection;
@@ -674,27 +604,23 @@ class _conectionState extends State<conection> {
       mails.clear();
       allLines.clear();
 
-      setState(() {
-        action1 = S.of(context).connect;
-      });
-
-      chargueDataCSV(context);
+   
+      //chargueDataCSV(context);
 
     } else if (bd_action ==S.of(context).connection)
     {
-      print("entrs");
-      if (kIsWeb)
-      {    selectedDb = selectedConection!.database;
-        print("entr1");
+
+      selectedDb = selectedConection!.database;
+
         String conected = S.of(context).is_connected_to;
-        String action1 = '$conected $bdName';
+        String actionAlert = '$conected $bdName';
         BaseDateSelected = bdName;
 
 
         String err = '';
         if (err.isEmpty) {
-          confirm(context, action1);
-          editText = false;
+          confirm(context, actionAlert);
+
 
           sectors.clear();
           allFactories.clear();
@@ -703,6 +629,7 @@ class _conectionState extends State<conection> {
           allLines.clear();
 
           // Esperamos a que las funciones de carga terminen
+
           await sqlImportSetors();
           await sqlImportFactories();
           await sqlImportEmpleoyes();
@@ -710,10 +637,6 @@ class _conectionState extends State<conection> {
           await sqlImportLines();
 
 
-          setState(() {
-            action1 = S.of(context).connect;
-          });
-        }
       }
     }
     else if (bd_action==S.of(context).save)
@@ -733,12 +656,12 @@ class _conectionState extends State<conection> {
       {
           setState(() {
             conections[idSelect].database = NameBDNew;
-            csvExportatorConections(conections);
+         //   csvExportatorConections(conections);
           });
 
           String array = S.of(context).connection;
           String actionArray = S.of(context).modifiedFemale;
-          String action1 = LocalizationHelper.manage_array(context, array, actionArray);
+         String action1 = LocalizationHelper.manage_array(context, array, actionArray);
 
           confirm(context, action1);
           executeQuery = null;
@@ -746,10 +669,39 @@ class _conectionState extends State<conection> {
           setState(() {
             editText = false;
             action0 = S.of(context).edit;
-            action1 = S.of(context).connect;
             action2 = S.of(context).delete;
+            BaseDateSelected ="";
           });
       }
+    }
+  }
+
+  Future<void> _restoreLastConection() async{
+    if (BaseDateSelected.isEmpty) return;
+
+    final last = conections.firstWhere(
+          (c) => c.database == BaseDateSelected,
+    );
+
+    if (last == null) return;
+
+    selectedConection = last;
+    selectedDb = last.database;
+
+    controllers.nameBD.text = last.database;
+    controllers.host.text = last.host;
+    controllers.port.text = last.port;
+    controllers.user.text = last.user;
+    controllers.password.text = last.password;
+
+
+    editText = false;
+
+    try {
+      await actionsDB(S.of(context).connection, last.database, context);
+
+    } catch (_) {
+      // si falla, no pasa nada
     }
   }
 
