@@ -1,9 +1,11 @@
 import 'dart:io';
 
+import 'package:crud_factories/Backend/providers/Conection_provider.dart';
 import 'package:crud_factories/Platform/appDesktop.dart';
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:window_manager/window_manager.dart';
 import 'Alertdialogs/closeApp.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -24,7 +26,15 @@ void main() async {
       if(!kIsWeb)
         await windowManager.ensureInitialized();
 
-        runApp(MyApp());
+        runApp(
+            MultiProvider(
+            providers: [
+              ChangeNotifierProvider(
+                  create: (_) => ConectionProvider()
+              )
+            ],
+            child: MyApp())
+           );
 }
 class MyApp extends StatelessWidget {
   @override

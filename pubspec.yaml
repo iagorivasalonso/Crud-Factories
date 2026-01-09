@@ -30,6 +30,7 @@ dependencies:
   intl_utils: ^2.8.9
   universal_html: ^2.0.9
   http: ^1.1.0
+  provider: ^6.0.5
 
 dev_dependencies:
   flutter_test:
