@@ -7,7 +7,7 @@ import '../../Alertdialogs/confirm.dart';
 import '../../Alertdialogs/error.dart';
 import '../../generated/l10n.dart';
 
-enum ConectionStatus {
+enum ConnectionStatus {
 
   none,
   disconnected,
@@ -16,35 +16,39 @@ enum ConectionStatus {
 class ConectionProvider extends ChangeNotifier {
 
   Conection? selected;
-  MySqlConnection? connection;
 
-  ConectionStatus get status {
-    if(selected == null) return ConectionStatus.none;
-    return connection == null
-        ? ConectionStatus.connected
-        : ConectionStatus.connected;
+
+
+  ConnectionStatus get status {
+    if(selected == null) return ConnectionStatus.none;
+    return executeQuery == null
+        ? ConnectionStatus.disconnected
+        : ConnectionStatus.connected;
   }
 
   String actionLabel(BuildContext context) {
      switch(status) {
-       case ConectionStatus.none:
+       case ConnectionStatus.none:
          return S.of(context).newFemale;
-       case ConectionStatus.disconnected:
+       case ConnectionStatus.disconnected:
          return S.of(context).connect;
-       case ConectionStatus.connected:
+       case ConnectionStatus.connected:
          return S.of(context).disconnect;
      }
 
   }
 
-  void selectedConnection (Conection? c) {
+  Future<void> selectConnection(Conection? c, BuildContext context) async {
+    if (status == ConnectionStatus.connected) {
+      await disconnet(context);
+    }
     selected = c;
+    executeQuery = null;
     notifyListeners();
   }
 
   Future<void> connect (BuildContext context) async {
-
-    if(selected == null) return;
+    if (selected == null) return;
 
     final settings = ConnectionSettings(
       host: selected!.host,
@@ -55,30 +59,35 @@ class ConectionProvider extends ChangeNotifier {
     );
 
     try {
-       connection = await MySqlConnection.connect(settings);
-       BaseDateSelected = selected!.database;
+      executeQuery = await MySqlConnection.connect(settings);
+      BaseDateSelected = selected!.database;
 
-       confirm(context, '${S.of(context).is_connected_to} ${selected!.database}');
-       notifyListeners();
+      selectedDb =  selected!.database;
 
+      confirm(context, '${S
+          .of(context)
+          .is_connected_to} ${selected!.database}');
+      notifyListeners();
     } catch (e) {
-      error(context, S.of(context).sql_error);
+      error(context, S
+          .of(context)
+          .sql_error);
     }
-
+  }
     Future<void>disconnet(BuildContext context) async {
 
-      await connection?.close();
-
+      await executeQuery?.close();
       confirm(context, S.of(context).has_closed_the_connection);
+      selectedDb='';
+      selected = null;
       notifyListeners();
     }
 
     void clearSelection() {
 
       selected = null;
-      connection = null;
+      executeQuery = null;
 
       notifyListeners();
     }
   }
-}
