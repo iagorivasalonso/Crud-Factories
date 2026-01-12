@@ -119,18 +119,7 @@ class _conectionState extends State<conection> {
                                         .newFemale,
                                     itemLabel: (Conection) =>
                                     Conection.database,
-                                    onChanged: (Conection? c) async {
-
-                                        Conection conect = c!;
-
-                                        namebd.text = conect.database;
-                                        hostbd.text = conect.host;
-                                        portbd.text = conect.port;
-                                        userbd.text = conect.user;
-                                        passbd.text = conect.password;
-
-                                        await provider.selectConnection(c, context);
-                                    },
+                                    onChanged: (conectionChoose) => _onConectionChanged(context,conectionChoose,provider),
                                   ),
                                 ),
                               ),
@@ -288,5 +277,18 @@ class _conectionState extends State<conection> {
       await sqlImportEmpleoyes();
       await sqlImportMails();
     }
+  }
+
+  Future<void> _onConectionChanged(BuildContext context, Conection? conectionChoose, provider) async {
+
+    Conection conect = conectionChoose!;
+
+    namebd.text = conect.database;
+    hostbd.text = conect.host;
+    portbd.text = conect.port;
+    userbd.text = conect.user;
+    passbd.text = conect.password;
+
+    await provider.selectConnection(conect, context);
   }
 }
