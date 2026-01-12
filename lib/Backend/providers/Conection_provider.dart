@@ -77,7 +77,8 @@ class ConectionProvider extends ChangeNotifier {
 
       await executeQuery?.close();
       selectedDb='';
-      selected = null;
+      executeQuery = null;
+
       notifyListeners();
       confirm(context, S.of(context).has_closed_the_connection);
     }
