@@ -505,8 +505,8 @@ class S {
   }
 
   /// `Volver`
-  String get volver {
-    return Intl.message('Volver', name: 'volver', desc: '', args: []);
+  String get back {
+    return Intl.message('Volver', name: 'back', desc: '', args: []);
   }
 
   /// `Para`

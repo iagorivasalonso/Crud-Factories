@@ -214,7 +214,7 @@ class _sendMailState extends State<sendMail> {
                                     child: materialButton(
                                       nameAction: otherMail == false
                                           ? S.of(context).orther
-                                          : S.of(context).volver,
+                                          : S.of(context).back,
                                       function: () async {
                                         setState(() {
                                           otherMail = !otherMail;

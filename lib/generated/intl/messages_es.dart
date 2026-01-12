@@ -75,6 +75,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "april": MessageLookupByLibrary.simpleMessage("Abril"),
     "attach": MessageLookupByLibrary.simpleMessage("Adjuntar"),
     "august": MessageLookupByLibrary.simpleMessage("Agosto"),
+    "back": MessageLookupByLibrary.simpleMessage("Volver"),
     "because_it_does_not_have": MessageLookupByLibrary.simpleMessage(
       "Porque no tiene",
     ),
@@ -456,7 +457,6 @@ class MessageLookup extends MessageLookupByLibrary {
       "Verificar contraseña",
     ),
     "view_demo": MessageLookupByLibrary.simpleMessage("Ver demo"),
-    "volver": MessageLookupByLibrary.simpleMessage("Volver"),
     "want_to_complete_it": MessageLookupByLibrary.simpleMessage(
       "¿Desea completarlo?",
     ),
