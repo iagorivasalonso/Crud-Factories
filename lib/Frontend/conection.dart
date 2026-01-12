@@ -120,7 +120,16 @@ class _conectionState extends State<conection> {
                                     itemLabel: (Conection) =>
                                     Conection.database,
                                     onChanged: (Conection? c) async {
-                                      await provider.selectConnection(c, context);
+
+                                        Conection conect = c!;
+
+                                        namebd.text = conect.database;
+                                        hostbd.text = conect.host;
+                                        portbd.text = conect.port;
+                                        userbd.text = conect.user;
+                                        passbd.text = conect.password;
+
+                                        await provider.selectConnection(c, context);
                                     },
                                   ),
                                 ),
@@ -137,7 +146,7 @@ class _conectionState extends State<conection> {
 
                                 ),
                               ),
-                            ]),
+                        ]),
 
                         Padding(
                           padding: const EdgeInsets.only(top: 20.0),
