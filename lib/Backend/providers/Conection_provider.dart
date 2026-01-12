@@ -38,6 +38,8 @@ class ConectionProvider extends ChangeNotifier {
 
   }
 
+
+
   Future<void> selectConnection(Conection? c, BuildContext context) async {
     if (status == ConnectionStatus.connected) {
       await disconnet(context);
@@ -80,7 +82,10 @@ class ConectionProvider extends ChangeNotifier {
       executeQuery = null;
 
       notifyListeners();
-      confirm(context, S.of(context).has_closed_the_connection);
+
+      if (context.mounted) {
+        confirm(context, S.of(context).has_closed_the_connection);
+      }
     }
 
     void clearSelection() {
