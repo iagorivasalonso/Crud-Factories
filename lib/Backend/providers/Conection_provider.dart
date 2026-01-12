@@ -43,7 +43,6 @@ class ConectionProvider extends ChangeNotifier {
       await disconnet(context);
     }
     selected = c;
-    executeQuery = null;
     notifyListeners();
   }
 
@@ -77,10 +76,10 @@ class ConectionProvider extends ChangeNotifier {
     Future<void>disconnet(BuildContext context) async {
 
       await executeQuery?.close();
-      confirm(context, S.of(context).has_closed_the_connection);
       selectedDb='';
       selected = null;
       notifyListeners();
+      confirm(context, S.of(context).has_closed_the_connection);
     }
 
     void clearSelection() {
