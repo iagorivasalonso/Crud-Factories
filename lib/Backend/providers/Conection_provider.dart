@@ -13,11 +13,16 @@ enum ConnectionStatus {
   disconnected,
   connected,
 }
+
+enum ConnectionViewMode {
+   normal,
+   editing,
+}
 class ConectionProvider extends ChangeNotifier {
 
   Conection? selected;
 
-
+   ConnectionViewMode viewMode = ConnectionViewMode.normal;
 
   ConnectionStatus get status {
     if(selected == null) return ConnectionStatus.none;
@@ -26,7 +31,15 @@ class ConectionProvider extends ChangeNotifier {
         : ConnectionStatus.connected;
   }
 
-  String actionLabel(BuildContext context) {
+  String editButtonLabel(BuildContext context) {
+     return viewMode == ConnectionViewMode.editing
+         ? S.of(context).back
+         : S.of(context).edit;
+  }
+  String action1Label(BuildContext context) {
+    if(viewMode == ConnectionViewMode.editing)
+         return S.of(context).acept;
+
      switch(status) {
        case ConnectionStatus.none:
          return S.of(context).newFemale;
@@ -38,6 +51,24 @@ class ConectionProvider extends ChangeNotifier {
 
   }
 
+  String action2Label(BuildContext context) {
+
+    if(viewMode == ConnectionViewMode.editing)
+    {
+      return S.of(context).cancel;
+    }
+    else
+    {
+      return  S.of(context).delete;
+    }
+
+  }
+
+  String actionEditLabel(BuildContext context) {
+    return viewMode == ConnectionViewMode.editing
+        ? S.of(context).back
+        : S.of(context).edit;
+  }
 
 
   Future<void> selectConnection(Conection? c, BuildContext context) async {
@@ -74,6 +105,19 @@ class ConectionProvider extends ChangeNotifier {
           .of(context)
           .sql_error);
     }
+  }
+
+  bool toggleEditMode(ConectionProvider provider) {
+
+    if (executeQuery == null) return false;
+
+    viewMode =
+    viewMode == ConnectionViewMode.editing
+        ? ConnectionViewMode.normal
+        : ConnectionViewMode.editing;
+
+    notifyListeners();
+    return true;
   }
     Future<void>disconnet(BuildContext context) async {
 

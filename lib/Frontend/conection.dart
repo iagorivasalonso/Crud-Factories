@@ -1,4 +1,6 @@
 import 'package:adaptive_scrollbar/adaptive_scrollbar.dart';
+import 'package:crud_factories/Alertdialogs/error.dart';
+import 'package:crud_factories/Alertdialogs/warning.dart';
 import 'package:crud_factories/Backend/Global/list.dart';
 import 'package:crud_factories/Backend/Global/variables.dart';
 import 'package:crud_factories/Backend/providers/Conection_provider.dart';
@@ -128,11 +130,15 @@ class _conectionState extends State<conection> {
                               Padding(
                                 padding: const EdgeInsets.only(top: 30.0),
                                 child: materialButton(
-                                  nameAction: S
-                                      .of(context)
-                                      .edit,
-                                  function: () => null, //_onSelectAction(context),
-
+                                  nameAction: provider.actionEditLabel(context),
+                                  function: ()  {
+                                       final ok = provider.toggleEditMode(provider);
+                                       if(!ok)
+                                       {
+                                           String message = S.of(context).not_connected_to_any_database;
+                                           error(context, message);
+                                       }
+                                   }
                                 ),
                               ),
                         ]),
@@ -215,19 +221,19 @@ class _conectionState extends State<conection> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             items: [
                               materialButton(
-                                nameAction: provider.actionLabel(context),
-                                function: () =>  _onConect(context,provider),
+                                nameAction: provider.action1Label(context),
+                                function: () => _actionConnect(context,provider),
 
                               ),
-/*
+
                               Padding(
                                 padding: const EdgeInsets.only(left: 20.0),
                                 child: materialButton(
-                                  nameAction: action2,
-                                  function: () => _onDelete(context),
+                                  nameAction: provider.action2Label(context),
+                                  function: () =>null,
 
                                 ),
-                              ),*/
+                              ),
                             ],
                           ),
                         ),
@@ -248,9 +254,10 @@ class _conectionState extends State<conection> {
       body: Text("conection"),
     );
   }
+  
 
 
-  Future<void> _onConect(BuildContext context, ConectionProvider provider) async {
+  Future<void> _actionConnect(BuildContext context, ConectionProvider provider) async {
     if (provider.status == ConnectionStatus.connected) {
       provider.disconnet(context);
 
@@ -291,4 +298,7 @@ class _conectionState extends State<conection> {
 
     await provider.selectConnection(conect, context);
   }
+
+
+
 }
