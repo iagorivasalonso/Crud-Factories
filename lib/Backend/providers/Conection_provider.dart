@@ -1,10 +1,14 @@
+import 'package:crud_factories/Backend/CSV/exportConections.dart';
+import 'package:crud_factories/Backend/Global/list.dart';
 import 'package:crud_factories/Backend/Global/variables.dart';
+import 'package:crud_factories/Backend/SQL/manageSQl.dart';
 import 'package:crud_factories/Objects/Conection.dart';
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:mysql1/mysql1.dart';
 
 import '../../Alertdialogs/confirm.dart';
 import '../../Alertdialogs/error.dart';
+import '../../Functions/createId.dart';
 import '../../generated/l10n.dart';
 
 enum ConnectionStatus {
@@ -139,4 +143,107 @@ class ConectionProvider extends ChangeNotifier {
 
       notifyListeners();
     }
+
+    // =================
+    //    CRUD
+   // ==================
+
+  Map<String, Conection> get _conectionsMap => {for (var c in conections) c.database: c};
+
+  Future<String?> create(BuildContext context, Conection cNew) async {
+
+      if (_conectionsMap.containsKey(cNew.database)) {
+        return 'La conexión ya existe';
+      }
+
+      cNew.id = conections.isNotEmpty ? createId(conections.last.id) : "1";
+
+      return await _withConnection(cNew, (conn) async {
+        final err = await createDB(context, cNew.database, conn);
+        if (err.isNotEmpty) return err;
+
+        conections.add(cNew);
+        _updateList(conections, newSelected: cNew);
+        return null;
+
+      });
+    }
+
+  Future<String?> update(BuildContext context,Conection old, Conection cNew) async {
+
+    if (!_conectionsMap.containsKey(old.database)) {
+      return 'no se encontro la conecxion';
+    }
+
+    return await _withConnection(cNew, (conn) async {
+      final err = await editDB(context, old.database, cNew.database);
+      if (err.isNotEmpty) return err;
+
+      final index = conections.indexWhere((c) => c.database == old.database);
+      conections[index] = cNew;
+      _updateList(conections, newSelected: cNew);
+      return null;
+
+    });
   }
+
+
+  Future<String?> delete(BuildContext context, Conection toDelete,  {bool deleteSQL = false}) async {
+
+    if (!_conectionsMap.containsKey(toDelete.database)) {
+      return 'no se encontro la conecxion';
+    }
+
+    return await _withConnection(toDelete, (conn) async {
+      final err = await deleteDB(context, toDelete.database);
+      if (err.isNotEmpty) return err;
+
+      conections.removeWhere((c) => c.database == toDelete.database);
+      _updateList(conections, newSelected: null);
+      return null;
+
+    });
+  }
+
+
+
+  Future<T>_withConnection<T>(Conection c, Future<T> Function(MySqlConnection conn) action) async {
+
+    MySqlConnection? conn;
+
+    try {
+      conn = await connectSQL(c);
+      return await action(conn);
+    } catch (e) {
+      return Future.value('Error de conexión SQL: $e' as T);
+    } finally {
+
+      try {
+        await conn?.close();
+      } catch (_) {
+
+      }
+    }
+  }
+  Future<MySqlConnection> connectSQL(Conection cNew) async {
+    
+    final settings = ConnectionSettings(
+      host: cNew.host,
+      port: int.parse(cNew.port),
+      user: cNew.user,
+      password: cNew.password,
+    );
+
+    return await MySqlConnection.connect(settings);
+  }
+
+  void _updateList(List<Conection> newList, {Conection? newSelected}) {
+    conections = newList;
+    selected = newSelected;
+    notifyListeners();
+    csvExportatorConections(conections);
+  }
+
+  }
+
+
