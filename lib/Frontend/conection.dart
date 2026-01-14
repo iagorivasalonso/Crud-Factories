@@ -15,6 +15,7 @@ import '../Backend/SQL/importEmpleoye.dart';
 import '../Backend/SQL/importFactories.dart';
 import '../Backend/SQL/importMail.dart';
 import '../Backend/SQL/importSector.dart';
+import '../Functions/createId.dart';
 import '../Functions/isNotAndroid.dart';
 import '../Widgets/dropDownButton.dart';
 import '../Widgets/headView.dart';
@@ -222,7 +223,7 @@ class _conectionState extends State<conection> {
                             items: [
                               materialButton(
                                 nameAction: provider.action1Label(context),
-                                function: () => _actionConnect(context,provider),
+                                function: () => _handleAction1(context,provider)
 
                               ),
 
@@ -230,7 +231,7 @@ class _conectionState extends State<conection> {
                                 padding: const EdgeInsets.only(left: 20.0),
                                 child: materialButton(
                                   nameAction: provider.action2Label(context),
-                                  function: () =>null,
+                                  function: () => _handleAction2(context,provider)
 
                                 ),
                               ),
@@ -254,10 +255,34 @@ class _conectionState extends State<conection> {
       body: Text("conection"),
     );
   }
-  
+
+  void _handleAction1(BuildContext context,ConectionProvider provider) {
+
+    final actionLabel = provider.action1Label(context);
+
+    if (actionLabel == S.of(context).newFemale) {
+      _createConex(context, provider);
+    } else if (provider.viewMode == ConnectionViewMode.normal) {
+      _actionConnect(context, provider);
+    } else {
+      _editConex(context, provider);
+    }
+
+  }
+
+  void _handleAction2(BuildContext context,ConectionProvider provider) {
+
+    if (provider.viewMode == ConnectionViewMode.normal) {
+      _undoConex();
+    } else {
+      _deleteConex(context, provider);
+    }
+
+  }
 
 
   Future<void> _actionConnect(BuildContext context, ConectionProvider provider) async {
+
     if (provider.status == ConnectionStatus.connected) {
       provider.disconnet(context);
 
@@ -299,6 +324,56 @@ class _conectionState extends State<conection> {
     await provider.selectConnection(conect, context);
   }
 
+  Future<void>_createConex(BuildContext context, ConectionProvider provider) async{
+
+     Conection cNew=new Conection(
+        id: conections.isNotEmpty ? createId(conections.last.id) : "1",
+        database: namebd.text,
+        port: portbd.text,
+        host: hostbd.text,
+        user: userbd.text,
+        password: passbd.text);
+
+     await provider.create(context, cNew);
+  }
+
+  Future<void>_editConex(BuildContext context, ConectionProvider provider) async {
+
+    final old = provider.selected;
+    if (old == null) return;
+
+    final updated = Conection(
+      id: old.id,
+      database: namebd.text,
+      host: hostbd.text,
+      port: portbd.text,
+      user: userbd.text,
+      password: passbd.text,
+    );
+
+    final err = await provider.update(context, old, updated);
+
+  }
+
+
+  Future<void>_deleteConex(BuildContext context, ConectionProvider provider) async {
+
+    final toDelete = provider.selected;
+    if (toDelete == null) return;
+    
+    
+    final err = await provider.delete(context, toDelete);
+  }
+
+  void _undoConex() {
+
+    namebd.text = _last!.database;
+    hostbd.text = _last!.host;
+    portbd.text = _last!.port;
+    userbd.text = _last!.user;
+    passbd.text = _last!.password;
+
+  }
 
 
 }
