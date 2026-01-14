@@ -49,6 +49,7 @@ class _conectionState extends State<conection> {
 
   Conection? _last;
 
+
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
@@ -70,6 +71,19 @@ class _conectionState extends State<conection> {
     BuildContext context = isNotAndroid() ? context0 : context1;
 
     final provider = context.watch<ConectionProvider>();
+
+    bool editCamps = true;
+
+    if(provider.status != ConnectionStatus.connected)
+    {
+      editCamps = true;
+    }
+    else
+    {
+      editCamps = provider.viewMode == ConnectionViewMode.editing
+               ? true
+               : false;
+    }
 
     return !isNotAndroid()
         ? Scaffold(
@@ -155,7 +169,7 @@ class _conectionState extends State<conection> {
                                     .of(context)
                                     .data_base,
                                 controllerCamp: namebd,
-                                campEdit: false,
+                                campEdit: editCamps,
                               ),
                             ),
                           ),
@@ -171,7 +185,7 @@ class _conectionState extends State<conection> {
                                         .of(context)
                                         .host,
                                     controllerCamp: hostbd,
-                                    campEdit: false,
+                                    campEdit: editCamps,
                                   ),
                                 ),
                                 Expanded(
@@ -181,7 +195,7 @@ class _conectionState extends State<conection> {
                                         .of(context)
                                         .port,
                                     controllerCamp: portbd,
-                                    campEdit: false,
+                                    campEdit: editCamps,
                                   ),
                                 ),
                               ]
@@ -198,7 +212,7 @@ class _conectionState extends State<conection> {
                                         .of(context)
                                         .user,
                                     controllerCamp: userbd,
-                                    campEdit: false,
+                                    campEdit: editCamps,
                                   ),
 
                                 ),
@@ -209,7 +223,7 @@ class _conectionState extends State<conection> {
                                         .of(context)
                                         .password,
                                     controllerCamp: passbd,
-                                    campEdit: false,
+                                    campEdit: editCamps,
                                   ),
                                 ),
                               ]),
