@@ -100,42 +100,24 @@ Future<String> deleteDB(BuildContext context, String nameBD) async {
 Future<String> editDB(BuildContext context, String nameBD, String nameBDnew) async {
 
   String err="";
-  var showTablesVar = await executeQuery.query('SHOW TABLES');
-  String sTablesLine = showTablesVar.toString();
-  String tmp= sTablesLine.substring(1,sTablesLine.length-1);
-
-  List<String> allLine = tmp.split(":");
-  List<String> nameTables = [];
-
-  for(int i = 0; i < allLine.length; i++)
-  {
-    if(i%2 == 0)
-    {
-      List<String> allLine2 =allLine[i].split("}");
-      nameTables.add(allLine2[0]);
-    }
-
-  }
-  nameTables.removeAt(0);
 
   try {
-
+    var results = await executeQuery.query('SHOW TABLES');
     await executeQuery.query('CREATE DATABASE $nameBDnew');
+    for (final row in results) {
+      final nameTable = row[0].toString();
+        await executeQuery.query(
+            'RENAME TABLE $nameBD.$nameTable TO $nameBDnew.$nameTable');
+      }
 
-    for(int i = 0; i < nameTables.length; i++)
-    {
-      String nameTable = nameTables[i];
-      await executeQuery.query('RENAME TABLE $nameBD.$nameTable TO $nameBDnew.$nameTable');
-    }
+      await executeQuery.query('DROP DATABASE $nameBD');
 
-    await executeQuery.query('DROP DATABASE $nameBD');
-
-  }catch(SQLException){
+  }catch(e){
 
     err = S.of(context).error_modifying_the_database_name;
     error(context, err);
+  } finally {
+    await executeQuery.close();
   }
-
-
   return err;
 }
