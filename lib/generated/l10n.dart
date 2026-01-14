@@ -1386,6 +1386,16 @@ class S {
     );
   }
 
+  /// `Debes seleccionar una conexion`
+  String get You_must_select_a_connection {
+    return Intl.message(
+      'Debes seleccionar una conexion',
+      name: 'You_must_select_a_connection',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `El correo electrónico se ha enviado correctamente`
   String get the_mail_has_been_successfully_sent {
     return Intl.message(

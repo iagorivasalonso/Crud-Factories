@@ -192,6 +192,7 @@
   "there_is_no_shipping_selected": "No hay ningún envío seleccionado",
   "your_mail_is_invalid": "Tu correo electrónico no es válido",
   "You_must_select_a_correct_list": "Debes seleccionar una lista correcta",
+  "You_must_select_a_connection": "Debes seleccionar una conexion",
   "the_mail_has_been_successfully_sent": "El correo electrónico se ha enviado correctamente",
   "there_is_no_mails_para_send": "No hay correos electrónicos para enviar",
   "The_recipient_is_not_a_valid_mail": "El destinatario no es un correo electrónico válido",

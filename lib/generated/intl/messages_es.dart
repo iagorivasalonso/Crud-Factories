@@ -55,6 +55,9 @@ class MessageLookup extends MessageLookupByLibrary {
         MessageLookupByLibrary.simpleMessage(
           "No puede dejar el campo vacío. ¿Desea continuar?",
         ),
+    "You_must_select_a_connection": MessageLookupByLibrary.simpleMessage(
+      "Debes seleccionar una conexion",
+    ),
     "You_must_select_a_correct_list": MessageLookupByLibrary.simpleMessage(
       "Debes seleccionar una lista correcta",
     ),

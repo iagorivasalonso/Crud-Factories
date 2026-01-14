@@ -5,6 +5,7 @@ import 'package:fluent_ui/fluent_ui.dart';
 import 'package:http/http.dart' as http show post;
 import '../../Alertdialogs/confirm.dart';
 import '../../Alertdialogs/error.dart';
+import '../../generated/l10n.dart';
 
 
 
@@ -15,7 +16,7 @@ class DbApi {
   static Future<void> actionApi(BuildContext context, String action, Conection? connection) async {
 
     if (connection == null) {
-      error(context, "Debes seleccionar una conexión");
+      error(context, S.of(context).You_must_select_a_connection);
       return;
     }
 
