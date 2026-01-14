@@ -156,8 +156,6 @@ class ConectionProvider extends ChangeNotifier {
         return 'La conexión ya existe';
       }
 
-      cNew.id = conections.isNotEmpty ? createId(conections.last.id) : "1";
-
       return await _withConnection(cNew, (conn) async {
         final err = await createDB(context, cNew.database, conn);
         if (err.isNotEmpty) return err;
