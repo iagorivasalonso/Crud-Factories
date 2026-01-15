@@ -47,7 +47,7 @@ class _conectionState extends State<conection> {
   final userbd = TextEditingController();
   final passbd = TextEditingController();
 
-  Conection? _last;
+
 
 
   @override
@@ -56,14 +56,12 @@ class _conectionState extends State<conection> {
 
     final provider = context.read<ConectionProvider>();
 
-    if (provider.selected != null && provider.selected != _last) {
-      _last = provider.selected;
-
-      namebd.text = _last!.database;
-      hostbd.text = _last!.host;
-      portbd.text = _last!.port;
-      userbd.text = _last!.user;
-      passbd.text = _last!.password;
+    if (provider.selected != null) {
+      namebd.text = provider.selected!.database;
+      hostbd.text = provider.selected!.host;
+      portbd.text = provider.selected!.port;
+      userbd.text = provider.selected!.user;
+      passbd.text = provider.selected!.password;
     }
   }
   @override
@@ -147,7 +145,7 @@ class _conectionState extends State<conection> {
                                 child: materialButton(
                                   nameAction: provider.actionEditLabel(context),
                                   function: ()  {
-                                       final ok = provider.toggleEditMode(provider);
+                                       final ok = provider.toggleEditMode();
                                        if(!ok)
                                        {
                                            String message = S.of(context).not_connected_to_any_database;
@@ -287,7 +285,7 @@ class _conectionState extends State<conection> {
   void _handleAction2(BuildContext context,ConectionProvider provider) {
 
     if (provider.viewMode == ConnectionViewMode.normal) {
-      _undoConex();
+      _deleteConex(context, provider);
     } else {
       _deleteConex(context, provider);
     }
@@ -365,7 +363,7 @@ class _conectionState extends State<conection> {
       password: passbd.text,
     );
 
-    final err = await provider.update(context, old, updated);
+   final err = await provider.update(context, old, updated);
 
   }
 
@@ -373,21 +371,10 @@ class _conectionState extends State<conection> {
   Future<void>_deleteConex(BuildContext context, ConectionProvider provider) async {
 
     final toDelete = provider.selected;
+    print(toDelete);
     if (toDelete == null) return;
-    
-    
+
     final err = await provider.delete(context, toDelete);
-  }
-
-  void _undoConex() {
-
-    namebd.text = _last!.database;
-    hostbd.text = _last!.host;
-    portbd.text = _last!.port;
-    userbd.text = _last!.user;
-    passbd.text = _last!.password;
 
   }
-
-
 }
