@@ -13,7 +13,7 @@ class DbApi {
   static const baseUrl = 'http://localhost:3000';
 
 
-  static Future<void> actionApi(BuildContext context, String action, Conection? connection) async {
+  static Future<void> actionApi(BuildContext context, String action, Conection? connection, [Conection? old]) async {
 
     if (connection == null) {
       error(context, S.of(context).You_must_select_a_connection);
@@ -28,6 +28,7 @@ class DbApi {
         'user': connection.user,
         'password': connection.password,
         'database': connection.database,
+        if (action == 'update' && old != null) 'oldDatabase': old.database,
       };
 
       final res = await http.post(
