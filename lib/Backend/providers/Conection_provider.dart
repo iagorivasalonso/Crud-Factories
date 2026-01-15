@@ -1,14 +1,14 @@
 import 'package:crud_factories/Backend/CSV/exportConections.dart';
 import 'package:crud_factories/Backend/Global/list.dart';
 import 'package:crud_factories/Backend/Global/variables.dart';
+import 'package:crud_factories/Backend/SQL/DbApi.dart';
 import 'package:crud_factories/Backend/SQL/manageSQl.dart';
 import 'package:crud_factories/Objects/Conection.dart';
 import 'package:fluent_ui/fluent_ui.dart';
+import 'package:flutter/foundation.dart';
 import 'package:mysql1/mysql1.dart';
-
 import '../../Alertdialogs/confirm.dart';
 import '../../Alertdialogs/error.dart';
-import '../../Functions/createId.dart';
 import '../../generated/l10n.dart';
 
 enum ConnectionStatus {
@@ -25,14 +25,18 @@ enum ConnectionViewMode {
 class ConectionProvider extends ChangeNotifier {
 
   Conection? selected;
+  bool _connected = false;
+  Conection? _previous;
+
+  Conection? get previous => _previous;
 
    ConnectionViewMode viewMode = ConnectionViewMode.normal;
 
   ConnectionStatus get status {
     if(selected == null) return ConnectionStatus.none;
-    return executeQuery == null
-        ? ConnectionStatus.disconnected
-        : ConnectionStatus.connected;
+    return _connected
+        ? ConnectionStatus.connected
+        : ConnectionStatus.disconnected;
   }
 
   String editButtonLabel(BuildContext context) {
@@ -86,46 +90,88 @@ class ConectionProvider extends ChangeNotifier {
   Future<void> connect (BuildContext context) async {
     if (selected == null) return;
 
-    final settings = ConnectionSettings(
-      host: selected!.host,
-      port: int.parse(selected!.port),
-      user: selected!.user,
-      password: selected!.password,
-      db: selected!.database,
-    );
+
 
     try {
-      executeQuery = await MySqlConnection.connect(settings);
+      if(!kIsWeb)
+      {
+        final settings = ConnectionSettings(
+          host: selected!.host,
+          port: int.parse(selected!.port),
+          user: selected!.user,
+          password: selected!.password,
+          db: selected!.database,
+        );
+
+        executeQuery = await MySqlConnection.connect(settings);
+      }
+      else
+      {
+        await DbApi.actionApi(context, 'connect', selected!);
+      }
+      final err = await createTables(context);
+      if (err.isNotEmpty) {
+        return; // no marcamos conexión válida
+      }
+
+      _connected = true;
       BaseDateSelected = selected!.database;
+      selectedDb = selected!.database;
 
-      selectedDb =  selected!.database;
-
-      confirm(context, '${S
-          .of(context)
-          .is_connected_to} ${selected!.database}');
       notifyListeners();
+
     } catch (e) {
-      error(context, S
-          .of(context)
-          .sql_error);
+      if(context.mounted)
+      error(context, S.of(context).sql_error);
     }
   }
 
-  bool toggleEditMode(ConectionProvider provider) {
+  bool toggleEditMode() {
 
-    if (executeQuery == null) return false;
+    if (status != ConnectionStatus.connected || selected == null) {
+      return false;
+    }
 
-    viewMode =
-    viewMode == ConnectionViewMode.editing
-        ? ConnectionViewMode.normal
-        : ConnectionViewMode.editing;
+    if (viewMode == ConnectionViewMode.normal) {
+      // Guardamos copia para undo
+      _previous = Conection(
+        id: selected!.id,
+        database: selected!.database,
+        host: selected!.host,
+        port: selected!.port,
+        user: selected!.user,
+        password: selected!.password,
+      );
+
+      viewMode = ConnectionViewMode.editing;
+    } else {
+      viewMode = ConnectionViewMode.normal;
+    }
 
     notifyListeners();
     return true;
   }
+  void undoEdit() {
+    if (_previous == null) return;
+
+    selected = Conection(
+      id: _previous!.id,
+      database: _previous!.database,
+      host: _previous!.host,
+      port: _previous!.port,
+      user: _previous!.user,
+      password: _previous!.password,
+    );
+
+    _previous = null;
+    viewMode = ConnectionViewMode.normal;
+
+    notifyListeners();
+  }
     Future<void>disconnet(BuildContext context) async {
 
       await executeQuery?.close();
+      _connected = false;
       selectedDb='';
       executeQuery = null;
 
@@ -151,20 +197,31 @@ class ConectionProvider extends ChangeNotifier {
   Map<String, Conection> get _conectionsMap => {for (var c in conections) c.database: c};
 
   Future<String?> create(BuildContext context, Conection cNew) async {
-
+print("f3");
       if (_conectionsMap.containsKey(cNew.database)) {
         return 'La conexión ya existe';
       }
 
-      return await _withConnection(cNew, (conn) async {
-        final err = await createDB(context, cNew.database, conn);
-        if (err.isNotEmpty) return err;
+      if(kIsWeb)
+      {
+        await DbApi.actionApi(context, 'create',cNew);
+      }
+      else
+      {
+        String? err;
 
+        err= await _withConnection(cNew, (conn) async {
+          final e = await createDB(context, cNew.database, conn);
+          return e.isNotEmpty ? e : null;
+        });
+        print(err);
+        if (err != null) return err;
+      }
+
+print("preparada para guardar${cNew}");
         conections.add(cNew);
         _updateList(conections, newSelected: cNew);
         return null;
-
-      });
     }
 
   Future<String?> update(BuildContext context,Conection old, Conection cNew) async {
@@ -173,16 +230,23 @@ class ConectionProvider extends ChangeNotifier {
       return 'no se encontro la conecxion';
     }
 
-    return await _withConnection(cNew, (conn) async {
-      final err = await editDB(context, old.database, cNew.database);
-      if (err.isNotEmpty) return err;
-
+    if(kIsWeb)
+    {
+      await DbApi.actionApi(context, 'update',old, cNew);
+    }
+    else
+    {
+      await _withConnection(cNew, (conn) async {
+        final err = await editDB(context, old.database, cNew.database);
+        if (err.isNotEmpty) return err;
+      });
+    }
       final index = conections.indexWhere((c) => c.database == old.database);
       conections[index] = cNew;
       _updateList(conections, newSelected: cNew);
       return null;
 
-    });
+
   }
 
 
@@ -192,21 +256,32 @@ class ConectionProvider extends ChangeNotifier {
       return 'no se encontro la conecxion';
     }
 
-    return await _withConnection(toDelete, (conn) async {
-      final err = await deleteDB(context, toDelete.database);
-      if (err.isNotEmpty) return err;
+    if(kIsWeb)
+    {
+      await DbApi.actionApi(context, 'delete', toDelete);
+    }
+    else
+    {
+      await _withConnection(toDelete, (conn) async {
+        final err = await deleteDB(context, toDelete.database);
+        if (err.isNotEmpty) return err;
+      });
+    }
+
 
       conections.removeWhere((c) => c.database == toDelete.database);
       _updateList(conections, newSelected: null);
       return null;
 
-    });
   }
 
 
 
   Future<T>_withConnection<T>(Conection c, Future<T> Function(MySqlConnection conn) action) async {
 
+    if(kIsWeb) {
+      return await action(null as MySqlConnection);
+    }
     MySqlConnection? conn;
 
     try {
@@ -224,7 +299,7 @@ class ConectionProvider extends ChangeNotifier {
     }
   }
   Future<MySqlConnection> connectSQL(Conection cNew) async {
-    
+
     final settings = ConnectionSettings(
       host: cNew.host,
       port: int.parse(cNew.port),
