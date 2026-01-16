@@ -272,23 +272,21 @@ class _conectionState extends State<conection> {
 
     final actionLabel = provider.action1Label(context);
 
-    if (actionLabel == S.of(context).newFemale) {
-      _createConex(context, provider);
-    } else if (provider.viewMode == ConnectionViewMode.normal) {
-      _actionConnect(context, provider);
-    } else {
-      _editConex(context, provider);
-    }
+    actionLabel == S.of(context).newFemale
+      ? _createConex(context, provider)
+        : provider.viewMode == ConnectionViewMode.normal
+          ? _deleteConex(context, provider)
+          : _editConex(context, provider);
+
 
   }
 
   void _handleAction2(BuildContext context,ConectionProvider provider) {
 
-    if (provider.viewMode == ConnectionViewMode.normal) {
-      _deleteConex(context, provider);
-    } else {
-      _deleteConex(context, provider);
-    }
+    provider.viewMode == ConnectionViewMode.normal
+      ? _deleteConex(context, provider)
+      : _deleteConex(context, provider);
+
 
   }
 
@@ -371,7 +369,6 @@ class _conectionState extends State<conection> {
   Future<void>_deleteConex(BuildContext context, ConectionProvider provider) async {
 
     final toDelete = provider.selected;
-    print(toDelete);
     if (toDelete == null) return;
 
     final err = await provider.delete(context, toDelete);
