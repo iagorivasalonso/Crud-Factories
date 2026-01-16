@@ -334,7 +334,7 @@ class _conectionState extends State<conection> {
     userbd.text = conect.user;
     passbd.text = conect.password;
 
-    bool err = await provider.selectConnection(conect, context);
+    final err = await provider.selectConnection(conect, context);
   }
 
   Future<void>_createConex(BuildContext context, ConectionProvider provider) async{
@@ -347,7 +347,7 @@ class _conectionState extends State<conection> {
         user: userbd.text,
         password: passbd.text);
 
-     bool exist = await provider.create( cNew);
+     final exist = await provider.create( cNew);
   }
 
   Future<void>_editConex(BuildContext context, ConectionProvider provider) async {
