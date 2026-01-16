@@ -976,6 +976,26 @@ class S {
     );
   }
 
+  /// `No se encontró la conexión`
+  String get sqlConnectionNotFound {
+    return Intl.message(
+      'No se encontró la conexión',
+      name: 'sqlConnectionNotFound',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `La conexión ya existe`
+  String get sqlConnectionAlreadyExists {
+    return Intl.message(
+      'La conexión ya existe',
+      name: 'sqlConnectionAlreadyExists',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `La conexión se ha eliminado correctamente`
   String get connection_has_been_successfully_deleted {
     return Intl.message(

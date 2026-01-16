@@ -370,6 +370,12 @@ class MessageLookup extends MessageLookupByLibrary {
     "shipments": MessageLookupByLibrary.simpleMessage("Envíos"),
     "source": MessageLookupByLibrary.simpleMessage("Fuente"),
     "sql": MessageLookupByLibrary.simpleMessage("SQL"),
+    "sqlConnectionAlreadyExists": MessageLookupByLibrary.simpleMessage(
+      "La conexión ya existe",
+    ),
+    "sqlConnectionNotFound": MessageLookupByLibrary.simpleMessage(
+      "No se encontró la conexión",
+    ),
     "sql_error": MessageLookupByLibrary.simpleMessage("Error SQL"),
     "state": MessageLookupByLibrary.simpleMessage("Estado"),
     "street": MessageLookupByLibrary.simpleMessage("Calle"),

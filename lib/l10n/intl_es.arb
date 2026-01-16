@@ -135,6 +135,8 @@
   "error_modifying_the_database_name": "Error al modificar el el nombre de la base de datos",
   "no_have_registered_mails": "No tienes correos electrónicos registrados",
   "has_no_server_connected": "No tienes ningún servidor conectado",
+  "sqlConnectionNotFound": "No se encontró la conexión",
+  "sqlConnectionAlreadyExists": "La conexión ya existe",
   "connection_has_been_successfully_deleted": "La conexión se ha eliminado correctamente",
   "connection_cannot_be_established": "No se puede establecer la conexión",
   "route_file_cannot_be_read": "No se puede leer el archivo de rutas",

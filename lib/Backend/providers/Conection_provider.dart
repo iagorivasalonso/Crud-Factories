@@ -91,7 +91,6 @@ class ConectionProvider extends ChangeNotifier {
     if (selected == null) return;
 
 
-
     try {
       if(!kIsWeb)
       {
@@ -199,7 +198,7 @@ class ConectionProvider extends ChangeNotifier {
   Future<String?> create(BuildContext context, Conection cNew) async {
 print("f3");
       if (_conectionsMap.containsKey(cNew.database)) {
-        return 'La conexión ya existe';
+        return S.of(context).sqlConnectionAlreadyExists;
       }
 
       if(kIsWeb)
@@ -210,7 +209,7 @@ print("f3");
       {
         String? err;
 
-        err= await _withConnection(cNew, (conn) async {
+        err= await _withConnection(context,cNew, (conn) async {
           final e = await createDB(context, cNew.database, conn);
           return e.isNotEmpty ? e : null;
         });
@@ -218,7 +217,6 @@ print("f3");
         if (err != null) return err;
       }
 
-print("preparada para guardar${cNew}");
         conections.add(cNew);
         _updateList(conections, newSelected: cNew);
         return null;
@@ -227,7 +225,7 @@ print("preparada para guardar${cNew}");
   Future<String?> update(BuildContext context,Conection old, Conection cNew) async {
 
     if (!_conectionsMap.containsKey(old.database)) {
-      return 'no se encontro la conecxion';
+      return S.of(context).sqlConnectionNotFound;;
     }
 
     if(kIsWeb)
@@ -236,7 +234,7 @@ print("preparada para guardar${cNew}");
     }
     else
     {
-      await _withConnection(cNew, (conn) async {
+      await _withConnection(context,cNew, (conn) async {
         final err = await editDB(context, old.database, cNew.database);
         if (err.isNotEmpty) return err;
       });
@@ -253,7 +251,7 @@ print("preparada para guardar${cNew}");
   Future<String?> delete(BuildContext context, Conection toDelete,  {bool deleteSQL = false}) async {
 
     if (!_conectionsMap.containsKey(toDelete.database)) {
-      return 'no se encontro la conecxion';
+      return S.of(context).sqlConnectionNotFound;;
     }
 
     if(kIsWeb)
@@ -262,7 +260,7 @@ print("preparada para guardar${cNew}");
     }
     else
     {
-      await _withConnection(toDelete, (conn) async {
+      await _withConnection(context,toDelete, (conn) async {
         final err = await deleteDB(context, toDelete.database);
         if (err.isNotEmpty) return err;
       });
@@ -277,7 +275,7 @@ print("preparada para guardar${cNew}");
 
 
 
-  Future<T>_withConnection<T>(Conection c, Future<T> Function(MySqlConnection conn) action) async {
+  Future<T>_withConnection<T>(BuildContext context,Conection c, Future<T> Function(MySqlConnection conn) action) async {
 
     if(kIsWeb) {
       return await action(null as MySqlConnection);
@@ -288,9 +286,8 @@ print("preparada para guardar${cNew}");
       conn = await connectSQL(c);
       return await action(conn);
     } catch (e) {
-      return Future.value('Error de conexión SQL: $e' as T);
+      return Future.value('${S.of(context).sql_error} $e' as T);
     } finally {
-
       try {
         await conn?.close();
       } catch (_) {
