@@ -13,10 +13,10 @@ class DbApi {
   static const baseUrl = 'http://localhost:3000';
 
 
-  static Future<void> actionApi(BuildContext context, String action, Conection? connection, [Conection? old]) async {
+  static Future<void> actionApi(String action, Conection? connection, [Conection? old]) async {
 
     if (connection == null) {
-      error(context, S.of(context).You_must_select_a_connection);
+    //  error(context, S.of(context).You_must_select_a_connection);
       return;
     }
 
@@ -42,9 +42,9 @@ print(res.body);
         throw data['error'];
       }
 
-      confirm(context, data['message']);
+     // confirm(context, data['message']);
     } catch (e) {
-      error(context, e.toString());
+     // error(context, e.toString());
     }
   }
 }

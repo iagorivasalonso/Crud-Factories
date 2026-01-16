@@ -276,7 +276,7 @@ class _conectionState extends State<conection> {
       ? _createConex(context, provider)
         : provider.viewMode == ConnectionViewMode.normal
           ? _deleteConex(context, provider)
-          : _editConex(context, provider);
+          : _actionConnect(context, provider);
 
 
   }
@@ -285,7 +285,7 @@ class _conectionState extends State<conection> {
 
     provider.viewMode == ConnectionViewMode.normal
       ? _deleteConex(context, provider)
-      : _deleteConex(context, provider);
+      : _editConex(context, provider);
 
 
   }
@@ -293,8 +293,10 @@ class _conectionState extends State<conection> {
 
   Future<void> _actionConnect(BuildContext context, ConectionProvider provider) async {
 
+   bool err;
     if (provider.status == ConnectionStatus.connected) {
-      provider.disconnet(context);
+
+      bool err = await provider.disconnet();
 
       sectors.clear();
       allFactories.clear();
@@ -303,8 +305,9 @@ class _conectionState extends State<conection> {
       allLines.clear();
 
       chargueDataCSV(context);
+     // CARGAR TABLAS
     } else {
-      await provider.connect(context);
+      bool err = await provider.connect();
 
       sectors.clear();
       allFactories.clear();
@@ -331,7 +334,7 @@ class _conectionState extends State<conection> {
     userbd.text = conect.user;
     passbd.text = conect.password;
 
-    await provider.selectConnection(conect, context);
+    bool err = await provider.selectConnection(conect, context);
   }
 
   Future<void>_createConex(BuildContext context, ConectionProvider provider) async{
@@ -344,7 +347,7 @@ class _conectionState extends State<conection> {
         user: userbd.text,
         password: passbd.text);
 
-     await provider.create(context, cNew);
+     bool exist = await provider.create( cNew);
   }
 
   Future<void>_editConex(BuildContext context, ConectionProvider provider) async {
@@ -361,7 +364,7 @@ class _conectionState extends State<conection> {
       password: passbd.text,
     );
 
-   final err = await provider.update(context, old, updated);
+   final err = await provider.update(old, updated);
 
   }
 
@@ -371,7 +374,7 @@ class _conectionState extends State<conection> {
     final toDelete = provider.selected;
     if (toDelete == null) return;
 
-    final err = await provider.delete(context, toDelete);
+    final err = await provider.delete(toDelete);
 
   }
 }

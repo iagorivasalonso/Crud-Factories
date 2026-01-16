@@ -79,16 +79,16 @@ class ConectionProvider extends ChangeNotifier {
   }
 
 
-  Future<void> selectConnection(Conection? c, BuildContext context) async {
+  Future<void> selectConnection(Conection? c) async {
     if (status == ConnectionStatus.connected) {
-      await disconnet(context);
+      await disconnet();
     }
     selected = c;
     notifyListeners();
   }
 
-  Future<void> connect (BuildContext context) async {
-    if (selected == null) return;
+  Future<bool> connect () async {
+    if (selected == null) return false;
 
 
     try {
@@ -106,12 +106,9 @@ class ConectionProvider extends ChangeNotifier {
       }
       else
       {
-        await DbApi.actionApi(context, 'connect', selected!);
+        await DbApi.actionApi('connect', selected!);
       }
-      final err = await createTables(context);
-      if (err.isNotEmpty) {
-        return; // no marcamos conexión válida
-      }
+
 
       _connected = true;
       BaseDateSelected = selected!.database;
@@ -120,9 +117,9 @@ class ConectionProvider extends ChangeNotifier {
       notifyListeners();
 
     } catch (e) {
-      if(context.mounted)
-      error(context, S.of(context).sql_error);
+
     }
+      return _connected;
   }
 
   bool toggleEditMode() {
@@ -167,7 +164,7 @@ class ConectionProvider extends ChangeNotifier {
 
     notifyListeners();
   }
-    Future<void>disconnet(BuildContext context) async {
+    Future<bool>disconnet() async {
 
       await executeQuery?.close();
       _connected = false;
@@ -175,10 +172,7 @@ class ConectionProvider extends ChangeNotifier {
       executeQuery = null;
 
       notifyListeners();
-
-      if (context.mounted) {
-        confirm(context, S.of(context).has_closed_the_connection);
-      }
+     return _connected;
     }
 
     void clearSelection() {
@@ -195,87 +189,98 @@ class ConectionProvider extends ChangeNotifier {
 
   Map<String, Conection> get _conectionsMap => {for (var c in conections) c.database: c};
 
-  Future<String?> create(BuildContext context, Conection cNew) async {
-print("f3");
-      if (_conectionsMap.containsKey(cNew.database)) {
-        return S.of(context).sqlConnectionAlreadyExists;
-      }
+  Future<bool> create(Conection cNew) async {
 
-      if(kIsWeb)
-      {
-        await DbApi.actionApi(context, 'create',cNew);
+    bool exist = false;
+      if (_conectionsMap.containsKey(cNew.database)) {
+        exist =true;
       }
       else
       {
-        String? err;
+        if(kIsWeb)
+        {
+          await DbApi.actionApi( 'create',cNew);
+        }
+        else
+        {
+          String? err;
+          err= await _withConnection(cNew, (conn) async {
+            final err = await createDB( cNew.database, conn);
+            exist = err;
+          });
 
-        err= await _withConnection(context,cNew, (conn) async {
-          final e = await createDB(context, cNew.database, conn);
-          return e.isNotEmpty ? e : null;
-        });
-        print(err);
-        if (err != null) return err;
-      }
+        }
 
         conections.add(cNew);
         _updateList(conections, newSelected: cNew);
-        return null;
+
+      }
+
+    return exist;
+
     }
 
-  Future<String?> update(BuildContext context,Conection old, Conection cNew) async {
+  Future<bool> update(Conection old, Conection cNew) async {
+
+    bool error = false;
 
     if (!_conectionsMap.containsKey(old.database)) {
-      return S.of(context).sqlConnectionNotFound;;
-    }
-
-    if(kIsWeb)
-    {
-      await DbApi.actionApi(context, 'update',old, cNew);
+       error = true;
     }
     else
     {
-      await _withConnection(context,cNew, (conn) async {
-        final err = await editDB(context, old.database, cNew.database);
-        if (err.isNotEmpty) return err;
-      });
-    }
+      if(kIsWeb)
+      {
+        await DbApi.actionApi( 'update',old, cNew);
+      }
+      else
+      {
+        await _withConnection(cNew, (conn) async {
+          final err = await editDB(old.database, cNew.database);
+          error = err;
+        });
+      }
       final index = conections.indexWhere((c) => c.database == old.database);
       conections[index] = cNew;
       _updateList(conections, newSelected: cNew);
-      return null;
 
-
+    }
+    return error;
   }
 
 
-  Future<String?> delete(BuildContext context, Conection toDelete,  {bool deleteSQL = false}) async {
+  Future<bool> delete(Conection toDelete,  {bool deleteSQL = false}) async {
+
+    bool error = false;
 
     if (!_conectionsMap.containsKey(toDelete.database)) {
-      return S.of(context).sqlConnectionNotFound;;
-    }
-
-    if(kIsWeb)
-    {
-      await DbApi.actionApi(context, 'delete', toDelete);
+      error = true;
     }
     else
     {
-      await _withConnection(context,toDelete, (conn) async {
-        final err = await deleteDB(context, toDelete.database);
-        if (err.isNotEmpty) return err;
-      });
-    }
+      if(kIsWeb)
+      {
+        await DbApi.actionApi( 'delete', toDelete);
+      }
+      else
+      {
+        await _withConnection(toDelete, (conn) async {
+          final err = await deleteDB(toDelete.database);
+          if (err==true) return err;
+        });
+      }
 
 
       conections.removeWhere((c) => c.database == toDelete.database);
       _updateList(conections, newSelected: null);
-      return null;
-
+      return false;
+    }
+    return error;
   }
 
 
 
-  Future<T>_withConnection<T>(BuildContext context,Conection c, Future<T> Function(MySqlConnection conn) action) async {
+  Future<T>_withConnection<T>(Conection c, Future<T> Function(MySqlConnection conn) action) async {
 
     if(kIsWeb) {
       return await action(null as MySqlConnection);
@@ -286,7 +291,7 @@ print("f3");
       conn = await connectSQL(c);
       return await action(conn);
     } catch (e) {
-      return Future.value('${S.of(context).sql_error} $e' as T);
+      rethrow;
     } finally {
       try {
         await conn?.close();

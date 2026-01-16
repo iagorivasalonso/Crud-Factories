@@ -4,25 +4,25 @@ import 'package:crud_factories/generated/l10n.dart';
 import 'package:flutter/material.dart';
 
 
-Future<String> createDB(BuildContext context, String nameBD, conn) async {
+Future<bool> createDB(String nameBD, conn) async {
 
-  String err ="";
+  bool err=false;
 
   try {
     await conn.query('CREATE DATABASE $nameBD');
 
   }catch(SQLException){
-
-    err = S.of(context).could_not_create_database;
-    error(context, err);
+      err=true;
+  //  err = S.of(context).could_not_create_database;
+   // error(context, err);
   }
 
   return err;
 }
 
-Future<String> createTables(BuildContext context) async {
+Future<bool> createTables() async {
 
-  String err ="";
+  bool err=false;
 
   try {
     await executeQuery.query('CREATE TABLE IF NOT EXISTS sectors '
@@ -72,34 +72,30 @@ Future<String> createTables(BuildContext context) async {
     );
 
   }catch(SQLException){
-
-    err = S.of(context).database_tables_could_not_be_created;
-    error(context, err);
+    err = true;
   }
 
   return err;
 }
 
-Future<String> deleteDB(BuildContext context, String nameBD) async {
+Future<bool> deleteDB(String nameBD) async {
 
-  String err="";
+  bool err= false;
 
   try {
 
     await executeQuery.query('DROP DATABASE $nameBD');
 
   }catch(SQLException){
-
-    err = S.of(context).could_not_delete_database;
-    error(context, err);
+        err=true;
   }
 
   return err;
 }
 
-Future<String> editDB(BuildContext context, String nameBD, String nameBDnew) async {
+Future<bool> editDB(String nameBD, String nameBDnew) async {
 
-  String err="";
+  bool err=false;
 
   try {
     var results = await executeQuery.query('SHOW TABLES');
@@ -113,9 +109,7 @@ Future<String> editDB(BuildContext context, String nameBD, String nameBDnew) asy
       await executeQuery.query('DROP DATABASE $nameBD');
 
   }catch(e){
-
-    err = S.of(context).error_modifying_the_database_name;
-    error(context, err);
+    err = true;
   } finally {
     await executeQuery.close();
   }
