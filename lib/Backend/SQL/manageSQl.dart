@@ -1,23 +1,16 @@
-import 'package:crud_factories/Alertdialogs/error.dart';
 import 'package:crud_factories/Backend/Global/variables.dart';
-import 'package:crud_factories/generated/l10n.dart';
-import 'package:flutter/material.dart';
+
 
 
 Future<bool> createDB(String nameBD, conn) async {
 
-  bool err=false;
-
   try {
     await conn.query('CREATE DATABASE $nameBD');
-
+    await conn.query('USE `$nameBD`');
+          return true;
   }catch(SQLException){
-      err=true;
-  //  err = S.of(context).could_not_create_database;
-   // error(context, err);
+    return false;
   }
-
-  return err;
 }
 
 Future<bool> createTables() async {
