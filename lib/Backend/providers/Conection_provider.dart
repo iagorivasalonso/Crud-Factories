@@ -87,8 +87,8 @@ class ConectionProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<bool> connect () async {
-    if (selected == null) return false;
+  Future<String> connect (BuildContext context) async {
+    if (selected == null) return S.of(context).not_connected_to_any_database;
 
 
     try {
@@ -115,11 +115,32 @@ class ConectionProvider extends ChangeNotifier {
       selectedDb = selected!.database;
 
       notifyListeners();
-
+      return BaseDateSelected;
     } catch (e) {
 
+      _connected = false;
+      executeQuery = null;
+
+      final errorMsg = e.toString();
+      String type = S.of(context).sql_error;
+
+      if (errorMsg.contains("Unknown database")) {
+        type = "${S.of(context).there_is_no_database_with_that_name} ${selected?.database}";
+      }
+      else if (errorMsg.contains("is not allowed to connect to this MySQL server")) {
+        type = S.of(context).could_not_connect_with_the_server;
+      }
+      else if (errorMsg.contains("SocketException")) {
+        type = S.of(context).the_port_is_not_correct;
+      }
+      else if (errorMsg.contains("Access denied for user")) {
+        type = S.of(context).the_user_or_password_are_incorrect;
+      }
+
+   //  errorFiler.add(type)
+      return type;
     }
-      return _connected;
+
   }
 
   bool toggleEditMode() {
