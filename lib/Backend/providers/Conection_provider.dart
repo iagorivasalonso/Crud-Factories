@@ -224,8 +224,8 @@ class ConectionProvider extends ChangeNotifier {
         }
         else
         {
-          String? err;
-          err= await _withConnection(cNew, (conn) async {
+          String? create;
+          create= await _withConnection(cNew, (conn) async {
             final err = await createDB( cNew.database, conn);
             exist = err;
           });
