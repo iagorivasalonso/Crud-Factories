@@ -214,20 +214,27 @@ class ConectionProvider extends ChangeNotifier {
 
     bool exist = false;
       if (_conectionsMap.containsKey(cNew.database)) {
-        exist =true;
+        exist = true;
       }
       else
       {
         if(kIsWeb)
         {
           await DbApi.actionApi( 'create',cNew);
+
+          await createTables();
         }
         else
         {
           String? create;
-          create= await _withConnection(cNew, (conn) async {
+          create = await _withConnection(cNew, (conn) async {
             final err = await createDB( cNew.database, conn);
             exist = err;
+
+            if (!exist) {
+              // DESKTOP: crear tablas
+              exist = await createTables();
+            }
           });
 
         }
