@@ -61,15 +61,9 @@ class ConectionProvider extends ChangeNotifier {
   }
 
   String action2Label(BuildContext context) {
-
-    if(viewMode == ConnectionViewMode.editing)
-    {
-      return S.of(context).cancel;
-    }
-    else
-    {
-      return  S.of(context).delete;
-    }
+    return viewMode == ConnectionViewMode.editing
+        ? S.of(context).undo
+        : S.of(context).delete;
 
   }
 
@@ -200,7 +194,7 @@ class ConectionProvider extends ChangeNotifier {
   Future<String> create(Conection cNew) async {
 
     bool type_err = false;
-    String type ="";
+    String type =" ";
     try{
       if (_conectionsMap.containsKey(cNew.database)) {
         type_err = true;
@@ -221,6 +215,7 @@ class ConectionProvider extends ChangeNotifier {
 
             if (!type_err) {
               type_err = await createTables();
+
             }
           });
 

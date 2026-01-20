@@ -1,4 +1,5 @@
 import 'package:adaptive_scrollbar/adaptive_scrollbar.dart';
+import 'package:crud_factories/Alertdialogs/confirmDelete.dart';
 import 'package:crud_factories/Alertdialogs/error.dart';
 import 'package:crud_factories/Alertdialogs/warning.dart';
 import 'package:crud_factories/Backend/Global/list.dart';
@@ -10,6 +11,7 @@ import 'package:crud_factories/Widgets/layoutVariant.dart';
 import 'package:crud_factories/generated/l10n.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import '../Alertdialogs/confirm.dart';
 import '../Backend/CSV/chargueDataCsv.dart';
 import '../Backend/SQL/importEmpleoye.dart';
 import '../Backend/SQL/importFactories.dart';
@@ -134,7 +136,7 @@ class _conectionState extends State<conection> {
                                         .newFemale,
                                     itemLabel: (Conection) =>
                                     Conection.database,
-                                    onChanged: (conectionChoose) => _onConectionChanged(context,conectionChoose,provider),
+                                    onChanged: (conectionChoose) =>  _onConectionChanged(conectionChoose,provider),
                                   ),
                                 ),
                               ),
@@ -275,56 +277,71 @@ class _conectionState extends State<conection> {
     actionLabel == S.of(context).newFemale
       ? _createConex(context, provider)
         : provider.viewMode == ConnectionViewMode.normal
-          ? _deleteConex(context, provider)
-          : _actionConnect(context, provider);
+          ?  _actionConnect(context, provider)
+          :  _editConex(context, provider);
 
 
   }
 
   void _handleAction2(BuildContext context,ConectionProvider provider) {
 
-    provider.viewMode == ConnectionViewMode.normal
-      ? _deleteConex(context, provider)
-      : _editConex(context, provider);
-
+    final actionLabel = provider.action2Label(context);
+    actionLabel== S.of(context).undo
+      ? didChangeDependencies()
+      : _deleteConex(context, provider);
 
   }
 
 
   Future<void> _actionConnect(BuildContext context, ConectionProvider provider) async {
 
-   bool err;
     if (provider.status == ConnectionStatus.connected) {
 
-      bool err = await provider.disconnet();
+      final err = await provider.disconnet();
 
-      sectors.clear();
-      allFactories.clear();
-      empleoyes.clear();
-      mails.clear();
-      allLines.clear();
+      if(err==false)
+      {
+        sectors.clear();
+        allFactories.clear();
+        empleoyes.clear();
+        mails.clear();
+        allLines.clear();
 
-      chargueDataCSV(context);
-     // CARGAR TABLAS
+        chargueDataCSV(context);
+
+        String action = S.of(context).has_closed_the_connection;
+        confirm(context, action);
+      }
+
     } else {
-      bool err = await provider.connect();
+      final err = await provider.connect(context);
+      if(err==selectedDb) //si no hay error ya pone la conex
+      {
+        sectors.clear();
+        allFactories.clear();
+        empleoyes.clear();
+        mails.clear();
+        allLines.clear();
+        // Esperamos a que las funciones de carga terminen
 
-      sectors.clear();
-      allFactories.clear();
-      empleoyes.clear();
-      mails.clear();
-      allLines.clear();
+        await sqlImportSetors();
+        await sqlImportFactories();
+        await sqlImportEmpleoyes();
+        await sqlImportMails();
 
-      // Esperamos a que las funciones de carga terminen
+        String action = "${S.of(context).is_connected_to}$selectedDb";
+        confirm(context, action);
+      }
+      else
+      {
+         error(context, err);
+      }
 
-      await sqlImportSetors();
-      await sqlImportFactories();
-      await sqlImportEmpleoyes();
-      await sqlImportMails();
     }
+
   }
 
-  Future<void> _onConectionChanged(BuildContext context, Conection? conectionChoose, provider) async {
+  Future<void> _onConectionChanged(Conection? conectionChoose, provider) async {
 
     Conection conect = conectionChoose!;
 
@@ -334,7 +351,7 @@ class _conectionState extends State<conection> {
     userbd.text = conect.user;
     passbd.text = conect.password;
 
-    final err = await provider.selectConnection(conect, context);
+    provider.selectConnection(conect);
   }
 
   Future<void>_createConex(BuildContext context, ConectionProvider provider) async{
@@ -347,7 +364,20 @@ class _conectionState extends State<conection> {
         user: userbd.text,
         password: passbd.text);
 
-     final exist = await provider.create( cNew);
+     final type = await provider.create(cNew);
+
+     String action ="";
+
+     if(type!=" ")
+     {
+       await error(context, type);
+     }
+     else
+     {
+       action=S.of(context).connection_has_been_successfully_created;
+       confirm(context, action);
+     }
+
   }
 
   Future<void>_editConex(BuildContext context, ConectionProvider provider) async {
@@ -366,15 +396,44 @@ class _conectionState extends State<conection> {
 
    final err = await provider.update(old, updated);
 
+    String action="";
+    if(err==true)
+    {
+      action = S.of(context).could_not_be_edited;
+      error(context, action);
+    }
+    else
+    {
+      action=S.of(context).connection_has_been_successfully_edited;
+      confirm(context, action);
+    }
+
   }
 
 
   Future<void>_deleteConex(BuildContext context, ConectionProvider provider) async {
 
-    final toDelete = provider.selected;
-    if (toDelete == null) return;
+    String message= "${S.of(context).the} ${S.of(context).connection}";
+    bool confirnDelete= await confirmDelete(context, message);
 
-    final err = await provider.delete(toDelete);
+    if(confirnDelete==true)
+    {
+      final toDelete = provider.selected;
+      if (toDelete == null) return;
 
+      final err = await provider.delete(toDelete);
+
+      String action="";
+      if(err==true)
+      {
+        action = S.of(context).could_not_be_deleted;
+        error(context, action);
+      }
+      else
+      {
+        action= S.of(context).connection_has_been_successfully_deleted;
+        confirm(context, action);
+      }
+    }
   }
 }
