@@ -7,7 +7,7 @@ Future<bool> error(BuildContext  context, String action, [format]) async {
 
   double heightAlert = 185.0 + (2 * 15.0);
   double dialogHeight = heightAlert.clamp(185.0, 400.0);
-print(action.length);
+
   bool? err = await showDialog(
       context: context,
       barrierDismissible: true,
