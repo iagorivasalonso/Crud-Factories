@@ -27,6 +27,7 @@ class ConectionProvider extends ChangeNotifier {
   Conection? selected;
   bool _connected = false;
   Conection? _previous;
+  BuildContext context = context1;
 
   Conection? get previous => _previous;
 
@@ -122,22 +123,8 @@ class ConectionProvider extends ChangeNotifier {
       executeQuery = null;
 
       final errorMsg = e.toString();
-      String type = S.of(context).sql_error;
+      String type = await controlsErrors(errorMsg);
 
-      if (errorMsg.contains("Unknown database")) {
-        type = "${S.of(context).there_is_no_database_with_that_name} ${selected?.database}";
-      }
-      else if (errorMsg.contains("is not allowed to connect to this MySQL server")) {
-        type = S.of(context).could_not_connect_with_the_server;
-      }
-      else if (errorMsg.contains("SocketException")) {
-        type = S.of(context).the_port_is_not_correct;
-      }
-      else if (errorMsg.contains("Access denied for user")) {
-        type = S.of(context).the_user_or_password_are_incorrect;
-      }
-
-   //  errorFiler.add(type)
       return type;
     }
 
@@ -210,11 +197,13 @@ class ConectionProvider extends ChangeNotifier {
 
   Map<String, Conection> get _conectionsMap => {for (var c in conections) c.database: c};
 
-  Future<bool> create(Conection cNew) async {
+  Future<String> create(Conection cNew) async {
 
-    bool exist = false;
+    bool type_err = false;
+    String type ="";
+    try{
       if (_conectionsMap.containsKey(cNew.database)) {
-        exist = true;
+        type_err = true;
       }
       else
       {
@@ -226,14 +215,12 @@ class ConectionProvider extends ChangeNotifier {
         }
         else
         {
-          String? create;
-          create = await _withConnection(cNew, (conn) async {
-            final err = await createDB( cNew.database, conn);
-            exist = err;
 
-            if (!exist) {
-              // DESKTOP: crear tablas
-              exist = await createTables();
+          await _withConnection(cNew, (conn) async {
+            type_err = await createDB( cNew.database, conn);
+
+            if (!type_err) {
+              type_err = await createTables();
             }
           });
 
@@ -244,7 +231,12 @@ class ConectionProvider extends ChangeNotifier {
 
       }
 
-    return exist;
+    }catch(e){
+      final errorMsg = e.toString();
+      type = await controlsErrors(errorMsg);
+    }
+
+    return type;
 
     }
 
@@ -323,7 +315,7 @@ class ConectionProvider extends ChangeNotifier {
     } finally {
       try {
         await conn?.close();
-      } catch (_) {
+      } catch (exeption) {
 
       }
     }
@@ -345,6 +337,25 @@ class ConectionProvider extends ChangeNotifier {
     selected = newSelected;
     notifyListeners();
     csvExportatorConections(conections);
+  }
+
+  Future<String> controlsErrors(String errorMsg) async {
+
+    String type = S.of(context).sql_error;
+
+    if (errorMsg.contains("Unknown database")) {
+      type = "${S.of(context).there_is_no_database_with_that_name} ${selected?.database}";
+    }
+    else if (errorMsg.contains("is not allowed to connect to this MySQL server")) {
+      type = S.of(context).could_not_connect_with_the_server;
+    }
+    else if (errorMsg.contains("SocketException")) {
+      type = S.of(context).the_port_is_not_correct;
+    }
+    else if (errorMsg.contains("Access denied for user")) {
+      type = S.of(context).the_user_or_password_are_incorrect;
+    }
+    return type;
   }
 
   }
