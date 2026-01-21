@@ -28,6 +28,7 @@ class ConectionProvider extends ChangeNotifier {
   bool _connected = false;
   Conection? _previous;
   BuildContext context = context1;
+  Conection? _tempConnection;
 
   Conection? get previous => _previous;
 
@@ -82,32 +83,48 @@ class ConectionProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+
+
+  void setTempConnection(Conection c) {
+    _tempConnection = c;
+  }
+
+  void clearTempConnection() {
+    _tempConnection = null;
+  }
+
+  Conection? get connectionToUse {
+    return _tempConnection ?? selected;
+  }
   Future<String> connect (BuildContext context) async {
-    if (selected == null) return S.of(context).not_connected_to_any_database;
+    final con = connectionToUse;
+
+    if (con == null)
+      return S.of(context).not_connected_to_any_database;
 
 
     try {
       if(!kIsWeb)
       {
         final settings = ConnectionSettings(
-          host: selected!.host,
-          port: int.parse(selected!.port),
-          user: selected!.user,
-          password: selected!.password,
-          db: selected!.database,
+          host: con.host,
+          port: int.parse(con.port),
+          user: con.user,
+          password: con.password,
+          db: con.database,
         );
 
         executeQuery = await MySqlConnection.connect(settings);
       }
       else
       {
-        await DbApi.actionApi('connect', selected!);
+        await DbApi.actionApi('connect', con);
       }
 
 
       _connected = true;
-      BaseDateSelected = selected!.database;
-      selectedDb = selected!.database;
+      BaseDateSelected = con.database;
+      selectedDb = con.database;
 
       notifyListeners();
       return BaseDateSelected;
