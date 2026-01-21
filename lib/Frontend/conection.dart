@@ -51,22 +51,27 @@ class _conectionState extends State<conection> {
   final passbd = TextEditingController();
 
 
-
+  @override
+  void dispose() {
+    namebd.dispose();
+    hostbd.dispose();
+    portbd.dispose();
+    userbd.dispose();
+    passbd.dispose();
+    horizontalScroll.dispose();
+    verticalScroll.dispose();
+    super.dispose();
+  }
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
 
     final provider = context.read<ConectionProvider>();
+    _restore(provider);
 
-    if (provider.selected != null) {
-      namebd.text = provider.selected!.database;
-      hostbd.text = provider.selected!.host;
-      portbd.text = provider.selected!.port;
-      userbd.text = provider.selected!.user;
-      passbd.text = provider.selected!.password;
-    }
   }
+
   @override
   Widget build(BuildContext context0) {
     BuildContext context = isNotAndroid() ? context0 : context1;
@@ -288,7 +293,7 @@ class _conectionState extends State<conection> {
 
     final actionLabel = provider.action2Label(context);
     actionLabel== S.of(context).undo
-      ? didChangeDependencies()
+      ? _restore(provider)
       : _deleteConex(context, provider);
 
   }
@@ -473,5 +478,18 @@ class _conectionState extends State<conection> {
         confirm(context, action);
       }
     }
+  }
+
+  void _restore(ConectionProvider provider) {
+
+
+    if (provider.selected != null) {
+      namebd.text = provider.selected!.database;
+      hostbd.text = provider.selected!.host;
+      portbd.text = provider.selected!.port;
+      userbd.text = provider.selected!.user;
+      passbd.text = provider.selected!.password;
+    }
+    
   }
 }
