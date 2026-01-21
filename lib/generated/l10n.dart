@@ -259,10 +259,10 @@ class S {
     );
   }
 
-  /// `Está conectado a`
+  /// `Está conectado a `
   String get is_connected_to {
     return Intl.message(
-      'Está conectado a',
+      'Está conectado a ',
       name: 'is_connected_to',
       desc: '',
       args: [],
@@ -996,11 +996,31 @@ class S {
     );
   }
 
+  /// `La conexión se ha creado correctamente`
+  String get connection_has_been_successfully_created {
+    return Intl.message(
+      'La conexión se ha creado correctamente',
+      name: 'connection_has_been_successfully_created',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `La conexión se ha eliminado correctamente`
   String get connection_has_been_successfully_deleted {
     return Intl.message(
       'La conexión se ha eliminado correctamente',
       name: 'connection_has_been_successfully_deleted',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `La conexión se ha editado correctamente`
+  String get connection_has_been_successfully_edited {
+    return Intl.message(
+      'La conexión se ha editado correctamente',
+      name: 'connection_has_been_successfully_edited',
       desc: '',
       args: [],
     );
@@ -1266,6 +1286,11 @@ class S {
     return Intl.message('el', name: 'he', desc: '', args: []);
   }
 
+  /// `la`
+  String get the {
+    return Intl.message('la', name: 'the', desc: '', args: []);
+  }
+
   /// `Filtrar por`
   String get filter_by {
     return Intl.message('Filtrar por', name: 'filter_by', desc: '', args: []);
@@ -1411,6 +1436,16 @@ class S {
     return Intl.message(
       'Debes seleccionar una conexion',
       name: 'You_must_select_a_connection',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `No puedes realizar esta acción mientras estás conectado`
+  String get You_cannot_do_this_while_connected {
+    return Intl.message(
+      'No puedes realizar esta acción mientras estás conectado',
+      name: 'You_cannot_do_this_while_connected',
       desc: '',
       args: [],
     );
@@ -1998,6 +2033,16 @@ class S {
     return Intl.message(
       'En la base de datos. ¿Qué desea hacer?',
       name: 'in_the_database_what_do_you_want_to_do',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `La conexion ha cambiado ¿desea guardarla?`
+  String get the_connection_has_changed_do_you_want_to_save_it {
+    return Intl.message(
+      'La conexion ha cambiado ¿desea guardarla?',
+      name: 'the_connection_has_changed_do_you_want_to_save_it',
       desc: '',
       args: [],
     );

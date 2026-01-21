@@ -51,6 +51,9 @@ class MessageLookup extends MessageLookupByLibrary {
         MessageLookupByLibrary.simpleMessage(
           "Solo puedes eliminar las líneas que fueron devueltas. ¿Desea eliminar?",
         ),
+    "You_cannot_do_this_while_connected": MessageLookupByLibrary.simpleMessage(
+      "No puedes realizar esta acción mientras estás conectado",
+    ),
     "You_cannot_leave_the_field_empty_you_want_to_continue":
         MessageLookupByLibrary.simpleMessage(
           "No puede dejar el campo vacío. ¿Desea continuar?",
@@ -114,9 +117,17 @@ class MessageLookup extends MessageLookupByLibrary {
     "connection_cannot_be_established": MessageLookupByLibrary.simpleMessage(
       "No se puede establecer la conexión",
     ),
+    "connection_has_been_successfully_created":
+        MessageLookupByLibrary.simpleMessage(
+          "La conexión se ha creado correctamente",
+        ),
     "connection_has_been_successfully_deleted":
         MessageLookupByLibrary.simpleMessage(
           "La conexión se ha eliminado correctamente",
+        ),
+    "connection_has_been_successfully_edited":
+        MessageLookupByLibrary.simpleMessage(
+          "La conexión se ha editado correctamente",
         ),
     "connection_test": MessageLookupByLibrary.simpleMessage(
       "Prueba de conexión",
@@ -249,7 +260,9 @@ class MessageLookup extends MessageLookupByLibrary {
       "Conexión no válida",
     ),
     "invalid_file": MessageLookupByLibrary.simpleMessage("Archivo no válido"),
-    "is_connected_to": MessageLookupByLibrary.simpleMessage("Está conectado a"),
+    "is_connected_to": MessageLookupByLibrary.simpleMessage(
+      "Está conectado a ",
+    ),
     "it_has_been": MessageLookupByLibrary.simpleMessage("Ha sido"),
     "it_must_be_numerical": MessageLookupByLibrary.simpleMessage(
       "Debe de ser numérico",
@@ -386,9 +399,14 @@ class MessageLookup extends MessageLookupByLibrary {
     "that_sector_already_exists": MessageLookupByLibrary.simpleMessage(
       "Ese sector ya existe",
     ),
+    "the": MessageLookupByLibrary.simpleMessage("la"),
     "theFemale": MessageLookupByLibrary.simpleMessage("La"),
     "theMale": MessageLookupByLibrary.simpleMessage("El"),
     "the_company": MessageLookupByLibrary.simpleMessage("La empresa"),
+    "the_connection_has_changed_do_you_want_to_save_it":
+        MessageLookupByLibrary.simpleMessage(
+          "La conexion ha cambiado ¿desea guardarla?",
+        ),
     "the_connection_test_was_sent_successfully":
         MessageLookupByLibrary.simpleMessage(
           "la prueba de conexion se envio correctamente",
