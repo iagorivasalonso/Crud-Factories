@@ -2,6 +2,7 @@ import 'package:adaptive_scrollbar/adaptive_scrollbar.dart';
 import 'package:crud_factories/Alertdialogs/confirmDelete.dart';
 import 'package:crud_factories/Alertdialogs/error.dart';
 import 'package:crud_factories/Alertdialogs/warning.dart';
+import 'package:crud_factories/Backend/CSV/exportConections.dart';
 import 'package:crud_factories/Backend/Global/list.dart';
 import 'package:crud_factories/Backend/Global/variables.dart';
 import 'package:crud_factories/Backend/providers/Conection_provider.dart';
@@ -314,7 +315,23 @@ class _conectionState extends State<conection> {
       }
 
     } else {
+
+      Conection? modify;
+      if(saveChanges == true)
+      {
+        modify =Conection(
+          id: provider.selected?.id ?? "-",
+          database: namebd.text,
+          port: portbd.text,
+          host: hostbd.text,
+          user: userbd.text,
+          password: passbd.text,
+        );
+        provider.setTempConnection(modify);
+      }
+
       final err = await provider.connect(context);
+      print(err);
       if(err==selectedDb) //si no hay error ya pone la conex
       {
         sectors.clear();
@@ -330,7 +347,28 @@ class _conectionState extends State<conection> {
         await sqlImportMails();
 
         String action = "${S.of(context).is_connected_to}$selectedDb";
-        confirm(context, action);
+         await confirm(context, action);
+
+         if(modify != null)
+         {
+             String action = S.of(context).the_connection_has_changed_do_you_want_to_save_it;
+              bool changue = await warning(context, action);
+
+              if(changue)
+              {
+                String id = modify.id;
+                final index = conections.indexWhere((c) => c.id == id);
+                conections[index] = modify;
+                if (index != -1)
+                {
+                  String action = S.of(context).connection_has_been_successfully_edited;
+                  await confirm(context, action);
+
+                  csvExportatorConections(conections);
+                }
+
+              }
+         }
       }
       else
       {
