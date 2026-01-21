@@ -3,6 +3,7 @@ import 'package:crud_factories/Backend/Global/list.dart';
 import 'package:crud_factories/Backend/Global/variables.dart';
 import 'package:crud_factories/Backend/SQL/DbApi.dart';
 import 'package:crud_factories/Backend/SQL/manageSQl.dart';
+import 'package:crud_factories/Backend/SQL/serverService.dart';
 import 'package:crud_factories/Objects/Conection.dart';
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter/foundation.dart';
@@ -103,9 +104,12 @@ class ConectionProvider extends ChangeNotifier {
       return S.of(context).not_connected_to_any_database;
 
 
+
     try {
       if(!kIsWeb)
       {
+         await ServerService.startServer();
+
         final settings = ConnectionSettings(
           host: con.host,
           port: int.parse(con.port),
