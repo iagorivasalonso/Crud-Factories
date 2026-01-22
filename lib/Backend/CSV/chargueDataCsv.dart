@@ -22,6 +22,7 @@ Future<bool> chargueDataCSV(BuildContext context) async {
     errorFiles.add(S.of(context).route_file_cannot_be_read);
     return false;
   }
+
   final platformFile = PlatformFile(
     name: routesCSV[0].route.split('/').last,
     path: kIsWeb ? null : routesCSV[0].route,
@@ -35,13 +36,11 @@ Future<bool> chargueDataCSV(BuildContext context) async {
     errorFiles.add(S.of(context).route_file_cannot_be_read);
     return false;
   }
-  else
-  {
+
 
     try {
       final platformFile = PlatformFile(
         name: routesCSV[0].route.split('/').last,
-        path: kIsWeb ? null : routesCSV[1].route,
         bytes: utf8.encode(await rootBundle.loadString(routesCSV[1].route),),
         size: 0,);
       bool result = await importCsvSafe(context, platformFile);
@@ -52,7 +51,6 @@ Future<bool> chargueDataCSV(BuildContext context) async {
     try {
       final platformFile = PlatformFile(
         name: routesCSV[0].route.split('/').last,
-        path: kIsWeb ? null : routesCSV[3].route,
         bytes: utf8.encode(await rootBundle.loadString(routesCSV[3].route),),
         size: 0,);
       bool result = await importCsvSafe(context, platformFile);
@@ -64,7 +62,6 @@ Future<bool> chargueDataCSV(BuildContext context) async {
     try {
       final platformFile = PlatformFile(
         name: routesCSV[0].route.split('/').last,
-        path: kIsWeb ? null : routesCSV[4].route,
         bytes: utf8.encode(await rootBundle.loadString(routesCSV[4].route),),
         size: 0,);
       bool result = await importCsvSafe(context, platformFile);
@@ -93,7 +90,7 @@ Future<bool> chargueDataCSV(BuildContext context) async {
     } catch (e, s) {
       print("Error al importar lineas");
     }
-  }
+
 
   try {
     final platformFile = PlatformFile(
