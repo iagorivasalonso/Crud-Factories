@@ -13,7 +13,6 @@ import 'package:crud_factories/generated/l10n.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../Alertdialogs/confirm.dart';
-import '../Backend/CSV/chargueDataCsv.dart';
 import '../Backend/SQL/importEmpleoye.dart';
 import '../Backend/SQL/importFactories.dart';
 import '../Backend/SQL/importMail.dart';
@@ -313,7 +312,7 @@ class _conectionState extends State<conection> {
         mails.clear();
         allLines.clear();
 
-        chargueDataCSV(context);
+        //chargueDataCSV(context);
 
         String action = S.of(context).has_closed_the_connection;
         confirm(context, action);

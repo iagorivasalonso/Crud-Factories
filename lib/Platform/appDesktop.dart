@@ -6,6 +6,7 @@ import 'package:crud_factories/Alertdialogs/noCategory.dart';
 import 'package:crud_factories/Alertdialogs/typeconnection.dart';
 import 'package:crud_factories/Alertdialogs/warning.dart';
 import 'package:crud_factories/Backend/CSV/exportSectors.dart';
+import 'package:crud_factories/Backend/CSV/loader.dart';
 import 'package:crud_factories/Backend/Global/list.dart';
 import 'package:crud_factories/Backend/_selection_view.dart';
 import 'package:crud_factories/Backend/Global/variables.dart';
@@ -17,10 +18,9 @@ import 'package:crud_factories/generated/l10n.dart';
 import 'package:crud_factories/helpers/localization_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:menu_bar/menu_bar.dart';
-
 import '../Alertdialogs/createSector.dart';
-import '../Backend/CSV/chargueDataCsv.dart';
 import '../Backend/Global/controllers/List.dart';
+import '../Backend/Global/controllers/Router.dart';
 
 class appDesktop extends StatefulWidget {
   const appDesktop({super.key});
@@ -37,9 +37,19 @@ class _appDesktopState extends State<appDesktop> {
     super.initState();
 
     WidgetsBinding.instance?.addPostFrameCallback((_) async {
-      bool isChargue = await chargueDataCSV(context);
+      bool isChargue =  false;
+
+        isChargue = await csvLoaderService.loadInitialRoutes(context);
+
 
       bool sqlBd = await typeConection(context);
+
+      routeControllers = List.generate(namesRoutesOrdened.length,
+              (_) =>
+              RouterController(
+                name: TextEditingController(),
+                router: TextEditingController(),
+              ));
 
       listController = new ListController(
           routesNew: [],
