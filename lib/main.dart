@@ -98,7 +98,7 @@ class MyApp extends StatelessWidget {
   }
 
   void _initializeWindow(BuildContext context){
-
+    if (kIsWeb) return;
     WindowOptions windowOptions = WindowOptions(
       size: const Size(800,600),
       center: true,
