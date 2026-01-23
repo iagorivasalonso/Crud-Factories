@@ -1,19 +1,11 @@
 
+import 'package:crud_factories/Backend/CSV/loader.dart' show csvLoaderService;
 import 'package:crud_factories/Backend/Global/files.dart';
 import 'package:file_picker/file_picker.dart' show FilePickerResult, FilePicker, FileType;
-import 'package:file_picker/src/platform_file.dart';
-import 'package:flutter/foundation.dart';
-
 import 'package:flutter/material.dart';
-
 import '../Alertdialogs/confirm.dart';
-import '../Alertdialogs/error.dart';
-import '../Backend/CSV/chargueDataCsv.dart';
-
 import '../Backend/CSV/exportRoutes.dart';
 import '../Backend/CSV/Import General/importFiles.dart';
-import '../Backend/Global/controllers/List.dart';
-import '../Backend/Global/controllers/Router.dart';
 import '../Backend/Global/list.dart';
 import '../Backend/Global/variables.dart';
 import '../Objects/RouteCSV.dart';
@@ -40,21 +32,7 @@ class _adminRoutesState extends State<adminRoutes> {
   @override
   void initState() {
     super.initState();
-    routeControllers = List.generate(namesRoutesOrdened.length,
-            (_) =>
-            RouterController(
-              name: TextEditingController(),
-              router: TextEditingController(),
-            ));
 
-    listController = new ListController(
-        routesNew: [],
-        sectorsNew: [],
-        empleoyesNew: [],
-        mailsNew: [],
-        linesNew: [],
-        conectionsNew: [],
-        factoriesNew: []);
     WidgetsBinding.instance.addPostFrameCallback((_) {
       chargueRoutes();
       _showRouteDialog(context);
@@ -78,6 +56,7 @@ class _adminRoutesState extends State<adminRoutes> {
     BuildContext context = context1;
 
     return SizedBox.shrink();
+
     }
 
     Future<void> _showRouteDialog(BuildContext context) async {
@@ -187,57 +166,54 @@ class _adminRoutesState extends State<adminRoutes> {
 
     final platformFile = result.files.single;
 
-    importFiles(context,platformFile);
+     importFiles(context,platformFile);
      routeControllers[index].router.text =platformFile.name;
 
+     }
   }
 
-  Future<void> chargueRoutes() async {
+Future<void> chargueRoutes() async {
 
-    for (int i = 0; i < routesCSV.length; i++)
+  for (int i = 0; i < routesCSV.length; i++)
+  {
+    routeControllers[i].name.text =  namesRoutesOrdened[i];
+
+    if(routesCSV[i].route.isNotEmpty)
     {
-      routeControllers[i].name.text =  namesRoutesOrdened[i];
-
-      if(routesCSV[i].route.isNotEmpty)
-      {
-        routeControllers[i].router.text = routesCSV[i].route;
-      }
+      routeControllers[i].router.text = routesCSV[i].route;
     }
-
   }
-
-  Future<void> importedRoutes(BuildContext context) async{
-
-    List<RouteCSV> routesNew = [];
-
-    int idNew = -1;
-
-    for(int i = 0; i < routeControllers.length; i++)
-    {
-      idNew = i + 1;
-
-      routesNew.add(RouteCSV(
-          id: idNew.toString(),
-          name: routeControllers[i].name.text,
-          route: routeControllers[i].router.text,
-      ));
-    }
-
-    String array = S.of(context).routes;
-    String actionArray = S.of(context).saved;
-
-    String action = LocalizationHelper.manage_array(context, array, actionArray);
-    csvExportatorRoutes(routesNew);
-    await confirm(context, action);
-    chargueDataCSV(context);
-
-    setState((){
-      Navigator.of(context).pop(true);
-    });
-  }
-
 
 }
 
 
+Future<void> importedRoutes(BuildContext context, [bool initialChargue = false]) async{
+
+  List<RouteCSV> routesNew = [];
+
+  int idNew = -1;
+
+  for(int i = 0; i < routeControllers.length; i++)
+  {
+    idNew = i + 1;
+
+    routesNew.add(RouteCSV(
+      id: idNew.toString(),
+      name: routeControllers[i].name.text,
+      route: routeControllers[i].router.text,
+    ));
+  }
+
+  String array = S.of(context).routes;
+  String actionArray = S.of(context).saved;
+
+  String action = LocalizationHelper.manage_array(context, array, actionArray);
+  csvExportatorRoutes(routesNew);
+  await csvLoaderService.loadRemainingRoutes(context);
+
+  if(initialChargue==false)
+  await confirm(context, action);
+
+
+}
 

@@ -28,5 +28,5 @@ List <String> SQLRoutes = [];
 List <String> allRoutesOrdened = [];
 List <String> currentRoutes = [];
 
-late List<RouterController> routeControllers;
+List<RouterController> routeControllers =[];
 late ListController listController;
