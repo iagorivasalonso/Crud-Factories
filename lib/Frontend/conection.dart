@@ -236,7 +236,7 @@ class _conectionState extends State<conection> {
 
                         Padding(
                           padding: const EdgeInsets.only(
-                              left: 620.0, top: 20.0),
+                              left: 620.0, top: 80.0),
                           child: layoutVariant(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             items: [
