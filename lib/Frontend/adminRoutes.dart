@@ -26,29 +26,26 @@ class adminRoutes extends StatefulWidget {
 class _adminRoutesState extends State<adminRoutes> {
 
 
-
-  String? get selectedOption => null;
-
   @override
   void initState() {
     super.initState();
 
+    // Inicialización de variables simple
+
+    // Ejecutar async después del primer frame
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      chargueRoutes();
-      _showRouteDialog(context);
+      _initialize();
     });
-    if (routeControllers.isNotEmpty) {
-      routeControllers[0].router.text = fRoutes.path;
-    }
   }
 
-  @override
-  void dispose() {
-    for (final line in routeControllers) {
-      line.dispose();
-    }
-    super.dispose();
+// Método async separado
+  Future<void> _initialize() async {
+    if (!mounted) return;
+
+    await _showRouteDialog();
   }
+
+
 
   @override
   Widget build(BuildContext context0) {
@@ -59,7 +56,7 @@ class _adminRoutesState extends State<adminRoutes> {
 
     }
 
-    Future<void> _showRouteDialog(BuildContext context) async {
+    Future<void> _showRouteDialog() async {
 
       return showDialog(
         context: context,
@@ -153,7 +150,7 @@ class _adminRoutesState extends State<adminRoutes> {
     }
 
   Future<void> _pickFile(BuildContext context,index) async {
-
+    if (!mounted) return;
 
     FilePickerResult? result =  await FilePicker.platform.pickFiles(
       dialogTitle: S.of(context).select_file,

@@ -44,12 +44,13 @@ class _appDesktopState extends State<appDesktop> {
 
       bool sqlBd = await typeConection(context);
 
-      routeControllers = List.generate(namesRoutesOrdened.length,
-              (_) =>
+      routeControllers = List.generate(routesCSV.length,
+              (index) =>
               RouterController(
-                name: TextEditingController(),
-                router: TextEditingController(),
+                name: TextEditingController(text: routesCSV[index].name),
+                router: TextEditingController(text: routesCSV[index].route),
               ));
+
 
       listController = new ListController(
           routesNew: [],
