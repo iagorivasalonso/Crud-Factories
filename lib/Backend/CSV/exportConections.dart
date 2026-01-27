@@ -1,10 +1,11 @@
+
 import 'package:crud_factories/Backend/Global/files.dart';
 import 'package:crud_factories/Objects/Conection.dart';
 import 'package:csv/csv.dart';
-import 'package:flutter/foundation.dart';
 
-import 'Export General/export.dart';
-import 'Export General/export_web.dart';
+import 'Export_general/export_csv.dart';
+
+
 
 
 
@@ -42,11 +43,7 @@ Future<bool> csvExportatorConections(List<Conection> conections) async {
 
   String csv = const ListToCsvConverter(fieldDelimiter: ';').convert(rows);
 
-  if (kIsWeb) {
-    err =  await csvExportweb(csv, fileName: fConections.path);
-  } else {
-    err = !await csvExport(csv,file: fConections);
-  }
+    err = !await exportCsv(csv,file: fConections);
 
   return err;
 }

@@ -2,10 +2,8 @@
 import 'package:crud_factories/Backend/Global/files.dart';
 import 'package:crud_factories/Objects/Mail.dart';
 import 'package:csv/csv.dart';
-import 'package:flutter/foundation.dart';
 
-import 'Export General/export.dart';
-import 'Export General/export_web.dart';
+import 'Export_general/export_csv.dart';
 
 
 
@@ -39,10 +37,7 @@ Future<bool> csvExportatorMails(List<Mail> mails) async {
 
   String csv = const ListToCsvConverter(fieldDelimiter: ';').convert(rows);
 
-  if (kIsWeb) {
-    err =  await csvExportweb(csv, fileName: fFactories.path);
-  } else {
-    err = !await csvExport(csv,file: fFactories);
-  }
+  err = !await exportCsv(csv,file: fMails);
+
   return err;
 }
