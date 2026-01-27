@@ -31,12 +31,8 @@ import 'package:crud_factories/Objects/LineSend.dart';
 import 'package:crud_factories/Widgets/headViewsAndroid.dart';
 import 'package:crud_factories/generated/l10n.dart';
 import 'package:file_picker/file_picker.dart' show FilePickerResult, FileType, FilePicker;
-import 'package:file_picker/src/platform_file.dart';
-import 'package:flutter/foundation.dart' hide Factory;
 import 'package:flutter/material.dart';
-import '../Backend/CSV/importEmpleoyes.dart';
-import '../Backend/CSV/Import General/importFiles.dart';
-import '../Backend/CSV/importLines.dart';
+import '../Backend/CSV/ImportGeneral/CsvProcessorService.dart';
 import '../Functions/isNotAndroid.dart';
 import '../Widgets/CSVPickerField.dart';
 import '../Widgets/headView.dart';
@@ -186,13 +182,14 @@ Future<void> _pickFile(BuildContext context, TextEditingController controllerDat
 
   if(result == null) return;
 
+
+
   final platformFile = result.files.single;
 
-
- controllerDatePicker.text =platformFile.name;
-
-   bool importOrtherData = true;
-  importFiles(context,platformFile,importOrtherData);
+  final file = File(result.files.single.path!);
+  final content = await file.readAsString(encoding: utf8);
+  CsvProcessorService.processCsvContent(context, content,true);
+  controllerDatePicker.text =platformFile.name;
 
 }
 
