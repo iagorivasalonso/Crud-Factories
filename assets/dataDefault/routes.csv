@@ -2,7 +2,6 @@
 2;Conexiones;assets/dataDefault/conections.csv
 3;Servidor;C:\\Users\\Usuario\\Documents\\IntelijProjects\\datosApp\\USBWebserver v8.5\\8.5\\usbwebserver.exe
 4;Sectores;assets/dataDefault/sectors.csv
-4;Sectores;assets/dataDefault/sectors.csv
 5;Empresas;assets/dataDefault/factories.csv
 6;Empleados;assets/dataDefault/employees.csv
 7;Líneas;assets/dataDefault/lines.csv
