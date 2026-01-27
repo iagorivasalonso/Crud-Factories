@@ -1,11 +1,15 @@
 
+
+import 'dart:convert';
+import 'dart:io';
+import 'dart:typed_data';
 import 'package:crud_factories/Backend/CSV/loader.dart' show csvLoaderService;
 import 'package:crud_factories/Backend/Global/files.dart';
 import 'package:file_picker/file_picker.dart' show FilePickerResult, FilePicker, FileType;
 import 'package:flutter/material.dart';
 import '../Alertdialogs/confirm.dart';
+import '../Backend/CSV/ImportGeneral/CsvProcessorService.dart';
 import '../Backend/CSV/exportRoutes.dart';
-import '../Backend/CSV/Import General/importFiles.dart';
 import '../Backend/Global/list.dart';
 import '../Backend/Global/variables.dart';
 import '../Objects/RouteCSV.dart';
@@ -163,8 +167,10 @@ class _adminRoutesState extends State<adminRoutes> {
 
     final platformFile = result.files.single;
 
-     importFiles(context,platformFile);
-     routeControllers[index].router.text =platformFile.name;
+    final file = File(result.files.single.path!);
+    final content = await file.readAsString(encoding: utf8);
+    CsvProcessorService.processCsvContent(context, content,false);
+    routeControllers[index].router.text =platformFile.name;
 
      }
   }
@@ -186,15 +192,14 @@ Future<void> chargueRoutes() async {
 
 Future<void> importedRoutes(BuildContext context, [bool initialChargue = false]) async{
 
-  List<RouteCSV> routesNew = [];
-
   int idNew = -1;
+  routesCSV.clear();
 
   for(int i = 0; i < routeControllers.length; i++)
   {
     idNew = i + 1;
 
-    routesNew.add(RouteCSV(
+    routesCSV.add(RouteCSV(
       id: idNew.toString(),
       name: routeControllers[i].name.text,
       route: routeControllers[i].router.text,
@@ -205,7 +210,7 @@ Future<void> importedRoutes(BuildContext context, [bool initialChargue = false])
   String actionArray = S.of(context).saved;
 
   String action = LocalizationHelper.manage_array(context, array, actionArray);
-  csvExportatorRoutes(routesNew);
+  csvExportatorRoutes(routesCSV);
   await csvLoaderService.loadRemainingRoutes(context);
 
   if(initialChargue==false)
