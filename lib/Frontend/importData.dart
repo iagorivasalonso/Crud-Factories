@@ -189,7 +189,7 @@ Future<void> _pickFile(BuildContext context, TextEditingController controllerDat
   final file = File(result.files.single.path!);
   final content = await file.readAsString(encoding: utf8);
   CsvProcessorService.processCsvContent(context, content,true);
-  controllerDatePicker.text =platformFile.name;
+  controllerDatePicker.text =platformFile.path!;
 
 }
 

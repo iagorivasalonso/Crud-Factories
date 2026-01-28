@@ -170,7 +170,7 @@ class _adminRoutesState extends State<adminRoutes> {
     final file = File(result.files.single.path!);
     final content = await file.readAsString(encoding: utf8);
     CsvProcessorService.processCsvContent(context, content,false);
-    routeControllers[index].router.text =platformFile.name;
+    routeControllers[index].router.text = platformFile.path!;
 
      }
   }
