@@ -154,23 +154,23 @@ class _adminRoutesState extends State<adminRoutes> {
     }
 
   Future<void> _pickFile(BuildContext context,index) async {
-    if (!mounted) return;
+          if (!mounted) return;
 
-    FilePickerResult? result =  await FilePicker.platform.pickFiles(
-      dialogTitle: S.of(context).select_file,
-      type: FileType.custom,
-      allowedExtensions: ['csv','exe'],
-       withData: true,
-    );
+          FilePickerResult? result =  await FilePicker.platform.pickFiles(
+            dialogTitle: S.of(context).select_file,
+            type: FileType.custom,
+            allowedExtensions: ['csv','exe'],
+             withData: true,
+          );
 
-    if(result == null) return;
+          if(result == null) return;
 
-    final platformFile = result.files.single;
+          final platformFile = result.files.single;
 
-    final file = File(result.files.single.path!);
-    final content = await file.readAsString(encoding: utf8);
-    CsvProcessorService.processCsvContent(context, content,false);
-    routeControllers[index].router.text = platformFile.path!;
+          final file = File(result.files.single.path!);
+          final content = await file.readAsString(encoding: utf8);
+          CsvProcessorService.processCsvContent(context, content,false);
+          routeControllers[index].router.text = platformFile.path!;
 
      }
   }
@@ -211,6 +211,11 @@ Future<void> importedRoutes(BuildContext context, [bool initialChargue = false])
 
   String action = LocalizationHelper.manage_array(context, array, actionArray);
   csvExportatorRoutes(routesCSV);
+  sectors.clear();
+  allFactories.clear();
+  empleoyes.clear();
+  mails.clear();
+  allLines.clear();
   await csvLoaderService.loadRemainingRoutes(context);
 
   if(initialChargue==false)
