@@ -47,7 +47,6 @@ class LocalizationHelper {
 
   static String sendsFactory( BuildContext context,int countSendFactory) {
 
-
     return Intl.plural(
       countSendFactory,
       one: '${S.of(context).this_company_was_made}  $countSendFactory ${S.of(context).shipment.toLowerCase()}',
@@ -92,6 +91,19 @@ class LocalizationHelper {
       other: '${S.of(context).They_were_imported} $countImport $array $postVar',
       name: "importData",
       args: [countImport],
+      examples: const {"countImport": 0},
+    );
+  }
+
+  static String noFile( BuildContext context, String array) {
+
+     array = array.toLowerCase();
+    return Intl.plural(
+      0,
+      one:  '${S.of(context).the_file_of} $array  ${S.of(context).it_empty}',
+      other: '${S.of(context).the_file_of} $array ${S.of(context).it_empty}',
+      name: "importFile",
+      args: [array],
       examples: const {"countImport": 0},
     );
   }

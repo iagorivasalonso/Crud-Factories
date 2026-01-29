@@ -123,6 +123,8 @@
   "not_a_valid_webpage": "No es una página web válida",
   "not_connected_to_any_database": "No estás conectado a ninguna base de datos",
   "can_not_go_blank_fields": "No pueden quedar campos en blanco",
+  "the_file_of": "El fichero de",
+  "it_empty": "esta vacio",
   "you_can_not_make_the_shipping_because_you_do_not_have_companies_in_your_database": "No puedes realizar el envío porque no tienes empresas en tu base de datos",
   "all_changes_will_be_lost_do_you_want_to_continue": "Todos los cambios se perderán. ¿Desea continuar?",
   "could_not_be_deleted": "No se pudo eliminar",

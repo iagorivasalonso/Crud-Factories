@@ -854,6 +854,21 @@ class S {
     );
   }
 
+  /// `El fichero de`
+  String get the_file_of {
+    return Intl.message(
+      'El fichero de',
+      name: 'the_file_of',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `esta vacio`
+  String get it_empty {
+    return Intl.message('esta vacio', name: 'it_empty', desc: '', args: []);
+  }
+
   /// `No puedes realizar el envío porque no tienes empresas en tu base de datos`
   String
   get you_can_not_make_the_shipping_because_you_do_not_have_companies_in_your_database {

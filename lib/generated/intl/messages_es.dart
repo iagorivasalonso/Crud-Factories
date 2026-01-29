@@ -263,6 +263,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "is_connected_to": MessageLookupByLibrary.simpleMessage(
       "Está conectado a ",
     ),
+    "it_empty": MessageLookupByLibrary.simpleMessage("esta vacio"),
     "it_has_been": MessageLookupByLibrary.simpleMessage("Ha sido"),
     "it_must_be_numerical": MessageLookupByLibrary.simpleMessage(
       "Debe de ser numérico",
@@ -420,6 +421,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "the_field_cannot_be_blank": MessageLookupByLibrary.simpleMessage(
       "El campo no puede estar en blanco",
     ),
+    "the_file_of": MessageLookupByLibrary.simpleMessage("El fichero de"),
     "the_format_of_the": MessageLookupByLibrary.simpleMessage("El formato de"),
     "the_line": MessageLookupByLibrary.simpleMessage("La linea"),
     "the_mail_has_been_successfully_sent": MessageLookupByLibrary.simpleMessage(
