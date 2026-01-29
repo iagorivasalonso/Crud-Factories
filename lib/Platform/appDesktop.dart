@@ -39,7 +39,7 @@ class _appDesktopState extends State<appDesktop> {
     WidgetsBinding.instance?.addPostFrameCallback((_) async {
       bool isChargue =  false;
 
-        isChargue = await csvLoaderService.loadInitialRoutes(context);
+      routesCSV  = await csvLoaderService.loadInitialRoutes(context);
 
 
       bool sqlBd = await typeConection(context);
