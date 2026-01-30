@@ -31,7 +31,7 @@ class csvLoaderService {
       fRoutes = File(pathToLoad);
     }
 
-    final List<RouteCSV> loadedRoutes = await _createData(pathToLoad);
+     List<RouteCSV> loadedRoutes = await _createData(pathToLoad);
 
 
     if (loadedRoutes.isEmpty) {
@@ -42,21 +42,22 @@ class csvLoaderService {
     {
       namesRoutesOrdened = [S.of(context).routes,S.of(context).connections,S.of(context).server,S.of(context).sectors,S.of(context).companies,S.of(context).employees,S.of(context).lines, S.of(context).mails];
 
-      routesCSV  = reorderRouter(namesRoutesOrdened, loadedRoutes);
-
+      loadedRoutes  = reorderRouter(namesRoutesOrdened, loadedRoutes);
     }
 
-    return routesCSV;
+    return loadedRoutes;
   }
 
   static Future<bool> loadRemainingRoutes(BuildContext context) async {
 
-    final cantidadRoutes=routesCSV.length;
+  loadedRoutes = await csvLoaderService.loadInitialRoutes(context);
+
+    final cantidadRoutes=loadedRoutes.length;
     bool isCorrect= true;
 
     for(int i = 1; i <cantidadRoutes; i++)
     {
-      final route = routesCSV[i].route;
+      final route = loadedRoutes[i].route;
       if (route.isEmpty) continue;
 
       try {
@@ -72,7 +73,7 @@ class csvLoaderService {
 
         await importAppFile(context, file);
       } catch (e, s) {
-        String array =routesCSV[i].name;
+        String array =loadedRoutes[i].name;
         errorFiles.add("${S.of(context).file_not_found} $array");
       }
 
@@ -155,7 +156,7 @@ List<RouteCSV> reorderRouter ( List<String> orderRoutes, List<RouteCSV> routesCs
 }
 
 void clearAllData() {
-  routesCSV.clear();
+  loadedRoutes.clear();
   errorFiles.clear();
 
   // ⚠️ TODAS las listas que llenan los CSV

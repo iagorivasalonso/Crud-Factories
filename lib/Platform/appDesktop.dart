@@ -39,16 +39,16 @@ class _appDesktopState extends State<appDesktop> {
     WidgetsBinding.instance?.addPostFrameCallback((_) async {
       bool isChargue =  false;
 
-      routesCSV  = await csvLoaderService.loadInitialRoutes(context);
+      loadedRoutes  = await csvLoaderService.loadInitialRoutes(context);
 
 
       bool sqlBd = await typeConection(context);
 
-      routeControllers = List.generate(routesCSV.length,
+      routeControllers = List.generate(loadedRoutes.length,
               (index) =>
               RouterController(
-                name: TextEditingController(text: routesCSV[index].name),
-                router: TextEditingController(text: routesCSV[index].route),
+                name: TextEditingController(text: loadedRoutes[index].name),
+                router: TextEditingController(text: loadedRoutes[index].route),
               ));
 
 
@@ -71,15 +71,15 @@ class _appDesktopState extends State<appDesktop> {
           {
                 String name = '';
 
-                for(int i = 0; i < routesCSV.length; i++)
+                for(int i = 0; i < loadedRoutes.length; i++)
                 {
-                   name = routesCSV[i].name;
+                   name = loadedRoutes[i].name;
 
                    for (int y = 0; y < SQLRoutes.length; y++)
                    {
                       if(SQLRoutes[y] == name)
                       {
-                        routesCurrent.add(routesCSV[i]);
+                        routesCurrent.add(loadedRoutes[i]);
                       }
                    }
                 }
@@ -91,7 +91,7 @@ class _appDesktopState extends State<appDesktop> {
           }
           else
           {
-             routesCurrent = routesCSV;
+             routesCurrent = loadedRoutes;
           }
 
 
