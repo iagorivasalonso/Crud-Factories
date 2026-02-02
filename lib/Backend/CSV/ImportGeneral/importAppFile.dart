@@ -6,22 +6,20 @@ import 'package:crud_factories/helpers/localization_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:crud_factories/Backend/CSV/ImportGeneral/AppFile.dart';
-
-import 'AppFile.dart';
 import 'CsvProcessorService.dart';
 
 
-Future<void> importAppFile (BuildContext context, AppFile file , [bool importOtherFiles = false]) async {
+Future<bool> importAppFile (BuildContext context, AppFile file , [bool importOtherFiles = false]) async {
 
   String content;
+  String array="";
 
   try{
      final path = file.path ?? file.assetPath ?? '';
 
       if(path.toLowerCase().endsWith('.exe'))
       {
-
-        return;
+        return true;
       }
       if(file.assetPath!=null)
       {
@@ -32,22 +30,29 @@ Future<void> importAppFile (BuildContext context, AppFile file , [bool importOth
         final f = File(file.path!);
         content = await f.readAsString(encoding: utf8);
       }
+      if (content.trim().isEmpty)
+      {
+           var match = routesCSV.firstWhere(
+                 (route) => route.route == file.name,
+             // si no hay coincidencia devuelve null
+          );
 
-     if (content.trim().isEmpty) {
-       var match = routesCSV.firstWhere(
-             (route) => route.route == file.name,
-       );
+           array=match.name;
 
-       if (match != null)
-       {
-         String array =match.name;
-         errorFiles.add(LocalizationHelper.noFile(context, array));
-       }
+           await CsvProcessorService.processCsvContent(
+               context, content, importOtherFiles
+           );
 
-       return; // No se procesa
+       return true;
      }
-     await CsvProcessorService.processCsvContent(context, content, importOtherFiles);
-  }catch (e) {
-print(e);
+     else
+     {
+         return false;
+     }
+
+ }catch (e) {
+    errorFiles.add(LocalizationHelper.noFile(context,array));
+    return false;
   }
+
 }
