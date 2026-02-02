@@ -6,6 +6,7 @@ import 'dart:typed_data';
 import 'package:crud_factories/Backend/CSV/loader.dart' show csvLoaderService;
 import 'package:crud_factories/Backend/Global/files.dart';
 import 'package:file_picker/file_picker.dart' show FilePickerResult, FilePicker, FileType;
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import '../Alertdialogs/confirm.dart';
 import '../Alertdialogs/errorList.dart';
@@ -130,7 +131,7 @@ class _adminRoutesState extends State<adminRoutes> {
                         ),
                       ),
                     ),
-                    const SizedBox(height: 10),
+                    const SizedBox(height: kIsWeb? 40 : 10),
                     Padding(
                       padding: const EdgeInsets.only(left: 150.0),
                       child: Row(
