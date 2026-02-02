@@ -5,6 +5,7 @@ Padding defaultTextfield({
   required String nameCamp,
   String? campOld,
   required TextEditingController controllerCamp,
+  bool? automatic = false,
   bool? campEdit,
 }){
 
@@ -30,6 +31,7 @@ Padding defaultTextfield({
             child: TextField(
               enabled: campEdit,
               controller: controllerCamp,
+              style: TextStyle(color: automatic == true ? Colors.grey: Colors.black),
               decoration: const InputDecoration(
                 border: OutlineInputBorder(),
                 isDense: true,

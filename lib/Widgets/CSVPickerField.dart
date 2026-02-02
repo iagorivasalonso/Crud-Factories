@@ -9,16 +9,17 @@ class CSVPickerField extends StatefulWidget {
   final String campName;
   final String actionName;
   final Future<void> Function() function;
+  final bool automatic;
 
 
 
-   const CSVPickerField({
+  const CSVPickerField({
     super.key,
     required this.controller,
     required this.campName,
     required this.actionName,
     required this.function,
-
+    this.automatic = false,
 
   });
 
@@ -37,6 +38,7 @@ class _CSVPickerFieldState extends State<CSVPickerField> {
     TextEditingController controllerImportPicker  = widget.controller;
     String campName = widget.campName;
     String action = widget.actionName;
+    bool automatic = widget.automatic;
 
 
     return Row(
@@ -47,6 +49,7 @@ class _CSVPickerFieldState extends State<CSVPickerField> {
             child: defaultTextfield(
               nameCamp: campName,
               controllerCamp: controllerImportPicker,
+              automatic: automatic
             ),
           ),
         ),
