@@ -14,7 +14,7 @@ Future<bool> warning(BuildContext  context,String action) async{
            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(0)),
            child: SizedBox(
              width: 380,
-             height: 185,
+             height: 195,
              child: Column(
                children: [
                  headDialog(title: S.of(context).careful),
