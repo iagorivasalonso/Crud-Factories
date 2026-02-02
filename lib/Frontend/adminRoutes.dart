@@ -8,6 +8,8 @@ import 'package:crud_factories/Backend/Global/files.dart';
 import 'package:file_picker/file_picker.dart' show FilePickerResult, FilePicker, FileType;
 import 'package:flutter/material.dart';
 import '../Alertdialogs/confirm.dart';
+import '../Alertdialogs/errorList.dart';
+import '../Alertdialogs/warning.dart';
 import '../Backend/CSV/ImportGeneral/CsvProcessorService.dart';
 import '../Backend/CSV/exportRoutes.dart';
 import '../Backend/Global/list.dart';
@@ -49,7 +51,8 @@ class _adminRoutesState extends State<adminRoutes> {
     await _showRouteDialog();
   }
 
-
+  List<bool> campAutomatic =List.generate(routeControllers.length, (index) => false);
+  List<RouteCSV>routesNoSave =[];
 
   @override
   Widget build(BuildContext context0) {
@@ -115,9 +118,11 @@ class _adminRoutesState extends State<adminRoutes> {
                                 controller: routeControllers[index].router,
                                 campName: routeControllers[index].name.text,
                                 actionName: S.of(context).examine,
+                                automatic: campAutomatic[index],
                                 function: () => _pickFile(
                                   context,
                                   index,
+                                  setState,
                                 ),
                               ),
                             );
@@ -153,7 +158,7 @@ class _adminRoutesState extends State<adminRoutes> {
 
     }
 
-  Future<void> _pickFile(BuildContext context,index) async {
+  Future<void> _pickFile(BuildContext context,index, void Function(void Function()) setState) async {
           if (!mounted) return;
 
           FilePickerResult? result =  await FilePicker.platform.pickFiles(
@@ -167,10 +172,42 @@ class _adminRoutesState extends State<adminRoutes> {
 
           final platformFile = result.files.single;
 
-          final file = File(result.files.single.path!);
-          final content = await file.readAsString(encoding: utf8);
-          CsvProcessorService.processCsvContent(context, content,false);
           routeControllers[index].router.text = platformFile.path!;
+
+
+
+          if (index == 0)
+          {
+
+            String message=S.of(context).other_fields_will_be_autofilled_do_you_want_to_continue;
+            bool correct= await warning(context, message);
+
+            if(correct == true)
+            {
+                    try {
+                      // Limpiamos y cargamos la nueva ruta
+                     List<RouteCSV>routesNoSave = await csvLoaderService.loadInitialRoutes(context, routeControllers[index].router.text);
+
+                     if (routesCSV.isNotEmpty) {
+                       await csvLoaderService.loadRemainingRoutes(context, routesCSV);
+                     }
+
+                      for(int i = 1; i <routesNoSave.length; i++)
+                      {
+                        routeControllers[i].router.text = routesNoSave[i].route;
+                      }
+
+                    } catch (e) {
+
+                    }
+
+                    setState((){
+                      for(int i = 1; i<routeControllers.length;i++)
+                        campAutomatic[i]=true;
+                    });
+            }
+          }
+
 
      }
   }
@@ -192,15 +229,13 @@ Future<void> chargueRoutes() async {
 
 Future<void> importedRoutes(BuildContext context, [bool initialChargue = false]) async{
 
-  int idNew = -1;
   routesCSV.clear();
 
   for(int i = 0; i < routeControllers.length; i++)
   {
-    idNew = i + 1;
 
     routesCSV.add(RouteCSV(
-      id: idNew.toString(),
+      id: (i+1).toString(),
       name: routeControllers[i].name.text,
       route: routeControllers[i].router.text,
     ));
@@ -208,18 +243,24 @@ Future<void> importedRoutes(BuildContext context, [bool initialChargue = false])
 
   String array = S.of(context).routes;
   String actionArray = S.of(context).saved;
-
-  String action = LocalizationHelper.manage_array(context, array, actionArray);
   csvExportatorRoutes(routesCSV);
-  sectors.clear();
-  allFactories.clear();
-  empleoyes.clear();
-  mails.clear();
-  allLines.clear();
-  await csvLoaderService.loadRemainingRoutes(context);
+  bool result = await csvLoaderService.loadRemainingRoutes(context,routesCSV);
+  String action = LocalizationHelper.manage_array(context, array, actionArray);
 
   if(initialChargue==false)
-  await confirm(context, action);
+  {
+    if(result == true && errorFiles.isNotEmpty)
+    {
+      errors(context, errorFiles);
+    }
+    else
+    {
+      await confirm(context, action);
+      Navigator.of(context).pop(true);
+    }
+
+  }
+
 
 
 }
