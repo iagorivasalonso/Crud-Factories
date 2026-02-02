@@ -48,16 +48,16 @@ class csvLoaderService {
     return loadedRoutes;
   }
 
-  static Future<bool> loadRemainingRoutes(BuildContext context) async {
+  static Future<bool> loadRemainingRoutes(BuildContext context, List<RouteCSV> routesCSV) async {
 
-  loadedRoutes = await csvLoaderService.loadInitialRoutes(context);
 
-    final cantidadRoutes=loadedRoutes.length;
+
+    final cantidadRoutes=routesCSV.length;
     bool isCorrect= true;
 
     for(int i = 1; i <cantidadRoutes; i++)
     {
-      final route = loadedRoutes[i].route;
+      final route = routesCSV[i].route;
       if (route.isEmpty) continue;
 
       try {
@@ -73,13 +73,15 @@ class csvLoaderService {
 
         await importAppFile(context, file);
       } catch (e, s) {
-        String array =loadedRoutes[i].name;
+
+        String array =routesCSV[i].name;
         errorFiles.add("${S.of(context).file_not_found} $array");
+        isCorrect=false;
       }
 
     }
 
-    return true; // Devuelve true si todo bien
+    return isCorrect; // Devuelve true si todo bien
   }
 
   static Future<List<RouteCSV>> _createData(String path) async {
@@ -156,7 +158,7 @@ List<RouteCSV> reorderRouter ( List<String> orderRoutes, List<RouteCSV> routesCs
 }
 
 void clearAllData() {
-  loadedRoutes.clear();
+  routesCSV.clear();
   errorFiles.clear();
 
   // ⚠️ TODAS las listas que llenan los CSV
