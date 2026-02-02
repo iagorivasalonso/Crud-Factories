@@ -891,6 +891,16 @@ class S {
     );
   }
 
+  /// `Los demás campos se autocompletarán por defecto. ¿Desea continuar?`
+  String get other_fields_will_be_autofilled_do_you_want_to_continue {
+    return Intl.message(
+      'Los demás campos se autocompletarán por defecto. ¿Desea continuar?',
+      name: 'other_fields_will_be_autofilled_do_you_want_to_continue',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `No se pudo eliminar`
   String get could_not_be_deleted {
     return Intl.message(
