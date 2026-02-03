@@ -236,7 +236,6 @@ class ConectionProvider extends ChangeNotifier {
 
             if (!type_err) {
               type_err = await createTables();
-
             }
           });
 
