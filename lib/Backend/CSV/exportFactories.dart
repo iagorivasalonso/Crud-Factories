@@ -3,7 +3,7 @@ import 'package:crud_factories/Backend/Global/files.dart';
 import 'package:crud_factories/Objects/Factory.dart';
 import 'package:csv/csv.dart';
 
-import 'Export_general/export_csv.dart';
+import 'Export_general/export_csv_io.dart';
 
 
 
@@ -59,7 +59,7 @@ Future<bool> csvExportatorFactories(List<Factory> factories) async {
 
   String csv = const ListToCsvConverter(fieldDelimiter: ';').convert(rows);
 
-  err = !await exportCsv(csv,file: fFactories);
+  err = !await exportCsvIO(csv,file: fFactories);
 
   return err;
 }

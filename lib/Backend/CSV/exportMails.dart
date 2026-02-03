@@ -3,7 +3,9 @@ import 'package:crud_factories/Backend/Global/files.dart';
 import 'package:crud_factories/Objects/Mail.dart';
 import 'package:csv/csv.dart';
 
-import 'Export_general/export_csv.dart';
+import 'Export_general/export_csv_io.dart';
+
+
 
 
 
@@ -37,7 +39,7 @@ Future<bool> csvExportatorMails(List<Mail> mails) async {
 
   String csv = const ListToCsvConverter(fieldDelimiter: ';').convert(rows);
 
-  err = !await exportCsv(csv,file: fMails);
+  err = !await exportCsvIO(csv,file: fMails);
 
   return err;
 }
