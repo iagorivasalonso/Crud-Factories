@@ -121,6 +121,9 @@ class _adminRoutesState extends State<adminRoutes> {
                                      ? namesRoutesSQL.length
                                      : namesRoutesOrdened.length,
                           itemBuilder: (BuildContext context0, int index) {
+                            if (index == 2 && kIsWeb) {
+                              return const SizedBox.shrink(); // se oculta para web server
+                            }
                             return Padding(
                               padding: const EdgeInsets.all(10),
                               child: CSVPickerField(
