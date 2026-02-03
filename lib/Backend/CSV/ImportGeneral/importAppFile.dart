@@ -30,6 +30,7 @@ Future<bool> importAppFile (BuildContext context, AppFile file , [bool importOth
         final f = File(file.path!);
         content = await f.readAsString(encoding: utf8);
       }
+
       if (content.trim().isEmpty)
       {
            var match = routesCSV.firstWhere(
@@ -39,14 +40,14 @@ Future<bool> importAppFile (BuildContext context, AppFile file , [bool importOth
 
            array=match.name;
 
-           await CsvProcessorService.processCsvContent(
-               context, content, importOtherFiles
-           );
 
        return true;
      }
      else
      {
+       await CsvProcessorService.processCsvContent(
+         context, content, importOtherFiles
+        );
          return false;
      }
 
