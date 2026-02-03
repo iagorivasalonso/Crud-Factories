@@ -315,7 +315,7 @@ class _conectionState extends State<conection> {
 
 
         await csvLoaderService.loadRemainingRoutes(context,routesCSV);
-        
+
         String action = S.of(context).has_closed_the_connection;
         confirm(context, action);
       }
@@ -337,7 +337,6 @@ class _conectionState extends State<conection> {
       }
 
       final err = await provider.connect(context);
-      print(err);
       if(err==selectedDb) //si no hay error ya pone la conex
       {
         sectors.clear();
