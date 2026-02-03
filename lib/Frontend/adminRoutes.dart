@@ -139,7 +139,7 @@ class _adminRoutesState extends State<adminRoutes> {
                         ),
                       ),
                     ),
-                    const SizedBox(height: 10),
+                    const SizedBox(height: kIsWeb? 40 : 10),
                     Padding(
                       padding: const EdgeInsets.only(left: 150.0),
                       child: Row(
