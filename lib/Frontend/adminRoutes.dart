@@ -52,13 +52,14 @@ class _adminRoutesState extends State<adminRoutes> {
     await _showRouteDialog();
   }
 
-  List<bool> campAutomatic =List.generate(routeControllers.length, (index) => false);
+  List<bool> campAutomatic = List.generate(routeControllers.length, (index) => false);
   List<RouteCSV>routesNoSave =[];
 
   @override
   Widget build(BuildContext context0) {
 
     BuildContext context = context1;
+
 
     return SizedBox.shrink();
 
@@ -70,6 +71,13 @@ class _adminRoutesState extends State<adminRoutes> {
         context: context,
         builder: (BuildContext context) {
           String? selectedOption = S.of(context).csv;
+
+          final namesRoutesSQL = [
+            S.of(context).routes,
+            S.of(context).connections,
+            S.of(context).server,
+          ];
+
 
           return StatefulBuilder(
             builder: (BuildContext context0, void Function(void Function()) setState) => Dialog(
@@ -110,8 +118,8 @@ class _adminRoutesState extends State<adminRoutes> {
                         padding: const EdgeInsets.symmetric(horizontal: 20.0),
                         child: ListView.builder(
                           itemCount: selectedOption == S.of(context).sql
-                                     ?  3
-                                     : routeControllers.length,
+                                     ? namesRoutesSQL.length
+                                     : namesRoutesOrdened.length,
                           itemBuilder: (BuildContext context0, int index) {
                             return Padding(
                               padding: const EdgeInsets.all(10),
@@ -131,7 +139,7 @@ class _adminRoutesState extends State<adminRoutes> {
                         ),
                       ),
                     ),
-                    const SizedBox(height: kIsWeb? 40 : 10),
+                    const SizedBox(height: 10),
                     Padding(
                       padding: const EdgeInsets.only(left: 150.0),
                       child: Row(
