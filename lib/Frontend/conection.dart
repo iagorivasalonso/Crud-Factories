@@ -5,6 +5,7 @@ import 'package:crud_factories/Alertdialogs/warning.dart';
 import 'package:crud_factories/Backend/CSV/exportConections.dart';
 import 'package:crud_factories/Backend/Global/list.dart';
 import 'package:crud_factories/Backend/Global/variables.dart';
+import 'package:crud_factories/Backend/SQL/importLines.dart';
 import 'package:crud_factories/Backend/providers/Conection_provider.dart';
 import 'package:crud_factories/Objects/Conection.dart';
 import 'package:crud_factories/Widgets/headViewsAndroid.dart' show appBarAndroid;
@@ -348,6 +349,7 @@ class _conectionState extends State<conection> {
 
         await sqlImportSetors();
         await sqlImportFactories();
+        await sqlImportLines();
         await sqlImportEmpleoyes();
         await sqlImportMails();
 
