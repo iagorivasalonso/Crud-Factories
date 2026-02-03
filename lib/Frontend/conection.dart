@@ -143,7 +143,9 @@ class _conectionState extends State<conection> {
                                         .newFemale,
                                     itemLabel: (Conection) =>
                                     Conection.database,
-                                    onChanged: (conectionChoose) =>  _onConectionChanged(conectionChoose,provider),
+                                    onChanged: (conectionChoose) =>provider.status != ConnectionStatus.connected
+                                       ? _onConectionChanged(conectionChoose,provider)
+                                       : null,
                                   ),
                                 ),
                               ),
