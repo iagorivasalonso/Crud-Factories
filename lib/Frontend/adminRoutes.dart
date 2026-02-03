@@ -190,7 +190,6 @@ class _adminRoutesState extends State<adminRoutes> {
 
           if (index == 0)
           {
-
             String message=S.of(context).other_fields_will_be_autofilled_do_you_want_to_continue;
             bool correct= await warning(context, message);
 
