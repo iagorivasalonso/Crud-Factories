@@ -254,7 +254,7 @@ Future<void> importedRoutes(BuildContext context, [bool initialChargue = false])
 
   String array = S.of(context).routes;
   String actionArray = S.of(context).saved;
-  csvExportatorRoutes(routesCSV);
+
   bool result = await csvLoaderService.loadRemainingRoutes(context,routesCSV);
   String action = LocalizationHelper.manage_array(context, array, actionArray);
 
@@ -269,7 +269,7 @@ Future<void> importedRoutes(BuildContext context, [bool initialChargue = false])
       await confirm(context, action);
       Navigator.of(context).pop(true);
     }
-
+    csvExportatorRoutes(routesCSV);
   }
 
 

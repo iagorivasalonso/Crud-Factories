@@ -69,23 +69,12 @@ class _appDesktopState extends State<appDesktop> {
           {
                 String name = '';
 
-                for(int i = 0; i < routesCSV.length; i++)
-                {
-                   name = routesCSV[i].name;
-
-                   for (int y = 0; y < SQLRoutes.length; y++)
-                   {
-                      if(SQLRoutes[y] == name)
-                      {
-                        routesCurrent.add(routesCSV[i]);
-                      }
-                   }
+                for (var route in routesCSV) {
+                  if (SQLRoutes.any((sqlName) => sqlName.trim().toLowerCase() == route.name.trim().toLowerCase())) {
+                    routesCurrent.add(route);
+                  }
                 }
 
-                setState(() {
-                  itenSelect = 2;
-                  subIten1Select = 1;
-                });
           }
           else
           {
@@ -137,6 +126,12 @@ class _appDesktopState extends State<appDesktop> {
 
           bool initialChargue = true;
           await importedRoutes(context,initialChargue);
+
+      if (sqlBd == true)
+      setState(() {
+        itenSelect = 2;
+        subIten1Select = 1;
+      });
      });
 
   }
