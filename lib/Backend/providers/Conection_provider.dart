@@ -226,16 +226,16 @@ class ConectionProvider extends ChangeNotifier {
         {
           await DbApi.actionApi( 'create',cNew);
 
-          await createTables();
+          await actionsBD.createTables();
         }
         else
         {
 
           await _withConnection(cNew, (conn) async {
-            type_err = await createDB( cNew.database, conn);
+            type_err = await actionsBD.createDB( cNew.database, conn);
 
             if (!type_err) {
-              type_err = await createTables();
+              type_err = await actionsBD.createTables();
             }
           });
 
@@ -271,7 +271,7 @@ class ConectionProvider extends ChangeNotifier {
       else
       {
         await _withConnection(cNew, (conn) async {
-          final err = await editDB(old.database, cNew.database);
+          final err = await actionsBD.editDB(old.database, cNew.database);
           error = err;
         });
       }
@@ -300,7 +300,7 @@ class ConectionProvider extends ChangeNotifier {
       else
       {
         await _withConnection(toDelete, (conn) async {
-          final err = await deleteDB(toDelete.database);
+          final err = await actionsBD.deleteDB(toDelete.database);
           if (err==true) return err;
         });
       }
