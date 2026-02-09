@@ -255,27 +255,27 @@ class ConectionProvider extends ChangeNotifier {
 
     }
 
-  Future<bool> update(Conection old, Conection cNew) async {
+  Future<bool> update(Conection current, Conection cNew) async {
 
     bool error = false;
 
-    if (!_conectionsMap.containsKey(old.database)) {
+    if (!_conectionsMap.containsKey(current.database)) {
        error = true;
     }
     else
     {
       if(kIsWeb)
       {
-        await DbApi.actionApi( 'update',old, cNew);
+        await DbApi.actionApi( 'update',current, cNew);
       }
       else
       {
         await _withConnection(cNew, (conn) async {
-          final err = await actionsBD.editDB(old.database, cNew.database);
+          final err = await actionsBD.editDB(current.database, cNew.database);
           error = err;
         });
       }
-      final index = conections.indexWhere((c) => c.database == old.database);
+      final index = conections.indexWhere((c) => c.database == current.database);
       conections[index] = cNew;
       _updateList(conections, newSelected: cNew);
 
