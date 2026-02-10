@@ -224,9 +224,23 @@ class ConectionProvider extends ChangeNotifier {
       {
         if(kIsWeb)
         {
-          await DbApi.actionApi( 'create',cNew);
+            final ResDataBase = await DbApi.actionApi( 'createBD',cNew)
+                      .then((data) => DatabaseResponse.fromJson(data));
 
-          await actionsBD.createTables();
+            if (!ResDataBase.ok)
+            {
+                 type_err = false;
+            }
+            else
+            {
+              final ResTables = await DbApi.actionApi( 'createTables',cNew)
+                  .then((data) => DatabaseResponse.fromJson(data));
+
+              if(!ResTables.ok)
+              {
+                type_err = false;
+              }
+            }
         }
         else
         {
@@ -266,7 +280,13 @@ class ConectionProvider extends ChangeNotifier {
     {
       if(kIsWeb)
       {
-        await DbApi.actionApi( 'update',current, cNew);
+        final ResUpdate = await DbApi.actionApi( 'update',current, cNew)
+            .then((data) => DatabaseResponse.fromJson(data));
+
+        if(!ResUpdate.ok)
+        {
+          error = false;
+        }
       }
       else
       {
@@ -295,7 +315,13 @@ class ConectionProvider extends ChangeNotifier {
     {
       if(kIsWeb)
       {
-        await DbApi.actionApi( 'delete', toDelete);
+        final ResDelete = await DbApi.actionApi( 'delete', toDelete)
+            .then((data) => DatabaseResponse.fromJson(data));
+         print(ResDelete.ok);//false
+        if(!ResDelete.ok)
+        {
+          error = true;
+        }
       }
       else
       {
@@ -374,5 +400,16 @@ class ConectionProvider extends ChangeNotifier {
   }
 
   }
+
+class DatabaseResponse {
+  final bool ok;
+  final String message;
+
+  DatabaseResponse({required this.ok, required this.message});
+
+  factory DatabaseResponse.fromJson(Map<String, dynamic> json) {
+    return DatabaseResponse(ok: json['ok'], message: json['message']);
+  }
+}
 
 

@@ -13,11 +13,10 @@ class DbApi {
   static const baseUrl = 'http://localhost:3000';
 
 
-  static Future<void> actionApi(String action, Conection? connection, [Conection? newDataBase]) async {
+  static Future<Map<String, dynamic>> actionApi(String action, Conection? connection, [Conection? newDataBase]) async {
 
     if (connection == null) {
-    //  error(context, S.of(context).You_must_select_a_connection);
-      return;
+      return {'ok': false, 'message': 'Debes seleccionar una conexión'};
     }
 
     try {
@@ -30,7 +29,7 @@ class DbApi {
         'database': connection.database,
         if (action == 'update' && newDataBase != null) 'newDatabase': newDataBase.database,
       };
-      print(body);
+      print('[DbApi] Request body: $body');
       final res = await http.post(
         Uri.parse('$baseUrl/db'),
         headers: {'Content-Type': 'application/json'},
@@ -38,13 +37,14 @@ class DbApi {
       );
 
       final data = jsonDecode(res.body);
-      if (res.statusCode != 200) {
-        throw data['error'];
+      if (data['ok'] == true) {
+        return {'ok': true, 'message': data['message']};
+      } else {
+        return {'ok': false, 'message': data['message'] ?? 'Error desconocido'};
       }
 
-     // confirm(context, data['message']);
     } catch (e) {
-     // error(context, e.toString());
+      return {'ok': false, 'message': 'Error de conexión: $e'};
     }
   }
 }
