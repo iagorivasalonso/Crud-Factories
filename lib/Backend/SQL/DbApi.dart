@@ -29,7 +29,7 @@ class DbApi {
         'database': connection.database,
         if (action == 'update' && newDataBase != null) 'newDatabase': newDataBase.database,
       };
-      print('[DbApi] Request body: $body');
+
       final res = await http.post(
         Uri.parse('$baseUrl/db'),
         headers: {'Content-Type': 'application/json'},
