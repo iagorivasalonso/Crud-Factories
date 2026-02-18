@@ -387,6 +387,9 @@ class ConectionProvider extends ChangeNotifier {
     if (errorMsg.contains("Unknown database")) {
       type = "${S.of(context).there_is_no_database_with_that_name} ${selected?.database}";
     }
+    else if (errorMsg.contains(" Host desconocido")) {
+      type = S.of(context).unknown_host;
+    }
     else if (errorMsg.contains("is not allowed to connect to this MySQL server")) {
       type = S.of(context).could_not_connect_with_the_server;
     }
