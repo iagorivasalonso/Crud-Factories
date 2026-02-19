@@ -189,13 +189,26 @@ class ConectionProvider extends ChangeNotifier {
   }
     Future<bool>disconnet() async {
 
-      await executeQuery?.close();
-      _connected = false;
+      bool _disconnected = true;
+
+      if (executeQuery != null) {
+        try {
+          await executeQuery!.close();
+          print('Query cerrada correctamente.');
+
+          _connected = false;
+
+        } catch (e) {
+          print('Error cerrando la query: $e');
+          _disconnected = false; // marcar que hubo un fallo
+        }
+      }
+
       selectedDb='';
       executeQuery = null;
 
       notifyListeners();
-     return _connected;
+     return _disconnected;
     }
 
     void clearSelection() {
