@@ -482,6 +482,7 @@ class MessageLookup extends MessageLookupByLibrary {
         ),
     "to_import": MessageLookupByLibrary.simpleMessage("Para importar"),
     "undo": MessageLookupByLibrary.simpleMessage("Deshacer"),
+    "unknown_host": MessageLookupByLibrary.simpleMessage("Host desconocido"),
     "update": MessageLookupByLibrary.simpleMessage("Actualizar"),
     "user": MessageLookupByLibrary.simpleMessage("Usuario"),
     "utilities": MessageLookupByLibrary.simpleMessage("Utilidades"),

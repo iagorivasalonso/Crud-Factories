@@ -319,6 +319,16 @@ class S {
     return Intl.message('Host', name: 'host', desc: '', args: []);
   }
 
+  /// `Host desconocido`
+  String get unknown_host {
+    return Intl.message(
+      'Host desconocido',
+      name: 'unknown_host',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Importar`
   String get import {
     return Intl.message('Importar', name: 'import', desc: '', args: []);

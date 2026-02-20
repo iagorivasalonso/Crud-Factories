@@ -41,6 +41,7 @@
   "saved": "Guardado",
   "sends": "Envios",
   "host": "Host",
+  "unknown_host": "Host desconocido",
   "import": "Importar",
   "name": "Nombre",
   "newFemale": "Nueva",
