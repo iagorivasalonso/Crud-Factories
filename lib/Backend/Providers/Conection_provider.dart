@@ -415,13 +415,13 @@ class ConectionProvider extends ChangeNotifier {
     if (errorMsg.contains("Unknown database")) {
       type = "${S.of(context).there_is_no_database_with_that_name} ${selected?.database}";
     }
-    else if (errorMsg.contains(" Host desconocido")) {
+    else if (errorMsg.contains(" Host desconocido") | errorMsg.contains("Unknown host")) {
       type = S.of(context).unknown_host;
     }
     else if (errorMsg.contains("is not allowed to connect to this MySQL server")) {
       type = S.of(context).could_not_connect_with_the_server;
     }
-    else if (errorMsg.contains("SocketException")) {
+    else if (errorMsg.contains("SocketException") | errorMsg.contains('Connection refused (check host or port)')) {
       type = S.of(context).the_port_is_not_correct;
     }
     else if (errorMsg.contains("Access denied for user")) {
