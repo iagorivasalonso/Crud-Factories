@@ -122,7 +122,15 @@ class ConectionProvider extends ChangeNotifier {
       }
       else
       {
-        await DbApi.actionApi('connect', con);
+
+          final resConnection = await DbApi.actionApi('test-connection', con);
+          final dbResponse = DatabaseResponse.fromJson(resConnection);
+
+          print("d${dbResponse.message}");
+          if(dbResponse.message!="Conectado correctamente")
+          {
+            throw Exception(dbResponse.message);
+          }
       }
 
 
