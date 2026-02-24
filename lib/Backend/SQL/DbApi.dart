@@ -1,20 +1,12 @@
 import 'package:crud_factories/Objects/Conection.dart';
-import 'package:crud_factories/Objects/Conection.dart';
 import 'dart:convert';
-import 'package:fluent_ui/fluent_ui.dart';
-import 'package:http/http.dart' as http show post;
-import '../../Alertdialogs/confirm.dart';
-import '../../Alertdialogs/error.dart';
-import '../../generated/l10n.dart';
-
-
+import 'package:http/http.dart' as http;
 
 class DbApi {
   static const baseUrl = 'http://localhost:3000';
 
-
-  static Future<Map<String, dynamic>> actionApi(String action, Conection? connection, [Conection? newDataBase]) async {
-
+  static Future<Map<String, dynamic>> actionApi(
+      String action, Conection? connection, [Conection? newDataBase]) async {
     if (connection == null) {
       return {'ok': false, 'message': 'Debes seleccionar una conexión'};
     }
@@ -27,7 +19,8 @@ class DbApi {
         'user': connection.user,
         'password': connection.password,
         'database': connection.database,
-        if (action == 'update' && newDataBase != null) 'newDatabase': newDataBase.database,
+        if (action == 'update' && newDataBase != null)
+          'newDatabase': newDataBase.database,
       };
 
       final res = await http.post(
@@ -37,15 +30,32 @@ class DbApi {
       );
 
       final data = jsonDecode(res.body);
-      if (data['ok'] == true) {
-        return {'ok': true, 'message': data['message']};
-      } else {
-        return {'ok': false, 'message': data['message'] ?? 'Error desconocido'};
+
+
+      String message;
+
+// Caso normal: data['message'] existe
+      if (data['message'] != null && data['message'] is String) {
+        message = data['message'];
       }
+// Caso error: puede ser Map o String
+      else if (data['error'] != null) {
+        if (data['error'] is Map && data['error']['message'] is String) {
+          message = data['error']['message'];
+        } else if (data['error'] is String) {
+          message = data['error'];
+        } else {
+          message = 'Error desconocido';
+        }
+      } else {
+        message = 'Error desconocido';
+      }
+
+
+      return {'ok': data['ok'] ?? false, 'message': message};
 
     } catch (e) {
       return {'ok': false, 'message': 'Error de conexión: $e'};
     }
   }
 }
-
