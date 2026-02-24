@@ -124,7 +124,7 @@ class ConectionProvider extends ChangeNotifier {
       {
 
           final resConnection = await DbApi.actionApi('test-connection', con);
-          final dbResponse = DatabaseResponse.fromJson(resConnection);
+          final dbResponse = ApiResponse.fromJson(resConnection);
 
           print("d${dbResponse.message}");
           if(dbResponse.message!="Conectado correctamente")
@@ -207,7 +207,7 @@ class ConectionProvider extends ChangeNotifier {
               Conection? con =selected;
 
               final resConnection = await DbApi.actionApi('disconnect', con);
-              final dbResponse = DatabaseResponse.fromJson(resConnection);
+              final dbResponse = ApiResponse.fromJson(resConnection);
 
                  if(dbResponse.message=="Desconectado correctamente")
                  {
@@ -253,7 +253,7 @@ class ConectionProvider extends ChangeNotifier {
         if(kIsWeb)
         {
             final ResDataBase = await DbApi.actionApi( 'createBD',cNew)
-                      .then((data) => DatabaseResponse.fromJson(data));
+                      .then((data) => ApiResponse.fromJson(data));
 
             if (!ResDataBase.ok)
             {
@@ -262,7 +262,7 @@ class ConectionProvider extends ChangeNotifier {
             else
             {
               final ResTables = await DbApi.actionApi( 'createTables',cNew)
-                  .then((data) => DatabaseResponse.fromJson(data));
+                  .then((data) => ApiResponse.fromJson(data));
 
               if(!ResTables.ok)
               {
@@ -309,7 +309,7 @@ class ConectionProvider extends ChangeNotifier {
       if(kIsWeb)
       {
         final ResUpdate = await DbApi.actionApi( 'update',current, cNew)
-            .then((data) => DatabaseResponse.fromJson(data));
+            .then((data) => ApiResponse.fromJson(data));
 
         if(!ResUpdate.ok)
         {
@@ -344,7 +344,7 @@ class ConectionProvider extends ChangeNotifier {
       if(kIsWeb)
       {
         final ResDelete = await DbApi.actionApi( 'delete', toDelete)
-            .then((data) => DatabaseResponse.fromJson(data));
+            .then((data) => ApiResponse.fromJson(data));
          print(ResDelete.ok);//false
         if(!ResDelete.ok)
         {
@@ -432,14 +432,14 @@ class ConectionProvider extends ChangeNotifier {
 
   }
 
-class DatabaseResponse {
+class ApiResponse {
   final bool ok;
   final String message;
 
-  DatabaseResponse({required this.ok, required this.message});
+  ApiResponse({required this.ok, required this.message});
 
-  factory DatabaseResponse.fromJson(Map<String, dynamic> json) {
-    return DatabaseResponse(ok: json['ok'], message: json['message']);
+  factory ApiResponse.fromJson(Map<String, dynamic> json) {
+    return ApiResponse(ok: json['ok'], message: json['message']);
   }
 }
 
