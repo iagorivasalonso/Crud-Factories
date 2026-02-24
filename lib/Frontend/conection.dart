@@ -345,8 +345,8 @@ class _conectionState extends State<conection> {
         provider.setTempConnection(modify);
       }
 
-      final conected = await provider.connect(context);
-      if(conected!=selectedDb) //si no hay error ya pone la conex
+      final conectionTrue = await provider.connect(context);
+      if(conectionTrue==selectedDb) //si no hay error ya pone la conex
       {
         sectors.clear();
         allFactories.clear();
@@ -387,7 +387,8 @@ class _conectionState extends State<conection> {
       }
       else
       {
-         error(context, err);
+         //si no es true
+         error(context, conectionTrue);
       }
 
     }
