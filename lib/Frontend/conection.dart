@@ -306,9 +306,10 @@ class _conectionState extends State<conection> {
 
     if (provider.status == ConnectionStatus.connected) {
 
-      final err = await provider.disconnet();
+      final connected = await provider.disconnet();
 
-      if(err==false)
+
+      if(connected==false)
       {
         sectors.clear();
         allFactories.clear();
@@ -321,6 +322,11 @@ class _conectionState extends State<conection> {
 
         String action = S.of(context).has_closed_the_connection;
         confirm(context, action);
+      }
+      else
+      {
+        String action = S.of(context).cannot_disconnect;
+        error(context, action);
       }
 
     } else {
@@ -339,8 +345,8 @@ class _conectionState extends State<conection> {
         provider.setTempConnection(modify);
       }
 
-      final err = await provider.connect(context);
-      if(err==selectedDb) //si no hay error ya pone la conex
+      final conected = await provider.connect(context);
+      if(conected!=selectedDb) //si no hay error ya pone la conex
       {
         sectors.clear();
         allFactories.clear();
