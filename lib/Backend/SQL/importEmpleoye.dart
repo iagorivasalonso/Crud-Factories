@@ -1,12 +1,11 @@
 import 'dart:convert';
 import 'package:crud_factories/Backend/Global/controllers/Conection.dart';
+import 'package:crud_factories/Backend/connectors_API/connectApi.dart' show connectApi;
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 import 'package:crud_factories/Backend/Global/variables.dart';
 import 'package:crud_factories/Backend/Global/list.dart';
 import 'package:crud_factories/Objects/Empleoye.dart';
-
-import 'connectApi.dart';
 
 Future<void> sqlImportEmpleoyes(connectionControler controllers) async {
 

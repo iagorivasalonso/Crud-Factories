@@ -5,8 +5,8 @@ import 'package:http/http.dart' as http;
 import 'package:crud_factories/Backend/Global/variables.dart';
 import 'package:crud_factories/Backend/Global/list.dart';
 import 'package:crud_factories/Objects/LineSend.dart';
+import '../connectors_API/connectApi.dart';
 
-import 'connectApi.dart';
 
 Future<void> sqlImportLines(connectionControler controllers) async {
 

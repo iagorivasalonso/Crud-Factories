@@ -1,11 +1,12 @@
 import 'dart:convert';
 import 'package:crud_factories/Backend/Global/controllers/Conection.dart';
-import 'package:crud_factories/Backend/SQL/connectApi.dart';
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 import 'package:crud_factories/Backend/Global/variables.dart';
 import 'package:crud_factories/Backend/Global/list.dart';
 import 'package:crud_factories/Objects/Sector.dart';
+
+import '../connectors_API/connectApi.dart';
 
 Future<void> sqlImportSetors(connectionControler controllers) async {
  

@@ -6,7 +6,7 @@ import 'package:crud_factories/Backend/Global/variables.dart';
 import 'package:crud_factories/Backend/Global/list.dart';
 import 'package:crud_factories/Objects/Factory.dart';
 
-import 'connectApi.dart';
+import '../connectors_API/connectApi.dart';
 
 
 Future<void> sqlImportFactories(connectionControler controllers) async {
