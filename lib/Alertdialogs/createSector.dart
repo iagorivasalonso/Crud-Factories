@@ -184,13 +184,16 @@ Future<void> saveSector(BuildContext context,TextEditingController controllerSec
         else
         {
 
-          final sector1 = sectors.firstWhere((s) => s.name == campOld);
+          final sector1 = sectors.cast<Sector?>().firstWhere(
+                (s) => s?.name == campOld,
+            orElse: () => null,
+          );
 
           if (sector1 == null) {
-            final action = S.of(context).sector;
-            await error(context, action);
+            await error(context, S.of(context).sector);
             return;
           }
+
           sector1.name = controllerSector.text;
           currentSector = [sector1];
 
@@ -205,9 +208,9 @@ Future<void> saveSector(BuildContext context,TextEditingController controllerSec
           String action = S.of(context).sector_edited_correctly;
           await confirm(context, action);
         }
-        Navigator.of(context).pop(true);
+
       }
     }
 
-
+  Navigator.of(context).pop(true);
 }
