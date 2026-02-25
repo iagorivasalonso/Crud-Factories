@@ -1,16 +1,19 @@
 import 'dart:convert';
+import 'package:crud_factories/Backend/Global/controllers/Conection.dart';
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 import 'package:crud_factories/Backend/Global/variables.dart';
 import 'package:crud_factories/Backend/Global/list.dart';
 import 'package:crud_factories/Objects/LineSend.dart';
 
-Future<void> sqlImportLines() async {
-  const String baseUrl = 'http://localhost:3000';
+import 'connectApi.dart';
+
+Future<void> sqlImportLines(connectionControler controllers) async {
+
   if (selectedDb.isEmpty) return;
 
   if (kIsWeb) {
-    await _loadLinesFromApi(baseUrl);
+    await _loadLinesFromApi(controllers);
   } else {
     await _loadLinesFromDb();
   }
@@ -35,25 +38,32 @@ Future<void> _loadLinesFromDb() async {
   }
 }
 
-Future<void> _loadLinesFromApi(String baseUrl) async {
+Future<void> _loadLinesFromApi(connectionControler controllers) async {
+
   try {
-    final uri = Uri.parse('$baseUrl/$selectedDb/lines?db=$selectedDb');
-    final res = await http.get(uri);
+
+    final String nameTable = 'lines';
+    final uri = await connectApi(controllers,nameTable);
+
+    final res = await http.get(uri, headers: {'Content-Type': 'application/json'} );
 
     if (res.statusCode != 200) {
       throw Exception('HTTP ${res.statusCode}: ${res.body}');
     }
+    final body = jsonDecode(res.body);
 
-    final List<dynamic> data = jsonDecode(res.body);
-    for (final row in data) {
-      allLines.add(LineSend(
-        id: row['id'].toString(),
-        date: row['date'],
-        factory: row['factory'],
-        observations: row['observations'],
-        state: row['state'],
-      ));
+    if (body is List) {
+      for (final row in body) {
+        allLines.add(LineSend(
+          id: row['id'].toString() ?? '',
+          date: row['date'] ?? '',
+          factory: row['factory'] ?? '',
+          observations: row['observations'] ?? '',
+          state: row['state']  ?? '',
+        ));
+      }
     }
+
     debugPrint('Lines cargadas desde API: ${allLines.length}');
   } catch (e, stack) {
     debugPrint('API ERROR: $e');

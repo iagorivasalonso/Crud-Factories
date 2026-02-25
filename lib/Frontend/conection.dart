@@ -362,11 +362,11 @@ class _conectionState extends State<conection> {
         allLines.clear();
         // Esperamos a que las funciones de carga terminen
 
-        await sqlImportSetors();
-        await sqlImportFactories();
-        await sqlImportLines();
-        await sqlImportEmpleoyes();
-        await sqlImportMails();
+        await sqlImportSetors(controllers);
+        await sqlImportFactories(controllers);
+        await sqlImportLines(controllers);
+        await sqlImportEmpleoyes(controllers);
+        await sqlImportMails(controllers);
 
         String action = "${S.of(context).is_connected_to}$selectedDb";
          await confirm(context, action);

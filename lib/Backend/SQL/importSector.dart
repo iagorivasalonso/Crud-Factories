@@ -1,12 +1,14 @@
 import 'dart:convert';
+import 'package:crud_factories/Backend/Global/controllers/Conection.dart';
+import 'package:crud_factories/Backend/SQL/connectApi.dart';
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 import 'package:crud_factories/Backend/Global/variables.dart';
 import 'package:crud_factories/Backend/Global/list.dart';
 import 'package:crud_factories/Objects/Sector.dart';
 
-Future<void> sqlImportSetors() async {
-  const String baseUrl = 'http://localhost:3000';
+Future<void> sqlImportSetors(connectionControler controllers) async {
+ 
 
   if (selectedDb.isEmpty) {
     print('BD no seleccionada');
@@ -14,7 +16,7 @@ Future<void> sqlImportSetors() async {
   }
 
   if (kIsWeb) {
-    await _loadSectorsFromApi(baseUrl);
+    await _loadSectorsFromApi(controllers);
   } else {
     await _loadSectorsFromDb();
   }
@@ -46,30 +48,29 @@ Future<void> _loadSectorsFromDb() async {
 /// =======================
 /// WEB → API NODE
 /// =======================
-Future<void> _loadSectorsFromApi(String baseUrl) async {
-  try {
-    print('$baseUrl/db/$selectedDb/sectors?db=$selectedDb');
-    // Enviar selectedDb correctamente en query parameters
-    final uri = Uri.parse('$baseUrl/$selectedDb/sectors?db=$selectedDb')
-        .replace(queryParameters: {'db': selectedDb});
+Future<void> _loadSectorsFromApi(connectionControler controllers) async {
 
-    final res = await http.get(uri);
+  try {
+
+     final String nameTable = 'sectors';
+     final uri = await connectApi(controllers,nameTable);
+
+    final res = await http.get(uri, headers: {'Content-Type': 'application/json'} );
 
     if (res.statusCode != 200) {
       throw Exception('HTTP ${res.statusCode}: ${res.body}');
     }
 
-    final List<dynamic> data = jsonDecode(res.body);
+    final body = jsonDecode(res.body);
 
-    for (final row in data) {
-      sectors.add(
-        Sector(
-          id: row['id'].toString(),
-          name: row['sector'],
-        ),
-      );
+    if (body is List) {
+      for (final row in body) {
+        sectors.add(Sector(
+          id: row['id']?.toString() ?? '',
+          name: row['sector'] ?? '',
+        ));
+      }
     }
-
     debugPrint('Sectores cargados desde API: ${sectors.length}');
   } catch (e, stack) {
     debugPrint('API ERROR: $e');

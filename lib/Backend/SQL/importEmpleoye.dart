@@ -1,16 +1,19 @@
 import 'dart:convert';
+import 'package:crud_factories/Backend/Global/controllers/Conection.dart';
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 import 'package:crud_factories/Backend/Global/variables.dart';
 import 'package:crud_factories/Backend/Global/list.dart';
 import 'package:crud_factories/Objects/Empleoye.dart';
 
-Future<void> sqlImportEmpleoyes() async {
-  const String baseUrl = 'http://localhost:3000';
+import 'connectApi.dart';
+
+Future<void> sqlImportEmpleoyes(connectionControler controllers) async {
+
   if (selectedDb.isEmpty) return;
 
   if (kIsWeb) {
-    await _loadEmpleoyesFromApi(baseUrl);
+    await _loadEmpleoyesFromApi(controllers);
   } else {
     await _loadEmpleoyesFromDb();
   }
@@ -33,25 +36,33 @@ Future<void> _loadEmpleoyesFromDb() async {
   }
 }
 
-Future<void> _loadEmpleoyesFromApi(String baseUrl) async {
+Future<void> _loadEmpleoyesFromApi(connectionControler controllers) async {
+
   try {
-    final uri = Uri.parse('$baseUrl/$selectedDb/empleoyes?db=$selectedDb');
-    final res = await http.get(uri);
-print(uri);
+
+    final String nameTable = 'empleoyes';
+    final uri = await connectApi(controllers,nameTable);
+
+    final res = await http.get(uri, headers: {'Content-Type': 'application/json'} );
+
     if (res.statusCode != 200) {
       throw Exception('HTTP ${res.statusCode}: ${res.body}');
     }
 
-    final List<dynamic> data = jsonDecode(res.body);
-    for (final row in data) {
-      empleoyes.add(Empleoye(
-        id: row['id'].toString(),
-        name: row['name'],
-        idFactory: row['idFactory'].toString(),
-      ));
+    final body = jsonDecode(res.body);
 
+    if (body is List) {
+      for (final row in body) {
+        empleoyes.add(Empleoye(
+          id: row['id'].toString(),
+          name: row['name'],
+          idFactory: row['idFactory'].toString(),
+        ));
+
+      }
     }
-    print(empleoyes);
+
+
     debugPrint('Empleoyes cargados desde API: ${empleoyes.length}');
   } catch (e, stack) {
     debugPrint('API ERROR: $e');

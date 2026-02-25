@@ -1,17 +1,20 @@
 import 'dart:convert';
+import 'package:crud_factories/Backend/Global/controllers/Conection.dart';
 import 'package:flutter/foundation.dart' hide Factory;
 import 'package:http/http.dart' as http;
 import 'package:crud_factories/Backend/Global/variables.dart';
 import 'package:crud_factories/Backend/Global/list.dart';
 import 'package:crud_factories/Objects/Factory.dart';
 
+import 'connectApi.dart';
 
-Future<void> sqlImportFactories() async {
-  const String baseUrl = 'http://localhost:3000';
+
+Future<void> sqlImportFactories(connectionControler controllers) async {
+
   if (selectedDb.isEmpty) return;
 
   if (kIsWeb) {
-    await _loadFactoriesFromApi(baseUrl);
+    await _loadFactoriesFromApi(controllers);
   } else {
     await _loadFactoriesFromDb();
   }
@@ -45,51 +48,56 @@ Future<void> _loadFactoriesFromDb() async {
     debugPrintStack(stackTrace: stack);
   }
 }
-Future<void> _loadFactoriesFromApi(String baseUrl) async {
+Future<void> _loadFactoriesFromApi(connectionControler controllers) async {
   try {
-    final uri = Uri.parse('$baseUrl/$selectedDb/factories?db=$selectedDb');
-    final res = await http.get(uri);
-    print(res);
+
+    final String nameTable = 'factories';
+    final uri = await connectApi(controllers,nameTable);
+
+    final res = await http.get(uri, headers: {'Content-Type': 'application/json'} );
 
     if (res.statusCode != 200) {
       throw Exception('HTTP ${res.statusCode}: ${res.body}');
     }
 
-    final data = jsonDecode(res.body);
-    print(data);
 
-    // Protege contra que data no sea una lista
-    final factoriesList = (data is List) ? data : [];
+    final body = jsonDecode(res.body);
 
-    for (final row in factoriesList) {
-      // Protege thelephones
-      List<String> phonesList = (row['phones'] as List<String>? ?? [])
-          .map((p) => p.toString())
-          .toList();
+    if (body is List) {
+      for (final row in body) {
 
-// Rellenar hasta tener al menos 2 elementos
-      while (phonesList.length < 2) {
-        phonesList.add(''); // teléfono vacío
+          print(row);
+
+
+
+        // Protege thelephones
+// Protege los teléfonos de la API
+        List<String> phonesList = [
+          row['telephone1']?.toString() ?? '',
+          row['telephone2']?.toString() ?? '',
+        ];
+
+        allFactories.add(Factory(
+          id: row['id']?.toString() ?? '',
+          name: row['name'] ?? '',
+          highDate: row['highDate'] ?? '',
+          sector: row['sector']?.toString() ?? '',
+          thelephones: [row['telephone1'],row['telephone2']],
+          mail: row['mail'] ?? '',
+          web: row['web'] ?? '',
+          address: {
+            'street': row['address'] ?? '',
+            'number': row['number'] ?? '',
+            'apartament': row['apartament'] ?? '',
+            'city': row['city'] ?? '',
+            'postalCode': row['postalcode'] ?? '',
+            'province': row['province'] ?? '',
+          },
+        ));
+        print(allFactories[0].thelephones[0]);
       }
-
-      allFactories.add(Factory(
-        id: row['id']?.toString() ?? '',
-        name: row['name'] ?? '',
-        highDate: row['highDate'] ?? '',
-        sector: row['sector']?.toString() ?? '',
-        thelephones: phonesList,
-        mail: row['mail'] ?? '',
-        web: row['web'] ?? '',
-        address: {
-          'street': row['address'] ?? '',
-          'number': row['number'] ?? '',
-          'apartament': row['apartament'] ?? '',
-          'city': row['city'] ?? '',
-          'postalCode': row['postalcode'] ?? '',
-          'province': row['province'] ?? '',
-        },
-      ));
     }
+
 
     debugPrint('Factories cargadas desde API: ${allFactories.length}');
   } catch (e, stack) {
