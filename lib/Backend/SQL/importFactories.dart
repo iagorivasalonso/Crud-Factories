@@ -5,7 +5,6 @@ import 'package:http/http.dart' as http;
 import 'package:crud_factories/Backend/Global/variables.dart';
 import 'package:crud_factories/Backend/Global/list.dart';
 import 'package:crud_factories/Objects/Factory.dart';
-
 import '../connectors_API/connectApi.dart';
 
 
@@ -65,11 +64,6 @@ Future<void> _loadFactoriesFromApi(connectionControler controllers) async {
 
     if (body is List) {
       for (final row in body) {
-
-          print(row);
-
-
-
         // Protege thelephones
 // Protege los teléfonos de la API
         List<String> phonesList = [
@@ -94,7 +88,6 @@ Future<void> _loadFactoriesFromApi(connectionControler controllers) async {
             'province': row['province'] ?? '',
           },
         ));
-        print(allFactories[0].thelephones[0]);
       }
     }
 
