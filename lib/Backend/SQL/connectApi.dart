@@ -2,7 +2,6 @@ import 'package:crud_factories/Backend/Global/controllers/Conection.dart';
 
 Future<Uri> connectApi(connectionControler controllers, String nameTable) async {
 
-
   return Uri(
     scheme: 'http',
     host: 'localhost',
