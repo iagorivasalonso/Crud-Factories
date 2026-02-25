@@ -694,11 +694,6 @@ class S {
     return Intl.message('Líneas', name: 'lines', desc: '', args: []);
   }
 
-  /// `Enviado`
-  String get enviado {
-    return Intl.message('Enviado', name: 'enviado', desc: '', args: []);
-  }
-
   /// `Debe de ser numérico`
   String get it_must_be_numerical {
     return Intl.message(
@@ -1066,6 +1061,16 @@ class S {
     return Intl.message(
       'No se puede establecer la conexión',
       name: 'connection_cannot_be_established',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `No se puede desconectar`
+  String get cannot_disconnect {
+    return Intl.message(
+      'No se puede desconectar',
+      name: 'cannot_disconnect',
       desc: '',
       args: [],
     );

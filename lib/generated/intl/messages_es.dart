@@ -90,6 +90,9 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "can_not_load": MessageLookupByLibrary.simpleMessage("No se puede cargar"),
     "cancel": MessageLookupByLibrary.simpleMessage("Cancelar"),
+    "cannot_disconnect": MessageLookupByLibrary.simpleMessage(
+      "No se puede desconectar",
+    ),
     "cannot_go_empty": MessageLookupByLibrary.simpleMessage(
       "no puede quedar vacío",
     ),
@@ -194,7 +197,6 @@ class MessageLookup extends MessageLookupByLibrary {
     "edit_shipment": MessageLookupByLibrary.simpleMessage("Editar envio"),
     "el_shipment_has": MessageLookupByLibrary.simpleMessage("El envío tiene"),
     "employees": MessageLookupByLibrary.simpleMessage("Empleados"),
-    "enviado": MessageLookupByLibrary.simpleMessage("Enviado"),
     "error": MessageLookupByLibrary.simpleMessage("Error"),
     "error_creating_file": MessageLookupByLibrary.simpleMessage(
       "Error al crear el archivo",
