@@ -45,6 +45,7 @@ class _conectionState extends State<conection> {
 
   double widthBar = 10.0;
   late final connectionControler controllers;
+  bool conexChangued = false;
 
   @override
   void initState() {
@@ -324,8 +325,8 @@ class _conectionState extends State<conection> {
         mails.clear();
         allLines.clear();
 
-
-        await csvLoaderService.loadRemainingRoutes(context,routesCSV);
+        bool recharged= true;
+        await csvLoaderService.loadRemainingRoutes(context,routesCSV,recharged);
 
         String action = S.of(context).has_closed_the_connection;
         confirm(context, action);
@@ -371,7 +372,7 @@ class _conectionState extends State<conection> {
         String action = "${S.of(context).is_connected_to}$selectedDb";
          await confirm(context, action);
 
-         if(modify != null)
+         if(modify != null && conexChangued ==false)
          {
              String action = S.of(context).the_connection_has_changed_do_you_want_to_save_it;
               bool changue = await warning(context, action);

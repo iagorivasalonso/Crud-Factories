@@ -48,9 +48,7 @@ class csvLoaderService {
     return loadedRoutes;
   }
 
-  static Future<bool> loadRemainingRoutes(BuildContext context, List<RouteCSV> routesCSV) async {
-
-
+  static Future<bool> loadRemainingRoutes(BuildContext context, List<RouteCSV> routesCSV, [bool recharged= false]) async {
 
     final cantidadRoutes=routesCSV.length;
     bool isCorrect= true;
@@ -58,7 +56,8 @@ class csvLoaderService {
     for(int i = 1; i <cantidadRoutes; i++)
     {
       final route = routesCSV[i].route;
-      if (route.isEmpty) continue;
+
+      if (route.isEmpty || recharged ==true && routesCSV[i].name=='Conexiones') continue;
 
       try {
         AppFile file;
