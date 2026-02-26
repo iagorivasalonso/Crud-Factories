@@ -363,11 +363,11 @@ class _conectionState extends State<conection> {
         allLines.clear();
         // Esperamos a que las funciones de carga terminen
 
-        await sqlImportSetors(controllers);
-        await sqlImportFactories(controllers);
-        await sqlImportLines(controllers);
-        await sqlImportEmpleoyes(controllers);
-        await sqlImportMails(controllers);
+        await sqlImportSetors();
+        await sqlImportFactories();
+        await sqlImportLines();
+        await sqlImportEmpleoyes();
+        await sqlImportMails();
 
         String action = "${S.of(context).is_connected_to}$selectedDb";
          await confirm(context, action);
@@ -381,13 +381,27 @@ class _conectionState extends State<conection> {
               {
                 String id = modify.id;
                 final index = conections.indexWhere((c) => c.id == id);
-                conections[index] = modify;
-                if (index != -1)
-                {
+                if (index != -1) {
+                  // Actualiza el objeto en la lista
+                  conections[index] = Conection(
+                    id: modify.id,
+                    database: modify.database,
+                    host: modify.host,
+                    port: modify.port,
+                    user: modify.user,
+                    password: modify.password,
+                  );
+
+                  // Importante: actualizar selected para que apunte al objeto de la lista
+                  provider.selectConnection(conections[index]);
+
+                  // Refrescar UI
+                  setState(() {});
                   String action = S.of(context).connection_has_been_successfully_edited;
                   await confirm(context, action);
 
                   csvExportatorConections(conections);
+                  conexChangued = true;
                 }
 
               }
