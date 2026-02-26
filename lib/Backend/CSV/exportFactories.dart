@@ -1,9 +1,10 @@
-import 'package:crud_factories/Backend/CSV/Export_general/export_csv_web.dart';
+import 'package:crud_factories/Backend/CSV/Export_general/export_csv_web.dart' hide exportCsv;
 import 'package:crud_factories/Backend/Global/files.dart';
 import 'package:crud_factories/Objects/Factory.dart';
 import 'package:csv/csv.dart';
 
 import 'Export_general/export_csv_io.dart';
+import 'Export_general/export_csv_stub.dart';
 
 
 
@@ -57,9 +58,10 @@ Future<bool> csvExportatorFactories(List<Factory> factories) async {
       rows.add(row);
   }
 
+  final filePath = fFactories.toString();
   String csv = const ListToCsvConverter(fieldDelimiter: ';').convert(rows);
 
-  err = !await exportCsvIO(csv,file: fFactories);
+  err = !await exportCsv(csv, file: filePath);
 
   return err;
 }

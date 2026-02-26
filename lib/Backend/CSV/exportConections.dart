@@ -3,12 +3,7 @@ import 'package:crud_factories/Backend/Global/files.dart';
 import 'package:crud_factories/Objects/Conection.dart';
 import 'package:csv/csv.dart';
 
-import 'Export_general/export_csv_io.dart';
 import 'Export_general/export_csv_stub.dart';
-
-
-
-
 
 
 Future<bool> csvExportatorConections(List<Conection> conections) async {
@@ -19,6 +14,7 @@ Future<bool> csvExportatorConections(List<Conection> conections) async {
 
         for(int i = 0; i < conections.length; i++ )
         {
+
            "id": conections[i].id,
            "database": conections[i].database,
            "host": conections[i].host,
@@ -42,10 +38,10 @@ Future<bool> csvExportatorConections(List<Conection> conections) async {
         row.add(associateList[i]["password"]);
         rows.add(row);
   }
+  final filePath = fConections.toString();
 
   String csv = const ListToCsvConverter(fieldDelimiter: ';').convert(rows);
 
-  err = !await exportCsv(csv, file: fConections.path);
-
+  err = !await exportCsv(csv, file: filePath);
   return err;
 }

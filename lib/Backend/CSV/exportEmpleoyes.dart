@@ -4,6 +4,7 @@ import 'package:crud_factories/Objects/Empleoye.dart';
 import 'package:csv/csv.dart';
 
 import 'Export_general/export_csv_io.dart';
+import 'Export_general/export_csv_stub.dart';
 
 
 
@@ -33,9 +34,10 @@ Future<bool> csvExportatorEmpleoyes(List<Empleoye> empleoyes) async {
         rows.add(row);
   }
 
+  final filePath = fEmpleoyes.toString();
   String csv = const ListToCsvConverter(fieldDelimiter: ';').convert(rows);
 
-  err = !await exportCsvIO(csv,file: fEmpleoyes);
+  err = !await exportCsv(csv, file: filePath);
 
   return err;
 }
