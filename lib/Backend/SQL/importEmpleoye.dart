@@ -7,12 +7,12 @@ import 'package:crud_factories/Backend/Global/variables.dart';
 import 'package:crud_factories/Backend/Global/list.dart';
 import 'package:crud_factories/Objects/Empleoye.dart';
 
-Future<void> sqlImportEmpleoyes(connectionControler controllers) async {
+Future<void> sqlImportEmpleoyes() async {
 
   if (selectedDb.isEmpty) return;
 
   if (kIsWeb) {
-    await _loadEmpleoyesFromApi(controllers);
+    await _loadEmpleoyesFromApi();
   } else {
     await _loadEmpleoyesFromDb();
   }
@@ -35,12 +35,12 @@ Future<void> _loadEmpleoyesFromDb() async {
   }
 }
 
-Future<void> _loadEmpleoyesFromApi(connectionControler controllers) async {
+Future<void> _loadEmpleoyesFromApi() async {
 
   try {
 
     final String nameTable = 'empleoyes';
-    final uri = await connectApi(controllers,nameTable);
+    final uri = await connectApi(nameTable);
 
     final res = await http.get(uri, headers: {'Content-Type': 'application/json'} );
 

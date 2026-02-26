@@ -8,12 +8,12 @@ import 'package:crud_factories/Objects/Factory.dart';
 import '../connectors_API/connectApi.dart';
 
 
-Future<void> sqlImportFactories(connectionControler controllers) async {
+Future<void> sqlImportFactories() async {
 
   if (selectedDb.isEmpty) return;
 
   if (kIsWeb) {
-    await _loadFactoriesFromApi(controllers);
+    await _loadFactoriesFromApi();
   } else {
     await _loadFactoriesFromDb();
   }
@@ -47,11 +47,11 @@ Future<void> _loadFactoriesFromDb() async {
     debugPrintStack(stackTrace: stack);
   }
 }
-Future<void> _loadFactoriesFromApi(connectionControler controllers) async {
+Future<void> _loadFactoriesFromApi() async {
   try {
 
     final String nameTable = 'factories';
-    final uri = await connectApi(controllers,nameTable);
+    final uri = await connectApi(nameTable);
 
     final res = await http.get(uri, headers: {'Content-Type': 'application/json'} );
 

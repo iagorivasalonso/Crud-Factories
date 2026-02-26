@@ -8,12 +8,12 @@ import 'package:crud_factories/Objects/LineSend.dart';
 import '../connectors_API/connectApi.dart';
 
 
-Future<void> sqlImportLines(connectionControler controllers) async {
+Future<void> sqlImportLines() async {
 
   if (selectedDb.isEmpty) return;
 
   if (kIsWeb) {
-    await _loadLinesFromApi(controllers);
+    await _loadLinesFromApi();
   } else {
     await _loadLinesFromDb();
   }
@@ -38,12 +38,12 @@ Future<void> _loadLinesFromDb() async {
   }
 }
 
-Future<void> _loadLinesFromApi(connectionControler controllers) async {
+Future<void> _loadLinesFromApi() async {
 
   try {
 
     final String nameTable = 'lines';
-    final uri = await connectApi(controllers,nameTable);
+    final uri = await connectApi(nameTable);
 
     final res = await http.get(uri, headers: {'Content-Type': 'application/json'} );
 

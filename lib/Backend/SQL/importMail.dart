@@ -7,12 +7,12 @@ import 'package:crud_factories/Backend/Global/list.dart';
 import 'package:crud_factories/Objects/Mail.dart';
 import '../connectors_API/connectApi.dart';
 
-Future<void> sqlImportMails(connectionControler controllers) async {
+Future<void> sqlImportMails() async {
 
   if (selectedDb.isEmpty) return;
 
   if (kIsWeb) {
-    await _loadMailsFromApi(controllers);
+    await _loadMailsFromApi();
   } else {
     await _loadMailsFromDb();
   }
@@ -36,11 +36,11 @@ Future<void> _loadMailsFromDb() async {
   }
 }
 
-Future<void> _loadMailsFromApi(connectionControler controllers) async {
+Future<void> _loadMailsFromApi() async {
   try {
 
     final String nameTable = 'mails';
-    final uri = await connectApi(controllers,nameTable);
+    final uri = await connectApi(nameTable);
 
     final res = await http.get(uri, headers: {'Content-Type': 'application/json'} );
 

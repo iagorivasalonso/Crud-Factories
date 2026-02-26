@@ -8,7 +8,7 @@ import 'package:crud_factories/Objects/Sector.dart';
 
 import '../connectors_API/connectApi.dart';
 
-Future<void> sqlImportSetors(connectionControler controllers) async {
+Future<void> sqlImportSetors() async {
  
 
   if (selectedDb.isEmpty) {
@@ -17,7 +17,7 @@ Future<void> sqlImportSetors(connectionControler controllers) async {
   }
 
   if (kIsWeb) {
-    await _loadSectorsFromApi(controllers);
+    await _loadSectorsFromApi();
   } else {
     await _loadSectorsFromDb();
   }
@@ -49,12 +49,12 @@ Future<void> _loadSectorsFromDb() async {
 /// =======================
 /// WEB → API NODE
 /// =======================
-Future<void> _loadSectorsFromApi(connectionControler controllers) async {
+Future<void> _loadSectorsFromApi() async {
 
   try {
 
      final String nameTable = 'sectors';
-     final uri = await connectApi(controllers,nameTable);
+     final uri = await connectApi(nameTable);
 
     final res = await http.get(uri, headers: {'Content-Type': 'application/json'} );
 
