@@ -129,7 +129,14 @@ Future<void> saveSector(BuildContext context,TextEditingController controllerSec
             name: controllerSector.text,
           ));
 
-          Navigator.of(context).pop(true);
+          Sector newSector = Sector(id: idNew, name: controllerSector.text);
+          sectors.add(newSector);
+          String actionArray = S.of(context).saved;
+          String pr = S.of(context).theFemale;
+          String array = S.of(context).sector;
+
+          String action = LocalizationHelper.manage_array(context, array, actionArray, pr);
+          await confirm(context, action);
 
           if(executeQuery != null)
           {
@@ -138,30 +145,15 @@ Future<void> saveSector(BuildContext context,TextEditingController controllerSec
           else
           {
             sectors += currentSector;
-          bool errorExp = await csvExportatorSectors(sectors);
-          String array = S.of(context).sector;
-           if  (errorExp == false)
-           {
+            bool errorExp = await csvExportatorSectors(sectors);
 
-              String actionArray = S
-                  .of(context)
-                  .saved;
-              String pr = S
-                  .of(context)
-                  .theFemale;
-
-              String action = LocalizationHelper.manage_array(
-                  context, array, actionArray, pr);
-              await confirm(context, action);
-            }
-      else {
-        String action = LocalizationHelper.no_file(context, array);
-        warning(context, action);
-      }
+                  if  (errorExp != false)
+                  {
+                     String action = LocalizationHelper.no_file(context, array);
+                     warning(context, action);
+                  }
           }
 
-          String action = S.of(context).the_sector_has_been_created_successfully;
-          confirm(context, action);
         }
       }
       else
@@ -169,6 +161,7 @@ Future<void> saveSector(BuildContext context,TextEditingController controllerSec
         String action = S.of(context).the_field_cannot_be_blank;
         await error(context,action);
       }
+      Navigator.of(context).pop(true);
     }
     else
     {
@@ -197,7 +190,7 @@ Future<void> saveSector(BuildContext context,TextEditingController controllerSec
           sector1.name = controllerSector.text;
           currentSector = [sector1];
 
-          if(executeQuery != null)
+          if(BaseDateSelected.isNotEmpty)
           {
             sqlModifySector(currentSector);
           }
