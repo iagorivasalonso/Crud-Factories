@@ -1,10 +1,11 @@
-import 'dart:convert';
-import 'dart:html' as html; // Solo se usa en web
 import 'package:flutter/foundation.dart' as foundation;
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:crud_factories/Backend/Global/variables.dart';
 import 'package:crud_factories/Functions/manageState.dart';
 import 'package:crud_factories/Objects/LineSend.dart';
+
+import '../connectors_API/saveToWebStorage.dart';
+
 
 Future<void> sqlCreateLine(List<LineSend> lines, BuildContext context) async {
   try {
@@ -22,16 +23,18 @@ Future<void> sqlCreateLine(List<LineSend> lines, BuildContext context) async {
           [id, date, factory, state, observations],
         );
       } else {
-        // Web: guardar en localStorage
-        String key = 'line_$id';
-        Map<String, String> value = {
-          'id': id,
-          'date': date,
-          'factory': factory,
-          'state': state,
-          'observations': observations,
-        };
-        html.window.localStorage[key] = jsonEncode(value);
+
+        saveToWebStorage(
+          'lines', // prefijo
+          id,     // id único de la línea
+          {
+            'id': id,
+            'date': date,
+            'factory': factory,
+            'state': state,
+            'observations': observations,
+          },
+        );
       }
     }
 

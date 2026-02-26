@@ -1,8 +1,9 @@
-import 'dart:convert';
-import 'dart:html' as html; // Solo se usa en web
 import 'package:flutter/foundation.dart' as foundation;
 import 'package:crud_factories/Backend/Global/variables.dart';
 import 'package:crud_factories/Objects/Mail.dart';
+
+import '../connectors_API/saveToWebStorage.dart';
+
 
 Future<void> sqlCreateMail(List<Mail> mails) async {
   try {
@@ -20,14 +21,16 @@ Future<void> sqlCreateMail(List<Mail> mails) async {
         );
       } else {
         // Web: guardar en localStorage
-        String key = 'mail_$id';
-        Map<String, String> value = {
-          'id': id,
-          'company': company,
-          'email': email,
-          'password': password,
-        };
-        html.window.localStorage[key] = jsonEncode(value);
+        saveToWebStorage(
+          'mails', // prefijo
+          id,     // id único de la línea
+          {
+            'id': id,
+            'company': company,
+            'email': email,
+            'password': password,
+          },
+        );
       }
     }
 
