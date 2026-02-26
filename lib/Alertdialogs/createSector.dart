@@ -138,7 +138,8 @@ Future<void> saveSector(BuildContext context,TextEditingController controllerSec
           String action = LocalizationHelper.manage_array(context, array, actionArray, pr);
           await confirm(context, action);
 
-          if(executeQuery != null)
+
+          if(BaseDateSelected.isNotEmpty)
           {
             sqlCreateSector(currentSector);
           }
