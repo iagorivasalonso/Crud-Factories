@@ -5,6 +5,7 @@ import 'package:http/http.dart' as http;
 
 import '../../Objects/LineSend.dart';
 import '../Global/variables.dart';
+import '../connectors_API/connectApi.dart';
 
 Future<void> sqlModifyLines(List<LineSend> linesList) async {
   if (linesList.isEmpty) return;
@@ -23,7 +24,8 @@ Future<void> sqlModifyLines(List<LineSend> linesList) async {
           [date, factory, observations, state, id],
         );
       } else {
-        final uri = Uri.parse('http://localhost:3000/$selectedDb/lines/$id');
+        final String route = 'linesends/$id';
+        final uri = await connectApi(route);
         final res = await http.put(
           uri,
           headers: {'Content-Type': 'application/json'},

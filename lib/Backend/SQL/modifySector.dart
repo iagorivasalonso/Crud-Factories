@@ -5,9 +5,11 @@ import 'package:crud_factories/Objects/Sector.dart';
 import 'package:flutter/foundation.dart' as foundation;
 import 'package:http/http.dart' as http;
 
+import '../Global/list.dart';
+import '../connectors_API/connectApi.dart';
+
 Future<void> sqlModifySector(List<Sector> sectors) async {
 
-  Future<void> sqlModifySector(List<Sector> sectors) async {
     if (sectors.isEmpty) return;
 
     try {
@@ -21,12 +23,15 @@ Future<void> sqlModifySector(List<Sector> sectors) async {
             [name, id],
           );
         } else {
-          final uri = Uri.parse('http://localhost:3000/$selectedDb/sectors/$id');
-          final res = await http.put(
-            uri,
-            headers: {'Content-Type': 'application/json'},
-            body: jsonEncode({'sector': name}),
-          );
+          final String route = 'sectors/$id';
+          final uri = await connectApi(route);
+          final res = await http.put( uri, headers: {'Content-Type': 'application/json'},
+            body: jsonEncode({'sector': name}), );
+
+          if (res.statusCode != 200)
+          {
+            throw Exception('HTTP ${res.statusCode}: ${res.body}');
+          }
 
           if (res.statusCode != 200) {
             throw Exception('HTTP ${res.statusCode}: ${res.body}');
@@ -40,4 +45,4 @@ Future<void> sqlModifySector(List<Sector> sectors) async {
     }
   }
 
-}
+

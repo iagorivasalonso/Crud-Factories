@@ -5,6 +5,7 @@ import 'package:http/http.dart' as http;
 
 import '../../Objects/Mail.dart';
 import '../Global/variables.dart';
+import '../connectors_API/connectApi.dart';
 
 Future<void> sqlModifyMail(List<Mail> mail) async {
 
@@ -21,7 +22,8 @@ Future<void> sqlModifyMail(List<Mail> mail) async {
           [address, company, password, id],
         );
       } else {
-        final uri = Uri.parse('http://localhost:3000/$selectedDb/mails/$id');
+        final String route = 'mails/$id';
+        final uri = await connectApi(route);
         final res = await http.put(
           uri,
           headers: {'Content-Type': 'application/json'},

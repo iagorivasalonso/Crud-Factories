@@ -6,6 +6,8 @@ import 'package:crud_factories/Objects/Factory.dart';
 import 'package:flutter/foundation.dart' as foundation;
 import 'package:http/http.dart' as http;
 
+import '../connectors_API/connectApi.dart';
+
 Future<void> sqlModifyFActory(List<Factory> factory) async {
 
 
@@ -40,7 +42,9 @@ Future<void> sqlModifyFActory(List<Factory> factory) async {
           ],
         );
       } else {
-        final uri = Uri.parse('http://localhost:3000/$selectedDb/factories/$id');
+        final String route = 'factories/$id';
+        final uri = await connectApi(route);
+
         final res = await http.put(
           uri,
           headers: {'Content-Type': 'application/json'},
