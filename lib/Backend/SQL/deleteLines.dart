@@ -3,6 +3,8 @@ import 'package:crud_factories/Backend/Global/variables.dart';
 import 'package:crud_factories/Objects/LineSend.dart';
 import 'package:http/http.dart' as http;
 
+import '../connectors_API/connectApi.dart';
+
 Future<void> sqlDeleteLines(List<String> idsDelete) async {
   if (idsDelete.isEmpty) return;
 
@@ -13,7 +15,8 @@ Future<void> sqlDeleteLines(List<String> idsDelete) async {
       if (!foundation.kIsWeb) {
         await executeQuery.query('DELETE FROM linesends WHERE id=?', [id]);
       } else {
-        final uri = Uri.parse('http://localhost:3000/$selectedDb/lines/$id');
+        final String route = 'linesends/$id';
+        final uri = await connectApi(route);
         final res = await http.delete(uri);
 
         if (res.statusCode != 200) {

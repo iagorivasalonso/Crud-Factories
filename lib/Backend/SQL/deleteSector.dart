@@ -3,6 +3,8 @@ import 'package:crud_factories/Backend/Global/variables.dart';
 import 'package:crud_factories/Objects/Sector.dart';
 import 'package:http/http.dart' as http;
 
+import '../connectors_API/connectApi.dart';
+
 Future<void> sqlDeleteSector(String id) async {
 
 
@@ -12,7 +14,10 @@ Future<void> sqlDeleteSector(String id) async {
       if (!foundation.kIsWeb) {
         await executeQuery.query('DELETE FROM sectors WHERE id=?', [id]);
       } else {
-        final uri = Uri.parse('http://localhost:3000/$selectedDb/sectors/$id');
+
+        final String route = 'sectors/$id';
+        final uri = await connectApi(route);
+
         final res = await http.delete(uri);
 
         if (res.statusCode != 200) {

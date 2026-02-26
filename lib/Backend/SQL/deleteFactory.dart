@@ -3,6 +3,8 @@ import 'package:crud_factories/Backend/Global/variables.dart';
 import 'package:crud_factories/Objects/Factory.dart';
 import 'package:http/http.dart' as http;
 
+import '../connectors_API/connectApi.dart';
+
 Future<void> sqlDeleteFactory(String id) async {
 
 
@@ -12,7 +14,9 @@ Future<void> sqlDeleteFactory(String id) async {
       if (!foundation.kIsWeb) {
         await executeQuery.query('DELETE FROM factories WHERE id=?', [id]);
       } else {
-        final uri = Uri.parse('http://localhost:3000/$selectedDb/factories/$id');
+        final String route = 'factories/$id';
+        final uri = await connectApi(route);
+
         final res = await http.delete(uri);
 
         if (res.statusCode != 200) {

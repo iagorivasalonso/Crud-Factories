@@ -3,6 +3,8 @@ import 'package:crud_factories/Objects/Empleoye.dart';
 import 'package:flutter/foundation.dart' as foundation;
 import 'package:http/http.dart' as http;
 
+import '../connectors_API/connectApi.dart';
+
 Future<void> sqlDeleteEmpleoyes(List<Empleoye> idsDelete) async {
   if (idsDelete.isEmpty) return;
 
@@ -14,8 +16,10 @@ Future<void> sqlDeleteEmpleoyes(List<Empleoye> idsDelete) async {
         // Desktop → DB local
         await executeQuery.query('DELETE FROM empleoyes WHERE id=?', [id]);
       } else {
-        // Web → HTTP DELETE al backend
-        final uri = Uri.parse('http://localhost:3000/$selectedDb/empleoyes/$id');
+
+        final String route = 'empleoyes/$id';
+        final uri = await connectApi(route);
+
         final res = await http.delete(uri);
 
         if (res.statusCode != 200) {
