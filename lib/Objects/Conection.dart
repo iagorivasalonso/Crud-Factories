@@ -19,6 +19,14 @@ class Conection extends BaseEntity {
     required this.password
 });
 
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+          other is Conection && other.id == id;
+
+  @override
+  int get hashCode => id.hashCode;
+
   Map<String, dynamic> toJson() => {
     'host': host,
     'port': port,
