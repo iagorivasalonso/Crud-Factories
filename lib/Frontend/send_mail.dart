@@ -291,7 +291,6 @@ class _sendMailState extends State<sendMail> {
                             ),
                           ),
 
-
                           Align(
                               alignment: Alignment.topLeft,
                               child: Fileattachment(
