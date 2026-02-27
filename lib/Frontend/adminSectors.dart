@@ -116,7 +116,7 @@ Future <void> _onDeleteSector(BuildContext context, int index, void Function(voi
       .of(context)
       .the_sector_has_been_successfully_removed);
 
-  if (executeQuery != null) {
+  if (BaseDateSelected.isNotEmpty) {
     sqlDeleteSector(idSupr);
   }
   else {
