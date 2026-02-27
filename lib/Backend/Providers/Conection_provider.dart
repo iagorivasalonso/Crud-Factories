@@ -11,6 +11,7 @@ import 'package:mysql1/mysql1.dart';
 import '../../Alertdialogs/confirm.dart';
 import '../../Alertdialogs/error.dart';
 import '../../generated/l10n.dart';
+import '../connectors_API/Models/Api_response.dart';
 
 enum ConnectionStatus {
 
@@ -432,15 +433,5 @@ class ConectionProvider extends ChangeNotifier {
 
   }
 
-class ApiResponse {
-  final bool ok;
-  final String message;
-
-  ApiResponse({required this.ok, required this.message});
-
-  factory ApiResponse.fromJson(Map<String, dynamic> json) {
-    return ApiResponse(ok: json['ok'], message: json['message']);
-  }
-}
 
 
