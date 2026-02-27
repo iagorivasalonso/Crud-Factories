@@ -19,6 +19,7 @@ import 'package:crud_factories/helpers/localization_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:menu_bar/menu_bar.dart';
 import '../Alertdialogs/createSector.dart';
+import '../Backend/Global/controllers/Conection.dart';
 import '../Backend/Global/controllers/List.dart';
 import '../Backend/Global/controllers/Router.dart';
 
@@ -134,6 +135,13 @@ class _appDesktopState extends State<appDesktop> {
       });
      });
 
+    controlerConex = connectionControler(
+        namebd: TextEditingController(),
+        hostbd: TextEditingController(),
+        portbd: TextEditingController(),
+        userbd: TextEditingController(),
+        passbd: TextEditingController()
+    );
   }
 
   @override

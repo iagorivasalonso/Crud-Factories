@@ -3,7 +3,6 @@ import 'package:crud_factories/Alertdialogs/confirmDelete.dart';
 import 'package:crud_factories/Alertdialogs/error.dart';
 import 'package:crud_factories/Alertdialogs/warning.dart';
 import 'package:crud_factories/Backend/CSV/exportConections.dart';
-import 'package:crud_factories/Backend/Global/controllers/Conection.dart';
 import 'package:crud_factories/Backend/Global/list.dart';
 import 'package:crud_factories/Backend/Global/variables.dart';
 import 'package:crud_factories/Backend/SQL/importLines.dart';
@@ -44,7 +43,7 @@ class _conectionState extends State<conection> {
   final ScrollController verticalScroll = ScrollController();
 
   double widthBar = 10.0;
-  late final connectionControler controllers;
+
   bool conexChangued = false;
 
   @override
@@ -52,21 +51,15 @@ class _conectionState extends State<conection> {
     // TODO: implement initState
     super.initState();
 
-    controllers = connectionControler(
-        namebd: TextEditingController(),
-        hostbd: TextEditingController(),
-        portbd: TextEditingController(),
-        userbd: TextEditingController(),
-        passbd: TextEditingController()
-    );
+
   }
   @override
   void dispose() {
-    controllers.namebd.dispose();
-    controllers.hostbd.dispose();
-    controllers.portbd.dispose();
-    controllers.userbd.dispose();
-    controllers.passbd.dispose();
+    controlerConex.namebd.dispose();
+    controlerConex.hostbd.dispose();
+    controlerConex.portbd.dispose();
+    controlerConex.userbd.dispose();
+    controlerConex.passbd.dispose();
     horizontalScroll.dispose();
     verticalScroll.dispose();
     super.dispose();
@@ -185,7 +178,7 @@ class _conectionState extends State<conection> {
                                 nameCamp: S
                                     .of(context)
                                     .data_base,
-                                controllerCamp: controllers.namebd,
+                                controllerCamp: controlerConex.namebd,
                                 campEdit: editCamps,
                               ),
                             ),
@@ -201,7 +194,7 @@ class _conectionState extends State<conection> {
                                     nameCamp: S
                                         .of(context)
                                         .host,
-                                    controllerCamp: controllers.hostbd,
+                                    controllerCamp: controlerConex.hostbd,
                                     campEdit: editCamps,
                                   ),
                                 ),
@@ -211,7 +204,7 @@ class _conectionState extends State<conection> {
                                     nameCamp: S
                                         .of(context)
                                         .port,
-                                    controllerCamp: controllers.portbd,
+                                    controllerCamp: controlerConex.portbd,
                                     campEdit: editCamps,
                                   ),
                                 ),
@@ -228,7 +221,7 @@ class _conectionState extends State<conection> {
                                     nameCamp: S
                                         .of(context)
                                         .user,
-                                    controllerCamp: controllers.userbd,
+                                    controllerCamp: controlerConex.userbd,
                                     campEdit: editCamps,
                                   ),
 
@@ -239,7 +232,7 @@ class _conectionState extends State<conection> {
                                     nameCamp: S
                                         .of(context)
                                         .password,
-                                    controllerCamp: controllers.passbd,
+                                    controllerCamp: controlerConex.passbd,
                                     campEdit: editCamps,
                                   ),
                                 ),
@@ -344,11 +337,11 @@ class _conectionState extends State<conection> {
       {
         modify =Conection(
           id: provider.selected?.id ?? "-",
-          database: controllers.namebd.text,
-          port: controllers.portbd.text,
-          host: controllers.hostbd.text,
-          user: controllers.userbd.text,
-          password: controllers.passbd.text,
+          database: controlerConex.namebd.text,
+          port: controlerConex.portbd.text,
+          host: controlerConex.hostbd.text,
+          user: controlerConex.userbd.text,
+          password: controlerConex.passbd.text,
         );
         provider.setTempConnection(modify);
       }
@@ -421,11 +414,11 @@ class _conectionState extends State<conection> {
 
     Conection conect = conectionChoose!;
 
-    controllers.namebd.text = conect.database;
-    controllers.hostbd.text = conect.host;
-    controllers.portbd.text = conect.port;
-    controllers.userbd.text = conect.user;
-    controllers.passbd.text = conect.password;
+    controlerConex.namebd.text = conect.database;
+    controlerConex.hostbd.text = conect.host;
+    controlerConex.portbd.text = conect.port;
+    controlerConex.userbd.text = conect.user;
+    controlerConex.passbd.text = conect.password;
 
     provider.selectConnection(conect);
   }
@@ -434,11 +427,11 @@ class _conectionState extends State<conection> {
 
      Conection cNew=new Conection(
         id: conections.isNotEmpty ? createId(conections.last.id) : "1",
-        database: controllers.namebd.text,
-        port: controllers.portbd.text,
-        host: controllers.hostbd.text,
-        user: controllers.userbd.text,
-        password: controllers.passbd.text);
+        database: controlerConex.namebd.text,
+        port: controlerConex.portbd.text,
+        host: controlerConex.hostbd.text,
+        user: controlerConex.userbd.text,
+        password: controlerConex.passbd.text);
 
      final type = await provider.create(cNew);
 
@@ -463,11 +456,11 @@ class _conectionState extends State<conection> {
 
     final updated = Conection(
       id: old.id,
-      database: controllers.namebd.text,
-      host: controllers.hostbd.text,
-      port: controllers.portbd.text,
-      user: controllers.userbd.text,
-      password: controllers.passbd.text,
+      database: controlerConex.namebd.text,
+      host: controlerConex.hostbd.text,
+      port: controlerConex.portbd.text,
+      user: controlerConex.userbd.text,
+      password: controlerConex.passbd.text,
     );
 
    final err = await provider.update(old, updated);
@@ -517,11 +510,11 @@ class _conectionState extends State<conection> {
 
 
     if (provider.selected != null) {
-      controllers.namebd.text = provider.selected!.database;
-      controllers.hostbd.text = provider.selected!.host;
-      controllers.portbd.text = provider.selected!.port;
-      controllers.userbd.text = provider.selected!.user;
-      controllers.passbd.text = provider.selected!.password;
+      controlerConex.namebd.text = provider.selected!.database;
+      controlerConex.hostbd.text = provider.selected!.host;
+      controlerConex.portbd.text = provider.selected!.port;
+      controlerConex.userbd.text = provider.selected!.user;
+      controlerConex.passbd.text = provider.selected!.password;
     }
     
   }

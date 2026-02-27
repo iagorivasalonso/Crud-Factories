@@ -1,3 +1,4 @@
+import 'package:crud_factories/Backend/Global/controllers/Conection.dart';
 import 'package:crud_factories/Objects/Conection.dart';
 import 'package:crud_factories/Objects/Empleoye.dart';
 import 'package:crud_factories/Objects/Factory.dart';
@@ -30,3 +31,4 @@ List <String> currentRoutes = [];
 
 List<RouterController> routeControllers =[];
 late ListController listController;
+late connectionControler controlerConex;
