@@ -20,9 +20,11 @@ class MessageMail extends BaseEntity {
 
   String host;
   int port;
-  String secure;
+  bool secure;
   String mailTo;
+  String password;
   String mail;
+  String subject;
   String message;
 
   MessageMail ({
@@ -30,7 +32,9 @@ class MessageMail extends BaseEntity {
     required this.port,
     required this.secure,
     required this.mailTo,
+    required this.password,
     required this.mail,
+    required this.subject,
     required this.message
   });
 
@@ -39,7 +43,9 @@ class MessageMail extends BaseEntity {
     'port': port,
     'secure': secure,
     'mailTo': mailTo,
+    'password': password,
     'mail': mail,
+    'subject': subject,
     'message': message
   };
 }
