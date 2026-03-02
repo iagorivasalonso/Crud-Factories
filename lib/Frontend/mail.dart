@@ -316,10 +316,12 @@ Future sendingMail(context,controllers, Message message) async {
             if (company == "gmail") {
               final smtpServer = gmail(username, password);
               final sendReport = await send(message, smtpServer);
-            }
-            if (company == "hotmail") {
+            }else if (company == "hotmail") {
               final smtpServer = hotmail(username, password);
               final sendReport = await send(message, smtpServer);
+            }else{
+               String action = S.of(context).account_not_configured_on_the_server;
+               error(context, action);
             }
 
             connectEmail = true;

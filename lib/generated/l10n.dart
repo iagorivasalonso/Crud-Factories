@@ -569,6 +569,16 @@ class S {
     );
   }
 
+  /// `Cuenta no configurada en el servidor`
+  String get account_not_configured_on_the_server {
+    return Intl.message(
+      'Cuenta no configurada en el servidor',
+      name: 'account_not_configured_on_the_server',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Fuente`
   String get source {
     return Intl.message('Fuente', name: 'source', desc: '', args: []);

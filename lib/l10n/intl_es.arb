@@ -82,6 +82,7 @@
   "has": "Tiene",
   "company_en_base_datos": "Empresas en su base de datos",
   "companies_en_base_datos": "Empresas en su base de datos",
+  "account_not_configured_on_the_server": "Cuenta no configurada en el servidor",
   "source": "Fuente",
   "sql": "SQL",
   "csv": "CSV",

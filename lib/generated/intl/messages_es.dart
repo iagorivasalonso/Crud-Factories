@@ -65,6 +65,10 @@ class MessageLookup extends MessageLookupByLibrary {
       "Debes seleccionar una lista correcta",
     ),
     "a_recipient": MessageLookupByLibrary.simpleMessage("Un destinatario"),
+    "account_not_configured_on_the_server":
+        MessageLookupByLibrary.simpleMessage(
+          "Cuenta no configurada en el servidor",
+        ),
     "acept": MessageLookupByLibrary.simpleMessage("Aceptar"),
     "address": MessageLookupByLibrary.simpleMessage("Dirección"),
     "affair": MessageLookupByLibrary.simpleMessage("Asunto"),
