@@ -119,7 +119,7 @@ class _listSendsState extends State<listSends> {
     }
 
 
-        if (executeQuery != null) {
+        if (BaseDateSelected.isNotEmpty) {
 
           List<String> idsDelete = [];
 

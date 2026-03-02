@@ -537,7 +537,7 @@ class _newSendState extends State<newSend> {
       }
     });
 
-    if (executeQuery != null)
+    if (BaseDateSelected.isNotEmpty)
     {
       if(select==-1)
       {

@@ -252,7 +252,7 @@ Future<void> _onSaveMail(BuildContext context, int select,MailController control
         }
         else
         {
-                if (executeQuery != null)
+                if (BaseDateSelected.isNotEmpty)
                 {
                   if (select == -1)
                   {

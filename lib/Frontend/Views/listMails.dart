@@ -42,7 +42,7 @@ class _listMailsState extends State<listMails> {
     }
 
 
-    if (executeQuery != null) {
+    if (BaseDateSelected.isNotEmpty) {
       await sqlDeleteMail(mail.id);
     } else {
       csvExportatorMails(mails);

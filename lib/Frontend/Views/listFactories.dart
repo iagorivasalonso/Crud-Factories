@@ -108,7 +108,7 @@ class _listFactoriesState extends State<listFactories> {
       return true;
     }
 
-    if (executeQuery != null) {
+    if (BaseDateSelected.isNotEmpty) {
       await sqlDeleteFactory(factory.id);
     } else {
       csvExportatorFactories(factoriesSector);
