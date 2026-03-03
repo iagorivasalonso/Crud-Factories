@@ -131,6 +131,7 @@
   "other_fields_will_be_autofilled_do_you_want_to_continue": "Los demás campos se autocompletarán por defecto. ¿Desea continuar?",
   "could_not_be_deleted": "No se pudo eliminar",
   "could_not_be_edited": "No se pudo editar",
+  "the_message_could_not_be_sent": "No se pudo enviar el mensaje",
   "could_not_connect_with_the_server": "No se pudo conectar con el servidor",
   "the_connection_test_was_sent_successfully": "la prueba de conexion se envio correctamente",
   "could_not_create_database": "No se pudo crear la base de datos",

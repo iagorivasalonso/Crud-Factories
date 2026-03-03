@@ -437,6 +437,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "the_mail_has_been_successfully_sent": MessageLookupByLibrary.simpleMessage(
       "El correo electrónico se ha enviado correctamente",
     ),
+    "the_message_could_not_be_sent": MessageLookupByLibrary.simpleMessage(
+      "No se pudo enviar el mensaje",
+    ),
     "the_port_is_not_correct": MessageLookupByLibrary.simpleMessage(
       "El puerto no es correcto",
     ),

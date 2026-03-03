@@ -936,6 +936,16 @@ class S {
     );
   }
 
+  /// `No se pudo enviar el mensaje`
+  String get the_message_could_not_be_sent {
+    return Intl.message(
+      'No se pudo enviar el mensaje',
+      name: 'the_message_could_not_be_sent',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `No se pudo conectar con el servidor`
   String get could_not_connect_with_the_server {
     return Intl.message(

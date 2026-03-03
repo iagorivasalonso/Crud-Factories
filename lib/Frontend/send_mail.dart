@@ -455,8 +455,13 @@ Future<void> _onSendMail(BuildContext context,MailController controllers, bool o
 
       if(result)
       {
-        action=S.of(context).the_mail_has_been_successfully_sent;
+        action = S.of(context).the_mail_has_been_successfully_sent;
         confirm(context,action);
+      }
+      else
+      {
+        action = S.of(context).the_message_could_not_be_sent;
+        error(context,action);
       }
 
   }
