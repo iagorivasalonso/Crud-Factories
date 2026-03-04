@@ -21,7 +21,7 @@ class Mailapi {
           final responseData = response.body.isNotEmpty
                 ? jsonDecode(response.body)
                 : null;
-          print(response.statusCode);
+
           if(response.statusCode >= 200 && response.statusCode < 300)
           {
               return {
