@@ -16,11 +16,14 @@ import 'package:crud_factories/Widgets/textfield.dart';
 import 'package:crud_factories/Widgets/textFieldPassword.dart';
 import 'package:crud_factories/generated/l10n.dart';
 import 'package:crud_factories/helpers/localization_helper.dart';
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 import 'package:mailer/mailer.dart';
+import 'package:mailer/smtp_server.dart';
 import 'package:mailer/smtp_server/gmail.dart';
 import 'package:mailer/smtp_server/hotmail.dart';
 import '../Backend/Global/controllers/Mail.dart';
+import '../Backend/connectors_API/MailApi.dart';
 import '../Functions/isNotAndroid.dart';
 import '../Widgets/headViewsAndroid.dart';
 import '../Widgets/layoutVariant.dart';
@@ -313,19 +316,58 @@ Future sendingMail(context,controllers, Message message) async {
 
       try {
 
+        SmtpServer? smtpServer;
+
             if (company == "gmail") {
-              final smtpServer = gmail(username, password);
-              final sendReport = await send(message, smtpServer);
+              smtpServer = gmail(username, password);
             }else if (company == "hotmail") {
-              final smtpServer = hotmail(username, password);
-              final sendReport = await send(message, smtpServer);
+              smtpServer = hotmail(username, password);
+
             }else{
                String action = S.of(context).account_not_configured_on_the_server;
                error(context, action);
             }
 
-            connectEmail = true;
+        if (smtpServer != null)
+        {
+
+              if(kIsWeb)
+              {
+                    MessageMail messageMail = MessageMail(
+                        host: smtpServer.host,
+                        port: 465,
+                        secure: true,
+                        username: smtpServer.username!,
+                        password:smtpServer.password!,
+                        mails: message.recipients,
+                        subject: message.subject!,
+                        message: message.text!
+                    );
+
+                    final mailResponse = await Mailapi.sendingMailApi(messageMail);
+
+                    if(mailResponse['ok'] == true)
+                    {
+                      connectEmail = true;
+                    }
+                    else
+                    {
+                      connectEmail = false;
+                    }
+              }
+              else
+              {
+                  final sendReport = await send(message, smtpServer);
+              }
+
+
+
+        } else {
+          connectEmail = false;
+        }
+
       } catch (e) {
+        print(e.toString());
            connectEmail = false;
       }
 
