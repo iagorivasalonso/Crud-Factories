@@ -322,7 +322,7 @@ class _sendMailState extends State<sendMail> {
                               children: [
                                 materialButton(
                                     nameAction: S.of(context).send,
-                                    function: () => _onSendMail(context,controllers,otherMail,selectedOption),
+                                    function: () => _onSendMail(context,controllers,otherMail,selectedOption,selectedFactories),
 
                                 ),
 
@@ -388,7 +388,7 @@ class _sendMailState extends State<sendMail> {
   }
 }
 
-Future<void> _onSendMail(BuildContext context,MailController controllers, bool otherMail, String? selectedOption) async {
+Future<void> _onSendMail(BuildContext context,MailController controllers, bool otherMail, String? selectedOption, selectedFactories) async {
 
   bool correct = true;
   String action = '';
@@ -405,7 +405,6 @@ Future<void> _onSendMail(BuildContext context,MailController controllers, bool o
    
    if (correct)
    {
-
          if(selectedOption == S.of(context).a_recipient)
          {
                if(validatorCamps.mailCorrect(controllers.mailTo!.text) != true)
@@ -440,21 +439,34 @@ Future<void> _onSendMail(BuildContext context,MailController controllers, bool o
   if(correct)
   {
     List <String> separeaddress = controllers.mailTo!.text.split("@");
+    final recipients = [
+      controllers.mailTo?.text,
+      ...selectedFactories
+          .where((f) => f.mail != null && f.mail.isNotEmpty)
+          .map((f) => f.mail)
+    ]
+        .whereType<String>()
+        .where((mail) => mail.trim().isNotEmpty) // eliminar vacíos
+        .map((mail) => mail.trim()) // quitar espacios
+        .toSet() // eliminar duplicados
+        .toList();
 
     final message = Message()
-      ..from = Address(controllers.mailTo!.text, separeaddress[0])
-      ..recipients.add(controllers.mailTo!.text)
-      ..subject = controllers.subject!.text
-      ..text = controllers.message!.text
+      ..from = Address(controllers.mailTo!.text.trim(), separeaddress[0])
+      ..recipients.addAll(recipients) // agregamos solo los válidos
+      ..subject = controllers.subject!.text.trim()
+      ..text = controllers.message!.text.trim()
       ..attachments = controllers.attachments
           .where((f) => f.path != null)
           .map((file) => FileAttachment(File(file.path!)))
           .toList();
 
+
       final result = await sendingMail(context,controllers,message);
 
       if(result)
       {
+
         action = S.of(context).the_mail_has_been_successfully_sent;
         confirm(context,action);
       }

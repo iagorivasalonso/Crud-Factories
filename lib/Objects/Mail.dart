@@ -23,7 +23,7 @@ class MessageMail extends BaseEntity {
   bool secure;
   String username;
   String password;
-  String mail;
+  List<dynamic> mails;
   String subject;
   String message;
 
@@ -33,7 +33,7 @@ class MessageMail extends BaseEntity {
     required this.secure,
     required this.username,
     required this.password,
-    required this.mail,
+    required this.mails,
     required this.subject,
     required this.message
   });
@@ -44,7 +44,7 @@ class MessageMail extends BaseEntity {
     'secure': secure,
     'username': username,
     'password': password,
-    'mail': mail,
+    'mail': mails,
     'subject': subject,
     'message': message
   };
