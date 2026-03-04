@@ -12,7 +12,6 @@ class Mailapi {
 
     try{
           final body = messageMail.toJson();
-          print(body);
           final response = await http.post(
             Uri.parse('$baseUrl/mail/send'),
             headers: {'Content-Type' :'application/json'},
