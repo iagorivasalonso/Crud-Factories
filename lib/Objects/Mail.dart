@@ -18,14 +18,14 @@ class Mail extends BaseEntity {
 
 class MessageMail extends BaseEntity {
 
-  String host;
-  int port;
-  bool secure;
-  String username;
-  String password;
-  List<dynamic> mails;
-  String subject;
-  String message;
+  final String host;
+  final int port;
+  final bool secure;
+  final String username;
+  final String password;
+  final List<dynamic> mails;
+  final String subject;
+  final String message;
 
   MessageMail ({
     required this.host,
