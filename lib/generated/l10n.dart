@@ -896,6 +896,16 @@ class S {
     );
   }
 
+  /// `no se pudo realizar el envio`
+  String get the_shipment_could_not_be_completed {
+    return Intl.message(
+      'no se pudo realizar el envio',
+      name: 'the_shipment_could_not_be_completed',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Todos los cambios se perderán. ¿Desea continuar?`
   String get all_changes_will_be_lost_do_you_want_to_continue {
     return Intl.message(
@@ -931,16 +941,6 @@ class S {
     return Intl.message(
       'No se pudo editar',
       name: 'could_not_be_edited',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `No se pudo enviar el mensaje`
-  String get the_message_could_not_be_sent {
-    return Intl.message(
-      'No se pudo enviar el mensaje',
-      name: 'the_message_could_not_be_sent',
       desc: '',
       args: [],
     );
@@ -1506,16 +1506,6 @@ class S {
     return Intl.message(
       'No puedes realizar esta acción mientras estás conectado',
       name: 'You_cannot_do_this_while_connected',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `El correo electrónico se ha enviado correctamente`
-  String get the_mail_has_been_successfully_sent {
-    return Intl.message(
-      'El correo electrónico se ha enviado correctamente',
-      name: 'the_mail_has_been_successfully_sent',
       desc: '',
       args: [],
     );

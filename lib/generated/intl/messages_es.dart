@@ -434,12 +434,6 @@ class MessageLookup extends MessageLookupByLibrary {
     "the_file_of": MessageLookupByLibrary.simpleMessage("El fichero de"),
     "the_format_of_the": MessageLookupByLibrary.simpleMessage("El formato de"),
     "the_line": MessageLookupByLibrary.simpleMessage("La linea"),
-    "the_mail_has_been_successfully_sent": MessageLookupByLibrary.simpleMessage(
-      "El correo electrónico se ha enviado correctamente",
-    ),
-    "the_message_could_not_be_sent": MessageLookupByLibrary.simpleMessage(
-      "No se pudo enviar el mensaje",
-    ),
     "the_port_is_not_correct": MessageLookupByLibrary.simpleMessage(
       "El puerto no es correcto",
     ),
@@ -453,6 +447,9 @@ class MessageLookup extends MessageLookupByLibrary {
         ),
     "the_shipment_contains": MessageLookupByLibrary.simpleMessage(
       "El envío contiene",
+    ),
+    "the_shipment_could_not_be_completed": MessageLookupByLibrary.simpleMessage(
+      "no se pudo realizar el envio",
     ),
     "the_user_or_password_are_incorrect": MessageLookupByLibrary.simpleMessage(
       "El usuario o la contraseña son incorrectos",
