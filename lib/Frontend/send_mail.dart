@@ -19,6 +19,7 @@ import 'package:crud_factories/Widgets/headViewsAndroid.dart';
 import 'package:crud_factories/Widgets/textfieldCalendar.dart';
 import 'package:crud_factories/generated/l10n.dart';
 import 'package:crud_factories/helpers/localization_helper.dart';
+import 'package:flutter/foundation.dart' hide Factory;
 import 'package:flutter/material.dart';
 import 'package:mailer/mailer.dart' show Message, Address, send;
 import 'package:mailer/smtp_server/gmail.dart';
@@ -456,11 +457,12 @@ Future<void> _onSendMail(BuildContext context,MailController controllers, bool o
       ..recipients.addAll(recipients) // agregamos solo los válidos
       ..subject = controllers.subject!.text.trim()
       ..text = controllers.message!.text.trim()
-      ..attachments = controllers.attachments
+      ..attachments =  !kIsWeb
+          ? controllers.attachments
           .where((f) => f.path != null)
           .map((file) => FileAttachment(File(file.path!)))
-          .toList();
-
+          .toList()
+          : [];
 
       final result = await sendingMail(context,controllers,message);
 
