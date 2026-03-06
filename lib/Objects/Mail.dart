@@ -26,6 +26,7 @@ class MessageMail extends BaseEntity {
   final List<dynamic> mails;
   final String subject;
   final String message;
+  final List<Map<String, dynamic>>? attachments;
 
   MessageMail ({
     required this.host,
@@ -35,7 +36,8 @@ class MessageMail extends BaseEntity {
     required this.password,
     required this.mails,
     required this.subject,
-    required this.message
+    required this.message,
+    this.attachments
   });
 
   Map<String, dynamic> toJson() => {
@@ -46,6 +48,7 @@ class MessageMail extends BaseEntity {
     'password': password,
     'mail': mails,
     'subject': subject,
-    'message': message
+    'message': message,
+    'attachments': attachments
   };
 }

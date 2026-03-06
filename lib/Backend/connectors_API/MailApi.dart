@@ -24,10 +24,17 @@ class Mailapi {
 
           if(response.statusCode >= 200 && response.statusCode < 300)
           {
-              return {
-                'ok': true,
-                'message': responseData?['message'] ?? 'Correo enviado correctamente'
-              };
+            // Ahora responseData['results'] es una lista de envíos
+            final results = responseData['results'] as List<dynamic>? ?? [];
+
+            final sentMails = results.where((r) => r['status'] == 'sent').toList();
+            final failedMails = results.where((r) => r['status'] == 'failed').toList();
+
+            String summary = 'Enviados: ${sentMails.length}, Fallidos: ${failedMails.length}';
+            if (failedMails.isNotEmpty) {
+              summary += '\nFallaron: ${failedMails.map((r) => r['mail']).join(', ')}';
+            }
+            return {'ok': sentMails.isNotEmpty, 'message': summary, 'results': results};
           }
 
           if(response.statusCode == 400)
