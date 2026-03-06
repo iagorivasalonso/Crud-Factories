@@ -124,10 +124,6 @@ Future<void> saveSector(BuildContext context,TextEditingController controllerSec
             idNew ="1";
           }
 
-          currentSector.add(Sector(
-            id: idNew,
-            name: controllerSector.text,
-          ));
 
           Sector newSector = Sector(id: idNew, name: controllerSector.text);
           sectors.add(newSector);
