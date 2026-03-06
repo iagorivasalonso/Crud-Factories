@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:adaptive_scrollbar/adaptive_scrollbar.dart';
@@ -248,7 +249,7 @@ Future<void> _onSaveMail(BuildContext context, int select,MailController control
 
         final result = await sendingMail(context,controllers,message);
 
-        if (result == false)
+        if (result.length != 1)
         {
           String action = S.of(context).connection_cannot_be_established;
           error(context, action);
@@ -270,17 +271,17 @@ Future<void> _onSaveMail(BuildContext context, int select,MailController control
                 else
                 {
                   mails = mails + current;
+                }
 
-                  if (result == false)
-                  {
-                    action = S.of(context).the_user_or_password_are_incorrect;
-                    error(context, action);
-                  }
-                  else
-                  {
-                    action = S.of(context).the_connection_test_was_sent_successfully;
-                    confirm(context, action);
-                  }
+                if (result == false)
+                {
+                  action = S.of(context).the_user_or_password_are_incorrect;
+                  error(context, action);
+                }
+                else
+                {
+                  action = S.of(context).the_connection_test_was_sent_successfully;
+                  confirm(context, action);
                 }
                   bool errorExp = await csvExportatorMails(mails);
 
@@ -303,7 +304,9 @@ Future<void> _onSaveMail(BuildContext context, int select,MailController control
   }
 }
 
-Future sendingMail(context,controllers, Message message) async {
+Future<List<String>> sendingMail(context,controllers, Message message) async {
+
+  List<String> mailSends = [];
 
   bool connectEmail = false;
   String username = controllers.mail.text;
@@ -318,12 +321,16 @@ Future sendingMail(context,controllers, Message message) async {
 
         SmtpServer? smtpServer;
 
-            if (company == "gmail") {
+            if (company == "gmail")
+            {
               smtpServer = gmail(username, password);
-            }else if (company == "hotmail") {
+            }
+            else if (company == "hotmail")
+            {
               smtpServer = hotmail(username, password);
-
-            }else{
+            }
+            else
+            {
                String action = S.of(context).account_not_configured_on_the_server;
                error(context, action);
             }
@@ -333,7 +340,20 @@ Future sendingMail(context,controllers, Message message) async {
 
               if(kIsWeb)
               {
-                    MessageMail messageMail = MessageMail(
+
+                List<Map<String, dynamic>> attachmentList = [];
+
+                for (var file in controllers.attachments) {
+                  if (file.bytes != null) {
+                    attachmentList.add({
+                      'filename': file.name,
+                      'content': base64Encode(file.bytes!),
+                      'contentType': 'application/octet-stream',
+                    });
+                  }
+                }
+
+                MessageMail messageMail = MessageMail(
                         host: smtpServer.host,
                         port: 465,
                         secure: true,
@@ -341,37 +361,50 @@ Future sendingMail(context,controllers, Message message) async {
                         password:smtpServer.password!,
                         mails: message.recipients,
                         subject: message.subject!,
-                        message: message.text!
+                        message: message.text!,
+                        attachments: attachmentList
                     );
 
                     final mailResponse = await Mailapi.sendingMailApi(messageMail);
 
-                    if(mailResponse['ok'] == true)
-                    {
-                      connectEmail = true;
+                    final res = mailResponse['message'];
+                    String mailSend="Correo enviado correctamente a ";
+
+                final results = mailResponse['results'] as List<dynamic>?;
+
+                if (results != null && results.isNotEmpty) {
+                  final statuses = results.map((e) => (e as Map<String, dynamic>)['status']).join("\n");
+
+                  if (results != null && results.isNotEmpty) {
+                    for (var r in results) {
+                      final map = r as Map<String, dynamic>;
+                      final status = map['status'] ?? '';
+
+                      // Regex para extraer correo
+                      final regex = RegExp(r'\b[\w\.-]+@[\w\.-]+\.\w+\b');
+                      final match = regex.firstMatch(status);
+                      if (match != null) {
+                        final email = match.group(0);
+                        mailSends.add(email.toString());
+
+                      }
                     }
-                    else
-                    {
-                      connectEmail = false;
-                    }
+                  }
+                }
               }
               else
               {
                   final sendReport = await send(message, smtpServer);
               }
 
-
-
-        } else {
-          connectEmail = false;
         }
 
       } catch (e) {
         print(e.toString());
-           connectEmail = false;
+       mailSends = [];
       }
 
-  return connectEmail;
+  return mailSends;
 }
 
 

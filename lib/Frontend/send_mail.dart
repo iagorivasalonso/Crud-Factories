@@ -464,17 +464,16 @@ Future<void> _onSendMail(BuildContext context,MailController controllers, bool o
           .toList()
           : [];
 
-      final result = await sendingMail(context,controllers,message);
+      List<String> mailSend = await sendingMail(context,controllers,message);
 
-      if(result)
+      if(mailSend.isNotEmpty)
       {
-
-        action = S.of(context).the_mail_has_been_successfully_sent;
+        action = LocalizationHelper.sendMails(context, mailSend.length);
         confirm(context,action);
       }
       else
       {
-        action = S.of(context).the_message_could_not_be_sent;
+        action = S.of(context).the_shipment_could_not_be_completed;
         error(context,action);
       }
 
