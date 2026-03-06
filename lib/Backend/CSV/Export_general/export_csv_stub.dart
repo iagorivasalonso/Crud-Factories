@@ -1,5 +1,3 @@
-
-
-Future<bool>exportCsv(String data, {required String? file}) async {
-  return false;
+Future<bool> exportCsv(String csv, {String? file}) async {
+  return false; // fallback multiplataforma
 }

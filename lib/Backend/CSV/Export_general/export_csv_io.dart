@@ -2,15 +2,17 @@
 import 'dart:io';
 
 
-Future<bool> exportCsvIO(String csv, {required File file,}) async {
+Future<bool> exportCsv(String csv, {String? file}) async {
 
   try {
 
-    if (!await file.exists()) {
-      await file.create(recursive: true);
+    final f = File(file ?? "export.csv");
+
+    if (!await f.exists()) {
+      await f.create(recursive: true);
     }
 
-    await file.writeAsString(csv);
+    await f.writeAsString(csv);
     return true;
 
   } catch (e) {
