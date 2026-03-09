@@ -1,8 +1,7 @@
 import 'dart:convert';
-import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 import 'package:universal_html/html.dart' as html;
-import 'connectApi.dart';
+import '../../connectors_API/connectApi.dart';
 
 Future<void> saveToWebStorage(String prefix, String id, Map<String, dynamic> data) async {
 
@@ -12,14 +11,12 @@ Future<void> saveToWebStorage(String prefix, String id, Map<String, dynamic> dat
   final uri = await connectApi(nameTable);
 
   await http.post(
-         uri,
+    uri,
     headers: {
       'Content-Type': 'application/json',
     },
     body: jsonEncode(data),
   );
 
-  if (kIsWeb) {
-    html.window.localStorage[key] = jsonEncode(data);
-  }
+  html.window.localStorage[key] = jsonEncode(data);
 }
