@@ -145,6 +145,15 @@ class _appDesktopState extends State<appDesktop> {
   }
 
   @override
+  void dispose() {
+    controlerConex.namebd.dispose();
+    controlerConex.hostbd.dispose();
+    controlerConex.portbd.dispose();
+    controlerConex.userbd.dispose();
+    controlerConex.passbd.dispose();
+    super.dispose();
+  }
+  @override
   Widget build(BuildContext context) {
 
     double mWidth = MediaQuery.of(context).size.width;

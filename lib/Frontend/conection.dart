@@ -53,17 +53,7 @@ class _conectionState extends State<conection> {
 
 
   }
-  @override
-  void dispose() {
-    controlerConex.namebd.dispose();
-    controlerConex.hostbd.dispose();
-    controlerConex.portbd.dispose();
-    controlerConex.userbd.dispose();
-    controlerConex.passbd.dispose();
-    horizontalScroll.dispose();
-    verticalScroll.dispose();
-    super.dispose();
-  }
+
 
   @override
   void didChangeDependencies() {
