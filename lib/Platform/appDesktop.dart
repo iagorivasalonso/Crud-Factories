@@ -722,7 +722,7 @@ class _appDesktopState extends State<appDesktop> {
                         if(mails.isEmpty)
                         {
                           String action =S.of(context).no_have_registered_mails;
-                          error(context,action);
+                          warning(context,action);
                         }
 
                         if (saveChanges == false)
