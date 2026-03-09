@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 
 class DbApi {
-  static const baseUrl = 'http://localhost:3000';
+  static const baseUrl = 'http://localhost:3000/db';
 
   static Future<Map<String, dynamic>> actionApi(
       String action, Conection? connection, [Conection? newDataBase]) async {

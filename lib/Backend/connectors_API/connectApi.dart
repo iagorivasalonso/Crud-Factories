@@ -7,7 +7,7 @@ Future<Uri> connectApi(String nameTable) async {
     scheme: 'http',
     host: 'localhost',
     port: 3000,
-    path: '${controlerConex.namebd.text}/$nameTable',
+    path: 'db/${controlerConex.namebd.text}/$nameTable',
     queryParameters: {
       'host': controlerConex.hostbd.text,
       'port': controlerConex.portbd.text,
