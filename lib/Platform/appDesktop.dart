@@ -68,7 +68,7 @@ class _appDesktopState extends State<appDesktop> {
 
           if (sqlBd == true)
           {
-                String name = '';
+
 
                 for (var route in routesCSV) {
                   if (SQLRoutes.any((sqlName) => sqlName.trim().toLowerCase() == route.name.trim().toLowerCase())) {
