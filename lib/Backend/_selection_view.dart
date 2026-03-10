@@ -69,20 +69,7 @@ FuntionSeleted(int itenSelection, int subIten1Selection,int subIten2Selection, d
 
         if (subIten1Selection == 3)
         {
-          groupFactoriesSector(subIten2Selection,allFactoriesOriginal);
-
-          List<LineSend> filteredLines = groupLinesSector();
-
-          if(filteredLines.isEmpty)
-          {
-            WidgetsBinding.instance?.addPostFrameCallback((_) async {
-              error(context,LocalizationHelper.arrayBeApp(context, S.of(context).lines.toLowerCase()));
-            });
-
-             groupFactoriesSector(0,allFactoriesOriginal);
-
-             filteredLines = groupLinesSector();
-          }
+            List<LineSend>filteredLines = reunedLines(context,subIten2Selection,allFactoriesOriginal);
 
           return listSends(context,List.from(filteredLines),List.from(dateSends));
         }
@@ -92,7 +79,17 @@ FuntionSeleted(int itenSelection, int subIten1Selection,int subIten2Selection, d
       case 2:
         if (subIten1Selection == 0)
         {
+
           groupFactoriesSector(subIten2Selection,allFactoriesOriginal);
+
+          List<LineSend> filteredLines = groupLinesSector();
+
+          if(filteredLines.isEmpty)
+          {
+            groupFactoriesSector(0,allFactoriesOriginal);
+
+            filteredLines = groupLinesSector();
+          }
 
           return sendMail();
         }
@@ -101,6 +98,25 @@ FuntionSeleted(int itenSelection, int subIten1Selection,int subIten2Selection, d
           return conection();
     }
 
+}
+
+List<LineSend> reunedLines(BuildContext context,int subIten2Selection, List<Factory> allFactoriesOriginal) {
+
+  groupFactoriesSector(subIten2Selection,allFactoriesOriginal);
+
+  List<LineSend> filteredLines = groupLinesSector();
+
+  if(filteredLines.isEmpty)
+  {
+    WidgetsBinding.instance?.addPostFrameCallback((_) async {
+      error(context,LocalizationHelper.arrayBeApp(context, S.of(context).lines.toLowerCase()));
+    });
+
+    groupFactoriesSector(0,allFactoriesOriginal);
+
+    filteredLines = groupLinesSector();
+  }
+  return filteredLines;
 }
 void groupFactoriesSector(int subIten2Selection, List<Factory> allFactoriesOriginal) {
 
