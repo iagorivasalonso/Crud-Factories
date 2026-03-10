@@ -89,6 +89,14 @@ class _sendMailState extends State<sendMail> {
 
     );
 
+    if(dateSends.isNotEmpty)
+    {
+       selectedSend = dateSends.first;
+
+       WidgetsBinding.instance.addPostFrameCallback((_) {
+         _onDateSelect(selectedSend);
+       });
+    }
   }
 
   @override
