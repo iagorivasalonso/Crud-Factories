@@ -367,8 +367,6 @@ Future<List<String>> sendingMail(context,controllers, Message message) async {
 
                     final mailResponse = await Mailapi.sendingMailApi(messageMail);
 
-                    final res = mailResponse['message'];
-                    String mailSend="Correo enviado correctamente a ";
 
                 final results = mailResponse['results'] as List<dynamic>?;
 
