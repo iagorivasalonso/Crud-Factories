@@ -237,25 +237,28 @@ class _sendMailState extends State<sendMail> {
                           ),
 
                           if(allLines.isNotEmpty)
-                          Align(
-                            alignment: Alignment.topLeft,
-                            child: Padding(
-                                    padding: const EdgeInsets.only(left: 30.0,bottom: 10.0),
-                                    child: GenericRadioGroup<String>(
-                                      items: [S.of(context).a_recipient,S.of(context).multiple_recipients],
-                                      camp: S.of(context).select,
-                                      selectedItem: selectedOption,
-                                      label: (item) => item,
-                                      onChanged: (value) {
-                                        if (value != null) {
-                                          setState(() {
-                                            selectedOption = value;
-                                          });
-                                        }
-                                      },
-                                      direction: Axis.horizontal,
+                          Padding(
+                            padding: const EdgeInsets.only(left: 30.0),
+                            child: Align(
+                              alignment: Alignment.topLeft,
+                              child: Padding(
+                                      padding: const EdgeInsets.only(right:150.0, bottom: 10.0),
+                                      child: GenericRadioGroup<String>(
+                                        items: [S.of(context).a_recipient,S.of(context).multiple_recipients],
+                                        camp: S.of(context).select,
+                                        selectedItem: selectedOption,
+                                        label: (item) => item,
+                                        onChanged: (value) {
+                                          if (value != null) {
+                                            setState(() {
+                                              selectedOption = value;
+                                            });
+                                          }
+                                        },
+                                        direction: Axis.horizontal,
+                                      ),
                                     ),
-                                  ),
+                            ),
                           ),
 
 
