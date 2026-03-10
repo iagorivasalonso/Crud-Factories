@@ -114,7 +114,7 @@ class _sendMailState extends State<sendMail> {
 
     if(selectedOption==null)
     {
-      selectedOption =S.of(context).a_recipient;
+      selectedOption = S.of(context).a_recipient;
     }
 
     if(mails.isEmpty)
