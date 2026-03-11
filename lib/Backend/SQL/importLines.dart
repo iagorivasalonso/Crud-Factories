@@ -31,7 +31,7 @@ Future<void> _loadLinesFromDb() async {
         state: row[4],
       ));
     }
-    debugPrint('Lines cargadas desde DB: ${allLines.length}');
+    debugPrint('Lineas cargadas desde DB: ${allLines.length}');
   } catch (e, stack) {
     debugPrint('DB ERROR: $e');
     debugPrintStack(stackTrace: stack);

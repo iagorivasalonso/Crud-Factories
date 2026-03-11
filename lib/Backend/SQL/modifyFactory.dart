@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:crud_factories/Backend/Global/list.dart';
 import 'package:crud_factories/Backend/Global/variables.dart';
 import 'package:crud_factories/Objects/Factory.dart';
+import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter/foundation.dart' as foundation;
 import 'package:http/http.dart' as http;
 
@@ -65,8 +66,8 @@ Future<void> sqlModifyFActory(List<Factory> factory) async {
 
     }
 
-    print('Factories modificadas: ${factory.length}');
+    print('Empresas modificadas: ${factory.length}');
   } catch (e) {
-    print('ERROR al modificar factories: $e');
+    debugPrint('DB ERROR: $e');
   }
 }

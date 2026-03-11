@@ -29,7 +29,7 @@ Future<void> _loadMailsFromDb() async {
         password: row[3],
       ));
     }
-    debugPrint('Mails cargados desde DB: ${mails.length}');
+    debugPrint('Emails cargados desde DB: ${mails.length}');
   } catch (e, stack) {
     debugPrint('DB ERROR: $e');
     debugPrintStack(stackTrace: stack);

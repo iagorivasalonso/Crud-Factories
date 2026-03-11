@@ -28,7 +28,7 @@ Future<void> _loadEmpleoyesFromDb() async {
         idFactory: row[2].toString(),
       ));
     }
-    debugPrint('Empleoyes cargados desde DB: ${empleoyes.length}');
+    debugPrint('Empleados cargados desde DB: ${empleoyes.length}');
   } catch (e, stack) {
     debugPrint('DB ERROR: $e');
     debugPrintStack(stackTrace: stack);
