@@ -312,7 +312,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "name_sector": MessageLookupByLibrary.simpleMessage("Nombre del sector"),
     "newFemale": MessageLookupByLibrary.simpleMessage("Nueva"),
     "newMale": MessageLookupByLibrary.simpleMessage("Nuevo"),
-    "new_mail": MessageLookupByLibrary.simpleMessage("Nuevo mail"),
+    "new_mail": MessageLookupByLibrary.simpleMessage("Nuevo email"),
     "new_shipment": MessageLookupByLibrary.simpleMessage("Nuevo envio"),
     "no": MessageLookupByLibrary.simpleMessage("No"),
     "no_data_in_memory": MessageLookupByLibrary.simpleMessage(

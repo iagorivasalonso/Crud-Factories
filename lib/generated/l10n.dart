@@ -409,9 +409,9 @@ class S {
     );
   }
 
-  /// `Nuevo mail`
+  /// `Nuevo email`
   String get new_mail {
-    return Intl.message('Nuevo mail', name: 'new_mail', desc: '', args: []);
+    return Intl.message('Nuevo email', name: 'new_mail', desc: '', args: []);
   }
 
   /// `Nuevo envio`
