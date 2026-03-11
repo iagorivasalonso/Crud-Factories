@@ -392,7 +392,17 @@ Future<List<String>> sendingMail(context,controllers, Message message) async {
               }
               else
               {
+                try {
                   final sendReport = await send(message, smtpServer);
+
+                  for(int i = 0; i  < message.recipients.length; i++)
+                  {
+                    mailSends.add(message.recipients[i].toString());
+                  }
+
+                } catch (e) {
+                  print("Error enviando correo: $e");
+                }
               }
 
         }
