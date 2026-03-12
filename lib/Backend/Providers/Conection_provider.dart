@@ -199,7 +199,12 @@ class ConectionProvider extends ChangeNotifier {
 
       if(!kIsWeb)
       {
-         await executeQuery?.close();
+           var resConex = await executeQuery?.close();
+
+           if(resConex == null);
+           {
+             _connected = false;
+           }
       }
       else
       {
