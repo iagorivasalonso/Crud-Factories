@@ -6,7 +6,7 @@ Future<bool> exportCsv(String csv, {String? file}) async {
 
   try {
 
-    final f = File(file ?? "export.csv");
+    final f = File(file!);
 
     if (!await f.exists()) {
       await f.create(recursive: true);

@@ -32,9 +32,9 @@ Future<bool> csvExportatorEmpleoyes(List<Empleoye> empleoyes) async {
         rows.add(row);
   }
 
-  final filePath = fEmpleoyes.toString();
-  String csv = const ListToCsvConverter(fieldDelimiter: ';').convert(rows);
+  final filePath = fEmpleoyes.path;
 
+  String csv = const ListToCsvConverter(fieldDelimiter: ';').convert(rows);
   err = !await exportCsv(csv, file: filePath);
 
   return err;

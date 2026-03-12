@@ -10,7 +10,7 @@ Future<bool> exportCsv(String csv, {String? file}) async {
     final url = html.Url.createObjectUrlFromBlob(blob);
 
     html.AnchorElement(href: url)
-      ..setAttribute("download", file ?? "export.csv")
+      ..setAttribute("download", file!)
       ..click();
 
     html.Url.revokeObjectUrl(url);

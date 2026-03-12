@@ -38,10 +38,9 @@ Future<bool> csvExportatorConections(List<Conection> conections) async {
         row.add(associateList[i]["password"]);
         rows.add(row);
   }
-  final filePath = fConections.toString();
+  final filePath = fConections.path;
 
   String csv = const ListToCsvConverter(fieldDelimiter: ';').convert(rows);
-
   err = !await exportCsv(csv, file: filePath);
 
   return err;

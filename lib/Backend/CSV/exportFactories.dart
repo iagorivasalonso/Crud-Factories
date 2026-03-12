@@ -55,9 +55,9 @@ Future<bool> csvExportatorFactories(List<Factory> factories) async {
       rows.add(row);
   }
 
-  final filePath = fFactories.toString();
-  String csv = const ListToCsvConverter(fieldDelimiter: ';').convert(rows);
+  final filePath = fFactories.path;
 
+  String csv = const ListToCsvConverter(fieldDelimiter: ';').convert(rows);
   err = !await exportCsv(csv, file: filePath);
 
   return err;
