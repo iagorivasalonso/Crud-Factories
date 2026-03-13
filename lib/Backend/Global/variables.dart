@@ -5,7 +5,7 @@ var executeQuery;
 
 TextEditingController controllerSearchSend = TextEditingController();
 
-String BaseDateSelected = "newMale";
+String BaseDateSelected = "";
 String routeFirst = "";
 int itenSelect = -1;
 int itenSelection = 0;
