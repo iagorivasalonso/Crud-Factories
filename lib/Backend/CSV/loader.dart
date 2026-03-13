@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
+import 'package:crud_factories/Alertdialogs/defaultData.dart';
 import 'package:crud_factories/Backend/Global/files.dart';
 import 'package:crud_factories/Backend/Global/list.dart';
 import 'package:crud_factories/Objects/RouteCSV.dart';
@@ -12,7 +13,7 @@ import 'package:flutter/src/widgets/framework.dart';
 import 'ImportGeneral/AppFile.dart';
 import 'ImportGeneral/importAppFile.dart';
 import 'loader.dart';
-
+import 'package:path/path.dart' as p;
 
 class csvLoaderService {
 
@@ -20,16 +21,16 @@ class csvLoaderService {
   static Future<List<RouteCSV>> loadInitialRoutes(BuildContext context,[String? newRoutePath]) async {
    clearAllData();
 
-    const String defaultRoutesPath = 'assets/dataDefault/routes.csv';
-    fRoutes = new File(defaultRoutesPath);
+    const String defaultRoutesPath = 'C:/Users/Usuario/Documents/IntelijProjects/roues.csv';
+    final String pathToLoad = await resolveRoutesPath(context,defaultRoutesPath);
 
-    final String pathToLoad = newRoutePath?.isNotEmpty == true ? newRoutePath! : defaultRoutesPath;
+   if (pathToLoad == 'fail') {
+     return [];
+   }
 
 
-    if(!pathToLoad.startsWith('assets/'))
-    {
-      fRoutes = File(pathToLoad);
-    }
+    fRoutes = File(pathToLoad);
+
 
      List<RouteCSV> loadedRoutes = await _createData(pathToLoad);
 
@@ -83,6 +84,46 @@ class csvLoaderService {
     return isCorrect; // Devuelve true si todo bien
   }
 
+  static Future<String> resolveRoutesPath (BuildContext context, [String? newRoutePath]) async {
+
+    final String userPath = newRoutePath!;
+
+    final String assetPath = 'assets/dataDefault/routes.csv';
+
+    if(newRoutePath != null && newRoutePath.isNotEmpty)
+    {
+          final file = File(newRoutePath);
+          if (await file.exists())
+          {
+            return newRoutePath;
+          }
+          else
+          {
+             bool errData = await defaultData(context);
+
+             if(errData==true)
+             {
+               return assetPath;
+             }
+             else
+             {
+               return 'fail';
+             }
+          }
+    }
+
+    if(kIsWeb)
+        return assetPath;
+
+    final file = File(userPath);
+
+    if(await file.exists())
+            return userPath;
+
+    print(assetPath);
+    return assetPath;
+
+  }
   static Future<List<RouteCSV>> _createData(String path) async {
 
     final String rawData = path.startsWith('assets/')
@@ -110,14 +151,14 @@ class csvLoaderService {
   }
   static AppFile fromAsset(String assetPath) {
     return AppFile(
-      name: assetPath.split('/').last,
+      name: p.basename(assetPath),
       assetPath: assetPath,
     );
   }
 
   static AppFile fromPath(String path) {
     return AppFile(
-      name: path.split('/').last,
+      name:  p.basename(path),
       path: path,
     );
   }
@@ -130,11 +171,6 @@ class csvLoaderService {
     );
   }
 }
-
-
-
-
-
 
 List<RouteCSV> reorderRouter ( List<String> orderRoutes, List<RouteCSV> routesCsv) {
 
