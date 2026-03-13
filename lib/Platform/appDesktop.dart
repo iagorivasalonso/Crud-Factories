@@ -40,36 +40,19 @@ class _appDesktopState extends State<appDesktop> {
     WidgetsBinding.instance?.addPostFrameCallback((_) async {
       bool isChargue =  false;
 
-      List<RouteCSV> initialRoutes = await csvLoaderService.loadInitialRoutes(context);
-
+      routesCSV = await csvLoaderService.loadInitialRoutes(context);
 
       bool sqlBd = await typeConection(context);
 
 // Crear TextEditingController para la UI
-      routeControllers = List.generate(initialRoutes.length, (i) => RouterController(
-        name: TextEditingController(text: initialRoutes[i].name),
-        router: TextEditingController(text: initialRoutes[i].route),
-      ));
+      csvLoaderService.createControllerList(routesCSV);
 
-      listController = new ListController(
-          routesNew: [],
-          sectorsNew: [],
-          empleoyesNew: [],
-          mailsNew: [],
-          linesNew: [],
-          conectionsNew: [],
-          factoriesNew: []);
-
-          String action = "";
-          List<RouteCSV> routesCurrent = [];
-
-
+      String action = "";
+      List<RouteCSV> routesCurrent = [];
 
 
           if (sqlBd == true)
           {
-
-
                 for (var route in routesCSV) {
                   if (SQLRoutes.any((sqlName) => sqlName.trim().toLowerCase() == route.name.trim().toLowerCase())) {
                     routesCurrent.add(route);
@@ -135,13 +118,8 @@ class _appDesktopState extends State<appDesktop> {
       });
      });
 
-    controlerConex = connectionControler(
-        namebd: TextEditingController(),
-        hostbd: TextEditingController(),
-        portbd: TextEditingController(),
-        userbd: TextEditingController(),
-        passbd: TextEditingController()
-    );
+    csvLoaderService.createControllerBD();
+
   }
 
   @override

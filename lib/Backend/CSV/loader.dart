@@ -8,9 +8,13 @@ import 'package:crud_factories/Objects/RouteCSV.dart';
 import 'package:crud_factories/generated/l10n.dart';
 import 'package:csv/csv.dart';
 import 'package:file_picker/file_picker.dart';
+import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/services.dart';
 import 'package:flutter/src/widgets/framework.dart';
+import '../Global/controllers/Conection.dart';
+import '../Global/controllers/List.dart';
+import '../Global/controllers/Router.dart';
 import 'ImportGeneral/AppFile.dart';
 import 'ImportGeneral/importAppFile.dart';
 import 'loader.dart';
@@ -181,6 +185,36 @@ class csvLoaderService {
       path: file.path,
       bytes: file.bytes,
     );
+  }
+
+  static void createControllerList(List<RouteCSV> initialRoutes) {
+
+    routeControllers = List.generate(initialRoutes.length, (i) => RouterController(
+      name: TextEditingController(text: initialRoutes[i].name),
+      router: TextEditingController(text: initialRoutes[i].route),
+    ));
+
+    listController = new ListController(
+        routesNew: [],
+        sectorsNew: [],
+        empleoyesNew: [],
+        mailsNew: [],
+        linesNew: [],
+        conectionsNew: [],
+        factoriesNew: []);
+
+  }
+
+  static void createControllerBD() {
+
+    controlerConex = connectionControler(
+        namebd: TextEditingController(),
+        hostbd: TextEditingController(),
+        portbd: TextEditingController(),
+        userbd: TextEditingController(),
+        passbd: TextEditingController()
+    );
+
   }
 }
 
