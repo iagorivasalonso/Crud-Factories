@@ -21,7 +21,10 @@ class csvLoaderService {
   static Future<List<RouteCSV>> loadInitialRoutes(BuildContext context,[String? newRoutePath]) async {
    clearAllData();
 
-    const String defaultRoutesPath = 'C:/Users/Usuario/Documents/IntelijProjects/roues.csv';
+    Directory currentDir = Directory.current;
+    Directory parentDir = currentDir.parent;
+
+    final String defaultRoutesPath = '${parentDir.path}/routes.csv';
     final String pathToLoad = await resolveRoutesPath(context,defaultRoutesPath);
 
    if (pathToLoad == 'fail') {
