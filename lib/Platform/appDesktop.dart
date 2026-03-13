@@ -116,9 +116,10 @@ class _appDesktopState extends State<appDesktop> {
         itenSelect = 2;
         subIten1Select = 1;
       });
+
+      csvLoaderService.createControllerBD();
      });
 
-    csvLoaderService.createControllerBD();
 
   }
 
