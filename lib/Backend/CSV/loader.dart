@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:crud_factories/Alertdialogs/defaultData.dart';
 import 'package:crud_factories/Backend/Global/files.dart';
 import 'package:crud_factories/Backend/Global/list.dart';
+import 'package:crud_factories/Backend/Global/variables.dart';
 import 'package:crud_factories/Objects/RouteCSV.dart';
 import 'package:crud_factories/generated/l10n.dart';
 import 'package:csv/csv.dart';
@@ -21,10 +22,18 @@ class csvLoaderService {
   static Future<List<RouteCSV>> loadInitialRoutes(BuildContext context,[String? newRoutePath]) async {
    clearAllData();
 
-    Directory currentDir = Directory.current;
-    Directory parentDir = currentDir.parent;
+   Directory? parentDir;
 
-    final String defaultRoutesPath = '${parentDir.path}/routes.csv';
+   if (!kIsWeb) {
+     parentDir = Directory.current.parent;
+   }
+       routeFirst= 'routes.csv';
+
+   final String defaultRoutesPath =
+   parentDir?.path != null
+       ? p.join(parentDir!.path,routeFirst)
+       : '';
+
     final String pathToLoad = await resolveRoutesPath(context,defaultRoutesPath);
 
    if (pathToLoad == 'fail') {
