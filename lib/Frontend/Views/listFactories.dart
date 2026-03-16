@@ -50,6 +50,8 @@ class _listFactoriesState extends State<listFactories> {
   void didUpdateWidget(covariant listFactories oldWidget) {
     super.didUpdateWidget(oldWidget);
     displayFactoriesNotifier = ValueNotifier<List<Factory>>(widget.list);
+    factoriesSector = displayFactoriesNotifier.value;
+    factorySelect = factoriesSector[0];
   }
 
   bool _contains(String text, String search) {
