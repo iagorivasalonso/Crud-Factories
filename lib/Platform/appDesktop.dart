@@ -42,7 +42,9 @@ class _appDesktopState extends State<appDesktop> {
 
       routesCSV = await csvLoaderService.loadInitialRoutes(context);
 
-      bool sqlBd = await typeConection(context);
+      bool sqlBd = useDataDefault == false
+                 ? await typeConection(context)
+                 : false;
 
 // Crear TextEditingController para la UI
       csvLoaderService.createControllerList(routesCSV);
@@ -112,10 +114,10 @@ class _appDesktopState extends State<appDesktop> {
           await importedRoutes(context,initialChargue);
 
       if (sqlBd == true)
-      setState(() {
-        itenSelect = 2;
-        subIten1Select = 1;
-      });
+          setState(() {
+            itenSelect = 2;
+            subIten1Select = 1;
+          });
 
       csvLoaderService.createControllerBD();
      });
