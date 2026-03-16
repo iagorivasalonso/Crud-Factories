@@ -78,6 +78,7 @@ class _adminRoutesState extends State<adminRoutes> {
             S.of(context).server,
           ];
 
+     routeControllers[0].router.text = routeFirst;
 
           return StatefulBuilder(
             builder: (BuildContext context0, void Function(void Function()) setState) => Dialog(
