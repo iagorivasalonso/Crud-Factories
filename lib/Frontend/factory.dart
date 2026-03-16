@@ -132,8 +132,10 @@ class _newFactoryState extends State<newFactory> {
               if(tmp == sectors[i].id)
               {
                 sector = sectors[i].name;
+                controllers.sector.text = sector;
               }
             }
+
             controllers.telephone1.text = widget.factorySelect!.thelephones[0];
             controllers.telephone2.text =  widget.factorySelect!.thelephones[1];
             controllers.mail.text =  widget.factorySelect!.mail;
