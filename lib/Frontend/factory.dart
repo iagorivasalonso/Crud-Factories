@@ -457,7 +457,7 @@ class _newFactoryState extends State<newFactory> {
     }
 
 
-    if (sectorChoose == null)
+    if (sectorChoose == null && select == -1)
     {
       String modif = "";
       bool create = await createSector(context, modif);
