@@ -46,8 +46,16 @@ class _appDesktopState extends State<appDesktop> {
                  ? await typeConection(context)
                  : false;
 
-// Crear TextEditingController para la UI
+       // Crear TextEditingController para la UI
       csvLoaderService.createControllerList(routesCSV);
+
+      //si no hay rutas ofercer cargarlas
+
+      if(routesCSV.isEmpty)
+        showDialog(
+          context: context,
+          builder: (context) => const adminRoutes(),
+        );
 
       String action = "";
       List<RouteCSV> routesCurrent = [];

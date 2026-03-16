@@ -27,21 +27,31 @@ class csvLoaderService {
    clearAllData();
 
    Directory? parentDir;
+   var fileRoutes='';
 
    if (!kIsWeb) {
      parentDir = Directory.current.parent;
    }
-       routeFirst= 'routes.csv';
+       fileRoutes= 'routes.csv';
 
    final String defaultRoutesPath =
    parentDir?.path != null
-       ? p.join(parentDir!.path,routeFirst)
+       ? p.join(parentDir!.path,fileRoutes)
        : '';
+
+    routeFirst = defaultRoutesPath;
 
     final String pathToLoad = await resolveRoutesPath(context,defaultRoutesPath);
 
+
+   namesRoutesOrdened = [S.of(context).routes,S.of(context).connections,S.of(context).server,S.of(context).sectors,S.of(context).companies,S.of(context).employees,S.of(context).lines, S.of(context).mails];
+
    if (pathToLoad == 'fail') {
      return [];
+   }
+   else
+   {
+     routeFirst = pathToLoad;
    }
 
 
@@ -57,7 +67,7 @@ class csvLoaderService {
     }
     else
     {
-      namesRoutesOrdened = [S.of(context).routes,S.of(context).connections,S.of(context).server,S.of(context).sectors,S.of(context).companies,S.of(context).employees,S.of(context).lines, S.of(context).mails];
+
 
       loadedRoutes  = reorderRouter(namesRoutesOrdened, loadedRoutes);
     }
@@ -106,7 +116,7 @@ class csvLoaderService {
 
     final String assetPath = 'assets/dataDefault/routes.csv';
 
-    if(newRoutePath != null && newRoutePath.isNotEmpty)
+    if(newRoutePath.isNotEmpty)
     {
           final file = File(newRoutePath);
           if (await file.exists())
@@ -119,6 +129,7 @@ class csvLoaderService {
 
              if(errData==true)
              {
+               useDataDefault = true;
                return assetPath;
              }
              else
@@ -189,9 +200,11 @@ class csvLoaderService {
 
   static void createControllerList(List<RouteCSV> initialRoutes) {
 
-    routeControllers = List.generate(initialRoutes.length, (i) => RouterController(
-      name: TextEditingController(text: initialRoutes[i].name),
-      router: TextEditingController(text: initialRoutes[i].route),
+    routeControllers = List.generate(namesRoutesOrdened.length, (i) => RouterController(
+      name: TextEditingController(text: namesRoutesOrdened[i]),
+      router:  routesCSV.isNotEmpty && routesCSV[i].route.isNotEmpty
+              ? TextEditingController(text: routesCSV[i].route)
+              : TextEditingController(text: ''),
     ));
 
     listController = new ListController(
