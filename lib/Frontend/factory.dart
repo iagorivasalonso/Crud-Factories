@@ -122,6 +122,7 @@ class _newFactoryState extends State<newFactory> {
 
       if(saveChanges == false)
       {
+            id = widget.factorySelect!.id;
             controllers.name.text = widget.factorySelect!.name;
             controllers.highDate.text = widget.factorySelect!.highDate;
             tmp = widget.factorySelect!.sector;
@@ -185,6 +186,16 @@ class _newFactoryState extends State<newFactory> {
       title = S.of(context).newFemale;
       action = S.of(context).create;
       action2 = S.of(context).delete;
+
+      if (allFactories.isNotEmpty) {
+        String idLast = allFactories[allFactories
+            .length - 1].id;
+        id = createId(idLast);
+      }
+      else {
+        id = "1";
+      }
+print(id);
     }
     else {
       title = S.of(context).edit;
@@ -650,19 +661,9 @@ class _newFactoryState extends State<newFactory> {
           }
         }
         if (select == -1) {
-          String idNew = "";
-
-          if (allFactories.isNotEmpty) {
-            String idLast = allFactories[allFactories
-                .length - 1].id;
-            idNew = createId(idLast);
-          }
-          else {
-            idNew = "1";
-          }
 
           current.add(Factory(
-            id: idNew,
+            id: id,
             name: controllers.name.text,
             highDate: controllers.highDate.text,
             sector: controllers.sector.text,
