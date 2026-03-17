@@ -5,8 +5,11 @@ import 'dart:io';
 Future<bool> exportCsv(String csv, {String? file}) async {
 
   try {
+    if (file == null || file.isEmpty)
+      return false;
 
-    final f = File(file!);
+
+    final f = File(file);
 
     if (!await f.exists()) {
       await f.create(recursive: true);
