@@ -195,7 +195,7 @@ class _newFactoryState extends State<newFactory> {
       else {
         id = "1";
       }
-print(id);
+
     }
     else {
       title = S.of(context).edit;
