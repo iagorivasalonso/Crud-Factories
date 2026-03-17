@@ -685,7 +685,7 @@ class _newFactoryState extends State<newFactory> {
           if (saveChanges == true) {
             allFactories[select].name = controllers.name.text;
             allFactories[select].highDate = controllers.highDate.text;
-            allFactories[select].sector = controllers.sector.text;
+            allFactories[select].sector = selectedSector!.id;
             allFactories[select].thelephones = [
               controllers.telephone1.text,
               controllers.telephone2.text,
@@ -739,8 +739,7 @@ class _newFactoryState extends State<newFactory> {
             }
           }
           csvExportatorEmpleoyes(empleoyes);
-          bool errorExp = await csvExportatorFactories(
-              allFactories);
+          bool errorExp = await csvExportatorFactories(allFactories);
 
           String array = S
               .of(context)
