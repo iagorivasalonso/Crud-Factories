@@ -206,6 +206,11 @@ class _newFactoryState extends State<newFactory> {
       action2 = S.of(context).undo;
    }
 
+    final Sector newSectorOption = Sector(
+        id: "new",
+        name: S.of(context).newMale,
+    );
+
     String name = S.of(context).company;
     String title1 = "$title $name";
 
@@ -263,13 +268,18 @@ class _newFactoryState extends State<newFactory> {
                               SizedBox(width: 100),
                               Flexible(
                                 child: GenericDropdown<Sector>(
-                                  items: sectors,
+                                  items: [
+                                    if(select==-1)
+                                    newSectorOption,
+                                    ...sectors
+                                  ],
                                   camp:S.of(context).sector,
                                   selectedItem: selectedSector,
+                                  hint:  S.of(context).select,
                                   itemLabel: (sector) => sector.name,
                                   onChanged: (sectorChoose) =>
                                       _onSectorChanged(context, sectorChoose, select),
-                                  hint: '',
+
                                 ),
                               ),
                             ],
@@ -458,35 +468,29 @@ class _newFactoryState extends State<newFactory> {
   }
 
   Future<void> _onSectorChanged(BuildContext context,Sector? sectorChoose,int select) async {
-    if (saveChanges == false && select != -1) {
-      saveChanges = true;
-    }
 
+    if (sectorChoose == null) return;
 
-    if (sectorChoose == null && select == -1)
+    bool create = false;
+    String modif = "";
+
+    if (sectorChoose!.name == S.of(context).newMale)
     {
-      String modif = controllers.sector.text;
-
-      final exist = sectors.any((s)=> s.name.toLowerCase() == modif.toLowerCase());
-
-      if(exist)
-          return;
-
-      bool create = await createSector(context, modif);
-
-      if (create == true) {
-        setState(() {});
-      }
+      create = await createSector(context, modif);
+    }
+    else if (saveChanges == false && select != -1)
+    {
+      saveChanges = true;
     }
     else
     {
-      selectedSector = sectorChoose;
+      selectedSector = sectors.firstWhere((s) => s.id == sectorChoose.id);
 
       setState(() {
         controllers.sector.text = sectorChoose!.name;
       });
-
     }
+
   }
 
   Future<void> _addEmplepoye(factoryController controllers,
@@ -750,7 +754,7 @@ class _newFactoryState extends State<newFactory> {
           if (errorExp == false) {
             String actionArray = S
                 .of(context)
-                .saved;
+                .saved_female;
             String pr = S
                 .of(context)
                 .theFemale;
