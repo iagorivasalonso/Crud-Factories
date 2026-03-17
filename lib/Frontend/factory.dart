@@ -63,7 +63,6 @@ class _newFactoryState extends State<newFactory> {
   int contactSelect = 0;
   String id ="";
   String date="";
-  String sector = " ";
   Sector? selectedSector;
   String tmp = " ";
   String allAddress = "";
@@ -127,14 +126,12 @@ class _newFactoryState extends State<newFactory> {
             controllers.highDate.text = widget.factorySelect!.highDate;
             tmp = widget.factorySelect!.sector;
 
-            for(int i = 0; i <sectors.length; i++)
-            {
-              if(tmp == sectors[i].id)
-              {
-                sector = sectors[i].name;
-                controllers.sector.text = sector;
-              }
-            }
+            selectedSector = sectors.firstWhere(
+                  (s) => s.id == tmp,
+              orElse: () => sectors.first,
+            );
+
+            controllers.sector.text = selectedSector!.name;
 
             controllers.telephone1.text = widget.factorySelect!.thelephones[0];
             controllers.telephone2.text =  widget.factorySelect!.thelephones[1];
@@ -188,7 +185,6 @@ class _newFactoryState extends State<newFactory> {
       title = S.of(context).newFemale;
       action = S.of(context).create;
       action2 = S.of(context).delete;
-      sector = S.of(context).select;
     }
     else {
       title = S.of(context).edit;
@@ -258,12 +254,11 @@ class _newFactoryState extends State<newFactory> {
                                 child: GenericDropdown<Sector>(
                                   items: sectors,
                                   camp:S.of(context).sector,
-                                  opDefault: select == -1 ? S.of(context).newMale : sector,
                                   selectedItem: selectedSector,
-                                  hint: sector,
                                   itemLabel: (sector) => sector.name,
                                   onChanged: (sectorChoose) =>
                                       _onSectorChanged(context, sectorChoose, select),
+                                  hint: '',
                                 ),
                               ),
                             ],
@@ -459,7 +454,13 @@ class _newFactoryState extends State<newFactory> {
 
     if (sectorChoose == null && select == -1)
     {
-      String modif = "";
+      String modif = controllers.sector.text;
+
+      final exist = sectors.any((s)=> s.name.toLowerCase() == modif.toLowerCase());
+
+      if(exist)
+          return;
+
       bool create = await createSector(context, modif);
 
       if (create == true) {
