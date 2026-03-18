@@ -4,7 +4,6 @@ import 'package:crud_factories/Alertdialogs/confirm.dart';
 import 'package:crud_factories/Alertdialogs/error.dart';
 import 'package:crud_factories/Backend/Global/controllers/LineSend.dart';
 import 'package:crud_factories/Backend/Global/list.dart';
-import 'package:crud_factories/Backend/SQL/createLine.dart';
 import 'package:crud_factories/Backend/Global/variables.dart';
 import 'package:crud_factories/Backend/CSV/exportLines.dart';
 import 'package:crud_factories/Functions/createId.dart';
@@ -57,7 +56,7 @@ class _newSendState extends State<newSend> {
   String sector = "";
   String campKey = " ";
   String messageResult ="";
-   int cantFactory= 0;
+  int cantFactory= 0;
   List<String> stateSends =[];
   String tList = "";
   String action1 = "";
@@ -81,7 +80,7 @@ class _newSendState extends State<newSend> {
              factory: TextEditingController(),
              sector: TextEditingController(),
              observations: TextEditingController(),
-             state: TextEditingController()
+             state: LineSendState.prepared,
          ));
 
     sectorsString = [S.of(context1).allMale];
@@ -148,22 +147,25 @@ class _newSendState extends State<newSend> {
                      }).toList();
                 }
            }
+      List parsedStates = stateSends
+          .map((e) => manageState.parseState(e, context, false))
+          .toList();
+      linesControllers = List.generate(factoriesSector.length, (index) {
+        return LineSendController(
+          date: TextEditingController(
+            text: DateFormat('dd-MM-yyyy').format(DateTime.now()),
+          ),
+          factory: TextEditingController(
+            text: factoriesSector[index].name,
+          ),
+          sector: TextEditingController(
+            text: factoriesSector[index].sector.toString(),
+          ),
+          observations: TextEditingController(text: ""),
+          state: LineSendState.prepared,
+        );
+      });
 
-
-          for(int i = 0; i < factoriesSector.length; i++)
-          {
-             int idLine = i +1;
-             final String formattedDate = DateFormat('dd-MM-yyyy').format(date);
-
-             linesNew.add(new LineSend(
-                  id: idLine.toString(),
-                  date: formattedDate,
-                  factory: factoriesSector[i].name,
-                  sector: factoriesSector[i].sector,
-                  observations: linesControllers[i].observations.text,
-                  state: manageState.parseState(stateSends[0],context,false)));
-
-          }
 
           cantFactory = factoriesSector.length;
           messageResult = LocalizationHelper.factoriesBD(context, cantFactory);
@@ -212,7 +214,7 @@ class _newSendState extends State<newSend> {
                       factory: TextEditingController(),
                       sector: TextEditingController(),
                       observations: TextEditingController(),
-                      state: TextEditingController()
+                      state: LineSendState.prepared
                   ));
 
                    observationModify = List.generate(linesSelected.length, (index) => false);
@@ -315,13 +317,13 @@ class _newSendState extends State<newSend> {
                                        select: -1,
                                        states: stateSends,
                                        sendValues: send,
-                                       selectedItem: selectedItem,
+                                       selectedItem: null,
                                        linesControllers: linesControllers,
                                        mesage: messageResult,
                                        onStateChanged: (index , value ) {
                                          setState(() {
-                                           linesControllers[index].state.text = value;
-                                           selectedItem = value; //
+                                           linesControllers[index].state = value as LineSendState;
+                                          // selectedItem = value; //
                                          });
                                        },
                                        onSendChanged: (i, value) {
@@ -346,7 +348,7 @@ class _newSendState extends State<newSend> {
                                       : [campKey, S.of(context).sector ,S.of(context).observations, S.of(context).state],
                                          showSectorColumn: allSectors,
                                         states: stateSends,
-                                        selectedItem: selectedItem,
+                                        selectedItem: null,
                                         linesControllers: linesControllers,
                                         mesage: messageResult,
                                         onObservationChanged: (index , String ) {
@@ -368,12 +370,12 @@ class _newSendState extends State<newSend> {
                                         },
                                         onStateChanged: (index , value ) {
                                           setState(() {
-                                            linesControllers[index].state.text = value;
-                                            selectedItem = value; //
+                                            linesControllers[index].state = value;
+                                            selectedItem = value as String;
 
-                                              if(linesControllers[index].state.text != linesSelected[index].state)
+                                              if(linesControllers[index].state!= linesSelected[index].state)
                                               {
-                                                linesSelected[index].state=linesControllers[index].state.text;
+                                                linesSelected[index].state=linesControllers[index].state as String;
                                                 stateModify[index] = true;
                                                 saveChanges = true;
                                               }
@@ -424,34 +426,30 @@ class _newSendState extends State<newSend> {
 
   }
 
-  Future<void> loadLinesFromModel(BuildContext context, List<LineSend> lines, List<LineSendController> controllersLines) async {
+  Future<void> loadLinesFromModel(
+      BuildContext context,
+      List<LineSend> lines,
+      List<LineSendController> controllersLines,
+      ) async {
 
+    for (int i = 0; i < lines.length && i < controllersLines.length; i++) {
 
+      Sector? sectorSelected = sectors.firstWhereOrNull(
+            (sector) => sector.id == lines[i].sector,
+      );
 
-        for(int i = 0; i<linesSelected.length && i < controllersLines.length; i++)
-        {
-            Sector? sectorSelected = sectors.firstWhereOrNull(
-                  (sector) => sector.id == lines[i].sector!,
-            );
+      controllersLines[i].date.text = lines[i].date;
+      controllersLines[i].factory.text = lines[i].factory;
 
-            controllersLines[i].date.text = linesSelected[i].date;
-            controllersLines[i].factory.text = linesSelected[i].factory;
+      controllersLines[i].sector.text = sectorSelected != null
+          ? sectorSelected.name
+          : S.of(context).The_sector_does_not_exist;
 
-            if (sectorSelected != null)
-            {
-              controllersLines[i].sector.text = sectorSelected.name;
-            }
-            else
-            {
-              controllersLines[i].sector.text = S.of(context).The_sector_does_not_exist;
-            }
+      controllersLines[i].observations.text = lines[i].observations;
 
-            controllersLines[i].observations.text = linesSelected[i].observations;
-            controllersLines[i].state.text = linesSelected[i].state;
-        }
-
+      //¡¡controllersLines[i].state = manageState.parseState(lines[i].state, context, false);
+    }
   }
-
   Future<void> _onSectorChanged(BuildContext context,Sector? sectorChoose,int select) async {
 
     setState(() {
@@ -505,12 +503,12 @@ class _newSendState extends State<newSend> {
                     factory: factoriesSector[i].name,
                     observations: linesControllers[i].observations.text,
                     state: manageState.parseState(
-                        linesControllers[i].state.text, context, true)),
+                        linesControllers[i].state.name, context, true)),
               );
 
               linesControllers[i].observations.text = "";
+              linesControllers[i].state = LineSendState.prepared;
               send[i] = false;
-              linesControllers[i].state.text = stateSends.first;
               selectedItem = S.of(context).prepared;
             }
           }
@@ -584,7 +582,7 @@ class _newSendState extends State<newSend> {
               {
                   linesControllers[i].observations.text = "";
                   send[i] = false;
-                  linesControllers[i].state.text = stateSends.first;
+                  linesControllers[i].state = LineSendState.prepared;
                   selectedItem = S.of(context).prepared;
               }
       }
@@ -593,7 +591,8 @@ class _newSendState extends State<newSend> {
               for(int i = 0; i < linesSelected.length; i++)
               {
                 linesControllers[i].observations.text = linesSave[i].observations;
-                linesControllers[i].state.text = linesSave[i].state;
+
+                selectedItem = S.of(context).prepared;
               }
       }
     });
