@@ -52,5 +52,38 @@ class manageState {
             return state;
           }
 
+  LineSendState stringToState(String value) {
+    final key = value.toLowerCase().trim();
+
+    switch (key) {
+      case "prepared":
+      case "linesendstate.prepared":
+        return LineSendState.prepared;
+
+      case "sent":
+      case "linesendstate.sent":
+      case "enviado":
+        return LineSendState.sent;
+
+      case "in_progress":
+      case "linesendstate.in_progress":
+      case "en proceso":
+        return LineSendState.in_progress;
+
+      case "returned":
+      case "linesendstate.returned":
+        return LineSendState.returned;
+
+      case "has_responded":
+      case "he_responded":
+      case "linesendstate.has_responded":
+      case "respondido":
+        //return LineSendState.heResponded;
+
+      default:
+        return LineSendState.prepared;
+    }
+  }
+
   }
 
