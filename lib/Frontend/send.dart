@@ -124,6 +124,7 @@ class _newSendState extends State<newSend> {
            }
            else
            {
+
                      factoriesSector = allFactories.where((factory){
                        return factory.sector == selectedSector!.id;
                      }).toList();
@@ -152,7 +153,7 @@ class _newSendState extends State<newSend> {
 
               allSectors = true;
 
-              linesSelected = allLines.where((line) {
+              linesSelected = lineSector.where((line) {
                     return line.date == selectCamp;
 
                     }).toList();
