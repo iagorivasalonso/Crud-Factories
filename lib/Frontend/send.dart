@@ -431,8 +431,8 @@ class _newSendState extends State<newSend> {
           S.of(context).The_sector_does_not_exist;
       controllersLines[i].date.text = linesSelected[i].date;
       controllersLines[i].factory.text = linesSelected[i].factory;
-      controllersLines[i].state =  stringToState(lines[i].state);
-      controllersLines[i].observations.text = "";
+      controllersLines[i].state =  stringToState(linesSelected[i].state);
+      controllersLines[i].observations.text = linesSelected[i].observations;
 
     }
   }
