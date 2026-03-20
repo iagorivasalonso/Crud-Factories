@@ -555,8 +555,7 @@ class _newFactoryState extends State<newFactory> {
       campOld = allFactories[select].name;
     }
 
-    if (validatorCamps.primaryKeyCorrect(
-        controllers.name.text, nameCamp, allKeys, campOld, context) == true) {
+    if (validatorCamps.primaryKeyCorrect(controllers.name.text, nameCamp, allKeys, campOld, context) == true || controllers.name.text==allFactories[select].name) {
       final telephone1 = controllers.telephone1.text.replaceAll(" ", "");
       final telephone2 = controllers.telephone2.text.replaceAll(" ", "");
 
@@ -670,7 +669,7 @@ class _newFactoryState extends State<newFactory> {
             id: id,
             name: controllers.name.text,
             highDate: controllers.highDate.text,
-            sector: controllers.sector.text,
+            sector: selectedSector!.id,
             thelephones: [
               controllers.telephone1.text,
               controllers.telephone2.text,
