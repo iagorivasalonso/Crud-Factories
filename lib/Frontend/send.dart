@@ -431,43 +431,12 @@ class _newSendState extends State<newSend> {
           S.of(context).The_sector_does_not_exist;
       controllersLines[i].date.text = linesSelected[i].date;
       controllersLines[i].factory.text = linesSelected[i].factory;
-      controllersLines[i].state =  stringToState(linesSelected[i].state);
+      controllersLines[i].state =  manageState.stringToState(linesSelected[i].state);
       controllersLines[i].observations.text = linesSelected[i].observations;
 
     }
   }
-  LineSendState stringToState(String value) {
-    final key = value.toLowerCase().trim();
 
-    switch (key) {
-      case "prepared":
-      case "linesendstate.prepared":
-        return LineSendState.prepared;
-
-      case "sent":
-      case "linesendstate.sent":
-      case "enviado":
-        return LineSendState.sent;
-
-      case "in_progress":
-      case "linesendstate.in_progress":
-      case "en proceso":
-        return LineSendState.in_progress;
-
-      case "returned":
-      case "linesendstate.returned":
-        return LineSendState.returned;
-
-      case "has_responded":
-      case "he_responded":
-      case "linesendstate.has_responded":
-      case "respondido":
-      //return LineSendState.heResponded;
-
-      default:
-        return LineSendState.prepared;
-    }
-  }
   Future<void> _onSectorChanged(BuildContext context,Sector? sectorChoose,int select) async {
 
     setState(() {

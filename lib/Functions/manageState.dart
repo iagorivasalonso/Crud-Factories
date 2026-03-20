@@ -52,7 +52,7 @@ class manageState {
             return state;
           }
 
-  LineSendState stringToState(String value) {
+  static LineSendState stringToState(String value) {
     final key = value.toLowerCase().trim();
 
     switch (key) {
