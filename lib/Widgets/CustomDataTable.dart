@@ -5,6 +5,7 @@ import '../Backend/Global/controllers/LineSend.dart';
 import '../Backend/Global/variables.dart';
 import '../Functions/isNotAndroid.dart';
 import '../Functions/manageState.dart';
+import '../Objects/LineSend.dart';
 import '../generated/l10n.dart';
 
 class customDataTable extends StatelessWidget {
@@ -19,7 +20,7 @@ class customDataTable extends StatelessWidget {
   final List<LineSendController> linesControllers;
   final String mesage;
   final void Function(int, String)? onObservationChanged;
-  final void Function(int, String) onStateChanged;
+  final void Function(int, LineSendState) onStateChanged;
   final void Function(int, bool) onSendChanged;
   Function(dynamic value) onSelectedAllChanged;
 
@@ -69,8 +70,9 @@ class customDataTable extends StatelessWidget {
                                ),
                                 ).toList(),
                             rows: select == -1
-                                 ? tableLinesNew(context)
-                                 : tableLinesEdit(context),
+                              ? tableLinesNew(context)
+                              :  tableLinesEdit(context)
+
                         ),
                   ),
                ),
@@ -134,28 +136,24 @@ class customDataTable extends StatelessWidget {
               ),
             ),
             DataCell(
-                SizedBox(
-                  height: 40,
-                  child: DropdownButtonFormField<String>(
-                    value:  linesControllers[index].state.text.isNotEmpty
-                                    ? linesControllers[index].state.text
-                                    : selectedItem,
-                    items: states
-                        .map((option) => DropdownMenuItem<String>(
-                      value: option,
-                      child: Text(
-                        manageState.seeLanguage(context1, option),
-                        style: const TextStyle(fontSize: 12),
-                      ),
-                    ))
-                        .toList(),
-                    onChanged: (value) {
-                      if (value != null) {
-                        onStateChanged(index, value);
-                      }
-                    },
-                  ),
-                )
+              SizedBox(
+                height: 40,
+                child: DropdownButtonFormField<LineSendState>(
+                  value: linesControllers[index].state, // ✅ el valor actual (un solo enum)
+                  items: LineSendState.values.map((state) {
+                    return DropdownMenuItem<LineSendState>(
+                      value: state,                     // ✅ un solo enum, no la lista
+                      child: Text(manageState.seeLanguage(context,state.name)), // ✅ texto traducido
+                    );
+                  }).toList(),
+                  onChanged: (value) {
+                    if (value != null) {
+                      linesControllers[index].state = value; // actualizar la fila
+                      onStateChanged(index, value);
+                    }
+                  },
+                ),
+              ),
             ),
 
             DataCell(
@@ -209,21 +207,17 @@ class customDataTable extends StatelessWidget {
             DataCell(
                 SizedBox(
                   height: 40,
-                  child: DropdownButtonFormField<String>(
-                    value:  linesControllers[index].state.text.isNotEmpty
-                        ? linesControllers[index].state.text
-                        : S.of(context).prepared,
-                    items: states
-                        .map((option) => DropdownMenuItem<String>(
-                      value: option,
-                      child: Text(
-                        manageState.seeLanguage(context1, option),
-                        style: const TextStyle(fontSize: 12),
-                      ),
-                    ))
-                        .toList(),
+                  child: DropdownButtonFormField<LineSendState>(
+                    value: linesControllers[index].state,
+                    items: LineSendState.values.map((state) {
+                      return DropdownMenuItem<LineSendState>(
+                        value: state,
+                        child: Text(manageState.seeLanguage(context,state.name)),
+                      );
+                    }).toList(),
                     onChanged: (value) {
                       if (value != null) {
+                        linesControllers[index].state = value; // actualizar la fila
                         onStateChanged(index, value);
                       }
                     },

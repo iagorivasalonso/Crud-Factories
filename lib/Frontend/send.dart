@@ -9,6 +9,7 @@ import 'package:crud_factories/Backend/CSV/exportLines.dart';
 import 'package:crud_factories/Functions/createId.dart';
 import 'package:crud_factories/Functions/manageState.dart';
 import 'package:crud_factories/Functions/validatorCamps.dart';
+import 'package:crud_factories/Objects/Factory.dart';
 import 'package:crud_factories/Objects/LineSend.dart';
 import 'package:crud_factories/Objects/Sector.dart';
 import 'package:crud_factories/Widgets/headViewsAndroid.dart';
@@ -74,19 +75,7 @@ class _newSendState extends State<newSend> {
   @override
   void initState() {
     super.initState();
-     linesControllers = List.generate(allFactories.length,
-         (_) => LineSendController(
-             date: TextEditingController(),
-             factory: TextEditingController(),
-             sector: TextEditingController(),
-             observations: TextEditingController(),
-             state: LineSendState.prepared,
-         ));
-
-    sectorsString = [S.of(context1).allMale];
-    sectorsString.addAll(sectors.map((s) => s.name));
-
-    send = List.generate(allFactories.length, (index) => false);
+    generateControllers();
   }
 
 
@@ -121,56 +110,30 @@ class _newSendState extends State<newSend> {
       action1 = S.of(context).newMale;
       action2 = S.of(context).reboot;
 
-      if(sector.isEmpty)
-         sector = S.of(context).sector;
-
-      if(selectedSector==null)
-        factoriesSector = allFactories;
-
-
+      
       List<LineSend>linesNew = [];
 
           if(controllerSearchSend.text.isEmpty)
           {
             controllerSearchSend.text = DateFormat('dd-MM-yyyy').format( DateTime.now());
           }
-           if(selectedSector==S.of(context).allMale)
+
+           if(selectedSector==null)
            {
                factoriesSector = allFactories;
            }
            else
            {
-                if(selectedSector!=null)
-                {
                      factoriesSector = allFactories.where((factory){
                        return factory.sector == selectedSector!.id;
                      }).toList();
-                }
            }
-      List parsedStates = stateSends
-          .map((e) => manageState.parseState(e, context, false))
-          .toList();
-      linesControllers = List.generate(factoriesSector.length, (index) {
-        return LineSendController(
-          date: TextEditingController(
-            text: DateFormat('dd-MM-yyyy').format(DateTime.now()),
-          ),
-          factory: TextEditingController(
-            text: factoriesSector[index].name,
-          ),
-          sector: TextEditingController(
-            text: factoriesSector[index].sector.toString(),
-          ),
-          observations: TextEditingController(text: ""),
-          state: LineSendState.prepared,
-        );
-      });
 
 
           cantFactory = factoriesSector.length;
           messageResult = LocalizationHelper.factoriesBD(context, cantFactory);
 
-          loadLinesFromModel(context, linesNew, linesControllers);
+      loadFactoriesFromModel(context, factoriesSector, linesControllers);
     }
     else if(saveChanges ==false)
     {
@@ -187,7 +150,7 @@ class _newSendState extends State<newSend> {
          {
               campKey = S.of(context).company;
 
-              linesSelected = lineSector.where((line) {
+              linesSelected = allLines.where((line) {
                     return line.date == selectCamp;
 
                     }).toList();
@@ -216,7 +179,6 @@ class _newSendState extends State<newSend> {
                       observations: TextEditingController(),
                       state: LineSendState.prepared
                   ));
-
                    observationModify = List.generate(linesSelected.length, (index) => false);
                    stateModify =  List.generate(linesSelected.length, (index) => false);
 
@@ -327,6 +289,7 @@ class _newSendState extends State<newSend> {
                                          });
                                        },
                                        onSendChanged: (i, value) {
+                                         print(value);
                                            send[i] = value;
                                            saveChanges = true;
                                            setState(() {});
@@ -425,6 +388,27 @@ class _newSendState extends State<newSend> {
     );
 
   }
+  Future<void> loadFactoriesFromModel(
+      BuildContext context,
+      List<Factory> factories,
+      List<LineSendController> controllersLines,
+      ) async {
+
+    for (int i = 0; i < factories.length; i++) {
+
+      final sectorSelected = sectors.firstWhereOrNull(
+            (sector) => sector.id == factories[i].sector,
+      );
+
+
+      controllersLines[i].sector.text = sectorSelected?.name ??
+          S.of(context).The_sector_does_not_exist;
+      controllersLines[i].date.text = factories[i].highDate;
+      controllersLines[i].factory.text = factories[i].name;
+      controllersLines[i].observations.text = "";
+
+    }
+  }
 
   Future<void> loadLinesFromModel(
       BuildContext context,
@@ -432,22 +416,52 @@ class _newSendState extends State<newSend> {
       List<LineSendController> controllersLines,
       ) async {
 
-    for (int i = 0; i < lines.length && i < controllersLines.length; i++) {
+    for (int i = 0; i < linesSelected.length; i++) {
 
-      Sector? sectorSelected = sectors.firstWhereOrNull(
-            (sector) => sector.id == lines[i].sector,
+      final sectorSelected = sectors.firstWhereOrNull(
+            (sector) => sector.id == linesSelected[i].sector,
       );
 
-      controllersLines[i].date.text = lines[i].date;
-      controllersLines[i].factory.text = lines[i].factory;
 
-      controllersLines[i].sector.text = sectorSelected != null
-          ? sectorSelected.name
-          : S.of(context).The_sector_does_not_exist;
+      controllersLines[i].sector.text = sectorSelected?.name ??
+          S.of(context).The_sector_does_not_exist;
+      controllersLines[i].date.text = linesSelected[i].date;
+      controllersLines[i].factory.text = linesSelected[i].factory;
+      controllersLines[i].state =  stringToState(lines[i].state);
+      controllersLines[i].observations.text = "";
 
-      controllersLines[i].observations.text = lines[i].observations;
+    }
+  }
+  LineSendState stringToState(String value) {
+    final key = value.toLowerCase().trim();
 
-      //¡¡controllersLines[i].state = manageState.parseState(lines[i].state, context, false);
+    switch (key) {
+      case "prepared":
+      case "linesendstate.prepared":
+        return LineSendState.prepared;
+
+      case "sent":
+      case "linesendstate.sent":
+      case "enviado":
+        return LineSendState.sent;
+
+      case "in_progress":
+      case "linesendstate.in_progress":
+      case "en proceso":
+        return LineSendState.in_progress;
+
+      case "returned":
+      case "linesendstate.returned":
+        return LineSendState.returned;
+
+      case "has_responded":
+      case "he_responded":
+      case "linesendstate.has_responded":
+      case "respondido":
+      //return LineSendState.heResponded;
+
+      default:
+        return LineSendState.prepared;
     }
   }
   Future<void> _onSectorChanged(BuildContext context,Sector? sectorChoose,int select) async {
@@ -460,6 +474,7 @@ class _newSendState extends State<newSend> {
         selectedSector = null;
         allSectors = true;
       }
+      loadFactoriesFromModel(context, factoriesSector, linesControllers);
     });
   }
 
@@ -481,16 +496,8 @@ class _newSendState extends State<newSend> {
       int idInit = int.parse(idNew);
 
       if (select == -1) {
-        if (validatorCamps.dateCorrect(controllerSearch.text) == false) {
-          String array = S
-              .of(context)
-              .date;
-          String action = LocalizationHelper.format_must(context, array);
+        if (validatorCamps.dateCorrect(controllerSearch.text) == true) {
 
-          String format = 'DD-MM-AAAA';
-          error(context, action, format);
-        }
-        else {
           for (int i = 0; i < factoriesSector.length; i++) {
             if (send[i] == true) {
               int idNew = idInit + current.length;
@@ -576,28 +583,36 @@ class _newSendState extends State<newSend> {
     setState(() {
       if (select == -1)
       {
-              controllerSearchSend.text = DateFormat('dd-MM-yyyy').format(DateTime.now());
-
-              for (int i = 0; i < factoriesSector.length; i++)
-              {
-                  linesControllers[i].observations.text = "";
-                  send[i] = false;
-                  linesControllers[i].state = LineSendState.prepared;
-                  selectedItem = S.of(context).prepared;
-              }
+        generateControllers();
       }
       else
       {
-              for(int i = 0; i < linesSelected.length; i++)
-              {
-                linesControllers[i].observations.text = linesSave[i].observations;
 
-                selectedItem = S.of(context).prepared;
-              }
       }
     });
   }
+
+  void generateControllers() {
+    linesControllers = List.generate(allFactories.length, (index) {
+      return LineSendController(
+        date: TextEditingController(
+          text: DateFormat('dd-MM-yyyy').format(DateTime.now()),
+        ),
+        factory: TextEditingController(
+          text: allFactories[index].name,
+        ),
+        sector: TextEditingController(
+          text: allFactories[index].sector.toString(),
+        ),
+        observations: TextEditingController(text: ""),
+        state: LineSendState.prepared,
+      );
+    });
+
+    send = List.generate(allFactories.length, (_) => false);
+  }
 }
+
 
 
 
