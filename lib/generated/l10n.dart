@@ -309,6 +309,11 @@ class S {
     return Intl.message('Guardado', name: 'saved', desc: '', args: []);
   }
 
+  /// `Guardada`
+  String get saved_female {
+    return Intl.message('Guardada', name: 'saved_female', desc: '', args: []);
+  }
+
   /// `Envios`
   String get sends {
     return Intl.message('Envios', name: 'sends', desc: '', args: []);
