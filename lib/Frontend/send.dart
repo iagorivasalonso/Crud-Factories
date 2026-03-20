@@ -63,7 +63,7 @@ class _newSendState extends State<newSend> {
   String action1 = "";
   String action2 = "";
   int allLinesCreated = 0;
-  bool allSectors = true;
+  bool allSectors = false;
 
   List<String> sectorsString = [];
   List<bool> send = [];
@@ -150,6 +150,8 @@ class _newSendState extends State<newSend> {
          {
               campKey = S.of(context).company;
 
+              allSectors = true;
+
               linesSelected = allLines.where((line) {
                     return line.date == selectCamp;
 
@@ -161,6 +163,8 @@ class _newSendState extends State<newSend> {
          else
          {
              campKey = S.of(context).date;
+
+             allSectors = false;
 
              linesSelected = lineSector.where((line) {
                   return line.factory == selectCamp;
