@@ -92,6 +92,7 @@ class _listSendsState extends State<listSends> {
         selectCamp = selectedFilter == S.of(context1).date
             ? resultSend[0].description
             : resultSend[0].title;
+
       }
     }
   }
@@ -145,7 +146,20 @@ class _listSendsState extends State<listSends> {
         .where((element) => element.description.toLowerCase().contains(lowerSearch))
         .toList();
 
+    setState(() {
+      selectCard = 0;
+      select = 0;
+
+      if (selectedFilter == S.of(context1).date) {
+        selectCamp = resultSend[select].description;
+      }
+      if (selectedFilter == S.of(context1).company) {
+        selectCamp = resultSend[select].title;
+      }
+
+    });
     displayLinesNotifier.value = List.from(listFiltered);
+
 
   }
   Future<void>_onTap(int index, BuildContext context)  async {
