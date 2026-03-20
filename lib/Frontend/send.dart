@@ -339,18 +339,13 @@ class _newSendState extends State<newSend> {
                                         onStateChanged: (index , value ) {
                                           setState(() {
                                             linesControllers[index].state = value;
-                                            selectedItem = value as String;
 
-                                              if(linesControllers[index].state!= linesSelected[index].state)
-                                              {
-                                                linesSelected[index].state=linesControllers[index].state as String;
-                                                stateModify[index] = true;
-                                                saveChanges = true;
-                                              }
-                                              else
-                                              {
-                                                stateModify[index] = false;
-                                              }
+                                            if (linesControllers[index].state.name != linesSave[index].state) {
+                                              stateModify[index] = true;
+                                              saveChanges = true;
+                                            } else {
+                                              stateModify[index] = false;
+                                            }
                                           });
                                         }, sendValues: [], onSendChanged: (int p1, bool p2) {  }, onSelectedAllChanged: (value) {  },
                                    ),
@@ -498,20 +493,23 @@ class _newSendState extends State<newSend> {
         }
       }
       else {
-        int allLinesMod = 0;
-        for (int i = 0; i < linesSelected.length; i++) {
-          if (observationModify[i] || stateModify[i]) {
-            String id = linesSelected[i].id;
 
-            for (int x = 0; x < allLines.length; x++) {
-              if (allLines[x].id.trim() == id) {
-                allLines[x] = linesSelected[i];
-                allLinesMod++;
-              }
-            }
+
+        for (int i = 0; i < linesSelected.length; i++) {
+
+          linesSelected[i].observations = linesControllers[i].observations.text;
+          linesSelected[i].state=linesControllers[i].state.name;
+        }
+
+        int linesModify = 0;
+
+        for (int i = 0; i < stateModify.length; i++) {
+          if (stateModify[i] || observationModify[i]) { // suma si al menos uno es true
+            linesModify++;
           }
         }
-        String action = LocalizationHelper.cantLinesModify(context, allLinesMod);
+
+        String action = LocalizationHelper.cantLinesModify(context, linesModify);
         confirm(context,action);
       }
     });
