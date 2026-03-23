@@ -25,7 +25,7 @@ class LineSend extends BaseEntity {
     required this.state
   });
 
-  String showFormatDate(String date, BuildContext context) {
+  static String showFormatDate(String date, BuildContext context) {
 
     List <String> listMmonth = [
       ' ',

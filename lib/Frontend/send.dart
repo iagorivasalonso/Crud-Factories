@@ -147,11 +147,17 @@ class _newSendState extends State<newSend> {
       linesSelected.clear();
       linesControllers.clear();
 
+        allLines= lineSector;
+
+        for(int i = 0; i < lineSector.length; i++)
+        {
+          lineSector[i].date=LineSend.showFormatDate(lineSector[i].date, context);
+        }
+
          if(filter == S.of(context).date)
          {
               campKey = S.of(context).company;
 
-              allSectors = true;
 
               linesSelected = lineSector.where((line) {
                     return line.date == selectCamp;
@@ -165,7 +171,6 @@ class _newSendState extends State<newSend> {
          {
              campKey = S.of(context).date;
 
-             allSectors = false;
 
              linesSelected = lineSector.where((line) {
                   return line.factory == selectCamp;
@@ -205,6 +210,26 @@ class _newSendState extends State<newSend> {
               loadLinesFromModel(context, linesSelected, linesControllers);
               controllerSearchSend.text = selectCamp;
           }
+
+    allSectors = false;
+    String? currentSector;
+
+    for (int i = 0; i < lineSector.length; i++) {
+      if (i == 0) {
+        currentSector = lineSector[i].sector;
+      } else {
+        if (currentSector != lineSector[i].sector) {
+          allSectors = true;
+          break;
+        }
+      }
+    }
+
+    if (allSectors) {
+      print("Único sector: $currentSector");
+    } else {
+      print("Hay varios sectores");
+    }
 
     return !isNotAndroid()
         ? Scaffold(
@@ -251,14 +276,15 @@ class _newSendState extends State<newSend> {
                               ),
                             ),
 
-                            if(select == -1)
+
                               Flexible(
                                 child: Padding(
                                   padding: const EdgeInsets.only(left: 40.0, top: 20.0),
                                   child: SizedBox(
                                     height: 40,
                                     width: 300,
-                                    child: GenericDropdown<Sector>(
+                                    child: select == -1
+                                    ? GenericDropdown<Sector>(
                                       items: sectors,
                                       camp:S.of(context).sector,
                                       opDefault: S.of(context).allMale,
@@ -267,7 +293,14 @@ class _newSendState extends State<newSend> {
                                       itemLabel: (sector) => sector.name,
                                       onChanged: (sectorChoose) =>
                                           _onSectorChanged(context, sectorChoose, select),
-                                    ),
+                                    )
+                                    :allSectors==false
+                                      ? Padding(
+                                        padding: const EdgeInsets.only(top: 20.0),
+                                        child: Text("${S.of(context).companies_of}" " ${linesControllers[0].sector.text}",
+                                            style: const TextStyle(fontWeight: FontWeight.bold)),
+                                      )
+                                      : null,
                                   ),
                                 ),
                               ),
