@@ -42,7 +42,10 @@ class newSend extends StatefulWidget {
   State<newSend> createState() => _newSendState();
 }
 
-class _newSendState extends State<newSend> {
+class _newSendState extends State<newSend> with AutomaticKeepAliveClientMixin {
+
+  @override
+  bool get wantKeepAlive => true;
 
   final ScrollController horizontalScroll = ScrollController();
   final ScrollController verticalScroll = ScrollController();
@@ -72,12 +75,30 @@ class _newSendState extends State<newSend> {
   List<bool> stateModify = [];
 
   late List<LineSendController> linesControllers;
+
+
   @override
   void initState() {
     super.initState();
     generateControllers();
+
+      _initEditData();
+
   }
 
+  void _initEditData() {
+    if (widget.select == -1) return;
+
+    BuildContext context = context1;
+
+    allLines = lineSector;
+
+    for (int i = 0; i < lineSector.length; i++) {
+      lineSector[i].date = LineSend.showFormatDate(lineSector[i].date, context);
+    }
+
+    // Seleccionar líneas según
+  }
 
   @override
   void dispose() {
@@ -130,86 +151,30 @@ class _newSendState extends State<newSend> {
                      }).toList();
            }
 
-
-          cantFactory = factoriesSector.length;
           messageResult = LocalizationHelper.factoriesBD(context, cantFactory);
 
       loadFactoriesFromModel(context, factoriesSector, linesControllers);
     }
-    else if(saveChanges ==false)
+    else if(saveChanges == false)
     {
-
       tView = S.of(context).edit_shipment;
       tList = S.of(context).shipment;
       action1 = S.of(context).save;
       action2 = S.of(context).undo;
 
-      linesSelected.clear();
-      linesControllers.clear();
+      int cant = linesSelected.length;
 
-        allLines= lineSector;
+      if(filter == S.of(context).date) {
+        campKey = S.of(context).company;
+        messageResult = LocalizationHelper.sendsDay(context, cant);
+      } else {
+        campKey = S.of(context).date;
+        messageResult = LocalizationHelper.sendsFactory(context, cant);
+      }
 
-        for(int i = 0; i < lineSector.length; i++)
-        {
-          lineSector[i].date=LineSend.showFormatDate(lineSector[i].date, context);
-        }
+      controllerSearchSend.text = selectCamp;
+    }
 
-         if(filter == S.of(context).date)
-         {
-              campKey = S.of(context).company;
-
-
-              linesSelected = lineSector.where((line) {
-                    return line.date == selectCamp;
-
-                    }).toList();
-
-              int cant = linesSelected.length;
-              messageResult = LocalizationHelper.sendsDay(context, cant);
-         }
-         else
-         {
-             campKey = S.of(context).date;
-
-
-             linesSelected = lineSector.where((line) {
-                  return line.factory == selectCamp;
-
-                 }).toList();
-
-             int cant = linesSelected.length;
-             messageResult = LocalizationHelper.sendsFactory(context, cant);
-         }
-
-              linesControllers = List.generate(linesSelected.length,
-                      (_) => LineSendController(
-                      date: TextEditingController(),
-                      factory: TextEditingController(),
-                      sector: TextEditingController(),
-                      observations: TextEditingController(),
-                      state: LineSendState.prepared
-                  ));
-                   observationModify = List.generate(linesSelected.length, (index) => false);
-                   stateModify =  List.generate(linesSelected.length, (index) => false);
-
-                    linesSave = linesSelected
-                        .map((line) => LineSend(
-                      id: line.id,
-                      date: line.date,
-                      factory: line.factory,
-                      sector: line.sector,
-                      observations: line.observations,
-                      state: line.state,
-                    )).toList();
-
-                    if(linesSave.isEmpty)
-                    {
-                      linesSave = linesSelected;
-                    }
-
-              loadLinesFromModel(context, linesSelected, linesControllers);
-              controllerSearchSend.text = selectCamp;
-          }
 
     allSectors = false;
     String? currentSector;
@@ -225,11 +190,6 @@ class _newSendState extends State<newSend> {
       }
     }
 
-    if (allSectors) {
-      print("Único sector: $currentSector");
-    } else {
-      print("Hay varios sectores");
-    }
 
     return !isNotAndroid()
         ? Scaffold(
@@ -294,7 +254,7 @@ class _newSendState extends State<newSend> {
                                       onChanged: (sectorChoose) =>
                                           _onSectorChanged(context, sectorChoose, select),
                                     )
-                                    :allSectors==false
+                                    :allSectors==false  && linesControllers.isNotEmpty
                                       ? Padding(
                                         padding: const EdgeInsets.only(top: 20.0),
                                         child: Text("${S.of(context).companies_of}" " ${linesControllers[0].sector.text}",
@@ -327,7 +287,7 @@ class _newSendState extends State<newSend> {
                                          });
                                        },
                                        onSendChanged: (i, value) {
-                                         print(value);
+
                                            send[i] = value;
                                            saveChanges = true;
                                            setState(() {});
