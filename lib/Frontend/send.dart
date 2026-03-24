@@ -420,26 +420,33 @@ class _newSendState extends State<newSend>{
   }
 
   Future<void> loadLinesFromModel(
-      BuildContext context,
-      List<LineSend> lines,
-      List<LineSendController> controllersLines,
+      List<LineSend> lines
       ) async {
 
-    for (int i = 0; i < linesSelected.length; i++) {
-
-      final sectorSelected = sectors.firstWhereOrNull(
-            (sector) => sector.id == linesSelected[i].sector,
-      );
+    final oldControllers = linesControllers;
 
 
-      controllersLines[i].sector.text = sectorSelected?.name ??
-          S.of(context).The_sector_does_not_exist;
-      controllersLines[i].date.text = linesSelected[i].date;
-      controllersLines[i].factory.text = linesSelected[i].factory;
-      controllersLines[i].state =  manageState.stringToState(linesSelected[i].state);
-      controllersLines[i].observations.text = linesSelected[i].observations;
-
+     final newControllers = lines.map((line) {
+            final sectorSelected = sectors.firstWhereOrNull(
+                  (s) => s.id == line.sector,
+            );
+            print(line);
+            return LineSendController(
+              date: TextEditingController(text: line.date),
+              factory: TextEditingController(text: line.factory),
+              sector: TextEditingController(text: sectorSelected?.name ?? ''),
+              observations: TextEditingController(text: line.observations),
+              state: manageState.stringToState(line.state),
+            );
+          }).toList();
+    linesControllers = newControllers;
+    for (final c in oldControllers) {
+      c.dispose();
     }
+
+    linesSave = lines.map((e) => e.copyWith()).toList();
+          observationModify = List.filled(lines.length, false);
+          stateModify = List.filled(lines.length, false);
   }
 
   Future<void> _onSectorChanged(BuildContext context,Sector? sectorChoose,int select) async {
