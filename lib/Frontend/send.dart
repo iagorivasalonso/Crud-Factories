@@ -184,7 +184,9 @@ class _newSendState extends State<newSend>{
         messageResult = LocalizationHelper.sendsFactory(context, cant);
       }
 
-      controllerSearchSend.text = selectCamp;
+      controllerSearchSend.text = filter=="Fecha"
+           ? LineSend.showFormatDate(selectCamp, context)
+           : selectCamp;
     }
 
 
@@ -399,7 +401,7 @@ class _newSendState extends State<newSend>{
       List<LineSendController> controllersLines,
       ) async {
 
-    for (int i = 0; i < factories.length; i++) {
+    for (int i = 0; i < factories.length && i < controllersLines.length; i++) {
 
       final sectorSelected = sectors.firstWhereOrNull(
             (sector) => sector.id == factories[i].sector,
@@ -408,11 +410,13 @@ class _newSendState extends State<newSend>{
 
       controllersLines[i].sector.text = sectorSelected?.name ??
           S.of(context).The_sector_does_not_exist;
-      controllersLines[i].date.text = factories[i].highDate;
+      controllersLines[i].date.text = controllerSearchSend.text;
       controllersLines[i].factory.text = factories[i].name;
-      controllersLines[i].observations.text = "";
+      controllersLines[i].state = LineSendState.prepared;
 
     }
+    _updateMessageResult(context);
+    setState(() {});
   }
 
   Future<void> loadLinesFromModel(
