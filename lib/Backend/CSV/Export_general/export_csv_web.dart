@@ -2,20 +2,28 @@ import 'dart:html' as html;
 import 'dart:convert';
 
 Future<bool> exportCsv(String csv, {String? file}) async {
-
   try {
-
+    final filename = file ?? 'export.csv';
     final bytes = utf8.encode(csv);
     final blob = html.Blob([bytes]);
     final url = html.Url.createObjectUrlFromBlob(blob);
 
-    html.AnchorElement(href: url)
-      ..setAttribute("download", file!)
-      ..click();
+    final anchor = html.AnchorElement(href: url)
+      ..setAttribute("download", filename);
 
-    html.Url.revokeObjectUrl(url);
+    final body = html.document.body;
+    if (body == null) throw Exception('No body');
+
+    body.append(anchor);
+    anchor.click();
+    anchor.remove();
+
+    Future.delayed(const Duration(milliseconds: 100),
+            () => html.Url.revokeObjectUrl(url));
+
     return true;
-  } catch (_) {
+  } catch (e) {
+    print('CSV WEB error: $e');
     return false;
   }
 }

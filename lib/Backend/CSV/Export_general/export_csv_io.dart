@@ -3,7 +3,7 @@ import 'dart:io';
 
 
 Future<bool> exportCsv(String csv, {String? file}) async {
-
+print(csv);
   try {
     if (file == null || file.isEmpty)
       return false;
