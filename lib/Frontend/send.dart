@@ -281,6 +281,7 @@ class _newSendState extends State<newSend>{
                                 padding: const EdgeInsets.only(top: 40, left: 90, bottom: 30),
                                 child: select == -1
                                      ? customDataTable(
+                                       key: ValueKey(linesControllers),
                                        scrollController: verticalScrollTable,
                                        columns: allSectors == false
                                                  ? [S.of(context).company, S.of(context).observations, S.of(context).state, S.of(context).select]
