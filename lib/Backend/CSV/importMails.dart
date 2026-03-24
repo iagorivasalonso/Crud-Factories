@@ -9,7 +9,7 @@ import 'package:flutter/material.dart';
 import '../Global/list.dart';
 
 
-Future<void >csvImportMails(BuildContext context, List<Mail> mailf,[dynamic fileOrContent]) async {
+Future<void >csvImportMails(BuildContext context, List<Mail> mail,[dynamic fileOrContent]) async {
 
   try {
 
@@ -63,6 +63,8 @@ Future<List<Mail>> readMailsFromCsvContent(String content) async {
 
   for( final line in lines) {
     final parts = line.split(";");
+    // Validar que date parece un @
+    if (!parts[1].contains("-")) continue;
     if (parts.length < 4) continue;
     mail.add(Mail(
       id: parts[0].trim(),

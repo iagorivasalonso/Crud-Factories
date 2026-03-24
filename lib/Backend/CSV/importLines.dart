@@ -61,7 +61,12 @@ Future<List<LineSend>> readLinesFromCsvContent(String content) async {
   final lineSend = <LineSend>[];
 
   for( final line in lines) {
+
     final parts = line.split(";");
+    // Validar que date parece una fecha
+    if (!parts[1].contains("-")) continue;
+
+
     if (parts.length < 5) continue;
     lineSend.add(LineSend(
       id: parts[0],
