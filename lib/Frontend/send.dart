@@ -6,6 +6,7 @@ import 'package:crud_factories/Backend/Global/controllers/LineSend.dart';
 import 'package:crud_factories/Backend/Global/list.dart';
 import 'package:crud_factories/Backend/Global/variables.dart';
 import 'package:crud_factories/Backend/CSV/exportLines.dart';
+import 'package:crud_factories/Backend/SQL/createLine.dart';
 import 'package:crud_factories/Functions/createId.dart';
 import 'package:crud_factories/Functions/manageState.dart';
 import 'package:crud_factories/Functions/validatorCamps.dart';
@@ -42,10 +43,9 @@ class newSend extends StatefulWidget {
   State<newSend> createState() => _newSendState();
 }
 
-class _newSendState extends State<newSend> with AutomaticKeepAliveClientMixin {
+class _newSendState extends State<newSend>{
 
-  @override
-  bool get wantKeepAlive => true;
+
 
   final ScrollController horizontalScroll = ScrollController();
   final ScrollController verticalScroll = ScrollController();
@@ -80,25 +80,37 @@ class _newSendState extends State<newSend> with AutomaticKeepAliveClientMixin {
   @override
   void initState() {
     super.initState();
-    generateControllers();
 
+    linesControllers = [];
+
+    if (widget.select == -1) {
+      selectedSector = null;
+      factoriesSector = allFactories;
+      generateControllers();
+
+    } else {
+      _initEditData();
+    }
+  }
+  @override
+  void didUpdateWidget(covariant newSend oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.select != widget.select && widget.select != -1) {
       _initEditData();
 
-  }
-
-  void _initEditData() {
-    if (widget.select == -1) return;
-
-    BuildContext context = context1;
-
-    allLines = lineSector;
-
-    for (int i = 0; i < lineSector.length; i++) {
-      lineSector[i].date = LineSend.showFormatDate(lineSector[i].date, context);
+      loadFactoriesFromModel(context, factoriesSector, linesControllers);
     }
 
-    // Seleccionar líneas según
   }
+  void _initEditData() {
+    linesSelected = lineSector.map((e) => e.copyWith()).toList();
+
+    setState(() {
+      loadLinesFromModel(linesSelected);
+    });
+
+  }
+
 
   @override
   void dispose() {
@@ -131,9 +143,6 @@ class _newSendState extends State<newSend> with AutomaticKeepAliveClientMixin {
       action1 = S.of(context).newMale;
       action2 = S.of(context).reboot;
 
-      
-      List<LineSend>linesNew = [];
-
           if(controllerSearchSend.text.isEmpty)
           {
             controllerSearchSend.text = DateFormat('dd-MM-yyyy').format( DateTime.now());
@@ -151,7 +160,7 @@ class _newSendState extends State<newSend> with AutomaticKeepAliveClientMixin {
                      }).toList();
            }
 
-          messageResult = LocalizationHelper.factoriesBD(context, cantFactory);
+
 
       loadFactoriesFromModel(context, factoriesSector, linesControllers);
     }
@@ -164,10 +173,13 @@ class _newSendState extends State<newSend> with AutomaticKeepAliveClientMixin {
 
       int cant = linesSelected.length;
 
-      if(filter == S.of(context).date) {
+      if(filter == S.of(context).date)
+      {
         campKey = S.of(context).company;
         messageResult = LocalizationHelper.sendsDay(context, cant);
-      } else {
+      }
+      else
+      {
         campKey = S.of(context).date;
         messageResult = LocalizationHelper.sendsFactory(context, cant);
       }
@@ -359,8 +371,7 @@ class _newSendState extends State<newSend> with AutomaticKeepAliveClientMixin {
                                             padding: const EdgeInsets.only(left: 20.0),
                                             child: materialButton(
                                               nameAction: action2,
-                                              function: () =>
-                                              _onResetCamps(context, select),
+                                              function: () => _onResetCamps(context),
                                               ),
                                       )
                                      ],
@@ -530,7 +541,7 @@ class _newSendState extends State<newSend> with AutomaticKeepAliveClientMixin {
       {
         if(select == -1)
         {
-          send = List.generate(allFactories.length, (index) => false);
+          await _onResetCamps(context);
         }
       }
       else
@@ -567,7 +578,7 @@ class _newSendState extends State<newSend> with AutomaticKeepAliveClientMixin {
           text: allFactories[index].name,
         ),
         sector: TextEditingController(
-          text: allFactories[index].sector.toString(),
+          text: factoriesSector[index].sector.toString(),
         ),
         observations: TextEditingController(text: ""),
         state: LineSendState.prepared,
@@ -575,6 +586,24 @@ class _newSendState extends State<newSend> with AutomaticKeepAliveClientMixin {
     });
 
     send = List.generate(allFactories.length, (_) => false);
+  }
+
+  void _updateMessageResult(BuildContext context) {
+    int cant = factoriesSector.length;
+
+    if (widget.select == -1) {
+
+      messageResult = LocalizationHelper.factoriesBD(context, cant);
+    } else {
+
+      if (widget.filter == S.of(context).date) {
+        campKey = S.of(context).company;
+        messageResult = LocalizationHelper.sendsDay(context, cant);
+      } else {
+        campKey = S.of(context).date;
+        messageResult = LocalizationHelper.sendsFactory(context, cant);
+      }
+    }
   }
 }
 
