@@ -466,11 +466,11 @@ class _newSendState extends State<newSend>{
     setState(() {});
   }
 
-  Future<void> _onSaveSend(BuildContext context,int select, controllerSearch, List<LineSendController> linesControllers) async {
+  Future<void> _onSaveSend(BuildContext context,int select, controllerSearch, List<LineSendController> linesControllers) async{
 
     List <LineSend> current = [];
+    allLines.sort((a, b) => int.parse(a.id).compareTo(int.parse(b.id)));
 
-    setState(() {
       String idNew = "";
 
       if (allLines.isNotEmpty) {
@@ -483,33 +483,48 @@ class _newSendState extends State<newSend>{
 
       int idInit = int.parse(idNew);
 
-      if (select == -1) {
-        if (validatorCamps.dateCorrect(controllerSearch.text) == true) {
+      if (select == -1)
+      {
+        if (validatorCamps.dateCorrect(controllerSearch.text) == true)
+        {
 
-          for (int i = 0; i < factoriesSector.length; i++) {
-            if (send[i] == true) {
-              int idNew = idInit + current.length;
-              allLinesCreated ++;
+          for (int i = 0; i < factoriesSector.length; i++)
+          {
+            if (send[i] == true)
+            {
+              current.add(LineSend(
+                id: (idInit + current.length).toString(),
+                date: controllerSearch.text,
+                factory: factoriesSector[i].name,
+                observations: linesControllers[i].observations.text,
+                state: manageState.parseState(linesControllers[i].state.name, context, true),
+              ));
 
-              current.add(
-                LineSend(
-                    id: idNew.toString(),
-                    date: controllerSearch.text,
-                    factory: factoriesSector[i].name,
-                    observations: linesControllers[i].observations.text,
-                    state: manageState.parseState(
-                        linesControllers[i].state.name, context, true)),
-              );
 
+            }
+
+              // Reset UI
               linesControllers[i].observations.text = "";
               linesControllers[i].state = LineSendState.prepared;
               send[i] = false;
-              selectedItem = S.of(context).prepared;
             }
           }
-          String action = LocalizationHelper.sendsFactory(context, allLinesCreated);
-          confirm(context, action);
-        }
+
+          allLinesCreated += current.length;
+          confirm(context, LocalizationHelper.sendsFactory(context, allLinesCreated));
+
+        setState(() {
+          // Reinicia todos los checkboxes
+          send = List.generate(factoriesSector.length, (_) => false);
+
+          // Reinicia estados y observaciones de líneas (aunque ya lo hicimos arriba)
+          for (var ctrl in linesControllers) {
+            ctrl.state = LineSendState.prepared;
+            ctrl.observations.text = "";
+          }
+        });
+
+
       }
       else {
 
