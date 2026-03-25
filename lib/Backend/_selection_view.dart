@@ -40,7 +40,7 @@ FuntionSeleted(int itenSelection, int subIten1Selection,int subIten2Selection, d
         }
 
         if (subIten1Selection == 1)
-          return adminRoutes();
+          return AdminRoutesDialog();
 
         if (subIten1Selection == 2)
           return newImport();
@@ -104,7 +104,7 @@ List<LineSend> reunedLines(BuildContext context,int subIten2Selection, List<Fact
 
   groupFactoriesSector(subIten2Selection,allFactoriesOriginal);
 
-  List<LineSend> filteredLines = groupLinesSector();
+  List<LineSend> filteredLines = groupLinesSector(subIten2Selection);
 
   if(filteredLines.isEmpty)
   {
@@ -140,24 +140,43 @@ void groupFactoriesSector(int subIten2Selection, List<Factory> allFactoriesOrigi
 
 }
 
-List<LineSend> groupLinesSector() {
-
-  dateSends.clear();
+List<LineSend> groupLinesSector([int? subIten2Selection]) {
   lineSector.clear();
+if(subIten2Selection == 0)
+{
+  final lines  = allLines.map((f) => f.copyWith()).toList();
 
+  lineSector.clear();
+  lineSector.addAll(lines);
+}
+else
+{
   for(int i = 0; i <factoriesSector.length; i++)
   {
     final factory = factoriesSector[i];
 
-      final lines = allLines.
-            where((sl) => sl.factory == factory.name).toList();
+    print("Factory: ${factory.name}");
+
+    for (var l in allLines) {
+      print("Line factory: '${l.factory}'");
+    }
+    final lines = allLines
+        .where((sl) => sl.factory == factory.name) // ✅ FILTRO CLAVE
+        .map((line) {
+      final newLine = line.copyWith();
+      newLine.sector = factory.sector;
+      return newLine;
+    })
+        .toList();
 
     for (var line in lines) {
       line.sector = factory.sector; // <-- aquí se asigna
     }
 
     lineSector.addAll(lines);
+
   }
+}
 
   dateSends = manageArrays.avoidRepeteat(
     lineSector.map((line) => line.date).toList(),
