@@ -34,7 +34,7 @@ Future<bool> csvExportatorRoutes(List<RouteCSV> routes) async {
   final filePath = fRoutes.path;
 
  String csv = const ListToCsvConverter(fieldDelimiter: ';').convert(rows);
- err = !await exportCsv(csv, file: filePath);
+  final success  = await exportCsv(csv, file: filePath);
 
-  return err;
+  return !success;
 }

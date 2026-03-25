@@ -36,7 +36,7 @@ Future<bool> csvExportatorMails(List<Mail> mails) async {
   final filePath = fMails.path;
 
   String csv = const ListToCsvConverter(fieldDelimiter: ';').convert(rows);
-  err = !await exportCsv(csv, file: filePath);
+  final success  = await exportCsv(csv, file: filePath);
 
-  return err;
+  return !success;
 }

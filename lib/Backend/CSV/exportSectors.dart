@@ -34,9 +34,9 @@ Future<bool> csvExportatorSectors(List<Sector> sectors) async {
   final filePath = fSectors.path;
 
   String csv = const ListToCsvConverter(fieldDelimiter: ';').convert(rows);
-  err = !await exportCsv(csv, file: filePath);
+  final success  = await exportCsv(csv, file: filePath);
 
-  return err;
+  return !success;
 }
 
 

@@ -39,6 +39,8 @@ Future<bool>  csvExportatorLines(List<LineSend> listSend) async {
   final filePath = fLines.path;
 
   String csv = const ListToCsvConverter(fieldDelimiter: ';').convert(rows);
-  err = !await exportCsv(csv, file: filePath);
-  return err;
+
+  final success = await exportCsv(csv, file: filePath);
+
+  return !success;
 }

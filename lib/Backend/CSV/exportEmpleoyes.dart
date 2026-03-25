@@ -35,7 +35,8 @@ Future<bool> csvExportatorEmpleoyes(List<Empleoye> empleoyes) async {
   final filePath = fEmpleoyes.path;
 
   String csv = const ListToCsvConverter(fieldDelimiter: ';').convert(rows);
-  err = !await exportCsv(csv, file: filePath);
 
-  return err;
+  final success  = await exportCsv(csv, file: filePath);
+
+  return !success;
 }

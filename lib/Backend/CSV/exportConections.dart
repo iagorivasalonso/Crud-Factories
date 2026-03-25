@@ -41,7 +41,7 @@ Future<bool> csvExportatorConections(List<Conection> conections) async {
   final filePath = fConections.path;
 
   String csv = const ListToCsvConverter(fieldDelimiter: ';').convert(rows);
-  err = !await exportCsv(csv, file: filePath);
+  final success  = await exportCsv(csv, file: filePath);
 
-  return err;
+  return !success;
 }
