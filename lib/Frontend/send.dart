@@ -483,15 +483,12 @@ class _newSendState extends State<newSend>{
 
       int idInit = int.parse(idNew);
 
-      if (select == -1)
-      {
-        if (validatorCamps.dateCorrect(controllerSearch.text) == true)
-        {
+      if (select == -1) {
+        if (validatorCamps.dateCorrect(controllerSearch.text) == true) {
 
-          for (int i = 0; i < factoriesSector.length; i++)
-          {
-            if (send[i] == true)
-            {
+          for (int i = 0; i < factoriesSector.length; i++) {
+
+            if (send[i] == true){
               current.add(LineSend(
                 id: (idInit + current.length).toString(),
                 date: controllerSearch.text,
@@ -535,18 +532,17 @@ class _newSendState extends State<newSend>{
           linesSelected[i].state=linesControllers[i].state.name;
         }
 
-        int linesModify = 0;
 
-        for (int i = 0; i < stateModify.length; i++) {
-          if (stateModify[i] || observationModify[i]) { // suma si al menos uno es true
+
+        int linesModify = 0;
+        for (int i = 0; i < linesSelected.length; i++) {
+          if (stateModify[i] || observationModify[i]) {
             linesModify++;
           }
         }
-
-        String action = LocalizationHelper.cantLinesModify(context, linesModify);
-        confirm(context,action);
+        confirm(context, LocalizationHelper.cantLinesModify(context, linesModify));
       }
-    });
+
 
     if (BaseDateSelected.isNotEmpty)
     {
