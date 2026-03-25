@@ -532,15 +532,16 @@ class _newSendState extends State<newSend>{
           linesSelected[i].state=linesControllers[i].state.name;
         }
 
-
-
         int linesModify = 0;
-        for (int i = 0; i < linesSelected.length; i++) {
-          if (stateModify[i] || observationModify[i]) {
+
+        for (int i = 0; i < stateModify.length; i++) {
+          if (stateModify[i] || observationModify[i]) { // suma si al menos uno es true
             linesModify++;
           }
         }
-        confirm(context, LocalizationHelper.cantLinesModify(context, linesModify));
+
+        String action = LocalizationHelper.cantLinesModify(context, linesModify);
+        confirm(context,action);
       }
 
 
@@ -548,11 +549,11 @@ class _newSendState extends State<newSend>{
     {
       if(select==-1)
       {
-        csvExportatorLines(current);
+         await sqlCreateLine(current, context);
       }
       else
       {
-         sqlModifyLines(linesSelected);
+         await sqlModifyLines(linesSelected);
       }
     }
     else
@@ -569,6 +570,21 @@ class _newSendState extends State<newSend>{
         {
           await _onResetCamps(context);
         }
+        else
+        {
+          final selectedMap  = {for (var line in linesSelected) line.id :line};
+
+          for(int i = 0; i < allLines.length; i++)
+          {
+            final current = allLines[i];
+
+            if(selectedMap.containsKey(current.id))
+            {
+              allLines[i] = selectedMap[current.id]!;
+            }
+          }
+        }
+        await csvExportatorLines(allLines);
       }
       else
       {
