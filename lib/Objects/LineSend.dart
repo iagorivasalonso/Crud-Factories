@@ -44,6 +44,7 @@ class LineSend extends BaseEntity {
     ];
 
     List <String> partDate = date.split("-");
+
     String dateFormat = " ";
 
     int nMonth = int.parse(partDate[1]);
@@ -56,6 +57,26 @@ class LineSend extends BaseEntity {
 
     return dateFormat;
   }
+
+
+  LineSend copyWith({
+    String? id,
+    String? date,
+    String? factory,
+    String? observations,
+    String? state,
+    String? sector,
+  }) {
+    return LineSend(
+      id: id ?? this.id,
+      date: date ?? this.date,
+      factory: factory ?? this.factory,
+      observations: observations ?? this.observations,
+      state: state ?? this.state,
+      sector: sector ?? this.sector,
+    );
+  }
+
 
   @override
   String toString() {
