@@ -249,7 +249,7 @@ List<cardSend> chargueList (BuildContext context, String filter, List<LineSend> 
            allCards.add(
              cardSend(
                 title: '${S.of(context).shipment} ${i + 1}',
-                description: dateSends[i],
+                description: LineSend.showFormatDate(dateSends[i], context),
               ),
            );
         }
