@@ -60,7 +60,7 @@ class LocalizationHelper {
 
     return Intl.plural(
       countSendDay,
-      one: '${S.of(context).this_day_was_made} $countSendDay ${S.of(context).send.toLowerCase()}',
+      one: '${S.of(context).this_day_was_made} $countSendDay ${S.of(context).shipment.toLowerCase()}',
       other: '${S.of(context).this_day_they_were_made} $countSendDay ${S.of(context).sends.toLowerCase()}',
       name: "sendsDay",
       args: [countSendDay],

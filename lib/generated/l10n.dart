@@ -239,9 +239,9 @@ class S {
     return Intl.message('Empresas', name: 'companies', desc: '', args: []);
   }
 
-  /// `Envío`
+  /// `envio`
   String get shipment {
-    return Intl.message('Envío', name: 'shipment', desc: '', args: []);
+    return Intl.message('envio', name: 'shipment', desc: '', args: []);
   }
 
   /// `Envíos`
@@ -1551,6 +1551,16 @@ class S {
     return Intl.message(
       'Este día se realizó',
       name: 'this_day_was_made',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Empresas de`
+  String get companies_of {
+    return Intl.message(
+      'Empresas de',
+      name: 'companies_of',
       desc: '',
       args: [],
     );

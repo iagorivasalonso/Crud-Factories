@@ -111,6 +111,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "companies_en_base_datos": MessageLookupByLibrary.simpleMessage(
       "Empresas en su base de datos",
     ),
+    "companies_of": MessageLookupByLibrary.simpleMessage("Empresas de"),
     "company": MessageLookupByLibrary.simpleMessage("Empresa"),
     "company_contacts": MessageLookupByLibrary.simpleMessage(
       "Contactos de la empresa",
@@ -367,6 +368,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "routes": MessageLookupByLibrary.simpleMessage("Rutas"),
     "save": MessageLookupByLibrary.simpleMessage("Guardar"),
     "saved": MessageLookupByLibrary.simpleMessage("Guardado"),
+    "saved_female": MessageLookupByLibrary.simpleMessage("Guardada"),
     "search": MessageLookupByLibrary.simpleMessage("Buscar..."),
     "sector": MessageLookupByLibrary.simpleMessage("Sector"),
     "sector_edited_correctly": MessageLookupByLibrary.simpleMessage(
@@ -390,7 +392,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "sent": MessageLookupByLibrary.simpleMessage("Enviado"),
     "september": MessageLookupByLibrary.simpleMessage("Septiembre"),
     "server": MessageLookupByLibrary.simpleMessage("Servidor"),
-    "shipment": MessageLookupByLibrary.simpleMessage("Envío"),
+    "shipment": MessageLookupByLibrary.simpleMessage("envio"),
     "shipments": MessageLookupByLibrary.simpleMessage("Envíos"),
     "source": MessageLookupByLibrary.simpleMessage("Fuente"),
     "sql": MessageLookupByLibrary.simpleMessage("SQL"),
