@@ -119,7 +119,7 @@ class _appDesktopState extends State<appDesktop> {
           }
 
           bool initialChargue = true;
-          await importedRoutes(context,initialChargue);
+        await _importedRoutes(context,initialChargue);
 
       if (sqlBd == true)
           setState(() {
@@ -447,7 +447,6 @@ class _appDesktopState extends State<appDesktop> {
                                       width:  wItem,
                                       child: Text(S.of(context).allFemale)),
                                   onTap: () async {
-                                    controllerSearchSend.clear();
                                     if (saveChanges == false)
                                     {
                                       setState(() {
@@ -647,7 +646,6 @@ class _appDesktopState extends State<appDesktop> {
                                       width:  wItem,
                                       child: Text(S.of(context).allMale)),
                                   onTap: () async {
-                                    controllerSearchSend.clear();
                                     if (saveChanges == false)
                                     {
                                       setState(() {
@@ -680,7 +678,6 @@ class _appDesktopState extends State<appDesktop> {
                                             : wItem,
                                         child: Text(sectors[i].name)),
                                     onTap: (){
-                                      controllerSearchSend.clear();
                                       setState(() {
                                         itenSelect = 1;
                                         subIten1Select = 3;
