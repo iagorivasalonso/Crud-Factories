@@ -9,6 +9,7 @@ import 'package:file_picker/file_picker.dart' show FilePickerResult, FilePicker,
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import '../Alertdialogs/confirm.dart';
+import '../Alertdialogs/error.dart';
 import '../Alertdialogs/errorList.dart';
 import '../Alertdialogs/warning.dart';
 import '../Backend/CSV/ImportGeneral/CsvProcessorService.dart';
@@ -23,23 +24,39 @@ import '../Widgets/materialButton.dart';
 import '../generated/l10n.dart';
 import '../helpers/localization_helper.dart';
 
-class adminRoutes extends StatefulWidget {
-  const adminRoutes({super.key});
+class Adminroutes {
 
-  @override
-  State<adminRoutes> createState() => _adminRoutesState();
+   static Future<void> show (BuildContext context) {
+
+       return showDialog(
+           context: context,
+           builder: (_) => const AdminRoutesDialog(),
+       );
+   }
 }
 
-class _adminRoutesState extends State<adminRoutes> {
+class AdminRoutesDialog extends StatefulWidget {
+  const AdminRoutesDialog({super.key});
 
+  @override
+  State<AdminRoutesDialog> createState() => _AdminRoutesDialogState();
+}
+
+class _AdminRoutesDialogState extends State<AdminRoutesDialog> {
+
+  late List<bool> isAutoFilled;
+  List<RouteCSV> routesNoSave = [];
+
+  String? selectedOption;
 
   @override
   void initState() {
     super.initState();
 
-    // Inicialización de variables simple
+    selectedOption = S.of(context1).csv;
+    isAutoFilled = List.generate(routeControllers.length, (_) => false);
 
-    // Ejecutar async después del primer frame
+    routeControllers[0].router.text = routeFirst;
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _initialize();
     });
@@ -49,39 +66,24 @@ class _adminRoutesState extends State<adminRoutes> {
   Future<void> _initialize() async {
     if (!mounted) return;
 
-    await _showRouteDialog();
+    await _loadRoutes();
   }
-
-  List<bool> campAutomatic = List.generate(routeControllers.length, (index) => false);
-  List<RouteCSV>routesNoSave =[];
 
   @override
   Widget build(BuildContext context0) {
 
     BuildContext context = context1;
 
+    final namesRoutesSQL = [
+      S.of(context).routes,
+      S.of(context).connections,
+      S.of(context).server,
+    ];
 
-    return SizedBox.shrink();
 
-    }
 
-    Future<void> _showRouteDialog() async {
 
-      return showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          String? selectedOption = S.of(context).csv;
-
-          final namesRoutesSQL = [
-            S.of(context).routes,
-            S.of(context).connections,
-            S.of(context).server,
-          ];
-
-     routeControllers[0].router.text = routeFirst;
-
-          return StatefulBuilder(
-            builder: (BuildContext context0, void Function(void Function()) setState) => Dialog(
+      return Dialog(
               shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(0)),
               child: ConstrainedBox(
                 constraints: BoxConstraints(
@@ -131,7 +133,7 @@ class _adminRoutesState extends State<adminRoutes> {
                                 controller: routeControllers[index].router,
                                 campName: routeControllers[index].name.text,
                                 actionName: S.of(context).examine,
-                                automatic: campAutomatic[index],
+                                automatic: isAutoFilled[index],
                                 function: () => _pickFile(
                                   context,
                                   index,
@@ -151,12 +153,12 @@ class _adminRoutesState extends State<adminRoutes> {
                         children: [
                           materialButton(
                             nameAction: S.of(context).import,
-                            function: () => importedRoutes(context),
+                            function: () => csvLoaderService.importedRoutes(context),
                           ),
                           const SizedBox(width: 20),
                           materialButton(
                             nameAction: S.of(context).cancel,
-                            function: () => chargueRoutes(),
+                            function: () => _loadRoutes(),
                           ),
                         ],
                       ),
@@ -164,14 +166,11 @@ class _adminRoutesState extends State<adminRoutes> {
                   ],
                 ),
               ),
-            ),
-          );
-        },
-      );
-
+            );
     }
 
   Future<void> _pickFile(BuildContext context,index, void Function(void Function()) setState) async {
+
           if (!mounted) return;
 
           FilePickerResult? result =  await FilePicker.platform.pickFiles(
@@ -183,50 +182,58 @@ class _adminRoutesState extends State<adminRoutes> {
 
           if(result == null) return;
 
-          final platformFile = result.files.single;
+          final file = result.files.single;
 
-          routeControllers[index].router.text = platformFile.path!;
+          if (file.path == null) return;
+          routeControllers[index].router.text = file.path!;
 
+          bool isMainRoute = index == 0;
 
+          if (isMainRoute) {
+            String message = S.of(context)
+                .other_fields_will_be_autofilled_do_you_want_to_continue;
 
-          if (index == 0)
-          {
-            String message=S.of(context).other_fields_will_be_autofilled_do_you_want_to_continue;
-            bool correct= await warning(context, message);
+            bool confirmAuto = await warning(context, message);
 
-            if(correct == true)
-            {
-                    try {
-                      // Limpiamos y cargamos la nueva ruta
-                     List<RouteCSV>routesNoSave = await csvLoaderService.loadInitialRoutes(context, routeControllers[index].router.text);
-
-                     if (routesCSV.isNotEmpty) {
-                       await csvLoaderService.loadRemainingRoutes(context, routesCSV);
-                     }
-
-                      for(int i = 1; i <routesNoSave.length; i++)
-                      {
-                        routeControllers[i].router.text = routesNoSave[i].route;
-                      }
-
-                    } catch (e) {
-
-                    }
-
-                    setState((){
-                      for(int i = 1; i<routeControllers.length;i++)
-                        campAutomatic[i]=true;
-                    });
+            if (confirmAuto) {
+              await _autoFillRoutes(context, index);
             }
           }
 
+          setState(() {});
 
      }
-  }
 
-Future<void> chargueRoutes() async {
+Future<void> _autoFillRoutes(BuildContext context, int index) async {
 
-  for (int i = 0; i < routesCSV.length; i++)
+    try {
+       routesNoSave = await csvLoaderService.loadInitialRoutes(
+           context,
+           routeControllers[index].router.text
+       );
+
+
+         await csvLoaderService.loadRemainingRoutes(context, routesNoSave);
+
+
+       for(int i = 1; i < routeControllers.length && i < routesNoSave.length; i++) {
+         routeControllers[i].router.text = routesNoSave[i].route;
+       }
+
+       if (!mounted) return;
+
+       setState(() {
+         for (int i = 1; i < routeControllers.length; i++) {
+           isAutoFilled[i] = true;
+         }
+       });
+    } catch (e) {
+       error(context, e.toString());
+    }
+}
+Future<void> _loadRoutes() async {
+
+  for (int i = 0; i < routeControllers.length && i < routesCSV.length; i++)
   {
     routeControllers[i].name.text =  namesRoutesOrdened[i];
 
@@ -236,44 +243,7 @@ Future<void> chargueRoutes() async {
     }
   }
 
-}
-
-
-Future<void> importedRoutes(BuildContext context, [bool initialChargue = false]) async{
-
-  routesCSV.clear();
-
-  for(int i = 0; i < routeControllers.length; i++)
-  {
-
-    routesCSV.add(RouteCSV(
-      id: (i+1).toString(),
-      name: routeControllers[i].name.text,
-      route: routeControllers[i].router.text,
-    ));
+  setState(() {});
   }
 
-  String array = S.of(context).routes;
-  String actionArray = S.of(context).saved;
-
-  bool result = await csvLoaderService.loadRemainingRoutes(context,routesCSV);
-  String action = LocalizationHelper.manage_array(context, array, actionArray);
-
-  if(initialChargue==false)
-  {
-    if(result == true && errorFiles.isNotEmpty)
-    {
-      errors(context, errorFiles);
-    }
-    else
-    {
-      await confirm(context, action);
-      Navigator.of(context).pop(true);
-    }
-    csvExportatorRoutes(routesCSV);
-  }
-
-
-
 }
-
