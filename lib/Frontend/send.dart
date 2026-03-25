@@ -558,41 +558,7 @@ class _newSendState extends State<newSend>{
     }
     else
     {
-      allLines = allLines + current;
 
-      bool errorExp = await csvExportatorLines(allLines);
-
-      String array = S.of(context).shipments;
-
-      if(errorExp == false)
-      {
-        if(select == -1)
-        {
-          await _onResetCamps(context);
-        }
-        else
-        {
-          final selectedMap  = {for (var line in linesSelected) line.id :line};
-
-          for(int i = 0; i < allLines.length; i++)
-          {
-            final current = allLines[i];
-
-            if(selectedMap.containsKey(current.id))
-            {
-              allLines[i] = selectedMap[current.id]!;
-            }
-          }
-        }
-        await csvExportatorLines(allLines);
-      }
-      else
-      {
-        String action = LocalizationHelper.no_file(context, array);
-        error(context, action);
-      }
-      allLinesCreated = 0;
-      saveChanges = false;
     }
   }
 
