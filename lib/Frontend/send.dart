@@ -451,16 +451,19 @@ class _newSendState extends State<newSend>{
 
   Future<void> _onSectorChanged(BuildContext context,Sector? sectorChoose,int select) async {
 
-    setState(() {
-      if (sectorChoose != null) {
-        selectedSector = sectorChoose;
-        allSectors = false;
-      } else {
-        selectedSector = null;
-        allSectors = true;
-      }
-      loadFactoriesFromModel(context, factoriesSector, linesControllers);
-    });
+    if (sectorChoose != null) {
+      selectedSector = sectorChoose;
+      allSectors = false;
+      factoriesSector = allFactories.where((f) => f.sector == sectorChoose.id).toList();
+    } else {
+      selectedSector = null;
+      allSectors = true;
+      factoriesSector = allFactories;
+    }
+    generateControllers();
+    _updateMessageResult(context);
+   
+    setState(() {});
   }
 
   Future<void> _onSaveSend(BuildContext context,int select, controllerSearch, List<LineSendController> linesControllers) async {
