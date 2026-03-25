@@ -12,11 +12,15 @@ import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/services.dart';
 import 'package:flutter/src/widgets/framework.dart';
+import '../../Alertdialogs/confirm.dart';
+import '../../Alertdialogs/errorList.dart';
+import '../../helpers/localization_helper.dart';
 import '../Global/controllers/Conection.dart';
 import '../Global/controllers/List.dart';
 import '../Global/controllers/Router.dart';
 import 'ImportGeneral/AppFile.dart';
 import 'ImportGeneral/importAppFile.dart';
+import 'exportRoutes.dart';
 import 'loader.dart';
 import 'package:path/path.dart' as p;
 
@@ -175,6 +179,40 @@ class csvLoaderService {
 
     return routes;
 
+  }
+
+  static Future<void> importedRoutes(BuildContext context, [bool initialChargue = false]) async{
+
+    routesCSV.clear();
+
+    for(int i = 0; i < routeControllers.length; i++)
+    {
+
+      routesCSV.add(RouteCSV(
+        id: (i+1).toString(),
+        name: routeControllers[i].name.text,
+        route: routeControllers[i].router.text,
+      ));
+    }
+
+
+    bool result = await csvLoaderService.loadRemainingRoutes(context,routesCSV);
+    String array = S.of(context).routes;
+    String actionArray = S.of(context).saved;
+
+    String action = LocalizationHelper.manage_array(context, array, actionArray);
+
+
+    if(result == true && errorFiles.isNotEmpty)
+    {
+      errors(context, errorFiles);
+    }
+    else
+    {
+      await confirm(context, action);
+      Navigator.of(context).pop(true);
+    }
+    csvExportatorRoutes(routesCSV);
   }
   static AppFile fromAsset(String assetPath) {
     return AppFile(
