@@ -532,16 +532,15 @@ class _newSendState extends State<newSend>{
           linesSelected[i].state=linesControllers[i].state.name;
         }
 
-        int linesModify = 0;
 
-        for (int i = 0; i < stateModify.length; i++) {
-          if (stateModify[i] || observationModify[i]) { // suma si al menos uno es true
+
+        int linesModify = 0;
+        for (int i = 0; i < linesSelected.length; i++) {
+          if (stateModify[i] || observationModify[i]) {
             linesModify++;
           }
         }
-
-        String action = LocalizationHelper.cantLinesModify(context, linesModify);
-        confirm(context,action);
+        confirm(context, LocalizationHelper.cantLinesModify(context, linesModify));
       }
 
 
