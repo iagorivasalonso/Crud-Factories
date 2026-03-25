@@ -569,28 +569,49 @@ class _newSendState extends State<newSend>{
     }
   }
 
-  Future<void> _onResetCamps(BuildContext context, int select) async {
+  Future<void> _onResetCamps(BuildContext context) async {
 
-    setState(() {
+    final select = widget.select;
+
       if (select == -1)
       {
-        generateControllers();
+          selectedSector = null;
+          factoriesSector = allFactories;
+
+          controllerSearchSend.text = DateFormat('dd-MM-yyyy').format(DateTime.now());
+
+          allLinesCreated = 0;
+          saveChanges = false;
+
+          generateControllers();
       }
       else
       {
+          for(int i = 0; i < linesControllers.length; i++)
+          {
+              linesControllers[i].observations.text = linesSave[i].observations;
+              linesControllers[i].state = manageState.stringToState(linesSave[i].state);
+              observationModify[i] = false;
+              stateModify[i] = false;
+          }
 
+          saveChanges = false;
       }
-    });
+    _updateMessageResult(context);
+     setState(() {});
   }
 
   void generateControllers() {
-    linesControllers = List.generate(allFactories.length, (index) {
+
+    final oldControllers = linesControllers;
+
+    linesControllers = List.generate(factoriesSector.length, (index) {
       return LineSendController(
         date: TextEditingController(
           text: DateFormat('dd-MM-yyyy').format(DateTime.now()),
         ),
         factory: TextEditingController(
-          text: allFactories[index].name,
+          text: factoriesSector[index].name,
         ),
         sector: TextEditingController(
           text: factoriesSector[index].sector.toString(),
@@ -600,17 +621,22 @@ class _newSendState extends State<newSend>{
       );
     });
 
-    send = List.generate(allFactories.length, (_) => false);
+    send = List.generate(factoriesSector.length, (_) => false);
+
+    for (final c in oldControllers) {
+      c.dispose();
+    }
+
   }
 
   void _updateMessageResult(BuildContext context) {
     int cant = factoriesSector.length;
 
     if (widget.select == -1) {
-
+      // Mensaje para nueva shipment
       messageResult = LocalizationHelper.factoriesBD(context, cant);
     } else {
-
+      // Mensaje para edición
       if (widget.filter == S.of(context).date) {
         campKey = S.of(context).company;
         messageResult = LocalizationHelper.sendsDay(context, cant);
