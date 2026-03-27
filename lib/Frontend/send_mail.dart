@@ -101,6 +101,11 @@ class _sendMailState extends State<sendMail> {
 
   @override
   void dispose() {
+
+    horizontalScroll.dispose();
+    verticalScroll.dispose();
+    verticalScrollTable.dispose();
+
     controllers.mail.dispose();
     controllers.password.dispose();
     controllers.mailTo!.dispose();
@@ -371,10 +376,13 @@ class _sendMailState extends State<sendMail> {
 
         controllers.mail.text = mailChoose!.address;
 
-        Codec<String, String> stringToBase64 = utf8.fuse(base64);
-        String password = stringToBase64.decode(controllers.password.text);
-
-        controllers.password.text = password;
+        try {
+          Codec<String, String> stringToBase64 = utf8.fuse(base64);
+          String password = stringToBase64.decode(controllers.password.text);
+          controllers.password.text = password;
+        } catch (e) {
+          controllers.password.text = '';
+        }
 
         mailSave = true;
       });
@@ -450,9 +458,9 @@ Future<void> _onSendMail(BuildContext context,MailController controllers, bool o
 
   if(correct)
   {
-    List <String> separeaddress = controllers.mailTo!.text.split("@");
+    List <String> separeaddress = (controllers.mailTo?.text ?? '').split("@");
     final recipients = [
-      controllers.mailTo?.text,
+      controllers.mailTo?.text ?? '',
       ...selectedFactories
           .where((f) => f.mail != null && f.mail.isNotEmpty)
           .map((f) => f.mail)
@@ -464,7 +472,10 @@ Future<void> _onSendMail(BuildContext context,MailController controllers, bool o
         .toList();
 
     final message = Message()
-      ..from = Address(controllers.mailTo!.text.trim(), separeaddress[0])
+      ..from = Address(
+          (controllers.mailTo?.text ?? '').trim(),
+          separeaddress.isNotEmpty ? separeaddress[0] : 'User'
+      )
       ..recipients.addAll(recipients) // agregamos solo los válidos
       ..subject = controllers.subject!.text.trim()
       ..text = controllers.message!.text.trim()
@@ -501,7 +512,9 @@ Future<void> _onResetMail(BuildContext context,MailController controllers, Funct
   controllers.message!.text="";
   controllers.attachments.clear();
 
-  selectedOption = S.of(context).a_recipient;
+  setState(() {
+    selectedOption = S.of(context).a_recipient;
+  });
 
 }
 
