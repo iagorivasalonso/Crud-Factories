@@ -120,6 +120,9 @@ class MessageLookup extends MessageLookupByLibrary {
       "Empresas en su base de datos",
     ),
     "confirm": MessageLookupByLibrary.simpleMessage("Confirmar"),
+    "confirm_delete_sector": MessageLookupByLibrary.simpleMessage(
+      "¿Seguro que quieres eliminar este sector?",
+    ),
     "connect": MessageLookupByLibrary.simpleMessage("Conectar"),
     "connection": MessageLookupByLibrary.simpleMessage("Conexión"),
     "connection_cannot_be_established": MessageLookupByLibrary.simpleMessage(

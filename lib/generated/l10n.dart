@@ -1536,6 +1536,16 @@ class S {
     );
   }
 
+  /// `¿Seguro que quieres eliminar este sector?`
+  String get confirm_delete_sector {
+    return Intl.message(
+      '¿Seguro que quieres eliminar este sector?',
+      name: 'confirm_delete_sector',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Este día se realizaron`
   String get this_day_they_were_made {
     return Intl.message(
