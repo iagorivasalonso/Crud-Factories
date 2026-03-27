@@ -54,7 +54,7 @@ class _appDesktopState extends State<appDesktop> {
       if(routesCSV.isEmpty)
         showDialog(
           context: context,
-          builder: (context) => const adminRoutes(),
+          builder: (context) => const AdminRoutesDialog(),
         );
 
       String action = "";
@@ -63,63 +63,48 @@ class _appDesktopState extends State<appDesktop> {
 
           if (sqlBd == true)
           {
-                for (var route in routesCSV) {
-                  if (SQLRoutes.any((sqlName) => sqlName.trim().toLowerCase() == route.name.trim().toLowerCase())) {
-                    routesCurrent.add(route);
-                  }
-                }
-
+            routesCurrent = routesCSV
+                .where((route) =>
+                SQLRoutes.any((sqlName) =>
+                sqlName.trim().toLowerCase() == route.name.trim().toLowerCase()))
+                .toList();
           }
           else
           {
              routesCurrent = routesCSV;
           }
 
+      bool fileFail = routesCurrent.any((r) => r.route.isEmpty);
 
+      if (errorFiles.isNotEmpty) {
+        errors(context, errorFiles);
 
-          if (isChargue == true)
-          {
-               bool fileFail = false;
+        setState(() {
+          itenSelect = 0;
+          subIten1Select = 1;
+          subIten2Select = -1;
+        });
+      }
 
-               for(int i = 0; i < routesCurrent.length; i++)
+      if(fileFail == true)
+       {
+               String no_rutes = S.of(context).you_do_not_have_a_complete_route_file;
+               String want_complete = S.of(context).want_to_complete_it;
+
+               action = "$no_rutes \n $want_complete";
+               bool rutesComplete = await warning(context, action);
+
+               if(rutesComplete == true)
                {
-                   if(routesCurrent[i].route.isEmpty)
-                   {
-                        fileFail = true;
-                   }
-               }
-               if(errorFiles.isNotEmpty)
-               {
-                 errors(context, errorFiles);
-
                  setState(() {
                    itenSelect = 0;
                    subIten1Select = 1;
                    subIten2Select = -1;
                  });
                }
+       }
 
-               if(fileFail == true)
-               {
-                    String no_rutes = S.of(context).you_do_not_have_a_complete_route_file;
-                    String want_complete = S.of(context).want_to_complete_it;
-
-                    action = "$no_rutes \n $want_complete";
-                    bool rutesComplete = await warning(context, action);
-
-                    if(rutesComplete == true)
-                    {
-                      setState(() {
-                        itenSelect = 0;
-                        subIten1Select = 1;
-                        subIten2Select = -1;
-                      });
-                    }
-               }
-          }
-
-          bool initialChargue = true;
-        await _importedRoutes(context,initialChargue);
+        await csvLoaderService.importedRoutes(context, true);
 
       if (sqlBd == true)
           setState(() {
@@ -285,7 +270,7 @@ class _appDesktopState extends State<appDesktop> {
 
                         showDialog(
                           context: context,
-                          builder: (context) => const adminRoutes(),
+                          builder: (context) => const AdminRoutesDialog(),
                         );
 
                       }
@@ -359,20 +344,10 @@ class _appDesktopState extends State<appDesktop> {
                                 if(create == true)
                                 {
 
-                                  bool errorExp = await csvExportatorSectors(sectors);
+                               //   bool errorExp = await csvExportatorSectors(sectors);
 
 
-                                  if(errorExp == false)
-                                  {
-                                    String action = S.of(context).the_sector_has_been_created_successfully;
-                                    await confirm(context, action);
-                                  }
-                                  else
-                                  {
-                                    String array = S.of(context).sectors;
-                                    String action = LocalizationHelper.no_file(context, array);
-                                    error(context, action);
-                                  }
+
                                 }
                               }
                       }
@@ -801,4 +776,7 @@ class _appDesktopState extends State<appDesktop> {
   }
 
 
+
+
 }
+

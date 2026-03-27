@@ -203,15 +203,16 @@ class csvLoaderService {
     String action = LocalizationHelper.manage_array(context, array, actionArray);
 
 
-    if(result == true && errorFiles.isNotEmpty)
+    if(initialChargue != true)
     {
-      errors(context, errorFiles);
-    }
-    else
-    {
+      if(result == true && errorFiles.isNotEmpty)
+      {
+        errors(context, errorFiles);
+      }
+
       await confirm(context, action);
-      Navigator.of(context).pop(true);
     }
+
     csvExportatorRoutes(routesCSV);
   }
   static AppFile fromAsset(String assetPath) {
