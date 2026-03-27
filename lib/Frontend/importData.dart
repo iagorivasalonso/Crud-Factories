@@ -186,227 +186,289 @@ Future<void> _pickFile(BuildContext context, TextEditingController controllerDat
 
   final platformFile = result.files.single;
 
-  final file = File(result.files.single.path!);
-  final content = await file.readAsString(encoding: utf8);
-  CsvProcessorService.processCsvContent(context, content,true);
-  controllerDatePicker.text =platformFile.path!;
+  String content;
+
+  if (platformFile.bytes != null) {
+    // Web y algunas plataformas
+    content = utf8.decode(platformFile.bytes!);
+  } else if (platformFile.path != null) {
+    // Android / Desktop
+    final file = File(platformFile.path!);
+    content = await file.readAsString(encoding: utf8);
+  } else {
+    throw Exception("No se pudo leer el archivo CSV");
+  }
+  // Procesamos el CSV para llenar los listController
+  CsvProcessorService.processCsvContent(context, content, true);
+
+  // Actualizamos el TextField con el nombre del archivo
+  controllerDatePicker.text = platformFile.name;
+
+  // Forzamos rebuild para que se vea reflejado en la UI
+  if (context.mounted) {
+   // setState(() {});
+  }
 
 }
+
 
 Future<void> _onSaveList(BuildContext context) async {
+  List<ImportResult> results = [];
 
-  int count = 0;
-  List<String> stringDialog = [];
-
-  Map<String,int> importedCount = {};
-
-  if (listController.routesNew.isNotEmpty)
-  {
-    final entityName = S.of(context).routes;
-    count += await processImport(
-      newList: listController.routesNew,
-      existingList: routesCSV,
-      getKey: (r) => r.route,
-      setId: (r, id) => r.id = id,
-      csvExport: csvExportatorRoutes,
-      conn: executeQuery,
-    );
-    importedCount[entityName] = count;
-  }
-
-  if (listController.sectorsNew.isNotEmpty)
-  {
-    final entityName = S.of(context).sectors;
-    count += await processImport(
-      newList: listController.sectorsNew,
-      existingList: sectors,
-      getKey: (s) => s.name,
-      setId: (s, id) => s.id = id,
-      csvExport: csvExportatorSectors,
-      sqlExport: sqlCreateSector,
-      conn: executeQuery,
-    );
-    importedCount[entityName] = count;
-  }
-
-  if (listController.empleoyesNew.isNotEmpty)
-  {
-    final entityName = S.of(context).employees;
-    List<Empleoye> tmp =
-    listController.empleoyesNew.where((e) => allFactories.any((f)=> f.id == e.idFactory))
-        .toList();
-
-    List<Empleoye> empExc =
-    listController.empleoyesNew.where((e) => !allFactories.any((f)=> f.id == e.idFactory))
-        .toList();
-
-    List<Empleoye> empleoyesNew = tmp;
-
-
-    if (allFactories.isNotEmpty)
-    {
-      if(empleoyesNew.isNotEmpty)
-      {
-        count += await processImport(
-          newList: empleoyesNew,
-          existingList: empleoyes,
-          getKey: (e) => e.name,
-          setId: (e, id) => e.id = id,
-          csvExport: csvExportatorEmpleoyes,
-          sqlExport: sqlCreateEmpleoye,
-          conn: executeQuery,
-        );
-        importedCount[entityName] = count;
-        if(empExc.isNotEmpty)
-        {
-          for(int i = 0; i <empExc.length; i++)
-          {
-            stringDialog.add(LocalizationHelper.empleoyesBeFactory(context, empExc[i].name));
-          }
-        }
-      }
-    }
-    else
-    {
-       stringDialog.add(LocalizationHelper.fieldInAnother(context, entityName.toLowerCase(), S.of(context).companies.toLowerCase()));
-    }
-
-  }
-
-  if (listController.mailsNew.isNotEmpty)
-  {
-    final entityName = S.of(context).mails;
-    count += await processImport(
-      newList: listController.mailsNew,
-      existingList: mails,
-      getKey: (m) => m.address,
-      setId: (s, id) => s.id = id,
-      csvExport: csvExportatorMails,
-      sqlExport: sqlCreateMail,
-      conn: executeQuery,
-    );
-    importedCount[entityName] = count;
-  }
-
-  if (listController.linesNew.isNotEmpty)
-  {
-    final entityName = S.of(context).lines;
-    List<LineSend> tmp =
-    listController.linesNew.where((l) =>
-        allFactories.any((e) => l.factory == e.name))
-        .toList();
-
-    List<LineSend> linesExcl =
-    listController.linesNew.where((l) => !allFactories.any((e) => l.factory == e.name))
-        .toList();
-
-
-    List<LineSend> linesNew = tmp;
-
-    if (allFactories.isNotEmpty)
-    {
-      if(linesNew.isNotEmpty)
-      {
-        count += await processImport(
-          newList: linesNew,
-          existingList: allLines,
-          getKey: (l) => l.factory,
-          setId: (e, id) => e.id = id,
-          csvExport: csvExportatorLines,
-          sqlExport: (lines) => sqlCreateLine(lines, context),
-          conn: executeQuery,
-        );
-        importedCount[entityName] = count;
-
-        if(linesExcl.isNotEmpty)
-        {
-          for(int i = 0; i <linesExcl.length; i++)
-          {
-            stringDialog.add(LocalizationHelper.factoryBeSector(context, linesExcl[i].factory));
-          }
-        }
-      }
-    }
-    else
-    {
-       stringDialog.add(LocalizationHelper.fieldInAnother(context, entityName.toLowerCase(), S.of(context).companies.toLowerCase()));
-    }
-  }
-
-  if (listController.conectionsNew.isNotEmpty)
-  {
-    final entityName = S.of(context).connection;
-    count += await processImport(
-      newList: listController.conectionsNew,
-      existingList: conections,
-      getKey: (c) => c.database,
-      setId: (c, id) => c.id = id,
-      csvExport: csvExportatorConections,
-      conn: executeQuery,
-    );
-    importedCount[entityName] = count;
-  }
-
-  if (listController.factoriesNew.isNotEmpty)
-  {
-    final entityName = S.of(context).company;
-    List<Factory> tmp = listController.factoriesNew.where((f) => sectors.any((e)=> f.sector == e.id))
-        .toList();
-
-    List<Factory> factExc = listController.factoriesNew.where((f) => !sectors.any((e)=> f.sector == e.id))
-        .toList();
-
-    List<Factory> factoriesNew = tmp;
-
-       if(sectors.isNotEmpty)
-       {
-         if(listController.factoriesNew.isNotEmpty)
-         {
-           count += await processImport(
-             newList: factoriesNew,
-             existingList: allFactories,
-             getKey: (f) => f.name,
-             setId: (e, id) => e.id = id,
-             csvExport: csvExportatorFactories,
-             sqlExport: sqlCreateFactory,
-             conn: executeQuery,
-           );
-           importedCount[entityName] = count;
-         }
-
-         if(factExc.isNotEmpty)
-         {
-           for(int i = 0; i <factExc.length; i++)
-           {
-             stringDialog.add(LocalizationHelper.factoryBeSector(context, factExc[i].name));
-           }
-         }
-       }
-       else
-       {
-         stringDialog.add(LocalizationHelper.fieldInAnother(context, entityName.toLowerCase(), S.of(context).sector.toLowerCase()));
-       }
-  }
-
-
-
-  if(count > 0 && importedCount.isNotEmpty)
-  {
-        String message = importedCount.entries
-                    .map((e) => LocalizationHelper.importData(context,e.key,e.value))
-                    .join();
-
-        confirm(context,message);
-  }
-  else
-  {
-       for (int i = 0; i<stringDialog.length; i++)
-       {
-           await noFind(context, true, stringDialog[i]);
-       }
-  }
-  stringDialog.clear();
+  results.add(await _importSectors(context));      // primero sectores
+  results.add(await _importFactories(context));    // luego factories
+  results.add(await _importRoutes(context));       // después routes
+  results.add(await _importEmployees(context));    // luego employees
+  results.add(await _importLines(context));        // luego lines
+  results.add(await _importMails(context));        // luego mails
+  results.add(await _importConnections(context));  // finalmente connections
+print(results.toString());
+  _showImportSumary(context, results);
 }
+
+Future<ImportResult> _importRoutes(BuildContext context) async {
+
+  final result = ImportResult(entity: S.of(context).routes);
+
+  if (listController.routesNew.isEmpty) return result;
+
+  result.inserted = await processImport(
+    newList: listController.routesNew,
+    existingList: routesCSV,
+    getKey: (r) => r.route,
+    setId: (r, id) => r.id = id,
+    csvExport: csvExportatorRoutes,
+    conn: executeQuery,
+  );
+
+  return result;
+}
+
+Future<ImportResult> _importSectors(BuildContext context) async {
+
+  final result = ImportResult(entity: S.of(context).sectors);
+
+  if (listController.sectorsNew.isEmpty) return result;
+
+  print('Sectors new: ${listController.sectorsNew}');
+  result.inserted = await processImport(
+    newList: listController.sectorsNew,
+    existingList: sectors,
+    getKey: (s) => s.name,
+    setId: (s, id) => s.id = id,
+    csvExport: csvExportatorSectors,
+    sqlExport: sqlCreateSector,
+    conn: executeQuery,
+  );
+
+  return result;
+}
+
+Future<ImportResult> _importEmployees(BuildContext context) async {
+
+  final result = ImportResult(entity: S.of(context).employees);
+
+  if (listController.empleoyesNew.isEmpty) return result;
+
+  if (allFactories.isEmpty) {
+    result.errors.add(
+      LocalizationHelper.fieldInAnother(
+        context,
+        result.entity.toLowerCase(),
+        S.of(context).companies.toLowerCase(),
+      ),
+    );
+    return result;
+  }
+
+  final valid = listController.empleoyesNew
+      .where((e) => allFactories.any((f) => f.id == e.idFactory))
+      .toList();
+
+  final invalid = listController.empleoyesNew
+      .where((e) => !allFactories.any((f) => f.id == e.idFactory))
+      .toList();
+
+  if (valid.isNotEmpty) {
+    result.inserted = await processImport(
+      newList: valid,
+      existingList: empleoyes,
+      getKey: (e) => e.name,
+      setId: (e, id) => e.id = id,
+      csvExport: csvExportatorEmpleoyes,
+      sqlExport: sqlCreateEmpleoye,
+      conn: executeQuery,
+    );
+  }
+
+  for (var e in invalid) {
+    result.errors.add(
+      LocalizationHelper.empleoyesBeFactory(context, e.name),
+    );
+  }
+
+  return result;
+}
+
+Future<ImportResult> _importMails(BuildContext context) async {
+
+  final result = ImportResult(entity: S.of(context).mails);
+
+  if (listController.mailsNew.isEmpty) return result;
+
+  result.inserted = await processImport(
+    newList: listController.mailsNew,
+    existingList: mails,
+    getKey: (m) => m.address,
+    setId: (m, id) => m.id = id,
+    csvExport: csvExportatorMails,
+    sqlExport: sqlCreateMail,
+    conn: executeQuery,
+  );
+
+  return result;
+}
+
+Future<ImportResult> _importLines(BuildContext context) async {
+
+  final result = ImportResult(entity: S.of(context).lines);
+
+  if (listController.linesNew.isEmpty) return result;
+
+  if (allFactories.isEmpty) {
+    result.errors.add(
+      LocalizationHelper.fieldInAnother(
+        context,
+        result.entity.toLowerCase(),
+        S.of(context).companies.toLowerCase(),
+      ),
+    );
+    return result;
+  }
+
+  final valid = listController.linesNew
+      .where((l) => allFactories.any((f) => f.name == l.factory))
+      .toList();
+
+  final invalid = listController.linesNew
+      .where((l) => !allFactories.any((f) => f.name == l.factory))
+      .toList();
+
+  if (valid.isNotEmpty) {
+    result.inserted = await processImport(
+      newList: valid,
+      existingList: allLines,
+      getKey: (l) => l.factory,
+      setId: (l, id) => l.id = id,
+      csvExport: csvExportatorLines,
+      sqlExport: (lines) => sqlCreateLine(lines, context),
+      conn: executeQuery,
+    );
+  }
+
+  for (var l in invalid) {
+    result.errors.add(
+      LocalizationHelper.factoryBeSector(context, l.factory),
+    );
+  }
+
+  return result;
+}
+
+Future<ImportResult> _importConnections(BuildContext context) async {
+
+  final result = ImportResult(entity: S.of(context).connection);
+
+  if (listController.conectionsNew.isEmpty) return result;
+
+  result.inserted = await processImport(
+    newList: listController.conectionsNew,
+    existingList: conections,
+    getKey: (c) => c.database,
+    setId: (c, id) => c.id = id,
+    csvExport: csvExportatorConections,
+    sqlExport: null,
+    conn: executeQuery,
+  );
+
+  return result;
+}
+
+Future<ImportResult> _importFactories(BuildContext context) async {
+
+  final result = ImportResult(entity: S.of(context).company);
+
+  if (listController.factoriesNew.isEmpty) return result;
+
+  if (sectors.isEmpty) {
+    result.errors.add(
+      LocalizationHelper.fieldInAnother(
+        context,
+        result.entity.toLowerCase(),
+        S.of(context).sector.toLowerCase(),
+      ),
+    );
+    return result;
+  }
+
+  final valid = listController.factoriesNew
+      .where((f) => sectors.any((s) => s.id == f.sector))
+      .toList();
+
+  final invalid = listController.factoriesNew
+      .where((f) => !sectors.any((s) => s.id == f.sector))
+      .toList();
+
+  if (valid.isNotEmpty) {
+    result.inserted = await processImport(
+      newList: valid,
+      existingList: allFactories,
+      getKey: (f) => f.name,
+      setId: (f, id) => f.id = id,
+      csvExport: csvExportatorFactories,
+      sqlExport: sqlCreateFactory,
+      conn: executeQuery,
+    );
+  }
+
+  for (var f in invalid) {
+    result.errors.add(
+      LocalizationHelper.factoryBeSector(context, f.name),
+    );
+  }
+
+  return result;
+}
+
+void _showImportSumary(BuildContext context, List<ImportResult> results) async{
+print("resu$results");
+      final success = results.where((r) => r.inserted > 0).toList();
+      final errors = results.expand((r) => r.errors).toList();
+print("deasfd$success");
+String summaryText = '';
+
+if (success.isNotEmpty) {
+  final message = success
+      .map((e) => LocalizationHelper.importData(context, e.entity, e.inserted))
+      .join('\n');
+  summaryText += message;
+  print(message);
+  confirm(context, message);
+}
+
+if (errors.isNotEmpty) {
+  final errorMessage = errors.join('\n');
+  summaryText += (summaryText.isNotEmpty ? '\n\n' : '') + errorMessage;
+  await noFind(context, true, errorMessage);
+}
+
+
+
+}
+
+
+
+
 
 abstract class BaseEntity {
   late String id;
@@ -429,11 +491,12 @@ Future<int> processImport<T extends BaseEntity>({
 
     if (!exists)
     {
+      final maxId = existingList.isNotEmpty
+          ? existingList.map((e) => int.parse(e.id)).reduce((a, b) => a > b ? a : b)
+          : 0;
 
-      setId(
-          iten,
-          existingList.isNotEmpty ? createId(existingList.last.id) : "1"
-      );
+      setId(iten, (maxId + 1).toString());
+
       existingList.add(iten);
       count++;
     }
@@ -449,3 +512,21 @@ Future<int> processImport<T extends BaseEntity>({
 }
 
 
+class ImportResult {
+
+   final String entity;
+   int inserted;
+   List<String> errors;
+
+   ImportResult({
+       required this.entity,
+       this.inserted = 0,
+       List<String>? errors,
+   }) : errors = errors ?? [];
+
+
+   @override
+   String toString() {
+     return 'ImportResult(entity: $entity, inserted: $inserted, errors: $errors)';
+   }
+}
