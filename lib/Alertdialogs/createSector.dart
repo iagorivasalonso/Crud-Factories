@@ -21,32 +21,17 @@ import '../helpers/localization_helper.dart';
 
 Future<bool> createSector(BuildContext  context, String campOld) async {
 
-  late TextEditingController controllerSector = TextEditingController();
+  final TextEditingController controllerSector = TextEditingController();
 
-  String titleAlert = "";
-  String action = "";
+  String title = campOld.isEmpty ? S.of(context).creation_of_the_sector : S.of(context).edit;
+  String action = campOld.isEmpty ? S.of(context).create_sector : S.of(context).save;
 
-
-  if(campOld.isNotEmpty)
-  {
-     titleAlert = S.of(context).edit;
-     controllerSector.text=campOld!;
-
-     action = S.of(context).save;
-
-  }
-  else
-  {
-    titleAlert = S.of(context).creation_of_the_sector;
-
-    action = S.of(context).create_sector;
-  }
+  if (campOld.isNotEmpty) controllerSector.text = campOld;
 
   bool? sector = await showDialog(
       context: context,
       builder: (BuildContext context) {
-        return StatefulBuilder(
-          builder: (BuildContext context, void Function(void Function()) setState) => Dialog(
+        return Dialog(
             shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(0)),
             child: ConstrainedBox(
                 constraints: BoxConstraints(
@@ -55,7 +40,7 @@ Future<bool> createSector(BuildContext  context, String campOld) async {
                 ),
                 child: Column(
                      children: [
-                       headDialog(title: titleAlert),
+                       headDialog(title: title),
                        Padding(
                          padding: const EdgeInsets.only(top:20.0,left: 40.0),
                          child: headView(
@@ -86,121 +71,80 @@ Future<bool> createSector(BuildContext  context, String campOld) async {
                      ],
                   ),
             )
-          ),
         );
       });
-
+     controllerSector.dispose();
      return sector?? false;
 
 }
 
 Future<void> saveSector(BuildContext context,TextEditingController controllerSector, String campOld) async {
 
-  List<Sector> currentSector = [];
+  final text = controllerSector.text
+      .trim()
+      .replaceAll(RegExp(r'\s+'), ' ');
 
-    if(campOld.isEmpty || sectors.isEmpty)
+  final old = campOld.trim().toLowerCase();
+
+  if (text.isEmpty) {
+    await error(context, S.of(context).the_field_cannot_be_blank);
+    return;
+  }
+
+  if (text.toLowerCase() == old) {
+    Navigator.of(context).pop(false);
+    return;
+  }
+
+  bool repeat = sectors.any((sector) =>
+  sector.name.toLowerCase() == text.toLowerCase() &&
+      sector.name.toLowerCase() != old);
+
+  if (repeat) {
+    await error(context, S.of(context).that_sector_already_exists);
+    return;
+  }
+
+    List<Sector> currentSector = [];
+
+    if (campOld.isEmpty)
     {
-      if(controllerSector.text.isNotEmpty)
-      {
-        bool repeat = sectors.any((sector) => sector.name == controllerSector.text);
+      String idNew = sectors.isNotEmpty ? createId(sectors.last.id) : "1";
+      Sector newSector = Sector(id: idNew, name: text);
+      sectors.add(newSector);
+      currentSector.add(newSector);
 
-        if(repeat == true)
-        {
-          String action = S.of(context).that_sector_already_exists;
-          await error(context, action);
-        }
-        else
-        {
+      String action = LocalizationHelper.manage_array(context, S.of(context).sector, S.of(context).saved, S.of(context).theFemale);
+      await confirm(context, action);
 
-          String idNew = "";
-
-          if(sectors.isNotEmpty)
-          {
-            String idLast = sectors[sectors.length-1].id;
-            idNew = createId(idLast);
-          }
-          else
-          {
-            idNew ="1";
-          }
-
-
-          Sector newSector = Sector(id: idNew, name: controllerSector.text);
-          sectors.add(newSector);
-          String actionArray = S.of(context).saved;
-          String pr = S.of(context).theFemale;
-          String array = S.of(context).sector;
-
-          String action = LocalizationHelper.manage_array(context, array, actionArray, pr);
-          await confirm(context, action);
-
-
-          if(BaseDateSelected.isNotEmpty)
-          {
-            sqlCreateSector(currentSector);
-          }
-          else
-          {
-            sectors += currentSector;
-            bool errorExp = await csvExportatorSectors(sectors);
-
-                  if  (errorExp != false)
-                  {
-                     String action = LocalizationHelper.no_file(context, array);
-                     warning(context, action);
-                  }
-          }
-
-        }
-      }
-      else
-      {
-        String action = S.of(context).the_field_cannot_be_blank;
-        await error(context,action);
-      }
-      Navigator.of(context).pop(true);
     }
     else
     {
-      if (campOld != controllerSector.text)
-      {
-        bool repeat = sectors.any((sector) => sector.name == controllerSector.text);
+      // Editar sector existente¡
+      final sectorList = sectors.where((s) =>
+      s.name.toLowerCase() == old);
 
-        if(repeat)
-        {
-          String action = S.of(context).that_sector_already_exists;
-          await error(context, action);
-        }
-        else
-        {
+      if (sectorList.isEmpty) return;
 
-          final sector1 = sectors.cast<Sector?>().firstWhere(
-                (s) => s?.name == campOld,
-            orElse: () => null,
-          );
+      final sector = sectorList.first;
 
-          if (sector1 == null) {
-            await error(context, S.of(context).sector);
-            return;
-          }
 
-          sector1.name = controllerSector.text;
-          currentSector = [sector1];
+      sector.name = text;
+      currentSector.add(sector);
 
-          if(BaseDateSelected.isNotEmpty)
-          {
-            sqlModifySector(currentSector);
-          }
-          else
-          {
-            csvExportatorSectors(sectors);
-          }
-          String action = S.of(context).sector_edited_correctly;
-          await confirm(context, action);
-        }
-
-      }
+      await confirm(context, S.of(context).sector_edited_correctly);
     }
 
-  Navigator.of(context).pop(true);
+    // Persistencia
+    if (BaseDateSelected.isNotEmpty) {
+      if (campOld.isEmpty) {
+        sqlCreateSector(currentSector);
+      } else {
+        sqlModifySector(currentSector);
+      }
+    } else {
+      await csvExportatorSectors(sectors);
+    }
+
+    Navigator.of(context).pop(true);
 }

@@ -10,6 +10,7 @@ import 'package:flutter/material.dart';
 
 import '../Alertdialogs/createSector.dart';
 import '../Alertdialogs/error.dart';
+import '../Alertdialogs/warning.dart';
 import '../Widgets/materialButton.dart';
 
 
@@ -74,26 +75,24 @@ Future<void> adminSector(BuildContext context) async {
 
 Future <void> _onCreateSector(BuildContext context, void Function(void Function()) setState) async {
 
-      String modif = "";
-      bool create = await createSector(context, modif);
+  final bool created = await createSector(context, "");
 
-      if (create == true) {
-        setState(() {});
-      }
+  if (created) {
+    setState(() {});
+  }
 
 }
 
 Future <void> _onEditSector(BuildContext context, int index, void Function(void Function()) setState) async {
 
    try {
-         String modif = sectors[index].name;
-         bool? mod = await createSector(context, modif);
+         final String oldName = sectors[index].name;
+         final bool edited = await createSector(context, oldName);
 
-         if( mod == true)
+         if(edited)
          {
            setState((){});
          }
-
    } catch (e){
        String action = S.of(context).could_not_be_edited;
        error(context,action);
@@ -101,25 +100,33 @@ Future <void> _onEditSector(BuildContext context, int index, void Function(void 
 }
 
 Future <void> _onDeleteSector(BuildContext context, int index, void Function(void Function()) setState) async {
-  String idSupr = sectors[index].id;
+
+  if (sectors.isEmpty || index >= sectors.length) return;
+
+  final String idToDelete = sectors[index].id;
 
 
-  if (sectors.length == 1) {
-    Navigator.of(context).pop(false);
-  }
+  final bool? confirmed = await warning(
+    context,
+    S.of(context).confirm_delete_sector, // mensaje personalizado
+  );
+
+  if (confirmed != true) return;
+
 
   setState(() {
     sectors.removeAt(index);
   });
 
-  confirm(context, S
-      .of(context)
-      .the_sector_has_been_successfully_removed);
+  await confirm(context, S.of(context).the_sector_has_been_successfully_removed);
 
   if (BaseDateSelected.isNotEmpty) {
-    sqlDeleteSector(idSupr);
+    sqlDeleteSector(idToDelete);
+  } else {
+    await csvExportatorSectors(sectors);
   }
-  else {
-    csvExportatorSectors(sectors);
+
+  if (sectors.isEmpty) {
+    Navigator.of(context).pop(false);
   }
 }
