@@ -9,8 +9,6 @@ import 'Export_general/export_csv.dart';
 
 Future<bool> csvExportatorSectors(List<Sector> sectors) async {
 
-  bool err = false;
-
   List<dynamic> associateList = [
 
       for (int i = 0; i < sectors.length; i++)

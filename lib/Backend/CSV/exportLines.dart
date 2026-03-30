@@ -7,8 +7,6 @@ import 'Export_general/export_csv.dart';
 
 Future<bool>  csvExportatorLines(List<LineSend> listSend) async {
 
-  bool err = false;
-
   List<dynamic> associateList = [
 
     for (int i = 0; i <listSend.length;i++)

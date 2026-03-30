@@ -9,8 +9,6 @@ import 'Export_general/export_csv.dart';
 
 Future<bool> csvExportatorFactories(List<Factory> factories) async {
 
-  bool err = false;
-
   List<dynamic> associateList = [
 
       for (int i = 0; i <factories.length;i++)

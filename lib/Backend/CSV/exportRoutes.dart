@@ -8,8 +8,6 @@ import 'Export_general/export_csv.dart';
 
 Future<bool> csvExportatorRoutes(List<RouteCSV> routes) async {
 
-  bool err = false;
-
   List<dynamic> associateList = [
 
       for (int i = 0; i < routes.length; i++)

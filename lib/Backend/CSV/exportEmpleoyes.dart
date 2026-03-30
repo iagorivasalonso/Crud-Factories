@@ -8,7 +8,6 @@ import 'Export_general/export_csv.dart';
 
 Future<bool> csvExportatorEmpleoyes(List<Empleoye> empleoyes) async {
 
-  bool err = false;
 
   List<dynamic> associateList = [
 
