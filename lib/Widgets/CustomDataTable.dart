@@ -1,11 +1,11 @@
+import 'package:crud_factories/Backend/Global/controllers/LineSend.dart' show LineSendController;
+import 'package:crud_factories/Backend/Global/variables.dart';
+import 'package:crud_factories/Functions/isNotAndroid.dart' show isNotAndroid;
+import 'package:crud_factories/Functions/manageState.dart' show manageState;
+import 'package:crud_factories/Objects/LineSend.dart' show LineSendState;
+import 'package:crud_factories/generated/l10n.dart' show S;
 import 'package:fluent_ui/fluent_ui.dart' hide Checkbox;
 import 'package:flutter/material.dart' hide Scrollbar;
-import '../Backend/Global/controllers/LineSend.dart';
-import '../Backend/Global/variables.dart';
-import '../Functions/isNotAndroid.dart';
-import '../Functions/manageState.dart';
-import '../Objects/LineSend.dart';
-import '../generated/l10n.dart';
 
 class customDataTable extends StatelessWidget {
 
