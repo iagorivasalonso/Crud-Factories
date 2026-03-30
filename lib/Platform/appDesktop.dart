@@ -343,11 +343,7 @@ class _appDesktopState extends State<appDesktop> {
 
                                 if(create == true)
                                 {
-
-                               //   bool errorExp = await csvExportatorSectors(sectors);
-
-
-
+                                  bool errorExp = await csvExportatorSectors(sectors);
                                 }
                               }
                       }
@@ -680,13 +676,15 @@ class _appDesktopState extends State<appDesktop> {
                           width: wItemMax,
                           child: Text(S.of(context).sending_mails)),
                       onTap: () async {
+
+                         bool enter = true;
                         if(mails.isEmpty)
                         {
-                          String action =S.of(context).no_have_registered_mails;
-                          warning(context,action);
+                          String action =S.of(context).if_you_have_no_registered_emails_do_you_wish_to_continue;
+                          enter = await warning(context,action);
                         }
 
-                        if (saveChanges == false)
+                        if (saveChanges == false && enter == true)
                         {
                           setState(() {
                             itenSelect = 2;
