@@ -6,8 +6,6 @@ import 'package:crud_factories/Objects/Conection.dart';
 import 'package:crud_factories/generated/l10n.dart';
 import 'package:flutter/material.dart';
 
-import '../../Objects/RouteCSV.dart';
-
 Future<void>csvImportConections(BuildContext context,List<Conection> conection,[dynamic fileOrContent]) async {
 
   try {

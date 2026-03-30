@@ -1,6 +1,3 @@
-
-
-
 import 'package:crud_factories/Objects/Conection.dart';
 import 'package:crud_factories/Objects/Empleoye.dart';
 import 'package:crud_factories/Objects/Factory.dart';

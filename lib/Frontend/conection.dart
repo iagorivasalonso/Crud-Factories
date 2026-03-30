@@ -13,19 +13,19 @@ import 'package:crud_factories/Widgets/layoutVariant.dart';
 import 'package:crud_factories/generated/l10n.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import '../Alertdialogs/confirm.dart';
-import '../Backend/CSV/loader.dart';
-import '../Backend/SQL/importEmpleoye.dart';
-import '../Backend/SQL/importFactories.dart';
-import '../Backend/SQL/importMail.dart';
-import '../Backend/SQL/importSector.dart';
-import '../Functions/createId.dart';
-import '../Functions/isNotAndroid.dart';
-import '../Widgets/dropDownButton.dart';
-import '../Widgets/headView.dart';
-import '../Widgets/materialButton.dart';
-import '../Widgets/textFieldPassword.dart';
-import '../Widgets/textfield.dart';
+import 'package:crud_factories/Alertdialogs/confirm.dart';
+import 'package:crud_factories/Backend/CSV/loader.dart';
+import 'package:crud_factories/Backend/SQL/importEmpleoye.dart';
+import 'package:crud_factories/Backend/SQL/importFactories.dart';
+import 'package:crud_factories/Backend/SQL/importMail.dart';
+import 'package:crud_factories/Backend/SQL/importSector.dart';
+import 'package:crud_factories/Functions/createId.dart';
+import 'package:crud_factories/Functions/isNotAndroid.dart';
+import 'package:crud_factories/Widgets/dropDownButton.dart';
+import 'package:crud_factories/Widgets/headView.dart';
+import 'package:crud_factories/Widgets/materialButton.dart';
+import 'package:crud_factories/Widgets/textFieldPassword.dart';
+import 'package:crud_factories/Widgets/textfield.dart';
 
 class conection extends StatefulWidget {
 

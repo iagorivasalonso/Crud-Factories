@@ -25,11 +25,11 @@ import 'package:crud_factories/Widgets/textfieldCalendar.dart';
 import 'package:crud_factories/generated/l10n.dart';
 import 'package:crud_factories/helpers/localization_helper.dart';
 import 'package:flutter/material.dart';
-import '../Alertdialogs/createSector.dart';
-import '../Functions/isNotAndroid.dart';
-import '../Widgets/dropDownButton.dart';
-import '../Widgets/listElements.dart';
-import '../Widgets/materialButton.dart';
+import 'package:crud_factories/Alertdialogs/createSector.dart';
+import 'package:crud_factories/Functions/isNotAndroid.dart';
+import 'package:crud_factories/Widgets/dropDownButton.dart';
+import 'package:crud_factories/Widgets/listElements.dart';
+import 'package:crud_factories/Widgets/materialButton.dart';
 
 
 

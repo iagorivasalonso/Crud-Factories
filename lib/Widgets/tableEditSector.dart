@@ -1,5 +1,6 @@
+import 'package:crud_factories/Objects/Sector.dart' show Sector;
 import 'package:flutter/material.dart';
-import '../Objects/Sector.dart';
+
 
 
 class tableEditSector extends StatelessWidget {

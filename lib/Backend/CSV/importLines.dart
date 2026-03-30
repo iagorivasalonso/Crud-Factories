@@ -2,10 +2,10 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:crud_factories/Backend/Global/list.dart';
 import 'package:crud_factories/Backend/Global/files.dart';
-import 'package:crud_factories/Functions/manageState.dart';
 import 'package:crud_factories/Objects/LineSend.dart';
 import 'package:crud_factories/generated/l10n.dart';
 import 'package:flutter/material.dart';
+
 Future<void> csvImportLines(BuildContext context, List<LineSend> line, [dynamic fileOrContent] ) async {
 
   try {

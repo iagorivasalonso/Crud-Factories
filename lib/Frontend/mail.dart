@@ -1,6 +1,4 @@
 import 'dart:convert';
-import 'dart:io';
-
 import 'package:adaptive_scrollbar/adaptive_scrollbar.dart';
 import 'package:crud_factories/Alertdialogs/confirm.dart';
 import 'package:crud_factories/Alertdialogs/error.dart';
@@ -21,14 +19,11 @@ import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 import 'package:mailer/mailer.dart';
 import 'package:mailer/smtp_server.dart';
-import 'package:mailer/smtp_server/gmail.dart';
-import 'package:mailer/smtp_server/hotmail.dart';
-import '../Backend/Global/controllers/Mail.dart';
-import '../Backend/connectors_API/MailApi.dart';
-import '../Functions/isNotAndroid.dart';
-import '../Widgets/headViewsAndroid.dart';
-import '../Widgets/layoutVariant.dart';
-import '../Widgets/materialButton.dart';
+import 'package:crud_factories/Backend/Global/controllers/Mail.dart';
+import 'package:crud_factories/Backend/connectors_API/MailApi.dart';
+import 'package:crud_factories/Functions/isNotAndroid.dart';
+import 'package:crud_factories/Widgets/headViewsAndroid.dart';
+import 'package:crud_factories/Widgets/materialButton.dart';
 
 
 class newMail extends StatefulWidget {

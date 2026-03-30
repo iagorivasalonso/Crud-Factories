@@ -1,5 +1,4 @@
 import 'package:crud_factories/Alertdialogs/closeApp.dart';
-import 'package:crud_factories/Alertdialogs/confirm.dart';
 import 'package:crud_factories/Alertdialogs/error.dart';
 import 'package:crud_factories/Alertdialogs/errorList.dart';
 import 'package:crud_factories/Alertdialogs/noCategory.dart';
@@ -15,13 +14,9 @@ import 'package:crud_factories/Frontend/adminSectors.dart';
 import 'package:crud_factories/Functions/changesNoSave.dart';
 import 'package:crud_factories/Objects/RouteCSV.dart';
 import 'package:crud_factories/generated/l10n.dart';
-import 'package:crud_factories/helpers/localization_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:menu_bar/menu_bar.dart';
-import '../Alertdialogs/createSector.dart';
-import '../Backend/Global/controllers/Conection.dart';
-import '../Backend/Global/controllers/List.dart';
-import '../Backend/Global/controllers/Router.dart';
+import 'package:crud_factories/Alertdialogs/createSector.dart';
 
 class appDesktop extends StatefulWidget {
   const appDesktop({super.key});

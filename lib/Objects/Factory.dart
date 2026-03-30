@@ -1,4 +1,6 @@
-import '../Frontend/importData.dart';
+
+
+import 'package:crud_factories/Frontend/importData.dart' show BaseEntity;
 
 class Factory extends BaseEntity {
 

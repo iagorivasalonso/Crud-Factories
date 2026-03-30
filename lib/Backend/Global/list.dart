@@ -7,7 +7,6 @@ import 'package:crud_factories/Objects/Mail.dart';
 import 'package:crud_factories/Objects/RouteCSV.dart';
 import 'package:crud_factories/Objects/Sector.dart';
 
-import '../../Frontend/Views/listSends.dart';
 import 'controllers/List.dart';
 import 'controllers/Router.dart';
 

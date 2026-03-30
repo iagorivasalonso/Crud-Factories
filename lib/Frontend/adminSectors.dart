@@ -8,10 +8,10 @@ import 'package:crud_factories/Widgets/tableEditSector.dart';
 import 'package:crud_factories/generated/l10n.dart';
 import 'package:flutter/material.dart';
 
-import '../Alertdialogs/createSector.dart';
-import '../Alertdialogs/error.dart';
-import '../Alertdialogs/warning.dart';
-import '../Widgets/materialButton.dart';
+import 'package:crud_factories/Alertdialogs/createSector.dart';
+import 'package:crud_factories/Alertdialogs/error.dart';
+import 'package:crud_factories/Alertdialogs/warning.dart';
+import 'package:crud_factories/Widgets/materialButton.dart';
 
 
 Future<void> adminSector(BuildContext context) async {

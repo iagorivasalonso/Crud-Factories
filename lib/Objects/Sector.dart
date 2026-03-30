@@ -1,3 +1,4 @@
+
 import '../Frontend/importData.dart';
 
 class Sector extends BaseEntity {

@@ -1,14 +1,15 @@
 
 import 'dart:convert';
 import 'dart:io';
+import 'package:flutter/foundation.dart' hide Factory;
+import 'package:flutter/material.dart';
 import 'package:adaptive_scrollbar/adaptive_scrollbar.dart';
 import 'package:crud_factories/Alertdialogs/confirm.dart';
 import 'package:crud_factories/Alertdialogs/error.dart';
 import 'package:crud_factories/Alertdialogs/warning.dart';
-import 'package:crud_factories/Backend/CSV/exportLines.dart';
 import 'package:crud_factories/Backend/Global/list.dart';
-import 'package:crud_factories/Backend/SQL/modifyLines.dart';
 import 'package:crud_factories/Backend/Global/variables.dart';
+import 'package:crud_factories/Frontend/mail.dart' show sendingMail;
 import 'package:crud_factories/Functions/validatorCamps.dart';
 import 'package:crud_factories/Objects/Factory.dart';
 import 'package:crud_factories/Objects/Mail.dart';
@@ -16,27 +17,20 @@ import 'package:crud_factories/Objects/LineSend.dart';
 import 'package:crud_factories/Widgets/genericRadioGroup.dart';
 import 'package:crud_factories/Widgets/headView.dart';
 import 'package:crud_factories/Widgets/headViewsAndroid.dart';
-import 'package:crud_factories/Widgets/textfieldCalendar.dart';
 import 'package:crud_factories/generated/l10n.dart';
 import 'package:crud_factories/helpers/localization_helper.dart';
-import 'package:flutter/foundation.dart' hide Factory;
-import 'package:flutter/material.dart';
-import 'package:mailer/mailer.dart' show Message, Address, send;
-import 'package:mailer/smtp_server/gmail.dart';
+import 'package:crud_factories/Backend/Global/controllers/Mail.dart';
+import 'package:crud_factories/Functions/isNotAndroid.dart';
+import 'package:crud_factories/Widgets/dropDownButton.dart';
+import 'package:crud_factories/Widgets/Fileattachment.dart';
+import 'package:crud_factories/Widgets/layoutVariant.dart';
+import 'package:crud_factories/Widgets/materialButton.dart';
+import 'package:crud_factories/Widgets/tableElements.dart';
+import 'package:crud_factories/Widgets/textArea.dart';
+import 'package:crud_factories/Widgets/textFieldPassword.dart';
+import 'package:crud_factories/Widgets/textfield.dart';
+import 'package:mailer/mailer.dart' show Message, Address;
 import 'package:mailer/src/entities/attachment.dart';
-
-import '../Backend/Global/controllers/Mail.dart';
-import '../Functions/isNotAndroid.dart';
-import '../Widgets/dropDownButton.dart';
-import '../Widgets/Fileattachment.dart';
-import '../Widgets/layoutVariant.dart';
-import '../Widgets/materialButton.dart';
-import '../Widgets/tableElements.dart';
-import '../Widgets/textArea.dart';
-import '../Widgets/textFieldPassword.dart';
-import '../Widgets/textfield.dart';
-import 'mail.dart';
-
 
 
 

@@ -1,7 +1,6 @@
-
+import 'package:crud_factories/Objects/LineSend.dart' show LineSendState;
 import 'package:fluent_ui/fluent_ui.dart';
 
-import '../../../Objects/LineSend.dart';
 
 class LineSendController {
 

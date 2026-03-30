@@ -1,19 +1,17 @@
-import 'dart:io';
-
 import 'package:crud_factories/Backend/Global/list.dart';
 import 'package:crud_factories/Backend/Global/variables.dart';
 import 'package:crud_factories/Frontend/factory.dart' show newFactory;
 import 'package:crud_factories/Objects/Factory.dart';
 import 'package:crud_factories/generated/l10n.dart' show S;
 import 'package:flutter/material.dart';
-import '../../Alertdialogs/warning.dart';
-import '../../Backend/CSV/exportFactories.dart';
-import '../../Backend/SQL/deleteFactory.dart';
-import '../../Functions/changesNoSave.dart';
-import '../../Functions/isNotAndroid.dart';
-import '../../Widgets/GenericListViewPage.dart';
-import '../../Widgets/factoryCard.dart';
-import '../../helpers/localization_helper.dart';
+import 'package:crud_factories/Alertdialogs/warning.dart';
+import 'package:crud_factories/Backend/CSV/exportFactories.dart';
+import 'package:crud_factories/Backend/SQL/deleteFactory.dart';
+import 'package:crud_factories/Functions/changesNoSave.dart';
+import 'package:crud_factories/Functions/isNotAndroid.dart';
+import 'package:crud_factories/Widgets/GenericListViewPage.dart';
+import 'package:crud_factories/Widgets/factoryCard.dart';
+import 'package:crud_factories/helpers/localization_helper.dart';
 
 
 class listFactories extends StatefulWidget {

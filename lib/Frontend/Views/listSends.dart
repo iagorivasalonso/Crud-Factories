@@ -2,17 +2,17 @@ import 'package:crud_factories/Backend/Global/variables.dart';
 import 'package:crud_factories/Frontend/send.dart';
 import 'package:crud_factories/generated/l10n.dart';
 import 'package:flutter/material.dart';
-import '../../Alertdialogs/warning.dart';
-import '../../Backend/CSV/exportLines.dart';
-import '../../Backend/Global/list.dart';
-import '../../Backend/SQL/deleteLines.dart';
-import '../../Functions/changesNoSave.dart';
-import '../../Functions/isNotAndroid.dart';
-import '../../Functions/manageArrays.dart';
-import '../../Objects/LineSend.dart';
-import '../../Widgets/GenericListViewPage.dart';
-import '../../Widgets/defaultCard.dart';
-import '../../helpers/localization_helper.dart';
+import 'package:crud_factories/Alertdialogs/warning.dart';
+import 'package:crud_factories/Backend/CSV/exportLines.dart';
+import 'package:crud_factories/Backend/Global/list.dart';
+import 'package:crud_factories/Backend/SQL/deleteLines.dart';
+import 'package:crud_factories/Functions/changesNoSave.dart';
+import 'package:crud_factories/Functions/isNotAndroid.dart';
+import 'package:crud_factories/Functions/manageArrays.dart';
+import 'package:crud_factories/Objects/LineSend.dart';
+import 'package:crud_factories/Widgets/GenericListViewPage.dart';
+import 'package:crud_factories/Widgets/defaultCard.dart';
+import 'package:crud_factories/helpers/localization_helper.dart';
 
 class listSends extends StatefulWidget {
 

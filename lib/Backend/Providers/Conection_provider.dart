@@ -8,8 +8,6 @@ import 'package:crud_factories/Objects/Conection.dart';
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter/foundation.dart';
 import 'package:mysql1/mysql1.dart';
-import '../../Alertdialogs/confirm.dart';
-import '../../Alertdialogs/error.dart';
 import '../../generated/l10n.dart';
 import '../connectors_API/Models/Api_response.dart';
 

@@ -1,7 +1,7 @@
 import 'package:crud_factories/generated/l10n.dart';
+import 'package:crud_factories/Alertdialogs/warning.dart';
 import 'package:flutter/src/widgets/framework.dart';
 
-import '../Alertdialogs/warning.dart';
 
 Future<bool> changesNoSave(BuildContext context) async {
 

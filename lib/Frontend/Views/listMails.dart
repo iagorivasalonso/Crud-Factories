@@ -4,16 +4,14 @@ import 'package:crud_factories/Backend/Global/variables.dart';
 import 'package:crud_factories/Backend/SQL/deleteMail.dart';
 import 'package:crud_factories/Frontend/mail.dart';
 import 'package:crud_factories/Widgets/defaultCard.dart';
-import 'package:crud_factories/Widgets/headViewsAndroid.dart' show appBarAndroid;
-import 'package:crud_factories/generated/l10n.dart';
 import 'package:flutter/material.dart';
 
-import '../../Alertdialogs/warning.dart';
-import '../../Functions/changesNoSave.dart';
-import '../../Functions/isNotAndroid.dart';
-import '../../Objects/Mail.dart';
-import '../../Widgets/GenericListViewPage.dart';
-import '../../helpers/localization_helper.dart';
+import 'package:crud_factories/Alertdialogs/warning.dart';
+import 'package:crud_factories/Functions/changesNoSave.dart';
+import 'package:crud_factories/Functions/isNotAndroid.dart';
+import 'package:crud_factories/Objects/Mail.dart';
+import 'package:crud_factories/Widgets/GenericListViewPage.dart';
+import 'package:crud_factories/helpers/localization_helper.dart';
 
 class listMails extends StatefulWidget {
 

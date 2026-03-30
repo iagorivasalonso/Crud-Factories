@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:crud_factories/Alertdialogs/confirm.dart';
 import 'package:crud_factories/Alertdialogs/error.dart';
 import 'package:crud_factories/Backend/Global/controllers/LineSend.dart';
@@ -21,14 +19,14 @@ import 'package:intl/intl.dart';
 import 'package:adaptive_scrollbar/adaptive_scrollbar.dart';
 import 'package:flutter/material.dart';
 import 'package:collection/collection.dart';
-import '../Backend/SQL/modifyLines.dart';
-import '../Functions/isNotAndroid.dart';
-import '../Widgets/CustomDataTable.dart';
-import '../Widgets/dropDownButton.dart' show GenericDropdown;
-import '../Widgets/headView.dart' show headView;
-import '../Widgets/materialButton.dart';
+import 'package:crud_factories/Backend/SQL/modifyLines.dart';
+import 'package:crud_factories/Functions/isNotAndroid.dart';
+import 'package:crud_factories/Widgets/CustomDataTable.dart';
+import 'package:crud_factories/Widgets/dropDownButton.dart' show GenericDropdown;
+import 'package:crud_factories/Widgets/headView.dart' show headView;
+import 'package:crud_factories/Widgets/materialButton.dart';
 
-import '../Widgets/textfieldCalendar.dart';
+import 'package:crud_factories/Widgets/textfieldCalendar.dart';
 
 
 class newSend extends StatefulWidget {

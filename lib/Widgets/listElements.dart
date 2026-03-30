@@ -1,8 +1,8 @@
+import 'package:crud_factories/Objects/Empleoye.dart';
 import 'package:fluent_ui/fluent_ui.dart';
 
-import '../Objects/Empleoye.dart';
-
 class ContactList extends StatefulWidget {
+
   final List<Empleoye> contacsCurrent;
 
   const ContactList({super.key, required this.contacsCurrent});

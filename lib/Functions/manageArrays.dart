@@ -1,4 +1,3 @@
-
 import 'package:crud_factories/Backend/Global/list.dart';
 
 class manageArrays {

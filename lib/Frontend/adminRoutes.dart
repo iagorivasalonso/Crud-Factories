@@ -1,28 +1,17 @@
-
-
-import 'dart:convert';
-import 'dart:io';
-import 'dart:typed_data';
 import 'package:crud_factories/Backend/CSV/loader.dart' show csvLoaderService;
-import 'package:crud_factories/Backend/Global/files.dart';
 import 'package:file_picker/file_picker.dart' show FilePickerResult, FilePicker, FileType;
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import '../Alertdialogs/confirm.dart';
-import '../Alertdialogs/error.dart';
-import '../Alertdialogs/errorList.dart';
-import '../Alertdialogs/warning.dart';
-import '../Backend/CSV/ImportGeneral/CsvProcessorService.dart';
-import '../Backend/CSV/exportRoutes.dart';
-import '../Backend/Global/list.dart';
-import '../Backend/Global/variables.dart';
-import '../Objects/RouteCSV.dart';
-import '../Widgets/CSVPickerField.dart';
-import '../Widgets/genericRadioGroup.dart';
-import '../Widgets/headAlertDialog.dart';
-import '../Widgets/materialButton.dart';
-import '../generated/l10n.dart';
-import '../helpers/localization_helper.dart';
+import 'package:crud_factories/Alertdialogs/error.dart';
+import 'package:crud_factories/Alertdialogs/warning.dart';
+import 'package:crud_factories/Backend/Global/list.dart';
+import 'package:crud_factories/Backend/Global/variables.dart';
+import 'package:crud_factories/Objects/RouteCSV.dart';
+import 'package:crud_factories/Widgets/CSVPickerField.dart';
+import 'package:crud_factories/Widgets/genericRadioGroup.dart';
+import 'package:crud_factories/Widgets/headAlertDialog.dart';
+import 'package:crud_factories/Widgets/materialButton.dart';
+import 'package:crud_factories/generated/l10n.dart';
 
 class Adminroutes {
 
