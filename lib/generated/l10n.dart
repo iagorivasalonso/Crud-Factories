@@ -1011,11 +1011,11 @@ class S {
     );
   }
 
-  /// `No tienes correos electrónicos registrados`
-  String get no_have_registered_mails {
+  /// `No tiene correos registrados ¿desea continuar?`
+  String get if_you_have_no_registered_emails_do_you_wish_to_continue {
     return Intl.message(
-      'No tienes correos electrónicos registrados',
-      name: 'no_have_registered_mails',
+      'No tiene correos registrados ¿desea continuar?',
+      name: 'if_you_have_no_registered_emails_do_you_wish_to_continue',
       desc: '',
       args: [],
     );

@@ -140,7 +140,7 @@
   "database_tables_could_not_be_created": "No se pudieron crear las tablas de la base de datos",
   "could_not_delete_database" : "No se pudo eliminar la base de datos",
   "error_modifying_the_database_name": "Error al modificar el el nombre de la base de datos",
-  "no_have_registered_mails": "No tienes correos electrónicos registrados",
+  "if_you_have_no_registered_emails_do_you_wish_to_continue": "No tiene correos registrados ¿desea continuar?",
   "has_no_server_connected": "No tienes ningún servidor conectado",
   "sqlConnectionNotFound": "No se encontró la conexión",
   "sqlConnectionAlreadyExists": "La conexión ya existe",

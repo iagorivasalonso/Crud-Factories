@@ -253,6 +253,10 @@ class MessageLookup extends MessageLookupByLibrary {
     "he": MessageLookupByLibrary.simpleMessage("el"),
     "he_responded": MessageLookupByLibrary.simpleMessage("Respondió"),
     "host": MessageLookupByLibrary.simpleMessage("Host"),
+    "if_you_have_no_registered_emails_do_you_wish_to_continue":
+        MessageLookupByLibrary.simpleMessage(
+          "No tiene correos registrados ¿desea continuar?",
+        ),
     "import": MessageLookupByLibrary.simpleMessage("Importar"),
     "import_data": MessageLookupByLibrary.simpleMessage("Importar datos"),
     "in_progress": MessageLookupByLibrary.simpleMessage("En curso"),
@@ -326,9 +330,6 @@ class MessageLookup extends MessageLookupByLibrary {
       "No existe el archivo de",
     ),
     "no_has": MessageLookupByLibrary.simpleMessage("No tiene"),
-    "no_have_registered_mails": MessageLookupByLibrary.simpleMessage(
-      "No tienes correos electrónicos registrados",
-    ),
     "not_a_valid_mail": MessageLookupByLibrary.simpleMessage(
       "No es un correo electrónico válido",
     ),
