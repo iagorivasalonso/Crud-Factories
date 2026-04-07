@@ -16,7 +16,6 @@ import 'package:crud_factories/Widgets/textfield.dart';
 import 'package:crud_factories/generated/l10n.dart';
 import 'package:crud_factories/helpers/localization_helper.dart';
 import 'package:intl/intl.dart';
-import 'package:adaptive_scrollbar/adaptive_scrollbar.dart';
 import 'package:flutter/material.dart';
 import 'package:collection/collection.dart';
 import 'package:crud_factories/Backend/SQL/modifyLines.dart';
@@ -49,7 +48,7 @@ class _newSendState extends State<newSend>{
   final ScrollController verticalScroll = ScrollController();
   final ScrollController verticalScrollTable = ScrollController();
 
-  double widthBar = 10.0;
+
   String tView ="";
   Sector? selectedSector = null;
   String selectedItem = LineSendState.prepared.name;
@@ -128,7 +127,7 @@ class _newSendState extends State<newSend>{
     String filter = widget.filter;
 
 
-    DateTime date = DateTime.now();
+
 
     stateSends = [S.of(context).prepared, S.of(context).sent, S.of(context).in_progress, S.of(context).returned, S.of(context).he_responded, S.of(context).pending];
 
@@ -205,184 +204,184 @@ class _newSendState extends State<newSend>{
 
     return !isNotAndroid()
         ? Scaffold(
-      body: AdaptiveScrollbar(
+      body: Scrollbar(
         controller: verticalScroll,
-        width: widthBar,
-        child: AdaptiveScrollbar(
+        thumbVisibility: true,
+        child: Scrollbar(
           controller: horizontalScroll,
-          width: widthBar,
-          position: ScrollbarPosition.bottom,
-          underSpacing: const EdgeInsets.only(bottom: 8),
+          thumbVisibility: true,
+          notificationPredicate: (notification) =>
+          notification.metrics.axis == Axis.horizontal,
           child: SingleChildScrollView(
             controller: verticalScroll,
             scrollDirection: Axis.vertical,
             child: SingleChildScrollView(
               controller: horizontalScroll,
               scrollDirection: Axis.horizontal,
-              child: SizedBox(
-                height: select == -1
-                    ? 600
-                    : 630,
-                width: 1100,
-                child: Align(
-                    alignment: Alignment.topLeft,
-                    child: Padding(
-                      padding: const EdgeInsets.only(left: 30.0, top: 30.0),
-                      child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            headView(
-                                title: tView
-                            ),
-
-                            Container(
-                              width: 500,
-                              child: select == -1
-                                  ? textfieldCalendar(
-                                nameCamp: S.of(context).date,
-                                controllerCamp: controllerSearchSend,
-                              )
-                              : defaultTextfield(
-                                  nameCamp: filter,
-                                  controllerCamp: controllerSearchSend
+              child: Padding(
+                padding: const EdgeInsets.only(left: 30.0, top: 30.0),
+                child: Container(
+                    constraints: BoxConstraints(
+                      minWidth: MediaQuery.of(context).size.width,
+                      minHeight: MediaQuery.of(context).size.height,
+                    ),
+                  child: Align(
+                      alignment: Alignment.topLeft,
+                      child: SizedBox(
+                        width: 980,
+                        child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              headView(
+                                  title: tView
                               ),
-                            ),
-
-
-                              Flexible(
-                                child: Padding(
-                                  padding: const EdgeInsets.only(left: 40.0, top: 20.0),
-                                  child: SizedBox(
-                                    height: 40,
-                                    width: 300,
-                                    child: select == -1
-                                    ? GenericDropdown<Sector>(
-                                      items: sectors,
-                                      camp:S.of(context).sector,
-                                      opDefault: S.of(context).allMale,
-                                      selectedItem: selectedSector,
-                                      hint: sector,
-                                      itemLabel: (sector) => sector.name,
-                                      onChanged: (sectorChoose) =>
-                                          _onSectorChanged(context, sectorChoose, select),
-                                    )
-                                    :allSectors==false  && linesControllers.isNotEmpty
-                                      ? Padding(
-                                        padding: const EdgeInsets.only(top: 20.0),
-                                        child: Text("${S.of(context).companies_of}" " ${linesControllers[0].sector.text}",
-                                            style: const TextStyle(fontWeight: FontWeight.bold)),
-                                      )
-                                      : null,
-                                  ),
+                              Container(
+                                width: 500,
+                                child: select == -1
+                                    ? textfieldCalendar(
+                                  nameCamp: S.of(context).date,
+                                  controllerCamp: controllerSearchSend,
+                                )
+                                : defaultTextfield(
+                                    nameCamp: filter,
+                                    controllerCamp: controllerSearchSend
                                 ),
                               ),
 
-                              Padding(
-                                padding: const EdgeInsets.only(top: 40, left: 90, bottom: 30),
-                                child: select == -1
-                                     ? customDataTable(
-                                       key: ValueKey(linesControllers),
-                                       scrollController: verticalScrollTable,
-                                       columns: allSectors == false
-                                                 ? [S.of(context).company, S.of(context).observations, S.of(context).state, S.of(context).select]
-                                                 : [S.of(context).company, S.of(context).sector ,S.of(context).observations, S.of(context).state, S.of(context).select],
-                                       showSectorColumn: allSectors,
-                                       select: -1,
-                                       states: stateSends,
-                                       sendValues: send,
-                                       selectedItem: null,
-                                       linesControllers: linesControllers,
-                                       mesage: messageResult,
-                                       onStateChanged: (index , value ) {
-                                         setState(() {
-                                           linesControllers[index].state = value as LineSendState;
-                                          // selectedItem = value; //
-                                         });
-                                       },
-                                       onSendChanged: (i, value) {
 
-                                           send[i] = value;
-                                           saveChanges = true;
-                                           setState(() {});
-                                       },
-                                       onSelectedAllChanged: (value) {
-                                            for (int i = 0; i < send.length; i++)
-                                            {
-                                              send[i] = value;
-                                            }
-                                        saveChanges = true;
-                                        setState(() {});
-                                       },
-                                    )
-
-                                    : customDataTable(
-                                    scrollController: verticalScrollTable,
-                                    columns: allSectors == false
-                                      ? [campKey, S.of(context).observations, S.of(context).state]
-                                      : [campKey, S.of(context).sector ,S.of(context).observations, S.of(context).state],
-                                         showSectorColumn: allSectors,
-                                        states: stateSends,
-                                        selectedItem: null,
-                                        linesControllers: linesControllers,
-                                        mesage: messageResult,
-                                        onObservationChanged: (index , String ) {
-                                          if(linesControllers[index].observations.text!=linesSelected[index].observations)
-                                          {
-                                             linesSelected[index].observations=linesControllers[index].observations.text;
-                                             observationModify[index] = true;
-
-                                             setState(() {
-                                               saveChanges = true;
-                                             });
-                                          }
-                                          else
-                                          {
-                                            observationModify[index] = false;
-                                          }
-
-
-                                        },
-                                        onStateChanged: (index , value ) {
-                                          setState(() {
-                                            linesControllers[index].state = value;
-
-                                            if (linesControllers[index].state.name != linesSave[index].state) {
-                                              stateModify[index] = true;
-                                              saveChanges = true;
-                                            } else {
-                                              stateModify[index] = false;
-                                            }
-                                          });
-                                        }, sendValues: [], onSendChanged: (int p1, bool p2) {  }, onSelectedAllChanged: (value) {  },
-                                   ),
-                                  ),
-
-                                  Padding(
-                                      padding: const EdgeInsets.only(left: 750.0),
-                                      child: Row(
-                                        crossAxisAlignment: CrossAxisAlignment.start,
-                                        children: [
-                                          materialButton(
-                                              nameAction: action1,
-                                              function: () =>
-                                              _onSaveSend(context,select,controllerSearchSend,linesControllers)
-                                          ),
-
-                                          Padding(
-                                            padding: const EdgeInsets.only(left: 20.0),
-                                            child: materialButton(
-                                              nameAction: action2,
-                                              function: () => _onResetCamps(context),
-                                              ),
+                                Padding(
+                                    padding: const EdgeInsets.only(left: 40.0, top: 20.0),
+                                    child: SizedBox(
+                                      height: 40,
+                                      width: 300,
+                                      child: select == -1
+                                      ? GenericDropdown<Sector>(
+                                        items: sectors,
+                                        camp:S.of(context).sector,
+                                        opDefault: S.of(context).allMale,
+                                        selectedItem: selectedSector,
+                                        hint: sector,
+                                        itemLabel: (sector) => sector.name,
+                                        onChanged: (sectorChoose) =>
+                                            _onSectorChanged(context, sectorChoose, select),
                                       )
-                                     ],
+                                      :allSectors == false  && linesControllers.isNotEmpty
+                                        ? Padding(
+                                          padding: const EdgeInsets.only(top: 20.0),
+                                          child: Text("${S.of(context).companies_of}" " ${linesControllers[0].sector.text}",
+                                              style: const TextStyle(fontWeight: FontWeight.bold)),
+                                        )
+                                        : SizedBox.shrink(),
+                                    ),
                                   ),
-                                 ),
-                              ]
-                            ),
+
+                                Padding(
+                                  padding: const EdgeInsets.only(top: 40, left: 90, bottom: 30),
+                                  child: select == -1
+                                       ? customDataTable(
+                                         key: ValueKey(linesControllers),
+                                         scrollController: verticalScrollTable,
+                                         columns: allSectors == false
+                                                   ? [S.of(context).company, S.of(context).observations, S.of(context).state, S.of(context).select]
+                                                   : [S.of(context).company, S.of(context).sector ,S.of(context).observations, S.of(context).state, S.of(context).select],
+                                         showSectorColumn: allSectors,
+                                         select: -1,
+                                         states: stateSends,
+                                         sendValues: send,
+                                         selectedItem: null,
+                                         linesControllers: linesControllers,
+                                         mesage: messageResult,
+                                         onStateChanged: (index , value ) {
+                                           setState(() {
+                                             linesControllers[index].state = value as LineSendState;
+                                            // selectedItem = value; //
+                                           });
+                                         },
+                                         onSendChanged: (i, value) {
+
+                                             send[i] = value;
+                                             saveChanges = true;
+                                             setState(() {});
+                                         },
+                                         onSelectedAllChanged: (value) {
+                                              for (int i = 0; i < send.length; i++)
+                                              {
+                                                send[i] = value;
+                                              }
+                                          saveChanges = true;
+                                          setState(() {});
+                                         },
+                                      )
+
+                                      : customDataTable(
+                                      scrollController: verticalScrollTable,
+                                      columns: allSectors == false
+                                        ? [campKey, S.of(context).observations, S.of(context).state]
+                                        : [campKey, S.of(context).sector ,S.of(context).observations, S.of(context).state],
+                                           showSectorColumn: allSectors,
+                                          states: stateSends,
+                                          selectedItem: null,
+                                          linesControllers: linesControllers,
+                                          mesage: messageResult,
+                                          onObservationChanged: (index , String ) {
+                                            if(linesControllers[index].observations.text!=linesSelected[index].observations)
+                                            {
+                                               linesSelected[index].observations=linesControllers[index].observations.text;
+                                               observationModify[index] = true;
+
+                                               setState(() {
+                                                 saveChanges = true;
+                                               });
+                                            }
+                                            else
+                                            {
+                                              observationModify[index] = false;
+                                            }
+
+
+                                          },
+                                          onStateChanged: (index , value ) {
+                                            setState(() {
+                                              linesControllers[index].state = value;
+
+                                              if (linesControllers[index].state.name != linesSave[index].state) {
+                                                stateModify[index] = true;
+                                                saveChanges = true;
+                                              } else {
+                                                stateModify[index] = false;
+                                              }
+                                            });
+                                          }, sendValues: [], onSendChanged: (int p1, bool p2) {  }, onSelectedAllChanged: (value) {  },
+                                     ),
+                                    ),
+
+                                    Padding(
+                                        padding: const EdgeInsets.only(left: 700.0),
+                                        child: Row(
+                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                          children: [
+                                            materialButton(
+                                                nameAction: action1,
+                                                function: () =>
+                                                _onSaveSend(context,select,controllerSearchSend,linesControllers)
+                                            ),
+
+                                            Padding(
+                                              padding: const EdgeInsets.only(left: 20.0),
+                                              child: materialButton(
+                                                nameAction: action2,
+                                                function: () => _onResetCamps(context),
+                                                ),
+                                        )
+                                       ],
+                                    ),
+                                   ),
+                                ]
+                              ),
                       ),
-                    )
-                ),
+                      )
+                  ),
+              ),
               ),
             ),
           ),

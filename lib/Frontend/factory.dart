@@ -1,5 +1,3 @@
-
-import 'package:adaptive_scrollbar/adaptive_scrollbar.dart';
 import 'package:crud_factories/Alertdialogs/confirm.dart';
 import 'package:crud_factories/Alertdialogs/error.dart';
 import 'package:crud_factories/Alertdialogs/warning.dart';
@@ -50,8 +48,6 @@ class _newFactoryState extends State<newFactory> {
 
   final ScrollController horizontalScroll = ScrollController();
   final ScrollController verticalScroll = ScrollController();
-
-  double widthBar = 10.0;
 
   List<Empleoye> contacsCurrent = [];
   List<Empleoye> contacsPreEdit = [];
@@ -216,242 +212,247 @@ class _newFactoryState extends State<newFactory> {
 
     return !isNotAndroid()
        ? Scaffold(
-      body: AdaptiveScrollbar(
+      body: Scrollbar(
         controller: verticalScroll,
-        width: widthBar,
-        child: AdaptiveScrollbar(
+        thumbVisibility: true,
+        notificationPredicate: (notification) =>
+        notification.metrics.axis == Axis.vertical,
+        child: Scrollbar(
           controller: horizontalScroll,
-          width: widthBar,
-          position: ScrollbarPosition.bottom,
-          underSpacing: EdgeInsets.only(bottom: 8),
+          thumbVisibility: true,
           child: SingleChildScrollView(
             controller: verticalScroll,
             scrollDirection: Axis.vertical,
             child: SingleChildScrollView(
               controller: horizontalScroll,
               scrollDirection: Axis.horizontal,
-              child: Container(
-                height: 1005,
-                width: 856,
-                child: Align(
-                  alignment: Alignment.topLeft,
-                  child: Padding(
-                    padding: const EdgeInsets.only(left: 30.0, top: 30.0),
-                    child: Column(
-                      children: [
-                        headView(
-                            title: title1
-                        ),
+              child: Padding(
+                padding: const EdgeInsets.only(left: 30.0, top: 30.0),
+                child: Container(
+                  constraints: BoxConstraints(
+                    minWidth: MediaQuery.of(context).size.width,
+                    minHeight: MediaQuery.of(context).size.height,
+                  ),
+                  child: Align(
+                    alignment: Alignment.topLeft,
+                    child: SizedBox(
+                      width: 856,
+                      child: Column(
+                        children: [
+                          headView(
+                              title: title1
+                          ),
 
-                        defaultTextfield(
-                          nameCamp: S.of(context).name,
-                          controllerCamp: controllers.name,
-                          campOld: select == -1 ? '' : widget.factorySelect!.name,
-                        ),
+                          defaultTextfield(
+                            nameCamp: S.of(context).name,
+                            controllerCamp: controllers.name,
+                            campOld: select == -1 ? '' : widget.factorySelect!.name,
+                          ),
 
-                        Padding(
-                          padding: const EdgeInsets.only(top: 20.0, bottom: 30.0),
-                          child: layoutVariant(
+                          Padding(
+                            padding: const EdgeInsets.only(top: 20.0, bottom: 30.0),
+                            child: layoutVariant(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              items: [
+
+                                Flexible(
+                                  child: SizedBox(
+                                    width: 600,
+                                    child: textfieldCalendar(
+                                      nameCamp: S.of(context).discharge_date,
+                                      campOld: "",
+                                      controllerCamp: controllers.highDate,
+                                    ),
+                                  ),
+                                ),
+                                SizedBox(width: 100),
+                                Flexible(
+                                  child: GenericDropdown<Sector>(
+                                    items: [
+                                      if(select==-1)
+                                      newSectorOption,
+                                      ...sectors
+                                    ],
+                                    camp:S.of(context).sector,
+                                    selectedItem: selectedSector,
+                                    hint:  S.of(context).select,
+                                    itemLabel: (sector) => sector.name,
+                                    onChanged: (sectorChoose) =>
+                                        _onSectorChanged(context, sectorChoose, select),
+
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+
+                          headView(
+                              title: S.of(context).contact
+                          ),
+
+                          layoutVariant(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              items: [
+                                Flexible(
+                                  child: defaultTextfield(
+                                    nameCamp: S.of(context).phone_1,
+                                    controllerCamp: controllers.telephone1,
+                                    campOld: select == -1 ? '' : widget.factorySelect!.thelephones[0],
+                                  ),
+                                ),
+
+                                Flexible(
+                                  child: defaultTextfield(
+                                    nameCamp: S.of(context).phone_2,
+                                    controllerCamp: controllers.telephone2,
+                                    campOld: select == -1 ? '' : widget.factorySelect!.thelephones[1],
+                                  ),
+                                ),
+                              ]
+                          ),
+
+                          layoutVariant(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              items: [
+                                Flexible(
+                                  child: defaultTextfield(
+                                    nameCamp: S.of(context).mail,
+                                    controllerCamp: controllers.mail,
+                                    campOld: select == -1 ? '' : widget.factorySelect!.mail,
+                                  ),
+                                ),
+
+                                Flexible(
+                                  child: defaultTextfield(
+                                    nameCamp: S.of(context).web_page,
+                                    controllerCamp: controllers.web,
+                                    campOld: select == -1 ? '' : widget.factorySelect!.web,
+                                  ),
+                                ),
+                              ]
+                          ),
+
+                          defaultTextfield(
+                            nameCamp: S.of(context).address,
+                            controllerCamp: controllers.address,
+                            campOld: select == -1 ? '' : allAddress,
+                          ),
+                          layoutVariant(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              items: [
+                                Flexible(
+                                  child: defaultTextfield(
+                                    nameCamp: S.of(context).city,
+                                    controllerCamp: controllers.city,
+                                    campOld: select == -1 ? '' : widget.factorySelect!.address['city']
+                                  ),
+                                ),
+
+                                Flexible(
+                                  child: defaultTextfield(
+                                    nameCamp: S.of(context).postal_code,
+                                    controllerCamp: controllers.postalCode,
+                                    campOld: select == -1 ? '' : widget.factorySelect!.address['city'],
+                                  ),
+                                ),
+                              ]
+                          ),
+
+                          Align(
+                            alignment: Alignment.topLeft,
+                            child: SizedBox(
+                              width: 400,
+                              child: defaultTextfield(
+                                nameCamp: S.of(context).province,
+                                controllerCamp: controllers.province,
+                                campOld: select == -1 ? '' : widget.factorySelect!.address['province']!,
+                              ),
+                            ),
+                          ),
+
+
+                          layoutVariant(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             items: [
-
                               Flexible(
+                                child: defaultTextfield(
+                                  nameCamp: S.of(context).employees,
+                                  controllerCamp: controllers.employeeNew,
+                                  campOld: '',
+                                ),
+                              ),
+
+                              Padding(
+                                padding: const EdgeInsets.only(left: 22.0),
                                 child: SizedBox(
-                                  width: 600,
-                                  child: textfieldCalendar(
-                                    nameCamp: S.of(context).discharge_date,
-                                    campOld: "",
-                                    controllerCamp: controllers.highDate,
+                                  width: 50,
+                                  child: Column(
+                                    mainAxisSize: MainAxisSize.min,
+                                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                                    children: [
+                                      Padding(
+                                        padding: const EdgeInsets.only(top: 25.0),
+                                        child: materialButton(
+                                          icon: const Icon(Icons.add),
+                                          function: () => _addEmplepoye(controllers, contacsCurrent, id),
+                                        ),
+                                      ),
+                                      const SizedBox(height: 12),
+                                      materialButton(
+                                        icon: const Icon(Icons.delete),
+                                        function: () => _deleteEmplepoye(
+                                            contacsCurrent,
+                                            idsDelete,
+                                            contactSelect,
+                                            context
+                                        ),
+                                      ),
+                                    ],
                                   ),
                                 ),
                               ),
-                              SizedBox(width: 100),
-                              Flexible(
-                                child: GenericDropdown<Sector>(
-                                  items: [
-                                    if(select==-1)
-                                    newSectorOption,
-                                    ...sectors
-                                  ],
-                                  camp:S.of(context).sector,
-                                  selectedItem: selectedSector,
-                                  hint:  S.of(context).select,
-                                  itemLabel: (sector) => sector.name,
-                                  onChanged: (sectorChoose) =>
-                                      _onSectorChanged(context, sectorChoose, select),
 
-                                ),
+                              Flexible(
+                                child: ContactList(contacsCurrent: contacsCurrent),
                               ),
                             ],
                           ),
-                        ),
-
-                        headView(
-                            title: S.of(context).contact
-                        ),
-
-                        layoutVariant(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            items: [
-                              Flexible(
-                                child: defaultTextfield(
-                                  nameCamp: S.of(context).phone_1,
-                                  controllerCamp: controllers.telephone1,
-                                  campOld: select == -1 ? '' : widget.factorySelect!.thelephones[0],
-                                ),
-                              ),
-
-                              Flexible(
-                                child: defaultTextfield(
-                                  nameCamp: S.of(context).phone_2,
-                                  controllerCamp: controllers.telephone2,
-                                  campOld: select == -1 ? '' : widget.factorySelect!.thelephones[1],
-                                ),
-                              ),
-                            ]
-                        ),
-
-                        layoutVariant(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            items: [
-                              Flexible(
-                                child: defaultTextfield(
-                                  nameCamp: S.of(context).mail,
-                                  controllerCamp: controllers.mail,
-                                  campOld: select == -1 ? '' : widget.factorySelect!.mail,
-                                ),
-                              ),
-
-                              Flexible(
-                                child: defaultTextfield(
-                                  nameCamp: S.of(context).web_page,
-                                  controllerCamp: controllers.web,
-                                  campOld: select == -1 ? '' : widget.factorySelect!.web,
-                                ),
-                              ),
-                            ]
-                        ),
-
-                        defaultTextfield(
-                          nameCamp: S.of(context).address,
-                          controllerCamp: controllers.address,
-                          campOld: select == -1 ? '' : allAddress,
-                        ),
-                        layoutVariant(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            items: [
-                              Flexible(
-                                child: defaultTextfield(
-                                  nameCamp: S.of(context).city,
-                                  controllerCamp: controllers.city,
-                                  campOld: select == -1 ? '' : widget.factorySelect!.address['city']
-                                ),
-                              ),
-
-                              Flexible(
-                                child: defaultTextfield(
-                                  nameCamp: S.of(context).postal_code,
-                                  controllerCamp: controllers.postalCode,
-                                  campOld: select == -1 ? '' : widget.factorySelect!.address['city'],
-                                ),
-                              ),
-                            ]
-                        ),
-
-                        Align(
-                          alignment: Alignment.topLeft,
-                          child: SizedBox(
-                            width: 400,
-                            child: defaultTextfield(
-                              nameCamp: S.of(context).province,
-                              controllerCamp: controllers.province,
-                              campOld: select == -1 ? '' : widget.factorySelect!.address['province']!,
-                            ),
-                          ),
-                        ),
-
-
-                        layoutVariant(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          items: [
-                            Flexible(
-                              child: defaultTextfield(
-                                nameCamp: S.of(context).employees,
-                                controllerCamp: controllers.employeeNew,
-                                campOld: '',
-                              ),
-                            ),
-
-                            Padding(
-                              padding: const EdgeInsets.only(left: 22.0),
-                              child: SizedBox(
-                                width: 50,
-                                child: Column(
-                                  mainAxisSize: MainAxisSize.min,
-                                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                          Padding(
+                                padding: const EdgeInsets.only(left: 600.0, top:100.0),
+                                child: Row(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    Padding(
-                                      padding: const EdgeInsets.only(top: 25.0),
-                                      child: materialButton(
-                                        icon: const Icon(Icons.add),
-                                        function: () => _addEmplepoye(controllers, contacsCurrent, id),
-                                      ),
-                                    ),
-                                    const SizedBox(height: 12),
                                     materialButton(
-                                      icon: const Icon(Icons.delete),
-                                      function: () => _deleteEmplepoye(
-                                          contacsCurrent,
-                                          idsDelete,
-                                          contactSelect,
-                                          context
+                                        nameAction: action,
+                                        function: () =>
+                                            _onSaveFactory(
+                                                context,
+                                                select,
+                                                controllers,
+                                                contacsPreEdit,
+                                                contacsCurrent,
+                                                idsDelete
+                                            )
+                                    ),
+
+                                    Padding(
+                                      padding: const EdgeInsets.only(left: 20.0),
+                                      child: materialButton(
+                                        nameAction: action2,
+                                        function: () =>
+                                            _onResetFactory(
+                                                context,
+                                                select,
+                                                controllers,
+                                                contacsCurrent
+                                            ),
                                       ),
                                     ),
                                   ],
-                                ),
-                              ),
                             ),
-
-                            Flexible(
-                              child: ContactList(contacsCurrent: contacsCurrent),
-                            ),
-                          ],
-                        ),
-                        Padding(
-                              padding: const EdgeInsets.only(left: 600.0, top:100.0),
-                              child: Row(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  materialButton(
-                                      nameAction: action,
-                                      function: () =>
-                                          _onSaveFactory(
-                                              context,
-                                              select,
-                                              controllers,
-                                              contacsPreEdit,
-                                              contacsCurrent,
-                                              idsDelete
-                                          )
-                                  ),
-
-                                  Padding(
-                                    padding: const EdgeInsets.only(left: 20.0),
-                                    child: materialButton(
-                                      nameAction: action2,
-                                      function: () =>
-                                          _onResetFactory(
-                                              context,
-                                              select,
-                                              controllers,
-                                              contacsCurrent
-                                          ),
-                                    ),
-                                  ),
-                                ],
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
                   ),
                 ),

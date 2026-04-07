@@ -89,15 +89,23 @@ class customDataTable extends StatelessWidget {
                     if(select == -1)
                     Row(
                       children: [
-                        Text(S.of(context).select_all),
-                        Checkbox(
-                          value: sendValues.every((v) => v), // true si todos están seleccionados
-                          onChanged: (value) {
-                            if (value != null) {
-                              onSelectedAllChanged(value);
-                            }
-                          },
+                        SizedBox(
+                          width: 230,
+                          child: Row(
+                            children: [
+                              Text(S.of(context).select_all),
+                              Checkbox(
+                                value: sendValues.every((v) => v), // true si todos están seleccionados
+                                onChanged: (value) {
+                                  if (value != null) {
+                                    onSelectedAllChanged(value);
+                                  }
+                                },
+                              ),
+                            ],
+                          ),
                         ),
+
                       ],
                     ),
 

@@ -3,7 +3,6 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:flutter/foundation.dart' hide Factory;
 import 'package:flutter/material.dart';
-import 'package:adaptive_scrollbar/adaptive_scrollbar.dart';
 import 'package:crud_factories/Alertdialogs/confirm.dart';
 import 'package:crud_factories/Alertdialogs/error.dart';
 import 'package:crud_factories/Alertdialogs/warning.dart';
@@ -49,11 +48,6 @@ class _sendMailState extends State<sendMail> {
   final ScrollController horizontalScroll = ScrollController();
   final ScrollController verticalScroll = ScrollController();
   final ScrollController verticalScrollTable = ScrollController();
-
-
-
-  double widthBar = 10.0;
-
 
   List <String> columns = [];
   List <String> columnsTable = [];
@@ -147,208 +141,211 @@ class _sendMailState extends State<sendMail> {
 
     return !isNotAndroid()
         ? Scaffold(
-      body: AdaptiveScrollbar(
+      body: Scrollbar(
         controller: verticalScroll,
-        width: widthBar,
-        child: AdaptiveScrollbar(
+        thumbVisibility: true,
+        child: Scrollbar(
           controller: horizontalScroll,
-          width: widthBar,
-          position: ScrollbarPosition.bottom,
-          underSpacing: EdgeInsets.only(bottom: 8),
+          thumbVisibility: true,
+          notificationPredicate: (notification) =>
+          notification.metrics.axis == Axis.horizontal,
           child: SingleChildScrollView(
             controller: verticalScroll,
             scrollDirection: Axis.vertical,
             child: SingleChildScrollView(
               controller: horizontalScroll,
               scrollDirection: Axis.horizontal,
-              child: Container(
-                height: selectedOption == S.of(context).a_recipient
-                    ? 835
-                    : 1105,
-                width: 880,
-                child: Align(
-                  alignment: Alignment.topLeft,
-                  child: Padding(
-                    padding: const EdgeInsets.only(top: 30.0, left: 30),
-                    child: Column(
-                        children: [
-                          headView(
-                              title: S.of(context).sending_mails
-                          ),
+              child: Padding(
+                padding: const EdgeInsets.only(left: 30.0, top: 30.0),
+                child: Container(
+                  constraints: BoxConstraints(
+                    minWidth: MediaQuery.of(context).size.width,
+                    minHeight: MediaQuery.of(context).size.height,
+                  ),
+                  child: Align(
+                    alignment: Alignment.topLeft,
+                    child: SizedBox(
+                      width: 880,
+                      child: Column(
+                          children: [
+                            headView(
+                                title: S.of(context).sending_mails
+                            ),
 
-                          Padding(
-                            padding: otherMail == false
-                                     ? const EdgeInsets.only(left: 30.0)
-                                     : const EdgeInsets.only(left: 3.0),
-                            child: layoutVariant(
-                              items: [
-                                Flexible(
-                                  flex: 4,
-                                  child: otherMail == false
-                                      ? GenericDropdown<Mail>(
-                                        items: mails,
-                                        camp: S.of(context).sender,
-                                        selectedItem: selectedMail,
-                                        hint: mails[0].address,
-                                        itemLabel: (Mail) => Mail.address,
-                                        onChanged: (mailChoose) => _onMailChanged(mailChoose),
-                                      )
-                                      : Row(
-                                          children: [
-                                            Expanded(
-                                              child: defaultTextfield(
-                                                nameCamp: S.of(context).mail,
-                                                controllerCamp: controllers.mail,
+                            Padding(
+                              padding: otherMail == false
+                                       ? const EdgeInsets.only(left: 30.0)
+                                       : const EdgeInsets.only(left: 3.0),
+                              child: layoutVariant(
+                                items: [
+                                  Flexible(
+                                    flex: 4,
+                                    child: otherMail == false
+                                        ? GenericDropdown<Mail>(
+                                          items: mails,
+                                          camp: S.of(context).sender,
+                                          selectedItem: selectedMail,
+                                          hint: mails[0].address,
+                                          itemLabel: (Mail) => Mail.address,
+                                          onChanged: (mailChoose) => _onMailChanged(mailChoose),
+                                        )
+                                        : Row(
+                                            children: [
+                                              Expanded(
+                                                child: defaultTextfield(
+                                                  nameCamp: S.of(context).mail,
+                                                  controllerCamp: controllers.mail,
+                                                ),
                                               ),
-                                            ),
-                                            const SizedBox(width: 16),
-                                            Expanded(
-                                              child: textfieldPassword(
-                                                nameCamp: S.of(context).password,
-                                                controllerCamp: controllers.password,
+                                              const SizedBox(width: 16),
+                                              Expanded(
+                                                child: textfieldPassword(
+                                                  nameCamp: S.of(context).password,
+                                                  controllerCamp: controllers.password,
+                                                ),
                                               ),
-                                            ),
-                                          ],
-                                  ),
-                                ),
-
-                                if(mails.isNotEmpty)
-                                Flexible(
-                                  flex: 1,
-                                  child: Padding(
-                                    padding: otherMail == false
-                                                 ? const EdgeInsets.only(top: 10)
-                                                 :  const EdgeInsets.only(top: 20),
-                                    child: materialButton(
-                                      nameAction: otherMail == false
-                                          ? S.of(context).orther
-                                          : S.of(context).back,
-                                      function: () async {
-                                        setState(() {
-                                          otherMail = !otherMail;
-                                        });
-                                      },
+                                            ],
                                     ),
                                   ),
-                                )
-                              ],
-                            ),
-                          ),
 
-                          if(allLines.isNotEmpty)
-                          Padding(
-                            padding: const EdgeInsets.only(left: 30.0),
-                            child: Align(
-                              alignment: Alignment.topLeft,
-                              child: Padding(
-                                      padding: const EdgeInsets.only(right:150.0, bottom: 10.0),
-                                      child: GenericRadioGroup<String>(
-                                        items: [S.of(context).a_recipient,S.of(context).multiple_recipients],
-                                        camp: S.of(context).select,
-                                        selectedItem: selectedOption,
-                                        label: (item) => item,
-                                        onChanged: (value) {
-                                          if (value != null) {
-                                            setState(() {
-                                              selectedOption = value;
-                                            });
-                                          }
+                                  if(mails.isNotEmpty)
+                                  Flexible(
+                                    flex: 1,
+                                    child: Padding(
+                                      padding: otherMail == false
+                                                   ? const EdgeInsets.only(top: 10)
+                                                   :  const EdgeInsets.only(top: 20),
+                                      child: materialButton(
+                                        nameAction: otherMail == false
+                                            ? S.of(context).orther
+                                            : S.of(context).back,
+                                        function: () async {
+                                          setState(() {
+                                            otherMail = !otherMail;
+                                          });
                                         },
-                                        direction: Axis.horizontal,
                                       ),
                                     ),
-                            ),
-                          ),
-
-
-                          Padding(
-                            padding: const EdgeInsets.all(0),
-                            child: selectedOption == S.of(context).a_recipient
-                            ? Align(
-                              alignment: Alignment.topLeft,
-                              child: SizedBox(
-                                width: 600,
-                                child: defaultTextfield(
-                                  nameCamp: S.of(context).a_recipient,
-                                  controllerCamp: controllers.mailTo!,
-                                ),
-                              ),
-                            )
-                            : Column(
-                              children: [
-                               Align(
-                                 alignment: Alignment.topLeft,
-                                 child: SizedBox(
-                                      width: 420,
-                                      child: GenericDropdown<String>(
-                                        items: dateSends,
-                                        camp: S.of(context).multiple_recipients,
-                                        selectedItem: selectedSend,
-                                        hint: S.of(context).select,
-                                        itemLabel: (dateSend) => dateSend,
-                                        onChanged: _onDateSelect,
-                                      ),
-                                    ),
-                               ),
-
-                                tableElements(
-                                  columnsTable: [S.of(context).company, S.of(context).mail],
-                                  contentTable: selectedFactories,
-                                  controllerCamp: TextEditingController(),
-                                  rowBuilder:  (factory) => [factory.name, factory.mail],
-                                ),
-
-                              ],
-                            ),
-                          ),
-
-                          Align(
-                              alignment: Alignment.topLeft,
-                              child: Fileattachment(
-                                camp: controllers.subject!,
-                                multiple: true,
-                                attachments: controllers.attachments,
-                                allowedExtensions: ['pdf', 'csv', 'jpg'], // extensiones permitidas
-                                onFilesChanged: (files) {
-                                  setState(() {
-                                    controllers.attachments.addAll(files);
-                                  });
-                                },
+                                  )
+                                ],
                               ),
                             ),
 
-                          Padding(
-                            padding: const EdgeInsets.only(left: 30.0,top: 30.0),
-                            child: textArea(
-                                nameCamp: S.of(context).message,
-                                campOld: '',
-                                controllerCamp: controllers.message!
+                            if(allLines.isNotEmpty)
+                            Padding(
+                              padding: const EdgeInsets.only(left: 30.0),
+                              child: Align(
+                                alignment: Alignment.topLeft,
+                                child: Padding(
+                                        padding: const EdgeInsets.only(right:150.0, bottom: 10.0),
+                                        child: GenericRadioGroup<String>(
+                                          items: [S.of(context).a_recipient,S.of(context).multiple_recipients],
+                                          camp: S.of(context).select,
+                                          selectedItem: selectedOption,
+                                          label: (item) => item,
+                                          onChanged: (value) {
+                                            if (value != null) {
+                                              setState(() {
+                                                selectedOption = value;
+                                              });
+                                            }
+                                          },
+                                          direction: Axis.horizontal,
+                                        ),
+                                      ),
+                              ),
                             ),
-                          ),
 
-                          Padding(
-                            padding: const EdgeInsets.only(left: 650.0,top:  20.0),
-                            child: Row(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                materialButton(
-                                    nameAction: S.of(context).send,
-                                    function: () => _onSendMail(context,controllers,otherMail,selectedOption,selectedFactories),
 
-                                ),
-
-                                Padding(
-                                  padding: const EdgeInsets.only(left: 20.0),
-                                  child: materialButton(
-                                      nameAction: S.of(context).reboot,
-                                      function: () => _onResetMail(context,controllers,setState,selectedOption),
-
+                            Padding(
+                              padding: const EdgeInsets.all(0),
+                              child: selectedOption == S.of(context).a_recipient
+                              ? Align(
+                                alignment: Alignment.topLeft,
+                                child: SizedBox(
+                                  width: 600,
+                                  child: defaultTextfield(
+                                    nameCamp: S.of(context).a_recipient,
+                                    controllerCamp: controllers.mailTo!,
                                   ),
                                 ),
-                              ],
+                              )
+                              : Column(
+                                children: [
+                                 Align(
+                                   alignment: Alignment.topLeft,
+                                   child: SizedBox(
+                                        width: 420,
+                                        child: GenericDropdown<String>(
+                                          items: dateSends,
+                                          camp: S.of(context).multiple_recipients,
+                                          selectedItem: selectedSend,
+                                          hint: S.of(context).select,
+                                          itemLabel: (dateSend) => dateSend,
+                                          onChanged: _onDateSelect,
+                                        ),
+                                      ),
+                                 ),
+
+                                  tableElements(
+                                    columnsTable: [S.of(context).company, S.of(context).mail],
+                                    contentTable: selectedFactories,
+                                    controllerCamp: TextEditingController(),
+                                    rowBuilder:  (factory) => [factory.name, factory.mail],
+                                  ),
+
+                                ],
+                              ),
                             ),
-                          ),
-                        ]),
+
+                            Align(
+                                alignment: Alignment.topLeft,
+                                child: Fileattachment(
+                                  camp: controllers.subject!,
+                                  multiple: true,
+                                  attachments: controllers.attachments,
+                                  allowedExtensions: ['pdf', 'csv', 'jpg'], // extensiones permitidas
+                                  onFilesChanged: (files) {
+                                    setState(() {
+                                      controllers.attachments.addAll(files);
+                                    });
+                                  },
+                                ),
+                              ),
+
+                            Padding(
+                              padding: const EdgeInsets.only(left: 30.0,top: 30.0),
+                              child: textArea(
+                                  nameCamp: S.of(context).message,
+                                  campOld: '',
+                                  controllerCamp: controllers.message!
+                              ),
+                            ),
+
+                            Padding(
+                              padding: const EdgeInsets.only(left: 650.0,top:  20.0),
+                              child: Row(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  materialButton(
+                                      nameAction: S.of(context).send,
+                                      function: () => _onSendMail(context,controllers,otherMail,selectedOption,selectedFactories),
+
+                                  ),
+
+                                  Padding(
+                                    padding: const EdgeInsets.only(left: 20.0),
+                                    child: materialButton(
+                                        nameAction: S.of(context).reboot,
+                                        function: () => _onResetMail(context,controllers,setState,selectedOption),
+
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ]),
+                    ),
                   ),
                 ),
               ),

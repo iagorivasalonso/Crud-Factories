@@ -1,4 +1,3 @@
-import 'package:adaptive_scrollbar/adaptive_scrollbar.dart';
 import 'package:crud_factories/Alertdialogs/confirmDelete.dart';
 import 'package:crud_factories/Alertdialogs/error.dart';
 import 'package:crud_factories/Alertdialogs/warning.dart';
@@ -42,8 +41,6 @@ class _conectionState extends State<conection> {
   final ScrollController horizontalScroll = ScrollController();
   final ScrollController verticalScroll = ScrollController();
 
-  double widthBar = 10.0;
-
   bool conexChangued = false;
 
   @override
@@ -70,174 +67,179 @@ class _conectionState extends State<conection> {
 
     return !isNotAndroid()
         ? Scaffold(
-      body: AdaptiveScrollbar(
+      body: Scrollbar(
         controller: verticalScroll,
-        width: widthBar,
-        child: AdaptiveScrollbar(
+        thumbVisibility: true,
+        child: Scrollbar(
           controller: horizontalScroll,
-          width: widthBar,
-          position: ScrollbarPosition.bottom,
-          underSpacing: const EdgeInsets.only(bottom: 8),
+          thumbVisibility: true,
+          notificationPredicate: (notification) =>
+          notification.metrics.axis == Axis.horizontal,
           child: SingleChildScrollView(
             controller: verticalScroll,
             scrollDirection: Axis.vertical,
             child: SingleChildScrollView(
               controller: horizontalScroll,
               scrollDirection: Axis.horizontal,
-              child: SizedBox(
-                height: 478,
-                width: 850,
-                child: Align(
-                  alignment: Alignment.topLeft,
-                  child: Padding(
-                    padding: const EdgeInsets.only(left: 30.0, top: 30.0),
-                    child: Column(
-                      children: [
-                        headView(
-                            title: S
-                                .of(context)
-                                .database_connection
-                        ),
+              child: Padding(
+                padding: const EdgeInsets.only(left: 30.0, top: 30.0),
+                child: Container(
+                  constraints: BoxConstraints(
+                    minWidth: MediaQuery.of(context).size.width,
+                    minHeight: MediaQuery.of(context).size.height,
+                  ),
+                  child: Align(
+                    alignment: Alignment.topLeft,
+                    child: SizedBox(
+                      width: 850,
+                      child: Column(
+                        children: [
+                          headView(
+                              title: S
+                                  .of(context)
+                                  .database_connection
+                          ),
 
-                        layoutVariant(
-                            items:
-                            [
-                              Padding(
-                                padding: const EdgeInsets.only(
-                                    left: 30.0, top: 30.0),
-                                child: SizedBox(
-                                  width: 700,
-                                  height: 40,
-                                  child: GenericDropdown<Conection>(
-                                    items: conections,
-                                    camp: S
-                                        .of(context)
-                                        .database_connection,
-                                    selectedItem: provider.selected,
-                                    hint: S
-                                        .of(context)
-                                        .newFemale,
-                                    itemLabel: (Conection) =>
-                                    Conection.database,
-                                    onChanged: (conectionChoose) =>provider.status != ConnectionStatus.connected
-                                       ? _onConectionChanged(conectionChoose,provider)
-                                       : null,
+                          layoutVariant(
+                              items:
+                              [
+                                Padding(
+                                  padding: const EdgeInsets.only(
+                                      left: 30.0, top: 30.0),
+                                  child: SizedBox(
+                                    width: 700,
+                                    height: 40,
+                                    child: GenericDropdown<Conection>(
+                                      items: conections,
+                                      camp: S
+                                          .of(context)
+                                          .database_connection,
+                                      selectedItem: provider.selected,
+                                      hint: S
+                                          .of(context)
+                                          .newFemale,
+                                      itemLabel: (Conection) =>
+                                      Conection.database,
+                                      onChanged: (conectionChoose) =>provider.status != ConnectionStatus.connected
+                                         ? _onConectionChanged(conectionChoose,provider)
+                                         : null,
+                                    ),
                                   ),
                                 ),
-                              ),
 
 
-                              Padding(
-                                padding: const EdgeInsets.only(top: 30.0),
-                                child: materialButton(
-                                  nameAction: provider.actionEditLabel(context),
-                                  function: ()  {
-                                       final ok = provider.toggleEditMode();
-                                       if(!ok)
-                                       {
-                                           String message = S.of(context).not_connected_to_any_database;
-                                           error(context, message);
-                                       }
-                                   }
+                                Padding(
+                                  padding: const EdgeInsets.only(top: 30.0),
+                                  child: materialButton(
+                                    nameAction: provider.actionEditLabel(context),
+                                    function: ()  {
+                                         final ok = provider.toggleEditMode();
+                                         if(!ok)
+                                         {
+                                             String message = S.of(context).not_connected_to_any_database;
+                                             error(context, message);
+                                         }
+                                     }
+                                  ),
                                 ),
-                              ),
-                        ]),
+                          ]),
 
-                        Padding(
-                          padding: const EdgeInsets.only(top: 20.0),
-                          child: Align(
-                            alignment: Alignment.topLeft,
-                            child: SizedBox(
-                              width: 350,
-                              child: defaultTextfield(
-                                nameCamp: S
-                                    .of(context)
-                                    .data_base,
-                                controllerCamp: controlerConex.namebd,
-                                campEdit: editCamps,
+                          Padding(
+                            padding: const EdgeInsets.only(top: 20.0),
+                            child: Align(
+                              alignment: Alignment.topLeft,
+                              child: SizedBox(
+                                width: 350,
+                                child: defaultTextfield(
+                                  nameCamp: S
+                                      .of(context)
+                                      .data_base,
+                                  controllerCamp: controlerConex.namebd,
+                                  campEdit: editCamps,
+                                ),
                               ),
                             ),
                           ),
-                        ),
 
-                        Padding(
-                          padding: const EdgeInsets.only(top: 20.0),
-                          child: layoutVariant(
-                              items: [
-                                Expanded(
-                                  child: defaultTextfield(
-                                    nameCamp: S
-                                        .of(context)
-                                        .host,
-                                    controllerCamp: controlerConex.hostbd,
-                                    campEdit: editCamps,
+                          Padding(
+                            padding: const EdgeInsets.only(top: 20.0),
+                            child: layoutVariant(
+                                items: [
+                                  Expanded(
+                                    child: defaultTextfield(
+                                      nameCamp: S
+                                          .of(context)
+                                          .host,
+                                      controllerCamp: controlerConex.hostbd,
+                                      campEdit: editCamps,
+                                    ),
                                   ),
-                                ),
-                                Expanded(
-                                  child:
-                                  defaultTextfield(
-                                    nameCamp: S
-                                        .of(context)
-                                        .port,
-                                    controllerCamp: controlerConex.portbd,
-                                    campEdit: editCamps,
+                                  Expanded(
+                                    child:
+                                    defaultTextfield(
+                                      nameCamp: S
+                                          .of(context)
+                                          .port,
+                                      controllerCamp: controlerConex.portbd,
+                                      campEdit: editCamps,
+                                    ),
                                   ),
-                                ),
-                              ]
+                                ]
+                            ),
                           ),
-                        ),
 
-                        Padding(
-                          padding: const EdgeInsets.only(top: 20.0),
-                          child: layoutVariant(
-                              items: [
-                                Expanded(
-                                  child: defaultTextfield(
-                                    nameCamp: S
-                                        .of(context)
-                                        .user,
-                                    controllerCamp: controlerConex.userbd,
-                                    campEdit: editCamps,
+                          Padding(
+                            padding: const EdgeInsets.only(top: 20.0),
+                            child: layoutVariant(
+                                items: [
+                                  Expanded(
+                                    child: defaultTextfield(
+                                      nameCamp: S
+                                          .of(context)
+                                          .user,
+                                      controllerCamp: controlerConex.userbd,
+                                      campEdit: editCamps,
+                                    ),
+
                                   ),
-
-                                ),
-                                Expanded(
-                                  child:
-                                  textfieldPassword(
-                                    nameCamp: S
-                                        .of(context)
-                                        .password,
-                                    controllerCamp: controlerConex.passbd,
-                                    campEdit: editCamps,
+                                  Expanded(
+                                    child:
+                                    textfieldPassword(
+                                      nameCamp: S
+                                          .of(context)
+                                          .password,
+                                      controllerCamp: controlerConex.passbd,
+                                      campEdit: editCamps,
+                                    ),
                                   ),
-                                ),
-                              ]),
-                        ),
-
-                        Padding(
-                          padding: const EdgeInsets.only(
-                              left: 620.0, top: 80.0),
-                          child: layoutVariant(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            items: [
-                              materialButton(
-                                nameAction: provider.action1Label(context),
-                                function: () => _handleAction1(context,provider)
-
-                              ),
-
-                              Padding(
-                                padding: const EdgeInsets.only(left: 20.0),
-                                child: materialButton(
-                                  nameAction: provider.action2Label(context),
-                                  function: () => _handleAction2(context,provider)
-
-                                ),
-                              ),
-                            ],
+                                ]),
                           ),
-                        ),
-                      ],
+
+                          Padding(
+                            padding: const EdgeInsets.only(
+                                left: 620.0, top: 80.0),
+                            child: layoutVariant(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              items: [
+                                materialButton(
+                                  nameAction: provider.action1Label(context),
+                                  function: () => _handleAction1(context,provider)
+
+                                ),
+
+                                Padding(
+                                  padding: const EdgeInsets.only(left: 20.0),
+                                  child: materialButton(
+                                    nameAction: provider.action2Label(context),
+                                    function: () => _handleAction2(context,provider)
+
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                 ),

@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'package:adaptive_scrollbar/adaptive_scrollbar.dart';
 import 'package:crud_factories/Alertdialogs/confirm.dart';
 import 'package:crud_factories/Alertdialogs/error.dart';
 import 'package:crud_factories/Alertdialogs/warning.dart';
@@ -42,7 +41,6 @@ class _newMailState extends State<newMail> {
   final ScrollController horizontalScroll = ScrollController();
   final ScrollController verticalScroll = ScrollController();
 
-  double widthBar = 10.0;
 
   late final MailController controllers;
 
@@ -94,27 +92,29 @@ class _newMailState extends State<newMail> {
 
     return !isNotAndroid()
         ? Scaffold(
-      body: AdaptiveScrollbar(
+      body: Scrollbar(
         controller: verticalScroll,
-        width: widthBar,
-        child: AdaptiveScrollbar(
+        thumbVisibility: true,
+        child: Scrollbar(
           controller: horizontalScroll,
-          width: widthBar,
-          position: ScrollbarPosition.bottom,
-          underSpacing: const EdgeInsets.only(bottom: 8),
+          thumbVisibility: true,
+          notificationPredicate: (notification) =>
+          notification.metrics.axis == Axis.horizontal,
           child: SingleChildScrollView(
             controller: verticalScroll,
             scrollDirection: Axis.vertical,
             child: SingleChildScrollView(
               controller: horizontalScroll,
               scrollDirection: Axis.horizontal,
-              child: SizedBox(
-                height: 475,
-                width: 890,
-                child: Align(
-                  alignment: Alignment.topLeft,
-                  child: Padding(
-                    padding: const EdgeInsets.only(left: 30.0, top: 30.0),
+              child: Padding(
+                padding: const EdgeInsets.only(left: 30.0, top: 30.0),
+                child: Container(
+                  constraints: BoxConstraints(
+                    minWidth: MediaQuery.of(context).size.width,
+                    minHeight: MediaQuery.of(context).size.height,
+                  ),
+                  child: Align(
+                    alignment: Alignment.topLeft,
                     child: SizedBox(
                       width: 700,
                       child: Column(

@@ -1,6 +1,5 @@
 import 'dart:convert';
 import 'dart:io';
-import 'package:adaptive_scrollbar/adaptive_scrollbar.dart';
 import 'package:crud_factories/Alertdialogs/confirm.dart';
 import 'package:crud_factories/Alertdialogs/noFind.dart' show noFind;
 import 'package:crud_factories/Backend/CSV/exportEmpleoyes.dart';
@@ -41,7 +40,6 @@ class _newImportState extends State<newImport> {
   final ScrollController horizontalScroll = ScrollController();
   final ScrollController verticalScroll = ScrollController();
 
-  double widthBar = 10.0;
   int idEndList = 0;
 
 
@@ -63,86 +61,85 @@ class _newImportState extends State<newImport> {
 
     BuildContext context = isNotAndroid() ? context0 :  context1;
 
-
-    return  !isNotAndroid()
+    return !isNotAndroid()
         ? Scaffold(
-           body: AdaptiveScrollbar(
+      body: Scrollbar(
         controller: verticalScroll,
-        width: widthBar,
-        child: AdaptiveScrollbar(
+        thumbVisibility: true,
+        child: Scrollbar(
           controller: horizontalScroll,
-          width: widthBar,
-          position: ScrollbarPosition.bottom,
-          underSpacing: EdgeInsets.only(bottom: 8),
+          thumbVisibility: true,
+          notificationPredicate: (notification) =>
+          notification.metrics.axis == Axis.horizontal,
           child: SingleChildScrollView(
             controller: verticalScroll,
             scrollDirection: Axis.vertical,
             child: SingleChildScrollView(
               controller: horizontalScroll,
               scrollDirection: Axis.horizontal,
-              child: SizedBox(
-                width: 770,
-                height: 470,
-                child: Align(
-                  alignment: Alignment.topLeft,
-                  child:  Padding(
-                    padding: const EdgeInsets.only(left: 30.0,top: 30.0),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        headView(
-                            title: S.of(context).import_data
-                        ),
+              child: Padding(
+                padding: const EdgeInsets.only(left: 30.0, top: 30.0),
+                child: Container(
+                  constraints: BoxConstraints(
+                    minWidth: MediaQuery.of(context).size.width,
+                    minHeight: MediaQuery.of(context).size.height,
+                  ),
+                  child: Align(
+                    alignment: Alignment.topLeft,
+                    child: SizedBox(
+                      width: 680,
+                      child: Column(
+                        children: [
+                          headView(
+                              title: S.of(context).import_data
+                          ),
 
-                        Padding(
-                          padding: const EdgeInsets.only(top:10.0, bottom: 30.0),
-                          child: Row(
+                          Padding(
+                            padding: const EdgeInsets.only(top:10.0,bottom: 30.0),
+                            child: Row(
                               children: [
-                                 Text(S.of(context).Import_data_in_CSV_format)
+                                Text(S.of(context).Import_data_in_CSV_format)
                               ] ,
+                            ),
                           ),
-                        ),
 
-                        SizedBox(
-                          width: 700,
-                          child: CSVPickerField(
-                              controller: controllerImportPicker,
-                              campName: S.of(context).route,
-                              actionName: S.of(context).examine,
-                              function: () => _pickFile(context, controllerImportPicker)
-                          ),
-                        ),
-
-                       Padding(
-                          padding: const EdgeInsets.only(left: 500.0, top: 260.0),
-                          child: Row(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Flexible(
-                                child: materialButton(
-                                    nameAction: S.of(context).import_data,
-                                    function: () => _onSaveList(context)
+                              SizedBox(
+                                width: 700,
+                                child: CSVPickerField(
+                                    controller: controllerImportPicker,
+                                    campName: S.of(context).route,
+                                    actionName: S.of(context).examine,
+                                    function: () => _pickFile(context, controllerImportPicker)
                                 ),
                               ),
 
-                              Flexible(
-                                child: Padding(
-                                  padding: const EdgeInsets.only(left: 20.0),
-                                  child: materialButton(
-                                    nameAction:S.of(context).delete,
-                                    function: () async{
-                                      setState(() {
-                                        controllerImportPicker.text = "";
-                                      });
-                                    },
+                             Padding(
+                                padding: const EdgeInsets.only(left: 450.0, top: 260.0),
+                                child: Row(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    materialButton(
+                                        nameAction: S.of(context).import_data,
+                                        function: () => _onSaveList(context)
+                                    ),
 
-                                  ),
+                                   Padding(
+                                        padding: const EdgeInsets.only(left: 20.0),
+                                        child: materialButton(
+                                          nameAction:S.of(context).delete,
+                                          function: () async{
+                                            setState(() {
+                                              controllerImportPicker.text = "";
+                                            });
+                                          },
+
+                                        ),
+                                      ),
+                                  ],
                                 ),
                               ),
-                            ],
-                          ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
                   ),
                 ),
@@ -153,9 +150,10 @@ class _newImportState extends State<newImport> {
       ),
     )
         : Scaffold(
-            appBar: appBarAndroid(context, name: S.of(context).import_data),
-            body: Text("conection"),
-       );
+      appBar: appBarAndroid(context, name: S.of(context).sending_mails),
+      body: Text("creart email"),
+    );
+
   }
 
 }
