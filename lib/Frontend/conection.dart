@@ -51,18 +51,13 @@ class _conectionState extends State<conection> {
     // TODO: implement initState
     super.initState();
 
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final provider = context.read<ConectionProvider>();
+      _restore(provider);
+    });
 
   }
 
-
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-
-    final provider = context.read<ConectionProvider>();
-    _restore(provider);
-
-  }
 
   @override
   Widget build(BuildContext context0) {
@@ -70,18 +65,8 @@ class _conectionState extends State<conection> {
 
     final provider = context.watch<ConectionProvider>();
 
-    bool editCamps = true;
-
-    if(provider.status != ConnectionStatus.connected)
-    {
-      editCamps = true;
-    }
-    else
-    {
-      editCamps = provider.viewMode == ConnectionViewMode.editing
-               ? true
-               : false;
-    }
+    final editCamps = provider.status != ConnectionStatus.connected ||
+        provider.viewMode == ConnectionViewMode.editing;
 
     return !isNotAndroid()
         ? Scaffold(
