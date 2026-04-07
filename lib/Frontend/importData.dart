@@ -192,10 +192,6 @@ Future<void> _pickFile(BuildContext context, TextEditingController controllerDat
   // Actualizamos el TextField con el nombre del archivo
   controllerDatePicker.text = platformFile.name;
 
-  // Forzamos rebuild para que se vea reflejado en la UI
-  if (context.mounted) {
-   // setState(() {});
-  }
 
 }
 
@@ -210,7 +206,7 @@ Future<void> _onSaveList(BuildContext context) async {
   results.add(await _importLines(context));        // luego lines
   results.add(await _importMails(context));        // luego mails
   results.add(await _importConnections(context));  // finalmente connections
-print(results.toString());
+
   _showImportSumary(context, results);
 }
 
@@ -238,7 +234,7 @@ Future<ImportResult> _importSectors(BuildContext context) async {
 
   if (listController.sectorsNew.isEmpty) return result;
 
-  print('Sectors new: ${listController.sectorsNew}');
+
   result.inserted = await processImport(
     newList: listController.sectorsNew,
     existingList: sectors,
@@ -473,25 +469,40 @@ Future<int> processImport<T extends BaseEntity>({
 }) async {
 
   int count = 0;
+  int maxId = existingList.isNotEmpty
+      ? existingList.map((e) => int.parse(e.id)).reduce((a, b) => a > b ? a : b)
+      : 0;
+
+  List<T> toInsert = [];
+  List<T> toUpdate = [];
+
 
   for(final iten in newList) {
-    bool exists = existingList.any((x) => getKey(x) == getKey(iten));
+    final index = existingList.indexWhere((x) => getKey(x) == getKey(iten));
 
-    if (!exists)
-    {
-      final maxId = existingList.isNotEmpty
-          ? existingList.map((e) => int.parse(e.id)).reduce((a, b) => a > b ? a : b)
-          : 0;
+        if (index == -1)
+        {
+          maxId++;
+          setId(iten, maxId.toString());
 
-      setId(iten, (maxId + 1).toString());
+          existingList.add(iten);
+          toInsert.add(iten);
+          count++;
+        }
+        else
+        {
+          final existing = existingList[index];
 
-      existingList.add(iten);
-      count++;
-    }
+          setId(iten, existing.id);
+
+          existingList[index] = iten;
+          toUpdate.add(iten);
+          count++;
+        }
   }
     if (count > 0) {
       if (conn != null && sqlExport != null) {
-        await sqlExport(newList);
+        await sqlExport([...toInsert, ...toUpdate]);
       } else {
         await csvExport(existingList);
       }
