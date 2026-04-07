@@ -49,15 +49,14 @@ class _newImportState extends State<newImport> {
 
   @override
   void initState (){
+    super.initState();
 
      if(idEndList == 0)
      {
-       for(int i = 0; i < allFactories.length; i++)
-       {
-         idEndList = int.parse(allFactories[i].id);
-       }
+       idEndList = allFactories
+           .map((f) => int.parse(f.id))
+           .reduce((a, b) => a > b ? a : b);
      }
-
   }
   @override
   Widget build(BuildContext context0) {
