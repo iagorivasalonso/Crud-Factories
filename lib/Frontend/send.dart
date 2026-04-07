@@ -127,10 +127,7 @@ class _newSendState extends State<newSend>{
     String filter = widget.filter;
 
 
-
-
     stateSends = [S.of(context).prepared, S.of(context).sent, S.of(context).in_progress, S.of(context).returned, S.of(context).he_responded, S.of(context).pending];
-
 
 
     if(select == -1)

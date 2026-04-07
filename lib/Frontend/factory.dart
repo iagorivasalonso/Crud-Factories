@@ -108,7 +108,6 @@ class _newFactoryState extends State<newFactory> {
   @override
   Widget build(BuildContext context0) {
 
-
     BuildContext context = isNotAndroid() ? context0 :  context1;
     int select = widget.select;
     sectorsString.clear();
