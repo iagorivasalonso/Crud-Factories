@@ -5,8 +5,8 @@ import 'package:show_platform_date_picker/show_platform_date_picker.dart' show S
 
 Padding textfieldCalendar({
   required String nameCamp,
-  String? campOld,
   required TextEditingController controllerCamp,
+  String? campOld
 }){
   final ShowPlatformDatePicker platformDatePicker = ShowPlatformDatePicker(buildContext: context1);
 
