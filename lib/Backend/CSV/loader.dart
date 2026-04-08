@@ -148,7 +148,6 @@ class csvLoaderService {
     if(await file.exists())
             return userPath;
 
-    print(assetPath);
     return assetPath;
 
   }
