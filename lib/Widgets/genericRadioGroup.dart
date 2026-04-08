@@ -1,4 +1,4 @@
-import 'package:fluent_ui/fluent_ui.dart';
+import 'package:flutter/material.dart';
 
 class GenericRadioGroup<T> extends StatelessWidget {
   final List<T> items;
@@ -24,13 +24,18 @@ class GenericRadioGroup<T> extends StatelessWidget {
       return Padding(
         padding: direction == Axis.vertical
             ? const EdgeInsets.only(bottom: 8.0)
-            : const EdgeInsets.only(right: 50.0),
-        child: RadioButton(
-          checked: selectedItem == item,
-          onChanged: (bool? value) {
-            if (value == true) onChanged(item);
-          },
-          content: Text(label(item)),
+            : const EdgeInsets.only(right: 20.0),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Radio<T>(
+              value: item,
+              groupValue: selectedItem,
+              onChanged: onChanged,
+            ),
+            const SizedBox(width: 4),
+            Text(label(item)),
+          ],
         ),
       );
     }).toList();
