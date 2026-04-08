@@ -130,9 +130,9 @@ class _appDesktopState extends State<appDesktop> {
 
     context1 = context;
 
-    double wItem= 80;
-    double wItemMax= 120;
-    Color colorBar =Colors.white;
+    double wItem = 80;
+    double wItemMax = 120;
+    Color colorBar = Colors.white;
 
     List<BarButton> _menuBarButtons() {
       return [
