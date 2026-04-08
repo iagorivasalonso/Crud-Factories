@@ -267,7 +267,7 @@ Future<void> _onSaveMail(BuildContext context, int select,MailController control
                 {
                   mails = mails + current;
                 }
-
+                saveChanges = false;
                 if (result == false)
                 {
                   action = S.of(context).the_user_or_password_are_incorrect;
@@ -278,6 +278,7 @@ Future<void> _onSaveMail(BuildContext context, int select,MailController control
                   action = S.of(context).the_connection_test_was_sent_successfully;
                   confirm(context, action);
                 }
+
                   bool errorExp = await csvExportatorMails(mails);
 
                   if(errorExp != false)

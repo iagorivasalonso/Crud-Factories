@@ -478,6 +478,7 @@ Future<void> _onSendMail(BuildContext context,MailController controllers, bool o
           : [];
 
       List<String> mailSend = await sendingMail(context,controllers,message);
+      saveChanges = false;
 
       if(mailSend.isNotEmpty)
       {
@@ -502,6 +503,8 @@ Future<void> _onResetMail(BuildContext context,MailController controllers, Funct
   controllers.subject!.text ="";
   controllers.message!.text="";
   controllers.attachments.clear();
+
+  saveChanges = false;
 
   setState(() {
     selectedOption = S.of(context).a_recipient;

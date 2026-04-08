@@ -537,7 +537,7 @@ class _newSendState extends State<newSend>{
         confirm(context, LocalizationHelper.cantLinesModify(context, linesModify));
       }
 
-
+    saveChanges = false;
     if (BaseDateSelected.isNotEmpty)
     {
       if(select==-1)

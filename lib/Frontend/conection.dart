@@ -268,7 +268,7 @@ class _conectionState extends State<conection> {
           ?  _actionConnect(context, provider)
           :  _editConex(context, provider);
 
-
+     saveChanges = false;
   }
 
   void _handleAction2(BuildContext context,ConectionProvider provider) {
@@ -278,6 +278,7 @@ class _conectionState extends State<conection> {
       ? _restore(provider)
       : _deleteConex(context, provider);
 
+    saveChanges = false;
   }
 
 
