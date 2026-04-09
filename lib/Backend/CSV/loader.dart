@@ -113,42 +113,44 @@ class csvLoaderService {
 
   static Future<String> resolveRoutesPath (BuildContext context, [String? newRoutePath]) async {
 
-    final String userPath = newRoutePath!;
+      final String userPath = newRoutePath ?? '';
+      final String assetPath = 'assets/dataDefault/routes.csv';
 
-    final String assetPath = 'assets/dataDefault/routes.csv';
 
-    if(newRoutePath.isNotEmpty)
-    {
-          final file = File(newRoutePath);
-          if (await file.exists())
-          {
-            return newRoutePath;
+      if (kIsWeb) {
+        bool errData = await defaultData(context);
+
+        if (errData == true) {
+          useDataDefault = true;
+          return assetPath;
+        } else {
+          return 'fail';
+        }
+      }
+
+
+      if (userPath.isNotEmpty) {
+        final file = File(userPath);
+
+        if (await file.exists()) {
+          return userPath;
+        } else {
+          bool errData = await defaultData(context);
+
+          if (errData == true) {
+            useDataDefault = true;
+            return assetPath;
+          } else {
+            return 'fail';
           }
-          else
-          {
-             bool errData = await defaultData(context);
+        }
+      }
 
-             if(errData==true)
-             {
-               useDataDefault = true;
-               return assetPath;
-             }
-             else
-             {
-               return 'fail';
-             }
-          }
-    }
+      final file = File(userPath);
 
-    if(kIsWeb)
-        return assetPath;
+      if (await file.exists()) return userPath;
 
-    final file = File(userPath);
-
-    if(await file.exists())
-            return userPath;
-
-    return assetPath;
+      return assetPath;
 
   }
   static Future<List<RouteCSV>> _createData(String path) async {
