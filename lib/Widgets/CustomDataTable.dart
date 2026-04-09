@@ -17,6 +17,7 @@ class customDataTable extends StatelessWidget {
   final String? selectedItem;
   final List<bool> sendValues;
   final List<LineSendController> linesControllers;
+  final bool showFactoryInsteadOfDate;
   final String mesage;
   final void Function(int, String)? onObservationChanged;
   final void Function(int, LineSendState) onStateChanged;
@@ -28,6 +29,7 @@ class customDataTable extends StatelessWidget {
     required this.scrollController,
     required this.columns,
     required this.showSectorColumn,
+    this.showFactoryInsteadOfDate = false,
     this.select,
     required this.states,
     this.selectedItem,
@@ -38,6 +40,7 @@ class customDataTable extends StatelessWidget {
     required this.onStateChanged,
     required this.onSendChanged,
     required this.onSelectedAllChanged,
+
   });
 
 

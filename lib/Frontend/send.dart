@@ -73,7 +73,7 @@ class _newSendState extends State<newSend>{
 
   late List<LineSendController> linesControllers;
 
-
+  bool _initialized = false;
   @override
   void initState() {
     super.initState();
@@ -92,19 +92,47 @@ class _newSendState extends State<newSend>{
   @override
   void didUpdateWidget(covariant newSend oldWidget) {
     super.didUpdateWidget(oldWidget);
-    if (oldWidget.select != widget.select && widget.select != -1) {
-      _initEditData();
 
-      loadFactoriesFromModel(context, factoriesSector, linesControllers);
+    if (oldWidget.select != widget.select ||
+        oldWidget.selectCamp != widget.selectCamp ||
+        oldWidget.filter != widget.filter) {
+
+      if (widget.select == -1) {
+        selectedSector = null;
+        factoriesSector = allFactories;
+
+        generateControllers();
+        controllerSearchSend.text =
+            DateFormat('dd-MM-yyyy').format(DateTime.now());
+
+        // ✅ después de generar
+        loadFactoriesFromModel(context, factoriesSector, linesControllers);
+
+      } else {
+        _initEditData();
+      }
     }
-
   }
   void _initEditData() {
-    linesSelected = lineSector.map((e) => e.copyWith()).toList();
 
-    setState(() {
+    if(widget.filter=="Fecha")
+    {
+        linesSelected = lineSector.where((e) {
+          return e.date == widget.selectCamp;  // si tienes sector seleccionado
+        }).toList();
+    }
+    else
+    {
+      linesSelected = lineSector.where((e) {
+        return e.factory == widget.selectCamp;  // si tienes sector seleccionado
+      }).toList();
+    }
+
+    print(linesSelected);
+    controllerSearchSend.text = widget.selectCamp;
+
       loadLinesFromModel(linesSelected);
-    });
+
 
   }
 
@@ -123,7 +151,6 @@ class _newSendState extends State<newSend>{
 
     BuildContext context = isNotAndroid() ? context0 :  context1;
     int select = widget.select;
-    String selectCamp = widget.selectCamp;
     String filter = widget.filter;
 
 
@@ -137,10 +164,6 @@ class _newSendState extends State<newSend>{
       action1 = S.of(context).newMale;
       action2 = S.of(context).reboot;
 
-          if(controllerSearchSend.text.isEmpty)
-          {
-            controllerSearchSend.text = DateFormat('dd-MM-yyyy').format( DateTime.now());
-          }
 
            if(selectedSector==null)
            {
@@ -156,7 +179,6 @@ class _newSendState extends State<newSend>{
 
 
 
-      loadFactoriesFromModel(context, factoriesSector, linesControllers);
     }
     else if(saveChanges == false)
     {
@@ -178,9 +200,7 @@ class _newSendState extends State<newSend>{
         messageResult = LocalizationHelper.sendsFactory(context, cant);
       }
 
-      controllerSearchSend.text = filter=="Fecha"
-           ? LineSend.showFormatDate(selectCamp, context)
-           : selectCamp;
+
     }
 
 
@@ -424,7 +444,7 @@ class _newSendState extends State<newSend>{
             final sectorSelected = sectors.firstWhereOrNull(
                   (s) => s.id == line.sector,
             );
-            print(line);
+
             return LineSendController(
               date: TextEditingController(text: line.date),
               factory: TextEditingController(text: line.factory),
@@ -520,74 +540,70 @@ class _newSendState extends State<newSend>{
       else {
 
 
-        for (int i = 0; i < linesSelected.length; i++) {
-
-          linesSelected[i].observations = linesControllers[i].observations.text;
-          linesSelected[i].state=linesControllers[i].state.name;
-        }
-
-
-
         int linesModify = 0;
+
         for (int i = 0; i < linesSelected.length; i++) {
-          if (stateModify[i] || observationModify[i]) {
+
+          final original = linesSave[i];
+
+          final newObservations = linesControllers[i].observations.text;
+          final newState = linesControllers[i].state.name;
+
+          if (original.observations != newObservations ||
+              original.state != newState) {
             linesModify++;
           }
+
+          // 👉 aplicar cambios
+          linesSelected[i].observations = newObservations;
+          linesSelected[i].state = newState;
         }
+
+        confirm(
+          context,
+          LocalizationHelper.cantLinesModify(context, linesModify),
+        );
+
+        // 👉 sincronizar con allLines
+        final selectedMap = {
+          for (var line in linesSelected) line.id: line
+        };
+
+        allLines = allLines.map((line) {
+          return selectedMap[line.id] ?? line;
+        }).toList();
         confirm(context, LocalizationHelper.cantLinesModify(context, linesModify));
       }
 
     saveChanges = false;
-    if (BaseDateSelected.isNotEmpty)
-    {
-      if(select==-1)
-      {
-         await sqlCreateLine(current, context);
+
+    if (BaseDateSelected.isNotEmpty) {
+
+      if (select == -1) {
+        await sqlCreateLine(current, context);
+      } else {
+        await sqlModifyLines(linesSelected);
       }
-      else
-      {
-         await sqlModifyLines(linesSelected);
-      }
-    }
-    else
-    {
-      allLines = allLines + current;
+
+    } else {
 
       bool errorExp = await csvExportatorLines(allLines);
 
-      String array = S.of(context).shipments;
-
-      if(errorExp == false)
-      {
-        if(select == -1)
-        {
-          await _onResetCamps(context);
-        }
-        else
-        {
-          final selectedMap  = {for (var line in linesSelected) line.id :line};
-
-          for(int i = 0; i < allLines.length; i++)
-          {
-            final current = allLines[i];
-
-            if(selectedMap.containsKey(current.id))
-            {
-              allLines[i] = selectedMap[current.id]!;
-            }
-          }
-        }
-        await csvExportatorLines(allLines);
-      }
-      else
-      {
-        String action = LocalizationHelper.no_file(context, array);
+      if (errorExp) {
+        String action = LocalizationHelper.no_file(
+          context,
+          S.of(context).shipments,
+        );
         error(context, action);
+        return;
       }
-      allLinesCreated = 0;
-      saveChanges = false;
+
+      if (select == -1) {
+        await _onResetCamps(context);
+      }
     }
   }
+
 
   Future<void> _onResetCamps(BuildContext context) async {
 
