@@ -122,7 +122,7 @@ class _newFactoryState extends State<newFactory> {
     if (select == -1) {
       title = S.of(context).newFemale;
       action = S.of(context).create;
-      action2 = S.of(context).delete;
+      action2 = S.of(context).reboot;
 
       if (allFactories.isNotEmpty) {
         String idLast = allFactories[allFactories

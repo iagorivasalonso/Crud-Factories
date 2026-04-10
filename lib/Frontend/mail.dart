@@ -76,7 +76,7 @@ class _newMailState extends State<newMail> {
     if (select == -1) {
       title = S.of(context).newMale;
       action = S.of(context).create;
-      action2 = S.of(context).delete;
+      action2 = S.of(context).reboot;
     }
     else {
       title = S.of(context).edit;
