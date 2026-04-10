@@ -13,6 +13,7 @@ import 'package:crud_factories/Objects/LineSend.dart';
 import 'package:crud_factories/Widgets/GenericListViewPage.dart';
 import 'package:crud_factories/Widgets/defaultCard.dart';
 import 'package:crud_factories/helpers/localization_helper.dart';
+import 'package:intl/intl.dart';
 
 class listSends extends StatefulWidget {
 
@@ -138,29 +139,73 @@ class _listSendsState extends State<listSends> {
   }
 
 
-  Future<void> _onFilter(String filter, String search) async {
+  Future<void> _onFilter(BuildContext context,String filter, String search) async {
     selectedFilter = filter;
     final lowerSearch = search.toLowerCase();
 
-    final listFiltered = chargueList(context1, selectedFilter, widget.list, widget.dateSends)
-        .where((element) => element.description.toLowerCase().contains(lowerSearch))
-        .toList();
+    final baseList = chargueList(
+      context1,
+      selectedFilter,
+      widget.list,
+      widget.dateSends,
+    );
+
+    bool matchesDate(String dateStr) {
+      try {
+        final date = DateFormat('dd-MM-yyyy').parse(dateStr);
+
+        final dayNoZero = DateFormat("d", "es_ES").format(date);   // 1
+        final dayWithZero = DateFormat("dd", "es_ES").format(date); // 01
+        final month = DateFormat("MMMM", "es_ES").format(date);
+        final year = DateFormat("yyyy", "es_ES").format(date);
+
+        final formatted1 = "$dayNoZero de $month de $year".toLowerCase();
+        final formatted2 = "$dayWithZero de $month de $year".toLowerCase();
+
+        return formatted1.contains(lowerSearch) ||
+            formatted2.contains(lowerSearch) ||
+            year.contains(lowerSearch) ||
+            dateStr.toLowerCase().contains(lowerSearch);
+
+      } catch (e) {
+        return false;
+      }
+    }
+
+    final listFiltered = baseList.where((element) {
+      final title = element.title.toLowerCase();
+      final desc = element.description.toLowerCase();
+
+      if (selectedFilter == S.of(context1).date) {
+        return matchesDate(element.description) ||
+            title.contains(lowerSearch);
+      }
+
+      if (selectedFilter == S.of(context1).company) {
+        return title.contains(lowerSearch) ||
+            desc.contains(lowerSearch);
+      }
+
+      return title.contains(lowerSearch) ||
+          desc.contains(lowerSearch);
+    }).toList();
 
     setState(() {
       selectCard = 0;
       select = 0;
 
-      if (selectedFilter == S.of(context1).date) {
-        selectCamp = resultSend[select].description;
-      }
-      if (selectedFilter == S.of(context1).company) {
-        selectCamp = resultSend[select].title;
-      }
+      resultSend = listFiltered;
 
+      if (listFiltered.isNotEmpty) {
+        if (selectedFilter == S.of(context1).date) {
+          selectCamp = listFiltered[0].description;
+        } else {
+          selectCamp = listFiltered[0].title;
+        }
+      }
     });
-    displayLinesNotifier.value = List.from(listFiltered);
 
-
+    displayLinesNotifier.value = listFiltered;
   }
   Future<void>_onTap(int index, BuildContext context)  async {
    setState(() {
@@ -215,10 +260,12 @@ class _listSendsState extends State<listSends> {
                 filters: filterOptions,
                 itemBuilder: (send, index) => defaultCard(
                   title: send.title,
-                  description: send.description,
+                  description:selectedFilter == S.of(context).date
+                    ? LineSend.showFormatDate(send.description, context)
+                    : send.description ,
                   color: selectCard == index ? Colors.white : Colors.grey,
                 ),
-                onFilter: _onFilter,
+                onFilter:  (item, query) => _onFilter(context,item,query),
                 onDelete: (line) => _onDelete(context, line),
                 onTap: (send, index) => _onTap(index, context),
                 onSelect: (_) {},
@@ -249,7 +296,7 @@ List<cardSend> chargueList (BuildContext context, String filter, List<LineSend> 
            allCards.add(
              cardSend(
                 title: '${S.of(context).shipment} ${i + 1}',
-                description: LineSend.showFormatDate(dateSends[i], context),
+                description: dateSends[i],
               ),
            );
         }
