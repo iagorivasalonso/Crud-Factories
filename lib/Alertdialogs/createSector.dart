@@ -29,7 +29,7 @@ Future<bool> createSector(BuildContext  context, String campOld) async {
 
   bool? sector = await showDialog(
       context: context,
-      builder: (BuildContext context) {
+      builder: (BuildContext dialogContext) {
         return Dialog(
             shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(0)),
             child: ConstrainedBox(
@@ -64,7 +64,7 @@ Future<bool> createSector(BuildContext  context, String campOld) async {
                          flex: 1,
                          child: materialButton(
                            nameAction: action,
-                           function: () => saveSector(context,controllerSector,campOld),
+                           function: () => saveSector(dialogContext, dialogContext,controllerSector,campOld),
                          ),
                        ),
                      ],
@@ -77,7 +77,7 @@ Future<bool> createSector(BuildContext  context, String campOld) async {
 
 }
 
-Future<void> saveSector(BuildContext context,TextEditingController controllerSector, String campOld) async {
+Future<void> saveSector(BuildContext context,  BuildContext dialogContext,TextEditingController controllerSector, String campOld) async {
 
   final text = controllerSector.text
       .trim()
@@ -114,6 +114,7 @@ Future<void> saveSector(BuildContext context,TextEditingController controllerSec
       currentSector.add(newSector);
 
       String action = LocalizationHelper.manage_array(context, S.of(context).sector, S.of(context).saved, S.of(context).theFemale);
+      Navigator.pop(dialogContext, true);
       await confirm(context, action);
 
     }
@@ -130,7 +131,7 @@ Future<void> saveSector(BuildContext context,TextEditingController controllerSec
 
       sector.name = text;
       currentSector.add(sector);
-
+      Navigator.of(context).pop(true);
       await confirm(context, S.of(context).sector_edited_correctly);
     }
 
@@ -144,6 +145,6 @@ Future<void> saveSector(BuildContext context,TextEditingController controllerSec
     } else {
       await csvExportatorSectors(sectors);
     }
+   return;
 
-    Navigator.of(context).pop(true);
 }

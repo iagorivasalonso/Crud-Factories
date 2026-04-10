@@ -126,7 +126,7 @@ Future <void> _onDeleteSector(BuildContext context, int index, void Function(voi
     await csvExportatorSectors(sectors);
   }
 
-  if (sectors.isEmpty) {
+  if (sectors.isEmpty && Navigator.canPop(context)) {
     Navigator.of(context).pop(false);
   }
 }
