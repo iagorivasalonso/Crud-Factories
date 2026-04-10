@@ -498,7 +498,6 @@ class _newFactoryState extends State<newFactory> {
     setState(() {
       saveChanges = true;
       String idNew = "";
-      contacsCurrent.clear();
 
       if (empleoyes.isNotEmpty) {
         String idLast = empleoyes.last.id;
