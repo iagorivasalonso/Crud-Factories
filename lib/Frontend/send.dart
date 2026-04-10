@@ -64,7 +64,7 @@ class _newSendState extends State<newSend>{
   String action2 = "";
   int allLinesCreated = 0;
   bool allSectors = false;
-
+  String sectorName= "";
   List<String> sectorsString = [];
   List<bool> send = [];
 
@@ -132,6 +132,20 @@ class _newSendState extends State<newSend>{
     controllerSearchSend.text = widget.selectCamp;
 
       loadLinesFromModel(linesSelected);
+
+
+
+    if (linesControllers.isNotEmpty) {
+      final firstSector = linesControllers.first.sector.text;
+
+      allSectors = linesControllers.any(
+            (e) => e.sector.text != firstSector,
+      );
+    }
+     sectorName = linesControllers.isNotEmpty
+        ? linesControllers.first.sector.text
+        : "";
+
 
 
   }
@@ -204,20 +218,6 @@ class _newSendState extends State<newSend>{
     }
 
 
-    allSectors = false;
-    String? currentSector;
-
-    for (int i = 0; i < lineSector.length; i++) {
-      if (i == 0) {
-        currentSector = lineSector[i].sector;
-      } else {
-        if (currentSector != lineSector[i].sector) {
-          allSectors = true;
-          break;
-        }
-      }
-    }
-
 
     return !isNotAndroid()
         ? Scaffold(
@@ -282,11 +282,12 @@ class _newSendState extends State<newSend>{
                                         onChanged: (sectorChoose) =>
                                             _onSectorChanged(context, sectorChoose, select),
                                       )
-                                      :allSectors == false  && linesControllers.isNotEmpty
+                                      :!allSectors && linesControllers.isNotEmpty
                                         ? Padding(
                                           padding: const EdgeInsets.only(top: 20.0),
-                                          child: Text("${S.of(context).companies_of}" " ${linesControllers[0].sector.text}",
-                                              style: const TextStyle(fontWeight: FontWeight.bold)),
+                                          child: Text(sectorName.isNotEmpty?"${S.of(context).companies_of} $sectorName":"",
+                                            style: const TextStyle(fontWeight: FontWeight.bold),
+                                          )
                                         )
                                         : SizedBox.shrink(),
                                     ),
