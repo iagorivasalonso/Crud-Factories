@@ -50,7 +50,9 @@ class _newSendState extends State<newSend>{
 
 
   String tView ="";
-  Sector? selectedSector = null;
+  final Sector allSectorOption = Sector(id: "-1", name: "Todos");
+  late Sector? selectedSector = allSectorOption;
+
   String selectedItem = LineSendState.prepared.name;
   List<LineSend> linesSelected = [];
   List<LineSend> linesSave = [];
@@ -63,7 +65,7 @@ class _newSendState extends State<newSend>{
   String action1 = "";
   String action2 = "";
   int allLinesCreated = 0;
-  bool allSectors = false;
+  bool allSectors = true;
   String sectorName= "";
   List<String> sectorsString = [];
   List<bool> send = [];
@@ -73,7 +75,6 @@ class _newSendState extends State<newSend>{
 
   late List<LineSendController> linesControllers;
 
-  bool _initialized = false;
   @override
   void initState() {
     super.initState();
@@ -81,7 +82,7 @@ class _newSendState extends State<newSend>{
     linesControllers = [];
 
     if (widget.select == -1) {
-      selectedSector = null;
+      selectedSector = allSectorOption;
       factoriesSector = allFactories;
       generateControllers();
 
@@ -98,7 +99,7 @@ class _newSendState extends State<newSend>{
         oldWidget.filter != widget.filter) {
 
       if (widget.select == -1) {
-        selectedSector = null;
+        selectedSector = allSectorOption;
         factoriesSector = allFactories;
 
         generateControllers();
@@ -167,7 +168,7 @@ class _newSendState extends State<newSend>{
     int select = widget.select;
     String filter = widget.filter;
 
-
+    final items = [allSectorOption, ...sectors];
     stateSends = [S.of(context).prepared, S.of(context).sent, S.of(context).in_progress, S.of(context).returned, S.of(context).he_responded, S.of(context).pending];
 
 
@@ -179,18 +180,13 @@ class _newSendState extends State<newSend>{
       action2 = S.of(context).reboot;
 
 
-           if(selectedSector==null)
-           {
-               factoriesSector = allFactories;
-           }
-           else
-           {
-
-                     factoriesSector = allFactories.where((factory){
-                       return factory.sector == selectedSector!.id;
-                     }).toList();
-           }
-
+      if (selectedSector == null || selectedSector!.id == "-1") {
+        factoriesSector = allFactories;
+      } else {
+        factoriesSector = allFactories
+            .where((factory) => factory.sector == selectedSector!.id)
+            .toList();
+      }
 
 
     }
@@ -273,7 +269,7 @@ class _newSendState extends State<newSend>{
                                       width: 300,
                                       child: select == -1
                                       ? GenericDropdown<Sector>(
-                                        items: sectors,
+                                        items: items,
                                         camp:S.of(context).sector,
                                         opDefault: S.of(context).allMale,
                                         selectedItem: selectedSector,
@@ -464,20 +460,21 @@ class _newSendState extends State<newSend>{
           stateModify = List.filled(lines.length, false);
   }
 
-  Future<void> _onSectorChanged(BuildContext context,Sector? sectorChoose,int select) async {
-
-    if (sectorChoose != null) {
-      selectedSector = sectorChoose;
-      allSectors = false;
-      factoriesSector = allFactories.where((f) => f.sector == sectorChoose.id).toList();
-    } else {
-      selectedSector = null;
+  void _onSectorChanged(BuildContext context, Sector? sectorChoose, int select) {
+    if (sectorChoose == null || sectorChoose.id == -1) {
+      selectedSector = allSectorOption;
       allSectors = true;
       factoriesSector = allFactories;
+    } else {
+      selectedSector = sectorChoose;
+      allSectors = false;
+      factoriesSector = allFactories
+          .where((f) => f.sector == sectorChoose.id)
+          .toList();
     }
+
     generateControllers();
     _updateMessageResult(context);
-   
     setState(() {});
   }
 
@@ -612,7 +609,7 @@ class _newSendState extends State<newSend>{
 
       if (select == -1)
       {
-          selectedSector = null;
+          selectedSector = allSectorOption;
           factoriesSector = allFactories;
 
           controllerSearchSend.text = DateFormat('dd-MM-yyyy').format(DateTime.now());
@@ -642,7 +639,14 @@ class _newSendState extends State<newSend>{
 
     final oldControllers = linesControllers;
 
+
+
     linesControllers = List.generate(factoriesSector.length, (index) {
+
+      final sectorObj = sectors.firstWhereOrNull(
+            (s) => s.id == factoriesSector[index].sector,
+      );
+
       return LineSendController(
         date: TextEditingController(
           text: DateFormat('dd-MM-yyyy').format(DateTime.now()),
@@ -651,7 +655,7 @@ class _newSendState extends State<newSend>{
           text: factoriesSector[index].name,
         ),
         sector: TextEditingController(
-          text: factoriesSector[index].sector.toString(),
+          text: sectorObj?.name ?? '',
         ),
         observations: TextEditingController(text: ""),
         state: LineSendState.prepared,
