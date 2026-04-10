@@ -781,11 +781,15 @@ class _newFactoryState extends State<newFactory> {
       controllers.mail.clear();
       controllers.web.clear();
       controllers.web.clear();
+      controllers.address.clear();
       controllers.city.clear();
       controllers.postalCode.clear();
       controllers.province.clear();
       controllers.contacts.clear();
       controllers.employee.clear();
+      selectedSector = null;
+      controllers.sector.clear();
+
       setState(() {
         contacsCurrent.clear();
       });
