@@ -128,7 +128,7 @@ class _listFactoriesState extends State<listFactories> {
     }
 
     setState(() {
-      factorySelect = widget.list[index];
+      factorySelect = displayFactoriesNotifier.value[index];
       selectIndex = index; // opcional pero recomendable
     });
   }
