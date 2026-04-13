@@ -41,11 +41,11 @@ class actionsBD {
           ' FOREIGN KEY fk_sectors(sector) REFERENCES sectors(id))'
       );
 
-      await executeQuery.query('CREATE TABLE IF NOT EXISTS empleoyes '
+      await executeQuery.query('CREATE TABLE IF NOT EXISTS employees '
           '(id int NOT NULL AUTO_INCREMENT PRIMARY KEY,'
           ' name varchar(50) NOT NULL,'
           ' idFactory int(11) NOT NULL,'
-          ' FOREIGN KEY fk_empleoyes(idFactory) REFERENCES factories(id)'
+          ' FOREIGN KEY fk_employees(idFactory) REFERENCES factories(id)'
           ' ON DELETE CASCADE)'
       );
 
