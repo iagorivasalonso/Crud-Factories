@@ -24,15 +24,15 @@ Future<void> adminSector(BuildContext context) async {
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(0)),
           child: ConstrainedBox(
             constraints: BoxConstraints(
-              maxHeight: MediaQuery.of(context).size.height * 0.6,
               maxWidth: 400,
+              maxHeight: 350,
             ),
             child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 headDialog(title: S.of(context).sector_management),
-                const SizedBox(height: 60),
-                Flexible(
-                  flex: 1,
+                const SizedBox(height: 15.0),
+                Expanded(
                   child: Padding(
                     padding: const EdgeInsets.only(left: 30.0, right: 30.0),
                     child: tableEditSector(
@@ -42,11 +42,12 @@ Future<void> adminSector(BuildContext context) async {
                     )
                   ),
                 ),
-                const SizedBox(height: 30),
+                const SizedBox(height: 10),
                 Padding(
-                  padding: const EdgeInsets.only(left: 110.0),
+                  padding: const EdgeInsets.only(bottom: 30),
                   child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       materialButton(
                         nameAction: S.of(context).create,
