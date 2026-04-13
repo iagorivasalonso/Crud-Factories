@@ -8,13 +8,13 @@ import 'package:crud_factories/Objects/Sector.dart';
 
 class ListController {
 
-  final List<RouteCSV> routesNew;
-  final List<Sector> sectorsNew;
-  final List<Empleoye> empleoyesNew;
-  final List<Mail> mailsNew;
-  final List<LineSend> linesNew;
-  final List<Conection> conectionsNew;
-  final List<Factory> factoriesNew;
+  List<RouteCSV> routesNew;
+  List<Sector> sectorsNew;
+  List<Empleoye> empleoyesNew;
+  List<Mail> mailsNew;
+  List<LineSend> linesNew;
+  List<Conection> conectionsNew;
+  List<Factory> factoriesNew;
 
   ListController ({
     required this.routesNew,
