@@ -83,6 +83,13 @@ class _newFactoryState extends State<newFactory> {
       employee: TextEditingController(),
       employeeNew: TextEditingController(),
     );
+
+    if (widget.factorySelect != null && widget.select != -1) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        campCharge();
+        setState(() {});
+      });
+    }
   }
 
   @override
@@ -104,6 +111,16 @@ class _newFactoryState extends State<newFactory> {
       c.dispose();
     }
     super.dispose();
+  }
+
+  @override
+  void didUpdateWidget(covariant newFactory oldWidget) {
+    super.didUpdateWidget(oldWidget);
+
+    if (widget.factorySelect?.id != oldWidget.factorySelect?.id) {
+      campCharge();
+      setState(() {});
+    }
   }
   @override
   Widget build(BuildContext context0) {
@@ -136,8 +153,6 @@ class _newFactoryState extends State<newFactory> {
     }
     else {
       title = S.of(context).edit;
-
-        campCharge();
 
       action = S.of(context).update;
       action2 = S.of(context).undo;
@@ -410,9 +425,8 @@ class _newFactoryState extends State<newFactory> {
   }
   void campCharge () {
 
-    if(saveChanges == false)
-    {
       id = widget.factorySelect!.id;
+
       controllers.name.text = widget.factorySelect!.name;
       controllers.highDate.text = widget.factorySelect!.highDate;
       tmp = widget.factorySelect!.sector;
@@ -433,38 +447,30 @@ class _newFactoryState extends State<newFactory> {
       var number =  widget.factorySelect!.address['number']!;
       var apartament =  widget.factorySelect!.address['apartament']!;
 
-      if (apartament == "")
-      {
-        allAddress = '$address,$number';
-      }
-      else
-      {
-        allAddress = '$address,$number-$apartament';
-      }
+
+      allAddress = apartament == ""
+          ? '$address,$number'
+          : '$address,$number-$apartament';
+
       controllers.address.text = allAddress!;
       controllers.city.text =  widget.factorySelect!.address['city']!;
       controllers.postalCode.text =  widget.factorySelect!.address['postalCode']!;
       controllers.province.text =  widget.factorySelect!.address['province']!;
 
 
-      int idFactory = widget.select +1;
+      String idFactory = widget.factorySelect!.id;
 
 
       contacsPreEdit.clear();
       contacsCurrent.clear();
 
 
-
-      for (int i = 0; i < empleoyes.length; i++)
-      {
-        if(empleoyes[i].idFactory == idFactory.toString())
-        {
-          contacsPreEdit.add(empleoyes[i]);
-          contacsCurrent.add(empleoyes[i]);
+      for (var e in empleoyes) {
+        if (e.idFactory == idFactory) {
+          contacsPreEdit.add(e);
+          contacsCurrent.add(e);
         }
       }
-
-    }
 
   }
   Future<void> _onSectorChanged(BuildContext context,Sector? sectorChoose,int select) async {
@@ -656,7 +662,7 @@ class _newFactoryState extends State<newFactory> {
             for (int x = 0; x <
                 empleoyes.length; x++) {
               if (current ==
-                  empleoyes[i].id) {
+                  empleoyes[x].id) {
                 empleoyes.removeAt(x);
               }
             }
