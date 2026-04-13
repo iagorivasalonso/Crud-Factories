@@ -258,17 +258,25 @@ class _conectionState extends State<conection> {
     );
   }
 
-  void _handleAction1(BuildContext context,ConectionProvider provider) {
+  Future<void> _handleAction1(BuildContext context,ConectionProvider provider) async {
 
     final actionLabel = provider.action1Label(context);
 
-    actionLabel == S.of(context).newFemale
-      ? _createConex(context, provider)
-        : provider.viewMode == ConnectionViewMode.normal
-          ?  _actionConnect(context, provider)
-          :  _editConex(context, provider);
+    if (actionLabel == S.of(context).newFemale) {
+      await _createConex(context, provider);
 
-     saveChanges = false;
+    } else if (provider.viewMode == ConnectionViewMode.normal) {
+      await _actionConnect(context, provider);
+
+    } else {
+
+      await _editConex(context, provider);
+
+
+      provider.toggleEditMode();
+    }
+
+    saveChanges = false;
   }
 
   void _handleAction2(BuildContext context,ConectionProvider provider) {
@@ -481,6 +489,8 @@ class _conectionState extends State<conection> {
       {
         action= S.of(context).connection_has_been_successfully_deleted;
         confirm(context, action);
+
+        _clearFields();
       }
     }
   }
@@ -496,5 +506,15 @@ class _conectionState extends State<conection> {
       controlerConex.passbd.text = provider.selected!.password;
     }
     
+  }
+
+  void _clearFields() {
+
+    controlerConex.namebd.clear();
+    controlerConex.hostbd.clear();
+    controlerConex.portbd.clear();
+    controlerConex.userbd.clear();
+    controlerConex.passbd.clear();
+
   }
 }
