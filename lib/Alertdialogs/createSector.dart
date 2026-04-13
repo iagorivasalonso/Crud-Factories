@@ -34,7 +34,7 @@ Future<bool> createSector(BuildContext  context, String campOld) async {
             shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(0)),
             child: ConstrainedBox(
                 constraints: BoxConstraints(
-                  maxHeight: MediaQuery.of(context).size.height * 0.4,
+                  maxHeight: 200,
                   maxWidth: 400,
                 ),
                 child: Column(
