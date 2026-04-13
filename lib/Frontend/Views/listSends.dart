@@ -221,10 +221,13 @@ class _listSendsState extends State<listSends> {
 
    });
 
-    if (saveChanges) {
-      saveChanges = !await changesNoSave(context);
-      return;
-    }
+   if (saveChanges) {
+     bool discard = await changesNoSave(context);
+
+     if (!discard) return;
+
+     saveChanges = false;
+   }
     resultSend = chargueList(context1, selectedFilter,widget.list,widget.dateSends);
 
   }

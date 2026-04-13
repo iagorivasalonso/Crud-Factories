@@ -51,11 +51,12 @@ class _listMailsState extends State<listMails> {
 
   Future<void>_onTap(int index, BuildContext context)  async {
 
-    selectCard = index;
-
     if (saveChanges) {
-      saveChanges = !await changesNoSave(context);
-      return;
+      bool discard = await changesNoSave(context);
+
+      if (!discard) return;
+
+      saveChanges = false;
     }
   }
 

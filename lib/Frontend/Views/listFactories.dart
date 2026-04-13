@@ -117,17 +117,20 @@ class _listFactoriesState extends State<listFactories> {
     return false;
   }
 
-  Future<void>_onTap(int index, BuildContext context)  async {
+  Future<void> _onTap(int index, BuildContext context) async {
+
+    if (saveChanges) {
+      bool discard = await changesNoSave(context);
+
+      if (!discard) return;
+
+      saveChanges = false;
+    }
 
     setState(() {
       factorySelect = widget.list[index];
+      selectIndex = index; // opcional pero recomendable
     });
-
-
-        if (saveChanges) {
-          saveChanges = !await changesNoSave(context);
-          return;
-        }
   }
 
   @override
