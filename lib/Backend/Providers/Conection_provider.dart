@@ -244,61 +244,53 @@ class ConectionProvider extends ChangeNotifier {
   Map<String, Conection> get _conectionsMap => {for (var c in conections) c.database: c};
 
   Future<String> create(Conection cNew) async {
+    String type = "";
 
-    bool type_err = false;
-    String type =" ";
-    try{
+    try {
       if (_conectionsMap.containsKey(cNew.database)) {
-        type_err = true;
-      }
-      else
-      {
-        if(kIsWeb)
-        {
-            final ResDataBase = await DbApi.actionApi( 'createBD',cNew)
-                      .then((data) => ApiResponse.fromJson(data));
-
-            if (!ResDataBase.ok)
-            {
-                 type_err = false;
-            }
-            else
-            {
-              final ResTables = await DbApi.actionApi( 'createTables',cNew)
-                  .then((data) => ApiResponse.fromJson(data));
-
-              if(!ResTables.ok)
-              {
-                type_err = false;
-              }
-            }
-        }
-        else
-        {
-
-          await _withConnection(cNew, (conn) async {
-            type_err = await actionsBD.createDB( cNew.database, conn);
-
-            if (!type_err) {
-              type_err = await actionsBD.createTables();
-            }
-          });
-
-        }
-
-        conections.add(cNew);
-        _updateList(conections, newSelected: cNew);
-
+        return "Ya existe la conexión";
       }
 
-    }catch(e){
-      final errorMsg = e.toString();
-      type = await controlsErrors(errorMsg);
-    }
+      if (kIsWeb) {
+        final ResDataBase = await DbApi.actionApi('createBD', cNew)
+            .then((data) => ApiResponse.fromJson(data));
 
-    return type;
+        if (!ResDataBase.ok) {
+          //return ResDataBase.error?.message ?? "Error creando BD";
+        }
 
+        final ResTables = await DbApi.actionApi('createTables', cNew)
+            .then((data) => ApiResponse.fromJson(data));
+
+        if (!ResTables.ok) {
+          //return ResTables.error?.message ?? "Error creando tablas";
+        }
+      } else {
+        await _withConnection(cNew, (conn) async {
+          final okDB = await actionsBD.createDB(cNew.database, conn);
+
+          if (!okDB) {
+            throw Exception("Error creando BD");
+          }
+
+          final okTables = await actionsBD.createTables();
+
+          if (!okTables) {
+            throw Exception("Error creando tablas");
+          }
+        });
+      }
+
+      // SOLO si todo OK
+      conections.add(cNew);
+      _updateList(conections, newSelected: cNew);
+
+      return "OK";
+
+    } catch (e) {
+      return e.toString();
     }
+  }
 
   Future<bool> update(Conection current, Conection cNew) async {
 
