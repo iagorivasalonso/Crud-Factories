@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:io';
 import 'package:crud_factories/Alertdialogs/confirm.dart';
 import 'package:crud_factories/Alertdialogs/noFind.dart' show noFind;
 import 'package:crud_factories/Backend/CSV/exportEmpleoyes.dart';
@@ -19,6 +18,7 @@ import 'package:crud_factories/Backend/CSV/exportMails.dart';
 import 'package:crud_factories/Widgets/headViewsAndroid.dart';
 import 'package:crud_factories/generated/l10n.dart';
 import 'package:file_picker/file_picker.dart' show FilePickerResult, FileType, FilePicker;
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:crud_factories/Backend/CSV/ImportGeneral/CsvProcessorService.dart';
 import 'package:crud_factories/Functions/isNotAndroid.dart';
@@ -40,7 +40,6 @@ class _newImportState extends State<newImport> {
   final ScrollController horizontalScroll = ScrollController();
   final ScrollController verticalScroll = ScrollController();
 
-  int idEndList = 0;
 
 
   late TextEditingController controllerImportPicker = TextEditingController();
@@ -49,12 +48,6 @@ class _newImportState extends State<newImport> {
   void initState (){
     super.initState();
 
-     if(idEndList == 0)
-     {
-       idEndList = allFactories
-           .map((f) => int.parse(f.id))
-           .reduce((a, b) => a > b ? a : b);
-     }
   }
   @override
   Widget build(BuildContext context0) {
@@ -164,30 +157,25 @@ Future<void> _pickFile(BuildContext context, TextEditingController controllerDat
     dialogTitle: S.of(context).select_file,
     type: FileType.custom,
     allowedExtensions: ['csv'],
+    withData: true,
   );
 
   if(result == null) return;
 
 
-
   final platformFile = result.files.single;
 
-  String content;
-
-  if (platformFile.bytes != null) {
-    // Web y algunas plataformas
-    content = utf8.decode(platformFile.bytes!);
-  } else if (platformFile.path != null) {
-    // Android / Desktop
-    final file = File(platformFile.path!);
-    content = await file.readAsString(encoding: utf8);
-  } else {
+// 🔥 SIEMPRE usamos bytes (multiplataforma)
+  if (platformFile.bytes == null) {
     throw Exception("No se pudo leer el archivo CSV");
   }
-  // Procesamos el CSV para llenar los listController
-  CsvProcessorService.processCsvContent(context, content, true);
 
-  // Actualizamos el TextField con el nombre del archivo
+  final String content = utf8.decode(platformFile.bytes!);
+
+// Procesamos el CSV
+  await CsvProcessorService.processCsvContent(context, content, true);
+
+// Actualizamos el TextField
   controllerDatePicker.text = platformFile.name;
 
 
@@ -195,6 +183,7 @@ Future<void> _pickFile(BuildContext context, TextEditingController controllerDat
 
 
 Future<void> _onSaveList(BuildContext context) async {
+
   List<ImportResult> results = [];
 
   results.add(await _importSectors(context));      // primero sectores
@@ -423,10 +412,10 @@ Future<ImportResult> _importFactories(BuildContext context) async {
 }
 
 void _showImportSumary(BuildContext context, List<ImportResult> results) async{
-print("resu$results");
+
       final success = results.where((r) => r.inserted > 0).toList();
       final errors = results.expand((r) => r.errors).toList();
-print("deasfd$success");
+
 String summaryText = '';
 
 if (success.isNotEmpty) {
@@ -498,14 +487,25 @@ Future<int> processImport<T extends BaseEntity>({
           count++;
         }
   }
-    if (count > 0) {
-      if (conn != null && sqlExport != null) {
-        await sqlExport([...toInsert, ...toUpdate]);
-      } else {
-        await csvExport(existingList);
-      }
+
+  if (count > 0) {
+/*
+    // 🚨 WEB = NO SQL
+    if (kIsWeb) {
+      await csvExport(existingList);
+      return count;
+    }*/
+print(BaseDateSelected);
+    print(sqlExport);
+    // 💻 SOLO DESKTOP/MOBILE
+    if (BaseDateSelected.isNotEmpty && sqlExport != null) {
+      await sqlExport([...toInsert, ...toUpdate]);
+    } else {
+      await csvExport(existingList);
+    }
   }
-    return count;
+
+  return count;
 }
 
 
