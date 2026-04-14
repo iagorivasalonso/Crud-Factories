@@ -13,7 +13,7 @@ class customDataTable extends StatelessWidget {
   final List<String> columns;
   final bool showSectorColumn;
   final int? select;
-  final List<String> states;
+  final List<LineSendState> states;
   final String? selectedItem;
   final List<bool> sendValues;
   final List<LineSendController> linesControllers;

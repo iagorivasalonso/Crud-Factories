@@ -169,8 +169,7 @@ class _newSendState extends State<newSend>{
     String filter = widget.filter;
 
     final items = [allSectorOption, ...sectors];
-    stateSends = [S.of(context).prepared, S.of(context).sent, S.of(context).in_progress, S.of(context).returned, S.of(context).he_responded, S.of(context).pending];
-
+    List<LineSendState> stateSends = LineSendState.values.toList();
 
     if(select == -1)
     {
@@ -542,13 +541,11 @@ class _newSendState extends State<newSend>{
 
         for (int i = 0; i < linesSelected.length; i++) {
 
-          final original = linesSave[i];
 
           final newObservations = linesControllers[i].observations.text;
           final newState = linesControllers[i].state.name;
 
-          if (original.observations != newObservations ||
-              original.state != newState) {
+          if (observationModify[i] || stateModify[i]) {
             linesModify++;
           }
 
@@ -557,11 +554,14 @@ class _newSendState extends State<newSend>{
           linesSelected[i].state = newState;
         }
 
+        if(linesModify > 0)
         confirm(
           context,
           LocalizationHelper.cantLinesModify(context, linesModify),
         );
 
+        observationModify = List.filled(linesSelected.length, false);
+        stateModify = List.filled(linesSelected.length, false);
         // 👉 sincronizar con allLines
         final selectedMap = {
           for (var line in linesSelected) line.id: line
@@ -570,7 +570,6 @@ class _newSendState extends State<newSend>{
         allLines = allLines.map((line) {
           return selectedMap[line.id] ?? line;
         }).toList();
-        confirm(context, LocalizationHelper.cantLinesModify(context, linesModify));
       }
 
     saveChanges = false;
