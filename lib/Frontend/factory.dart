@@ -540,239 +540,121 @@ class _newFactoryState extends State<newFactory> {
     });
   }
 
-  Future<void> _onSaveFactory(BuildContext context, int select,
-      factoryController controllers, contacsPreEdit, contacsCurrent,
-      List<String> idsDelete) async {
-    List <Factory> current = [];
-    List <String> allKeys = [];
-    String nameCamp = S
-        .of(context)
-        .name;
-    String action = '';
+  Future<void> _onSaveFactory(
+      BuildContext context,
+      int select,
+      factoryController controllers,
+      contacsPreEdit,
+      contacsCurrent,
+      List<String> idsDelete,
+      ) async {
 
-    for (int i = 0; i < allFactories.length; i++) {
-      allKeys.add(allFactories[i].name);
+    final allKeys = allFactories.map((f) => f.name).toList();
+    final campOld = select != -1 ? allFactories[select].name : "";
+
+    final isValidName = validatorCamps.primaryKeyCorrect(
+      controllers.name.text,
+      S.of(context).name,
+      allKeys,
+      campOld,
+      context,
+    ) ||
+        (select != -1 && controllers.name.text == allFactories[select].name);
+
+    if (!isValidName) return;
+
+    final telephone1 = controllers.telephone1.text.replaceAll(" ", "");
+    final telephone2 = controllers.telephone2.text.replaceAll(" ", "");
+
+    if (!validatorCamps.dateCorrect(controllers.highDate.text)) {
+
+      String array = S.of(context).date;
+      String action = LocalizationHelper.format_must(context, array);
+
+      String format = 'DD-MM-AAAA';
+      error(context, action, format);
+      return;
     }
 
-    String campOld = " ";
-
-    if (select != -1) {
-      campOld = allFactories[select].name;
+    if (validatorCamps.campEmpty(controllers.sector.text)) {
+      String campo = S.of(context).sector;
+      error(context, LocalizationHelper.camp_empty(context, campo));
+      return;
     }
 
-    if (validatorCamps.primaryKeyCorrect(controllers.name.text, nameCamp, allKeys, campOld, context) == true || controllers.name.text==allFactories[select].name) {
-      final telephone1 = controllers.telephone1.text.replaceAll(" ", "");
-      final telephone2 = controllers.telephone2.text.replaceAll(" ", "");
+    if (!validatorCamps.mailCorrect(controllers.mail.text)) {
+      error(context, S.of(context).not_a_valid_mail);
+      return;
+    }
 
-      if (validatorCamps.dateCorrect(controllers.highDate.text) == false) {
-        String array = S
-            .of(context)
-            .date;
-        String action = LocalizationHelper.format_must(context, array);
+    if (!validatorCamps.webCorrect(controllers.web.text)) {
+      error(context, S.of(context).not_a_valid_webpage);
+      return;
+    }
 
-        String format = 'DD-MM-AAAA';
-        error(context, action, format);
-      }
-      if (validatorCamps.campEmpty(controllers.sector.text) == true) {
-        String campo = S
-            .of(context)
-            .sector;
-        String action = LocalizationHelper.camp_empty(context, campo);
-        error(context, action);
-      }
-      if (validatorCamps.telephoneCorrect(telephone1, context) == false) {
+    // ---- ADDRESS PARSE ----
+    final adrress1 = controllers.address.text.split(",");
+    final adrress2 = controllers.address.text.split("-");
+    final apartament = controllers.address.text.contains("-") ? adrress2[1] : "";
+    final num = adrress2[0].split(",");
 
+    // ---- CREATE OR UPDATE ----
+    if (select == -1) {
+      allFactories.add(
+        Factory(
+          id: id,
+          name: controllers.name.text,
+          highDate: controllers.highDate.text,
+          sector: selectedSector!.id,
+          thelephones: [telephone1, telephone2],
+          mail: controllers.mail.text,
+          web: controllers.web.text,
+          address: {
+            'street': adrress1[0],
+            'number': num[1],
+            'apartament': apartament,
+            'city': controllers.city.text,
+            'postalCode': controllers.postalCode.text,
+            'province': controllers.province.text,
+          },
+        ),
+      );
+    } else if (saveChanges) {
+      final f = allFactories[select];
+      f.name = controllers.name.text;
+      f.highDate = controllers.highDate.text;
+      f.sector = selectedSector!.id;
+      f.thelephones = [telephone1, telephone2];
+      f.mail = controllers.mail.text;
+      f.web = controllers.web.text;
+      f.address['street'] = adrress1[0];
+      f.address['number'] = num[1];
+      f.address['apartament'] = apartament;
+      f.address['city'] = controllers.city.text;
+      f.address['postalCode'] = controllers.postalCode.text;
+    }
 
-      }
-      if (validatorCamps.telephoneCorrect(telephone2, context) == true) {
+    saveChanges = false;
 
-      }
-      if (validatorCamps.mailCorrect(controllers.mail.text) != true) {
-        action = S
-            .of(context)
-            .not_a_valid_mail;
-        error(context, action);
-      }
-      if (validatorCamps.webCorrect(controllers.web.text) != true) {
-        action = S
-            .of(context)
-            .not_a_valid_webpage;
-        error(context, action);
-      }
-      else
-      if (validatorCamps.adrressCorrect(controllers.address.text) != true) {
-        String array = S
-            .of(context)
-            .address;
-        String action = LocalizationHelper.format_must(context, array);
-        String street = S
-            .of(context)
-            .street;
-        String number = S
-            .of(context)
-            .number;
-        String format = '$street , $number';
+    // ---- EXPORT ONLY ONCE ----
+    final empOk = await csvExportatorEmpleoyes(empleoyes);
+    final facOk = await csvExportatorFactories(allFactories);
 
-        error(context, action, format);
-      }
-      else {
-        List<String> adrress1 = controllers.address.text.split(",");
-
-        List<String> adrress2 = controllers.address.text.split("-");
-        String apartament = '';
-
-        if (controllers.address.text.contains("-")) {
-          apartament = adrress2[1];
-        }
-        else {
-          apartament = '';
-        }
-        List<String> num = adrress2[0].split(",");
-
-        if (BaseDateSelected.isNotEmpty) {
-          Set<Empleoye> contacsPreEdit1 = contacsPreEdit.toSet();
-          Set<Empleoye> contacsCurrent1 = contacsCurrent.toSet();
-
-          Set<
-              Empleoye> empleoyesNew = contacsCurrent1
-              .difference(contacsPreEdit1);
-
-          sqlCreateEmpleoye(
-              empleoyesNew.toList());
-          empleoyes.addAll(empleoyesNew);
-
-          Set<
-              Empleoye> empleoyesDelete = contacsPreEdit1
-              .difference(contacsCurrent1);
-
-          List<
-              Empleoye> empleoyesDelete1 = empleoyesDelete
-              .toList();
-          sqlDeleteEmpleoyes(
-              empleoyesDelete1);
-
-          String current = "";
-
-          for (int i = 0; i <
-              empleoyesDelete1
-                  .length; i++) {
-            current =
-                empleoyesDelete1[i].id;
-
-            for (int x = 0; x <
-                empleoyes.length; x++) {
-              if (current ==
-                  empleoyes[x].id) {
-                empleoyes.removeAt(x);
-              }
-            }
-          }
-        }
-        if (select == -1) {
-
-          current.add(Factory(
-            id: id,
-            name: controllers.name.text,
-            highDate: controllers.highDate.text,
-            sector: selectedSector!.id,
-            thelephones: [
-              controllers.telephone1.text,
-              controllers.telephone2.text,
-            ],
-            mail: controllers.mail.text,
-            web: controllers.web.text,
-            address: {
-              'street': adrress1[0],
-              'number': num[1],
-              'apartament': apartament,
-              'city': controllers.city.text,
-              'postalCode': controllers.postalCode.text,
-              'province': controllers.province.text,
-            },
-          ));
-        }
-        else {
-          if (saveChanges == true) {
-            allFactories[select].name = controllers.name.text;
-            allFactories[select].highDate = controllers.highDate.text;
-            allFactories[select].sector = selectedSector!.id;
-            allFactories[select].thelephones = [
-              controllers.telephone1.text,
-              controllers.telephone2.text,
-            ];
-            allFactories[select].mail = controllers.mail.text;
-            allFactories[select].web = controllers.web.text;
-            allFactories[select].address['street'] = adrress1[0];
-            allFactories[select].address['number'] = num[1];
-            allFactories[select].address['apartament'] = apartament;
-            allFactories[select].address['city'] = controllers.city.text;
-            allFactories[select].address['postalCode'] =
-                controllers.postalCode.text;
-          }
-        }
-        saveChanges = false;
-
-        if (BaseDateSelected.isNotEmpty) {
-          if (select == -1) {
-            sqlCreateFactory(current);
-          }
-          else {
-            current.add(
-                allFactories[select]);
-            sqlModifyFActory(current);
-          }
-        }
-        else {
-          allFactories =
-              allFactories + current;
-          csvExportatorFactories(
-              allFactories);
-
-          empleoyes = [
-            ...{
-              ...empleoyes,
-              ...contacsCurrent
-            }
-          ];
-
-          String idCurrent = "";
-          for (int i = 0; i <
-              idsDelete.length; i++) {
-            idCurrent = idsDelete[i];
-
-            for (int y = 0; y <
-                empleoyes.length; y++) {
-              if (idCurrent ==
-                  empleoyes[y].id) {
-                empleoyes.removeAt(y);
-              }
-            }
-          }
-          csvExportatorEmpleoyes(empleoyes);
-          bool errorExp = await csvExportatorFactories(allFactories);
-
-          String array = S
-              .of(context)
-              .company;
-
-          if (errorExp == false) {
-            String actionArray = S
-                .of(context)
-                .saved_female;
-            String pr = S
-                .of(context)
-                .theFemale;
-
-            String action = LocalizationHelper.manage_array(
-                context, array, actionArray, pr);
-            await confirm(context, action);
-          }
-          else {
-            String action = LocalizationHelper.no_file(context, array);
-            warning(context, action);
-          }
-        }
-      }
+    if (facOk && empOk) {
+      await confirm(
+        context,
+        LocalizationHelper.manage_array(
+          context,
+          S.of(context).company,
+          S.of(context).saved_female,
+          S.of(context).theFemale,
+        ),
+      );
+    } else {
+      warning(
+        context,
+        LocalizationHelper.no_file(context, S.of(context).company),
+      );
     }
   }
 
