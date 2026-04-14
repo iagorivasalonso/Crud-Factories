@@ -1,3 +1,5 @@
+import 'package:crud_factories/Backend/CSV/exportEmpleoyes.dart';
+import 'package:crud_factories/Backend/CSV/exportFactories.dart';
 import 'package:crud_factories/Backend/Global/list.dart';
 import 'package:crud_factories/Backend/Global/variables.dart';
 import 'package:crud_factories/Frontend/factory.dart' show newFactory;
@@ -5,7 +7,6 @@ import 'package:crud_factories/Objects/Factory.dart';
 import 'package:crud_factories/generated/l10n.dart' show S;
 import 'package:flutter/material.dart';
 import 'package:crud_factories/Alertdialogs/warning.dart';
-import 'package:crud_factories/Backend/CSV/exportFactories.dart';
 import 'package:crud_factories/Backend/SQL/deleteFactory.dart';
 import 'package:crud_factories/Functions/changesNoSave.dart';
 import 'package:crud_factories/Functions/isNotAndroid.dart';
@@ -14,11 +15,13 @@ import 'package:crud_factories/Widgets/factoryCard.dart';
 import 'package:crud_factories/helpers/localization_helper.dart';
 
 
+
 class listFactories extends StatefulWidget {
   BuildContext context;
   List<Factory> list;
+  String sector; //esto es lo q necesito para la condicion
 
-  listFactories(this.context, this.list);
+  listFactories(this.context, this.list, this.sector);
 
   @override
   State<listFactories> createState() => _listFactoriesState();
@@ -47,9 +50,19 @@ class _listFactoriesState extends State<listFactories> {
 
   void didUpdateWidget(covariant listFactories oldWidget) {
     super.didUpdateWidget(oldWidget);
-    displayFactoriesNotifier = ValueNotifier<List<Factory>>(widget.list);
-    factoriesSector = displayFactoriesNotifier.value;
-    factorySelect = factoriesSector[0];
+
+
+    if (oldWidget.sector != widget.sector) {
+      displayFactoriesNotifier.value = List.from(widget.list);
+
+      if (widget.list.isNotEmpty) {
+        factorySelect = widget.list.first;
+        selectIndex = 0;
+      } else {
+        factorySelect = null;
+        selectIndex = -1;
+      }
+    }
   }
 
   bool _contains(String text, String search) {
@@ -60,7 +73,7 @@ class _listFactoriesState extends State<listFactories> {
 
     final lowerSearch = search.toLowerCase();
 
-    final filtered = (widget.list as List<Factory>).where((factory) {
+    final filtered = widget.list.where((factory) {
       final filterMap = {
         'Name': factory.name,
         'Nombre': factory.name,
@@ -90,28 +103,45 @@ class _listFactoriesState extends State<listFactories> {
   }
 
   Future<bool> _onDelete(BuildContext context, Factory factory) async {
+
     final confirmDelete = await warning(
       context,
       LocalizationHelper.confirm_delete(context, "${factory.name}"),
     );
 
     if (confirmDelete) {
+
+      empleoyes.removeWhere((f) => f.idFactory == factory.id);
       factoriesSector.remove(factory);
       allFactories.remove(factory);
 
-      final updated = List<Factory>.from(widget.list)
+
+      if (BaseDateSelected.isNotEmpty) {
+        await sqlDeleteFactory(factory.id);
+      } else {
+        csvExportatorEmpleoyes(empleoyes);
+        csvExportatorFactories(allFactories);
+      }
+
+
+
+
+      final updated = List<Factory>.from(displayFactoriesNotifier.value)
         ..remove(factory);
 
       displayFactoriesNotifier.value = updated;
 
+      setState(() {
+        if (displayFactoriesNotifier.value.isNotEmpty) {
+          factorySelect = displayFactoriesNotifier.value.first;
+          selectIndex = 0;
+        } else {
+          factorySelect = null;
+          selectIndex = -1;
+        }
+      });
 
       return true;
-    }
-
-    if (BaseDateSelected.isNotEmpty) {
-      await sqlDeleteFactory(factory.id);
-    } else {
-      csvExportatorFactories(factoriesSector);
     }
 
     return false;
@@ -131,6 +161,7 @@ class _listFactoriesState extends State<listFactories> {
       factorySelect = displayFactoriesNotifier.value[index];
       selectIndex = index; // opcional pero recomendable
     });
+
   }
 
   @override
@@ -155,22 +186,28 @@ class _listFactoriesState extends State<listFactories> {
           children: [
             SizedBox(
               width: mWidthList,
-              child: GenericListViewPage<Factory>(
-                itens: displayFactoriesNotifier.value,
-                filters: filterOptions,
-                defaultFilter: S.of(context).name,
-                itemBuilder: (factory, index) => factoryCard(
-                  name: factory.name,
-                  address: factory.allAdress(),
-                  telephone: factory.thelephones.isNotEmpty
-                      ? factory.thelephones[0]
-                      : '',
-                  city: factory.address['city'],
-                ),
-                onFilter: _onFilter,
-                onDelete: (factory) => _onDelete(context, factory),
-                onTap: (factory, index) => _onTap(index, context),
-              ),
+              child: ValueListenableBuilder<List<Factory>>(
+                  valueListenable: displayFactoriesNotifier,
+                    builder: (context0, list, _) {
+
+                      return GenericListViewPage<Factory>(
+                        itens: list,
+                        filters: filterOptions,
+                        defaultFilter: S.of(context).name,
+                        itemBuilder: (factory, index) => factoryCard(
+                          name: factory.name,
+                          address: factory.allAdress(),
+                          telephone: factory.thelephones.isNotEmpty
+                              ? factory.thelephones[0]
+                              : '',
+                          city: factory.address['city'],
+                        ),
+                        onFilter: _onFilter,
+                        onDelete: (factory) => _onDelete(context, factory),
+                        onTap: (factory, index) => _onTap(index, context),
+                      );
+                    },
+                  ),
             ),
 
             SizedBox(
@@ -179,7 +216,5 @@ class _listFactoriesState extends State<listFactories> {
             ),
           ],
         );
-
-
   }
 }

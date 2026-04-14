@@ -21,7 +21,7 @@ FuntionSeleted(int itenSelection, int subIten1Selection,int subIten2Selection, d
 
   List<Factory> allFactoriesOriginal = [];
 
-  allFactoriesOriginal = allFactories.map((f) => f.copyWith()).toList();
+  allFactoriesOriginal = List.from(allFactories);
 
   int select=-1;
 
@@ -60,8 +60,9 @@ FuntionSeleted(int itenSelection, int subIten1Selection,int subIten2Selection, d
               });
               factoriesSector = allFactories;
             }
-
-            return listFactories(context,List.from(factoriesSector));
+            String sector = subIten2Selection.toString();
+            print(sector);
+            return listFactories(context,List.from(factoriesSector),sector);
         }
 
         if (subIten1Selection == 2)
@@ -125,9 +126,7 @@ void groupFactoriesSector(int subIten2Selection, List<Factory> allFactoriesOrigi
 
   if(subIten2Selection == 0)
   {
-    factoriesSector  = allFactoriesOriginal
-        .map((f) => f.copyWith())
-        .toList();
+    factoriesSector = List.from(allFactoriesOriginal);
   }
   else
   {
