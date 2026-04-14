@@ -1,5 +1,7 @@
-import 'dart:html' as html;
+
 import 'dart:convert';
+
+import 'package:universal_html/universal_html.dart' as html;
 
 Future<bool> exportCsv(String csv, {String? file}) async {
   try {
