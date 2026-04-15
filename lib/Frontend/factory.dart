@@ -656,6 +656,7 @@ class _newFactoryState extends State<newFactory> {
         LocalizationHelper.no_file(context, S.of(context).company),
       );
     }
+    await _onResetFactory(context, select, controllers, contacsCurrent);
   }
 
   Future<void> _onResetFactory(BuildContext context, int select,
