@@ -10,8 +10,13 @@ Padding textfieldCalendar({
 }){
   final ShowPlatformDatePicker platformDatePicker = ShowPlatformDatePicker(buildContext: context1);
 
-  DateTime seletedDate =DateTime.now();
+  DateTime now = DateTime.now();
 
+  BuildContext context = context1;
+
+  if (controllerCamp.text.isEmpty) {
+    controllerCamp.text = DateFormat('dd-MM-yyyy').format(now);
+  }
   return Padding(
     padding: const EdgeInsets.only(left: 35.0, top: 20.0,right: 40.0),
     child: Row(
@@ -40,8 +45,8 @@ Padding textfieldCalendar({
               ),
               onTap: () async {
                 DateTime? dateSelected = await platformDatePicker.showPlatformDatePicker(
-                  context1,
-                  seletedDate,
+                  context,
+                  now,
                   DateTime(DateTime.now().year - 10),
                   DateTime(DateTime.now().year + 1),
                 );
