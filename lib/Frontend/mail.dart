@@ -251,6 +251,21 @@ Future<void> _onSaveMail(BuildContext context, int select,MailController control
         }
         else
         {
+          final newMail = Mail(
+            address: controllers.mail.text,
+            password: controllers.password.text,
+            id: '8',
+            company: "ggogle",
+          );
+
+          if (select == -1) {
+            // CREAR
+            mails.add(newMail);
+          } else {
+            // EDITAR
+            mails[select] = newMail;
+          }
+
                 if (BaseDateSelected.isNotEmpty)
                 {
                   if (select == -1)
@@ -263,10 +278,9 @@ Future<void> _onSaveMail(BuildContext context, int select,MailController control
                     sqlModifyMail(current);
                   }
                 }
-                else
-                {
-                  mails = mails + current;
-                }
+
+
+
                 saveChanges = false;
                 if (result == false)
                 {
