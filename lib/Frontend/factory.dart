@@ -4,12 +4,8 @@ import 'package:crud_factories/Alertdialogs/warning.dart';
 import 'package:crud_factories/Backend/CSV/exportEmpleoyes.dart';
 import 'package:crud_factories/Backend/Global/controllers/Factory.dart';
 import 'package:crud_factories/Backend/Global/list.dart';
-import 'package:crud_factories/Backend/SQL/createEmpleoye.dart';
-import 'package:crud_factories/Backend/SQL/createFactory.dart';
-import 'package:crud_factories/Backend/SQL/deleteEmpleoyes.dart';
-import 'package:crud_factories/Backend/SQL/modifyFactory.dart';
 import 'package:crud_factories/Backend/Global/variables.dart';
-import 'package:crud_factories/Backend/CSV//exportFactories.dart';
+import 'package:crud_factories/Backend/CSV/exportFactories.dart';
 import 'package:crud_factories/Functions/createId.dart';
 import 'package:crud_factories/Functions/validatorCamps.dart';
 import 'package:crud_factories/Objects/Empleoye.dart';
@@ -639,7 +635,18 @@ class _newFactoryState extends State<newFactory> {
     }
 
     saveChanges = false;
+    empleoyes.removeWhere((e) => idsDelete.contains(e.id));
 
+// Añade o actualiza los actuales
+    for (var e in contacsCurrent) {
+      final index = empleoyes.indexWhere((emp) => emp.id == e.id);
+
+      if (index == -1) {
+        empleoyes.add(e); // nuevo
+      } else {
+        empleoyes[index] = e; // update
+      }
+    }
     // ---- EXPORT ONLY ONCE ----
     final empOk = await csvExportatorEmpleoyes(empleoyes);
     final facOk = await csvExportatorFactories(allFactories);
