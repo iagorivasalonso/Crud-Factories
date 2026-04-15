@@ -244,52 +244,30 @@ class ConectionProvider extends ChangeNotifier {
   Map<String, Conection> get _conectionsMap => {for (var c in conections) c.database: c};
 
   Future<String> create(Conection cNew) async {
-    String type = "";
-
-    try {
-      if (_conectionsMap.containsKey(cNew.database)) {
-        return "Ya existe la conexión";
-      }
-
-      if (kIsWeb) {
-        final ResDataBase = await DbApi.actionApi('createBD', cNew)
-            .then((data) => ApiResponse.fromJson(data));
-
-        if (!ResDataBase.ok) {
-          //return ResDataBase.error?.message ?? "Error creando BD";
-        }
-
-        final ResTables = await DbApi.actionApi('createTables', cNew)
-            .then((data) => ApiResponse.fromJson(data));
-
-        if (!ResTables.ok) {
-          //return ResTables.error?.message ?? "Error creando tablas";
-        }
-      } else {
-        await _withConnection(cNew, (conn) async {
-          final okDB = await actionsBD.createDB(cNew.database, conn);
-
-          if (!okDB) {
-            throw Exception("Error creando BD");
-          }
-
-          final okTables = await actionsBD.createTables();
-
-          if (!okTables) {
-            throw Exception("Error creando tablas");
-          }
-        });
-      }
-
-      // SOLO si todo OK
-      conections.add(cNew);
-      _updateList(conections, newSelected: cNew);
-
-      return "OK";
-
-    } catch (e) {
-      return e.toString();
+    if (_conectionsMap.containsKey(cNew.database)) {
+      return "EXISTS";
     }
+
+    final resDb = ApiResponse.fromJson(
+      await DbApi.actionApi('createBD', cNew),
+    );
+
+    if (resDb.ok) {
+      return "ERROR: BD";
+    }
+
+    final resTables = ApiResponse.fromJson(
+      await DbApi.actionApi('createTables', cNew),
+    );
+
+    if (resTables.ok) {
+      return "ERROR: TABLES";
+    }
+
+    conections.add(cNew);
+    _updateList(conections, newSelected: cNew);
+
+    return "OK";
   }
 
   Future<bool> update(Conection current, Conection cNew) async {
