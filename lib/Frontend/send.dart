@@ -81,7 +81,7 @@ class _newSendState extends State<newSend>{
 
     linesControllers = [];
 
-    if (widget.select == -1) {
+    if (widget.select == -1  && linesControllers.isEmpty) {
       selectedSector = allSectorOption;
       factoriesSector = allFactories;
       generateControllers();
@@ -98,7 +98,7 @@ class _newSendState extends State<newSend>{
         oldWidget.selectCamp != widget.selectCamp ||
         oldWidget.filter != widget.filter) {
 
-      if (widget.select == -1) {
+      if (widget.select == -1 && linesControllers.isEmpty) {
         selectedSector = allSectorOption;
         factoriesSector = allFactories;
 
@@ -472,7 +472,6 @@ class _newSendState extends State<newSend>{
           .toList();
     }
 
-    generateControllers();
     _updateMessageResult(context);
     setState(() {});
   }
@@ -553,7 +552,7 @@ class _newSendState extends State<newSend>{
           linesSelected[i].observations = newObservations;
           linesSelected[i].state = newState;
         }
-
+        allLines = List.from(linesSelected);
         if(linesModify > 0)
         confirm(
           context,
@@ -672,7 +671,7 @@ class _newSendState extends State<newSend>{
   void _updateMessageResult(BuildContext context) {
     int cant = factoriesSector.length;
 
-    if (widget.select == -1) {
+    if (widget.select == -1 && linesControllers.isEmpty) {
       // Mensaje para nueva shipment
       messageResult = LocalizationHelper.factoriesBD(context, cant);
     } else {
