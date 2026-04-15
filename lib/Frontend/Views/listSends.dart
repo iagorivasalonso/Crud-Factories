@@ -73,8 +73,6 @@ class _listSendsState extends State<listSends> {
   @override
   void didUpdateWidget(covariant listSends oldWidget) {
 
-
-
     super.didUpdateWidget(oldWidget);
 
     if (oldWidget.list != widget.list || oldWidget.dateSends != widget.dateSends) {
@@ -99,45 +97,69 @@ class _listSendsState extends State<listSends> {
   }
 
 
+  Future<bool> _onDelete(BuildContext context, cardSend line) async {
 
-  Future<bool> _onDelete(BuildContext context, cardSend line)  async {
+    List<LineSend> linesToDelete;
 
-    List<LineSend> linesToDelete = allLines
-        .where((l) => l.state == S.of(context).returned && l.date ==line.description)
-        .toList();
+    if (selectedFilter == S.of(context).date) {
+      linesToDelete = allLines.where((l) =>
+
+          l.date == line.description).toList();
+      print(linesToDelete.toString());
+    } else {
+      linesToDelete = allLines.where((l) =>
+      l.state == LineSendState.returned &&
+          l.factory == line.title).toList();
+    }
+
+    if (linesToDelete.isEmpty) return false;
 
     final confirmDelete = await warning(
       context,
-      LocalizationHelper.confirm_delete(context,S.of(context).You_can_only_delete_the_lines_that_were_returned_Do_you_want_to_delete),
+      LocalizationHelper.confirm_delete(
+        context,
+        S.of(context).You_can_only_delete_the_lines_that_were_returned_Do_you_want_to_delete,
+      ),
     );
-    if (confirmDelete)
-    {
-      setState(() {
-        allLines.removeWhere((l) =>
-        l.state == S.of(context).returned &&
-            l.date == line.description);
-      });
-      //return true;
+
+    if (!confirmDelete) return false;
+
+
+    allLines.removeWhere(
+          (l) => linesToDelete.any((e) => e.id == l.id),
+    );
+
+    final updated = chargueList(
+      context,
+      selectedFilter,
+      allLines,
+      _buildDateSends(), 
+    );
+
+    displayLinesNotifier.value = List.from(updated);
+
+    setState(() {
+
+      if (updated.isNotEmpty) {
+        selectCard = 0;
+        select = 0;
+        selectCamp = updated.first.description;
+      } else {
+        selectCard = -1;
+        select = -1;
+        selectCamp = "";
+      }
+    });
+
+    // 5. PERSISTENCIA
+    if (BaseDateSelected.isNotEmpty) {
+      await sqlDeleteLines(linesToDelete.map((e) => e.id).toList());
+    } else {
+      await csvExportatorLines(allLines);
     }
 
-
-        if (BaseDateSelected.isNotEmpty) {
-
-          List<String> idsDelete = [];
-
-          for(int i = 0; i < linesToDelete.length; i++)
-          {
-            idsDelete.add(linesToDelete[i].id);
-          }
-           await sqlDeleteLines(idsDelete);
-
-        } else {
-          csvExportatorLines(allLines);
-        }
-
-    return false;
+    return true;
   }
-
 
   Future<void> _onFilter(BuildContext context,String filter, String search) async {
     selectedFilter = filter;
@@ -146,7 +168,7 @@ class _listSendsState extends State<listSends> {
     final baseList = chargueList(
       context1,
       selectedFilter,
-      widget.list,
+      allLines,
       widget.dateSends,
     );
 
@@ -228,7 +250,7 @@ class _listSendsState extends State<listSends> {
 
      saveChanges = false;
    }
-    resultSend = chargueList(context1, selectedFilter,widget.list,widget.dateSends);
+    resultSend = chargueList(context1, selectedFilter,allLines,widget.dateSends);
 
   }
   @override
@@ -284,6 +306,10 @@ class _listSendsState extends State<listSends> {
         ),
       ],
     );
+  }
+
+  List<String> _buildDateSends() {
+    return allLines.map((l) => l.date).toSet().toList();
   }
   
 }
