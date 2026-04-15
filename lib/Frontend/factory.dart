@@ -593,10 +593,14 @@ class _newFactoryState extends State<newFactory> {
     }
 
     // ---- ADDRESS PARSE ----
-    final adrress1 = controllers.address.text.split(",");
-    final adrress2 = controllers.address.text.split("-");
-    final apartament = controllers.address.text.contains("-") ? adrress2[1] : "";
-    final num = adrress2[0].split(",");
+    final addressText = controllers.address.text;
+
+    final partsDash = addressText.split("-");
+    final apartament = partsDash.length > 1 ? partsDash[1] : "";
+
+    final partsComma = partsDash[0].split(",");
+    final street = partsComma.isNotEmpty ? partsComma[0] : "";
+    final number = partsComma.length > 1 ? partsComma[1] : "";
 
     // ---- CREATE OR UPDATE ----
     if (select == -1) {
@@ -610,8 +614,8 @@ class _newFactoryState extends State<newFactory> {
           mail: controllers.mail.text,
           web: controllers.web.text,
           address: {
-            'street': adrress1[0],
-            'number': num[1],
+            'street': street,
+            'number': number,
             'apartament': apartament,
             'city': controllers.city.text,
             'postalCode': controllers.postalCode.text,
@@ -627,8 +631,8 @@ class _newFactoryState extends State<newFactory> {
       f.thelephones = [telephone1, telephone2];
       f.mail = controllers.mail.text;
       f.web = controllers.web.text;
-      f.address['street'] = adrress1[0];
-      f.address['number'] = num[1];
+      f.address['street'] = street;
+      f.address['number'] = number;
       f.address['apartament'] = apartament;
       f.address['city'] = controllers.city.text;
       f.address['postalCode'] = controllers.postalCode.text;
