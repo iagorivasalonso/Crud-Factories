@@ -573,7 +573,7 @@ class _newSendState extends State<newSend>{
       }
 
     saveChanges = false;
-
+    allLines += current;
     if (BaseDateSelected.isNotEmpty) {
 
       if (select == -1) {
