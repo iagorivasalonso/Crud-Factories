@@ -754,6 +754,16 @@ class S {
     return Intl.message('Cargar datos', name: 'load_data', desc: '', args: []);
   }
 
+  /// `no puede eliminar el sector con empresas`
+  String get it_cannot_eliminate_the_sector_with_companies {
+    return Intl.message(
+      'no puede eliminar el sector con empresas',
+      name: 'it_cannot_eliminate_the_sector_with_companies',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `El empleado se ha eliminado correctamente`
   String get the_employee_has_been_correctly_removed {
     return Intl.message(

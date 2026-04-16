@@ -277,6 +277,10 @@ class MessageLookup extends MessageLookupByLibrary {
     "is_connected_to": MessageLookupByLibrary.simpleMessage(
       "Está conectado a ",
     ),
+    "it_cannot_eliminate_the_sector_with_companies":
+        MessageLookupByLibrary.simpleMessage(
+          "no puede eliminar el sector con empresas",
+        ),
     "it_empty": MessageLookupByLibrary.simpleMessage("esta vacio"),
     "it_has_been": MessageLookupByLibrary.simpleMessage("Ha sido"),
     "it_must_be_numerical": MessageLookupByLibrary.simpleMessage(

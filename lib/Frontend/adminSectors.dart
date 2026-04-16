@@ -107,6 +107,18 @@ Future <void> _onDeleteSector(BuildContext context, int index, void Function(voi
   final String idToDelete = sectors[index].id;
 
 
+  final bool hasFactories = allFactories.any(
+        (factory) => factory.sector == idToDelete,
+  );
+
+  if (hasFactories) {
+    await warning(
+      context,
+      S.of(context).it_cannot_eliminate_the_sector_with_companies,
+    );
+    return;
+  }
+
   final bool? confirmed = await warning(
     context,
     S.of(context).confirm_delete_sector, // mensaje personalizado

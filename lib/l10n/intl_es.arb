@@ -114,6 +114,7 @@
   "no_data_in_memory": "No se encontraron datos en memoria. ¿Qué desea hacer?",
   "view_demo": "Ver demo",
   "load_data": "Cargar datos",
+  "it_cannot_eliminate_the_sector_with_companies":"no puede eliminar el sector con empresas",
   "the_employee_has_been_correctly_removed": "El empleado se ha eliminado correctamente",
   "all_the_sector_will_be_showcased": "En el sector, se mostrarán todas las",
   "the_sector_has_been_created_successfully": "El sector se ha creado correctamente",
