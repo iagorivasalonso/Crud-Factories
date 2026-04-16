@@ -242,7 +242,7 @@ Future<void> _onSaveMail(BuildContext context, int select,MailController control
           ..text = S.of(context).this_is_a_connection_test_from_the_application;
 
 
-        final result = await sendingMail(context,controllers,message);
+        final result = await sendingMail(context,controllers,message,select);
 
         if (result.length != 1)
         {
@@ -251,20 +251,6 @@ Future<void> _onSaveMail(BuildContext context, int select,MailController control
         }
         else
         {
-          final newMail = Mail(
-            address: controllers.mail.text,
-            password: controllers.password.text,
-            id: '8',
-            company: "ggogle",
-          );
-
-          if (select == -1) {
-            // CREAR
-            mails.add(newMail);
-          } else {
-            // EDITAR
-            mails[select] = newMail;
-          }
 
                 if (BaseDateSelected.isNotEmpty)
                 {
@@ -314,7 +300,7 @@ Future<void> _onSaveMail(BuildContext context, int select,MailController control
   }
 }
 
-Future<List<String>> sendingMail(context,controllers, Message message) async {
+Future<List<String>> sendingMail(context,controllers, Message message, [select]) async {
 
   List<String> mailSends = [];
 
@@ -326,6 +312,21 @@ Future<List<String>> sendingMail(context,controllers, Message message) async {
   List <String> extCompany = separeaddress[1].split(".");
 
   String company = extCompany[0];
+
+  final newMail = Mail(
+    address: controllers.mail.text,
+    password: controllers.password.text,
+    id: '0',
+    company: company,
+  );
+
+  if (select == -1) {
+    // CREAR
+    mails.add(newMail);
+  } else {
+    // EDITAR
+    mails[select] = newMail;
+  }
 
       try {
 
