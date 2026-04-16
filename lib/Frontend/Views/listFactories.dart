@@ -1,3 +1,4 @@
+import 'package:crud_factories/Alertdialogs/error.dart' show error;
 import 'package:crud_factories/Backend/CSV/exportEmpleoyes.dart';
 import 'package:crud_factories/Backend/CSV/exportFactories.dart';
 import 'package:crud_factories/Backend/Global/list.dart';
@@ -13,6 +14,7 @@ import 'package:crud_factories/Functions/isNotAndroid.dart';
 import 'package:crud_factories/Widgets/GenericListViewPage.dart';
 import 'package:crud_factories/Widgets/factoryCard.dart';
 import 'package:crud_factories/helpers/localization_helper.dart';
+import 'package:crud_factories/Alertdialogs/noCategory.dart';
 
 
 
@@ -110,7 +112,6 @@ class _listFactoriesState extends State<listFactories> {
     );
 
     if (confirmDelete) {
-
       empleoyes.removeWhere((f) => f.idFactory == factory.id);
       factoriesSector.remove(factory);
       allFactories.remove(factory);
@@ -122,8 +123,6 @@ class _listFactoriesState extends State<listFactories> {
         csvExportatorEmpleoyes(empleoyes);
         csvExportatorFactories(allFactories);
       }
-
-
 
 
       final updated = List<Factory>.from(displayFactoriesNotifier.value)
@@ -141,7 +140,13 @@ class _listFactoriesState extends State<listFactories> {
         }
       });
 
-      return true;
+      if (displayFactoriesNotifier.value.isEmpty) {
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          String array = S.of(context).companies;
+          noCategory(context, array);
+        });
+        return true;
+      }
     }
 
     return false;
@@ -184,6 +189,7 @@ class _listFactoriesState extends State<listFactories> {
 
     return Row(
           children: [
+            if(factorySelect != null)
             SizedBox(
               width: mWidthList,
               child: ValueListenableBuilder<List<Factory>>(
@@ -212,7 +218,9 @@ class _listFactoriesState extends State<listFactories> {
 
             SizedBox(
               width: mWidth-mWidthList,
-              child: newFactory(select,factorySelect),
+              child: factorySelect != null
+                  ? newFactory(select, factorySelect)
+                  : Text(""),
             ),
           ],
         );

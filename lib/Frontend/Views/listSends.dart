@@ -1,3 +1,4 @@
+import 'package:crud_factories/Alertdialogs/noCategory.dart' show noCategory;
 import 'package:crud_factories/Backend/Global/variables.dart';
 import 'package:crud_factories/Frontend/send.dart';
 import 'package:crud_factories/generated/l10n.dart';
@@ -151,6 +152,15 @@ class _listSendsState extends State<listSends> {
       }
     });
 
+    if (displayLinesNotifier.value.isEmpty) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        String array = S.of(context).sends;
+        noCategory(context, array);
+      });
+      return true;
+    }
+
+
     // 5. PERSISTENCIA
     if (BaseDateSelected.isNotEmpty) {
       await sqlDeleteLines(linesToDelete.map((e) => e.id).toList());
@@ -273,6 +283,7 @@ class _listSendsState extends State<listSends> {
     ];
     return Row(
       children: [
+        if(selectCamp.isNotEmpty)
         Container(
           color: Colors.grey,
           width: mWidthList,
@@ -302,7 +313,9 @@ class _listSendsState extends State<listSends> {
 
         SizedBox(
           width: mWidth - mWidthList,
-          child: newSend(selectCamp,  selectedFilter, select)
+            child: selectCamp.isNotEmpty
+                ? newSend(selectCamp,  selectedFilter, select)
+                : Text(""),
         ),
       ],
     );

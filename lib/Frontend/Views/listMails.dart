@@ -1,11 +1,12 @@
+import 'package:crud_factories/Alertdialogs/noCategory.dart' show noCategory;
 import 'package:crud_factories/Backend/CSV/exportMails.dart';
 import 'package:crud_factories/Backend/Global/list.dart';
 import 'package:crud_factories/Backend/Global/variables.dart';
 import 'package:crud_factories/Backend/SQL/deleteMail.dart';
 import 'package:crud_factories/Frontend/mail.dart';
 import 'package:crud_factories/Widgets/defaultCard.dart';
+import 'package:crud_factories/generated/l10n.dart';
 import 'package:flutter/material.dart';
-
 import 'package:crud_factories/Alertdialogs/warning.dart';
 import 'package:crud_factories/Functions/changesNoSave.dart';
 import 'package:crud_factories/Functions/isNotAndroid.dart';
@@ -33,6 +34,15 @@ class _listMailsState extends State<listMails> {
     );
 
     if (confirmDelete) {
+
+        if(mails.length==1)
+        {
+          WidgetsBinding.instance.addPostFrameCallback((_) {
+            String array = S.of(context).mails;
+            noCategory(context, array);
+          });
+        }
+
       setState(() {
         mails.remove(mail);
       });
@@ -70,6 +80,7 @@ class _listMailsState extends State<listMails> {
 
     return Row(
       children: [
+        if(mails.isNotEmpty)
         Container(
           color: Colors.grey,
           width: mWidthList,
@@ -94,7 +105,9 @@ class _listMailsState extends State<listMails> {
 
         SizedBox(
           width: mWidth-mWidthList,
-          child: newMail(selectCard),
+          child: mails.isNotEmpty
+                ? newMail(selectCard)
+                : Text(""),
         ),
       ],
     );
