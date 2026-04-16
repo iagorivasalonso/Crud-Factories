@@ -411,7 +411,7 @@ Future<ImportResult> _importFactories(BuildContext context) async {
   return result;
 }
 
-void _showImportSumary(BuildContext context, List<ImportResult> results) async{
+void _showImportSumary(BuildContext context, List<ImportResult> results) async {
 
       final success = results.where((r) => r.inserted > 0).toList();
       final errors = results.expand((r) => r.errors).toList();
@@ -489,15 +489,7 @@ Future<int> processImport<T extends BaseEntity>({
   }
 
   if (count > 0) {
-/*
-    // 🚨 WEB = NO SQL
-    if (kIsWeb) {
-      await csvExport(existingList);
-      return count;
-    }*/
-print(BaseDateSelected);
-    print(sqlExport);
-    // 💻 SOLO DESKTOP/MOBILE
+
     if (BaseDateSelected.isNotEmpty && sqlExport != null) {
       await sqlExport([...toInsert, ...toUpdate]);
     } else {
