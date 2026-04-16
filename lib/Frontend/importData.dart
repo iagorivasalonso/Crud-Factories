@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:crud_factories/Alertdialogs/confirm.dart';
 import 'package:crud_factories/Alertdialogs/noFind.dart' show noFind;
+import 'package:crud_factories/Backend/CSV/ImportGeneral/import_Processor.dart' show processImport;
 import 'package:crud_factories/Backend/CSV/exportEmpleoyes.dart';
 import 'package:crud_factories/Backend/CSV/exportRoutes.dart';
 import 'package:crud_factories/Backend/CSV/exportSectors.dart';
@@ -15,10 +16,10 @@ import 'package:crud_factories/Backend/CSV/exportConections.dart';
 import 'package:crud_factories/Backend/CSV/exportFactories.dart';
 import 'package:crud_factories/Backend/CSV/exportLines.dart';
 import 'package:crud_factories/Backend/CSV/exportMails.dart';
+import 'package:crud_factories/Objects/importResult.dart' show ImportResult;
 import 'package:crud_factories/Widgets/headViewsAndroid.dart';
 import 'package:crud_factories/generated/l10n.dart';
 import 'package:file_picker/file_picker.dart' show FilePickerResult, FileType, FilePicker;
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:crud_factories/Backend/CSV/ImportGeneral/CsvProcessorService.dart';
 import 'package:crud_factories/Functions/isNotAndroid.dart';
@@ -416,106 +417,23 @@ void _showImportSumary(BuildContext context, List<ImportResult> results) async {
       final success = results.where((r) => r.inserted > 0).toList();
       final errors = results.expand((r) => r.errors).toList();
 
-String summaryText = '';
+      String summaryText = '';
 
-if (success.isNotEmpty) {
-  final message = success
-      .map((e) => LocalizationHelper.importData(context, e.entity, e.inserted))
-      .join('\n');
-  summaryText += message;
-  print(message);
-  confirm(context, message);
-}
+      if (success.isNotEmpty) {
+            final message = success
+                .map((e) => LocalizationHelper.importData(context, e.entity, e.inserted))
+                .join('\n');
+            summaryText += message;
+            print(message);
+            confirm(context, message);
+      }
 
-if (errors.isNotEmpty) {
-  final errorMessage = errors.join('\n');
-  summaryText += (summaryText.isNotEmpty ? '\n\n' : '') + errorMessage;
-  await noFind(context, true, errorMessage);
-}
-
-
+      if (errors.isNotEmpty) {
+          final errorMessage = errors.join('\n');
+          summaryText += (summaryText.isNotEmpty ? '\n\n' : '') + errorMessage;
+          await noFind(context, true, errorMessage);
+      }
 
 }
 
 
-
-
-
-abstract class BaseEntity {
-  late String id;
-}
-
-Future<int> processImport<T extends BaseEntity>({
-      required List<T> newList,
-      required List<T> existingList,
-      required String Function(T) getKey,
-      required void Function(T, String) setId,
-      required Future<void> Function(List<T>) csvExport,
-      Future<void> Function(List<T>)? sqlExport,
-      dynamic conn,
-}) async {
-
-  int count = 0;
-  int maxId = existingList.isNotEmpty
-      ? existingList.map((e) => int.parse(e.id)).reduce((a, b) => a > b ? a : b)
-      : 0;
-
-  List<T> toInsert = [];
-  List<T> toUpdate = [];
-
-
-  for(final iten in newList) {
-    final index = existingList.indexWhere((x) => getKey(x) == getKey(iten));
-
-        if (index == -1)
-        {
-          maxId++;
-          setId(iten, maxId.toString());
-
-          existingList.add(iten);
-          toInsert.add(iten);
-          count++;
-        }
-        else
-        {
-          final existing = existingList[index];
-
-          setId(iten, existing.id);
-
-          existingList[index] = iten;
-          toUpdate.add(iten);
-          count++;
-        }
-  }
-
-  if (count > 0) {
-
-    if (BaseDateSelected.isNotEmpty && sqlExport != null) {
-      await sqlExport([...toInsert, ...toUpdate]);
-    } else {
-      await csvExport(existingList);
-    }
-  }
-
-  return count;
-}
-
-
-class ImportResult {
-
-   final String entity;
-   int inserted;
-   List<String> errors;
-
-   ImportResult({
-       required this.entity,
-       this.inserted = 0,
-       List<String>? errors,
-   }) : errors = errors ?? [];
-
-
-   @override
-   String toString() {
-     return 'ImportResult(entity: $entity, inserted: $inserted, errors: $errors)';
-   }
-}

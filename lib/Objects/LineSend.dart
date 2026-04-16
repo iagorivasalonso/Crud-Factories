@@ -1,4 +1,4 @@
-import 'package:crud_factories/Frontend/importData.dart' show BaseEntity;
+import 'package:crud_factories/Objects/BaseEntity.dart';
 import 'package:crud_factories/generated/l10n.dart';
 import 'package:flutter/src/widgets/framework.dart';
 

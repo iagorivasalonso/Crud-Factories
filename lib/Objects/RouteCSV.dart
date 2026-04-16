@@ -1,4 +1,4 @@
-import 'package:crud_factories/Frontend/importData.dart' show BaseEntity;
+import 'package:crud_factories/Objects/BaseEntity.dart';
 
 class RouteCSV extends BaseEntity {
 

@@ -1,5 +1,5 @@
+import 'package:crud_factories/Objects/BaseEntity.dart';
 
-import '../Frontend/importData.dart';
 
 class Sector extends BaseEntity {
 

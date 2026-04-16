@@ -1,5 +1,7 @@
 
-import 'package:crud_factories/Frontend/importData.dart' show BaseEntity;
+
+
+import 'package:crud_factories/Objects/BaseEntity.dart';
 
 class Empleoye extends BaseEntity {
 
