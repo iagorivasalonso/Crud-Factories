@@ -304,7 +304,6 @@ Future<List<String>> sendingMail(context,controllers, Message message, [select])
 
   List<String> mailSends = [];
 
-  bool connectEmail = false;
   String username = controllers.mail.text;
   String password = controllers.password.text;
 
