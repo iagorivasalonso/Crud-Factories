@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:crud_factories/Alertdialogs/defaultData.dart';
+import 'package:crud_factories/Alertdialogs/error.dart' show error;
 import 'package:crud_factories/Backend/Global/files.dart';
 import 'package:crud_factories/Backend/Global/list.dart';
 import 'package:crud_factories/Backend/Global/variables.dart';
@@ -203,18 +204,31 @@ class csvLoaderService {
     String action = LocalizationHelper.manage_array(context, array, actionArray);
 
 
-    if(initialChargue != true)
-    {
-      if(result == true && errorFiles.isNotEmpty)
-      {
-        errors(context, errorFiles);
-      }
+        if(initialChargue != true)
+        {
+              if(result == true && errorFiles.isNotEmpty)
+              {
+                errors(context, errorFiles);
+              }
 
-      await confirm(context, action);
-      Navigator.of(context).pop(false);
-    }
+              await confirm(context, action);
+              Navigator.of(context).pop(false);
 
-    csvExportatorRoutes(routesCSV);
+              bool errorExp = await csvExportatorRoutes(routesCSV);
+
+              if (!kIsWeb && errorExp) {
+                String action = LocalizationHelper.no_file(
+                  context,
+                  S.of(context).routes,
+                );
+                error(context, action);
+                return;
+              }
+
+
+        }
+
+
   }
   static AppFile fromAsset(String assetPath) {
     return AppFile(

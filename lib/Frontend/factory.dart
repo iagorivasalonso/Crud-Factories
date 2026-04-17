@@ -18,6 +18,7 @@ import 'package:crud_factories/Widgets/headViewsAndroid.dart';
 import 'package:crud_factories/Widgets/textfieldCalendar.dart';
 import 'package:crud_factories/generated/l10n.dart';
 import 'package:crud_factories/helpers/localization_helper.dart';
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 import 'package:crud_factories/Alertdialogs/createSector.dart';
 import 'package:crud_factories/Functions/isNotAndroid.dart';
@@ -662,10 +663,14 @@ class _newFactoryState extends State<newFactory> {
         ),
       );
     } else {
-      warning(
-        context,
-        LocalizationHelper.no_file(context, S.of(context).company),
-      );
+
+      if (!kIsWeb) {
+        warning(
+          context,
+          LocalizationHelper.no_file(context, S.of(context).company),
+        );
+      }
+
     }
     await _onResetFactory(context, select, controllers, contacsCurrent);
   }

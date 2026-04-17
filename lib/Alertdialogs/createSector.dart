@@ -14,6 +14,7 @@ import 'package:crud_factories/Widgets/materialButton.dart' show materialButton;
 import 'package:crud_factories/Widgets/textfield.dart' show defaultTextfield;
 import 'package:crud_factories/generated/l10n.dart';
 import 'package:crud_factories/helpers/localization_helper.dart' show LocalizationHelper;
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 
 
@@ -143,7 +144,16 @@ Future<void> saveSector(BuildContext context,  BuildContext dialogContext,TextEd
         sqlModifySector(currentSector);
       }
     } else {
-      await csvExportatorSectors(sectors);
+      bool errorExp = await csvExportatorSectors(sectors);
+
+      if (!kIsWeb && errorExp) {
+        String action = LocalizationHelper.no_file(
+          context,
+          S.of(context).sectors,
+        );
+        error(context, action);
+        return;
+      }
     }
    return;
 

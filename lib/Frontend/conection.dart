@@ -10,6 +10,8 @@ import 'package:crud_factories/Objects/Conection.dart';
 import 'package:crud_factories/Widgets/headViewsAndroid.dart' show appBarAndroid;
 import 'package:crud_factories/Widgets/layoutVariant.dart';
 import 'package:crud_factories/generated/l10n.dart';
+import 'package:crud_factories/helpers/localization_helper.dart' show LocalizationHelper;
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:crud_factories/Alertdialogs/confirm.dart';
@@ -380,7 +382,17 @@ class _conectionState extends State<conection> {
                   String action = S.of(context).connection_has_been_successfully_edited;
                   await confirm(context, action);
 
-                  csvExportatorConections(conections);
+
+                  bool errorExp = await csvExportatorConections(conections);
+
+                  if (!kIsWeb && errorExp) {
+                    String action = LocalizationHelper.no_file(
+                      context,
+                      S.of(context).connections,
+                    );
+                    error(context, action);
+                    return;
+                  }
                   conexChangued = true;
                 }
 

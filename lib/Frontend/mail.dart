@@ -281,12 +281,12 @@ Future<void> _onSaveMail(BuildContext context, int select,MailController control
 
                   bool errorExp = await csvExportatorMails(mails);
 
-                  if(errorExp != false)
-                  {
-                    String array = S.of(context).mails;
-                    String action = LocalizationHelper.no_file(context, array);
-                    warning(context, action);
-                  }
+                if (!kIsWeb && errorExp != false)
+                {
+                  String array = S.of(context).mails;
+                  String action = LocalizationHelper.no_file(context, array);
+                  warning(context, action);
+                }
         }
       }
       else

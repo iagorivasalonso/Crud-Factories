@@ -1,3 +1,4 @@
+import 'package:crud_factories/Alertdialogs/error.dart' show error;
 import 'package:crud_factories/Backend/CSV/exportConections.dart';
 import 'package:crud_factories/Backend/Global/list.dart';
 import 'package:crud_factories/Backend/Global/variables.dart';
@@ -9,6 +10,7 @@ import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter/foundation.dart';
 import 'package:mysql1/mysql1.dart';
 import '../../generated/l10n.dart';
+import '../../helpers/localization_helper.dart' show LocalizationHelper;
 import '../connectors_API/Models/Api_response.dart';
 
 enum ConnectionStatus {
@@ -374,11 +376,21 @@ class ConectionProvider extends ChangeNotifier {
     return await MySqlConnection.connect(settings);
   }
 
-  void _updateList(List<Conection> newList, {Conection? newSelected}) {
+  void _updateList(List<Conection> newList, {Conection? newSelected}) async {
     conections = newList;
     selected = newSelected;
     notifyListeners();
-    csvExportatorConections(conections);
+
+    bool errorExp = await csvExportatorConections(conections);
+
+    if (!kIsWeb && errorExp) {
+      String action = LocalizationHelper.no_file(
+        context,
+        S.of(context).connections,
+      );
+      error(context, action);
+      return;
+    }
   }
 
   Future<String> controlsErrors(String errorMsg) async {

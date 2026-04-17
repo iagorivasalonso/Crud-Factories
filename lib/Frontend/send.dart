@@ -15,6 +15,7 @@ import 'package:crud_factories/Widgets/headViewsAndroid.dart';
 import 'package:crud_factories/Widgets/textfield.dart';
 import 'package:crud_factories/generated/l10n.dart';
 import 'package:crud_factories/helpers/localization_helper.dart';
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
 import 'package:collection/collection.dart';
@@ -585,7 +586,7 @@ class _newSendState extends State<newSend>{
 
       bool errorExp = await csvExportatorLines(allLines);
 
-      if (errorExp) {
+      if (!kIsWeb && errorExp) {
         String action = LocalizationHelper.no_file(
           context,
           S.of(context).shipments,
