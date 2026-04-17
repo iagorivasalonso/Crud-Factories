@@ -35,13 +35,17 @@ class csvLoaderService {
    }
        fileRoutes= 'routes.csv';
 
-   final String defaultRoutesPath =
+   String defaultRoutesPath =
    parentDir?.path != null
        ? p.join(parentDir!.path,fileRoutes)
        : '';
 
     routeFirst = defaultRoutesPath;
 
+    if(newRoutePath != null)
+    {
+       defaultRoutesPath =newRoutePath;
+    }
     final String pathToLoad = await resolveRoutesPath(context,defaultRoutesPath);
 
 
@@ -111,47 +115,45 @@ class csvLoaderService {
     return isCorrect; // Devuelve true si todo bien
   }
 
-  static Future<String> resolveRoutesPath (BuildContext context, [String? newRoutePath]) async {
+  static Future<String> resolveRoutesPath(BuildContext context, [String? newRoutePath]) async {
 
-      final String userPath = newRoutePath ?? '';
-      final String assetPath = 'assets/dataDefault/routes.csv';
+    final String userPath = newRoutePath ?? '';
+    final String assetPath = 'assets/dataDefault/routes.csv';
 
+    // 🌐 WEB → siempre default
+    if (kIsWeb) {
+      bool errData = newRoutePath!.isEmpty
+             ? await defaultData(context)
+             : true;
 
-      if (kIsWeb) {
-        bool errData = await defaultData(context);
-
-        if (errData == true) {
-          useDataDefault = true;
-          return assetPath;
-        } else {
-          return 'fail';
-        }
+      if (errData == true) {
+        useDataDefault = true;
+        return assetPath;
+      } else {
+        return 'fail';
       }
+    }
 
-
-      if (userPath.isNotEmpty) {
-        final file = File(userPath);
-
-        if (await file.exists()) {
-          return userPath;
-        } else {
-          bool errData = await defaultData(context);
-
-          if (errData == true) {
-            useDataDefault = true;
-            return assetPath;
-          } else {
-            return 'fail';
-          }
-        }
-      }
-
+    // 🟢 CASO IMPORTANTE: VIENE UNA RUTA DEL USUARIO
+    if (userPath.isNotEmpty) {
       final file = File(userPath);
 
-      if (await file.exists()) return userPath;
+      if (await file.exists()) {
+        return userPath; // ✅ usar la que viene
+      } else {
+        // ❌ NO usar default si el usuario ya pasó una ruta
+        return 'fail';
+      }
+    }
 
+    // 🟡 NO HAY RUTA → usar default si existe
+    final file = File(assetPath);
+
+    if (await file.exists()) {
       return assetPath;
+    }
 
+    return 'fail';
   }
   static Future<List<RouteCSV>> _createData(String path) async {
 
@@ -209,6 +211,7 @@ class csvLoaderService {
       }
 
       await confirm(context, action);
+      Navigator.of(context).pop(false);
     }
 
     csvExportatorRoutes(routesCSV);
