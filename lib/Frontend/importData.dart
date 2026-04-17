@@ -41,8 +41,6 @@ class _newImportState extends State<newImport> {
   final ScrollController horizontalScroll = ScrollController();
   final ScrollController verticalScroll = ScrollController();
 
-
-
   late TextEditingController controllerImportPicker = TextEditingController();
 
   @override
