@@ -549,22 +549,82 @@ class _newFactoryState extends State<newFactory> {
     final allKeys = allFactories.map((f) => f.name).toList();
     final campOld = select != -1 ? allFactories[select].name : "";
 
-    final isValidName = validatorCamps.primaryKeyCorrect(
+    final nameError = ValidatorCamps.primaryKeyValidate(
       controllers.name.text,
-      S.of(context).name,
       allKeys,
       campOld,
       context,
-    ) ||
-        (select != -1 && controllers.name.text == allFactories[select].name);
+    );
 
-    if (!isValidName) return;
+    final isSameSelected = (select != -1 && controllers.name.text == allFactories[select].name);
 
-    final telephone1 = controllers.telephone1.text.replaceAll(" ", "");
-    final telephone2 = controllers.telephone2.text.replaceAll(" ", "");
+    if (nameError != null && !isSameSelected) {
+      error(context, nameError);
+      return;
+    }
 
-    if (!validatorCamps.dateCorrect(controllers.highDate.text)) {
+    final dateError = ValidatorCamps.dateValidate(
+      controllers.highDate.text,
+      context,
+    );
 
+    if (dateError != null) {
+      String format = 'DD-MM-AAAA';
+      error(context, dateError, format);
+      return;
+    }
+
+    final sectorError = ValidatorCamps.emptyValidate(
+      controllers.sector.text,
+      context,
+      S.of(context).sector,
+    );
+
+    if (sectorError != null) {
+      error(context, sectorError);
+      return;
+    }
+
+    final mailError = ValidatorCamps.mailValidate(
+      controllers.mail.text,
+      context,
+    );
+
+    if (mailError != null) {
+      error(context, mailError);
+      return;
+    }
+
+    final tel1 = controllers.telephone1.text.replaceAll(" ", "");
+    final tel2 = controllers.telephone2.text.replaceAll(" ", "");
+
+    final tel1Error = ValidatorCamps.telephoneValidate(
+      tel1,
+      context,
+    );
+
+    if (tel1Error != null) {
+      error(context, tel1Error);
+      return;
+    }
+
+    final tel2Error = ValidatorCamps.telephoneValidate(
+      tel2,
+      context,
+    );
+
+    if (tel2Error != null) {
+      error(context, tel2Error);
+      return;
+    }
+    // ---- ADDRESS PARSE ----
+
+    final addressError = ValidatorCamps.addressValidate(
+      controllers.address.text,
+      context,
+    );
+
+    if (addressError != null) {
       String array = S.of(context).date;
       String action = LocalizationHelper.format_must(context, array);
 
@@ -573,23 +633,6 @@ class _newFactoryState extends State<newFactory> {
       return;
     }
 
-    if (validatorCamps.campEmpty(controllers.sector.text)) {
-      String campo = S.of(context).sector;
-      error(context, LocalizationHelper.camp_empty(context, campo));
-      return;
-    }
-
-    if (!validatorCamps.mailCorrect(controllers.mail.text)) {
-      error(context, S.of(context).not_a_valid_mail);
-      return;
-    }
-
-    if (!validatorCamps.webCorrect(controllers.web.text)) {
-      error(context, S.of(context).not_a_valid_webpage);
-      return;
-    }
-
-    // ---- ADDRESS PARSE ----
     final addressText = controllers.address.text;
 
     final partsDash = addressText.split("-");
@@ -599,6 +642,16 @@ class _newFactoryState extends State<newFactory> {
     final street = partsComma.isNotEmpty ? partsComma[0] : "";
     final number = partsComma.length > 1 ? partsComma[1] : "";
 
+    final postalError = ValidatorCamps.postalCodeValidate(
+      controllers.postalCode.text,
+      context,
+    );
+
+    if (postalError != null) {
+      error(context, postalError);
+      return;
+    }
+
     // ---- CREATE OR UPDATE ----
     if (select == -1) {
       allFactories.add(
@@ -607,7 +660,7 @@ class _newFactoryState extends State<newFactory> {
           name: controllers.name.text,
           highDate: controllers.highDate.text,
           sector: selectedSector!.id,
-          thelephones: [telephone1, telephone2],
+          thelephones: [tel1, tel2],
           mail: controllers.mail.text,
           web: controllers.web.text,
           address: {
@@ -625,7 +678,7 @@ class _newFactoryState extends State<newFactory> {
       f.name = controllers.name.text;
       f.highDate = controllers.highDate.text;
       f.sector = selectedSector!.id;
-      f.thelephones = [telephone1, telephone2];
+      f.thelephones = [tel1, tel2];
       f.mail = controllers.mail.text;
       f.web = controllers.web.text;
       f.address['street'] = street;
