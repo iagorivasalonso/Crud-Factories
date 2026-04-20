@@ -51,8 +51,7 @@ class _newSendState extends State<newSend>{
 
 
   String tView ="";
-  final Sector allSectorOption = Sector(id: "-1", name: "Todos");
-  late Sector? selectedSector = allSectorOption;
+  Sector? selectedSector;
 
   String selectedItem = LineSendState.prepared.name;
   List<LineSend> linesSelected = [];
@@ -308,7 +307,6 @@ class _newSendState extends State<newSend>{
                                          onStateChanged: (index , value ) {
                                            setState(() {
                                              linesControllers[index].state = value as LineSendState;
-                                            // selectedItem = value; //
                                            });
                                          },
                                          onSendChanged: (i, value) {
@@ -495,7 +493,16 @@ class _newSendState extends State<newSend>{
       int idInit = int.parse(idNew);
 
       if (select == -1) {
-        if (validatorCamps.dateCorrect(controllerSearch.text) == true) {
+        final dateError = ValidatorCamps.dateValidate(
+          controllerSearch.text,
+          context,
+        );
+
+        if (dateError != null) {
+          String format = 'DD-MM-AAAA';
+          error(context, dateError, format);
+          return;
+        }
 
           for (int i = 0; i < factoriesSector.length; i++) {
 
@@ -516,7 +523,7 @@ class _newSendState extends State<newSend>{
               linesControllers[i].state = LineSendState.prepared;
               send[i] = false;
             }
-          }
+
 
           allLinesCreated += current.length;
           confirm(context, LocalizationHelper.sendsFactory(context, allLinesCreated));
@@ -608,7 +615,7 @@ class _newSendState extends State<newSend>{
 
       if (select == -1)
       {
-          selectedSector = allSectorOption;
+          selectedSector = null;
           factoriesSector = allFactories;
 
           controllerSearchSend.text = DateFormat('dd-MM-yyyy').format(DateTime.now());

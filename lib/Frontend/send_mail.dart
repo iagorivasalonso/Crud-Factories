@@ -406,23 +406,33 @@ Future<void> _onSendMail(BuildContext context,MailController controllers, bool o
 
    if(otherMail)
    {
-         if(validatorCamps.mailCorrect(controllers.mail.text) != true)
-         {
-             correct = false;
-             action = S.of(context).your_mail_is_invalid;
-             error(context,action);
-         }
+     final mailError = ValidatorCamps.mailValidate(
+       controllers.mail.text,
+       context,
+     );
+
+     if (mailError != null) {
+
+       correct = false;
+       error(context, S.of(context).your_mail_is_invalid);
+       return;
+     }
    }
    
    if (correct)
    {
          if(selectedOption == S.of(context).a_recipient)
          {
-               if(validatorCamps.mailCorrect(controllers.mailTo!.text) != true)
-               {
-                   correct = false;
-                   action = S.of(context).The_recipient_is_not_a_valid_mail;
-                   error(context,action);
+               final mailError = ValidatorCamps.mailValidate(
+                 controllers.mail.text,
+                 context,
+               );
+
+               if (mailError != null) {
+
+                 correct = false;
+                 error(context, S.of(context).The_recipient_is_not_a_valid_mail);
+                 return;
                }
          }
    }

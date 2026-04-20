@@ -200,103 +200,45 @@ Future<void> _onSaveMail(BuildContext context, int select,MailController control
     campOld = mails[select].address;
   }
 
-  if((validatorCamps.primaryKeyCorrect(controllers.mail.text,nameCamp,allKeys,campOld,context) ==true) )
-  {
-    if(validatorCamps.mailCorrect(controllers.mail.text) != true)
-    {
-      action = S.of(context).not_a_valid_mail;
-      await error(context, action);
-    }
-    if(controllers.password.text.isEmpty || controllers.passwordVerify!.text.isEmpty)
-    {
+  final mail = controllers.mail.text;
+  final pass = controllers.password.text;
+  final pass2 = controllers.passwordVerify!.text;
 
-      if(controllers.password.text.isEmpty)
-      {
-        String array = S.of(context).password;
-        action = LocalizationHelper.camp_empty(context, array);
-        await error(context, action);
-      }
-      else
-      {
-        String array = S.of(context).verify_password;
-        action = LocalizationHelper.camp_empty(context, array);
-        error(context, action);
-      }
-    }
-    else
-    {
-      if (controllers.password.text == controllers.passwordVerify!.text)
-      {
+// ---- PRIMARY KEY ----
+  final nameError = ValidatorCamps.primaryKeyValidate(
+    controllers.mail.text,
+    allKeys,
+    campOld,
+    context,
+  );
 
-        String username = controllers.mail.text;
-        String password = "";
-        String company = "";
+  if (nameError != null) {
+    await error(context, nameError);
+    return;
+  }
+// ---- MAIL FORMAT ----
+  final mailError = ValidatorCamps.mailValidate(mail, context);
+  if (mailError != null) {
+    await error(context, mailError);
+    return;
+  }
 
+// ---- PASSWORD EMPTY ----
+  final passwordError = ValidatorCamps.passwordValidate(
+    pass,
+    pass2,
+    context,
+  );
 
-        List <String> separeaddress = username.split("@");
+  if (passwordError != null) {
+    await error(context, passwordError);
+    return;
+  }
 
-        final message = Message()
-          ..from = Address(username, separeaddress[0])
-          ..recipients.add(username)
-          ..subject = S.of(context).connection_test
-          ..text = S.of(context).this_is_a_connection_test_from_the_application;
-
-
-        final result = await sendingMail(context,controllers,message,select);
-
-        if (result.length != 1)
-        {
-          String action = S.of(context).connection_cannot_be_established;
-          error(context, action);
-        }
-        else
-        {
-
-                if (BaseDateSelected.isNotEmpty)
-                {
-                  if (select == -1)
-                  {
-                    sqlCreateMail(current);
-                  }
-                  else
-                  {
-                    current.add(mails[select]);
-                    sqlModifyMail(current);
-                  }
-                }
-
-
-
-                saveChanges = false;
-                if (result == false)
-                {
-                  action = S.of(context).the_user_or_password_are_incorrect;
-                  error(context, action);
-                }
-                else
-                {
-                  action = S.of(context).the_connection_test_was_sent_successfully;
-                  confirm(context, action);
-                }
-
-                  bool errorExp = await csvExportatorMails(mails);
-
-                if (!kIsWeb && errorExp != false)
-                {
-                  String array = S.of(context).mails;
-                  String action = LocalizationHelper.no_file(context, array);
-                  warning(context, action);
-                }
-        }
-      }
-      else
-      {
-        action = S.of(context).passwords_do_not_match;
-        error(context, action);
-      }
-
-    }
-
+// ---- PASSWORD MATCH ----
+  if (pass != pass2) {
+    await error(context, S.of(context).passwords_do_not_match);
+    return;
   }
 }
 

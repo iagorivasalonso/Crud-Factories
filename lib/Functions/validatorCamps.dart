@@ -1,190 +1,149 @@
-import 'package:crud_factories/Alertdialogs/error.dart';
 import 'package:crud_factories/generated/l10n.dart';
 import 'package:crud_factories/helpers/localization_helper.dart';
 import 'package:fluent_ui/fluent_ui.dart';
 
-class validatorCamps {
+class ValidatorCamps {
 
-  static bool primaryKeyCorrect(String camp, String nameCamp, List <String> allKeys, String campOld, BuildContext context) {
+  static String? primaryKeyValidate(
+      String camp,
+      List<String> allKeys,
+      String campOld,
+      BuildContext context,
+      ) {
+    if (allKeys.isEmpty || campOld == camp) return null;
 
-   bool keyCorrect= false;
-
-   if(allKeys.isEmpty || campOld == camp){
-     keyCorrect = true;
-   }  else if (allKeys.contains(camp)) {
-     error(context, S.of(context).this_field_cannot_be_repeated);
-     keyCorrect = false;
-   } else {
-     keyCorrect = true;
-   }
-
-    return keyCorrect;
-  }
-
-  static bool campEmpty(String camp) {
-
-    bool campValid = false;
-
-    if(camp.isEmpty)
-    {
-      campValid = true;
-    }else
-    {
-      campValid = false;
+    if (allKeys.contains(camp)) {
+      return S.of(context).this_field_cannot_be_repeated;
     }
 
-    return campValid;
+    return null;
   }
 
-  static bool dateCorrect( String date)
-  {
-    bool dateValid =  RegExp(r"^[0-3][0-9]+-[0-1][0-9]+-[0-9][0-9][0-9][0-9]").hasMatch(date);
+  static String? emptyValidate(String camp, BuildContext context, String nameCamp) {
+    if (camp.trim().isEmpty) {
+      return "$nameCamp ${S.of(context).is_required}";
+    }
+    return null;
+  }
 
-    if(dateValid == true)
-    {
+  static String? dateValidate(String date, BuildContext context) {
+    final value = date.trim();
+    String array = S.of(context).date;
+    if (value.isEmpty) return null;
 
+    if (!RegExp(r"^[0-3][0-9]-[0-1][0-9]-[0-9]{4}$").hasMatch(value)) {
 
-      if(date.length == 10)
-      {
-
-        List <String> partDate = date.split("-");
-
-        if(partDate.length == 3)
-        {
-          int dd = int.parse(partDate[0]);
-          int mm = int.parse(partDate[1]);
-          int aa = int.parse(partDate[2]);
-
-          if(dd > 31)
-          {
-            dateValid = false;
-          }
-          else if(mm > 12)
-          {
-            dateValid = false;
-          }
-          else if (aa > 9999)
-          {
-            dateValid = false;
-          }
-        }
-        else
-        {
-          dateValid = false;
-        }
-      }
-      else
-      {
-        dateValid = false;
-      }
-
-
+      return LocalizationHelper.format_must(context, array);
     }
 
-    return dateValid;
+    final parts = value.split("-");
+    if (parts.length != 3) return LocalizationHelper.format_must(context, array);
 
+    final dd = int.tryParse(parts[0]) ?? 0;
+    final mm = int.tryParse(parts[1]) ?? 0;
+    final aa = int.tryParse(parts[2]) ?? 0;
 
-  }
-
-  static bool telephoneCorrect(String telephone, BuildContext context) {
-
-    bool telephoneValid = false;
-
-    if(telephone.isNotEmpty)
-    {
-      telephoneValid = RegExp(r"^[0-9,$]*$").hasMatch(telephone);
-      String camp = S.of(context).phone;
-
-      if(telephoneValid != true)
-      {
-        String action =LocalizationHelper.camp_number(context, camp);
-        error(context,action);
-      }
-      else
-      {
-        if(telephone.trim().length!=9)
-        {
-          telephoneValid = false;
-          String action = LocalizationHelper.cant_numbers(context,camp, 9);
-          error(context,action);
-
-        }
-      };
+    if (dd > 31 || mm > 12 || aa > 9999) {
+      return LocalizationHelper.format_must(context, array);
     }
 
-    return telephoneValid;
+    return null;
   }
 
-  static bool mailCorrect(String email) {
+  static String? telephoneValidate(String telephone, BuildContext context) {
+    final value = telephone.trim();
+    final camp = S.of(context).phone;
 
-    final bool mailValid = RegExp(r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+(-.*)?$").hasMatch(email);
+    if (value.isEmpty) return null;
 
-    return mailValid;
-  }
-
-  static bool webCorrect(String web) {
-
-    final bool webValid = RegExp(r"^[www]+.[a-zA-Z0-9]+.[a-zA-Z ,]+").hasMatch(web);
-
-    return webValid;
-  }
-
-  static bool adrressCorrect(String adrress) {
-
-    final adrress1 = adrress.replaceAll(" ", "");
-    final bool adrressValid =RegExp(r"^[a-zA-Z0-9áéíóúÁÉÍÓÚñÑ.!#$%&'*+-/=?^_`{|}~]+,[0-9a-zA-ZáéíóúÁÉÍÓÚñÑ]+").hasMatch(adrress1);
-
-    return adrressValid;
-  }
-
-  static bool passwordCorrect(String pas1, String pas2, BuildContext context)  {
-
-    bool passValid = false;
-
-    if(pas1.isEmpty)
-    {
-      String camp = S.of(context).password;
-      String action =LocalizationHelper.camp_number(context, camp);
-      error(context,action);
-    }
-    else
-    {
-      if(pas1 != pas2)
-      {
-        String action =S.of(context).passwords_do_not_match;
-        error(context,action);
-      }
-      else
-      {
-        passValid = true;
-      }
+    if (!RegExp(r'^[0-9]+$').hasMatch(value)) {
+      return LocalizationHelper.camp_number(context, camp);
     }
 
-    return passValid;
+    if (value.length != 9) {
+      return LocalizationHelper.cant_numbers(context, camp, 9);
+    }
+
+    return null;
   }
 
-  static bool postalCodeCorrect(String postalCode, BuildContext context) {
+  static String? mailValidate(String email, BuildContext context) {
+    final value = email.trim();
 
-    bool postalCodeValid = RegExp(r"^[0-9,$]*$").hasMatch(postalCode);
+    if (value.isEmpty) return null;
 
-    if(postalCodeValid != true)
-    {
-      String camp = S.of(context).postal_code;
-      String action =LocalizationHelper.camp_number(context, camp);
-      error(context,action);
-    }
-    else
-    {
-      if(postalCode.trim().length!=5)
-      {
-        postalCodeValid = false;
-        String action = LocalizationHelper.cant_numbers(context,postalCode, 5);
-        error(context,action);
+    final valid = RegExp(
+      r"^[\w-\.]+@([\w-]+\.)+[\w-]{2,}$",
+    ).hasMatch(value);
 
-      }
+    if (!valid) {
+      return S.of(context).not_a_valid_mail;
     }
 
+    return null;
+  }
+  static String? webValidate(String web, BuildContext context) {
+    final value = web.trim();
 
-    return postalCodeValid;
+    if (value.isEmpty) return null;
+
+    final valid = RegExp(
+      r'^(https?:\/\/)?(www\.)?[a-zA-Z0-9-]+\.[a-zA-Z]{2,}',
+    ).hasMatch(value);
+
+    if (!valid) {
+      return S.of(context).not_a_valid_webpage;
+    }
+
+    return null;
+  }
+
+  static String? addressValidate(String address, BuildContext context) {
+    final value = address.replaceAll(" ", "");
+
+    if (value.isEmpty) return null;
+
+    final valid = RegExp(
+      r"^[a-zA-Z0-9áéíóúÁÉÍÓÚñÑ]+,[0-9a-zA-ZáéíóúÁÉÍÓÚñÑ]+",
+    ).hasMatch(value);
+
+    if (!valid) {
+      return S.of(context).address;
+    }
+
+    return null;
+  }
+
+  static String? passwordValidate(
+      String pas1,
+      String pas2,
+      BuildContext context,
+      ) {
+    if (pas1.isEmpty) {
+      return LocalizationHelper.camp_empty(context, S.of(context).password);
+    }
+
+    if (pas1 != pas2) {
+      return S.of(context).passwords_do_not_match;
+    }
+
+    return null;
+  }
+
+  static String? postalCodeValidate(String postalCode, BuildContext context) {
+    final value = postalCode.trim();
+    final camp = S.of(context).postal_code;
+
+    if (value.isEmpty) return null;
+
+    if (!RegExp(r'^[0-9]+$').hasMatch(value)) {
+      return LocalizationHelper.camp_number(context, camp);
+    }
+
+    if (value.length != 5) {
+      return LocalizationHelper.cant_numbers(context, camp, 5);
+    }
+
+    return null;
   }
 }
