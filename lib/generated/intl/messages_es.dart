@@ -277,6 +277,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "is_connected_to": MessageLookupByLibrary.simpleMessage(
       "Está conectado a ",
     ),
+    "is_required": MessageLookupByLibrary.simpleMessage("Es obligatorio"),
     "it_cannot_eliminate_the_sector_with_companies":
         MessageLookupByLibrary.simpleMessage(
           "no puede eliminar el sector con empresas",
@@ -400,7 +401,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "sent": MessageLookupByLibrary.simpleMessage("Enviado"),
     "september": MessageLookupByLibrary.simpleMessage("Septiembre"),
     "server": MessageLookupByLibrary.simpleMessage("Servidor"),
-    "shipment": MessageLookupByLibrary.simpleMessage("envio"),
+    "shipment": MessageLookupByLibrary.simpleMessage("Envio"),
     "shipments": MessageLookupByLibrary.simpleMessage("Envíos"),
     "source": MessageLookupByLibrary.simpleMessage("Fuente"),
     "sql": MessageLookupByLibrary.simpleMessage("SQL"),

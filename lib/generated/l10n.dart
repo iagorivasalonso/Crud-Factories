@@ -239,9 +239,9 @@ class S {
     return Intl.message('Empresas', name: 'companies', desc: '', args: []);
   }
 
-  /// `envio`
+  /// `Envio`
   String get shipment {
-    return Intl.message('envio', name: 'shipment', desc: '', args: []);
+    return Intl.message('Envio', name: 'shipment', desc: '', args: []);
   }
 
   /// `Envíos`
@@ -1883,6 +1883,16 @@ class S {
     return Intl.message(
       'Ese sector ya existe',
       name: 'that_sector_already_exists',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Es obligatorio`
+  String get is_required {
+    return Intl.message(
+      'Es obligatorio',
+      name: 'is_required',
       desc: '',
       args: [],
     );

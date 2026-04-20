@@ -57,7 +57,7 @@
   "list_of_sends": "Lista de envios",
   "new_mail": "Nuevo email",
   "new_shipment": "Nuevo envio",
-  "shipment": "envio",
+  "shipment": "Envio",
   "number": "Número",
   "web_page": "Página web",
   "province": "Provincia",
@@ -244,6 +244,8 @@
   "creation_of_the_sector": "Creación del sector",
   "name_sector": "Nombre del sector",
   "that_sector_already_exists": "Ese sector ya existe",
+  "is_required" : "Es obligatorio",
+
   "the_field_cannot_be_blank": "El campo no puede estar en blanco",
   "cant_not_load": "No puede cargar",
   "because_it_does_not_have" : "Porque no tiene",
