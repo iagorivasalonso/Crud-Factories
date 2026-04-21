@@ -73,9 +73,16 @@ class csvLoaderService {
     }
     else
     {
+      loadedRoutes  =  await reorderRouter(namesRoutesOrdened, loadedRoutes);
 
-
-      loadedRoutes  = reorderRouter(namesRoutesOrdened, loadedRoutes);
+       fRoutes = File(loadedRoutes[0].route);       //necesario para luego exportar no web
+       fSectors = File(loadedRoutes[3].route);
+       fFactories = File(loadedRoutes[4].route);
+       fEmpleoyes = File(loadedRoutes[5].route);
+       fLines = File(loadedRoutes[6].route);
+       fMails = File(loadedRoutes[7].route);
+       fConections = File(loadedRoutes[1].route);
+       fServer = File(loadedRoutes[2].route);
     }
 
     return loadedRoutes;
