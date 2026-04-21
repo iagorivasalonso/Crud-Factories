@@ -392,6 +392,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "select": MessageLookupByLibrary.simpleMessage("Seleccionar"),
     "select_all": MessageLookupByLibrary.simpleMessage("Seleccionar todos"),
     "select_file": MessageLookupByLibrary.simpleMessage("Seleccionar archivo"),
+    "select_how_continue": MessageLookupByLibrary.simpleMessage(
+      "Selecciona cómo continuar",
+    ),
     "select_shipment": MessageLookupByLibrary.simpleMessage(
       "Seleccionar envío",
     ),

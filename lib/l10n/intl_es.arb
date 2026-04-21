@@ -113,6 +113,7 @@
   "it_must_be_numerical": "Debe de ser numérico",
   "must_have": "Debe de tener",
   "data_not_found": "Datos no encontrados",
+  "select_how_continue": "Selecciona cómo continuar",
   "no_data_in_memory": "No se encontraron datos en memoria. ¿Qué desea hacer?",
   "view_demo": "Ver demo",
   "load_data": "Cargar datos",

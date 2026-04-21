@@ -744,6 +744,16 @@ class S {
     );
   }
 
+  /// `Selecciona cómo continuar`
+  String get select_how_continue {
+    return Intl.message(
+      'Selecciona cómo continuar',
+      name: 'select_how_continue',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `No se encontraron datos en memoria. ¿Qué desea hacer?`
   String get no_data_in_memory {
     return Intl.message(

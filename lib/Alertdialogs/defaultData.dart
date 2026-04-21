@@ -1,5 +1,6 @@
 import 'package:crud_factories/Widgets/headAlertDialog.dart';
 import 'package:crud_factories/generated/l10n.dart';
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 
 Future<bool> defaultData (BuildContext  context) async {
@@ -8,6 +9,11 @@ Future<bool> defaultData (BuildContext  context) async {
       context: context,
       barrierDismissible: true,
       builder: (BuildContext context, ) {
+
+        String title = kIsWeb
+            ? S.of(context).select_how_continue
+            : S.of(context).data_not_found;
+
         return StatefulBuilder(
           builder: (BuildContext context0, void Function(void Function()) setState) => Dialog(
             shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(0)),
@@ -16,7 +22,7 @@ Future<bool> defaultData (BuildContext  context) async {
               height: 175,
               child: Column(
                 children: [
-                  headDialog(title: S.of(context).data_not_found),
+                  headDialog(title: title),
                   Expanded(
                     child: Padding(
                       padding:  EdgeInsets.only(left: 25,top: 25, bottom: 15),
