@@ -67,7 +67,6 @@ class _newSendState extends State<newSend>{
   int allLinesCreated = 0;
   bool allSectors = true;
   String sectorName= "";
-  List<String> sectorsString = [];
   List<bool> send = [];
 
   List<bool> observationModify = [];
@@ -82,7 +81,7 @@ class _newSendState extends State<newSend>{
     linesControllers = [];
 
     if (widget.select == -1  && linesControllers.isEmpty) {
-      selectedSector = allSectorOption;
+      selectedSector = null;
       factoriesSector = allFactories;
       generateControllers();
 
@@ -99,7 +98,7 @@ class _newSendState extends State<newSend>{
         oldWidget.filter != widget.filter) {
 
       if (widget.select == -1 && linesControllers.isEmpty) {
-        selectedSector = allSectorOption;
+        selectedSector = null;
         factoriesSector = allFactories;
 
         generateControllers();
@@ -168,7 +167,7 @@ class _newSendState extends State<newSend>{
     int select = widget.select;
     String filter = widget.filter;
 
-    final items = [allSectorOption, ...sectors];
+
     List<LineSendState> stateSends = LineSendState.values.toList();
 
     if(select == -1)
@@ -268,14 +267,13 @@ class _newSendState extends State<newSend>{
                                       width: 300,
                                       child: select == -1
                                       ? GenericDropdown<Sector>(
-                                        items: items,
+                                        items: sectors,
                                         camp:S.of(context).sector,
                                         opDefault: S.of(context).allMale,
                                         selectedItem: selectedSector,
                                         hint: sector,
                                         itemLabel: (sector) => sector.name,
-                                        onChanged: (sectorChoose) =>
-                                            _onSectorChanged(context, sectorChoose, select),
+                                        onChanged: (sectorChoose) =>_onSectorChanged(context, sectorChoose, select),
                                       )
                                       :!allSectors && linesControllers.isNotEmpty
                                         ? Padding(
@@ -460,7 +458,7 @@ class _newSendState extends State<newSend>{
 
   void _onSectorChanged(BuildContext context, Sector? sectorChoose, int select) {
     if (sectorChoose == null || sectorChoose.id == -1) {
-      selectedSector = allSectorOption;
+      selectedSector = null;
       allSectors = true;
       factoriesSector = allFactories;
     } else {
