@@ -69,6 +69,16 @@ class S {
     return Intl.message('Archivo', name: 'file', desc: '', args: []);
   }
 
+  /// `Datos`
+  String get data {
+    return Intl.message('Datos', name: 'data', desc: '', args: []);
+  }
+
+  /// `Descargar`
+  String get download {
+    return Intl.message('Descargar', name: 'download', desc: '', args: []);
+  }
+
   /// `Base de datos`
   String get data_base {
     return Intl.message('Base de datos', name: 'data_base', desc: '', args: []);

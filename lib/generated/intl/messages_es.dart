@@ -168,6 +168,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "Creación del sector",
     ),
     "csv": MessageLookupByLibrary.simpleMessage("CSV"),
+    "data": MessageLookupByLibrary.simpleMessage("Datos"),
     "data_base": MessageLookupByLibrary.simpleMessage("Base de datos"),
     "data_not_found": MessageLookupByLibrary.simpleMessage(
       "Datos no encontrados",
@@ -201,6 +202,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "does_not_belong_to_the_sector": MessageLookupByLibrary.simpleMessage(
       "No pertenece al sector",
     ),
+    "download": MessageLookupByLibrary.simpleMessage("Descargar"),
     "edit": MessageLookupByLibrary.simpleMessage("Editar"),
     "edit_shipment": MessageLookupByLibrary.simpleMessage("Editar envio"),
     "el_shipment_has": MessageLookupByLibrary.simpleMessage("El envío tiene"),

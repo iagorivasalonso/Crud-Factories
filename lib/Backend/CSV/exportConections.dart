@@ -1,47 +1,26 @@
-
+import 'package:crud_factories/Backend/CSV/Export_general/csv_builder.dart' show buildCsv;
 import 'package:crud_factories/Backend/Global/files.dart';
 import 'package:crud_factories/Objects/Conection.dart';
 import 'package:csv/csv.dart';
 import 'Export_general/export_csv.dart';
 
+Future<bool> csvExportatorConections(List<Conection> connections) async {
 
+  final rows = connections.map((c) => [
+    c.id,
+    c.database,
+    c.host,
+    c.port,
+    c.user,
+    c.password,
+  ]).toList();
 
-Future<bool> csvExportatorConections(List<Conection> conections) async {
+  final csv = buildCsv(
+    headers: ['id', 'database', 'host', 'port', 'user', 'password'],
+    rows: rows,
+  );
 
-  bool err = false;
-
-  List<dynamic> associateList = [
-
-        for(int i = 0; i < conections.length; i++ )
-        {
-
-           "id": conections[i].id,
-           "database": conections[i].database,
-           "host": conections[i].host,
-           "port": conections[i].port,
-           "user":conections[i].user,
-           "password":conections[i].password,
-        }
-  ];
-
-  List<List<dynamic>> rows = [];
-
-  for (int i = 0; i < associateList.length; i++)
-  {
-        List<dynamic> row = [];
-
-        row.add(associateList[i]["id"]);
-        row.add(associateList[i]["database"]);
-        row.add(associateList[i]["host"]);
-        row.add(associateList[i]["port"]);
-        row.add(associateList[i]["user"]);
-        row.add(associateList[i]["password"]);
-        rows.add(row);
-  }
-  final filePath = fConections.path;
-
-  String csv = const ListToCsvConverter(fieldDelimiter: ';').convert(rows);
-  final success  = await exportCsv(csv, file: filePath);
+  final success = await exportCsv(csv, file: fConections.path);
 
   return !success;
 }

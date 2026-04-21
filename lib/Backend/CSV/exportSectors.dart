@@ -6,35 +6,26 @@ import 'package:csv/csv.dart';
 import 'Export_general/export_csv.dart';
 
 
-
 Future<bool> csvExportatorSectors(List<Sector> sectors) async {
+  final rows = <List<dynamic>>[];
 
-  List<dynamic> associateList = [
+  rows.add([
+    'id',
+    'name',
+  ]);
 
-      for (int i = 0; i < sectors.length; i++)
-      {
-        "id": sectors[i].id,
-        "name": sectors[i].name,
-      },
-  ];
-
-  List<List<dynamic>> rows = [];
-
-  for (int i = 0; i < associateList.length; i++)
-  {
-      List<dynamic> row = [];
-
-      row.add(associateList[i]["id"]);
-      row.add(associateList[i]["name"]);
-      rows.add(row);
+  for (final s in sectors) {
+    rows.add([
+      s.id,
+      s.name,
+    ]);
   }
 
-  final filePath = fSectors.path;
+  final csv = const ListToCsvConverter(
+    fieldDelimiter: ';',
+  ).convert(rows);
 
-  String csv = const ListToCsvConverter(fieldDelimiter: ';').convert(rows);
-  final success  = await exportCsv(csv, file: filePath);
+  final success = await exportCsv(csv, file: fSectors.path);
 
   return !success;
 }
-
-

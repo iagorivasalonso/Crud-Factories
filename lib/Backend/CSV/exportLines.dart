@@ -1,44 +1,35 @@
-import 'package:crud_factories/Backend/Global/files.dart';
-import 'package:crud_factories/Objects/LineSend.dart';
-import 'package:csv/csv.dart';
-import 'Export_general/export_csv.dart';
+import 'package:crud_factories/Backend/CSV/Export_general/export_csv_io.dart';
+import 'package:crud_factories/Backend/Global/files.dart' show fLines;
+import 'package:crud_factories/Objects/LineSend.dart' show LineSend;
+import 'package:csv/csv.dart' show ListToCsvConverter;
 
+Future<bool> csvExportatorLines(List<LineSend> listSend) async {
+  final rows = <List<dynamic>>[];
 
+  rows.add([
+    'id',
+    'date',
+    'factory',
+    'observations',
+    'state',
+  ]);
 
-Future<bool>  csvExportatorLines(List<LineSend> listSend) async {
-
-  List<dynamic> associateList = [
-
-    for (int i = 0; i <listSend.length;i++)
-    {
-        "id": listSend[i].id,
-        "date": listSend[i].date,
-        "factory": listSend[i].factory,
-        "observations": listSend[i].observations,
-        "state": listSend[i].state
-    },
-  ];
-
-  List<List<dynamic>> rows = [];
-
-  for (int i = 0; i < associateList.length; i++)
-  {
-    List<dynamic> row = [];
-
-    row.add(associateList[i]["id"]);
-    row.add(associateList[i]["date"]);
-    row.add(associateList[i]["factory"]);
-    row.add(associateList[i]["observations"]);
-    row.add(associateList[i]["state"]);
-    rows.add(row);
+  for (final l in listSend) {
+    rows.add([
+      l.id,
+      l.date,
+      l.factory,
+      l.observations,
+      l.state,
+    ]);
   }
 
+  final csv = const ListToCsvConverter(
+    fieldDelimiter: ';',
+  ).convert(rows);
+  print("PATH: ${fLines.path}");
 
-  final filePath = fLines.path;
-
-  String csv = const ListToCsvConverter(fieldDelimiter: ';').convert(rows);
-
-  final success = await exportCsv(csv, file: filePath);
-
+  final success = await exportCsv(csv, file: fLines.path);
+  print("SUCCESS: $success");
   return !success;
 }

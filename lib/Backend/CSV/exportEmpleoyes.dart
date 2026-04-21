@@ -5,37 +5,24 @@ import 'package:csv/csv.dart';
 import 'Export_general/export_csv.dart';
 
 
-
 Future<bool> csvExportatorEmpleoyes(List<Empleoye> empleoyes) async {
+  final rows = <List<dynamic>>[];
 
+  rows.add(['id', 'name', 'idFactory']);
 
-  List<dynamic> associateList = [
-
-      for (int i = 0; i < empleoyes.length; i++)
-      {
-        "id": empleoyes[i].id,
-        "name": empleoyes[i].name,
-        "idFactory": empleoyes[i].idFactory
-      },
-  ];
-
-  List<List<dynamic>> rows = [];
-
-  for (int i = 0; i < associateList.length; i++)
-  {
-        List<dynamic> row = [];
-
-        row.add(associateList[i]["id"]);
-        row.add(associateList[i]["name"]);
-        row.add(associateList[i]["idFactory"]);
-        rows.add(row);
+  for (final e in empleoyes) {
+    rows.add([
+      e.id,
+      e.name,
+      e.idFactory,
+    ]);
   }
 
-  final filePath = fEmpleoyes.path;
+  final csv = const ListToCsvConverter(
+    fieldDelimiter: ';',
+  ).convert(rows);
 
-  String csv = const ListToCsvConverter(fieldDelimiter: ';').convert(rows);
-
-  final success  = await exportCsv(csv, file: filePath);
+  final success = await exportCsv(csv, file: fEmpleoyes.path);
 
   return !success;
 }

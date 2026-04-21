@@ -3,6 +3,8 @@
   "appTitle": "Mi aplicación",
   "update": "Actualizar",
   "file": "Archivo",
+  "data": "Datos",
+  "download": "Descargar",
   "data_base": "Base de datos",
   "street": "Calle",
   "cancel": "Cancelar",
