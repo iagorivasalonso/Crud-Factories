@@ -59,7 +59,7 @@ Future<List<Sector>> readSectorsFromCsvContent(String content) async {
 
   final sector = <Sector>[];
 
-   for( final line in lines) {
+   for( final line in lines.skip(1)) {
      final parts = line.split(";");
      if (parts.length < 2) continue;
      sector.add(Sector(

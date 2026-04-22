@@ -58,9 +58,10 @@ Future<List<LineSend>> readLinesFromCsvContent(String content) async {
       .where((line) => line.trim().isNotEmpty)
       .toList();
 
+
   final lineSend = <LineSend>[];
 
-  for( final line in lines) {
+  for( final line in lines.skip(1)) {
 
     final parts = line.split(";");
     // Validar que date parece una fecha

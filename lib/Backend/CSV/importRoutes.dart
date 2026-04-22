@@ -57,7 +57,7 @@ Future<List<RouteCSV>> readRoutesFromCsvContent(String content) async {
 
   final routes = <RouteCSV>[];
 
-  for (final line in lines) {
+  for (final line in lines.skip(1)) {
     final parts = line.split(";");
     if (parts.length < 3) continue;
     final routePath = parts[2].trim();   //seguridad solo para rutas por si faltan otros archivos

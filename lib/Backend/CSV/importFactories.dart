@@ -57,7 +57,7 @@ Future<List<Factory>> readFactoriesFromCsvContent(String content) async {
 
   final factory = <Factory>[];
 
-  for( final line in lines) {
+  for( final line in lines.skip(1)) {
     final parts = line.split(";");
     if (parts.length < 14) continue;
     factory.add(Factory(

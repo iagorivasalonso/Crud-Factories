@@ -57,7 +57,7 @@ Future<List<Conection>> readConectionsFromCsvContent(String content) async {
 
   final conection = <Conection>[];
 
-  for( final line in lines) {
+  for( final line in lines.skip(1)) {
     final parts = line.split(";");
     if (parts.length < 6) continue;
     conection.add(Conection(

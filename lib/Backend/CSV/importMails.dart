@@ -61,7 +61,7 @@ Future<List<Mail>> readMailsFromCsvContent(String content) async {
 
   final mail = <Mail>[];
 
-  for( final line in lines) {
+  for( final line in lines.skip(1)) {
     final parts = line.split(";");
     // Validar que date parece un @
     if (!parts[1].contains("@")) continue;

@@ -59,7 +59,7 @@ Future<List<Empleoye>> readEmpleoyeFromCsvContent(String content) async {
 
   final empleoye = <Empleoye>[];
 
-  for( final line in lines) {
+  for( final line in lines.skip(1)) {
     final parts = line.split(";");
     if (parts.length < 3) continue;
     empleoye.add(Empleoye(
