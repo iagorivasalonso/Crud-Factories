@@ -19,7 +19,9 @@ import 'package:flutter/material.dart';
 
 
 
-Future<bool> createSector(BuildContext  context, String campOld) async {
+Future<Sector?> createSector(BuildContext  context, String campOld) async {
+
+  Sector? resultSector;
 
   final TextEditingController controllerSector = TextEditingController();
 
@@ -28,7 +30,7 @@ Future<bool> createSector(BuildContext  context, String campOld) async {
 
   if (campOld.isNotEmpty) controllerSector.text = campOld;
 
-  bool? sector = await showDialog(
+  Sector? sector = await showDialog(
       context: context,
       builder: (BuildContext dialogContext) {
         return Dialog(
@@ -65,7 +67,7 @@ Future<bool> createSector(BuildContext  context, String campOld) async {
                          flex: 1,
                          child: materialButton(
                            nameAction: action,
-                           function: () => saveSector(dialogContext,controllerSector,campOld),
+                           function: () => saveSector(dialogContext,controllerSector,campOld, resultSector),
                          ),
                        ),
                      ],
@@ -74,11 +76,11 @@ Future<bool> createSector(BuildContext  context, String campOld) async {
         );
       });
      controllerSector.dispose();
-     return sector?? false;
+     return sector;
 
 }
 
-Future<void> saveSector(BuildContext dialogContext,TextEditingController controllerSector, String campOld) async {
+Future<void> saveSector(BuildContext dialogContext,TextEditingController controllerSector, String campOld, Sector? resultSector) async {
 
   final text = controllerSector.text
       .trim()
@@ -113,7 +115,8 @@ Future<void> saveSector(BuildContext dialogContext,TextEditingController control
       Sector newSector = Sector(id: idNew, name: text);
       sectors.add(newSector);
       currentSector.add(newSector);
-
+      resultSector = newSector;
+      
       String action = LocalizationHelper.manage_array(dialogContext, S.of(dialogContext).sector, S.of(dialogContext).saved, S.of(dialogContext).theFemale);
       await confirm(dialogContext, action);
 
@@ -131,6 +134,8 @@ Future<void> saveSector(BuildContext dialogContext,TextEditingController control
 
       sector.name = text;
       currentSector.add(sector);
+
+      resultSector = sector;
       await confirm(dialogContext, S.of(dialogContext).sector_edited_correctly);
     }
 
@@ -156,7 +161,7 @@ Future<void> saveSector(BuildContext dialogContext,TextEditingController control
   }
 
 // 🔒 cerrar SIEMPRE una sola vez
-  Navigator.of(dialogContext).pop(true);
+  Navigator.of(dialogContext).pop(resultSector);
 
 // ⚠️ mostrar error después
   if (showError) {

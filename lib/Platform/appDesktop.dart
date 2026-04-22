@@ -15,6 +15,7 @@ import 'package:crud_factories/Frontend/adminRoutes.dart';
 import 'package:crud_factories/Frontend/adminSectors.dart';
 import 'package:crud_factories/Functions/changesNoSave.dart';
 import 'package:crud_factories/Objects/RouteCSV.dart';
+import 'package:crud_factories/Objects/Sector.dart' show Sector;
 import 'package:crud_factories/generated/l10n.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -337,9 +338,9 @@ class _appDesktopState extends State<appDesktop> {
                               {
                                 String modif = S.of(context).newMale.toLowerCase();
 
-                                bool create = await createSector(context,modif);
+                                  Sector? create = await createSector(context,modif);
 
-                                if(create == true)
+                                if(create  != null)
                                 {
                                   bool errorExp = await csvExportatorSectors(sectors);
                                 }

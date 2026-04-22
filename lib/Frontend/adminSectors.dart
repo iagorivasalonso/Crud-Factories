@@ -13,6 +13,8 @@ import 'package:crud_factories/Alertdialogs/error.dart';
 import 'package:crud_factories/Alertdialogs/warning.dart';
 import 'package:crud_factories/Widgets/materialButton.dart';
 
+import '../Objects/Sector.dart';
+
 
 Future<void> adminSector(BuildContext context) async {
 
@@ -76,9 +78,9 @@ Future<void> adminSector(BuildContext context) async {
 
 Future <void> _onCreateSector(BuildContext context, void Function(void Function()) setState) async {
 
-  final bool created = await createSector(context, "");
+  final Sector? created = await createSector(context, "");
 
-  if (created) {
+  if (created != null) {
     setState(() {});
   }
 
@@ -88,9 +90,9 @@ Future <void> _onEditSector(BuildContext context, int index, void Function(void 
 
    try {
          final String oldName = sectors[index].name;
-         final bool edited = await createSector(context, oldName);
+         final Sector?  edited = await createSector(context, oldName);
 
-         if(edited)
+         if(edited  != null)
          {
            setState((){});
          }

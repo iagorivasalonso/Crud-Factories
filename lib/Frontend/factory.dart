@@ -474,12 +474,17 @@ class _newFactoryState extends State<newFactory> {
 
     if (sectorChoose == null) return;
 
-    bool create = false;
-    String modif = "";
-
     if (sectorChoose!.name == S.of(context).newMale)
     {
-      create = await createSector(context, modif);
+        final newSector = await createSector(context, "");
+
+        if(newSector != null)
+        {
+           setState(() {
+              selectedSector = newSector;
+              controllers.sector.text = newSector.name;
+           });
+        }
     }
     else if (saveChanges == false && select != -1)
     {
