@@ -138,7 +138,7 @@ Future<void> saveSector(BuildContext dialogContext,TextEditingController control
       resultSector = sector;
       await confirm(dialogContext, S.of(dialogContext).sector_edited_correctly);
     }
-
+  saveChanges = false;
   bool showError = false;
   String? errorMsg;
 
