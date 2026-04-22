@@ -65,7 +65,7 @@ Future<bool> createSector(BuildContext  context, String campOld) async {
                          flex: 1,
                          child: materialButton(
                            nameAction: action,
-                           function: () => saveSector(dialogContext, dialogContext,controllerSector,campOld),
+                           function: () => saveSector(dialogContext,controllerSector,campOld),
                          ),
                        ),
                      ],
@@ -78,7 +78,7 @@ Future<bool> createSector(BuildContext  context, String campOld) async {
 
 }
 
-Future<void> saveSector(BuildContext context,  BuildContext dialogContext,TextEditingController controllerSector, String campOld) async {
+Future<void> saveSector(BuildContext dialogContext,TextEditingController controllerSector, String campOld) async {
 
   final text = controllerSector.text
       .trim()
@@ -87,12 +87,12 @@ Future<void> saveSector(BuildContext context,  BuildContext dialogContext,TextEd
   final old = campOld.trim().toLowerCase();
 
   if (text.isEmpty) {
-    await error(context, S.of(context).the_field_cannot_be_blank);
+    await error(dialogContext, S.of(dialogContext).the_field_cannot_be_blank);
     return;
   }
 
   if (text.toLowerCase() == old) {
-    Navigator.of(context).pop(false);
+    Navigator.of(dialogContext).pop(false);
     return;
   }
 
@@ -101,7 +101,7 @@ Future<void> saveSector(BuildContext context,  BuildContext dialogContext,TextEd
       sector.name.toLowerCase() != old);
 
   if (repeat) {
-    await error(context, S.of(context).that_sector_already_exists);
+    await error(dialogContext, S.of(dialogContext).that_sector_already_exists);
     return;
   }
 
@@ -114,9 +114,8 @@ Future<void> saveSector(BuildContext context,  BuildContext dialogContext,TextEd
       sectors.add(newSector);
       currentSector.add(newSector);
 
-      String action = LocalizationHelper.manage_array(context, S.of(context).sector, S.of(context).saved, S.of(context).theFemale);
-      Navigator.pop(dialogContext, true);
-      await confirm(context, action);
+      String action = LocalizationHelper.manage_array(dialogContext, S.of(dialogContext).sector, S.of(dialogContext).saved, S.of(dialogContext).theFemale);
+      await confirm(dialogContext, action);
 
     }
     else
@@ -132,29 +131,37 @@ Future<void> saveSector(BuildContext context,  BuildContext dialogContext,TextEd
 
       sector.name = text;
       currentSector.add(sector);
-      Navigator.of(context).pop(true);
-      await confirm(context, S.of(context).sector_edited_correctly);
+      await confirm(dialogContext, S.of(dialogContext).sector_edited_correctly);
     }
 
-    // Persistencia
-    if (BaseDateSelected.isNotEmpty) {
-      if (campOld.isEmpty) {
-        sqlCreateSector(currentSector);
-      } else {
-        sqlModifySector(currentSector);
-      }
+  bool showError = false;
+  String? errorMsg;
+
+  if (BaseDateSelected.isNotEmpty) {
+    if (campOld.isEmpty) {
+      sqlCreateSector(currentSector);
     } else {
-      bool errorExp = await csvExportatorSectors(sectors);
-
-      if (!kIsWeb && errorExp) {
-        String action = LocalizationHelper.no_file(
-          context,
-          S.of(context).sectors,
-        );
-        error(context, action);
-        return;
-      }
+      sqlModifySector(currentSector);
     }
+  } else {
+    bool errorExp = await csvExportatorSectors(sectors);
+
+    if (!kIsWeb && errorExp) {
+      showError = true;
+      errorMsg = LocalizationHelper.no_file(
+        dialogContext,
+        S.of(dialogContext).sectors,
+      );
+    }
+  }
+
+// 🔒 cerrar SIEMPRE una sola vez
+  Navigator.of(dialogContext).pop(true);
+
+// ⚠️ mostrar error después
+  if (showError) {
+    await error(dialogContext, errorMsg!);
+  }
    return;
 
 }
