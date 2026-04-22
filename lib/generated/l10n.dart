@@ -764,6 +764,26 @@ class S {
     );
   }
 
+  /// `No hay datos para exportar`
+  String get no_data_to_export {
+    return Intl.message(
+      'No hay datos para exportar',
+      name: 'no_data_to_export',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Datos exportados correctamente`
+  String get export_success {
+    return Intl.message(
+      'Datos exportados correctamente',
+      name: 'export_success',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Ver demo`
   String get view_demo {
     return Intl.message('Ver demo', name: 'view_demo', desc: '', args: []);

@@ -115,6 +115,8 @@
   "data_not_found": "Datos no encontrados",
   "select_how_continue": "Selecciona cómo continuar",
   "no_data_in_memory": "No se encontraron datos en memoria. ¿Qué desea hacer?",
+  "no_data_to_export": "No hay datos para exportar",
+  "export_success": "Datos exportados correctamente",
   "view_demo": "Ver demo",
   "load_data": "Cargar datos",
   "it_cannot_eliminate_the_sector_with_companies":"no puede eliminar el sector con empresas",

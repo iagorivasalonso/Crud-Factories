@@ -1,9 +1,11 @@
 import 'package:crud_factories/Alertdialogs/closeApp.dart';
+import 'package:crud_factories/Alertdialogs/confirm.dart' show confirm;
 import 'package:crud_factories/Alertdialogs/error.dart';
 import 'package:crud_factories/Alertdialogs/errorList.dart';
 import 'package:crud_factories/Alertdialogs/noCategory.dart';
 import 'package:crud_factories/Alertdialogs/typeconnection.dart';
 import 'package:crud_factories/Alertdialogs/warning.dart';
+import 'package:crud_factories/Backend/CSV/Export_general/export_service.dart' show ExportService;
 import 'package:crud_factories/Backend/CSV/exportSectors.dart';
 import 'package:crud_factories/Backend/CSV/loader.dart';
 import 'package:crud_factories/Backend/Global/list.dart';
@@ -14,6 +16,7 @@ import 'package:crud_factories/Frontend/adminSectors.dart';
 import 'package:crud_factories/Functions/changesNoSave.dart';
 import 'package:crud_factories/Objects/RouteCSV.dart';
 import 'package:crud_factories/generated/l10n.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:menu_bar/menu_bar.dart';
 import 'package:crud_factories/Alertdialogs/createSector.dart';
@@ -735,6 +738,45 @@ class _appDesktopState extends State<appDesktop> {
                 ]
             )
         ),
+
+        if(kIsWeb)
+        BarButton(
+            text: Text(S.of(context).data,
+                   style: TextStyle(color:colorBar),),
+            submenu: SubMenu(
+               menuItems: [
+                 MenuButton(
+                   text: SizedBox(
+                     width: wItemMax,
+                     child: Text(S.of(context).download,),
+                   ),
+                   onTap: () async {
+
+                        if(routeFirst.isNotEmpty && routesCSV.isNotEmpty)
+                        {
+                              await ExportService.exportAllZip(
+                                routes: routesCSV,
+                                connections: conections,
+                                sectors: sectors,
+                                factories: allFactories,
+                                employees: empleoyes,
+                                lines: allLines,
+                                mails: mails,
+                              );
+
+                              await confirm(context,S.of(context).export_success);
+                        }
+                        else
+                        {
+                               await error(context,S.of(context).no_data_to_export);
+                        }
+
+
+                   },
+                 ),
+               ]
+            )
+         ),
       ];
     }
     return mHeight>50.0

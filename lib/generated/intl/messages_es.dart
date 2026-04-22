@@ -218,6 +218,9 @@ class MessageLookup extends MessageLookupByLibrary {
       "Error al modificar el el nombre de la base de datos",
     ),
     "examine": MessageLookupByLibrary.simpleMessage("Examinar"),
+    "export_success": MessageLookupByLibrary.simpleMessage(
+      "Datos exportados correctamente",
+    ),
     "february": MessageLookupByLibrary.simpleMessage("Febrero"),
     "file": MessageLookupByLibrary.simpleMessage("Archivo"),
     "file_already_exists": MessageLookupByLibrary.simpleMessage(
@@ -332,6 +335,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "no": MessageLookupByLibrary.simpleMessage("No"),
     "no_data_in_memory": MessageLookupByLibrary.simpleMessage(
       "No se encontraron datos en memoria. ¿Qué desea hacer?",
+    ),
+    "no_data_to_export": MessageLookupByLibrary.simpleMessage(
+      "No hay datos para exportar",
     ),
     "no_file_exists": MessageLookupByLibrary.simpleMessage(
       "No existe el archivo de",
