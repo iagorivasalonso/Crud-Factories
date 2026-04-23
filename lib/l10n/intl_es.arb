@@ -114,7 +114,7 @@
   "must_have": "Debe de tener",
   "data_not_found": "Datos no encontrados",
   "select_how_continue": "Selecciona cómo continuar",
-  "no_data_in_memory": "No se encontraron datos en memoria. ¿Qué desea hacer?",
+  "no_data_available": "No hay datos disponibles. ¿Qué desea hacer?",
   "no_data_to_export": "No hay datos para exportar",
   "export_success": "Datos exportados correctamente",
   "view_demo": "Ver demo",

@@ -26,7 +26,7 @@ Future<bool> defaultData (BuildContext  context) async {
                   Expanded(
                     child: Padding(
                       padding:  EdgeInsets.only(left: 25,top: 25, bottom: 15),
-                      child: Text(S.of(context).no_data_in_memory,
+                      child: Text(S.of(context).no_data_available,
 
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,),

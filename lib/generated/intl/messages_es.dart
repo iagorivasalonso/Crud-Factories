@@ -333,8 +333,8 @@ class MessageLookup extends MessageLookupByLibrary {
     "new_mail": MessageLookupByLibrary.simpleMessage("Nuevo email"),
     "new_shipment": MessageLookupByLibrary.simpleMessage("Nuevo envio"),
     "no": MessageLookupByLibrary.simpleMessage("No"),
-    "no_data_in_memory": MessageLookupByLibrary.simpleMessage(
-      "No se encontraron datos en memoria. ¿Qué desea hacer?",
+    "no_data_available": MessageLookupByLibrary.simpleMessage(
+      "No hay datos disponibles. ¿Qué desea hacer?",
     ),
     "no_data_to_export": MessageLookupByLibrary.simpleMessage(
       "No hay datos para exportar",

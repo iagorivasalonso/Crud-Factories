@@ -754,11 +754,11 @@ class S {
     );
   }
 
-  /// `No se encontraron datos en memoria. ¿Qué desea hacer?`
-  String get no_data_in_memory {
+  /// `No hay datos disponibles. ¿Qué desea hacer?`
+  String get no_data_available {
     return Intl.message(
-      'No se encontraron datos en memoria. ¿Qué desea hacer?',
-      name: 'no_data_in_memory',
+      'No hay datos disponibles. ¿Qué desea hacer?',
+      name: 'no_data_available',
       desc: '',
       args: [],
     );
