@@ -5,6 +5,7 @@ Padding defaultTextfield({
   required String nameCamp,
   String? campOld,
   required TextEditingController controllerCamp,
+  FocusNode? focusNode,
   bool? automatic = false,
   bool? campEdit,
 }){
@@ -29,7 +30,11 @@ Padding defaultTextfield({
           child: SizedBox(
             height: 40,
             child: TextField(
-              enabled: campEdit,
+              focusNode: focusNode,
+              onTapOutside: (_) {
+                focusNode?.unfocus();
+              },
+              enabled: campEdit ?? true,
               controller: controllerCamp,
               style: TextStyle(color: automatic == true ? Colors.grey: Colors.black),
               decoration: const InputDecoration(

@@ -24,11 +24,22 @@ Future<Sector?> createSector(BuildContext  context, String campOld) async {
   Sector? resultSector;
 
   final TextEditingController controllerSector = TextEditingController();
+  final FocusNode focusNode = FocusNode();
 
   String title = campOld.isEmpty ? S.of(context).creation_of_the_sector : S.of(context).edit;
   String action = campOld.isEmpty ? S.of(context).create_sector : S.of(context).save;
 
   if (campOld.isNotEmpty) controllerSector.text = campOld;
+
+focusNode.addListener(() {
+  if (!focusNode.hasFocus) {
+  if (campOld.isNotEmpty) {
+  saveChanges = controllerSector.text != campOld;
+  } else {
+  saveChanges = controllerSector.text.isNotEmpty;
+  }
+  }
+  });
 
   Sector? sector = await showDialog(
       context: context,
@@ -58,6 +69,7 @@ Future<Sector?> createSector(BuildContext  context, String campOld) async {
                              child: defaultTextfield(
                                nameCamp:"",
                                controllerCamp: controllerSector,
+                               focusNode: focusNode
                              ),
                            ),
                          ),
@@ -76,6 +88,7 @@ Future<Sector?> createSector(BuildContext  context, String campOld) async {
         );
       });
      controllerSector.dispose();
+     focusNode.dispose();
      return sector;
 
 }
