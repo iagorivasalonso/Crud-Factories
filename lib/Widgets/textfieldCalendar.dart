@@ -1,9 +1,11 @@
 import 'package:crud_factories/Backend/Global/variables.dart';
+import 'package:crud_factories/Functions/validatorCamps.dart' show ValidatorCamps;
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:show_platform_date_picker/show_platform_date_picker.dart' show ShowPlatformDatePicker;
 
 Padding textfieldCalendar({
+  required BuildContext context,
   required String nameCamp,
   String? campOld,
   required TextEditingController controllerCamp,
@@ -13,14 +15,12 @@ Padding textfieldCalendar({
 
   final ShowPlatformDatePicker platformDatePicker = ShowPlatformDatePicker(buildContext: context1);
 
-  DateTime dateCurrent= new DateTime.now();
+  DateTime dateCurrent = new DateTime.now();
 
  if(controllerCamp.text.isNotEmpty)
  {
    dateCurrent = DateFormat("dd-MM-yyyy").parse(controllerCamp.text);
  }
-
-
 
   return Padding(
     padding: const EdgeInsets.only(left: 35.0, top: 20.0,right: 40.0),
@@ -40,7 +40,8 @@ Padding textfieldCalendar({
         Expanded(
           child: SizedBox(
             height: 40,
-            child: TextField(
+            child: TextFormField(
+              validator: (value) => ValidatorCamps.dateValidate(value ?? '', context),
               controller: controllerCamp,
               decoration: const InputDecoration(
                 border: OutlineInputBorder(),
