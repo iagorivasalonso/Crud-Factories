@@ -21,6 +21,10 @@ Padding textfieldCalendar({
  {
    dateCurrent = DateFormat("dd-MM-yyyy").parse(controllerCamp.text);
  }
+ else
+ {
+   controllerCamp.text = DateFormat("dd-MM-yyyy").format(dateCurrent);
+ }
 
   return Padding(
     padding: const EdgeInsets.only(left: 35.0, top: 20.0,right: 40.0),
