@@ -93,7 +93,7 @@ class CsvProcessorService {
 
         case 6:
           if (!importOrtherFiles) {
-            await csvImportConections(context, listController.conectionsNew, content);
+            await csvImportConections(context, content);
           } else {
             listController.conectionsNew =
             await readConectionsFromCsvContent(content);

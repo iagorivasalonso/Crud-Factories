@@ -6,7 +6,7 @@ import 'package:crud_factories/Objects/Conection.dart';
 import 'package:crud_factories/generated/l10n.dart';
 import 'package:flutter/material.dart';
 
-Future<void>csvImportConections(BuildContext context,List<Conection> conection,[dynamic fileOrContent]) async {
+Future<List<Conection>>csvImportConections(BuildContext context,[dynamic fileOrContent]) async {
 
   try {
 
@@ -28,7 +28,8 @@ Future<void>csvImportConections(BuildContext context,List<Conection> conection,[
     {
       throw Exception("Invalid value");
     }
-    conections.addAll(imported);
+
+    return imported;
 
   } catch (e) {
     String array = S.of(context).connections;
@@ -39,8 +40,10 @@ Future<void>csvImportConections(BuildContext context,List<Conection> conection,[
     else if(e.toString().contains("Invalid value")) {
       errorFiles.add("${S.of(context).file_format_error} $array");
     }
+    return [];
   }
 }
+
 Future<List<Conection>> readConectionsFromCsv(File file) async {
 
   final content = await file.readAsString(encoding: utf8);
@@ -57,17 +60,20 @@ Future<List<Conection>> readConectionsFromCsvContent(String content) async {
 
   final conection = <Conection>[];
 
-  for( final line in lines.skip(1)) {
+  for (final line in lines.skip(1)) {
     final parts = line.split(";");
+
     if (parts.length < 6) continue;
+
     conection.add(Conection(
       id: parts[0].trim(),
-      database: parts[1],
-      host: parts[2],
-      port: parts[3],
-      user: parts[4],
-      password: parts[5]
+      database: parts[1].trim(),
+      host: parts[2].trim(),
+      port: parts[3].trim(),
+      user: parts[4].trim(),
+      password: parts[5].trim(),
     ));
   }
+
   return conection;
 }

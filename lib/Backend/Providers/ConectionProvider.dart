@@ -228,7 +228,14 @@ class ConectionProvider extends ChangeNotifier {
   }
 
 
+  Future<List<Conection>>importConections(BuildContext context,List<Conection> conection,[dynamic fileOrContent]) async {
 
+    final imported = await csvImportConections(context, fileOrContent);
+
+    _conections.addAll(imported); // ✔ estado del provider
+    notifyListeners();
+    return [];
+  }
 
     Future<bool>disconnet() async {
 
