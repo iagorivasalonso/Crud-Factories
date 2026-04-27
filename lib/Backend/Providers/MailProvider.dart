@@ -1,6 +1,6 @@
 import 'package:fluent_ui/fluent_ui.dart';
 
-class Mailprovaider  extends ChangeNotifier {
+class MailProvider  extends ChangeNotifier {
 
   final List<String> _mails = [];
 

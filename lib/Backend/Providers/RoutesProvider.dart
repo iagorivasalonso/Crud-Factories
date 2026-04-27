@@ -1,7 +1,7 @@
 import 'package:crud_factories/Objects/RouteCSV.dart' show RouteCSV;
 import 'package:fluent_ui/fluent_ui.dart';
 
-class RoutesProvaider extends ChangeNotifier {
+class RoutesProvider extends ChangeNotifier {
 
   final List<RouteCSV> _routes = [];
 

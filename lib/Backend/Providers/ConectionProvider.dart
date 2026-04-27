@@ -1,5 +1,7 @@
 import 'package:crud_factories/Alertdialogs/error.dart' show error;
 import 'package:crud_factories/Backend/CSV/exportConections.dart';
+import 'package:crud_factories/Backend/CSV/importConections.dart' show readConectionsFromCsv, csvImportConections;
+import 'package:crud_factories/Backend/Global/files.dart';
 import 'package:crud_factories/Backend/Global/list.dart';
 import 'package:crud_factories/Backend/Global/variables.dart';
 import 'package:crud_factories/Backend/connectors_API/DbApi.dart';
@@ -9,6 +11,7 @@ import 'package:crud_factories/Objects/Conection.dart';
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter/foundation.dart';
 import 'package:mysql1/mysql1.dart';
+import 'package:universal_html/html.dart' show File;
 import '../../generated/l10n.dart';
 import '../../helpers/localization_helper.dart' show LocalizationHelper;
 import '../connectors_API/Models/Api_response.dart';
@@ -203,7 +206,7 @@ class ConectionProvider extends ChangeNotifier {
   void setConections(List<Conection> data) { // NEW
     _conections
       ..clear()
-      ..addAll(data);
+      ..addAll(List.from(data)); //
 
     notifyListeners();
   }
@@ -218,10 +221,14 @@ class ConectionProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+
   void clear() { // NEW
     _conections.clear();
     notifyListeners();
   }
+
+
+
 
     Future<bool>disconnet() async {
 

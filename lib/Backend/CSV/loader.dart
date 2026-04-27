@@ -4,6 +4,12 @@ import 'package:crud_factories/Alertdialogs/error.dart' show error;
 import 'package:crud_factories/Backend/Global/files.dart';
 import 'package:crud_factories/Backend/Global/list.dart';
 import 'package:crud_factories/Backend/Global/variables.dart';
+import 'package:crud_factories/Backend/Providers/ConectionProvider.dart';
+import 'package:crud_factories/Backend/Providers/EmpleoyeeProvider.dart' show EmployeeProvider;
+import 'package:crud_factories/Backend/Providers/FactoryProvider.dart' show FactoryProvider;
+import 'package:crud_factories/Backend/Providers/MailProvider.dart' show MailProvider;
+import 'package:crud_factories/Backend/Providers/RoutesProvider.dart' show RoutesProvider;
+import 'package:crud_factories/Backend/Providers/SectorProvider.dart' show SectorProvider;
 import 'package:crud_factories/Objects/RouteCSV.dart';
 import 'package:crud_factories/generated/l10n.dart';
 import 'package:csv/csv.dart';
@@ -11,6 +17,7 @@ import 'package:file_picker/file_picker.dart';
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/services.dart';
+import 'package:provider/provider.dart';
 import '../../Alertdialogs/confirm.dart';
 import '../../Alertdialogs/errorList.dart';
 import '../../helpers/localization_helper.dart';
@@ -305,15 +312,12 @@ List<RouteCSV> reorderRouter ( List<String> orderRoutes, List<RouteCSV> routesCs
    return reordered;
 }
 
-void clearAllData() {
-  routesCSV.clear();
-  errorFiles.clear();
+Future<void> clearAllProviders(BuildContext context) async {
 
-  // ⚠️ TODAS las listas que llenan los CSV
-  allFactories.clear();
-  empleoyes.clear();
-  sectors.clear();
-  conections.clear();
-  mails.clear();
-  allLines.clear();
+  context.read<FactoryProvider>().clear();
+  context.read<EmployeeProvider>().clear();
+  context.read<SectorProvider>().clear();
+  context.read<RoutesProvider>().clear();
+  context.read<MailProvider>().clear();
+  context.read<ConectionProvider>().clear();
 }
