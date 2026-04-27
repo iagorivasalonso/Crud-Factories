@@ -1,6 +1,8 @@
 
 import 'dart:convert';
 import 'dart:io';
+import 'package:crud_factories/Alertdialogs/warning.dart';
+import 'package:crud_factories/Validators/sendMail.dart' show SendMailValidator;
 import 'package:flutter/foundation.dart' hide Factory;
 import 'package:flutter/material.dart';
 import 'package:crud_factories/Alertdialogs/confirm.dart';
@@ -30,6 +32,8 @@ import 'package:crud_factories/Widgets/textFieldPassword.dart';
 import 'package:crud_factories/Widgets/textfield.dart';
 import 'package:mailer/mailer.dart' show Message, Address;
 import 'package:mailer/src/entities/attachment.dart';
+
+import '../Alertdialogs/warning.dart' show warning;
 
 
 
@@ -401,64 +405,33 @@ class _sendMailState extends State<sendMail> {
 
 Future<void> _onSendMail(BuildContext context,MailController controllers, bool otherMail, String? selectedOption, selectedFactories) async {
 
-  bool correct = true;
   String action = '';
 
-   if(otherMail)
-   {
-     final mailError = ValidatorCamps.mailValidate(
-       controllers.mail.text,
-       context,
-     );
+  final result = SendMailValidator.validateAll(
+    context: context,
+    mail: controllers.mail.text,
+    password: controllers.password.text,
+    mailTo: controllers.mailTo?.text ?? '',
+    subject: controllers.subject!.text,
+    message: controllers.message!.text,
+    otherMail: otherMail,
+    isRecipient: selectedOption == S.of(context).a_recipient,
+  );
 
-     if (mailError != null) {
+// 🔴 ERROR (no deja seguir)
+  if (result.error != null) {
+    error(context, result.error!);
+    return;
+  }
 
-       correct = false;
-       error(context, S.of(context).your_mail_is_invalid);
-       return;
-     }
-   }
-   
-   if (correct)
-   {
-         if(selectedOption == S.of(context).a_recipient)
-         {
-               final mailError = ValidatorCamps.mailValidate(
-                 controllers.mail.text,
-                 context,
-               );
-
-               if (mailError != null) {
-
-                 correct = false;
-                 error(context, S.of(context).The_recipient_is_not_a_valid_mail);
-                 return;
-               }
-         }
-   }
-
-   if(correct)
-   {
-         if(controllers.subject!.text.isEmpty)
-         {
-           String array = S.of(context).affair;
-           action = LocalizationHelper.camp_empty_continue(context, array);
-           correct= await warning(context, action);
-         }
-   }
-
-  if(correct)
-  {
-    if(controllers.message!.text.isEmpty)
-    {
-      String array = S.of(context).message;
-      action = LocalizationHelper.camp_empty_continue(context, array);
-      correct= await warning(context, action);
+// 🔴 WARNING (solo avisa)
+  if (result.warnings.isNotEmpty) {
+    for (final warn in result.warnings) {
+      final ok = await warning(context, warn);
+      if (!ok) return;
     }
   }
 
-  if(correct)
-  {
     List <String> separeaddress = (controllers.mailTo?.text ?? '').split("@");
     final recipients = [
       controllers.mailTo?.text ?? '',
@@ -500,9 +473,6 @@ Future<void> _onSendMail(BuildContext context,MailController controllers, bool o
         action = S.of(context).the_shipment_could_not_be_completed;
         error(context,action);
       }
-
-  }
-
 }
 
 Future<void> _onResetMail(BuildContext context,MailController controllers, Function(VoidCallback) setState, String? selectedOption) async {
@@ -521,9 +491,4 @@ Future<void> _onResetMail(BuildContext context,MailController controllers, Funct
   });
 
 }
-
-
-
-
-
 

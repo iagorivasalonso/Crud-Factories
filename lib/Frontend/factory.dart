@@ -11,6 +11,7 @@ import 'package:crud_factories/Functions/validatorCamps.dart';
 import 'package:crud_factories/Objects/Empleoye.dart';
 import 'package:crud_factories/Objects/Factory.dart';
 import 'package:crud_factories/Objects/Sector.dart';
+import 'package:crud_factories/Validators/factory.dart' show FactoryValidator, AddressParser;
 import 'package:crud_factories/Widgets/headView.dart';
 import 'package:crud_factories/Widgets/layoutVariant.dart';
 import 'package:crud_factories/Widgets/textfield.dart';
@@ -212,6 +213,7 @@ class _newFactoryState extends State<newFactory> {
                                   child: SizedBox(
                                     width: 600,
                                     child: textfieldCalendar(
+                                      context: context,
                                       nameCamp: S.of(context).discharge_date,
                                       campOld: select == -1 ? '' : widget.factorySelect!.highDate,
                                       controllerCamp: controllers.highDate,
@@ -551,185 +553,73 @@ class _newFactoryState extends State<newFactory> {
       List<String> idsDelete,
       ) async {
 
-    final allKeys = allFactories.map((f) => f.name).toList();
-    final campOld = select != -1 ? allFactories[select].name : "";
-
-    final nameError = ValidatorCamps.primaryKeyValidate(
-      controllers.name.text,
-      allKeys,
-      campOld,
-      context,
-    );
-
-    final isSameSelected = (select != -1 && controllers.name.text == allFactories[select].name);
-
-    if (nameError != null && !isSameSelected) {
-      error(context, nameError);
-      return;
-    }
-
-    final dateError = ValidatorCamps.dateValidate(
-      controllers.highDate.text,
-      context,
-    );
-
-    if (dateError != null) {
-      String format = 'DD-MM-AAAA';
-      error(context, dateError, format);
-      return;
-    }
-
-    final sectorError = ValidatorCamps.emptyValidate(
-      controllers.sector.text,
-      context,
-      S.of(context).sector,
-    );
-
-    if (sectorError != null) {
-      error(context, sectorError);
-      return;
-    }
-
-    final mailError = ValidatorCamps.mailValidate(
-      controllers.mail.text,
-      context,
-    );
-
-    if (mailError != null) {
-      error(context, mailError);
-      return;
-    }
-
     final tel1 = controllers.telephone1.text.replaceAll(" ", "");
     final tel2 = controllers.telephone2.text.replaceAll(" ", "");
 
-    final tel1Error = ValidatorCamps.telephoneValidate(
-      tel1,
+    final errorMsg = FactoryValidator.validate(
       context,
+      controllers,
+      select,
+      allFactories,
     );
 
-    if (tel1Error != null) {
-      error(context, tel1Error);
+    if (errorMsg != null) {
+      error(context, errorMsg);
       return;
     }
 
-    final tel2Error = ValidatorCamps.telephoneValidate(
-      tel2,
-      context,
+    final addressData = AddressParser.parse(controllers.address.text);
+
+    final factory = Factory(
+      id: id,
+      name: controllers.name.text,
+      highDate: controllers.highDate.text,
+      sector: selectedSector!.id,
+      thelephones: [tel1, tel2],
+      mail: controllers.mail.text,
+      web: controllers.web.text,
+      address: {
+        'street': addressData['street'] ?? '',
+        'number': addressData['number'] ?? '',
+        'apartament': addressData['apartament'] ?? '',
+        'city': controllers.city.text,
+        'postalCode': controllers.postalCode.text,
+        'province': controllers.province.text,
+      },
     );
 
-    if (tel2Error != null) {
-      error(context, tel2Error);
-      return;
-    }
-    // ---- ADDRESS PARSE ----
-
-    final addressError = ValidatorCamps.addressValidate(
-      controllers.address.text,
-      context,
-    );
-
-    if (addressError != null) {
-      String array = S.of(context).date;
-      String action = LocalizationHelper.format_must(context, array);
-
-      String format = 'DD-MM-AAAA';
-      error(context, action, format);
-      return;
-    }
-
-    final addressText = controllers.address.text;
-
-    final partsDash = addressText.split("-");
-    final apartament = partsDash.length > 1 ? partsDash[1] : "";
-
-    final partsComma = partsDash[0].split(",");
-    final street = partsComma.isNotEmpty ? partsComma[0] : "";
-    final number = partsComma.length > 1 ? partsComma[1] : "";
-
-    final postalError = ValidatorCamps.postalCodeValidate(
-      controllers.postalCode.text,
-      context,
-    );
-
-    if (postalError != null) {
-      error(context, postalError);
-      return;
-    }
-
-    // ---- CREATE OR UPDATE ----
     if (select == -1) {
-      allFactories.add(
-        Factory(
-          id: id,
-          name: controllers.name.text,
-          highDate: controllers.highDate.text,
-          sector: selectedSector!.id,
-          thelephones: [tel1, tel2],
-          mail: controllers.mail.text,
-          web: controllers.web.text,
-          address: {
-            'street': street,
-            'number': number,
-            'apartament': apartament,
-            'city': controllers.city.text,
-            'postalCode': controllers.postalCode.text,
-            'province': controllers.province.text,
-          },
-        ),
-      );
+      allFactories.add(factory);
     } else if (saveChanges) {
-      final f = allFactories[select];
-      f.name = controllers.name.text;
-      f.highDate = controllers.highDate.text;
-      f.sector = selectedSector!.id;
-      f.thelephones = [tel1, tel2];
-      f.mail = controllers.mail.text;
-      f.web = controllers.web.text;
-      f.address['street'] = street;
-      f.address['number'] = number;
-      f.address['apartament'] = apartament;
-      f.address['city'] = controllers.city.text;
-      f.address['postalCode'] = controllers.postalCode.text;
+      allFactories[select] = factory;
     }
 
     saveChanges = false;
+
     empleoyes.removeWhere((e) => idsDelete.contains(e.id));
 
-// Añade o actualiza los actuales
     for (var e in contacsCurrent) {
       final index = empleoyes.indexWhere((emp) => emp.id == e.id);
-
       if (index == -1) {
-        empleoyes.add(e); // nuevo
+        empleoyes.add(e);
       } else {
-        empleoyes[index] = e; // update
+        empleoyes[index] = e;
       }
     }
-    // ---- EXPORT ONLY ONCE ----
-    final empOk = await csvExportatorEmpleoyes(empleoyes);
-    final facOk = await csvExportatorFactories(allFactories);
 
-    if (facOk && empOk) {
-      await confirm(
+    await csvExportatorEmpleoyes(empleoyes);
+    await csvExportatorFactories(allFactories);
+
+    await confirm(
+      context,
+      LocalizationHelper.manage_array(
         context,
-        LocalizationHelper.manage_array(
-          context,
-          S.of(context).company,
-          S.of(context).saved_female,
-          S.of(context).theFemale,
-        ),
-      );
-    } else {
+        S.of(context).company,
+        S.of(context).saved_female,
+        S.of(context).theFemale,
+      ),
+    );
 
-      if (!kIsWeb) {
-        warning(
-          context,
-          LocalizationHelper.no_file(context, S.of(context).company),
-        );
-      }
-
-    }
     await _onResetFactory(context, select, controllers, contacsCurrent);
   }
 
@@ -763,9 +653,4 @@ class _newFactoryState extends State<newFactory> {
 
     saveChanges = false;
   }
-
-
 }
-
-
-

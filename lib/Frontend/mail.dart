@@ -9,6 +9,7 @@ import 'package:crud_factories/Backend/Global/variables.dart';
 import 'package:crud_factories/Backend/CSV/exportMails.dart';
 import 'package:crud_factories/Functions/validatorCamps.dart';
 import 'package:crud_factories/Objects/Mail.dart';
+import 'package:crud_factories/Validators/mail.dart';
 import 'package:crud_factories/Widgets/headView.dart';
 import 'package:crud_factories/Widgets/textfield.dart';
 import 'package:crud_factories/Widgets/textFieldPassword.dart';
@@ -187,58 +188,36 @@ class _newMailState extends State<newMail> {
 
 Future<void> _onSaveMail(BuildContext context, int select,MailController controllers) async {
 
-  List <Mail> current = [];
-  String action = "";
+  final errorMsg = MailValidator.validate(
+    context: context,
+    controllers: controllers,
+    mails: mails,
+    select: select,
+  );
 
-  List <String> allKeys = [];
-  String nameCamp = S.of(context).mail;
-
-
-  String campOld = " ";
-  if(select != -1)
+  if (errorMsg != null) {
+    await error(context, errorMsg);
+    return;
+  }
+  else
   {
-    campOld = mails[select].address;
-  }
+    final username = controllers.mail.text;
 
-  final mail = controllers.mail.text;
-  final pass = controllers.password.text;
-  final pass2 = controllers.passwordVerify!.text;
+    final message = Message()
+      ..from = Address(username, username.split("@")[0])
+      ..recipients.add(username)
+      ..subject = S.of(context).connection_test
+      ..text = S.of(context).this_is_a_connection_test_from_the_application;
 
-// ---- PRIMARY KEY ----
-  final nameError = ValidatorCamps.primaryKeyValidate(
-    controllers.mail.text,
-    allKeys,
-    campOld,
-    context,
-  );
+    final result = await sendingMail(context, controllers, message, select);
 
-  if (nameError != null) {
-    await error(context, nameError);
-    return;
-  }
-// ---- MAIL FORMAT ----
-  final mailError = ValidatorCamps.mailValidate(mail, context);
-  if (mailError != null) {
-    await error(context, mailError);
-    return;
-  }
-
-// ---- PASSWORD EMPTY ----
-  final passwordError = ValidatorCamps.passwordValidate(
-    pass,
-    pass2,
-    context,
-  );
-
-  if (passwordError != null) {
-    await error(context, passwordError);
-    return;
-  }
-
-// ---- PASSWORD MATCH ----
-  if (pass != pass2) {
-    await error(context, S.of(context).passwords_do_not_match);
-    return;
+    if (result.isEmpty) {
+      await error(context, "Error enviando correo");
+    }
+    else
+    {
+       confirm(context, S.of(context).message);
+    }
   }
 }
 
@@ -253,7 +232,7 @@ Future<List<String>> sendingMail(context,controllers, Message message, [select])
   List <String> extCompany = separeaddress[1].split(".");
 
   String company = extCompany[0];
-
+/*
   final newMail = Mail(
     address: controllers.mail.text,
     password: controllers.password.text,
@@ -268,7 +247,7 @@ Future<List<String>> sendingMail(context,controllers, Message message, [select])
     // EDITAR
     mails[select] = newMail;
   }
-
+*/
       try {
 
         SmtpServer? smtpServer;
@@ -395,4 +374,3 @@ void campCharge(
     controllers.passwordVerify!.clear();
   }
 }
-

@@ -1,6 +1,7 @@
 import 'dart:io';
 
-import 'package:crud_factories/Backend/providers/Conection_provider.dart';
+import 'package:crud_factories/Backend/Providers/App_provaider.dart';
+import 'package:crud_factories/Backend/Providers/Conection_provider.dart' show AppProvider, ConectionProvider;
 import 'package:crud_factories/Platform/appDesktop.dart';
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
@@ -31,7 +32,11 @@ void main() async {
             providers: [
               ChangeNotifierProvider(
                   create: (_) => ConectionProvider()
-              )
+              ),
+
+              ChangeNotifierProvider(
+                create: (_) => AppProvider(),
+              ),
             ],
             child: MyApp())
            );
@@ -57,7 +62,7 @@ class MyApp extends StatelessWidget {
               MyWindowListener.context = context;
               _initializeWindow(context);
 
-              return appDesktop();
+              return const appDesktop();
             }
         ),
       );
@@ -77,7 +82,7 @@ class MyApp extends StatelessWidget {
           builder: (context) {
             MyWindowListener.context = context;
             _initializeWindow(context);
-            return appDesktop();
+            return const appDesktop();
           },
         ),
       );

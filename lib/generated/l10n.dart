@@ -764,6 +764,46 @@ class S {
     );
   }
 
+  /// `El nombre es requerido`
+  String get name_required {
+    return Intl.message(
+      'El nombre es requerido',
+      name: 'name_required',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `El sector es requerido`
+  String get sector_required {
+    return Intl.message(
+      'El sector es requerido',
+      name: 'sector_required',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `El email es requerido`
+  String get mail_required {
+    return Intl.message(
+      'El email es requerido',
+      name: 'mail_required',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `La contraseña es requrida`
+  String get password_required {
+    return Intl.message(
+      'La contraseña es requrida',
+      name: 'password_required',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `No hay datos para exportar`
   String get no_data_to_export {
     return Intl.message(
