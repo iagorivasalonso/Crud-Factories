@@ -26,6 +26,10 @@ enum ConnectionViewMode {
 }
 class ConectionProvider extends ChangeNotifier {
 
+  final List<Conection> _conections = []; // NEW
+
+  List<Conection> get conections => List.unmodifiable(_conections); // N
+
   Conection? selected;
   bool _connected = false;
   Conection? _previous;
@@ -195,6 +199,30 @@ class ConectionProvider extends ChangeNotifier {
 
     notifyListeners();
   }
+
+  void setConections(List<Conection> data) { // NEW
+    _conections
+      ..clear()
+      ..addAll(data);
+
+    notifyListeners();
+  }
+
+  void addConection(Conection c) { // NEW
+    _conections.add(c);
+    notifyListeners();
+  }
+
+  void delete(String database) { // NEW
+    _conections.removeWhere((c) => c.database == database);
+    notifyListeners();
+  }
+
+  void clear() { // NEW
+    _conections.clear();
+    notifyListeners();
+  }
+
     Future<bool>disconnet() async {
 
       if(!kIsWeb)
@@ -243,9 +271,9 @@ class ConectionProvider extends ChangeNotifier {
     //    CRUD
    // ==================
 
-  Map<String, Conection> get _conectionsMap => {for (var c in conections) c.database: c};
+  Map<String, Conection> get _conectionsMap => {for (var c in _conections) c.database: c};
 
-  Future<String> create(Conection cNew) async {
+  Future<String> createBD(Conection cNew) async {
     if (_conectionsMap.containsKey(cNew.database)) {
       return "EXISTS";
     }
@@ -266,13 +294,13 @@ class ConectionProvider extends ChangeNotifier {
       return "ERROR: TABLES";
     }
 
-    conections.add(cNew);
-    _updateList(conections, newSelected: cNew);
+    _conections.add(cNew);
+    _updateList(_conections, newSelected: cNew);
 
     return "OK";
   }
 
-  Future<bool> update(Conection current, Conection cNew) async {
+  Future<bool> updateBD(Conection current, Conection cNew) async {
 
     bool error = false;
 
@@ -298,16 +326,16 @@ class ConectionProvider extends ChangeNotifier {
           error = err;
         });
       }
-      final index = conections.indexWhere((c) => c.database == current.database);
-      conections[index] = cNew;
-      _updateList(conections, newSelected: cNew);
+      final index = _conections.indexWhere((c) => c.database == current.database);
+      _conections[index] = cNew;
+      _updateList(_conections, newSelected: cNew);
 
     }
     return error;
   }
 
 
-  Future<bool> delete(Conection toDelete,  {bool deleteSQL = false}) async {
+  Future<bool> deleteBD(Conection toDelete,  {bool deleteSQL = false}) async {
 
     bool error = false;
 
@@ -335,8 +363,8 @@ class ConectionProvider extends ChangeNotifier {
       }
 
 
-      conections.removeWhere((c) => c.database == toDelete.database);
-      _updateList(conections, newSelected: null);
+      _conections.removeWhere((c) => c.database == toDelete.database);
+      _updateList(_conections, newSelected: null);
       return false;
     }
     return error;
@@ -377,11 +405,15 @@ class ConectionProvider extends ChangeNotifier {
   }
 
   void _updateList(List<Conection> newList, {Conection? newSelected}) async {
-    conections = newList;
+
+    _conections
+      ..clear()
+      ..addAll(newList);
+
     selected = newSelected;
     notifyListeners();
 
-    bool errorExp = await csvExportatorConections(conections);
+    bool errorExp = await csvExportatorConections(_conections);
 
     if (!kIsWeb && errorExp) {
       String action = LocalizationHelper.no_file(
