@@ -313,6 +313,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "lists": MessageLookupByLibrary.simpleMessage("Listas"),
     "load_data": MessageLookupByLibrary.simpleMessage("Cargar datos"),
     "mail": MessageLookupByLibrary.simpleMessage("Email"),
+    "mail_required": MessageLookupByLibrary.simpleMessage(
+      "El email es requerido",
+    ),
     "mails": MessageLookupByLibrary.simpleMessage("Emails"),
     "march": MessageLookupByLibrary.simpleMessage("Marzo"),
     "may": MessageLookupByLibrary.simpleMessage("Mayo"),
@@ -327,6 +330,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "must_be": MessageLookupByLibrary.simpleMessage("Debe ser"),
     "must_have": MessageLookupByLibrary.simpleMessage("Debe de tener"),
     "name": MessageLookupByLibrary.simpleMessage("Nombre"),
+    "name_required": MessageLookupByLibrary.simpleMessage(
+      "El nombre es requerido",
+    ),
     "name_sector": MessageLookupByLibrary.simpleMessage("Nombre del sector"),
     "newFemale": MessageLookupByLibrary.simpleMessage("Nueva"),
     "newMale": MessageLookupByLibrary.simpleMessage("Nuevo"),
@@ -364,6 +370,9 @@ class MessageLookup extends MessageLookupByLibrary {
         ),
     "para": MessageLookupByLibrary.simpleMessage("Para"),
     "password": MessageLookupByLibrary.simpleMessage("Contraseña"),
+    "password_required": MessageLookupByLibrary.simpleMessage(
+      "La contraseña es requrida",
+    ),
     "passwords_do_not_match": MessageLookupByLibrary.simpleMessage(
       "Las contraseñas no coinciden",
     ),
@@ -393,6 +402,9 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "sector_management": MessageLookupByLibrary.simpleMessage(
       "Gestión de sectores",
+    ),
+    "sector_required": MessageLookupByLibrary.simpleMessage(
+      "El sector es requerido",
     ),
     "sectors": MessageLookupByLibrary.simpleMessage("Sectores"),
     "select": MessageLookupByLibrary.simpleMessage("Seleccionar"),
