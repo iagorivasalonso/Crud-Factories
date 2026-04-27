@@ -26,8 +26,7 @@ class csvLoaderService {
 
 
   static Future<List<RouteCSV>> loadInitialRoutes(BuildContext context,[String? newRoutePath]) async {
-   clearAllData();
-
+    errorFiles.clear();
    Directory? parentDir;
    var fileRoutes='';
 
@@ -130,7 +129,7 @@ class csvLoaderService {
 
     // 🌐 WEB → siempre default
     if (kIsWeb) {
-      bool errData = newRoutePath!.isEmpty
+      bool errData = (newRoutePath ?? '').isEmpty
              ? await defaultData(context)
              : true;
 
@@ -189,54 +188,48 @@ class csvLoaderService {
 
   }
 
-  static Future<void> importedRoutes(BuildContext context, [bool initialChargue = false]) async{
+  static Future<List<RouteCSV>> importedRoutes(BuildContext context, [bool initialChargue = false]) async {
 
-    routesCSV.clear();
+    final List<RouteCSV> updatedRoutes = [];
 
-    for(int i = 0; i < routeControllers.length; i++)
-    {
-
-      routesCSV.add(RouteCSV(
-        id: (i+1).toString(),
+    for (int i = 0; i < routeControllers.length; i++) {
+      updatedRoutes.add(RouteCSV(
+        id: (i + 1).toString(),
         name: routeControllers[i].name.text,
         route: routeControllers[i].router.text,
       ));
     }
 
+    bool result = await csvLoaderService.loadRemainingRoutes(context, updatedRoutes);
 
-    bool result = await csvLoaderService.loadRemainingRoutes(context,routesCSV);
     String array = S.of(context).routes;
     String actionArray = S.of(context).saved;
 
     String action = LocalizationHelper.manage_array(context, array, actionArray);
 
+    if (!initialChargue) {
 
-        if(initialChargue != true)
-        {
-              if(result == true && errorFiles.isNotEmpty)
-              {
-                errors(context, errorFiles);
-              }
+      if (result && errorFiles.isNotEmpty) {
+        errors(context, errorFiles);
+      }
 
-              await confirm(context, action);
-              Navigator.of(context).pop(false);
+      await confirm(context, action);
+      Navigator.of(context).pop(false);
 
-              bool errorExp = await csvExportatorRoutes(routesCSV);
+      bool errorExp = await csvExportatorRoutes(updatedRoutes);
 
-              if (!kIsWeb && errorExp) {
-                String action = LocalizationHelper.no_file(
-                  context,
-                  S.of(context).routes,
-                );
-                error(context, action);
-                return;
-              }
+      if (!kIsWeb && errorExp) {
+        String action = LocalizationHelper.no_file(
+          context,
+          S.of(context).routes,
+        );
+        error(context, action);
+      }
+    }
 
-
-        }
-
-
+    return updatedRoutes;
   }
+
   static AppFile fromAsset(String assetPath) {
     return AppFile(
       name: p.basename(assetPath),
@@ -263,8 +256,8 @@ class csvLoaderService {
 
     routeControllers = List.generate(namesRoutesOrdened.length, (i) => RouterController(
       name: TextEditingController(text: namesRoutesOrdened[i]),
-      router:  routesCSV.isNotEmpty && routesCSV[i].route.isNotEmpty
-              ? TextEditingController(text: routesCSV[i].route)
+      router: (i < initialRoutes.length && initialRoutes[i].route.isNotEmpty)
+              ? TextEditingController(text: initialRoutes[i].route)
               : TextEditingController(text: ''),
     ));
 

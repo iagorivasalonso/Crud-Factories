@@ -9,6 +9,7 @@ import 'package:crud_factories/Backend/CSV/Export_general/export_service.dart' s
 import 'package:crud_factories/Backend/CSV/exportSectors.dart';
 import 'package:crud_factories/Backend/CSV/loader.dart';
 import 'package:crud_factories/Backend/Global/list.dart';
+import 'package:crud_factories/Backend/Providers/Conection_provider.dart';
 import 'package:crud_factories/Backend/_selection_view.dart';
 import 'package:crud_factories/Backend/Global/variables.dart';
 import 'package:crud_factories/Frontend/adminRoutes.dart';
@@ -21,6 +22,9 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:menu_bar/menu_bar.dart';
 import 'package:crud_factories/Alertdialogs/createSector.dart';
+import 'package:provider/provider.dart';
+
+import '../Backend/Providers/App_provaider.dart';
 
 class appDesktop extends StatefulWidget {
   const appDesktop({super.key});
@@ -35,85 +39,11 @@ class _appDesktopState extends State<appDesktop> {
   void initState() {
     // TODO: implement initState
     super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      await context.read<AppProvider>().loadRoutes(context);
+    });
 
-    WidgetsBinding.instance?.addPostFrameCallback((_) async {
-      bool isChargue =  false;
-
-      routesCSV = await csvLoaderService.loadInitialRoutes(context);
-
-      bool sqlBd = useDataDefault == false
-                 ? await typeConection(context)
-                 : false;
-
-       // Crear TextEditingController para la UI
-      csvLoaderService.createControllerList(routesCSV);
-
-      //si no hay rutas ofercer cargarlas
-
-      if(routesCSV.isEmpty)
-        showDialog(
-          context: context,
-          builder: (context) => const AdminRoutesDialog(),
-        );
-
-      String action = "";
-      List<RouteCSV> routesCurrent = [];
-
-
-          if (sqlBd == true)
-          {
-            routesCurrent = routesCSV
-                .where((route) =>
-                SQLRoutes.any((sqlName) =>
-                sqlName.trim().toLowerCase() == route.name.trim().toLowerCase()))
-                .toList();
-          }
-          else
-          {
-             routesCurrent = routesCSV;
-          }
-
-      bool fileFail = routesCurrent.any((r) => r.route.isEmpty);
-
-      if (errorFiles.isNotEmpty) {
-        errors(context, errorFiles);
-
-        setState(() {
-          itenSelect = 0;
-          subIten1Select = 1;
-          subIten2Select = -1;
-        });
-      }
-
-      if(fileFail == true)
-       {
-               String no_rutes = S.of(context).you_do_not_have_a_complete_route_file;
-               String want_complete = S.of(context).want_to_complete_it;
-
-               action = "$no_rutes \n $want_complete";
-               bool rutesComplete = await warning(context, action);
-
-               if(rutesComplete == true)
-               {
-                 setState(() {
-                   itenSelect = 0;
-                   subIten1Select = 1;
-                   subIten2Select = -1;
-                 });
-               }
-       }
-
-        await csvLoaderService.importedRoutes(context, true);
-
-      if (sqlBd == true)
-          setState(() {
-            itenSelect = 2;
-            subIten1Select = 1;
-          });
-
-      csvLoaderService.createControllerBD();
-     });
-
+    csvLoaderService.createControllerBD();
 
   }
 
