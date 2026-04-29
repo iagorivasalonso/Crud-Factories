@@ -1,72 +1,64 @@
 import 'dart:convert';
 import 'dart:io';
-import 'package:crud_factories/Backend/Global/list.dart';
-import 'package:crud_factories/Backend/Global/files.dart';
+import 'dart:typed_data' show Uint8List;
 import 'package:crud_factories/Objects/Empleoye.dart';
-import 'package:crud_factories/generated/l10n.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart' show kIsWeb;
+import 'package:flutter/services.dart';
 
+Future<List<Empleoye>> csvImportEmpleoyees({
+  File? file,
+  Uint8List? bytes,
+  String? content,
+  String? assetPath,
+}) async {
+  String csvContent;
 
-Future<void>csvImportEmpleoyes(BuildContext context, List<Empleoye> empleoye, [dynamic fileOrContent]) async {
-
-  try {
-    List<Empleoye> imported;
-
-    if (fileOrContent == null)
-    {
-      imported = await readEmpleoyeFromCsv(fEmpleoyes);
-    }
-    else if (fileOrContent is File)
-    {
-      imported = await readEmpleoyeFromCsv(fileOrContent);
-    }
-    else if (fileOrContent is String)
-    {
-      imported = await readEmpleoyeFromCsvContent(fileOrContent);
-    }
-    else
-    {
-      throw Exception("Invalid value");
-    }
-    empleoyes.addAll(imported);
-
-
-
-  } catch (e) {
-    String array = S.of(context).employees;
-    
-    if(e.toString().contains("El sistema no puede encontrar el archivo especificado")) {
-      errorFiles.add("${S.of(context).file_not_found} $array");
-    }
-    else if(e.toString().contains("Invalid value")) {
-      errorFiles.add("${S.of(context).file_format_error} $array");
+  if (bytes != null) {
+    try {
+      csvContent = utf8.decode(bytes);
+    } catch (_) {
+      csvContent = latin1.decode(bytes);
     }
   }
+
+  // 📄 String directo
+  else if (content != null) {
+    csvContent = content;
+  }
+
+  // 🖥️ Desktop / Mobile file
+  else if (!kIsWeb && file != null) {
+    csvContent = await file.readAsString(encoding: utf8);
+  }
+
+  // 📦 Asset (fallback automático)
+  else {
+    csvContent = await rootBundle.loadString(
+      assetPath ?? "assets/dataDefault/employees.csv",
+    );
+  }
+
+  return readEmpleoyeFromCsvContent(csvContent);
 }
 
-Future<List<Empleoye>> readEmpleoyeFromCsv(File file) async {
-
-  final content = await file.readAsString(encoding: utf8);
-  return readEmpleoyeFromCsvContent(content);
-}
-
-Future<List<Empleoye>> readEmpleoyeFromCsvContent(String content) async {
-
+List<Empleoye> readEmpleoyeFromCsvContent(String content) {
   final lines = const LineSplitter()
       .convert(content)
       .where((line) => line.trim().isNotEmpty)
       .toList();
 
-  final empleoye = <Empleoye>[];
+  final employees = <Empleoye>[];
 
-  for( final line in lines.skip(1)) {
+  for (final line in lines.skip(1)) {
     final parts = line.split(";");
     if (parts.length < 3) continue;
-    empleoye.add(Empleoye(
+
+    employees.add(Empleoye(
       id: parts[0].trim(),
       name: parts[1].trim(),
       idFactory: parts[2].trim(),
     ));
   }
-  return empleoye;
+
+  return employees;
 }

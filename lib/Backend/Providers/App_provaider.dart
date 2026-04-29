@@ -1,45 +1,67 @@
 
 
 import 'package:crud_factories/Alertdialogs/typeConnection.dart';
+import 'package:crud_factories/Backend/CSV/importEmpleoyes.dart';
+import 'package:crud_factories/Backend/CSV/importFactories.dart';
+import 'package:crud_factories/Backend/CSV/importLines.dart';
+import 'package:crud_factories/Backend/CSV/importMails.dart' show csvImportMails;
+import 'package:crud_factories/Backend/CSV/importRoutes.dart';
+import 'package:crud_factories/Backend/CSV/importSectors.dart';
 import 'package:crud_factories/Backend/CSV/loader.dart' show csvLoaderService;
+import 'package:crud_factories/Backend/Providers/ConectionProvider.dart';
+import 'package:crud_factories/Backend/Providers/EmpleoyeeProvider.dart';
+import 'package:crud_factories/Backend/Providers/FactoryProvider.dart';
+import 'package:crud_factories/Backend/Providers/LineSendProvider.dart';
+import 'package:crud_factories/Backend/Providers/MailProvider.dart' show MailProvider;
+import 'package:crud_factories/Backend/Providers/RoutesProvider.dart';
+import 'package:crud_factories/Backend/Providers/SectorProvider.dart';
+import 'package:crud_factories/Objects/Mail.dart';
 import 'package:crud_factories/Objects/RouteCSV.dart' show RouteCSV;
 import 'package:fluent_ui/fluent_ui.dart' show ChangeNotifier;
 import 'package:flutter/material.dart' show BuildContext;
+import 'package:provider/provider.dart';
+
+import '../CSV/importConections.dart';
 
 class AppProvider extends ChangeNotifier {
 
-  List<RouteCSV> routes = [];
   bool loaded = false;
-  bool loading = false;
+  bool _loading = false;
 
   Future<void> loadRoutes(BuildContext context) async {
-    if (loaded || loading) return;
+    if (_loading) return;
 
-    loading = true;
+    _loading = true;
     notifyListeners();
 
 
     try {
-      // 1. cargar base
-      final initial = await csvLoaderService.loadInitialRoutes(context);
 
-      csvLoaderService.createControllerList(initial);
+      final routes = await csvImportRoutes();
+      print(routes);
+      final connections = await csvImportConections();
+      final sectors = await csvImportSectors();
+      final factories = await csvImportFactories();
+      final employees = await csvImportEmpleoyees();
+      final lines = await csvImportLines();
+      final mails = await csvImportMails();
 
-      // 2. conexión
-      await typeConection(context);
 
-      // 3. IMPORTANTE: ya no dependes de controllers
-      final imported = await csvLoaderService.importedRoutes(context,true);
+      context.read<RoutesProvider>().setRoutes(routes);
+      context.read<ConectionProvider>().setConections(connections);
+      context.read<SectorProvider>().setSectors(sectors);
+      context.read<FactoryProvider>().setFactories(factories);
+      context.read<EmployeeProvider>().setEmployees(employees);
+      context.read<LineSendProvider>().setLineSends(lines);
+      context.read<MailProvider>().setMails(mails);
 
-      routes = imported.isNotEmpty ? imported : initial;
-
-      loaded = true;
 
     } catch (e) {
       print("ERROR loadRoutes: $e");
     } finally {
-      loading = false;
+      _loading = false;
       notifyListeners();
     }
   }
 }
+

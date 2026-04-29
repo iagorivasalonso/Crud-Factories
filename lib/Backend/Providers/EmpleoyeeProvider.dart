@@ -1,5 +1,12 @@
+import 'package:crud_factories/Backend/CSV/importEmpleoyes.dart';
+import 'package:crud_factories/Backend/Global/files.dart';
+import 'package:crud_factories/generated/l10n.dart' show S;
+import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter/foundation.dart';
 import 'package:crud_factories/Objects/Empleoye.dart';
+import 'package:universal_html/html.dart' show File;
+
+import '../Global/list.dart';
 
 class EmployeeProvider extends ChangeNotifier {
 
@@ -39,4 +46,36 @@ class EmployeeProvider extends ChangeNotifier {
     _employees.clear();
     notifyListeners();
   }
+
+  Future<void> importEmployee(BuildContext context, {
+    required File file,
+    Uint8List? bytes,
+    String? content,
+    String? assetPath,
+  }) async {
+
+    try {
+      final imported = await csvImportEmpleoyees(
+        file: fEmpleoyes,
+        bytes: bytes,
+        content: content,
+        assetPath: assetPath,
+      );
+
+      _employees.addAll(imported); // ✔ estado del provider
+    } catch (e) {
+      final s = S.of(context);
+
+      final msg = e.toString().toLowerCase();
+
+      if (msg.contains("not found") ||
+          msg.contains("archivo") ||
+          msg.contains("asset")) {
+        errorFiles.add("${s.file_not_found} ${s.routes}");
+      } else {
+        errorFiles.add("${s.file_format_error} ${s.routes}");
+      }
+    }
+  }
+
 }

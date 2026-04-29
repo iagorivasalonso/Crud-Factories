@@ -8,22 +8,25 @@ import 'package:crud_factories/Objects/LineSend.dart';
 import '../connectors_API/connectApi.dart';
 
 
-Future<void> sqlImportLines() async {
+Future<List<LineSend>> sqlImportLines() async {
 
-  if (selectedDb.isEmpty) return;
+  if (selectedDb.isEmpty) return [];
 
   if (kIsWeb) {
-    await _loadLinesFromApi();
+    return _loadLinesFromApi();
   } else {
-    await _loadLinesFromDb();
+    return _loadLinesFromDb();
   }
 }
 
-Future<void> _loadLinesFromDb() async {
+Future<List<LineSend>> _loadLinesFromDb() async {
+
+  final list = <LineSend>[];
+
   try {
     final result = await executeQuery.query('SELECT * FROM linesends');
     for (final row in result) {
-      allLines.add(LineSend(
+      list.add(LineSend(
         id: row[0].toString(),
         date: row[1],
         factory: row[2],
@@ -31,15 +34,17 @@ Future<void> _loadLinesFromDb() async {
         state: row[4],
       ));
     }
-    debugPrint('Lineas cargadas desde DB: ${allLines.length}');
+    debugPrint('Lineas cargadas desde DB: ${list.length}');
   } catch (e, stack) {
     debugPrint('DB ERROR: $e');
     debugPrintStack(stackTrace: stack);
   }
+  return list;
 }
 
-Future<void> _loadLinesFromApi() async {
+Future<List<LineSend>> _loadLinesFromApi() async {
 
+  final list = <LineSend>[];
   try {
 
     final String nameTable = 'lines';
@@ -54,7 +59,7 @@ Future<void> _loadLinesFromApi() async {
 
     if (body is List) {
       for (final row in body) {
-        allLines.add(LineSend(
+        list.add(LineSend(
           id: row['id'].toString() ?? '',
           date: row['date'] ?? '',
           factory: row['factory'] ?? '',
@@ -64,9 +69,10 @@ Future<void> _loadLinesFromApi() async {
       }
     }
 
-    debugPrint('Lines cargadas desde API: ${allLines.length}');
+    debugPrint('Lines cargadas desde API: ${list.length}');
   } catch (e, stack) {
     debugPrint('API ERROR: $e');
     debugPrintStack(stackTrace: stack);
   }
+  return list;
 }

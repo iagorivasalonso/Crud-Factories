@@ -16,10 +16,9 @@ import '../importRoutes.dart';
 import '../importSectors.dart';
 
 class CsvProcessorService {
-  static Future<void> processCsvContent(
+  static Future<void> processCsContent(
       BuildContext context,
-      String content,
-      bool importOrtherFiles,
+      String content
       ) async {
 
     try {
@@ -52,61 +51,48 @@ class CsvProcessorService {
       switch (parts.length) {
 
         case 2:
-          if (!importOrtherFiles) {
-            await csvImportSectors(context, listController.sectorsNew, content);
-          } else {
+
             listController.sectorsNew =
             await readSectorsFromCsvContent(content);
-          }
+
           break;
 
         case 3:
           if (parts[1].contains("R")) {
-            await csvImportRoutes(context, listController.routesNew, content);
+            listController.routesNew = await readRoutesFromCsvContent(content);
           } else {
-            if (!importOrtherFiles) {
-              await csvImportEmpleoyes(context, listController.empleoyesNew, content);
-            } else {
               listController.empleoyesNew =
               await readEmpleoyeFromCsvContent(content);
-            }
+
           }
           break;
 
         case 4:
-          if (!importOrtherFiles) {
-            await csvImportMails(context, listController.mailsNew, content);
-          } else {
+
             listController.mailsNew =
             await readMailsFromCsvContent(content);
-          }
+
           break;
 
         case 5:
-          if (!importOrtherFiles) {
-            await csvImportLines(context, listController.linesNew, content);
-          } else {
+
             listController.linesNew =
             await readLinesFromCsvContent(content);
-          }
+
           break;
 
         case 6:
-          if (!importOrtherFiles) {
-            await csvImportConections(context, content);
-          } else {
+
             listController.conectionsNew =
             await readConectionsFromCsvContent(content);
-          }
+
           break;
 
         case 14:
-          if (!importOrtherFiles) {
-            await csvImportFactories(context, listController.factoriesNew, content);
-          } else {
+
             listController.factoriesNew =
             await readFactoriesFromCsvContent(content);
-          }
+
           break;
 
         default:

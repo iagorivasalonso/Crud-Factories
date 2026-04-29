@@ -1,82 +1,81 @@
 import 'dart:convert';
 import 'dart:io';
-import 'package:crud_factories/Backend/Global/list.dart';
-import 'package:crud_factories/Backend/Global/files.dart';
+import 'dart:typed_data';
 import 'package:crud_factories/Objects/LineSend.dart';
-import 'package:crud_factories/generated/l10n.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart' show kIsWeb;
+import 'package:flutter/services.dart';
 
-Future<void> csvImportLines(BuildContext context, List<LineSend> line, [dynamic fileOrContent] ) async {
+Future<List<LineSend>> csvImportLines({
+  File? file,
+  Uint8List? bytes,
+  String? content,
+  String? assetPath,
+}) async {
+  String csvContent;
 
-  try {
-
-    List<LineSend> imported;
-
-    if (fileOrContent == null)
-    {
-      imported = await readLinesFromCsv(fLines);
+  if (bytes != null) {
+    try {
+      csvContent = utf8.decode(bytes);
+    } catch (_) {
+      csvContent = latin1.decode(bytes);
     }
-    else if (fileOrContent is File)
-    {
-      imported = await readLinesFromCsv(fileOrContent);
-    }
-    else if (fileOrContent is String)
-    {
-      imported = await readLinesFromCsvContent(fileOrContent);
-    }
-    else
-    {
-      throw Exception("Invalid value");
-    }
-    allLines.addAll(imported);
-
-
-
-  } catch (e) {
-    String array = S.of(context).lines;
-
-    if(e.toString().contains("El sistema no puede encontrar el archivo especificado")) {
-      errorFiles.add("${S.of(context).file_not_found} $array");
-    }
-    else if(e.toString().contains("Invalid value")) {
-      errorFiles.add("${S.of(context).file_format_error} $array");
-    }
-
   }
+
+  // 📄 String directo
+  else if (content != null) {
+    csvContent = content;
+  }
+
+  // 🖥️ Desktop / Mobile file
+  else if (!kIsWeb && file != null) {
+    csvContent = await file.readAsString(encoding: utf8);
+  }
+
+  // 📦 Asset (fallback automático)
+  else {
+    csvContent = await rootBundle.loadString(
+      assetPath ?? "assets/dataDefault/lines.csv",
+    );
+  }
+
+  return readLinesFromCsvContent(csvContent);
 }
 
 Future<List<LineSend>> readLinesFromCsv(File file) async {
-
   final content = await file.readAsString(encoding: utf8);
   return readLinesFromCsvContent(content);
 }
 
-Future<List<LineSend>> readLinesFromCsvContent(String content) async {
-
+List<LineSend> readLinesFromCsvContent(String content) {
   final lines = const LineSplitter()
       .convert(content)
       .where((line) => line.trim().isNotEmpty)
       .toList();
 
+  final lineSends = <LineSend>[];
 
-  final lineSend = <LineSend>[];
-
-  for( final line in lines.skip(1)) {
-
+  for (final line in lines.skip(1)) {
     final parts = line.split(";");
-    // Validar que date parece una fecha
-    if (!parts[1].contains("-")) continue;
-
 
     if (parts.length < 5) continue;
-    lineSend.add(LineSend(
-      id: parts[0],
-      date:parts[1],
-      factory:parts[2] ,
-      observations: parts[3] ,
-      state: parts[4],
+
+    final id = parts[0].trim();
+    final date = parts[1].trim();
+    final factory = parts[2].trim();
+    final observations = parts[3].trim();
+    final state = parts[4].trim();
+
+    // Validación simple de fecha
+    if (!date.contains("-")) continue;
+
+    lineSends.add(LineSend(
+      id: id,
+      date: date,
+      factory: factory,
+      observations: observations,
+      state: state,
     ));
   }
 
-  return lineSend;
+  return lineSends;
 }

@@ -228,13 +228,35 @@ class ConectionProvider extends ChangeNotifier {
   }
 
 
-  Future<List<Conection>>importConections(BuildContext context,List<Conection> conection,[dynamic fileOrContent]) async {
+  Future<void>importConections(BuildContext context, {
+    required File file,
+    Uint8List? bytes,
+    String? content,
+    String? assetPath,
+  }) async {
+    try {
+      final imported = await csvImportConections(
+        file: fMails,
+        bytes: bytes,
+        content: content,
+        assetPath: assetPath,
+      );
 
-    final imported = await csvImportConections(context, fileOrContent);
+      _conections.addAll(imported); // ✔ estado del provider
+    } catch (e) {
+      final s = S.of(context);
 
-    _conections.addAll(imported); // ✔ estado del provider
-    notifyListeners();
-    return [];
+      final msg = e.toString().toLowerCase();
+
+      if (msg.contains("not found") ||
+          msg.contains("archivo") ||
+          msg.contains("asset")) {
+        errorFiles.add("${s.file_not_found} ${s.routes}");
+      } else {
+        errorFiles.add("${s.file_format_error} ${s.routes}");
+      }
+    }
+      notifyListeners();
   }
 
     Future<bool>disconnet() async {

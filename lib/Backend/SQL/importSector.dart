@@ -8,30 +8,30 @@ import 'package:crud_factories/Objects/Sector.dart';
 
 import '../connectors_API/connectApi.dart';
 
-Future<void> sqlImportSetors() async {
+Future<List<Sector>> sqlImportSetors() async {
  
 
-  if (selectedDb.isEmpty) {
-    print('BD no seleccionada');
-    return;
-  }
+  if (selectedDb.isEmpty)return[];
 
   if (kIsWeb) {
-    await _loadSectorsFromApi();
+    return _loadSectorsFromApi();
   } else {
-    await _loadSectorsFromDb();
+    return _loadSectorsFromDb();
   }
 }
 
 /// =======================
 /// DESKTOP → DB LOCAL
 /// =======================
-Future<void> _loadSectorsFromDb() async {
+Future<List<Sector>> _loadSectorsFromDb() async {
+
+  final list = <Sector>[];
+
   try {
     final result = await executeQuery.query('SELECT * FROM sectors');
 
     for (final row in result) {
-      sectors.add(
+      list.add(
         Sector(
           id: row[0].toString(),
           name: row[1],
@@ -39,17 +39,20 @@ Future<void> _loadSectorsFromDb() async {
       );
     }
 
-    debugPrint('Sectores cargados desde DB: ${sectors.length}');
+    debugPrint('Sectores cargados desde DB: ${list.length}');
   } catch (e, stack) {
     debugPrint('DB ERROR: $e');
     debugPrintStack(stackTrace: stack);
   }
+  return list;
 }
 
 /// =======================
 /// WEB → API NODE
 /// =======================
-Future<void> _loadSectorsFromApi() async {
+Future<List<Sector>> _loadSectorsFromApi() async {
+
+  final list = <Sector>[];
 
   try {
 
@@ -66,15 +69,16 @@ Future<void> _loadSectorsFromApi() async {
 
     if (body is List) {
       for (final row in body) {
-        sectors.add(Sector(
+        list.add(Sector(
           id: row['id']?.toString() ?? '',
           name: row['sector'] ?? '',
         ));
       }
     }
-    debugPrint('Sectores cargados desde API: ${sectors.length}');
+    debugPrint('Sectores cargados desde API: ${list.length}');
   } catch (e, stack) {
     debugPrint('API ERROR: $e');
     debugPrintStack(stackTrace: stack);
   }
+  return list;
 }

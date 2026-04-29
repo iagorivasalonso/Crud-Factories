@@ -7,35 +7,41 @@ import 'package:crud_factories/Backend/Global/variables.dart';
 import 'package:crud_factories/Backend/Global/list.dart';
 import 'package:crud_factories/Objects/Empleoye.dart';
 
-Future<void> sqlImportEmpleoyes() async {
+Future<List<Empleoye>> sqlImportEmpleoyes() async {
 
-  if (selectedDb.isEmpty) return;
+  if (selectedDb.isEmpty) return [];
 
   if (kIsWeb) {
-    await _loadEmpleoyesFromApi();
+     return _loadEmpleoyesFromApi();
   } else {
-    await _loadEmpleoyesFromDb();
+     return _loadEmpleoyesFromDb();
   }
 }
 
-Future<void> _loadEmpleoyesFromDb() async {
+Future<List<Empleoye>> _loadEmpleoyesFromDb() async {
+
+  final list = <Empleoye>[];
+
   try {
     final result = await executeQuery.query('SELECT * FROM empleoyes');
     for (final row in result) {
-      empleoyes.add(Empleoye(
+      list.add(Empleoye(
         id: row[0].toString(),
         name: row[1],
         idFactory: row[2].toString(),
       ));
     }
-    debugPrint('Empleados cargados desde DB: ${empleoyes.length}');
+    debugPrint('Empleados cargados desde DB: ${list.length}');
   } catch (e, stack) {
     debugPrint('DB ERROR: $e');
     debugPrintStack(stackTrace: stack);
   }
+  return list;
 }
 
-Future<void> _loadEmpleoyesFromApi() async {
+Future<List<Empleoye>> _loadEmpleoyesFromApi() async {
+
+  final list = <Empleoye>[];
 
   try {
 
@@ -52,7 +58,7 @@ Future<void> _loadEmpleoyesFromApi() async {
 
     if (body is List) {
       for (final row in body) {
-        empleoyes.add(Empleoye(
+        list.add(Empleoye(
           id: row['id'].toString(),
           name: row['name'],
           idFactory: row['idFactory'].toString(),
@@ -62,9 +68,10 @@ Future<void> _loadEmpleoyesFromApi() async {
     }
 
 
-    debugPrint('Empleoyes cargados desde API: ${empleoyes.length}');
+    debugPrint('Empleoyes cargados desde API: ${list.length}');
   } catch (e, stack) {
     debugPrint('API ERROR: $e');
     debugPrintStack(stackTrace: stack);
   }
+  return list;
 }

@@ -7,36 +7,41 @@ import 'package:crud_factories/Backend/Global/list.dart';
 import 'package:crud_factories/Objects/Mail.dart';
 import '../connectors_API/connectApi.dart';
 
-Future<void> sqlImportMails() async {
+Future<List<Mail>> sqlImportMails() async {
 
-  if (selectedDb.isEmpty) return;
+  if (selectedDb.isEmpty) return [];
 
   if (kIsWeb) {
-    await _loadMailsFromApi();
+    return _loadMailsFromApi();
   } else {
-    await _loadMailsFromDb();
+    return _loadMailsFromDb();
   }
 }
 
-Future<void> _loadMailsFromDb() async {
+Future<List<Mail>> _loadMailsFromDb() async {
+
+  final list = <Mail>[];
   try {
     final result = await executeQuery.query('SELECT * FROM mails');
     for (final row in result) {
-      mails.add(Mail(
+      list.add(Mail(
         id: row[0].toString(),
         company: row[1],
         address: row[2],
         password: row[3],
       ));
     }
-    debugPrint('Emails cargados desde DB: ${mails.length}');
+    debugPrint('Emails cargados desde DB: ${list.length}');
   } catch (e, stack) {
     debugPrint('DB ERROR: $e');
     debugPrintStack(stackTrace: stack);
   }
+  return list;
 }
 
-Future<void> _loadMailsFromApi() async {
+Future<List<Mail>> _loadMailsFromApi() async {
+
+  final list = <Mail>[];
   try {
 
     final String nameTable = 'mails';
@@ -51,7 +56,7 @@ Future<void> _loadMailsFromApi() async {
 
     if (body is List) {
       for (final row in body) {
-        mails.add(Mail(
+        list.add(Mail(
           id: row['id']?.toString() ?? '',
           company: row['company'] ?? '',
           address: row['email'] ?? '',      // aquí tu campo email
@@ -60,18 +65,10 @@ Future<void> _loadMailsFromApi() async {
       }
     }
 
-    final List<dynamic> data = jsonDecode(res.body);
-    for (final row in data) {
-      mails.add(Mail(
-        id: row['id']?.toString() ?? '',
-        company: row['company'] ?? '',
-        address: row['email'] ?? '',      // aquí tu campo email
-        password: row['password'] ?? '',
-      ));
-    }
-    debugPrint('Mails cargados desde API: ${mails.length}');
+    debugPrint('Mails cargados desde API: ${list.length}');
   } catch (e, stack) {
     debugPrint('API ERROR: $e');
     debugPrintStack(stackTrace: stack);
   }
+  return list;
 }

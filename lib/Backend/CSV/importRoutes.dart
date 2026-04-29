@@ -1,55 +1,41 @@
 import 'dart:convert';
-import 'dart:io';
-import 'package:crud_factories/Backend/Global/list.dart';
-import 'package:crud_factories/Backend/Global/files.dart';
+import 'dart:typed_data';
+import 'package:crud_factories/Objects/RouteCSV.dart' show RouteCSV;
+import 'package:flutter/services.dart';
+import 'package:flutter/foundation.dart' show kIsWeb, debugPrint;
+import 'dart:io' show File;
+
 import 'package:crud_factories/Objects/RouteCSV.dart';
-import 'package:crud_factories/generated/l10n.dart';
-import 'package:fluent_ui/fluent_ui.dart';
+import 'package:universal_html/html.dart' hide File;
 
+Future<List<RouteCSV>> csvImportRoutes({
+  File? file,
+  Uint8List? bytes,
+  String? content,
+  String? assetPath,
+}) async {
+  String csvContent;
 
-Future<void>csvImportRoutes(BuildContext context, List<RouteCSV> routes, [dynamic fileOrContent]) async {
-
-  try {
-    List<RouteCSV> imported;
-
-    if (fileOrContent == null)
-    {
-      imported = await readRoutesFromCsv(fRoutes);
+  if (bytes != null) {
+    try {
+      csvContent = utf8.decode(bytes);
+    } catch (_) {
+      csvContent = latin1.decode(bytes);
     }
-    else if (fileOrContent is File)
-    {
-      imported = await readRoutesFromCsv(fileOrContent);
-    }
-    else if (fileOrContent is String)
-    {
-      imported = await readRoutesFromCsvContent(fileOrContent);
-    }
-    else
-    {
-      throw Exception("Invalid value");
-    }
-    routesCSV.addAll(imported);
-
-  } catch (e) {
-        String array = S.of(context).routes;
-
-        if(e.toString().contains("El sistema no puede encontrar el archivo especificado")) {
-          errorFiles.add("${S.of(context).file_not_found} $array");
-        }
-        else if(e.toString().contains("Invalid value")) {
-          errorFiles.add("${S.of(context).file_format_error} $array");
-        }
+  } else if (content != null) {
+    csvContent = content;
+  } else if (!kIsWeb && file != null) {
+    csvContent = await file.readAsString(encoding: utf8);
+  } else {
+    csvContent = await rootBundle.loadString(
+      assetPath ?? "assets/dataDefault/routes.csv",
+    );
   }
+
+  return readRoutesFromCsvContent(csvContent);
 }
 
-Future<List<RouteCSV>> readRoutesFromCsv(File file) async {
-
-  final content = await file.readAsString(encoding: utf8);
-  return readRoutesFromCsvContent(content);
-}
-
-Future<List<RouteCSV>> readRoutesFromCsvContent(String content) async {
-
+List<RouteCSV> readRoutesFromCsvContent(String content) {
   final lines = const LineSplitter()
       .convert(content)
       .where((line) => line.trim().isNotEmpty)
@@ -60,15 +46,18 @@ Future<List<RouteCSV>> readRoutesFromCsvContent(String content) async {
   for (final line in lines.skip(1)) {
     final parts = line.split(";");
     if (parts.length < 3) continue;
-    final routePath = parts[2].trim();   //seguridad solo para rutas por si faltan otros archivos
-    final safePath = routePath.isEmpty ? "<EMPTY>" : routePath;
+
+    final id = parts[0].trim();
+    final name = parts[1].trim();
+    final routePath = parts[2].trim();
+
     routes.add(RouteCSV(
-      id: parts[0].trim(),
-      name: parts[1].trim(),
-      route: safePath,
+      id: id,
+      name: name,
+      route: routePath.isEmpty ? "<EMPTY>" : routePath,
     ));
   }
 
+  debugPrint('Routes loaded: ${routes.length}');
   return routes;
-
 }

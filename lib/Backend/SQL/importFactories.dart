@@ -8,22 +8,24 @@ import 'package:crud_factories/Objects/Factory.dart';
 import '../connectors_API/connectApi.dart';
 
 
-Future<void> sqlImportFactories() async {
+Future<List<Factory>> sqlImportFactories() async {
 
-  if (selectedDb.isEmpty) return;
+  if (selectedDb.isEmpty) return [];
 
   if (kIsWeb) {
-    await _loadFactoriesFromApi();
+    return _loadFactoriesFromApi();
   } else {
-    await _loadFactoriesFromDb();
+    return _loadFactoriesFromDb();
   }
 }
 
-Future<void> _loadFactoriesFromDb() async {
+Future<List<Factory>> _loadFactoriesFromDb() async {
+
+  final list = <Factory>[];
   try {
     final result = await executeQuery.query('SELECT * FROM factories');
     for (final row in result) {
-      allFactories.add(Factory(
+      list.add(Factory(
         id: row[0].toString(),
         name: row[1],
         highDate: row[2],
@@ -41,13 +43,17 @@ Future<void> _loadFactoriesFromDb() async {
         },
       ));
     }
-    debugPrint('Factories cargadas desde DB: ${allFactories.length}');
+    debugPrint('Factories cargadas desde DB: ${list.length}');
   } catch (e, stack) {
     debugPrint('DB ERROR: $e');
     debugPrintStack(stackTrace: stack);
   }
+  return list;
 }
-Future<void> _loadFactoriesFromApi() async {
+Future<List<Factory>> _loadFactoriesFromApi() async {
+
+  final list = <Factory>[];
+
   try {
 
     final String nameTable = 'factories';
@@ -71,7 +77,7 @@ Future<void> _loadFactoriesFromApi() async {
           row['telephone2']?.toString() ?? '',
         ];
 
-        allFactories.add(Factory(
+        list.add(Factory(
           id: row['id']?.toString() ?? '',
           name: row['name'] ?? '',
           highDate: row['highDate'] ?? '',
@@ -92,9 +98,10 @@ Future<void> _loadFactoriesFromApi() async {
     }
 
 
-    debugPrint('Factories cargadas desde API: ${allFactories.length}');
+    debugPrint('Factories cargadas desde API: ${list.length}');
   } catch (e, stack) {
     debugPrint('API ERROR: $e');
     debugPrintStack(stackTrace: stack);
   }
+  return list;
 }

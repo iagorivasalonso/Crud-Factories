@@ -1,71 +1,59 @@
 import 'dart:convert';
-import 'dart:io';
-import 'package:crud_factories/Backend/Global/list.dart';
-import 'package:crud_factories/Backend/Global/files.dart';
-import 'package:crud_factories/Objects/Conection.dart';
-import 'package:crud_factories/generated/l10n.dart';
-import 'package:flutter/material.dart';
+import 'dart:typed_data';
+import 'dart:io' show File;
+import 'package:crud_factories/Objects/Conection.dart' show Conection;
+import 'package:flutter/foundation.dart' show kIsWeb;
+import 'package:flutter/services.dart';
 
-Future<List<Conection>>csvImportConections(BuildContext context,[dynamic fileOrContent]) async {
+Future<List<Conection>> csvImportConections({
+  File? file,
+  Uint8List? bytes,
+  String? content,
+  String? assetPath,
+}) async {
+  String csvContent;
 
-  try {
-
-    List<Conection> imported;
-
-    if (fileOrContent == null)
-    {
-      imported = await readConectionsFromCsv(fConections);
+  if (bytes != null) {
+    try {
+      csvContent = utf8.decode(bytes);
+    } catch (_) {
+      csvContent = latin1.decode(bytes);
     }
-    else if (fileOrContent is File)
-    {
-      imported = await readConectionsFromCsv(fileOrContent);
-    }
-    else if (fileOrContent is String)
-    {
-      imported = await readConectionsFromCsvContent(fileOrContent);
-    }
-    else
-    {
-      throw Exception("Invalid value");
-    }
-
-    return imported;
-
-  } catch (e) {
-    String array = S.of(context).connections;
-
-    if(e.toString().contains("El sistema no puede encontrar el archivo especificado")) {
-      errorFiles.add("${S.of(context).file_not_found} $array");
-    }
-    else if(e.toString().contains("Invalid value")) {
-      errorFiles.add("${S.of(context).file_format_error} $array");
-    }
-    return [];
   }
+
+  // 📄 String directo
+  else if (content != null) {
+    csvContent = content;
+  }
+
+  // 🖥️ Desktop / Mobile file
+  else if (!kIsWeb && file != null) {
+    csvContent = await file.readAsString(encoding: utf8);
+  }
+
+  // 📦 Asset (fallback automático)
+  else {
+    csvContent = await rootBundle.loadString(
+      assetPath ?? "assets/dataDefault/conections.csv",
+    );
+  }
+
+  return readConectionsFromCsvContent(csvContent);
 }
 
-Future<List<Conection>> readConectionsFromCsv(File file) async {
-
-  final content = await file.readAsString(encoding: utf8);
-  return readConectionsFromCsvContent(content);
-}
-
-
-Future<List<Conection>> readConectionsFromCsvContent(String content) async {
-
+List<Conection> readConectionsFromCsvContent(String content) {
   final lines = const LineSplitter()
       .convert(content)
       .where((line) => line.trim().isNotEmpty)
       .toList();
 
-  final conection = <Conection>[];
+  final connections = <Conection>[];
 
   for (final line in lines.skip(1)) {
     final parts = line.split(";");
-
     if (parts.length < 6) continue;
 
-    conection.add(Conection(
+    connections.add(Conection(
       id: parts[0].trim(),
       database: parts[1].trim(),
       host: parts[2].trim(),
@@ -75,5 +63,6 @@ Future<List<Conection>> readConectionsFromCsvContent(String content) async {
     ));
   }
 
-  return conection;
+  print('Connections loaded: ${connections.length}');
+  return connections;
 }

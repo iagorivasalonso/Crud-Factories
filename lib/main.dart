@@ -1,7 +1,12 @@
 import 'dart:io';
 
 import 'package:crud_factories/Backend/Providers/App_provaider.dart';
-import 'package:crud_factories/Backend/Providers/Conection_provider.dart' show AppProvider, ConectionProvider;
+import 'package:crud_factories/Backend/Providers/EmpleoyeeProvider.dart';
+import 'package:crud_factories/Backend/Providers/FactoryProvider.dart';
+import 'package:crud_factories/Backend/Providers/LineSendProvider.dart';
+import 'package:crud_factories/Backend/Providers/MailProvider.dart' show MailProvider;
+import 'package:crud_factories/Backend/Providers/RoutesProvider.dart';
+import 'package:crud_factories/Backend/Providers/SectorProvider.dart';
 import 'package:crud_factories/Platform/appDesktop.dart';
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
@@ -11,8 +16,8 @@ import 'package:window_manager/window_manager.dart';
 import 'Alertdialogs/closeApp.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:crud_factories/generated/l10n.dart';
-
 import 'Backend/Global/routes.dart';
+import 'Backend/Providers/ConectionProvider.dart';
 import 'Platform/appAndroid.dart';
 
 
@@ -31,12 +36,37 @@ void main() async {
             MultiProvider(
             providers: [
               ChangeNotifierProvider(
-                  create: (_) => ConectionProvider()
+                create: (_) => AppProvider(),
+              ),
+              ChangeNotifierProvider(
+                  create: (_) => RoutesProvider()
               ),
 
               ChangeNotifierProvider(
-                create: (_) => AppProvider(),
+                  create: (_) => SectorProvider()
               ),
+              ChangeNotifierProvider(
+                  create: (_) => FactoryProvider()
+              ),
+
+              ChangeNotifierProvider(
+                  create: (_) => EmployeeProvider()
+              ),
+
+              ChangeNotifierProvider(
+                  create: (_) => LineSendProvider()
+              ),
+
+
+              ChangeNotifierProvider(
+                  create: (_) => MailProvider()
+              ),
+
+
+              ChangeNotifierProvider(
+                  create: (_) => ConectionProvider()
+              ),
+
             ],
             child: MyApp())
            );

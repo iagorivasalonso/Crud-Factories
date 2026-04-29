@@ -1,21 +1,23 @@
 import 'package:crud_factories/Alertdialogs/closeApp.dart';
 import 'package:crud_factories/Alertdialogs/confirm.dart' show confirm;
 import 'package:crud_factories/Alertdialogs/error.dart';
-import 'package:crud_factories/Alertdialogs/errorList.dart';
 import 'package:crud_factories/Alertdialogs/noCategory.dart';
-import 'package:crud_factories/Alertdialogs/typeconnection.dart';
 import 'package:crud_factories/Alertdialogs/warning.dart';
 import 'package:crud_factories/Backend/CSV/Export_general/export_service.dart' show ExportService;
 import 'package:crud_factories/Backend/CSV/exportSectors.dart';
 import 'package:crud_factories/Backend/CSV/loader.dart';
 import 'package:crud_factories/Backend/Global/list.dart';
-import 'package:crud_factories/Backend/Providers/Conection_provider.dart';
+import 'package:crud_factories/Backend/Providers/ConectionProvider.dart';
+import 'package:crud_factories/Backend/Providers/EmpleoyeeProvider.dart';
+import 'package:crud_factories/Backend/Providers/FactoryProvider.dart';
+import 'package:crud_factories/Backend/Providers/LineSendProvider.dart';
+import 'package:crud_factories/Backend/Providers/MailProvider.dart';
+import 'package:crud_factories/Backend/Providers/SectorProvider.dart';
 import 'package:crud_factories/Backend/_selection_view.dart';
 import 'package:crud_factories/Backend/Global/variables.dart';
 import 'package:crud_factories/Frontend/adminRoutes.dart';
 import 'package:crud_factories/Frontend/adminSectors.dart';
 import 'package:crud_factories/Functions/changesNoSave.dart';
-import 'package:crud_factories/Objects/RouteCSV.dart';
 import 'package:crud_factories/Objects/Sector.dart' show Sector;
 import 'package:crud_factories/generated/l10n.dart';
 import 'package:flutter/foundation.dart';
@@ -23,8 +25,8 @@ import 'package:flutter/material.dart';
 import 'package:menu_bar/menu_bar.dart';
 import 'package:crud_factories/Alertdialogs/createSector.dart';
 import 'package:provider/provider.dart';
-
 import '../Backend/Providers/App_provaider.dart';
+import '../Backend/Providers/RoutesProvider.dart';
 
 class appDesktop extends StatefulWidget {
   const appDesktop({super.key});
@@ -35,12 +37,18 @@ class appDesktop extends StatefulWidget {
 
 class _appDesktopState extends State<appDesktop> {
   late TextEditingController controllerImportPicker = TextEditingController();
+
+
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) async {
+
+     await csvLoaderService.loadInitialRoutes(context); //necesario para la primera ruta
+
       await context.read<AppProvider>().loadRoutes(context);
+
     });
 
     csvLoaderService.createControllerBD();
@@ -63,11 +71,18 @@ class _appDesktopState extends State<appDesktop> {
     double mHeight = MediaQuery.of(context).size.height;
 
     context1 = context;
+    final routesCSV = context.watch<RoutesProvider>().routes;
+    final connections = context.watch<ConectionProvider>().conections;
+    final sectors = context.watch<SectorProvider>().sectors;
+    final allFactories = context.watch<FactoryProvider>().factories;
+    final employees = context.watch<EmployeeProvider>().employees;
+    final allLines = context.watch<LineSendProvider>().LineSends;
+    final mails = context.watch<MailProvider>().mails;
 
     double wItem = 80;
     double wItemMax = 120;
     Color colorBar = Colors.white;
-
+print(routesCSV);
     List<BarButton> _menuBarButtons() {
       return [
         BarButton (
@@ -687,10 +702,10 @@ class _appDesktopState extends State<appDesktop> {
                         {
                               await ExportService.exportAllZip(
                                 routes: routesCSV,
-                                connections: conections,
+                                connections: connections,
                                 sectors: sectors,
                                 factories: allFactories,
-                                employees: empleoyes,
+                                employees: employees,
                                 lines: allLines,
                                 mails: mails,
                               );
@@ -710,7 +725,9 @@ class _appDesktopState extends State<appDesktop> {
          ),
       ];
     }
+
     return mHeight>50.0
+
     ? MaterialApp(
       theme: ThemeData(
           menuTheme: const MenuThemeData(
@@ -731,7 +748,6 @@ class _appDesktopState extends State<appDesktop> {
           child:  FuntionSeleted(itenSelect, subIten1Select, subIten2Select,mWidth, mHeight,context),
         ),
       )
-
     )
         :Container(
         width: mWidth,
