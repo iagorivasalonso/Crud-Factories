@@ -8,6 +8,7 @@ Padding defaultTextfield({
   FocusNode? focusNode,
   bool? automatic = false,
   bool? campEdit,
+  ValueChanged<String>? onChanged,
 }){
 
   return Padding(
@@ -42,11 +43,18 @@ Padding defaultTextfield({
                 isDense: true,
                 contentPadding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
               ),
-              onChanged: (s) {
-                if (campOld?.isNotEmpty ?? false) {
-                  saveChanges = controllerCamp.text != campOld;
+              onChanged: (value) {
+                // 👉 SI el padre manda lógica, la usamos
+                if (onChanged != null) {
+                  onChanged(value);
+                  return;
+                }
+
+                // 👉 SI NO, usamos lógica interna (fallback)
+                if (campOld != null && campOld.isNotEmpty) {
+                  saveChanges = value != campOld;
                 } else {
-                  saveChanges = controllerCamp.text.isNotEmpty;
+                  saveChanges = value.isNotEmpty;
                 }
               },
             ),

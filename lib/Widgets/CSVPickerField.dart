@@ -1,46 +1,32 @@
 
+import 'package:crud_factories/Backend/Providers/RoutesProvider.dart' show RoutesProvider;
 import 'package:crud_factories/Widgets/textfield.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'materialButton.dart';
 
-class CSVPickerField extends StatefulWidget {
-
-  final TextEditingController controller;
+class CSVPickerField extends StatelessWidget {
+  final String value;
   final String campName;
   final String actionName;
+  final ValueChanged<String> onChanged;
   final Future<void> Function() function;
   final bool automatic;
-
-
+  final int index;
 
   const CSVPickerField({
     super.key,
-    required this.controller,
+    required this.value,
     required this.campName,
     required this.actionName,
+    required this.onChanged,
     required this.function,
+    required this.index,
     this.automatic = false,
-
   });
 
   @override
-  State<CSVPickerField> createState() => _CSVPickerFieldState();
-}
-
-
-
-class _CSVPickerFieldState extends State<CSVPickerField> {
-
-  @override
-  Widget build(BuildContext context0) {
-
-
-    TextEditingController controllerImportPicker  = widget.controller;
-    String campName = widget.campName;
-    String action = widget.actionName;
-    bool automatic = widget.automatic;
-
-
+  Widget build(BuildContext context) {
     return Row(
       children: [
         Expanded(
@@ -48,17 +34,17 @@ class _CSVPickerFieldState extends State<CSVPickerField> {
             padding: const EdgeInsets.only(right: 3.0),
             child: defaultTextfield(
               nameCamp: campName,
-              controllerCamp: controllerImportPicker,
-              automatic: automatic
+              controllerCamp: TextEditingController(text: value),
+              automatic: automatic,
+              onChanged: (v) => onChanged(v),
             ),
           ),
         ),
-
         Padding(
           padding: const EdgeInsets.only(top: 15.0),
           child: materialButton(
-            nameAction: action,
-            function: () async => await widget.function(),
+            nameAction: actionName,
+            function: () async => await function(),
           ),
         ),
       ],
