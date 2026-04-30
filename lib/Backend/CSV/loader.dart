@@ -10,6 +10,7 @@ import 'package:crud_factories/Backend/Providers/FactoryProvider.dart' show Fact
 import 'package:crud_factories/Backend/Providers/MailProvider.dart' show MailProvider;
 import 'package:crud_factories/Backend/Providers/RoutesProvider.dart' show RoutesProvider;
 import 'package:crud_factories/Backend/Providers/SectorProvider.dart' show SectorProvider;
+import 'package:crud_factories/Objects/AppRoutesState.dart' show RouteFiles;
 import 'package:crud_factories/Objects/RouteCSV.dart';
 import 'package:crud_factories/generated/l10n.dart';
 import 'package:csv/csv.dart';
@@ -31,103 +32,59 @@ import 'package:path/path.dart' as p;
 
 class csvLoaderService {
 
+  static RouteFiles buildRouteFiles(List<RouteCSV> routes) {
+    String get(String name) {
+      return routes.firstWhere(
+            (r) => r.name == name,
+        orElse: () => RouteCSV(id: '', name: name, route: ''),
+      ).route;
+    }
 
-  static Future<List<RouteCSV>> loadInitialRoutes(BuildContext context,[String? newRoutePath]) async {
+    return RouteFiles(
+      routes: get("routes"),
+      connections: get("connections"),
+      server: get("server"),
+      sectors: get("sectors"),
+      factories: get("companies"),
+      employees: get("employees"),
+      lines: get("lines"),
+      mails: get("mails"),
+    );
+  }
+
+  static Future<(List<RouteCSV>, RouteFiles?)> loadInitialRoutes(BuildContext context,[String? newRoutePath]) async {
+
     errorFiles.clear();
-   Directory? parentDir;
-   var fileRoutes='';
 
-   if (!kIsWeb) {
-     parentDir = Directory.current.parent;
-   }
-       fileRoutes= 'routes.csv';
+    final fileName = 'routes.csv';
 
-   String defaultRoutesPath =
-   parentDir?.path != null
-       ? p.join(parentDir!.path,fileRoutes)
-       : '';
+    final parentDir = kIsWeb ? null : Directory.current.parent;
 
-    routeFirst = defaultRoutesPath;
+    final defaultPath = parentDir != null
+        ? p.join(parentDir.path,fileName)
+        : '';
 
-    if(newRoutePath != null)
-    {
-       defaultRoutesPath =newRoutePath;
+    final basePath = newRoutePath ?? defaultPath;
+
+    final pathToLoad = await resolveRoutesPath(context, basePath);
+
+
+    if (pathToLoad == 'fail') {
+      return (<RouteCSV>[], null);
     }
-    final String pathToLoad = await resolveRoutesPath(context,defaultRoutesPath);
 
+    final routes = await _createData(pathToLoad);
 
-   namesRoutesOrdened = [S.of(context).routes,S.of(context).connections,S.of(context).server,S.of(context).sectors,S.of(context).companies,S.of(context).employees,S.of(context).lines, S.of(context).mails];
-
-   if (pathToLoad == 'fail') {
-     return [];
-   }
-   else
-   {
-     routeFirst = pathToLoad;
-   }
-
-
-    fRoutes = File(pathToLoad);
-
-
-     List<RouteCSV> loadedRoutes = await _createData(pathToLoad);
-
-
-    if (loadedRoutes.isEmpty) {
+    if (routes.isEmpty) {
       errorFiles.add(S.of(context).route_file_cannot_be_read);
-      return [];
-    }
-    else
-    {
-      loadedRoutes  =  await reorderRouter(namesRoutesOrdened, loadedRoutes);
-
-       fRoutes = File(loadedRoutes[0].route);       //necesario para luego exportar no web
-       fSectors = File(loadedRoutes[3].route);
-       fFactories = File(loadedRoutes[4].route);
-       fEmpleoyes = File(loadedRoutes[5].route);
-       fLines = File(loadedRoutes[6].route);
-       fMails = File(loadedRoutes[7].route);
-       fConections = File(loadedRoutes[1].route);
-       fServer = File(loadedRoutes[2].route);
+      return (<RouteCSV>[], null);
     }
 
-    return loadedRoutes;
+    final files = buildRouteFiles(routes);
+
+    return (routes, files);
   }
 
-  static Future<bool> loadRemainingRoutes(BuildContext context, List<RouteCSV> routesCSV, [bool recharged= false]) async {
-
-    final cantidadRoutes=routesCSV.length;
-    bool isCorrect= true;
-
-    for(int i = 1; i <cantidadRoutes; i++)
-    {
-      final route = routesCSV[i].route;
-
-      if (route.isEmpty || recharged ==true && routesCSV[i].name=='Conexiones') continue;
-
-      try {
-        AppFile file;
-        if(route.startsWith('assets/'))
-        {
-           file = fromAsset(route);
-        }
-        else
-        {
-          file = fromPath(route);
-        }
-
-        await importAppFile(context, file);
-      } catch (e, s) {
-
-        String array =routesCSV[i].name;
-        errorFiles.add("${S.of(context).file_not_found} $array");
-        isCorrect=false;
-      }
-
-    }
-
-    return isCorrect; // Devuelve true si todo bien
-  }
 
   static Future<String> resolveRoutesPath(BuildContext context, [String? newRoutePath]) async {
 
@@ -207,7 +164,7 @@ class csvLoaderService {
       ));
     }
 
-    bool result = await csvLoaderService.loadRemainingRoutes(context, updatedRoutes);
+
 
     String array = S.of(context).routes;
     String actionArray = S.of(context).saved;
@@ -216,7 +173,7 @@ class csvLoaderService {
 
     if (!initialChargue) {
 
-      if (result && errorFiles.isNotEmpty) {
+      if (errorFiles.isNotEmpty) {
         errors(context, errorFiles);
       }
 
@@ -259,25 +216,6 @@ class csvLoaderService {
     );
   }
 
-  static void createControllerList(List<RouteCSV> initialRoutes) {
-
-    routeControllers = List.generate(namesRoutesOrdened.length, (i) => RouterController(
-      name: TextEditingController(text: namesRoutesOrdened[i]),
-      router: (i < initialRoutes.length && initialRoutes[i].route.isNotEmpty)
-              ? TextEditingController(text: initialRoutes[i].route)
-              : TextEditingController(text: ''),
-    ));
-
-    listController = new ListController(
-        routesNew: [],
-        sectorsNew: [],
-        empleoyesNew: [],
-        mailsNew: [],
-        linesNew: [],
-        conectionsNew: [],
-        factoriesNew: []);
-
-  }
 
   static void createControllerBD() {
 
@@ -290,26 +228,6 @@ class csvLoaderService {
     );
 
   }
-}
-
-List<RouteCSV> reorderRouter ( List<String> orderRoutes, List<RouteCSV> routesCsv) {
-
-   final routeMap = {
-     for(var r in routesCsv)
-        if(r.name.isNotEmpty)
-           r.name:r
-   };
-
-   final reordered = orderRoutes.map((name) {
-     final existingRoute = routeMap[name];
-     if (existingRoute != null) {
-       return existingRoute;
-     } else {
-       return RouteCSV(name: name, id: '', route: '');
-     }
-   }).toList();
-
-   return reordered;
 }
 
 Future<void> clearAllProviders(BuildContext context) async {
