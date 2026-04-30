@@ -1,6 +1,8 @@
 import 'package:crud_factories/Alertdialogs/confirm.dart';
 import 'package:crud_factories/Backend/CSV/exportSectors.dart';
 import 'package:crud_factories/Backend/Global/list.dart';
+import 'package:crud_factories/Backend/Providers/FactoryProvider.dart';
+import 'package:crud_factories/Backend/Providers/SectorProvider.dart' show SectorProvider;
 import 'package:crud_factories/Backend/SQL/deleteSector.dart';
 import 'package:crud_factories/Backend/Global/variables.dart';
 import 'package:crud_factories/Widgets/headAlertDialog.dart';
@@ -12,11 +14,15 @@ import 'package:crud_factories/Alertdialogs/createSector.dart';
 import 'package:crud_factories/Alertdialogs/error.dart';
 import 'package:crud_factories/Alertdialogs/warning.dart';
 import 'package:crud_factories/Widgets/materialButton.dart';
+import 'package:provider/provider.dart';
 
 import '../Objects/Sector.dart';
 
 
 Future<void> adminSector(BuildContext context) async {
+
+  final providerSector = context.watch<SectorProvider>();
+  final providerFactory = context.watch<FactoryProvider>();
 
   return showDialog(
     context: context,
@@ -38,9 +44,9 @@ Future<void> adminSector(BuildContext context) async {
                   child: Padding(
                     padding: const EdgeInsets.only(left: 30.0, right: 30.0),
                     child: tableEditSector(
-                      sectors: sectors,
-                      onEdit: (index) => _onEditSector(context, index, setState),
-                      onDelete: (index) => _onDeleteSector(context, index, setState),
+                      sectors: providerSector.sectors,
+                      onEdit: (index) => _onEditSector(context, index, setState,providerSector),
+                      onDelete: (index) => _onDeleteSector(context, index, setState,providerSector,providerFactory),
                     )
                   ),
                 ),
@@ -79,38 +85,29 @@ Future<void> adminSector(BuildContext context) async {
 
 Future <void> _onCreateSector(BuildContext context, void Function(void Function()) setState) async {
 
-  final Sector? created = await createSector(context, "");
-
-  if (created != null) {
-    setState(() {});
-  }
+  final created = await createSector(context, "");
 
 }
 
-Future <void> _onEditSector(BuildContext context, int index, void Function(void Function()) setState) async {
+Future <void> _onEditSector(BuildContext context, int index, void Function(void Function()) setState, SectorProvider provider) async {
 
    try {
-         final String oldName = sectors[index].name;
+         final String oldName = provider.sectors[index].name;
          final Sector?  edited = await createSector(context, oldName);
 
-         if(edited  != null)
-         {
-           setState((){});
-         }
    } catch (e){
        String action = S.of(context).could_not_be_edited;
        error(context,action);
    }
 }
 
-Future <void> _onDeleteSector(BuildContext context, int index, void Function(void Function()) setState) async {
+Future <void> _onDeleteSector(BuildContext context, int index, void Function(void Function()) setState, SectorProvider providerSector, FactoryProvider providerFactory) async {
 
-  if (sectors.isEmpty || index >= sectors.length) return;
+  if (providerSector.sectors.isEmpty || index >= providerSector.sectors.length) return;
 
-  final String idToDelete = sectors[index].id;
+  final String idToDelete = providerSector.sectors[index].id;
 
-
-  final bool hasFactories = allFactories.any(
+  final bool hasFactories = providerFactory.factories.any(
         (factory) => factory.sector == idToDelete,
   );
 
@@ -130,19 +127,19 @@ Future <void> _onDeleteSector(BuildContext context, int index, void Function(voi
   if (confirmed != true) return;
 
 
-  setState(() {
-    sectors.removeAt(index);
-  });
+
+    providerSector.removeSector(idToDelete);
+
 
   await confirm(context, S.of(context).the_sector_has_been_successfully_removed);
 
   if (BaseDateSelected.isNotEmpty) {
     sqlDeleteSector(idToDelete);
   } else {
-    await csvExportatorSectors(sectors);
+    await csvExportatorSectors(providerSector.sectors);
   }
 
-  if (sectors.isEmpty && Navigator.canPop(context)) {
+  if (providerSector.sectors.isEmpty && Navigator.canPop(context)) {
     Navigator.of(context).pop(false);
   }
 }

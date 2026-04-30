@@ -2,7 +2,7 @@
 import 'package:crud_factories/Alertdialogs/confirm.dart';
 import 'package:crud_factories/Alertdialogs/error.dart';
 import 'package:crud_factories/Backend/CSV/exportSectors.dart';
-import 'package:crud_factories/Backend/Global/list.dart';
+import 'package:crud_factories/Backend/Providers/SectorProvider.dart' show SectorProvider;
 import 'package:crud_factories/Backend/SQL/createSector.dart';
 import 'package:crud_factories/Backend/SQL/modifySector.dart';
 import 'package:crud_factories/Backend/Global/variables.dart';
@@ -16,29 +16,32 @@ import 'package:crud_factories/generated/l10n.dart';
 import 'package:crud_factories/helpers/localization_helper.dart' show LocalizationHelper;
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 
 
 Future<Sector?> createSector(BuildContext  context, String campOld) async {
 
-  Sector? resultSector;
+  final provider = context.read<SectorProvider>();
 
-  final TextEditingController controllerSector = TextEditingController();
+  final controllerSector = TextEditingController(
+    text: campOld.isNotEmpty ? campOld : '',
+  );
+
   final FocusNode focusNode = FocusNode();
 
   String title = campOld.isEmpty ? S.of(context).creation_of_the_sector : S.of(context).edit;
   String action = campOld.isEmpty ? S.of(context).create_sector : S.of(context).save;
 
-  if (campOld.isNotEmpty) controllerSector.text = campOld;
 
 focusNode.addListener(() {
-  if (!focusNode.hasFocus) {
-  if (campOld.isNotEmpty) {
-  saveChanges = controllerSector.text != campOld;
-  } else {
-  saveChanges = controllerSector.text.isNotEmpty;
-  }
-  }
+        if (!focusNode.hasFocus) {
+              if (campOld.isNotEmpty) {
+                   saveChanges = controllerSector.text != campOld;
+              } else {
+                 saveChanges = controllerSector.text.isNotEmpty;
+              }
+        }
   });
 
   Sector? sector = await showDialog(
@@ -79,7 +82,7 @@ focusNode.addListener(() {
                          flex: 1,
                          child: materialButton(
                            nameAction: action,
-                           function: () => saveSector(dialogContext,controllerSector,campOld, resultSector),
+                           function: () => saveSector(dialogContext,controllerSector,campOld,provider),
                          ),
                        ),
                      ],
@@ -93,7 +96,9 @@ focusNode.addListener(() {
 
 }
 
-Future<void> saveSector(BuildContext dialogContext,TextEditingController controllerSector, String campOld, Sector? resultSector) async {
+Future<void> saveSector(BuildContext dialogContext,TextEditingController controllerSector, String campOld, SectorProvider provider) async {
+
+  Sector sector;
 
   final text = controllerSector.text
       .trim()
@@ -107,28 +112,26 @@ Future<void> saveSector(BuildContext dialogContext,TextEditingController control
   }
 
   if (text.toLowerCase() == old) {
-    Navigator.of(dialogContext).pop(false);
+    Navigator.of(dialogContext).pop(null);
     return;
   }
 
-  bool repeat = sectors.any((sector) =>
-  sector.name.toLowerCase() == text.toLowerCase() &&
-      sector.name.toLowerCase() != old);
 
-  if (repeat) {
+  if (provider.exist(text, exclude: campOld)) {
     await error(dialogContext, S.of(dialogContext).that_sector_already_exists);
     return;
   }
 
-    List<Sector> currentSector = [];
+
 
     if (campOld.isEmpty)
     {
-      String idNew = sectors.isNotEmpty ? createId(sectors.last.id) : "1";
-      Sector newSector = Sector(id: idNew, name: text);
-      sectors.add(newSector);
-      currentSector.add(newSector);
-      resultSector = newSector;
+      String idNew = provider.sectors.isNotEmpty
+          ? createId(provider.sectors.last.id)
+          : "1";
+
+       sector = Sector(id: idNew, name: text);
+      provider.addSector(sector);
       
       String action = LocalizationHelper.manage_array(dialogContext, S.of(dialogContext).sector, S.of(dialogContext).saved, S.of(dialogContext).theFemale);
       await confirm(dialogContext, action);
@@ -136,45 +139,50 @@ Future<void> saveSector(BuildContext dialogContext,TextEditingController control
     }
     else
     {
-      // Editar sector existente¡
-      final sectorList = sectors.where((s) =>
-      s.name.toLowerCase() == old);
+      final existing = provider.sectors
+          .where((s) => s.name.toLowerCase() == old)
+          .cast<Sector?>()
+          .firstOrNull;
 
-      if (sectorList.isEmpty) return;
+      if (existing == null) {
+        await error(dialogContext, "Sector no encontrado");
+        return;
+      }
 
-      final sector = sectorList.first;
+      final updated = Sector(
+        id: existing.id,
+        name: text,
+      );
 
+      provider.updateSector(updated);
+      sector = updated;
 
-      sector.name = text;
-      currentSector.add(sector);
-
-      resultSector = sector;
       await confirm(dialogContext, S.of(dialogContext).sector_edited_correctly);
     }
-  saveChanges = false;
-  bool showError = false;
-  String? errorMsg;
+      saveChanges = false;
+      bool showError = false;
+      String? errorMsg;
 
-  if (BaseDateSelected.isNotEmpty) {
-    if (campOld.isEmpty) {
-      sqlCreateSector(currentSector);
-    } else {
-      sqlModifySector(currentSector);
-    }
-  } else {
-    bool errorExp = await csvExportatorSectors(sectors);
+      if (BaseDateSelected.isNotEmpty) {
+        if (campOld.isEmpty) {
+          sqlCreateSector(sector);
+        } else {
+          sqlModifySector(sector);
+        }
+      } else {
+        bool errorExp = await csvExportatorSectors(provider.sectors);
 
-    if (!kIsWeb && errorExp) {
-      showError = true;
-      errorMsg = LocalizationHelper.no_file(
-        dialogContext,
-        S.of(dialogContext).sectors,
-      );
-    }
-  }
+        if (!kIsWeb && errorExp) {
+          showError = true;
+          errorMsg = LocalizationHelper.no_file(
+            dialogContext,
+            S.of(dialogContext).sectors,
+          );
+        }
+      }
 
 // 🔒 cerrar SIEMPRE una sola vez
-  Navigator.of(dialogContext).pop(resultSector);
+  Navigator.of(dialogContext).pop(sector);
 
 // ⚠️ mostrar error después
   if (showError) {
@@ -183,3 +191,4 @@ Future<void> saveSector(BuildContext dialogContext,TextEditingController control
    return;
 
 }
+
