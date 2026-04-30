@@ -3,6 +3,7 @@ import 'dart:typed_data';
 import 'package:crud_factories/Backend/CSV/importRoutes.dart';
 import 'package:crud_factories/Backend/Global/files.dart';
 import 'package:crud_factories/Backend/Global/list.dart';
+import 'package:crud_factories/Objects/AppRoutesState.dart' show RouteFiles;
 import 'package:crud_factories/Objects/RouteCSV.dart' show RouteCSV;
 import 'package:crud_factories/generated/l10n.dart' show S;
 import 'package:fluent_ui/fluent_ui.dart';
@@ -12,12 +13,44 @@ class RoutesProvider extends ChangeNotifier {
 
   final List<RouteCSV> _routes = [];
 
+  RouteFiles? _files;
+
+
+  RouteFiles? get files => _files;
+
+  RouteFiles? state;
+
+
   List<RouteCSV> get routes => List.unmodifiable(_routes);
+
+  void setState(RouteFiles newState) {
+    state = newState;
+    notifyListeners();
+  }
 
   void setRoutes(List<RouteCSV> data) {
     _routes
       ..clear()
-      ..addAll(List.from(data));
+      ..addAll(data);
+
+    notifyListeners();
+  }
+
+
+  void setFiles(RouteFiles files) {
+    _files = files;
+    notifyListeners();
+  }
+
+  void updateRoute(int index, String newpath) {
+    if (index < 0 || index >= _routes.length) return;
+
+
+    _routes[index] = RouteCSV(
+      id: _routes[index].id,
+      name: _routes[index].name,
+      route: newpath,
+    );
 
     notifyListeners();
   }
@@ -26,7 +59,6 @@ class RoutesProvider extends ChangeNotifier {
     _routes.add(route);
     notifyListeners();
   }
-
 
   void delete(RouteCSV route) {
     _routes.remove(route);
