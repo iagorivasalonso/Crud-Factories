@@ -35,6 +35,27 @@ class SectorProvider extends ChangeNotifier {
     _sectors.clear();
     notifyListeners();
   }
+  bool exist(String name, {String? exclude}) {
+    return _sectors.any((s) =>
+    s.name.toLowerCase() == name.toLowerCase() &&
+        s.name.toLowerCase() != exclude?.toLowerCase());
+  }
+
+  void updateSector(Sector updated) {
+    final index = _sectors.indexWhere((s) => s.id == updated.id);
+
+    if (index != -1) {
+      _sectors[index] = updated;
+      notifyListeners();
+    }
+  }
+
+  void removeSector(String id) {
+    _sectors.removeWhere((s) => s.id == id);
+    notifyListeners();
+  }
+
+
 
   Future<void>importSectors(BuildContext context, {
       required File file,
