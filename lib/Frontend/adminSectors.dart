@@ -45,8 +45,8 @@ Future<void> adminSector(BuildContext context) async {
                     padding: const EdgeInsets.only(left: 30.0, right: 30.0),
                     child: tableEditSector(
                       sectors: providerSector.sectors,
-                      onEdit: (index) => _onEditSector(context, index, setState,providerSector),
-                      onDelete: (index) => _onDeleteSector(context, index, setState,providerSector,providerFactory),
+                      onEdit: (index) => createSector(context,providerSector.sectors[index]),//modo edicion
+                      onDelete: (index) => providerSector.delete(context, index, providerFactory),
                     )
                   ),
                 ),
@@ -59,7 +59,7 @@ Future<void> adminSector(BuildContext context) async {
                     children: [
                       materialButton(
                         nameAction: S.of(context).create,
-                        function: () => _onCreateSector(context, setState),
+                        function: () => createSector(context),
                       ),
                       const SizedBox(width: 20),
                       materialButton(
@@ -83,63 +83,4 @@ Future<void> adminSector(BuildContext context) async {
 
 }
 
-Future <void> _onCreateSector(BuildContext context, void Function(void Function()) setState) async {
 
-  final created = await createSector(context, "");
-
-}
-
-Future <void> _onEditSector(BuildContext context, int index, void Function(void Function()) setState, SectorProvider provider) async {
-
-   try {
-         final String oldName = provider.sectors[index].name;
-         final Sector?  edited = await createSector(context, oldName);
-
-   } catch (e){
-       String action = S.of(context).could_not_be_edited;
-       error(context,action);
-   }
-}
-
-Future <void> _onDeleteSector(BuildContext context, int index, void Function(void Function()) setState, SectorProvider providerSector, FactoryProvider providerFactory) async {
-
-  if (providerSector.sectors.isEmpty || index >= providerSector.sectors.length) return;
-
-  final String idToDelete = providerSector.sectors[index].id;
-
-  final bool hasFactories = providerFactory.factories.any(
-        (factory) => factory.sector == idToDelete,
-  );
-
-  if (hasFactories) {
-    await warning(
-      context,
-      S.of(context).it_cannot_eliminate_the_sector_with_companies,
-    );
-    return;
-  }
-
-  final bool? confirmed = await warning(
-    context,
-    S.of(context).confirm_delete_sector, // mensaje personalizado
-  );
-
-  if (confirmed != true) return;
-
-
-
-    providerSector.removeSector(idToDelete);
-
-
-  await confirm(context, S.of(context).the_sector_has_been_successfully_removed);
-
-  if (BaseDateSelected.isNotEmpty) {
-    sqlDeleteSector(idToDelete);
-  } else {
-    await csvExportatorSectors(providerSector.sectors);
-  }
-
-  if (providerSector.sectors.isEmpty && Navigator.canPop(context)) {
-    Navigator.of(context).pop(false);
-  }
-}
