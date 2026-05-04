@@ -64,9 +64,10 @@ class _AdminRoutesDialogState extends State<AdminRoutesDialog> {
 
   @override
   Widget build(BuildContext context0) {
-    BuildContext context = context1;
 
-    final routes = context.watch<RoutesProvider>().routes;
+    BuildContext context = context1;
+    final providerRoutes = context.watch<RoutesProvider>().routes;
+
 
     final sqlNames = [
       S.of(context).routes,
@@ -75,9 +76,8 @@ class _AdminRoutesDialogState extends State<AdminRoutesDialog> {
     ];
 
     final isSql = selectedOption == S.of(context).sql;
-    final routeList = context.watch<RoutesProvider>().routes;
-
-    //final itemCount = isSql ? sqlNames.length : routes.length;
+;
+    
 
     return Dialog(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(0)),
@@ -122,26 +122,26 @@ class _AdminRoutesDialogState extends State<AdminRoutesDialog> {
                 padding: const EdgeInsets.symmetric(horizontal: 20.0),
                 child: ListView.builder(
 
-                    itemCount: isSql ? 3 : routeList.length,
+                    itemCount: isSql ? 3 : providerRoutes.length,
                     itemBuilder: (context, index) {
 
-                      final routeList = context.watch<RoutesProvider>().routes;
+                      
                       final isSql = selectedOption == S.of(context).sql;
                       final campName = isSql
                           ? sqlNames[index]
-                          : (index < routeList.length ? routeList[index].name : '');
+                          : (index < providerRoutes.length ? providerRoutes[index].name : '');
 
                       return Padding(
                         padding: const EdgeInsets.all(10),
                         child: CSVPickerField(
                           index: index,
-                          value: routeList[index].route,
+                          value: providerRoutes[index].route,
                           campName: campName,
                           actionName: S.of(context).examine,
                           onChanged: (value) {
                             context.read<RoutesProvider>().updateRoute(index, value);
                           },
-                          function: () => _pickFile(context, index),
+                          function: () => context.watch<RoutesProvider>().pickFile(context,index),
                         ),
                       );
                     }
@@ -175,57 +175,5 @@ class _AdminRoutesDialogState extends State<AdminRoutesDialog> {
       ),
     );
   }
-
-  Future<void> _pickFile(BuildContext context, int index) async {
-    if (_loadingFromFile) return;
-    _loadingFromFile = true;
-
-    try {
-      final result = await FilePicker.platform.pickFiles(
-        dialogTitle: S.of(context).select_file,
-        type: FileType.custom,
-        allowedExtensions: ['csv', 'exe'],
-        withData: true,
-      );
-
-      if (result == null) return;
-
-      final file = result.files.single;
-
-      final routeValue = kIsWeb ? file.name : file.path;
-      if (routeValue == null) return;
-
-      context.read<RoutesProvider>().updateRoute(index, routeValue);
-
-      // SOLO auto-fill desde el primero
-      if (index != 0) return;
-
-      final confirm = await warning(
-        context,
-        S.of(context).other_fields_will_be_autofilled_do_you_want_to_continue,
-      );
-
-      if (!confirm) return;
-
-      final (routes, files) = await csvLoaderService.loadInitialRoutes(
-        context,
-        routeValue,
-      );
-
-      if (routes.isEmpty) {
-        error(context, S.of(context).route_file_cannot_be_read);
-        return;
-      }
-
-      context.read<RoutesProvider>().setRoutes(routes);
-
-      if (files != null) {
-        context.read<RoutesProvider>().setFiles(files);
-      }
-    } finally {
-      _loadingFromFile = false;
-    }
-  }
-
 }
 
