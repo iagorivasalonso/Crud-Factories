@@ -19,14 +19,11 @@ import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
-import '../../Alertdialogs/confirm.dart';
-import '../../Alertdialogs/errorList.dart';
-import '../../helpers/localization_helper.dart';
+import 'package:crud_factories/Alertdialogs/confirm.dart';
+import 'package:crud_factories/Alertdialogs/errorList.dart';
+import 'package:crud_factories/helpers/localization_helper.dart';
 import '../Global/controllers/Conection.dart';
-import '../Global/controllers/List.dart';
-import '../Global/controllers/Router.dart';
 import 'ImportGeneral/AppFile.dart';
-import 'ImportGeneral/importAppFile.dart';
 import 'exportRoutes.dart';
 import 'package:path/path.dart' as p;
 
@@ -67,8 +64,8 @@ class csvLoaderService {
     final basePath = newRoutePath ?? defaultPath;
 
     final pathToLoad = await resolveRoutesPath(context, basePath);
-
-
+    routeFirst = pathToLoad;
+print(routeFirst);
     if (pathToLoad == 'fail') {
       return (<RouteCSV>[], null);
     }
@@ -101,7 +98,7 @@ class csvLoaderService {
         useDataDefault = true;
         return assetPath;
       } else {
-        return 'fail';
+        return assetPath;
       }
     }
 
