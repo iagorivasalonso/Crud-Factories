@@ -28,6 +28,8 @@ class AppProvider extends ChangeNotifier {
   bool loaded = false;
   bool _loading = false;
 
+  bool get isLoading => _loading;
+
   Future<void> loadRoutes(BuildContext context) async {
     if (_loading) return;
 
@@ -38,14 +40,12 @@ class AppProvider extends ChangeNotifier {
     try {
 
       final routes = await csvImportRoutes();
-      print(routes);
-      final connections = await csvImportConections();
-      final sectors = await csvImportSectors();
-      final factories = await csvImportFactories();
-      final employees = await csvImportEmpleoyees();
-      final lines = await csvImportLines();
-      final mails = await csvImportMails();
-
+      final connections = await csvImportConections(assetPath: routes[1].route);
+      final sectors = await csvImportSectors(assetPath: routes[3].route);
+      final factories = await csvImportFactories(assetPath: routes[4].route);
+      final employees = await csvImportEmpleoyees(assetPath: routes[5].route);
+      final lines = await csvImportLines(assetPath: routes[6].route);
+      final mails = await csvImportMails(assetPath: routes[7].route);
 
       context.read<RoutesProvider>().setRoutes(routes);
       context.read<ConectionProvider>().setConections(connections);
@@ -55,9 +55,9 @@ class AppProvider extends ChangeNotifier {
       context.read<LineSendProvider>().setLineSends(lines);
       context.read<MailProvider>().setMails(mails);
 
-
     } catch (e) {
       print("ERROR loadRoutes: $e");
+      rethrow;
     } finally {
       _loading = false;
       notifyListeners();
