@@ -74,6 +74,9 @@ class RoutesProvider extends ChangeNotifier {
   }
   Future<void> pickFile(BuildContext context, int index) async {
     if (_isLoading) return;
+
+    if (index < 0 || index >= _routes.length) return;
+
     _setLoading(true);
 
     try {
@@ -91,15 +94,19 @@ class RoutesProvider extends ChangeNotifier {
       final routeValue = kIsWeb ? file.name : file.path;
       if (routeValue == null) return;
 
-       updateRoute(index, routeValue);
-
-      // SOLO auto-fill desde el primero
-      if (index != 0) return;
 
       final confirm = await warning(
         context,
         S.of(context).other_fields_will_be_autofilled_do_you_want_to_continue,
       );
+
+
+       updateRoute(index, routeValue);
+
+
+      if (index != 0) return;
+
+
 
       if (!confirm) return;
 
@@ -123,6 +130,7 @@ class RoutesProvider extends ChangeNotifier {
       _setLoading(false);
     }
   }
+
   Future<void> importRoutes(BuildContext context, {
     required File file,
     Uint8List? bytes,
