@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:typed_data';
+import 'package:crud_factories/Backend/Global/variables.dart';
 import 'package:crud_factories/Objects/RouteCSV.dart' show RouteCSV;
 import 'package:flutter/services.dart';
 import 'package:flutter/foundation.dart' show kIsWeb, debugPrint;
@@ -16,20 +17,24 @@ Future<List<RouteCSV>> csvImportRoutes({
 }) async {
   String csvContent;
 
+  // 🟢 1. Bytes (file picker / web)
   if (bytes != null) {
     try {
       csvContent = utf8.decode(bytes);
     } catch (_) {
       csvContent = latin1.decode(bytes);
     }
-  } else if (content != null) {
-    csvContent = content;
-  } else if (!kIsWeb && file != null) {
-    csvContent = await file.readAsString(encoding: utf8);
-  } else {
-    csvContent = await rootBundle.loadString(
-      assetPath ?? "assets/dataDefault/routes.csv",
-    );
+  } else if (kIsWeb) {
+    csvContent = await rootBundle.loadString(routeFirst);
+  } else{
+    // 🟢 3. DESKTOP → usar routeFirst como archivo real
+    final file = File(routeFirst);
+
+    if (await file.exists()) {
+      csvContent = await file.readAsString(encoding: utf8);
+    } else {
+      throw Exception("routeFirst not found: $routeFirst");
+    }
   }
 
   return readRoutesFromCsvContent(csvContent);

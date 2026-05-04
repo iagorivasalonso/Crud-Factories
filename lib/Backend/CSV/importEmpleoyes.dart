@@ -13,30 +13,26 @@ Future<List<Empleoye>> csvImportEmpleoyees({
 }) async {
   String csvContent;
 
+  // 🟢 1. Bytes (file picker / web)
   if (bytes != null) {
     try {
       csvContent = utf8.decode(bytes);
     } catch (_) {
       csvContent = latin1.decode(bytes);
     }
+  } else if (kIsWeb) {
+    csvContent = await rootBundle.loadString(assetPath!);
+  } else{
+    // 🟢 3. DESKTOP → usar routeFirst como archivo real
+    final file = File(assetPath!);
+
+    if (await file.exists()) {
+      csvContent = await file.readAsString(encoding: utf8);
+    } else {
+      throw Exception("route not found: $assetPath");
+    }
   }
 
-  // 📄 String directo
-  else if (content != null) {
-    csvContent = content;
-  }
-
-  // 🖥️ Desktop / Mobile file
-  else if (!kIsWeb && file != null) {
-    csvContent = await file.readAsString(encoding: utf8);
-  }
-
-  // 📦 Asset (fallback automático)
-  else {
-    csvContent = await rootBundle.loadString(
-      assetPath ?? "assets/dataDefault/employees.csv",
-    );
-  }
 
   return readEmpleoyeFromCsvContent(csvContent);
 }
