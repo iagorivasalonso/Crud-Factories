@@ -17,6 +17,25 @@ import 'package:flutter/foundation.dart';
 import 'package:crud_factories/Objects/Sector.dart';
 import 'package:universal_html/html.dart' show File;
 
+enum CreateResult {
+  success,
+  alreadyExists,
+  invalidData,
+}
+
+enum EditResult   {
+  success,
+  alreadyExists,
+  notFound,
+  invalidData
+}
+
+enum DeleteResult {
+  success,
+  notFound,
+  hasDependencies
+}
+
 class SectorProvider extends ChangeNotifier {
 
   final List<Sector> _sectors = [];
@@ -37,9 +56,17 @@ class SectorProvider extends ChangeNotifier {
   }
 
   bool exist(String name, {String? exclude}) {
-    return _sectors.any((s) =>
-    s.name.toLowerCase() == name.toLowerCase() &&
-        s.name.toLowerCase() != exclude?.toLowerCase());
+    final nameLower = name.toLowerCase();
+
+    return _sectors.any((s) {
+      final sectorName = s.name.toLowerCase();
+
+      if (exclude != null && sectorName == exclude.toLowerCase()) {
+        return false;
+      }
+
+      return sectorName == nameLower;
+    });
   }
 
   void clear() {
@@ -47,79 +74,85 @@ class SectorProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> create(BuildContext context) async {
+  Future<CreateResult> create(Sector sector) async {
 
-      final sector = await createSector(context);
+    final name= sector.name?.trim();
 
-      if(sector != null)
-      {
-         final exists = exist(sector.name!);
+    if (name == null || sector.name.isEmpty) {
+      return CreateResult.invalidData;
+    }
 
-        if (exists) {
-          await confirm(context, S.of(context).sector_already_exists);
-          return;
-        }
+    final exits = exist(sector.name);
 
-        final idNew = sectors.isNotEmpty
-             ? createId(sectors.last.id)
-             : "1";
+    if (exits) {
+      return CreateResult.alreadyExists;
+    }
 
-         final newSector = Sector(
-             id: idNew,
-             name: sector.name
-         );
+    final idNew = sectors.isNotEmpty
+        ? createId(sectors.last.id)
+        : "1";
 
-         _sectors.add(newSector);
+    final newSector = Sector(
+        id: idNew,
+        name: sector.name
+    );
 
-         if (BaseDateSelected.isNotEmpty) {
-           await sqlCreateSector(newSector);
-         } else {
-           await csvExportatorSectors(sectors);
-         }
-        notifyListeners();
+    _sectors.add(newSector);
+    notifyListeners();
+    if (BaseDateSelected.isNotEmpty) {
+      await sqlCreateSector(newSector);
+    } else {
+      await csvExportatorSectors(sectors);
+    }
 
-         await confirm(context, S.of(context).sector_created_successfully);
-      }
-
+    return CreateResult.success;
   }
 
-  Future<void> edit(BuildContext context,  Sector sectorOld) async {
+  Future<EditResult> edit(Sector update) async {
 
-    final result = await createSector(context,sectorOld);
-
-    if (result == null) return;
-
-    final index = _sectors.indexWhere((s) => s.id == sectorOld.id);
-    if (index == -1) return;
-
-    if (exist(result.name, exclude: sectorOld.name)) {
-      await error(context, S.of(context).sector_already_exists);
-      return;
+    if(update.name == null || update.name!.trim().isEmpty){
+       return EditResult.invalidData;
     }
-    _sectors[index] = Sector(
-        id: sectorOld.id,
-        name: result.name
+
+    final name = update.name!.trim();
+
+    final index = _sectors.indexWhere((s) => s.id == update.id);
+    if (index == -1) {
+      return EditResult.notFound;
+    }
+
+    if (exist(name, exclude: update.name)) {
+      return EditResult.alreadyExists;
+    }
+
+
+    final oldSector = _sectors[index];
+
+    final newSector = Sector(
+      id: update.id,
+      name: name,
     );
+
+    _sectors[index] = newSector;
 
     notifyListeners();
 
     if (BaseDateSelected.isNotEmpty) {
-      await sqlCreateSector(_sectors[index]);
+      await sqlCreateSector(newSector);
     } else {
       await csvExportatorSectors(_sectors);
     }
 
-    await confirm(context, S.of(context).sector_edited_correctly);
-
+    return EditResult.success;
   }
 
-  Future<void> delete(
-      BuildContext context,
+  Future<DeleteResult> delete(
       int index,
       FactoryProvider factoryProvider,
       ) async {
 
-     if(_sectors.isEmpty || index >= _sectors.length) return;
+     if(_sectors.isEmpty || index >= _sectors.length)
+       return DeleteResult.notFound;
 
      final sector = _sectors[index];
 
@@ -128,42 +161,25 @@ class SectorProvider extends ChangeNotifier {
      );
 
      if (hasFactories) {
-       await warning(
-         context,
-         S.of(context).it_cannot_eliminate_the_sector_with_companies,
-       );
-       return;
+       return DeleteResult.hasDependencies;
      }
 
-     // 2. confirmación
-     final confirmed = await warning(
-       context,
-       S.of(context).confirm_delete_sector,
-     );
-
-     if (confirmed != true) return;
-
+     final removed = _sectors.removeAt(index);
      try {
-       // 3. actualizar estado primero (UI instantánea)
-       final removed = _sectors.removeAt(index);
-
-
-       // 4. persistencia
+       //  persistencia
        if (BaseDateSelected.isNotEmpty) {
          await sqlDeleteSector(sector.id);
        } else {
-         await csvExportatorSectors(sectors);
+         await csvExportatorSectors(_sectors);
        }
        notifyListeners();
-       // 5. feedback
-       await confirm(
-         context,
-         S.of(context).the_sector_has_been_successfully_removed,
-       );
 
      } catch (e) {
-       await warning(context, S.of(context).sector_delete_error);
+        _sectors.insert(index,removed);
+        notifyListeners();
+       return DeleteResult.notFound;
      }
+     return DeleteResult.success;
   }
 
   Future<void>importSectors(BuildContext context, {

@@ -22,7 +22,7 @@ import 'package:provider/provider.dart';
 
 Future<Sector?> createSector(BuildContext  context, [Sector? sectorOld]) async {
 
-  final providerSector = context.read<SectorProvider>();
+
 
   final controllerSector = TextEditingController(
     text: sectorOld?.name ?? '',
@@ -85,9 +85,19 @@ focusNode.addListener(() {
                          flex: 1,
                          child: materialButton(
                            nameAction: action,
-                           function: () => isEdit
-                                    ? providerSector.create(context)
-                                    : providerSector.edit(context,sectorOld!)
+                           function:  () {
+                             final name = controllerSector.text.trim();
+
+                             if (name.isEmpty) return;
+print(name);
+                             Navigator.pop(
+                               dialogContext,
+                               Sector(
+                                 id: sectorOld?.id ?? '',
+                                 name: name,
+                               ),
+                             );
+                           },
                          ),
                        ),
                      ],
@@ -100,3 +110,4 @@ focusNode.addListener(() {
      return sector;
 
 }
+
