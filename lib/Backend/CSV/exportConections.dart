@@ -4,7 +4,7 @@ import 'package:crud_factories/Objects/Conection.dart';
 import 'package:csv/csv.dart';
 import 'Export_general/export_csv.dart';
 
-Future<bool> csvExportatorConections(List<Conection> connections) async {
+Future<bool> csvExportatorconnections(List<Conection> connections) async {
 
   final rows = connections.map((c) => [
     c.id,
@@ -20,7 +20,7 @@ Future<bool> csvExportatorConections(List<Conection> connections) async {
     rows: rows,
   );
 
-  final success = await exportCsv(csv, file: fConections.path);
+  final success = await exportCsv(csv, file: fconnections.path);
 
   return !success;
 }
