@@ -1,5 +1,6 @@
 import 'dart:typed_data';
 
+import 'package:crud_factories/Backend/CSV/importLines.dart';
 import 'package:crud_factories/Backend/CSV/importMails.dart';
 import 'package:crud_factories/Backend/Global/files.dart';
 import 'package:crud_factories/Backend/Global/list.dart';
@@ -10,7 +11,7 @@ import 'package:universal_html/html.dart' show File;
 
 class MailProvider  extends ChangeNotifier {
 
-  final List<Mail> _mails = [];
+  List<Mail> _mails = [];
 
   List<Mail> get mails => List.unmodifiable(_mails);
 
@@ -66,6 +67,23 @@ class MailProvider  extends ChangeNotifier {
     }
 
     notifyListeners();
+  }
+
+  Future<void> load(String path) async {
+
+    try {
+      final data = await csvImportMails(
+        assetPath: path,
+      );
+
+      _mails = data;
+      notifyListeners();
+
+    } catch (e) {
+      print("Error cargando mails: $e");
+      _mails = [];
+      notifyListeners();
+    }
   }
 
 }

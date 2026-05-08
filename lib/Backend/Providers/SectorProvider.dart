@@ -38,7 +38,7 @@ enum DeleteResult {
 
 class SectorProvider extends ChangeNotifier {
 
-  final List<Sector> _sectors = [];
+  List<Sector> _sectors = [];
 
   List<Sector> get sectors => List.unmodifiable(_sectors);
 
@@ -218,5 +218,23 @@ class SectorProvider extends ChangeNotifier {
 
       notifyListeners();
     }
+
+  Future<void> load(String path) async {
+    try {
+      final data = await csvImportSectors(
+        assetPath: path,
+      );
+
+      _sectors = data;
+      notifyListeners();
+
+    } catch (e) {
+      print("Error cargando sectores: $e");
+      _sectors = [];
+      notifyListeners();
+    }
+
+  }
+
 
 }
