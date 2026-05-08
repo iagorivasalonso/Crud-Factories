@@ -10,7 +10,7 @@ import '../Global/list.dart';
 
 class EmployeeProvider extends ChangeNotifier {
 
-  final List<Empleoye> _employees = [];
+  List<Empleoye> _employees = [];
 
   List<Empleoye> get employees => List.unmodifiable(_employees);
 
@@ -75,6 +75,23 @@ class EmployeeProvider extends ChangeNotifier {
       } else {
         errorFiles.add("${s.file_format_error} ${s.routes}");
       }
+    }
+  }
+
+  Future<void> load(String path) async {
+
+    try {
+      final data = await csvImportEmpleoyees(
+        assetPath: path,
+      );
+
+      _employees = data;
+      notifyListeners();
+
+    } catch (e) {
+      print("Error cargando employees: $e");
+      _employees = [];
+      notifyListeners();
     }
   }
 

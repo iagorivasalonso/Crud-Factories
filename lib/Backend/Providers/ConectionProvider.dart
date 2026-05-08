@@ -1,6 +1,5 @@
 import 'package:crud_factories/Alertdialogs/error.dart' show error;
-import 'package:crud_factories/Backend/CSV/exportConections.dart';
-import 'package:crud_factories/Backend/CSV/importConections.dart' show readConectionsFromCsv, csvImportConections;
+import 'package:crud_factories/Backend/CSV/exportConections.dart' show csvExportatorconnections;
 import 'package:crud_factories/Backend/Global/files.dart';
 import 'package:crud_factories/Backend/Global/list.dart';
 import 'package:crud_factories/Backend/Global/variables.dart';
@@ -14,6 +13,7 @@ import 'package:mysql1/mysql1.dart';
 import 'package:universal_html/html.dart' show File;
 import '../../generated/l10n.dart';
 import '../../helpers/localization_helper.dart' show LocalizationHelper;
+import '../CSV/importConections.dart';
 import '../connectors_API/Models/Api_response.dart';
 
 enum ConnectionStatus {
@@ -29,7 +29,7 @@ enum ConnectionViewMode {
 }
 class ConectionProvider extends ChangeNotifier {
 
-  final List<Conection> _conections = []; // NEW
+   List<Conection> _connections = []; // NEW
 
   List<Conection> get conections => List.unmodifiable(_conections); // N
 
@@ -82,6 +82,7 @@ class ConectionProvider extends ChangeNotifier {
         ? S.of(context).back
         : S.of(context).edit;
   }
+
 
 
   Future<void> selectConnection(Conection? c) async {
@@ -185,6 +186,7 @@ class ConectionProvider extends ChangeNotifier {
     notifyListeners();
     return true;
   }
+
   void undoEdit() {
     if (_previous == null) return;
 
@@ -307,10 +309,10 @@ class ConectionProvider extends ChangeNotifier {
     //    CRUD
    // ==================
 
-  Map<String, Conection> get _conectionsMap => {for (var c in _conections) c.database: c};
+  Map<String, Conection> get _connectionsMap => {for (var c in _connections) c.database: c};
 
   Future<String> createBD(Conection cNew) async {
-    if (_conectionsMap.containsKey(cNew.database)) {
+    if (_connectionsMap.containsKey(cNew.database)) {
       return "EXISTS";
     }
 
@@ -375,7 +377,7 @@ class ConectionProvider extends ChangeNotifier {
 
     bool error = false;
 
-    if (!_conectionsMap.containsKey(toDelete.database)) {
+    if (!_connectionsMap.containsKey(toDelete.database)) {
       error = true;
     }
     else
@@ -399,8 +401,8 @@ class ConectionProvider extends ChangeNotifier {
       }
 
 
-      _conections.removeWhere((c) => c.database == toDelete.database);
-      _updateList(_conections, newSelected: null);
+      _connections.removeWhere((c) => c.database == toDelete.database);
+      _updateList(_connections, newSelected: null);
       return false;
     }
     return error;
@@ -481,6 +483,23 @@ class ConectionProvider extends ChangeNotifier {
       type = S.of(context).the_user_or_password_are_incorrect;
     }
     return type;
+  }
+
+  Future<void> load(String path) async {
+    try {
+      final data = await csvImportconnections(
+        assetPath: path,
+      );
+
+      _connections = data;
+      notifyListeners();
+
+    } catch (e) {
+      print("Error cargando conexiones: $e");
+      _connections = [];
+      notifyListeners();
+    }
+
   }
 
   }

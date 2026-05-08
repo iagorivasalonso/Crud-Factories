@@ -15,13 +15,15 @@ import 'package:crud_factories/Backend/Providers/LineSendProvider.dart';
 import 'package:crud_factories/Backend/Providers/MailProvider.dart' show MailProvider;
 import 'package:crud_factories/Backend/Providers/RoutesProvider.dart';
 import 'package:crud_factories/Backend/Providers/SectorProvider.dart';
-import 'package:crud_factories/Objects/Mail.dart';
+import 'package:crud_factories/Objects/AppRoutesState.dart';
 import 'package:crud_factories/Objects/RouteCSV.dart' show RouteCSV;
+import 'package:crud_factories/Objects/buldRouteFiles.dart';
 import 'package:fluent_ui/fluent_ui.dart' show ChangeNotifier;
 import 'package:flutter/material.dart' show BuildContext;
 import 'package:provider/provider.dart';
 
 import '../CSV/importConections.dart';
+
 
 class AppProvider extends ChangeNotifier {
 
@@ -30,7 +32,7 @@ class AppProvider extends ChangeNotifier {
 
   bool get isLoading => _loading;
 
-  Future<void> loadRoutes(BuildContext context) async {
+  Future<void> loadApp(BuildContext context) async {
     if (_loading) return;
 
     _loading = true;
@@ -39,21 +41,20 @@ class AppProvider extends ChangeNotifier {
 
     try {
 
-      final routes = await csvImportRoutes();
-      final connections = await csvImportConections(assetPath: routes[1].route);
-      final sectors = await csvImportSectors(assetPath: routes[3].route);
-      final factories = await csvImportFactories(assetPath: routes[4].route);
-      final employees = await csvImportEmpleoyees(assetPath: routes[5].route);
-      final lines = await csvImportLines(assetPath: routes[6].route);
-      final mails = await csvImportMails(assetPath: routes[7].route);
+      final (routes, files) = await csvLoaderService.loadRoutes(context: context);
 
-      context.read<RoutesProvider>().setRoutes(routes);
-      context.read<ConectionProvider>().setConections(connections);
-      context.read<SectorProvider>().setSectors(sectors);
-      context.read<FactoryProvider>().setFactories(factories);
-      context.read<EmployeeProvider>().setEmployees(employees);
-      context.read<LineSendProvider>().setLineSends(lines);
-      context.read<MailProvider>().setMails(mails);
+      if (files == null) {
+        print("Error en loadRoutes: files null");
+        return;
+      }
+
+      // ✅ Set routes
+      final routesProvaider = context.read<RoutesProvider>();
+      routesProvaider.setRoutes(routes, files);
+
+
+      // ✅ Load others providers
+       await _loadDependencies(context,files);
 
     } catch (e) {
       print("ERROR loadRoutes: $e");
@@ -63,5 +64,40 @@ class AppProvider extends ChangeNotifier {
       notifyListeners();
     }
   }
+
+  Future<void>reloadFromRoutes(BuildContext context, List<RouteCSV>routes) async {
+
+  try{
+    final files = buildRouteFiles(routes);  // nombres de ficheros
+
+    //actualizacion provaider
+    context.read<RoutesProvider>().setRoutes(routes, files);
+
+    // 3. RELOAD DEPENDENCIES
+    await _loadDependencies(context, files);
+
+    print("🔄 RELOAD DONE");
+
+  }catch (e, st) {
+    print("💥 ERROR reloadFromRoutes:");
+    print(e);
+    print(st);
+    rethrow;
+  }
+
+  }
+
+  Future<void> _loadDependencies(BuildContext context, RouteFiles files) async {
+
+    await context.read<ConectionProvider>().load(files.connections);
+    await context.read<SectorProvider>().load(files.sectors);
+    await context.read<EmployeeProvider>().load(files.employees);
+    await context.read<FactoryProvider>().load(files.factories);
+    await context.read<LineSendProvider>().load(files.lines);
+    await context.read<MailProvider>().load(files.mails);
+  }
+
+
 }
+
 

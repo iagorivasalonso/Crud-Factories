@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:crud_factories/Backend/CSV/importEmpleoyes.dart';
 import 'package:crud_factories/Backend/CSV/importFactories.dart';
 import 'package:crud_factories/Backend/Global/files.dart';
 import 'package:crud_factories/generated/l10n.dart' show S;
@@ -11,7 +12,7 @@ import '../Global/list.dart' show errorFiles;
 
 class FactoryProvider extends ChangeNotifier {
 
-  final List<Factory> _factories = [];
+  List<Factory> _factories = [];
 
   List<Factory> get factories => List.unmodifiable(_factories);
 
@@ -82,6 +83,23 @@ class FactoryProvider extends ChangeNotifier {
       } else {
         errorFiles.add("${s.file_format_error} ${s.company}");
       }
+    }
+  }
+
+  Future<void> load(String path) async {
+
+    try {
+      final data = await csvImportFactories(
+        assetPath: path,
+      );
+
+      _factories = data;
+      notifyListeners();
+
+    } catch (e) {
+      print("Error cargando factories: $e");
+      _factories = [];
+      notifyListeners();
     }
   }
 }
