@@ -5,7 +5,7 @@ import 'package:crud_factories/Objects/Conection.dart' show Conection;
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/services.dart';
 
-Future<List<Conection>> csvImportConections({
+Future<List<Conection>> csvImportconnections({
   File? file,
   Uint8List? bytes,
   String? content,
@@ -33,10 +33,10 @@ Future<List<Conection>> csvImportConections({
     }
   }
 
-  return readConectionsFromCsvContent(csvContent);
+  return readconnectionsFromCsvContent(csvContent);
 }
 
-List<Conection> readConectionsFromCsvContent(String content) {
+List<Conection> readconnectionsFromCsvContent(String content) {
   final lines = const LineSplitter()
       .convert(content)
       .where((line) => line.trim().isNotEmpty)
