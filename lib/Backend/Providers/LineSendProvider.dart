@@ -10,7 +10,7 @@ import 'package:universal_html/html.dart';
 
 class LineSendProvider extends ChangeNotifier {
 
-  final List<LineSend> _Lines = [];
+  List<LineSend> _Lines = [];
 
   List<LineSend> get LineSends => List.unmodifiable(_Lines);
 
@@ -66,6 +66,23 @@ class LineSendProvider extends ChangeNotifier {
       }
     }
     notifyListeners();
+  }
+
+  Future<void> load(String path) async {
+
+    try {
+      final data = await csvImportLines(
+        assetPath: path,
+      );
+
+      _Lines = data;
+      notifyListeners();
+
+    } catch (e) {
+      print("Error cargando Lineas: $e");
+      _Lines = [];
+      notifyListeners();
+    }
   }
 
 }
