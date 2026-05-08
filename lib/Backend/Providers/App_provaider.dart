@@ -7,7 +7,7 @@ import 'package:crud_factories/Backend/CSV/importLines.dart';
 import 'package:crud_factories/Backend/CSV/importMails.dart' show csvImportMails;
 import 'package:crud_factories/Backend/CSV/importRoutes.dart';
 import 'package:crud_factories/Backend/CSV/importSectors.dart';
-import 'package:crud_factories/Backend/CSV/loader.dart' show csvLoaderService;
+import 'package:crud_factories/Backend/DataSources/BootstrapService.dart';
 import 'package:crud_factories/Backend/Providers/ConectionProvider.dart';
 import 'package:crud_factories/Backend/Providers/EmpleoyeeProvider.dart';
 import 'package:crud_factories/Backend/Providers/FactoryProvider.dart';
@@ -22,7 +22,6 @@ import 'package:fluent_ui/fluent_ui.dart' show ChangeNotifier;
 import 'package:flutter/material.dart' show BuildContext;
 import 'package:provider/provider.dart';
 
-import '../CSV/importConections.dart';
 
 
 class AppProvider extends ChangeNotifier {
@@ -41,20 +40,16 @@ class AppProvider extends ChangeNotifier {
 
     try {
 
-      final (routes, files) = await csvLoaderService.loadRoutes(context: context);
+      final source = await BootstrapService().resolve(context);
 
-      if (files == null) {
-        print("Error en loadRoutes: files null");
-        return;
-      }
+      final bundlle = await source.loadRoutes();
+
 
       // ✅ Set routes
-      final routesProvaider = context.read<RoutesProvider>();
-      routesProvaider.setRoutes(routes, files);
-
+      context.read<RoutesProvider>().setRoutes(bundlle.routes, bundlle.files);
 
       // ✅ Load others providers
-       await _loadDependencies(context,files);
+       await _loadDependencies(context,bundlle.files);
 
     } catch (e) {
       print("ERROR loadRoutes: $e");
@@ -65,10 +60,10 @@ class AppProvider extends ChangeNotifier {
     }
   }
 
-  Future<void>reloadFromRoutes(BuildContext context, List<RouteCSV>routes) async {
+  Future<void>reloadFromRoutes(BuildContext context, List<RouteCSV> routes) async {
 
   try{
-    final files = buildRouteFiles(routes);  // nombres de ficheros
+    final files = RouteFilesBuilder.buildRouteFiles(routes);
 
     //actualizacion provaider
     context.read<RoutesProvider>().setRoutes(routes, files);
