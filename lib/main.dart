@@ -1,10 +1,12 @@
 import 'dart:io';
 
 import 'package:crud_factories/Backend/Providers/App_provaider.dart';
+import 'package:crud_factories/Backend/Providers/EditStateProvider.dart' show EditStateProvider;
 import 'package:crud_factories/Backend/Providers/EmpleoyeeProvider.dart';
 import 'package:crud_factories/Backend/Providers/FactoryProvider.dart';
 import 'package:crud_factories/Backend/Providers/LineSendProvider.dart';
 import 'package:crud_factories/Backend/Providers/MailProvider.dart' show MailProvider;
+import 'package:crud_factories/Backend/Providers/NavigationProvider.dart';
 import 'package:crud_factories/Backend/Providers/RoutesProvider.dart';
 import 'package:crud_factories/Backend/Providers/SectorProvider.dart';
 import 'package:crud_factories/Platform/appDesktop.dart';
@@ -37,6 +39,12 @@ void main() async {
             providers: [
               ChangeNotifierProvider(
                 create: (_) => AppProvider(),
+              ),
+              ChangeNotifierProvider(
+                  create: (_) => NavigationProvider(),
+              ),
+              ChangeNotifierProvider(
+                create: (_) => EditStateProvider(),
               ),
               ChangeNotifierProvider(
                   create: (_) => RoutesProvider()
