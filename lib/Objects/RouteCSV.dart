@@ -11,4 +11,18 @@ class RouteCSV extends BaseEntity {
     required this.name,
     required this.route
   });
+
+  RouteCSV copyWith({
+    String? id,
+    String? name,
+    String? route,
+  }) {
+    return RouteCSV(
+      id: id ?? this.id,
+      name: name ?? this.name,
+      route: route ?? this.route,
+    );
+  }
+
+
 }
