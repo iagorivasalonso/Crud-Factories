@@ -31,7 +31,7 @@ class ConectionProvider extends ChangeNotifier {
 
    List<Conection> _connections = []; // NEW
 
-  List<Conection> get conections => List.unmodifiable(_conections); // N
+  List<Conection> get connections => List.unmodifiable(_connections); // N
 
   Conection? selected;
   bool _connected = false;
@@ -205,8 +205,8 @@ class ConectionProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  void setConections(List<Conection> data) { // NEW
-    _conections
+  void setconnections(List<Conection> data) { // NEW
+    _connections
       ..clear()
       ..addAll(List.from(data)); //
 
@@ -214,37 +214,37 @@ class ConectionProvider extends ChangeNotifier {
   }
 
   void addConection(Conection c) { // NEW
-    _conections.add(c);
+    _connections.add(c);
     notifyListeners();
   }
 
   void delete(String database) { // NEW
-    _conections.removeWhere((c) => c.database == database);
+    _connections.removeWhere((c) => c.database == database);
     notifyListeners();
   }
 
 
   void clear() { // NEW
-    _conections.clear();
+    _connections.clear();
     notifyListeners();
   }
 
 
-  Future<void>importConections(BuildContext context, {
+  Future<void>importconnections(BuildContext context, {
     required File file,
     Uint8List? bytes,
     String? content,
     String? assetPath,
   }) async {
     try {
-      final imported = await csvImportConections(
+      final imported = await csvImportconnections(
         file: fMails,
         bytes: bytes,
         content: content,
         assetPath: assetPath,
       );
 
-      _conections.addAll(imported); // ✔ estado del provider
+      _connections.addAll(imported); // ✔ estado del provider
     } catch (e) {
       final s = S.of(context);
 
@@ -332,8 +332,8 @@ class ConectionProvider extends ChangeNotifier {
       return "ERROR: TABLES";
     }
 
-    _conections.add(cNew);
-    _updateList(_conections, newSelected: cNew);
+    _connections.add(cNew);
+    _updateList(_connections, newSelected: cNew);
 
     return "OK";
   }
@@ -342,7 +342,7 @@ class ConectionProvider extends ChangeNotifier {
 
     bool error = false;
 
-    if (!_conectionsMap.containsKey(current.database)) {
+    if (!_connectionsMap.containsKey(current.database)) {
        error = true;
     }
     else
@@ -364,9 +364,9 @@ class ConectionProvider extends ChangeNotifier {
           error = err;
         });
       }
-      final index = _conections.indexWhere((c) => c.database == current.database);
-      _conections[index] = cNew;
-      _updateList(_conections, newSelected: cNew);
+      final index = _connections.indexWhere((c) => c.database == current.database);
+      _connections[index] = cNew;
+      _updateList(_connections, newSelected: cNew);
 
     }
     return error;
@@ -444,14 +444,14 @@ class ConectionProvider extends ChangeNotifier {
 
   void _updateList(List<Conection> newList, {Conection? newSelected}) async {
 
-    _conections
+    _connections
       ..clear()
       ..addAll(newList);
 
     selected = newSelected;
     notifyListeners();
 
-    bool errorExp = await csvExportatorConections(_conections);
+    bool errorExp = await csvExportatorconnections(_connections);
 
     if (!kIsWeb && errorExp) {
       String action = LocalizationHelper.no_file(

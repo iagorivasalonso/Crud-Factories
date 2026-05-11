@@ -2,12 +2,12 @@
 
 import 'dart:convert';
 
+import 'package:crud_factories/Backend/CSV/importConections.dart' show readconnectionsFromCsvContent;
 import 'package:fluent_ui/fluent_ui.dart';
 
 import '../../../Alertdialogs/error.dart';
 import '../../../generated/l10n.dart';
 import '../../Global/list.dart';
-import '../importConections.dart';
 import '../importEmpleoyes.dart';
 import '../importFactories.dart';
 import '../importLines.dart';
@@ -83,8 +83,8 @@ class CsvProcessorService {
 
         case 6:
 
-            listController.conectionsNew =
-            await readConectionsFromCsvContent(content);
+            listController.connectionsNew =
+            await readconnectionsFromCsvContent(content);
 
           break;
 
