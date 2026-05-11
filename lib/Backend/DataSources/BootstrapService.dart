@@ -1,28 +1,50 @@
+
+import 'package:crud_factories/Alertdialogs/typeConnection.dart' show TypeConnection, TypeConnectionDialog;
+import 'package:crud_factories/Backend/DataSources/fileSystem.dart' show filesDataSource, FileDataSource;
 import 'package:crud_factories/Backend/DataSources/filesDataWeb.dart' show WebUploadDataSource, AssetDataSource;
+import 'package:crud_factories/Backend/Providers/NavigationProvider.dart';
+import 'package:crud_factories/Frontend/adminRoutes.dart' show AdminRoutesDialog;
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as context show read;
+import 'package:provider/provider.dart';
 
 import 'AppDataSource.dart';
 
 class BootstrapService {
 
-  AppDataSource resolve(BuildContext context) {
+  Future<AppDataSource?> resolve(BuildContext context) async {
 
     // 🌐 WEB
-   // if (kIsWeb) {
+    if (kIsWeb) {
       return AssetDataSource();
-  //  }
-/*
+    }
+
+
+
     // 🪟 WINDOWS / DESKTOP
-    final type = await showTypeConnectionDialog(context);
+    final type = await TypeConnectionDialog(context);
 
-    switch (type) {
+    if (type == null) {
+      return null;
+    }
 
+    switch(type){
       case TypeConnection.csv:
-        return FileDataSource("ruta");
+         return FileDataSource(); //si es sql que vaya a la ventana
 
       case TypeConnection.sql:
-        throw UnimplementedError("SQL not implemented yet");
-    }**/
+           context.read<NavigationProvider>().go(AppView.connections);
+           return null;
+
+      case TypeConnection.empty:
+
+        showDialog(
+          context: context,
+          builder: (_) => const AdminRoutesDialog(),
+        );
+
+        return null;     // si es vsacio que vaya a la ventana
+    }
   }
 }

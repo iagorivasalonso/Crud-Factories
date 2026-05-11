@@ -3,22 +3,20 @@ import 'package:crud_factories/Alertdialogs/confirm.dart' show confirm;
 import 'package:crud_factories/Alertdialogs/error.dart';
 import 'package:crud_factories/Alertdialogs/noCategory.dart';
 import 'package:crud_factories/Alertdialogs/warning.dart';
+import 'package:crud_factories/Backend/AppContent.dart' show AppContent;
 import 'package:crud_factories/Backend/CSV/Export_general/export_service.dart' show ExportService;
 import 'package:crud_factories/Backend/CSV/exportSectors.dart';
-import 'package:crud_factories/Backend/CSV/loader.dart';
 import 'package:crud_factories/Backend/Global/list.dart';
 import 'package:crud_factories/Backend/Providers/ConectionProvider.dart';
 import 'package:crud_factories/Backend/Providers/EmpleoyeeProvider.dart';
 import 'package:crud_factories/Backend/Providers/FactoryProvider.dart';
 import 'package:crud_factories/Backend/Providers/LineSendProvider.dart';
 import 'package:crud_factories/Backend/Providers/MailProvider.dart';
+import 'package:crud_factories/Backend/Providers/NavigationProvider.dart' show navigationProvider, AppView, NavigationProvider;
 import 'package:crud_factories/Backend/Providers/SectorProvider.dart';
-import 'package:crud_factories/Backend/_selection_view.dart';
 import 'package:crud_factories/Backend/Global/variables.dart';
 import 'package:crud_factories/Frontend/adminRoutes.dart';
 import 'package:crud_factories/Frontend/adminSectors.dart';
-import 'package:crud_factories/Functions/changesNoSave.dart';
-import 'package:crud_factories/Objects/Sector.dart' show Sector;
 import 'package:crud_factories/generated/l10n.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -26,7 +24,9 @@ import 'package:menu_bar/menu_bar.dart';
 import 'package:crud_factories/Alertdialogs/createSector.dart';
 import 'package:provider/provider.dart';
 import '../Backend/Providers/App_provaider.dart';
+import '../Backend/Providers/EditStateProvider.dart';
 import '../Backend/Providers/RoutesProvider.dart';
+
 
 class appDesktop extends StatefulWidget {
   const appDesktop({super.key});
@@ -43,18 +43,24 @@ class _appDesktopState extends State<appDesktop> {
   void initState() {
     // TODO: implement initState
     super.initState();
+
+
     WidgetsBinding.instance.addPostFrameCallback((_) async {
 
-     await csvLoaderService.loadInitialRoutes(context); //necesario para la primera ruta
+      try {
+        await context.read<AppProvider>().loadApp(context);
 
-      await context.read<AppProvider>().loadRoutes(context);
+        print("✅ APP READY");
+
+      } catch (e, st) {
+        print("💥 ERROR INIT:");
+        print(e);
+        print(st);
+      }
+
 
     });
-
-    csvLoaderService.createControllerBD();
-
   }
-
   @override
   void dispose() {
     controlerConex.namebd.dispose();
@@ -71,18 +77,19 @@ class _appDesktopState extends State<appDesktop> {
     double mHeight = MediaQuery.of(context).size.height;
 
     context1 = context;
-    final routesCSV = context.watch<RoutesProvider>().routes;
-    final connections = context.watch<ConectionProvider>().conections;
-    final sectors = context.watch<SectorProvider>().sectors;
-    final allFactories = context.watch<FactoryProvider>().factories;
-    final employees = context.watch<EmployeeProvider>().employees;
-    final allLines = context.watch<LineSendProvider>().LineSends;
-    final mails = context.watch<MailProvider>().mails;
+    final providerRoutes = context.watch<RoutesProvider>().routes;
+    final providerconnections = context.watch<ConectionProvider>().connections;
+    final providerSectors = context.watch<SectorProvider>().sectors;
+    final providerFactories = context.watch<FactoryProvider>().factories;
+    final providerEmployees = context.watch<EmployeeProvider>().employees;
+    final providerLines = context.watch<LineSendProvider>().LineSends;
+    final providerMails = context.watch<MailProvider>().mails;
 
     double wItem = 80;
     double wItemMax = 120;
     Color colorBar = Colors.white;
-print(routesCSV);
+
+
     List<BarButton> _menuBarButtons() {
       return [
         BarButton (
@@ -104,27 +111,10 @@ print(routesCSV);
                                     child: Text(S.of(context).company)),
                                 onTap: () async {
 
-                                    if (saveChanges == false)
-                                    {
-                                      setState(() {
-                                        itenSelect = 0;
-                                        subIten1Select = 0;
-                                        subIten2Select = 0;
-                                      });
-                                    }
-                                    else
-                                    {
-                                      saveChanges =! await changesNoSave(context);
+                                  if (!await canNavigate(context)) return;
 
-                                      if(saveChanges == false)
-                                      {
-                                        setState(() {
-                                          itenSelect = 0;
-                                          subIten1Select = 0;
-                                          subIten2Select = 0;
-                                        });
-                                      }
-                                    }
+                                  context.read<NavigationProvider>()
+                                      .go(AppView.createFactory);
 
                                 }
                             ),
@@ -134,27 +124,11 @@ print(routesCSV);
                                     child: Text(S.of(context).mail)),
                                 onTap: () async {
 
-                                  if (saveChanges == false)
-                                  {
-                                    setState(() {
-                                      itenSelect = 0;
-                                      subIten1Select = 0;
-                                      subIten2Select = 1;
-                                    });
-                                  }
-                                  else
-                                  {
-                                    saveChanges =! await changesNoSave(context);
+                                  if (!await canNavigate(context)) return;
 
-                                    if(saveChanges == false)
-                                    {
-                                      setState(() {
-                                        itenSelect = 0;
-                                        subIten1Select = 0;
-                                        subIten2Select = 1;
-                                      });
-                                    }
-                                  }
+                                  context.read<NavigationProvider>()
+                                      .go(AppView.createMail);
+
 
                                 }
                             ),
@@ -164,42 +138,10 @@ print(routesCSV);
                                     child: Text(S.of(context).shipment)),
                                 onTap: () async {
 
-                                 bool go = false;
-                                 if (saveChanges == false)
-                                 {
-                                   go = true;
-                                 }
-                                 else
-                                 {
-                                   saveChanges =! await changesNoSave(context);
+                                  if (!await canNavigate(context)) return;
 
-                                   if(saveChanges == false)
-                                   {
-                                     go = true;
-                                   }
-                                 }
-                                 if(go == true)
-                                 {
-                                   if(allFactories.isNotEmpty)
-                                   {
-                                     setState(() {
-                                       itenSelect = 0;
-                                       subIten1Select = 0;
-                                       subIten2Select = 2;
-                                     });
-                                   }
-                                   else
-                                   {
-                                     String action =S.of(context).you_can_not_make_the_shipping_because_you_do_not_have_companies_in_your_database;
-                                     error(context,action);
-
-                                     setState(() {
-                                       itenSelect = -1;
-                                       subIten1Select = -1;
-                                       subIten2Select = -1;
-                                     });
-                                   }
-                                 }
+                                  context.read<NavigationProvider>()
+                                      .go(AppView.createShipment);
 
                                 }
                             ),
@@ -225,27 +167,10 @@ print(routesCSV);
                           child: Text(S.of(context).import)),
                       onTap: () async {
 
-                        if (saveChanges == false)
-                        {
-                          setState(() {
-                            itenSelect = 0;
-                            subIten1Select = 2;
-                            subIten2Select = -1;
-                          });
-                        }
-                        else
-                        {
-                          saveChanges =! await changesNoSave(context);
+                        if (!await canNavigate(context)) return;
 
-                          if(saveChanges == false)
-                          {
-                            setState(() {
-                              itenSelect = 0;
-                              subIten1Select = 2;
-                              subIten2Select = -1;
-                            });
-                          }
-                        }
+                        context.read<NavigationProvider>()
+                            .go(AppView.importData);
 
                       }
                   ),
@@ -273,83 +198,44 @@ print(routesCSV);
                           width: wItem,
                           child:  Text(S.of(context).sectors)),
                       onTap: () async {
-                              if(sectors.isNotEmpty)
-                              {
-                                setState(() {
-                                  adminSector(context);
-                                });
-                              }
-                              else
-                              {
-                                String modif = S.of(context).newMale.toLowerCase();
-
-                                  Sector? create = await createSector(context,modif);
-
-                                if(create  != null)
-                                {
-                                  bool errorExp = await csvExportatorSectors(sectors);
-                                }
-                              }
+                        await handleSectorAction(context);
                       }
                   ),
-                  if(sectors.length < 2 || allFactories.isEmpty)
+                  if(providerSectors.length < 2 || providerFactories.isEmpty)
                     MenuButton(
                         text: SizedBox(
                             width: wItem,
                             child: Text(S.of(context).companies)),
                             onTap: () async {
-                              bool go = false;
-                              if (saveChanges == false)
-                              {
-                                go = true;
-                              }
-                              else
-                              {
-                                saveChanges =! await changesNoSave(context);
 
-                                if(saveChanges == false)
-                                {
-                                  go = true;
-                                }
-                              }
-                              if(go == true)
-                              {
+                                if(!await canNavigate(context)) return;
 
-                                if(allFactories.isNotEmpty)
+                                if(providerFactories.isNotEmpty)
                                 {
-                                  setState(() {
-                                    itenSelect = 1;
-                                    subIten1Select = 1;
-                                    subIten2Select = 0;
-                                  });
+                                  context.read<NavigationProvider>()
+                                      .go(AppView.factories);
                                 }
                                 else
                                 {
-                                  String array = S.of(context).companies;
-                                  int dat = await noCategory(context, array);
+                                   final result = await noCategory(
+                                       context,
+                                       S.of(context).companies
+                                   );
 
-                                  if(dat == 1)
-                                  {
-                                    setState(() {
-                                      itenSelect = 0;
-                                      subIten1Select = 1;
-                                      subIten2Select = 0;
-                                    });
-                                  }
-                                  else
-                                  {
-                                    setState(() {
-                                      itenSelect = 0;
-                                      subIten1Select = 2;
-                                      subIten2Select = 0;
-                                    });
-                                  }
+                                   if(result== 1)
+                                   {
+                                     context.read<NavigationProvider>()
+                                         .go(AppView.factories);
+                                   }
+                                   else
+                                   {
+                                     context.read<NavigationProvider>()
+                                         .go(AppView.importData);
+                                   }
                                 }
-                              }
-
                             }
                     ),
-                  if(sectors.length > 1 && allFactories.isNotEmpty)
+                  if(providerSectors.length > 1 && providerFactories.isNotEmpty)
                   MenuButton(
                         text: SizedBox(
                             width: wItem,
@@ -362,45 +248,26 @@ print(routesCSV);
                                       width:  wItem,
                                       child: Text(S.of(context).allFemale)),
                                   onTap: () async {
-                                    if (saveChanges == false)
-                                    {
-                                      setState(() {
-                                        itenSelect = 1;
-                                        subIten1Select = 1;
-                                        subIten2Select = 0;
-                                      });
-                                    }
-                                    else
-                                    {
-                                      saveChanges =! await changesNoSave(context);
+                                    if(!await canNavigate(context)) return;
 
-                                      if(saveChanges == false)
-                                      {
-                                        setState(() {
-                                          itenSelect = 1;
-                                          subIten1Select = 1;
-                                          subIten2Select = 0;
-                                        });
-                                      }
-                                    }
+                                    context.read<NavigationProvider>().go(AppView.createFactory);
                                   }
                               ),
                               const MenuDivider(),
-                              for(int i = 0 ; i < sectors.length; i++)
-                                MenuButton(
-                                    text: SizedBox(
-                                        width: sectors[i].name.length > 3
-                                            ? sectors[i].name.length * 8
-                                            : wItem,
-                                        child: Text(sectors[i].name)),
-                                    onTap: (){
-                                      setState(() {
-                                        itenSelect = 1;
-                                        subIten1Select = 1;
-                                        subIten2Select = i + 1;
-                                      });
-                                    }
-                                ),
+
+                              for (final sector in providerSectors)
+                              MenuButton(
+                                  text: Text(sector.name),
+                                  onTap: () async {
+
+                                    if(!await canNavigate(context)) return;
+
+                                    context.read<NavigationProvider>().go(
+                                      AppView.factories,
+                                      sector: sector.id,
+                                    );
+                                  }
+                              )
                             ]
                         )
                     ),
@@ -411,143 +278,56 @@ print(routesCSV);
                           child: Text(S.of(context).mails)),
                       onTap: () async {
 
-                               bool go = false;
-                              if (saveChanges == false)
-                              {
-                                go = true;
-                              }
-                              else
-                              {
-                                saveChanges =! await changesNoSave(context);
+                        if(!await canNavigate(context)) return;
 
-                                if(saveChanges == false)
-                                {
-                                  go = true;
-                                }
-                              }
-
-                              if(go == true)
-                              {
-                                if(mails.isNotEmpty)
-                                {
-                                  setState(() {
-                                    itenSelect = 1;
-                                    subIten1Select = 2;
-                                  });
-                                }
-                                else
-                                {
-                                  String array = S.of(context).mails;
-                                  int dat = await noCategory(context, array);
-
-                                  if(dat == 1)
-                                  {
-                                    setState(() {
-                                      itenSelect = 0;
-                                      subIten1Select = 0;
-                                      subIten2Select = 1;
-                                    });
-                                  }
-                                  else if(dat == 2)
-                                  {
-                                    setState(() {
-                                      itenSelect = 0;
-                                      subIten1Select = 2;
-                                      subIten2Select = 1;
-                                    });
-                                  }
-                                  else
-                                  {
-                                    setState(() {
-                                      itenSelect = -1;
-                                      subIten1Select = -1;
-                                      subIten2Select = -1;
-                                    });
-                                  }
-                                }
-                              }
-
+                        context.read<NavigationProvider>().go(AppView.mails);
 
                       }
                   ),
-                  if(sectors.length < 2 || allLines.isEmpty)
+
+                  if(providerSectors.length < 2 || providerLines.isEmpty)
                   MenuButton(
                       text: SizedBox(
                           width: wItem,
                           child: Text(S.of(context).shipments)
                       ),
                       onTap: () async {
-                            bool go = false;
-                            if (saveChanges == false)
-                            {
-                              go = true;
-                            }
-                            else
-                            {
-                              saveChanges =! await changesNoSave(context);
+                             if(!await canNavigate(context)) return;
 
-                              if(saveChanges == false)
-                              {
-                                go = true;
-                              }
-                            }
-
-                             if(go == true)
+                             if(providerLines.isNotEmpty)
                              {
-                               if(allLines.isNotEmpty)
-                               {
-                                 setState(() {
-                                   itenSelect = 1;
-                                   subIten1Select = 3;
-                                   subIten2Select = 0;
-                                 });
-                               }
-                               else
-                               {
-                                 if(allFactories.isNotEmpty)
-                                 {
-                                   String array = S.of(context).shipments;
-                                   int dat = await noCategory(context, array);
-
-
-                                   if(dat == 1)
-                                   {
-                                     setState(() {
-                                       itenSelect = 0;
-                                       subIten1Select = 0;
-                                       subIten2Select = 3;
-                                     });
-                                   }
-                                   else if(dat == 2)
-                                   {
-                                     setState(() {
-                                       itenSelect = 0;
-                                       subIten1Select = 2;
-                                       subIten2Select = 1;
-                                     });
-
-                                   }
-                                   else
-                                   {
-                                     setState(() {
-                                       itenSelect = -1;
-                                       subIten1Select = -1;
-                                       subIten2Select = -1;
-                                     });
-                                   }
-                                 }
-                                 else
-                                 {
-                                   String array = S.of(context).shipments;
-                                   await noCategory(context, array);
-                                 }
-                               }
+                                 context.read<NavigationProvider>()
+                                     .go(AppView.shipments);
                              }
+                             else
+                             {
+                                 if(providerFactories.isEmpty)
+                                 {
+                                   String array = S.of(context).shipments;
+                                   noCategory(context, array);
+                                   return;
+                                 }
 
+                                 final result = await noCategory(
+                                   context,
+                                   S.of(context).shipments,
+                                 );
 
+                                 if(result == 1)
+                                 {
+                                   context.read<NavigationProvider>()
+                                       .go(AppView.shipments);
+                                 }
+                                 else if(result == 2)
+                                 {
+                                    context.read<NavigationProvider>()
+                                        .go(AppView.importData);
+                                 }
+
+                             }
                       }
                   ),
-                  if(sectors.length > 1 && allLines.isNotEmpty)
+                  if(providerSectors.length > 1 && providerLines.isNotEmpty)
                    MenuButton(
                         text: SizedBox(
                             width: wItem,
@@ -561,44 +341,27 @@ print(routesCSV);
                                       width:  wItem,
                                       child: Text(S.of(context).allMale)),
                                   onTap: () async {
-                                    if (saveChanges == false)
-                                    {
-                                      setState(() {
-                                        itenSelect = 1;
-                                        subIten1Select = 3;
-                                        subIten2Select = 0;
-                                      });
-                                    }
-                                    else
-                                    {
-                                      saveChanges =! await changesNoSave(context);
+                                      if(!await canNavigate(context)) return;
 
-                                      if(saveChanges == false)
-                                      {
-                                        setState(() {
-                                          itenSelect = 1;
-                                          subIten1Select = 3;
-                                          subIten2Select = 0;
-                                        });
-                                      }
-                                    }
+                                      context.read<NavigationProvider>()
+                                          .go(AppView.shipments);
                                   }
                               ),
                               const MenuDivider(),
-                              for(int i = 0 ; i < sectors.length; i++)
+                              for(final sector in providerSectors)
                                 MenuButton(
                                     text: SizedBox(
-                                        width: sectors[i].name.length > 3
-                                            ? sectors[i].name.length * 8
+                                        width: sector.name.length > 3
+                                            ? sector.name.length * 8
                                             : wItem,
-                                        child: Text(sectors[i].name)),
-                                    onTap: (){
-                                      setState(() {
-                                        itenSelect = 1;
-                                        subIten1Select = 3;
-                                        subIten2Select = i + 1;
+                                        child: Text(sector.name)),
+                                    onTap: () async {
+                                      if(!await canNavigate(context)) return;
 
-                                      });
+                                      context.read<NavigationProvider>().go(
+                                         AppView.shipments,
+                                         sector: sector.id
+                                      );
                                     }
                                 ),
                             ]
@@ -621,34 +384,18 @@ print(routesCSV);
                           child: Text(S.of(context).sending_mails)),
                       onTap: () async {
 
+                        if(!await canNavigate(context)) return;
+
                          bool enter = true;
-                        if(mails.isEmpty)
+                        if(providerMails.isEmpty)
                         {
                           String action =S.of(context).if_you_have_no_registered_emails_do_you_wish_to_continue;
                           enter = await warning(context,action);
                         }
 
-                        if (saveChanges == false && enter == true)
-                        {
-                          setState(() {
-                            itenSelect = 2;
-                            subIten1Select = 0;
-                            subIten2Select = -1;
-                          });
-                        }
-                        else
-                        {
-                          saveChanges =! await changesNoSave(context);
+                        if(!enter) return;
 
-                          if(saveChanges == false)
-                          {
-                            setState(() {
-                              itenSelect = 2;
-                              subIten1Select = 0;
-                              subIten2Select = -1;
-                            });
-                          }
-                        }
+                        context.read<NavigationProvider>().go(AppView.sendMail);
 
                       }
                   ),
@@ -658,27 +405,9 @@ print(routesCSV);
                           child: Text(S.of(context).DB_connection)),
                       onTap: () async {
 
-                        if (saveChanges == false)
-                        {
-                          setState(() {
-                            itenSelect = 2;
-                            subIten1Select = 1;
-                            subIten2Select = -1;
-                          });
-                        }
-                        else
-                        {
-                          saveChanges =! await changesNoSave(context);
+                        if(!await canNavigate(context)) return;
 
-                          if(saveChanges == false)
-                          {
-                            setState(() {
-                              itenSelect = 2;
-                              subIten1Select = 1;
-                              subIten2Select = -1;
-                            });
-                          }
-                        }
+                        context.read<NavigationProvider>().go(AppView.connections);
                       }
                   ),
                 ]
@@ -698,16 +427,16 @@ print(routesCSV);
                    ),
                    onTap: () async {
 
-                        if(routeFirst.isNotEmpty && routesCSV.isNotEmpty)
+                        if(routeFirst.isNotEmpty && providerRoutes.isNotEmpty)
                         {
                               await ExportService.exportAllZip(
-                                routes: routesCSV,
-                                connections: connections,
-                                sectors: sectors,
-                                factories: allFactories,
-                                employees: employees,
-                                lines: allLines,
-                                mails: mails,
+                                routes: providerRoutes,
+                                connections: providerconnections,
+                                sectors: providerSectors,
+                                factories: providerFactories,
+                                employees: providerEmployees,
+                                lines: providerLines,
+                                mails: providerMails,
                               );
 
                               await confirm(context,S.of(context).export_success);
@@ -745,7 +474,7 @@ print(routesCSV);
           width: mWidth,
           height:  mHeight,
             color: Colors.white,
-          child:  FuntionSeleted(itenSelect, subIten1Select, subIten2Select,mWidth, mHeight,context),
+          child:  AppContent(),
         ),
       )
     )
@@ -753,12 +482,32 @@ print(routesCSV);
         width: mWidth,
         height:  mHeight,
         color: Colors.white,
-        child:  FuntionSeleted(itenSelect, subIten1Select, subIten2Select,mWidth, mHeight,context)
+        child:  AppContent(),
     );
+
   }
 
+  Future<bool> canNavigate(BuildContext context) async {
+    return await context
+        .read<EditStateProvider>()
+        .confirmDiscard(context);
+  }
 
+  Future<void> handleSectorAction(BuildContext context) async {
 
+    final sectors = context.read<SectorProvider>().sectors;
+
+    if (sectors.isNotEmpty) {
+      adminSector(context);
+      return;
+    }
+
+    final create = await createSector(context);
+
+    if (create != null) {
+      await csvExportatorSectors(sectors);
+    }
+  }
 
 }
 

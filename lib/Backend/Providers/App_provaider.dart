@@ -42,8 +42,13 @@ class AppProvider extends ChangeNotifier {
 
       final source = await BootstrapService().resolve(context);
 
-      final bundlle = await source.loadRoutes();
 
+       if(source == null)
+       {
+         return;
+       }
+
+      final bundlle = await source.loadRoutes();
 
       // ✅ Set routes
       context.read<RoutesProvider>().setRoutes(bundlle.routes, bundlle.files);
