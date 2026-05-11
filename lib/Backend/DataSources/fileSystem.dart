@@ -1,19 +1,33 @@
 
+import 'dart:io';
+
+import 'package:path/path.dart' as p;
+
 import 'package:crud_factories/Backend/CSV/FileReader.dart';
-import 'package:crud_factories/Backend/CSV/csvReader.dart';
 import 'package:crud_factories/Backend/CSV/csvParse.dart';
 import 'package:crud_factories/Backend/DataSources/AppDataSource.dart';
-import 'package:crud_factories/Backend/DataSources/RoutesBundle.dart' show RoutesBundle;
-import 'package:crud_factories/Objects/buldRouteFiles.dart';
+import 'package:crud_factories/Backend/DataSources/RoutesBundle.dart';
+import 'package:crud_factories/Objects/buldRouteFiles.dart' show RouteFilesBuilder;
 
-class filesDataSource implements AppDataSource {
 
-  final String path;
 
-  filesDataSource(this.path);
+
+class FileDataSource implements AppDataSource {
+
+  static const String fileName = 'routes.csv';
 
   @override
   Future<RoutesBundle> loadRoutes() async {
+
+    final parentDir = Directory.current.parent;
+
+    final path = p.join(parentDir.path, fileName);
+
+    final file = File(path);
+
+    if (!await file.exists()) {
+      throw Exception("FILE NOT FOUND: $path");
+    }
 
     final raw = await FileReader.fromFile(path);
 
