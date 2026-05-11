@@ -194,6 +194,36 @@ class S {
     );
   }
 
+  /// `ya existe el sector`
+  String get sector_already_exists {
+    return Intl.message(
+      'ya existe el sector',
+      name: 'sector_already_exists',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `sector creado correctamente`
+  String get sector_created_successfully {
+    return Intl.message(
+      'sector creado correctamente',
+      name: 'sector_created_successfully',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `error al eliminar el sector`
+  String get sector_delete_error {
+    return Intl.message(
+      'error al eliminar el sector',
+      name: 'sector_delete_error',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `¿Desea completarlo?`
   String get want_to_complete_it {
     return Intl.message(
@@ -312,6 +342,16 @@ class S {
   /// `Guardar`
   String get save {
     return Intl.message('Guardar', name: 'save', desc: '', args: []);
+  }
+
+  /// `Guardar_sector`
+  String get save_sector {
+    return Intl.message(
+      'Guardar_sector',
+      name: 'save_sector',
+      desc: '',
+      args: [],
+    );
   }
 
   /// `Guardado`
@@ -1201,6 +1241,16 @@ class S {
     );
   }
 
+  /// `No se pudo resolver la ruta del archivo`
+  String get the_file_path_could_not_be_resolved {
+    return Intl.message(
+      'No se pudo resolver la ruta del archivo',
+      name: 'the_file_path_could_not_be_resolved',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Servidor`
   String get server {
     return Intl.message('Servidor', name: 'server', desc: '', args: []);
@@ -1948,6 +1998,16 @@ class S {
     );
   }
 
+  /// `Edición del sector`
+  String get edition_of_the_sector {
+    return Intl.message(
+      'Edición del sector',
+      name: 'edition_of_the_sector',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Nombre del sector`
   String get name_sector {
     return Intl.message(
@@ -1976,6 +2036,31 @@ class S {
       desc: '',
       args: [],
     );
+  }
+
+  /// `Datos no válidos`
+  String get invalid_data {
+    return Intl.message(
+      'Datos no válidos',
+      name: 'invalid_data',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Sector no encontrado`
+  String get sector_not_found {
+    return Intl.message(
+      'Sector no encontrado',
+      name: 'sector_not_found',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `No válido`
+  String get not_valid {
+    return Intl.message('No válido', name: 'not_valid', desc: '', args: []);
   }
 
   /// `El campo no puede estar en blanco`

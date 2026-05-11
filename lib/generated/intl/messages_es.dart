@@ -205,6 +205,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "download": MessageLookupByLibrary.simpleMessage("Descargar"),
     "edit": MessageLookupByLibrary.simpleMessage("Editar"),
     "edit_shipment": MessageLookupByLibrary.simpleMessage("Editar envio"),
+    "edition_of_the_sector": MessageLookupByLibrary.simpleMessage(
+      "Edición del sector",
+    ),
     "el_shipment_has": MessageLookupByLibrary.simpleMessage("El envío tiene"),
     "employees": MessageLookupByLibrary.simpleMessage("Empleados"),
     "error": MessageLookupByLibrary.simpleMessage("Error"),
@@ -278,6 +281,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "invalid_connection": MessageLookupByLibrary.simpleMessage(
       "Conexión no válida",
     ),
+    "invalid_data": MessageLookupByLibrary.simpleMessage("Datos no válidos"),
     "invalid_file": MessageLookupByLibrary.simpleMessage("Archivo no válido"),
     "is_connected_to": MessageLookupByLibrary.simpleMessage(
       "Está conectado a ",
@@ -358,6 +362,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "not_connected_to_any_database": MessageLookupByLibrary.simpleMessage(
       "No estás conectado a ninguna base de datos",
     ),
+    "not_valid": MessageLookupByLibrary.simpleMessage("No válido"),
     "november": MessageLookupByLibrary.simpleMessage("Noviembre"),
     "number": MessageLookupByLibrary.simpleMessage("Número"),
     "observations": MessageLookupByLibrary.simpleMessage("Observaciones"),
@@ -393,15 +398,28 @@ class MessageLookup extends MessageLookupByLibrary {
     "route_selector": MessageLookupByLibrary.simpleMessage("Selector de rutas"),
     "routes": MessageLookupByLibrary.simpleMessage("Rutas"),
     "save": MessageLookupByLibrary.simpleMessage("Guardar"),
+    "save_sector": MessageLookupByLibrary.simpleMessage("Guardar_sector"),
     "saved": MessageLookupByLibrary.simpleMessage("Guardado"),
     "saved_female": MessageLookupByLibrary.simpleMessage("Guardada"),
     "search": MessageLookupByLibrary.simpleMessage("Buscar..."),
     "sector": MessageLookupByLibrary.simpleMessage("Sector"),
+    "sector_already_exists": MessageLookupByLibrary.simpleMessage(
+      "ya existe el sector",
+    ),
+    "sector_created_successfully": MessageLookupByLibrary.simpleMessage(
+      "sector creado correctamente",
+    ),
+    "sector_delete_error": MessageLookupByLibrary.simpleMessage(
+      "error al eliminar el sector",
+    ),
     "sector_edited_correctly": MessageLookupByLibrary.simpleMessage(
       "sector editado correctamente",
     ),
     "sector_management": MessageLookupByLibrary.simpleMessage(
       "Gestión de sectores",
+    ),
+    "sector_not_found": MessageLookupByLibrary.simpleMessage(
+      "Sector no encontrado",
     ),
     "sector_required": MessageLookupByLibrary.simpleMessage(
       "El sector es requerido",
@@ -466,6 +484,9 @@ class MessageLookup extends MessageLookupByLibrary {
       "El campo no puede estar en blanco",
     ),
     "the_file_of": MessageLookupByLibrary.simpleMessage("El fichero de"),
+    "the_file_path_could_not_be_resolved": MessageLookupByLibrary.simpleMessage(
+      "No se pudo resolver la ruta del archivo",
+    ),
     "the_format_of_the": MessageLookupByLibrary.simpleMessage("El formato de"),
     "the_line": MessageLookupByLibrary.simpleMessage("La linea"),
     "the_port_is_not_correct": MessageLookupByLibrary.simpleMessage(
