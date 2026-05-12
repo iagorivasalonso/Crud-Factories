@@ -23,67 +23,66 @@ Future<void> adminSector(BuildContext context) async {
 
   final providerSector = context.read<SectorProvider>();
   final providerFactory = context.read<FactoryProvider>();
-
-  return showDialog(
+print("sdd");
+  return  showDialog(
     context: context,
-    builder: (BuildContext context) {
-      return StatefulBuilder(
-        builder: (BuildContext context, void Function(void Function()) setState) => Dialog(
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(0)),
-          child: ConstrainedBox(
-            constraints: BoxConstraints(
-              maxWidth: 400,
-              maxHeight: 350,
-            ),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                headDialog(title: S.of(context).sector_management),
-                const SizedBox(height: 15.0),
-                Expanded(
-                  child: Consumer<SectorProvider>(
-                    builder: (context,provider,_){
-                       return Padding(
-                       padding: const EdgeInsets.only(left: 30.0, right: 30.0),
-                            child: tableEditSector(
-                              sectors: providerSector.sectors,
-                              onEdit: (index) => editSector(context, index,providerSector),
-                              onDelete: (index) => deleteSector(context, index, providerFactory),
-                            )
-                         );
-                      },
-                  ),
-                ),
-                const SizedBox(height: 10),
-                Padding(
-                  padding: const EdgeInsets.only(bottom: 30),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      materialButton(
-                        nameAction: S.of(context).create,
-                        function: () => newSector(context),
-                      ),
-                      const SizedBox(width: 20),
-                      materialButton(
-                        nameAction: S.of(context).close,
-                        function:  () {
-                          saveChanges = false;
-                          Navigator.of(context).pop(false);
-                        },
-                      ),
-                    ],
-                  ),
-                ),
+    builder: (context) {
+       return Dialog(
+         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(0)),
+         child: ConstrainedBox(
+           constraints: BoxConstraints(
+             maxWidth: 400,
+             maxHeight: 350,
+           ),
+           child: Column(
+             mainAxisAlignment: MainAxisAlignment.spaceBetween,
+             children: [
+               headDialog(title: S.of(context).sector_management),
+               const SizedBox(height: 15.0),
+               Expanded(
+                 child: Consumer<SectorProvider>(
+                   builder: (context,provider,_){
+                     return Padding(
+                         padding: const EdgeInsets.only(left: 30.0, right: 30.0),
+                         child: tableEditSector(
+                           sectors: providerSector.sectors,
+                           onEdit: (index) => editSector(context, index,providerSector),
+                           onDelete: (index) => deleteSector(context, index),
+                         )
+                     );
+                   },
+                 ),
+               ),
+               const SizedBox(height: 10),
+               Padding(
+                 padding: const EdgeInsets.only(bottom: 30),
+                 child: Row(
+                   mainAxisAlignment: MainAxisAlignment.center,
+                   crossAxisAlignment: CrossAxisAlignment.center,
+                   children: [
+                     materialButton(
+                       nameAction: S.of(context).create,
+                       function: () => newSector(context),
+                     ),
+                     const SizedBox(width: 20),
+                     materialButton(
+                       nameAction: S.of(context).close,
+                       function:  () {
+                         saveChanges = false;
+                         Navigator.of(context).pop(false);
+                       },
+                     ),
+                   ],
+                 ),
+               ),
 
-              ],
-            ),
-          ),
-        ),
-      );
+             ],
+           ),
+         ),
+       );
     },
   );
+
 
 }
 
@@ -107,7 +106,7 @@ Future<void> newSector(BuildContext context) async {
   }
 }
 
-Future<void> editSector(BuildContext context, int index, providerSector) async {
+Future<void> editSector(BuildContext context, int index, SectorProvider providerSector) async {
   final old = providerSector.sectors[index];
 
   final updated = await createSector(context, old);
@@ -135,7 +134,7 @@ Future<void> editSector(BuildContext context, int index, providerSector) async {
   }
 }
 
-Future<void> deleteSector(BuildContext context, int index, FactoryProvider providerFactory) async {
+Future<void> deleteSector(BuildContext context, int index) async {
   final confirmed = await warning(
     context,
     S.of(context).confirm_delete_sector,
@@ -152,7 +151,7 @@ Future<void> deleteSector(BuildContext context, int index, FactoryProvider provi
 
   switch (result) {
     case DeleteResult.success:
-      await confirm(context,"");
+      await confirm(context,S.of(context).sector_delete_correctly);
       break;
 
     case DeleteResult.hasDependencies:
