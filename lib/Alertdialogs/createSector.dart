@@ -1,23 +1,13 @@
 
-import 'package:crud_factories/Alertdialogs/confirm.dart';
-import 'package:crud_factories/Alertdialogs/error.dart';
-import 'package:crud_factories/Backend/CSV/exportSectors.dart';
-import 'package:crud_factories/Backend/Providers/SectorProvider.dart' show SectorProvider;
-import 'package:crud_factories/Backend/SQL/createSector.dart';
-import 'package:crud_factories/Backend/SQL/modifySector.dart';
-import 'package:crud_factories/Backend/Global/variables.dart';
-import 'package:crud_factories/Functions/createId.dart';
+import 'package:crud_factories/Alertdialogs/warning.dart';
+import 'package:crud_factories/Frontend/send_mail.dart';
 import 'package:crud_factories/Objects/Sector.dart';
 import 'package:crud_factories/Widgets/headAlertDialog.dart';
 import 'package:crud_factories/Widgets/headView.dart';
-import 'package:crud_factories/Widgets/materialButton.dart' show materialButton;
-import 'package:crud_factories/Widgets/textfield.dart' show defaultTextfield;
+import 'package:crud_factories/Widgets/materialButton.dart';
+import 'package:crud_factories/Widgets/textfield.dart';
 import 'package:crud_factories/generated/l10n.dart';
-import 'package:crud_factories/helpers/localization_helper.dart' show LocalizationHelper;
-import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-
 
 
 Future<Sector?> createSector(BuildContext  context, [Sector? sectorOld]) async {
@@ -28,7 +18,6 @@ Future<Sector?> createSector(BuildContext  context, [Sector? sectorOld]) async {
     text: sectorOld?.name ?? '',
   );
 
-  final FocusNode focusNode = FocusNode();
 
   final isEdit = sectorOld != null;
 
@@ -40,73 +29,84 @@ Future<Sector?> createSector(BuildContext  context, [Sector? sectorOld]) async {
       ? S.of(context).save_sector
       : S.of(context).create_sector;
 
-focusNode.addListener(() {
-        if (!focusNode.hasFocus) {
-          saveChanges = controllerSector.text.trim().isNotEmpty &&
-              controllerSector.text.trim() != (sectorOld?.name ?? '');
-        }
-  });
 
   Sector? sector = await showDialog(
       context: context,
       builder: (BuildContext dialogContext) {
-        return Dialog(
-            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(0)),
-            child: ConstrainedBox(
-                constraints: BoxConstraints(
-                  maxHeight: 240,
-                  maxWidth: 400,
-                ),
-                child: Column(
-                     children: [
-                       headDialog(title: title),
-                       Padding(
-                         padding: const EdgeInsets.only(top:20.0,left: 40.0),
-                         child: headView(
-                             title: S.of(context).name_sector
+        return PopScope(
+          canPop: false,
+          onPopInvokedWithResult:(didPop,result) async {
+
+            if (didPop) return;
+
+            final hasChanges = controllerSector.text.trim() != (sectorOld?.name ?? '');
+
+            if (hasChanges) {
+              final confirmExit = await warning(
+                context, S.of(context).unsaved_changes,
+              );
+              if (confirmExit == true) {
+                Navigator.of(context).pop();
+              }
+            } else {
+              Navigator.of(context).pop();
+            }
+            },
+          child: Dialog(
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(0)),
+              child: ConstrainedBox(
+                  constraints: BoxConstraints(
+                    maxHeight: 240,
+                    maxWidth: 400,
+                  ),
+                  child: Column(
+                       children: [
+                         headDialog(title: title),
+                         Padding(
+                           padding: const EdgeInsets.only(top:20.0,left: 40.0),
+                           child: headView(
+                               title: S.of(context).name_sector
+                           ),
                          ),
-                       ),
-                       Flexible(
-                         flex:1,
-                         child: SizedBox(
-                           width: 350.0,
-                           child: Padding(
-                             padding: const EdgeInsets.symmetric(horizontal: 35.0),
-                             child: defaultTextfield(
-                               nameCamp:"",
-                               controllerCamp: controllerSector,
-                               focusNode: focusNode
+                         Flexible(
+                           flex:1,
+                           child: SizedBox(
+                             width: 350.0,
+                             child: Padding(
+                               padding: const EdgeInsets.symmetric(horizontal: 35.0),
+                               child: defaultTextfield(
+                                 nameCamp:"",
+                                 controllerCamp: controllerSector,
+                               ),
                              ),
                            ),
                          ),
-                       ),
-                       const SizedBox(height: 30),
-                       Flexible(
-                         flex: 1,
-                         child: materialButton(
-                           nameAction: action,
-                           function:  () {
-                             final name = controllerSector.text.trim();
+                         const SizedBox(height: 30),
+                         Flexible(
+                           flex: 1,
+                           child: materialButton(
+                             nameAction: action,
+                             function:  () {
+                               final name = controllerSector.text.trim();
 
-                             if (name.isEmpty) return;
-print(name);
-                             Navigator.pop(
-                               dialogContext,
-                               Sector(
-                                 id: sectorOld?.id ?? '',
-                                 name: name,
-                               ),
-                             );
-                           },
+                               if (name.isEmpty) return;
+
+                               Navigator.pop(
+                                 dialogContext,
+                                 Sector(
+                                   id: sectorOld?.id ?? '',
+                                   name: name,
+                                 ),
+                               );
+                             },
+                           ),
                          ),
-                       ),
-                     ],
-                  ),
-            )
+                       ],
+                    ),
+              )
+          ),
         );
       });
-     controllerSector.dispose();
-     focusNode.dispose();
      return sector;
 
 }
