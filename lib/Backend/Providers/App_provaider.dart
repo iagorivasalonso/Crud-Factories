@@ -1,12 +1,3 @@
-
-
-import 'package:crud_factories/Alertdialogs/typeConnection.dart';
-import 'package:crud_factories/Backend/CSV/importEmpleoyes.dart';
-import 'package:crud_factories/Backend/CSV/importFactories.dart';
-import 'package:crud_factories/Backend/CSV/importLines.dart';
-import 'package:crud_factories/Backend/CSV/importMails.dart' show csvImportMails;
-import 'package:crud_factories/Backend/CSV/importRoutes.dart';
-import 'package:crud_factories/Backend/CSV/importSectors.dart';
 import 'package:crud_factories/Backend/DataSources/BootstrapService.dart';
 import 'package:crud_factories/Backend/Providers/ConectionProvider.dart';
 import 'package:crud_factories/Backend/Providers/EmpleoyeeProvider.dart';
@@ -15,6 +6,8 @@ import 'package:crud_factories/Backend/Providers/LineSendProvider.dart';
 import 'package:crud_factories/Backend/Providers/MailProvider.dart' show MailProvider;
 import 'package:crud_factories/Backend/Providers/RoutesProvider.dart';
 import 'package:crud_factories/Backend/Providers/SectorProvider.dart';
+import 'package:crud_factories/Backend/Repositories/sectorRepository.dart';
+import 'package:crud_factories/Backend/Feature/Sector/CsvSectorDataSource.dart' show CsvSectorDataSource;
 import 'package:crud_factories/Objects/AppRoutesState.dart';
 import 'package:crud_factories/Objects/RouteCSV.dart' show RouteCSV;
 import 'package:crud_factories/Objects/buldRouteFiles.dart';
@@ -48,13 +41,10 @@ class AppProvider extends ChangeNotifier {
          return;
        }
 
-      final bundlle = await source.loadRoutes();
+      final bundle = await source.loadRoutes();
 
-      // ✅ Set routes
-      context.read<RoutesProvider>().setRoutes(bundlle.routes, bundlle.files);
+      await _applyRoutes(context, bundle.routes);
 
-      // ✅ Load others providers
-       await _loadDependencies(context,bundlle.files);
 
     } catch (e) {
       print("ERROR loadRoutes: $e");
@@ -65,26 +55,24 @@ class AppProvider extends ChangeNotifier {
     }
   }
 
-  Future<void>reloadFromRoutes(BuildContext context, List<RouteCSV> routes) async {
+  Future<void> reloadFromRoutes(
+      BuildContext context,
+      List<RouteCSV> routes,
+      ) async {
 
-  try{
-    final files = RouteFilesBuilder.buildRouteFiles(routes);
+    try {
+      print("eee routes reload");
 
-    //actualizacion provaider
-    context.read<RoutesProvider>().setRoutes(routes, files);
+      await _applyRoutes(context, routes);
 
-    // 3. RELOAD DEPENDENCIES
-    await _loadDependencies(context, files);
+      print("🔄 RELOAD DONE");
 
-    print("🔄 RELOAD DONE");
-
-  }catch (e, st) {
-    print("💥 ERROR reloadFromRoutes:");
-    print(e);
-    print(st);
-    rethrow;
-  }
-
+    } catch (e, st) {
+      print("💥 ERROR reloadFromRoutes:");
+      print(e);
+      print(st);
+      rethrow;
+    }
   }
 
   Future<void> _loadDependencies(BuildContext context, RouteFiles files) async {
@@ -95,6 +83,16 @@ class AppProvider extends ChangeNotifier {
     await context.read<FactoryProvider>().load(files.factories);
     await context.read<LineSendProvider>().load(files.lines);
     await context.read<MailProvider>().load(files.mails);
+  }
+
+  Future<void> _applyRoutes(BuildContext context, List<RouteCSV> routes) async {
+
+    final files = RouteFilesBuilder.buildRouteFiles(routes);
+
+    context.read<RoutesProvider>().setRoutes(routes);
+
+    await _loadDependencies(context, files);
+
   }
 
 
