@@ -89,8 +89,6 @@ print(nav.current);
 
      }
 
-     print(nav);
-    return const Placeholder();
   }
 }
 
