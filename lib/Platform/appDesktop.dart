@@ -5,7 +5,6 @@ import 'package:crud_factories/Alertdialogs/noCategory.dart';
 import 'package:crud_factories/Alertdialogs/warning.dart';
 import 'package:crud_factories/Backend/AppContent.dart' show AppContent;
 import 'package:crud_factories/Backend/CSV/Export_general/export_service.dart' show ExportService;
-import 'package:crud_factories/Backend/CSV/exportSectors.dart';
 import 'package:crud_factories/Backend/Global/list.dart';
 import 'package:crud_factories/Backend/Providers/ConectionProvider.dart';
 import 'package:crud_factories/Backend/Providers/EmpleoyeeProvider.dart';
@@ -21,7 +20,6 @@ import 'package:crud_factories/generated/l10n.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:menu_bar/menu_bar.dart';
-import 'package:crud_factories/Alertdialogs/createSector.dart';
 import 'package:provider/provider.dart';
 import '../Backend/Providers/App_provaider.dart';
 import '../Backend/Providers/EditStateProvider.dart';
@@ -75,8 +73,7 @@ class _appDesktopState extends State<appDesktop> {
 
     double mWidth = MediaQuery.of(context).size.width;
     double mHeight = MediaQuery.of(context).size.height;
-
-    context1 = context;
+    
     final providerRoutes = context.watch<RoutesProvider>().routes;
     final providerconnections = context.watch<ConectionProvider>().connections;
     final providerSectors = context.watch<SectorProvider>().sectors;
@@ -198,7 +195,7 @@ class _appDesktopState extends State<appDesktop> {
                           width: wItem,
                           child:  Text(S.of(context).sectors)),
                       onTap: () async {
-                        await handleSectorAction(context);
+                        await newSector(context);
                       }
                   ),
                   if(providerSectors.length < 2 || providerFactories.isEmpty)
@@ -492,22 +489,5 @@ class _appDesktopState extends State<appDesktop> {
         .read<EditStateProvider>()
         .confirmDiscard(context);
   }
-
-  Future<void> handleSectorAction(BuildContext context) async {
-
-    final sectors = context.read<SectorProvider>().sectors;
-
-    if (sectors.isNotEmpty) {
-      adminSector(context);
-      return;
-    }
-
-    final create = await createSector(context);
-
-    if (create != null) {
-      await csvExportatorSectors(sectors);
-    }
-  }
-
 }
 
