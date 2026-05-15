@@ -1,4 +1,5 @@
 import 'package:crud_factories/Backend/DataSources/BootstrapService.dart';
+import 'package:crud_factories/Backend/Feature/Router/CsvRouterDataSource.dart' show CsvRouterDataSource;
 import 'package:crud_factories/Backend/Providers/ConectionProvider.dart';
 import 'package:crud_factories/Backend/Providers/EmpleoyeeProvider.dart';
 import 'package:crud_factories/Backend/Providers/FactoryProvider.dart';
@@ -6,6 +7,7 @@ import 'package:crud_factories/Backend/Providers/LineSendProvider.dart';
 import 'package:crud_factories/Backend/Providers/MailProvider.dart' show MailProvider;
 import 'package:crud_factories/Backend/Providers/RoutesProvider.dart';
 import 'package:crud_factories/Backend/Providers/SectorProvider.dart';
+import 'package:crud_factories/Backend/Repositories/routesRepository.dart' show routerRepository;
 import 'package:crud_factories/Backend/Repositories/sectorRepository.dart';
 import 'package:crud_factories/Backend/Feature/Sector/CsvSectorDataSource.dart' show CsvSectorDataSource;
 import 'package:crud_factories/Objects/AppRoutesState.dart';
@@ -77,8 +79,14 @@ class AppProvider extends ChangeNotifier {
 
   Future<void> _loadDependencies(BuildContext context, RouteFiles files) async {
 
+
+    final routesRepo = routerRepository(
+      CsvRouterDataSource(files.routes),
+    );
+
+    context.read<RoutesProvider>().setRepository(routesRepo);
     await context.read<ConectionProvider>().load(files.connections);
-    await context.read<SectorProvider>().load(files.sectors);
+   // await context.read<SectorProvider>().load(files.sectors);
     await context.read<EmployeeProvider>().load(files.employees);
     await context.read<FactoryProvider>().load(files.factories);
     await context.read<LineSendProvider>().load(files.lines);

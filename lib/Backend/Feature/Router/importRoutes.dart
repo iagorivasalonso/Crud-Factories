@@ -25,15 +25,15 @@ Future<List<RouteCSV>> csvImportRoutes({
       csvContent = latin1.decode(bytes);
     }
   } else if (kIsWeb) {
-    csvContent = await rootBundle.loadString(routeFirst);
+    csvContent = await rootBundle.loadString(assetPath!);
   } else{
     // 🟢 3. DESKTOP → usar routeFirst como archivo real
-    final file = File(routeFirst);
+    final file = File(assetPath!);
 
     if (await file.exists()) {
       csvContent = await file.readAsString(encoding: utf8);
     } else {
-      throw Exception("routeFirst not found: $routeFirst");
+      throw Exception("routeFirst not found: $assetPath");
     }
   }
 

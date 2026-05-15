@@ -1,41 +1,44 @@
-import 'package:crud_factories/Backend/CSV/exportRoutes.dart' show csvExportatorRoutes;
-import 'package:crud_factories/Backend/Providers/ConectionProvider.dart' show ConectionProvider;
-import 'package:crud_factories/Backend/Providers/EmpleoyeeProvider.dart' show EmployeeProvider;
-import 'package:crud_factories/Backend/Providers/FactoryProvider.dart' show FactoryProvider;
-import 'package:crud_factories/Backend/Providers/LineSendProvider.dart' show LineSendProvider;
-import 'package:crud_factories/Backend/Providers/MailProvider.dart' show MailProvider;
-import 'package:crud_factories/Objects/RouterRegistry.dart' show RouterRegistry, RouteFileKey;
-import 'package:crud_factories/Objects/buldRouteFiles.dart' show buildRouteFiles;
-import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
-import 'package:crud_factories/Objects/RouteCSV.dart';
-import 'package:crud_factories/Objects/AppRoutesState.dart';
-import 'package:crud_factories/Backend/CSV/importRoutes.dart';
-import 'package:crud_factories/Backend/CSV/loader.dart';
-import 'package:crud_factories/Backend/Global/list.dart';
-import 'package:crud_factories/generated/l10n.dart';
-import 'package:provider/provider.dart';
-import 'package:universal_html/html.dart';
+import 'package:crud_factories/Backend/Repositories/routesRepository.dart' show routerRepository;
+import 'package:crud_factories/Objects/RouteCSV.dart' show RouteCSV;
+import 'package:crud_factories/Objects/buldRouteFiles.dart';
+import 'package:crud_factories/generated/l10n.dart' show S;
+import 'package:fluent_ui/fluent_ui.dart';
+import 'package:flutter/foundation.dart' show Uint8List;
 
-import '../Global/files.dart';
-import 'SectorProvider.dart' show SectorProvider;
+import '../../Objects/AppRoutesState.dart' show RouteFiles;
 
 enum LoadResult {
   success,
   invalidFile,
-  routeNotFound,
   error,
 }
 
 class RoutesProvider extends ChangeNotifier {
+
+  routerRepository repository;
+
+  RoutesProvider(this.repository);
+
   List<RouteCSV> _baseRoutes = [];
 
   RouteFiles? _files;
 
   final Map<String, RouteCSV> _overrides = {};
 
-  bool _isLoading = false;
-  bool get isLoading => _isLoading;
+
+  RouteFiles? get files => _files;
+
+  // =========================
+  // INITIALIZE (route master)
+  // =========================
+  void initialize(BuildContext context) {
+    if (_baseRoutes.isNotEmpty) return;
+
+    _baseRoutes.addAll([
+      RouteCSV(id: "1", name: S.of(context).routes, route: ''),
+    ]);
+
+  }
 
   // =========================
   // GETTER (SIN List.generate)
@@ -46,31 +49,13 @@ class RoutesProvider extends ChangeNotifier {
        return _overrides[base.id] ?? base;
     }).toList();
   }
-/*
-  // =========================
-  // LOADING
-  // =========================
-  void _setLoading(bool v) {
-    _isLoading = v;
-    notifyListeners();
-  }
-
-  // =========================
-  // RELOAD CENTRAL (ÚNICO MÉTODO REAL)
-  // =========================
-  void _reload(List<RouteCSV> routes, RouteFiles? files) {
-    _baseRoutes = List.from(routes);
-    _files = files;
-    _overrides.clear();
-    notifyListeners();
-  }*/
 
   // =========================
   // SET / INIT
   // =========================
-  void setRoutes(List<RouteCSV> routes, RouteFiles? files) {
-    _baseRoutes = List.from(routes);
-    _files = buildRouteFiles(routes);
+  void setRoutes(List<RouteCSV> update) {
+    _baseRoutes = List.from(update);
+    _files = RouteFilesBuilder.buildRouteFiles(update);
     _overrides.clear();
     notifyListeners();
   }
@@ -80,6 +65,8 @@ class RoutesProvider extends ChangeNotifier {
   // =========================
   void updateRoute(String id, String newPath) {
     final index = _baseRoutes.indexWhere((router) => router.id == id);
+
+    if(index == -1) return;
 
     final base = _baseRoutes[index];
 
@@ -102,56 +89,47 @@ class RoutesProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  void setRepository(routerRepository repo) {
+
+    repository = repo;
+  }
+
   // =========================
   // LOAD FROM FILE
   // =========================
-  Future<LoadResult> replaceRoutesFromBytes({
-    required BuildContext context,
-    required String routeId,
+  Future<LoadResult> importRoutesFromBytes({
     required Uint8List bytes,
   }) async {
 
-    // 1. parse CSV
-   try {
-     final csv = await csvLoaderService.loadRoutes(bytes: bytes, context: context);
-     final routes = csv.$1;
+    try {
 
-     if(routes.isEmpty)
-       return  LoadResult.invalidFile;
+      final imported =
+      await repository.importFromBytes(bytes);
 
-     // 2. actualizar SOLO estado
-     final updated = List<RouteCSV>.from(_baseRoutes);
+      if (imported.isEmpty) {
+        return LoadResult.invalidFile;
+      }
 
-     final index = updated.indexWhere((r) => r.id == routeId);
-     if (index == -1) {
-       return LoadResult.routeNotFound;
-     }
-
-     updated[index] = updated[index].copyWith(
-       route: "custom",
-     );
-
-     _baseRoutes = updated;
-
-     // 3. generar files (IMPORTANTE para dependencias)
-     _files = buildRouteFiles(_baseRoutes);
-
-     notifyListeners();
+      setRoutes(imported);
 
 
-     return LoadResult.success;
-   }catch(e) {
-     return LoadResult.success;
-   }
+      return LoadResult.success;
+
+    } catch (e, stack) {
+
+      debugPrint(
+        "importRoutesFromBytes error: $e",
+      );
+
+      debugPrintStack(
+        stackTrace: stack,
+      );
+
+      return LoadResult.error;
+    }
   }
 
-  Future<void> exportRoutesCSV() async {
-    final routesCSV = _baseRoutes
-        .map((base) => _overrides[base.id] ?? base)
-        .toList();
 
-    await csvExportatorRoutes(routesCSV);
-  }
 
 
   }

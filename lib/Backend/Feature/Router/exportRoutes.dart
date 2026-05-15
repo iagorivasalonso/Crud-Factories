@@ -3,9 +3,11 @@ import 'package:crud_factories/Objects/RouteCSV.dart' show RouteCSV;
 import 'package:csv/csv.dart';
 
 
-import 'Export_general/export_csv_io.dart';
+import '../../CSV/Export_general/export_csv_io.dart';
 
-Future<bool> csvExportatorRoutes(List<RouteCSV> routes) async {
+Future<bool> csvExportatorRoutes(List<RouteCSV> routes,{
+required String path,
+}) async {
   final rows = <List<dynamic>>[];
 
   rows.add([
@@ -26,7 +28,7 @@ Future<bool> csvExportatorRoutes(List<RouteCSV> routes) async {
     fieldDelimiter: ';',
   ).convert(rows);
 
-  final success = await exportCsv(csv, file: fRoutes.path);
+  final success = await exportCsv(csv, file: path);
 
   return !success;
 }
