@@ -1,13 +1,15 @@
 
 import 'dart:io';
+import 'dart:typed_data';
 
 import 'package:path/path.dart' as p;
 
 import 'package:crud_factories/Backend/CSV/FileReader.dart';
 import 'package:crud_factories/Backend/CSV/csvParse.dart';
-import 'package:crud_factories/Backend/DataSources/AppDataSource.dart';
 import 'package:crud_factories/Backend/DataSources/RoutesBundle.dart';
 import 'package:crud_factories/Objects/buldRouteFiles.dart' show RouteFilesBuilder;
+
+import 'IappDataSource.dart';
 
 
 
@@ -30,6 +32,18 @@ class FileDataSource implements AppDataSource {
     }
 
     final raw = await FileReader.fromFile(path);
+
+    final routes = csvParse.parseRoutes(raw);
+
+    final files = RouteFilesBuilder.buildRouteFiles(routes);
+
+    return RoutesBundle(routes, files);
+  }
+
+  @override
+  Future<RoutesBundle> loadRoutesFromBytes(Uint8List bytes) async {
+
+    final raw = String.fromCharCodes(bytes);
 
     final routes = csvParse.parseRoutes(raw);
 
