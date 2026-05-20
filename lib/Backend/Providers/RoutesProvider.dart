@@ -89,6 +89,16 @@ class RoutesProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  // =========================
+  // LOAD
+  // =========================
+  Future<void> load() async {
+    final loaded = await repository.load();
+
+    _baseRoutes = loaded;
+
+    notifyListeners();
+  }
   void setRepository(routerRepository repo) {
 
     repository = repo;
@@ -110,7 +120,6 @@ class RoutesProvider extends ChangeNotifier {
         return LoadResult.invalidFile;
       }
 
-      setRoutes(imported);
 
 
       return LoadResult.success;
