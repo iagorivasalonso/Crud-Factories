@@ -4,30 +4,42 @@ class RouteNameMapper {
 
   static RouteFileKey? fromString(String name) {
 
-    switch (name.trim().toLowerCase()) {
+    switch (name.toLowerCase()) {
 
+      case 'routes':
       case 'rutas':
         return RouteFileKey.routes;
 
+      case 'connections':
       case 'conexiones':
         return RouteFileKey.connections;
 
-      case 'sectores':
-        return RouteFileKey.sectors;
+      case 'server':
+      case 'servidor':
+        return RouteFileKey.server;
 
-      case 'empresas':
-        return RouteFileKey.factories;
-
+      case 'employees':
       case 'empleados':
         return RouteFileKey.employees;
 
+      case 'sectors':
+      case 'sectores':
+        return RouteFileKey.sectors;
+
+      case 'factories':
+      case 'fabricas':
+        return RouteFileKey.factories;
+
+      case 'lines':
       case 'lineas':
         return RouteFileKey.lines;
 
-      case 'emails':
+      case 'mails':
+      case 'correos':
         return RouteFileKey.mails;
 
       default:
+        print("⚠️ Ruta desconocida: $name");
         return null;
     }
   }
