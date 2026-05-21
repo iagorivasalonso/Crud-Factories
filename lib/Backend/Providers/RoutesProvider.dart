@@ -48,61 +48,31 @@ class RoutesProvider extends ChangeNotifier {
     return _baseRoutes.map((base) {
        return _overrides[base.id] ?? base;
     }).toList();
+
   }
 
-  // =========================
-  // SET / INIT
-  // =========================
-  void setRoutes(List<RouteCSV> update) {
-    _baseRoutes = List.from(update);
-    _files = RouteFilesBuilder.buildRouteFiles(update);
-    _overrides.clear();
-    notifyListeners();
-  }
-
-  // =========================
-  // UPDATE SINGLE ROUTE
-  // =========================
-  void updateRoute(String id, String newPath) {
-    final index = _baseRoutes.indexWhere((router) => router.id == id);
-
-    if(index == -1) return;
-
-    final base = _baseRoutes[index];
-
-    _overrides[base.id] = RouteCSV(
-      id: base.id,
-      name: base.name,
-      route: newPath,
-    );
-
-    notifyListeners();
-  }
-
-  // =========================
-  // CLEAR
-  // =========================
-  void clear() {
-    _baseRoutes = [];
-    _files = null;
-    _overrides.clear();
-    notifyListeners();
-  }
 
   // =========================
   // LOAD
   // =========================
   Future<void> load() async {
+
     final loaded = await repository.load();
 
     _baseRoutes = loaded;
 
     notifyListeners();
   }
+
+
+  // =========================
+  //  SETREPO
+  // =========================
   void setRepository(routerRepository repo) {
 
     repository = repo;
   }
+
 
   // =========================
   // LOAD FROM FILE
@@ -119,8 +89,6 @@ class RoutesProvider extends ChangeNotifier {
       if (imported.isEmpty) {
         return LoadResult.invalidFile;
       }
-
-
 
       return LoadResult.success;
 
