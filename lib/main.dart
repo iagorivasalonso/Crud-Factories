@@ -1,16 +1,4 @@
 import 'dart:io';
-
-import 'package:crud_factories/Backend/Feature/Router/getRouterDataSource.dart';
-import 'package:crud_factories/Backend/Providers/App_provaider.dart';
-import 'package:crud_factories/Backend/Providers/EditStateProvider.dart' show EditStateProvider;
-import 'package:crud_factories/Backend/Providers/EmpleoyeeProvider.dart';
-import 'package:crud_factories/Backend/Providers/FactoryProvider.dart';
-import 'package:crud_factories/Backend/Providers/LineSendProvider.dart';
-import 'package:crud_factories/Backend/Providers/MailProvider.dart' show MailProvider;
-import 'package:crud_factories/Backend/Providers/NavigationProvider.dart';
-import 'package:crud_factories/Backend/Providers/RoutesProvider.dart';
-import 'package:crud_factories/Backend/Providers/SectorProvider.dart';
-import 'package:crud_factories/Backend/Feature/Sector/getSectorDataSource.dart' show getSectorDataSource;
 import 'package:crud_factories/Platform/appDesktop.dart';
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
@@ -20,10 +8,8 @@ import 'package:window_manager/window_manager.dart';
 import 'Alertdialogs/closeApp.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:crud_factories/generated/l10n.dart';
+import 'Backend/Feature/Connection/Controller/DependecyInjection.dart';
 import 'Backend/Global/routes.dart';
-import 'Backend/Providers/ConectionProvider.dart';
-import 'Backend/Repositories/routesRepository.dart';
-import 'Backend/Repositories/sectorRepository.dart';
 import 'Platform/appAndroid.dart';
 
 
@@ -40,53 +26,7 @@ void main() async {
 
         runApp(
             MultiProvider(
-            providers: [
-              ChangeNotifierProvider(
-                create: (_) => AppProvider(),
-              ),
-              ChangeNotifierProvider(
-                  create: (_) => NavigationProvider(),
-              ),
-              ChangeNotifierProvider(
-                create: (_) => EditStateProvider(),
-              ),
-              ChangeNotifierProvider(
-                  create: (_) => RoutesProvider(
-                     routerRepository(
-                       getRouterDataSource(),
-                     ),
-                  )
-              ),
-              ChangeNotifierProvider(
-                  create: (_) => SectorProvider(
-                    SectorRepository(
-                      getSectorDataSource(),
-                    ),
-                  )
-              ),
-              ChangeNotifierProvider(
-                  create: (_) => FactoryProvider()
-              ),
-
-              ChangeNotifierProvider(
-                  create: (_) => EmployeeProvider()
-              ),
-
-              ChangeNotifierProvider(
-                  create: (_) => LineSendProvider()
-              ),
-
-
-              ChangeNotifierProvider(
-                  create: (_) => MailProvider()
-              ),
-
-
-              ChangeNotifierProvider(
-                  create: (_) => ConectionProvider()
-              ),
-
-            ],
+            providers: DependencyInjection.providers,
             child: MyApp())
            );
 }
