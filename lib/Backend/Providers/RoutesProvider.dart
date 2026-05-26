@@ -1,17 +1,13 @@
 import 'package:crud_factories/Backend/Repositories/routesRepository.dart' show routerRepository;
+import 'package:crud_factories/Objects/AppRoutesState.dart';
 import 'package:crud_factories/Objects/RouteCSV.dart' show RouteCSV;
-import 'package:crud_factories/Objects/buldRouteFiles.dart';
 import 'package:crud_factories/generated/l10n.dart' show S;
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter/foundation.dart' show Uint8List;
 
-import '../../Objects/AppRoutesState.dart' show RouteFiles;
+import '../Data/controlsMessagesError/errors.dart';
 
-enum LoadResult {
-  success,
-  invalidFile,
-  error,
-}
+
 
 class RoutesProvider extends ChangeNotifier {
 
@@ -21,7 +17,7 @@ class RoutesProvider extends ChangeNotifier {
 
   List<RouteCSV> _baseRoutes = [];
 
-  RouteFiles? _files;
+ RouteFiles? _files;
 
   final Map<String, RouteCSV> _overrides = {};
 
