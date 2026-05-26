@@ -16,7 +16,7 @@ class CsvRouterDataSource implements IRouterDataSource{
   Future<List<RouteCSV>> load() async {
 
     return await csvImportRoutes(
-      assetPath: this.path,
+      path: path,
     );
   }
 
@@ -36,7 +36,7 @@ class CsvRouterDataSource implements IRouterDataSource{
     // TODO: implement loadRoutesFromBytes
       return csvImportRoutes(
           bytes: bytes,
-          assetPath: this.path
+          path: this.path
       );
   }
 
