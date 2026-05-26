@@ -73,36 +73,33 @@ class RoutesProvider extends ChangeNotifier {
   // =========================
   // LOAD FROM FILE
   // =========================
-  Future<LoadResult> importRoutesFromBytes({
+  Future<(LoadResult, List<dynamic>)> importRoutesFromBytes({
     required Uint8List bytes,
   }) async {
 
     try {
 
-      final imported =
-      await repository.importFromBytes(bytes);
+      final imported = await repository.importFromBytes(bytes);
 
       if (imported.isEmpty) {
-        return LoadResult.invalidFile;
+        return (LoadResult.invalidFile, []);
       }
 
-      return LoadResult.success;
+      return (LoadResult.success, imported);
 
     } catch (e, stack) {
 
-      debugPrint(
-        "importRoutesFromBytes error: $e",
-      );
+      debugPrint("importRoutesFromBytes error: $e");
+      debugPrintStack(stackTrace: stack);
 
-      debugPrintStack(
-        stackTrace: stack,
-      );
-
-      return LoadResult.error;
+      return (LoadResult.error, []);
     }
   }
 
-
+  void setRoutes(List<RouteCSV> newRoutes) {
+    _baseRoutes = newRoutes;
+    notifyListeners();
+  }
 
 
   }
