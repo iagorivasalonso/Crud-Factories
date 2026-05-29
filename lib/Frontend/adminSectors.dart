@@ -1,29 +1,22 @@
 import 'package:crud_factories/Alertdialogs/confirm.dart';
-import 'package:crud_factories/Backend/CSV/exportSectors.dart';
-import 'package:crud_factories/Backend/Global/list.dart';
+import 'package:crud_factories/Backend/Data/controlsMessagesError/errors.dart' show CreateResult, EditResult, DeleteResult;
 import 'package:crud_factories/Backend/Providers/FactoryProvider.dart';
 import 'package:crud_factories/Backend/Providers/SectorProvider.dart' show CreateResult, SectorProvider, EditResult, DeleteResult;
-import 'package:crud_factories/Backend/SQL/deleteSector.dart';
 import 'package:crud_factories/Backend/Global/variables.dart';
 import 'package:crud_factories/Widgets/headAlertDialog.dart';
 import 'package:crud_factories/Widgets/tableEditSector.dart';
 import 'package:crud_factories/generated/l10n.dart';
 import 'package:flutter/material.dart';
-
 import 'package:crud_factories/Alertdialogs/createSector.dart';
 import 'package:crud_factories/Alertdialogs/error.dart';
 import 'package:crud_factories/Alertdialogs/warning.dart';
 import 'package:crud_factories/Widgets/materialButton.dart';
 import 'package:provider/provider.dart';
 
-import '../Objects/Sector.dart';
 
 
 Future<void> adminSector(BuildContext context) async {
 
-  final providerSector = context.read<SectorProvider>();
-  final providerFactory = context.read<FactoryProvider>();
-print("sdd");
   return  showDialog(
     context: context,
     builder: (context) {
@@ -41,7 +34,7 @@ print("sdd");
                const SizedBox(height: 15.0),
                Expanded(
                  child: Consumer<SectorProvider>(
-                   builder: (context,provider,_){
+                   builder: (context,providerSector,_){
                      return Padding(
                          padding: const EdgeInsets.only(left: 30.0, right: 30.0),
                          child: tableEditSector(
@@ -82,8 +75,6 @@ print("sdd");
        );
     },
   );
-
-
 }
 
 
@@ -113,7 +104,7 @@ Future<void> editSector(BuildContext context, int index, SectorProvider provider
 
   if (updated == null) return;
 
-  final result = await context.read<SectorProvider>().edit(updated);
+  final result = await context.read<SectorProvider>().update(updated);
 
   switch (result) {
     case EditResult.success:
@@ -131,6 +122,9 @@ Future<void> editSector(BuildContext context, int index, SectorProvider provider
     case EditResult.notFound:
       await error(context, S.of(context).sector_not_found);
       break;
+    case EditResult.error:
+      // TODO: Handle this case.
+      throw UnimplementedError();
   }
 }
 
@@ -161,5 +155,9 @@ Future<void> deleteSector(BuildContext context, int index) async {
     case DeleteResult.notFound:
       await error(context,S.of(context).sector_not_found);
       break;
+
+    case DeleteResult.error:
+      // TODO: Handle this case.
+      throw UnimplementedError();
   }
 }
