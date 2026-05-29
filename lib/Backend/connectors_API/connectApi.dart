@@ -1,18 +1,20 @@
 
-import '../Global/list.dart';
 
-Future<Uri> connectApi(String nameTable) async {
+
+import 'package:crud_factories/Backend/Feature/Sector/apiSectorDataSource%20.dart' show ApiConfig;
+
+Future<Uri> connectApi(String nameTable, ApiConfig config) async {
 
   return Uri(
     scheme: 'http',
     host: 'localhost',
     port: 3000,
-    path: 'db/${controlerConex.namebd.text}/$nameTable',
+    path: 'db/${config.database}/$nameTable',
     queryParameters: {
-      'host': controlerConex.hostbd.text,
-      'port': controlerConex.portbd.text,
-      'user': controlerConex.userbd.text,
-      'password': controlerConex.passbd.text,
+      'host': config.host,
+      'port': config.port,
+      'user': config.user,
+      'password': config.password,
     },
   );
 }

@@ -1,11 +1,15 @@
 import 'package:crud_factories/Alertdialogs/confirmDelete.dart';
 import 'package:crud_factories/Alertdialogs/error.dart';
 import 'package:crud_factories/Alertdialogs/warning.dart';
-import 'package:crud_factories/Backend/CSV/exportConections.dart';
+import 'package:crud_factories/Backend/Data/controlsMessagesError/errors.dart' show EditResult, CreateResult, DeleteResult;
+import 'package:crud_factories/Backend/Feature/Connection/Controller/ConnectionController.dart' show Connectioncontroller, ConnectResultModel, DisconnectResult;
+import 'package:crud_factories/Backend/Global/controllers/Conection.dart' show connectionControler;
 import 'package:crud_factories/Backend/Global/list.dart';
 import 'package:crud_factories/Backend/Global/variables.dart';
+import 'package:crud_factories/Backend/Providers/App_provaider.dart';
+import 'package:crud_factories/Backend/Providers/ConectionProvider.dart';
+import 'package:crud_factories/Backend/Providers/EditStateProvider.dart' show EditStateProvider;
 import 'package:crud_factories/Backend/SQL/importLines.dart';
-import 'package:crud_factories/Backend/providers/Conection_provider.dart';
 import 'package:crud_factories/Objects/Conection.dart';
 import 'package:crud_factories/Widgets/headViewsAndroid.dart' show appBarAndroid;
 import 'package:crud_factories/Widgets/layoutVariant.dart';
@@ -14,25 +18,16 @@ import 'package:crud_factories/helpers/localization_helper.dart' show Localizati
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:crud_factories/Alertdialogs/confirm.dart';
-import 'package:crud_factories/Backend/CSV/loader.dart';
-import 'package:crud_factories/Backend/SQL/importEmpleoye.dart';
-import 'package:crud_factories/Backend/SQL/importFactories.dart';
-import 'package:crud_factories/Backend/SQL/importMail.dart';
-import 'package:crud_factories/Backend/SQL/importSector.dart';
-import 'package:crud_factories/Functions/createId.dart';
 import 'package:crud_factories/Functions/isNotAndroid.dart';
 import 'package:crud_factories/Widgets/dropDownButton.dart';
 import 'package:crud_factories/Widgets/headView.dart';
 import 'package:crud_factories/Widgets/materialButton.dart';
 import 'package:crud_factories/Widgets/textFieldPassword.dart';
 import 'package:crud_factories/Widgets/textfield.dart';
+import '../Alertdialogs/confirm.dart';
+import '../Backend/Feature/Sector/apiSectorDataSource .dart';
 
 class conection extends StatefulWidget {
-
-
-   conection();
-
 
   State<conection> createState() => _conectionState();
 }
@@ -43,205 +38,245 @@ class _conectionState extends State<conection> {
   final ScrollController horizontalScroll = ScrollController();
   final ScrollController verticalScroll = ScrollController();
 
-  bool conexChangued = false;
+  late connectionControler controlerConex;
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
 
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      final provider = context.read<ConectionProvider>();
-      _restore(provider);
-    });
+    controlerConex = connectionControler(
+      namebd: TextEditingController(),
+      hostbd: TextEditingController(),
+      portbd: TextEditingController(),
+      userbd: TextEditingController(),
+      passbd: TextEditingController(),
+    );
+
 
   }
 
+  bool _loaded = false;
 
   @override
-  Widget build(BuildContext context0) {
+  void didChangeDependencies() {
+    super.didChangeDependencies();
 
-    BuildContext context = isNotAndroid() ? context0 : context1;
+    final provider = context.read<ConnectionProvider>();
 
-    final provider = context.watch<ConectionProvider>();
+    if (!_loaded && provider.selected != null) {
 
-    final editCamps = provider.status != ConnectionStatus.connected ||
-        provider.viewMode == ConnectionViewMode.editing;
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        _loadConection(provider.selected!, provider);
+      });
+      _loaded = true;
+    }
+  }
 
-    return !isNotAndroid()
-        ? Scaffold(
-      body: Scrollbar(
-        controller: verticalScroll,
-        thumbVisibility: true,
-        child: Scrollbar(
-          controller: horizontalScroll,
+  @override
+  Widget build(BuildContext context) {
+
+
+    final provider = context.watch<ConnectionProvider>();
+
+    final editCamps = true;
+
+    if (!isNotAndroid()) {
+      return Scaffold(
+        body: Scrollbar(
+          controller: verticalScroll,
           thumbVisibility: true,
-          notificationPredicate: (notification) =>
-          notification.metrics.axis == Axis.horizontal,
-          child: SingleChildScrollView(
-            controller: verticalScroll,
-            scrollDirection: Axis.vertical,
+          child: Scrollbar(
+            controller: horizontalScroll,
+            thumbVisibility: true,
+            notificationPredicate: (notification) =>
+            notification.metrics.axis == Axis.horizontal,
             child: SingleChildScrollView(
-              controller: horizontalScroll,
-              scrollDirection: Axis.horizontal,
-              child: Padding(
-                padding: const EdgeInsets.only(left: 30.0, top: 30.0),
-                child: Container(
-                  constraints: BoxConstraints(
-                    minWidth: MediaQuery.of(context).size.width,
-                    minHeight: MediaQuery.of(context).size.height,
-                  ),
-                  child: Align(
-                    alignment: Alignment.topLeft,
-                    child: SizedBox(
-                      width: 850,
-                      child: Column(
-                        children: [
-                          headView(
-                              title: S
-                                  .of(context)
-                                  .database_connection
-                          ),
-
-                          layoutVariant(
-                              items:
-                              [
-                                Padding(
-                                  padding: const EdgeInsets.only(
-                                      left: 30.0, top: 30.0),
-                                  child: SizedBox(
-                                    width: 700,
-                                    height: 40,
-                                    child: GenericDropdown<Conection>(
-                                      items: conections,
-                                      camp: S
-                                          .of(context)
-                                          .database_connection,
-                                      selectedItem: provider.selected,
-                                      hint: S
-                                          .of(context)
-                                          .newFemale,
-                                      itemLabel: (Conection) =>
-                                      Conection.database,
-                                      onChanged: (conectionChoose) =>provider.status != ConnectionStatus.connected
-                                         ? _onConectionChanged(conectionChoose,provider)
-                                         : null,
-                                    ),
-                                  ),
-                                ),
-
-
-                                Padding(
-                                  padding: const EdgeInsets.only(top: 30.0),
-                                  child: materialButton(
-                                    nameAction: provider.actionEditLabel(context),
-                                    function: ()  {
-                                         final ok = provider.toggleEditMode();
-                                         if(!ok)
-                                         {
-                                             String message = S.of(context).not_connected_to_any_database;
-                                             error(context, message);
-                                         }
-                                     }
-                                  ),
-                                ),
-                          ]),
-
-                          Padding(
-                            padding: const EdgeInsets.only(top: 20.0),
-                            child: Align(
-                              alignment: Alignment.topLeft,
-                              child: SizedBox(
-                                width: 350,
-                                child: defaultTextfield(
-                                  nameCamp: S
-                                      .of(context)
-                                      .data_base,
-                                  controllerCamp: controlerConex.namebd,
-                                  campEdit: editCamps,
-                                ),
-                              ),
+              controller: verticalScroll,
+              scrollDirection: Axis.vertical,
+              child: SingleChildScrollView(
+                controller: horizontalScroll,
+                scrollDirection: Axis.horizontal,
+                child: Padding(
+                  padding: const EdgeInsets.only(left: 30.0, top: 30.0),
+                  child: Container(
+                    constraints: BoxConstraints(
+                      minWidth: MediaQuery
+                          .of(context)
+                          .size
+                          .width,
+                      minHeight: MediaQuery
+                          .of(context)
+                          .size
+                          .height,
+                    ),
+                    child: Align(
+                      alignment: Alignment.topLeft,
+                      child: SizedBox(
+                        width: 850,
+                        child: Column(
+                          children: [
+                            headView(
+                                title: S
+                                    .of(context)
+                                    .database_connection
                             ),
-                          ),
 
-                          Padding(
-                            padding: const EdgeInsets.only(top: 20.0),
-                            child: layoutVariant(
-                                items: [
-                                  Expanded(
-                                    child: defaultTextfield(
-                                      nameCamp: S
-                                          .of(context)
-                                          .host,
-                                      controllerCamp: controlerConex.hostbd,
-                                      campEdit: editCamps,
+                            layoutVariant(
+                                items:
+                                [
+                                  Padding(
+                                    padding: const EdgeInsets.only(
+                                        left: 30.0, top: 30.0),
+                                    child: SizedBox(
+                                      width: 700,
+                                      height: 40,
+                                      child: GenericDropdown<Conection>(
+                                        items: provider.connections,
+                                        camp: S
+                                            .of(context)
+                                            .database_connection,
+                                        selectedItem: provider.selected,
+                                        hint: S
+                                            .of(context)
+                                            .newFemale,
+                                        itemLabel: (Conection) =>
+                                        Conection.database,
+                                        onChanged: (c) async {
+                                    //      if (!await canNavigate(context))
+                                        //    return;
+
+                                          provider.select(c);
+
+                                          _loadConection(c, provider);
+                                        },
+                                      ),
                                     ),
                                   ),
-                                  Expanded(
-                                    child:
-                                    defaultTextfield(
-                                      nameCamp: S
-                                          .of(context)
-                                          .port,
-                                      controllerCamp: controlerConex.portbd,
-                                      campEdit: editCamps,
-                                    ),
-                                  ),
-                                ]
-                            ),
-                          ),
 
-                          Padding(
-                            padding: const EdgeInsets.only(top: 20.0),
-                            child: layoutVariant(
-                                items: [
-                                  Expanded(
-                                    child: defaultTextfield(
-                                      nameCamp: S
-                                          .of(context)
-                                          .user,
-                                      controllerCamp: controlerConex.userbd,
-                                      campEdit: editCamps,
-                                    ),
 
-                                  ),
-                                  Expanded(
-                                    child:
-                                    textfieldPassword(
-                                      nameCamp: S
-                                          .of(context)
-                                          .password,
-                                      controllerCamp: controlerConex.passbd,
-                                      campEdit: editCamps,
+                                  Padding(
+                                    padding: const EdgeInsets.only(top: 30.0),
+                                    child: materialButton(
+                                        nameAction: provider.editButtonLabel(
+                                            context),
+                                        function: () {
+                                          final ok = provider.toggleEditMode();
+                                          if (!ok) {
+                                            String message = S
+                                                .of(context)
+                                                .not_connected_to_any_database;
+                                            error(context, message);
+                                          }
+                                        }
                                     ),
                                   ),
                                 ]),
-                          ),
 
-                          Padding(
-                            padding: const EdgeInsets.only(
-                                left: 620.0, top: 80.0),
-                            child: layoutVariant(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              items: [
-                                materialButton(
-                                  nameAction: provider.action1Label(context),
-                                  function: () => _handleAction1(context,provider)
-
-                                ),
-
-                                Padding(
-                                  padding: const EdgeInsets.only(left: 20.0),
-                                  child: materialButton(
-                                    nameAction: provider.action2Label(context),
-                                    function: () => _handleAction2(context,provider)
-
+                            Padding(
+                              padding: const EdgeInsets.only(top: 20.0),
+                              child: Align(
+                                alignment: Alignment.topLeft,
+                                child: SizedBox(
+                                  width: 350,
+                                  child: defaultTextfield(
+                                    context: context,
+                                    nameCamp: S
+                                        .of(context)
+                                        .data_base,
+                                    controllerCamp: controlerConex.namebd,
+                                    campEdit: editCamps,
                                   ),
                                 ),
-                              ],
+                              ),
                             ),
-                          ),
-                        ],
+
+                            Padding(
+                              padding: const EdgeInsets.only(top: 20.0),
+                              child: layoutVariant(
+                                  items: [
+                                    Expanded(
+                                      child: defaultTextfield(
+                                        context: context,
+                                        nameCamp: S
+                                            .of(context)
+                                            .host,
+                                        controllerCamp: controlerConex.hostbd,
+                                        campEdit: editCamps,
+                                      ),
+                                    ),
+                                    Expanded(
+                                      child:
+                                      defaultTextfield(
+                                        context: context,
+                                        nameCamp: S
+                                            .of(context)
+                                            .port,
+                                        controllerCamp: controlerConex.portbd,
+                                        campEdit: editCamps,
+                                      ),
+                                    ),
+                                  ]
+                              ),
+                            ),
+
+                            Padding(
+                              padding: const EdgeInsets.only(top: 20.0),
+                              child: layoutVariant(
+                                  items: [
+                                    Expanded(
+                                      child: defaultTextfield(
+                                        context: context,
+                                        nameCamp: S
+                                            .of(context)
+                                            .user,
+                                        controllerCamp: controlerConex.userbd,
+                                        campEdit: editCamps,
+                                      ),
+
+                                    ),
+                                    Expanded(
+                                      child:
+                                      textfieldPassword(
+                                        nameCamp: S
+                                            .of(context)
+                                            .password,
+                                        controllerCamp: controlerConex.passbd,
+                                        campEdit: editCamps,
+                                      ),
+                                    ),
+                                  ]),
+                            ),
+
+                            Padding(
+                              padding: const EdgeInsets.only(
+                                  left: 620.0, top: 80.0),
+                              child: layoutVariant(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                items: [
+                                  materialButton(
+                                      nameAction: provider.action1Label(
+                                          context),
+                                      function: () =>
+                                          _handleAction1(context, provider)
+
+                                  ),
+
+                                  Padding(
+                                    padding: const EdgeInsets.only(left: 20.0),
+                                    child: materialButton(
+                                        nameAction: provider.action2Label(
+                                            context),
+                                        function: () =>
+                                            _handleAction2(context, provider)
+
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                   ),
@@ -250,283 +285,177 @@ class _conectionState extends State<conection> {
             ),
           ),
         ),
-      ),
-    )
-        : Scaffold(
-      appBar: appBarAndroid(context, name: S
-          .of(context)
-          .database_connection),
-      body: Text("conection"),
-    );
-  }
-
-  Future<void> _handleAction1(BuildContext context,ConectionProvider provider) async {
-
-    final actionLabel = provider.action1Label(context);
-
-    if (actionLabel == S.of(context).newFemale) {
-      await _createConex(context, provider);
-
-    } else if (provider.viewMode == ConnectionViewMode.normal) {
-      await _actionConnect(context, provider);
-
+      );
     } else {
-
-      await _editConex(context, provider);
-
-
-      provider.toggleEditMode();
+      return Scaffold(
+        appBar: appBarAndroid(context, name: S
+            .of(context)
+            .database_connection),
+        body: Text("conection"),
+      );
     }
-
-    saveChanges = false;
   }
 
-  void _handleAction2(BuildContext context,ConectionProvider provider) {
+  Future<void> _loadConection(Conection? c, ConnectionProvider provider) async {
+    if (c == null) return;
 
-    final actionLabel = provider.action2Label(context);
-    actionLabel== S.of(context).undo
-      ? _restore(provider)
-      : _deleteConex(context, provider);
+    controlerConex.namebd.text = c.database;
+    controlerConex.hostbd.text = c.host;
+    controlerConex.portbd.text = c.port;
+    controlerConex.userbd.text = c.user;
+    controlerConex.passbd.text = c.password;
 
-    saveChanges = false;
-  }
-
-
-  Future<void> _actionConnect(BuildContext context, ConectionProvider provider) async {
-
-    if (provider.status == ConnectionStatus.connected) {
-
-      final connected = await provider.disconnet();
-
-
-      if(connected==false)
-      {
-        sectors.clear();
-        allFactories.clear();
-        empleoyes.clear();
-        mails.clear();
-        allLines.clear();
-
-        bool recharged= true;
-        await csvLoaderService.loadRemainingRoutes(context,routesCSV,recharged);
-
-        String action = S.of(context).has_closed_the_connection;
-        confirm(context, action);
-      }
-      else
-      {
-        String action = S.of(context).cannot_disconnect;
-        error(context, action);
-      }
-
-    } else {
-
-      Conection? modify;
-      if(saveChanges == true)
-      {
-        modify =Conection(
-          id: provider.selected?.id ?? "-",
-          database: controlerConex.namebd.text,
-          port: controlerConex.portbd.text,
-          host: controlerConex.hostbd.text,
-          user: controlerConex.userbd.text,
-          password: controlerConex.passbd.text,
-        );
-        provider.setTempConnection(modify);
-      }
-
-      final conectionTrue = await provider.connect(context);
-      if(conectionTrue==selectedDb) //si no hay error ya pone la conex
-      {
-        sectors.clear();
-        allFactories.clear();
-        empleoyes.clear();
-        mails.clear();
-        allLines.clear();
-        // Esperamos a que las funciones de carga terminen
-
-        await sqlImportSetors();
-        await sqlImportFactories();
-        await sqlImportLines();
-        await sqlImportEmpleoyes();
-        await sqlImportMails();
-
-        String action = "${S.of(context).is_connected_to}$selectedDb";
-         await confirm(context, action);
-
-         if(modify != null && conexChangued ==false)
-         {
-             String action = S.of(context).the_connection_has_changed_do_you_want_to_save_it;
-              bool changue = await warning(context, action);
-
-              if(changue)
-              {
-                String id = modify.id;
-                final index = conections.indexWhere((c) => c.id == id);
-                if (index != -1) {
-                  // Actualiza el objeto en la lista
-                  conections[index] = Conection(
-                    id: modify.id,
-                    database: modify.database,
-                    host: modify.host,
-                    port: modify.port,
-                    user: modify.user,
-                    password: modify.password,
-                  );
-
-                  // Importante: actualizar selected para que apunte al objeto de la lista
-                  provider.selectConnection(conections[index]);
-
-                  // Refrescar UI
-                  setState(() {});
-                  String action = S.of(context).connection_has_been_successfully_edited;
-                  await confirm(context, action);
-
-
-                  bool errorExp = await csvExportatorConections(conections);
-
-                  if (!kIsWeb && errorExp) {
-                    String action = LocalizationHelper.no_file(
-                      context,
-                      S.of(context).connections,
-                    );
-                    error(context, action);
-                    return;
-                  }
-                  conexChangued = true;
-                }
-
-              }
-         }
-      }
-      else
-      {
-         //si no es true
-         error(context, conectionTrue);
-      }
-
-    }
-
-  }
-
-  Future<void> _onConectionChanged(Conection? conectionChoose, provider) async {
-
-    Conection conect = conectionChoose!;
-
-    controlerConex.namebd.text = conect.database;
-    controlerConex.hostbd.text = conect.host;
-    controlerConex.portbd.text = conect.port;
-    controlerConex.userbd.text = conect.user;
-    controlerConex.passbd.text = conect.password;
-
-    provider.selectConnection(conect);
-  }
-
-  Future<void>_createConex(BuildContext context, ConectionProvider provider) async{
-
-     Conection cNew=new Conection(
-        id: conections.isNotEmpty ? createId(conections.last.id) : "1",
-        database: controlerConex.namebd.text,
-        port: controlerConex.portbd.text,
-        host: controlerConex.hostbd.text,
-        user: controlerConex.userbd.text,
-        password: controlerConex.passbd.text);
-
-     final type = await provider.create(cNew);
-
-     String action ="";
-
-     if(type!=" ")
-     {
-       await error(context, type);
-     }
-     else
-     {
-       action=S.of(context).connection_has_been_successfully_created;
-       confirm(context, action);
-     }
-
-  }
-
-  Future<void>_editConex(BuildContext context, ConectionProvider provider) async {
-
-    final old = provider.selected;
-    if (old == null) return;
-
-    final updated = Conection(
-      id: old.id,
-      database: controlerConex.namebd.text,
+    provider.select(c);
+/*
+    final config = ApiConfig(
       host: controlerConex.hostbd.text,
-      port: controlerConex.portbd.text,
+      port: int.parse(controlerConex.portbd.text),
+      database: controlerConex.namebd.text,
       user: controlerConex.userbd.text,
       password: controlerConex.passbd.text,
     );
 
-   final err = await provider.update(old, updated);
+    provider.setConfig(config);*/
+  }
 
-    String action="";
-    if(err==true)
+  void _handleAction1(BuildContext context, ConnectionProvider provider) async {
+
+    final controller = context.read<Connectioncontroller>();
+
+    if (provider.viewMode == ConnectionViewMode.editing) //edicion de conexion
     {
-      action = S.of(context).could_not_be_edited;
-      error(context, action);
+          final update = Conection(
+            id: provider.selected!.id,
+            database: controlerConex.namebd.text,
+            host: controlerConex.hostbd.text,
+            port: controlerConex.portbd.text,
+            user: controlerConex.userbd.text,
+            password: controlerConex.passbd.text,
+          );
+
+          final result = await controller.update(provider.selected!, update);
+
+          switch(result)
+          {
+            case EditResult.invalidData:
+              await error(context, S.of(context).can_not_find_the_connection);
+             break;
+
+            case EditResult.success:
+             await confirm(context, S.of(context).connection_has_been_successfully_edited);
+              break;
+
+            case EditResult.alreadyExists:
+                  await error(context, S.of(context).the_connection_already_exists);
+              break;
+
+            case EditResult.notFound:
+             await error(context, S.of(context).can_not_find_the_connection);
+              break;
+
+            case EditResult.error:
+              await error(context, S.of(context).could_not_be_edited);
+              break;
+          }
+          context.read<EditStateProvider>().clear();
+          provider.toggleEditMode();
+
+          return;
     }
-    else
+
+
+    if (provider.selected == null) {
+      final newConnection = Conection(
+        id: "100",
+        database: controlerConex.namebd.text,
+        host: controlerConex.hostbd.text,
+        port: controlerConex.portbd.text,
+        user: controlerConex.userbd.text,
+        password: controlerConex.passbd.text,
+      );
+
+       final result = await controller.create(newConnection);
+
+       switch(result)
+       {
+         case CreateResult.invalidData:
+           await error(context, S.of(context).can_not_find_the_connection);
+           break;
+
+         case CreateResult.alreadyExists:
+           await error(context, S.of(context).the_connection_already_exists);
+           break;
+
+         case CreateResult.success:
+            await confirm(context, S.of(context).connection_has_been_successfully_created);
+           break;
+       }
+      context.read<EditStateProvider>().clear();
+      return;
+    }
+
+    if (!provider.isConnected)
     {
-      action=S.of(context).connection_has_been_successfully_edited;
-      confirm(context, action);
-    }
+        final file =context.read<AppProvider>().files;
+        print(file?.server);
+        final result = await controller.connectSQL(context,file?.server);
 
+        if (result.success) {
+
+
+          final message = "${S.of(context).is_connected_to} ${provider.selected!.database}";
+
+          await confirm(context, message);
+
+          await context.read<AppProvider>().switchSource(
+            context,
+            DataSourceMode.sql,
+          );
+
+        } else {
+          await error(
+            context,
+            result.errorMessage ?? "Error desconocido",
+          );
+        }
+    }
   }
 
+  void _handleAction2(BuildContext context, ConnectionProvider provider) async {
 
-  Future<void>_deleteConex(BuildContext context, ConectionProvider provider) async {
+    final controller = context.read<Connectioncontroller>();
 
-    String message= "${S.of(context).the} ${S.of(context).connection}";
-    bool confirnDelete= await confirmDelete(context, message);
+    if (provider.viewMode == ConnectionViewMode.editing) {
+      provider.toggleEditMode();
 
-    if(confirnDelete==true)
+      _loadConection(provider.selected, provider);
+
+      return;
+    }
+
+    final selected = provider.selected;
+
+    if (selected != null)
     {
-      final toDelete = provider.selected;
-      if (toDelete == null) return;
+        final delete = await controller.delete(selected);
 
-      final err = await provider.delete(toDelete);
+        switch(delete) {
+          case DeleteResult.notFound:
+            error(context, S.of(context).no_connection_found);
+            break;
+          case DeleteResult.error:
+            error(context, S.of(context).could_not_be_deleted);
+            break;
 
-      String action="";
-      if(err==true)
-      {
-        action = S.of(context).could_not_be_deleted;
-        error(context, action);
-      }
-      else
-      {
-        action= S.of(context).connection_has_been_successfully_deleted;
-        confirm(context, action);
+          case DeleteResult.hasDependencies:
+            // TODO: Handle this case.
+            throw UnimplementedError();
+          case DeleteResult.success:
+            await confirm(context, S.of(context).connection_has_been_successfully_deleted);
+            break;
 
-        _clearFields();
-      }
+        }
     }
   }
 
-  void _restore(ConectionProvider provider) {
-
-
-    if (provider.selected != null) {
-      controlerConex.namebd.text = provider.selected!.database;
-      controlerConex.hostbd.text = provider.selected!.host;
-      controlerConex.portbd.text = provider.selected!.port;
-      controlerConex.userbd.text = provider.selected!.user;
-      controlerConex.passbd.text = provider.selected!.password;
-    }
-    
-  }
-
-  void _clearFields() {
-
-    controlerConex.namebd.clear();
-    controlerConex.hostbd.clear();
-    controlerConex.portbd.clear();
-    controlerConex.userbd.clear();
-    controlerConex.passbd.clear();
-
-  }
 }
