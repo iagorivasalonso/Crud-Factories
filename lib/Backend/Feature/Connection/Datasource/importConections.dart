@@ -23,7 +23,7 @@ Future<List<Conection>> csvImportconnections({
   } else if (kIsWeb) {
     csvContent = await rootBundle.loadString(assetPath!);
   } else{
-    // 🟢 3. DESKTOP → usar routeFirst como archivo real
+
     final file = File(assetPath!);
 
     if (await file.exists()) {
@@ -37,6 +37,7 @@ Future<List<Conection>> csvImportconnections({
 }
 
 List<Conection> readconnectionsFromCsvContent(String content) {
+
   final lines = const LineSplitter()
       .convert(content)
       .where((line) => line.trim().isNotEmpty)

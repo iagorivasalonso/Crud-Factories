@@ -25,7 +25,7 @@ class ServerService {
     if(await _isServerRunning(8080)) {
        return false;
     }
-
+/*
     if (Platform.isWindows) {
       String executable = routesCSV[2].route;
       try {
@@ -34,7 +34,7 @@ class ServerService {
       } catch (e) {
         return false;
       }
-    }
+    }*/
     return false;
   }
 }
