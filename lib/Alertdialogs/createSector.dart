@@ -75,6 +75,7 @@ Future<Sector?> createSector(BuildContext  context, [Sector? sectorOld]) async {
                              child: Padding(
                                padding: const EdgeInsets.symmetric(horizontal: 35.0),
                                child: defaultTextfield(
+                                 context: context,
                                  nameCamp:"",
                                  controllerCamp: controllerSector,
                                ),
