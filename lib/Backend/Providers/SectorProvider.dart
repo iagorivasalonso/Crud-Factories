@@ -1,46 +1,47 @@
-import 'package:crud_factories/Alertdialogs/confirm.dart' show confirm;
-import 'package:crud_factories/Alertdialogs/createSector.dart';
-import 'package:crud_factories/Alertdialogs/error.dart' show error;
-import 'package:crud_factories/Alertdialogs/warning.dart' show warning;
-import 'package:crud_factories/Backend/CSV/exportSectors.dart' show csvExportatorSectors;
-import 'package:crud_factories/Backend/CSV/importSectors.dart';
-import 'package:crud_factories/Backend/Global/files.dart';
-import 'package:crud_factories/Backend/Global/list.dart';
-import 'package:crud_factories/Backend/Global/variables.dart' show BaseDateSelected;
+
+import 'package:crud_factories/Backend/Feature/Sector/IsectorDataSource.dart';
 import 'package:crud_factories/Backend/Providers/FactoryProvider.dart' show FactoryProvider;
-import 'package:crud_factories/Backend/SQL/createSector.dart' show sqlCreateSector;
-import 'package:crud_factories/Backend/SQL/deleteSector.dart' show sqlDeleteSector;
+import 'package:crud_factories/Backend/Repositories/sectorRepository.dart' show SectorRepository;
+import 'package:crud_factories/Backend/Data/controlsMessagesError/errors.dart' show CreateResult, EditResult, DeleteResult;
 import 'package:crud_factories/Functions/createId.dart';
-import 'package:crud_factories/generated/l10n.dart' show S;
-import 'package:flutter/cupertino.dart' show BuildContext;
 import 'package:flutter/foundation.dart';
 import 'package:crud_factories/Objects/Sector.dart';
-import 'package:universal_html/html.dart' show File;
 
-enum CreateResult {
-  success,
-  alreadyExists,
-  invalidData,
-}
 
-enum EditResult   {
-  success,
-  alreadyExists,
-  notFound,
-  invalidData
-}
-
-enum DeleteResult {
-  success,
-  notFound,
-  hasDependencies
-}
 
 class SectorProvider extends ChangeNotifier {
+
+
+  SectorRepository? repository;
+
 
   List<Sector> _sectors = [];
 
   List<Sector> get sectors => List.unmodifiable(_sectors);
+
+  // =========================
+  // LOAD
+  // =========================
+
+  Future<void> load() async {
+    try {
+      final data = await _repo.load();
+
+      _sectors = data;
+
+      notifyListeners();
+    } catch (e) {
+      print("Error load: $e");
+      _sectors = [];
+      notifyListeners();
+    }
+  }
+
+
+  // =========================
+  //  SETSECTORS
+  // =========================
+
 
   void setSectors(List<Sector> data) {
     _sectors
@@ -50,10 +51,17 @@ class SectorProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  // =========================
+  //  ADDSECTORS
+  // =========================
   void addSector(Sector sector) {
     _sectors.add(sector);
     notifyListeners();
   }
+
+  // =========================
+  //  EXISTSECTORS
+  // =========================
 
   bool exist(String name, {String? exclude}) {
     final nameLower = name.toLowerCase();
@@ -69,20 +77,48 @@ class SectorProvider extends ChangeNotifier {
     });
   }
 
+  // =========================
+  //  CLEAR
+  // =========================
+
   void clear() {
     _sectors.clear();
     notifyListeners();
   }
 
+  // =========================
+  //  GETREPO
+  // =========================
+
+  SectorRepository get _repo {
+    final r = repository;
+    if (r == null) {
+      throw Exception("Repository not initialized");
+    }
+    return r;
+  }
+
+
+
+  Future<void> setRepositoryAndReload(SectorRepository repo) async {
+     repository = repo;
+    _sectors = [];
+    notifyListeners();
+
+    await load();
+  }
+  // =========================
+  //  CREATE
+  // =========================
   Future<CreateResult> create(Sector sector) async {
 
-    final name= sector.name?.trim();
+    final name = sector.name?.trim();
 
     if (name == null || sector.name.isEmpty) {
       return CreateResult.invalidData;
     }
 
-    final exits = exist(sector.name);
+    final exits = exist(name);
 
     if (exits) {
       return CreateResult.alreadyExists;
@@ -94,21 +130,20 @@ class SectorProvider extends ChangeNotifier {
 
     final newSector = Sector(
         id: idNew,
-        name: sector.name
+        name: name
     );
 
     _sectors.add(newSector);
     notifyListeners();
-    if (BaseDateSelected.isNotEmpty) {
-      await sqlCreateSector(newSector);
-    } else {
-      await csvExportatorSectors(sectors);
-    }
+    await  _repo.insert(newSector);
 
     return CreateResult.success;
   }
 
-  Future<EditResult> edit(Sector update) async {
+  // =========================
+  //  UPDATE
+  // =========================
+  Future<EditResult> update(Sector update) async {
 
     if(update.name == null || update.name!.trim().isEmpty){
        return EditResult.invalidData;
@@ -121,12 +156,12 @@ class SectorProvider extends ChangeNotifier {
       return EditResult.notFound;
     }
 
-    if (exist(name, exclude: update.name)) {
+    final oldSector = _sectors[index];
+
+    if (exist(name, exclude: oldSector.name)) {
       return EditResult.alreadyExists;
     }
 
-
-    final oldSector = _sectors[index];
 
     final newSector = Sector(
       id: update.id,
@@ -137,12 +172,7 @@ class SectorProvider extends ChangeNotifier {
 
     notifyListeners();
 
-    if (BaseDateSelected.isNotEmpty) {
-      await sqlCreateSector(newSector);
-    } else {
-      await csvExportatorSectors(_sectors);
-    }
-
+    await _repo.upload(newSector);
     return EditResult.success;
   }
 
@@ -167,11 +197,9 @@ class SectorProvider extends ChangeNotifier {
      final removed = _sectors.removeAt(index);
      try {
        //  persistencia
-       if (BaseDateSelected.isNotEmpty) {
-         await sqlDeleteSector(sector.id);
-       } else {
-         await csvExportatorSectors(_sectors);
-       }
+       await _repo.delete(
+           sector.id
+       );
        notifyListeners();
 
      } catch (e) {
@@ -181,60 +209,4 @@ class SectorProvider extends ChangeNotifier {
      }
      return DeleteResult.success;
   }
-
-  Future<void>importSectors(BuildContext context, {
-      required File file,
-      Uint8List? bytes,
-      String? content,
-      String? assetPath,
-    }) async {
-      try {
-        final imported = await csvImportSectors(
-          file: fSectors,
-          bytes: bytes,
-          content: content,
-          assetPath: assetPath,
-        );
-
-        for (final s in imported) {
-          if (!exist(s.name)) {
-            _sectors.add(s);
-          }
-        } //✔ estado del provider
-
-      } catch (e) {
-        final s = S.of(context);
-
-        final msg = e.toString().toLowerCase();
-
-        if (msg.contains("not found") ||
-            msg.contains("archivo") ||
-            msg.contains("asset")) {
-          errorFiles.add("${s.file_not_found} ${s.routes}");
-        } else {
-          errorFiles.add("${s.file_format_error} ${s.routes}");
-        }
-      }
-
-      notifyListeners();
-    }
-
-  Future<void> load(String path) async {
-    try {
-      final data = await csvImportSectors(
-        assetPath: path,
-      );
-
-      _sectors = data;
-      notifyListeners();
-
-    } catch (e) {
-      print("Error cargando sectores: $e");
-      _sectors = [];
-      notifyListeners();
-    }
-
-  }
-
-
 }
