@@ -32,7 +32,7 @@ Future<List<Sector>> csvImportSectors({
       throw Exception("route not found: $assetPath");
     }
   }
-
+print("fsad$csvContent");
   return readSectorsFromCsvContent(csvContent);
 }
 
