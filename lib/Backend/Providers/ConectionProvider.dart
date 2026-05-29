@@ -1,508 +1,206 @@
-import 'package:crud_factories/Alertdialogs/error.dart' show error;
-import 'package:crud_factories/Backend/CSV/exportConections.dart' show csvExportatorconnections;
-import 'package:crud_factories/Backend/Global/files.dart';
-import 'package:crud_factories/Backend/Global/list.dart';
-import 'package:crud_factories/Backend/Global/variables.dart';
-import 'package:crud_factories/Backend/connectors_API/DbApi.dart';
-import 'package:crud_factories/Backend/SQL/manageSQl.dart';
-import 'package:crud_factories/Backend/SQL/serverService.dart';
-import 'package:crud_factories/Objects/Conection.dart';
+
+
+import 'package:crud_factories/Backend/Feature/Connection/Service/IConnectionService.dart' show IConnectionService;
+import 'package:crud_factories/Backend/Feature/Connection/Sesion/IConnection_sesion_service.dart' show IConnectionSesionService;
+import 'package:crud_factories/Backend/Feature/Connection/SeverService/ServerService.dart';
+import 'package:crud_factories/Backend/Feature/Sector/apiSectorDataSource%20.dart';
+import 'package:crud_factories/Backend/Repositories/connectionRepository.dart' show ConnectionRepository;
+import 'package:crud_factories/Backend/connectors_API/DbApi.dart' show DbApi;
+import 'package:crud_factories/Objects/Conection.dart' show Conection;
+import 'package:crud_factories/Objects/ConnectionSesion.dart';
+import 'package:crud_factories/generated/l10n.dart' show S;
 import 'package:fluent_ui/fluent_ui.dart';
-import 'package:flutter/foundation.dart';
-import 'package:mysql1/mysql1.dart';
-import 'package:universal_html/html.dart' show File;
-import '../../generated/l10n.dart';
-import '../../helpers/localization_helper.dart' show LocalizationHelper;
-import '../CSV/importConections.dart';
-import '../connectors_API/Models/Api_response.dart';
+
+import '../Feature/Connection/ExecuteQuery/IexecuteQuery.dart';
 
 enum ConnectionStatus {
 
   none,
   disconnected,
   connected,
+  connecting,
 }
 
 enum ConnectionViewMode {
    normal,
    editing,
 }
-class ConectionProvider extends ChangeNotifier {
+class ConnectionProvider extends ChangeNotifier {
 
-   List<Conection> _connections = []; // NEW
+  List<Conection> connections = [];
 
-  List<Conection> get connections => List.unmodifiable(_connections); // N
 
   Conection? selected;
-  bool _connected = false;
-  Conection? _previous;
-  BuildContext context = context1;
-  Conection? _tempConnection;
+  Connectionsesion? session;
 
-  Conection? get previous => _previous;
+  ApiConfig? _config;
 
-   ConnectionViewMode viewMode = ConnectionViewMode.normal;
+  ConnectionStatus status = ConnectionStatus.disconnected;
+  Iexecutequery? executeQuery;
+  bool get isConnected => session != null;
 
-  ConnectionStatus get status {
-    if(selected == null) return ConnectionStatus.none;
-    return _connected
-        ? ConnectionStatus.connected
-        : ConnectionStatus.disconnected;
+  // =========================
+  // 🔥 ENGINE (SQL / API SWITCH HERE)
+  // =========================
+
+  ConnectionViewMode _viewMode = ConnectionViewMode.normal;
+  ConnectionViewMode get viewMode => _viewMode;
+
+
+  void setConfig(ApiConfig config) {
+    _config = config;
+    notifyListeners();
   }
 
-  String editButtonLabel(BuildContext context) {
-     return viewMode == ConnectionViewMode.editing
-         ? S.of(context).back
-         : S.of(context).edit;
-  }
-  String action1Label(BuildContext context) {
-    if(viewMode == ConnectionViewMode.editing)
-         return S.of(context).acept;
-
-     switch(status) {
-       case ConnectionStatus.none:
-         return S.of(context).newFemale;
-       case ConnectionStatus.disconnected:
-         return S.of(context).connect;
-       case ConnectionStatus.connected:
-         return S.of(context).disconnect;
-     }
-
-  }
-
-  String action2Label(BuildContext context) {
-    return viewMode == ConnectionViewMode.editing
-        ? S.of(context).undo
-        : S.of(context).delete;
-
-  }
-
-  String actionEditLabel(BuildContext context) {
-    return viewMode == ConnectionViewMode.editing
-        ? S.of(context).back
-        : S.of(context).edit;
-  }
-
-
-
-  Future<void> selectConnection(Conection? c) async {
-    if (status == ConnectionStatus.connected) {
-      await disconnet();
+  ApiConfig get config {
+    final c = _config;
+    if (c == null) {
+      throw Exception("ApiConfig not initialized");
     }
-    selected = c;
+    return c;
+  }
+
+  void setExecuteQuery(Iexecutequery query) {
+    executeQuery = query;
+    notifyListeners();
+  }
+
+
+  // =========================
+  // SET_CONNECTION
+  // =========================
+
+
+  void setConnections(List<Conection> data) {
+
+    connections = data;
+
+    notifyListeners();
+  }
+
+  // =========================
+  // SET_SESSION
+  // =========================
+
+  void setSession(Connectionsesion? connectionsesion) {
+
+    session = connectionsesion;
+
+    notifyListeners();
+  }
+
+  // =========================
+  // SET_CONNECTED_SESSION
+  // =========================
+
+  void setConnectedSession(Connectionsesion? s) {
+    session = s;
+
+    status = s == null
+        ? ConnectionStatus.disconnected
+        : ConnectionStatus.connected;
+
+    _viewMode = ConnectionViewMode.normal;
+
+    notifyListeners();
+  }
+
+   // =========================
+  // SET_VIEW_MODE
+  // =========================
+  void setViewMode(ConnectionViewMode mode) {
+    _viewMode = mode;
+    notifyListeners();
+  }
+  // =========================
+  // SET_STATUS
+  // =========================
+
+  void setStatus(ConnectionStatus s,) {
+
+    status = s;
     notifyListeners();
   }
 
 
 
-  void setTempConnection(Conection c) {
-    _tempConnection = c;
+
+  // =========================
+  // SELECT
+  // =========================
+
+  void select(Conection? c) {
+
+    selected= c;
+    notifyListeners();
   }
 
-  void clearTempConnection() {
-    _tempConnection = null;
+  // =========================
+  // ADD
+  // =========================
+  void addConnection(Conection connection) {
+    connections.add(connection);
+    notifyListeners();
   }
 
-  Conection? get connectionToUse {
-    return _tempConnection ?? selected;
-  }
-  Future<String> connect (BuildContext context) async {
-    final con = connectionToUse;
-
-    if (con == null)
-      return S.of(context).not_connected_to_any_database;
-
-
-
-    try {
-      if(!kIsWeb)
-      {
-         await ServerService.startServer();
-
-        final settings = ConnectionSettings(
-          host: con.host,
-          port: int.parse(con.port),
-          user: con.user,
-          password: con.password,
-          db: con.database,
-        );
-
-        executeQuery = await MySqlConnection.connect(settings);
-      }
-      else
-      {
-
-          final resConnection = await DbApi.actionApi('test-connection', con);
-          final dbResponse = ApiResponse.fromJson(resConnection);
-
-          if(dbResponse.message!="Conectado correctamente")
-          {
-            throw Exception(dbResponse.message);
-          }
-      }
-
-
-      _connected = true;
-      BaseDateSelected = con.database;
-      selectedDb = con.database;
-
-      notifyListeners();
-      return BaseDateSelected;
-    } catch (e) {
-
-      _connected = false;
-      executeQuery = null;
-
-      final errorMsg = e.toString();
-      String type = await controlsErrors(errorMsg);
-
-      return type;
-    }
-
-  }
-
+  // =========================
+  // SELECT EDIT MODE
+  // =========================
   bool toggleEditMode() {
+    if (!isConnected) return false;
 
-    if (status != ConnectionStatus.connected || selected == null) {
-      return false;
-    }
-
-    if (viewMode == ConnectionViewMode.normal) {
-      // Guardamos copia para undo
-      _previous = Conection(
-        id: selected!.id,
-        database: selected!.database,
-        host: selected!.host,
-        port: selected!.port,
-        user: selected!.user,
-        password: selected!.password,
-      );
-
-      viewMode = ConnectionViewMode.editing;
-    } else {
-      viewMode = ConnectionViewMode.normal;
-    }
+    _viewMode = _viewMode == ConnectionViewMode.editing
+        ? ConnectionViewMode.normal
+        : ConnectionViewMode.editing;
 
     notifyListeners();
     return true;
   }
 
-  void undoEdit() {
-    if (_previous == null) return;
+  // =========================
+  // BUTTON EDIT
+  // =========================
 
-    selected = Conection(
-      id: _previous!.id,
-      database: _previous!.database,
-      host: _previous!.host,
-      port: _previous!.port,
-      user: _previous!.user,
-      password: _previous!.password,
-    );
-
-    _previous = null;
-    viewMode = ConnectionViewMode.normal;
-
-    notifyListeners();
+  String editButtonLabel(BuildContext context) {
+    return viewMode == ConnectionViewMode.editing
+        ? S.of(context).back
+        : S.of(context).edit;
   }
 
-  void setconnections(List<Conection> data) { // NEW
-    _connections
-      ..clear()
-      ..addAll(List.from(data)); //
+  // ===========================================
+  // BUTTON NEW/CONNECT/DISCONNECT/ACCEPT
+  // ===========================================
 
-    notifyListeners();
+  String action1Label(BuildContext context) {
+
+    if(viewMode == ConnectionViewMode.editing)
+              return S.of(context).acept;
+
+    if(selected == null){
+      return S.of(context).newFemale;
+    }
+
+    if (session == null) {
+      return S.of(context).connect;
+    }
+
+    return S.of(context).disconnect;
   }
 
-  void addConection(Conection c) { // NEW
-    _connections.add(c);
-    notifyListeners();
-  }
+  // ===========================================
+  // BUTTON CANCEL/DELETE
+  // ===========================================
 
-  void delete(String database) { // NEW
-    _connections.removeWhere((c) => c.database == database);
-    notifyListeners();
-  }
+  String action2Label(BuildContext context) {
 
-
-  void clear() { // NEW
-    _connections.clear();
-    notifyListeners();
-  }
-
-
-  Future<void>importconnections(BuildContext context, {
-    required File file,
-    Uint8List? bytes,
-    String? content,
-    String? assetPath,
-  }) async {
-    try {
-      final imported = await csvImportconnections(
-        file: fMails,
-        bytes: bytes,
-        content: content,
-        assetPath: assetPath,
-      );
-
-      _connections.addAll(imported); // ✔ estado del provider
-    } catch (e) {
-      final s = S.of(context);
-
-      final msg = e.toString().toLowerCase();
-
-      if (msg.contains("not found") ||
-          msg.contains("archivo") ||
-          msg.contains("asset")) {
-        errorFiles.add("${s.file_not_found} ${s.routes}");
-      } else {
-        errorFiles.add("${s.file_format_error} ${s.routes}");
-      }
-    }
-      notifyListeners();
-  }
-
-    Future<bool>disconnet() async {
-
-      if(!kIsWeb)
-      {
-           var resConex = await executeQuery?.close();
-
-           if(resConex == null);
-           {
-             _connected = false;
-           }
-      }
-      else
-      {
-        try {
-              Conection? con =selected;
-
-              final resConnection = await DbApi.actionApi('disconnect', con);
-              final dbResponse = ApiResponse.fromJson(resConnection);
-
-                 if(dbResponse.message=="Desconectado correctamente")
-                 {
-                   _connected = false;
-                 }
-
-        } catch (e) {
-          print('Error al desconectar: $e');
-          _connected = true;
-        }
-      }
-
-      selectedDb='';
-
-      notifyListeners();
-     return _connected;
-    }
-
-    void clearSelection() {
-
-      selected = null;
-      executeQuery = null;
-
-      notifyListeners();
-    }
-
-    // =================
-    //    CRUD
-   // ==================
-
-  Map<String, Conection> get _connectionsMap => {for (var c in _connections) c.database: c};
-
-  Future<String> createBD(Conection cNew) async {
-    if (_connectionsMap.containsKey(cNew.database)) {
-      return "EXISTS";
-    }
-
-    final resDb = ApiResponse.fromJson(
-      await DbApi.actionApi('createBD', cNew),
-    );
-
-    if (resDb.ok) {
-      return "ERROR: BD";
-    }
-
-    final resTables = ApiResponse.fromJson(
-      await DbApi.actionApi('createTables', cNew),
-    );
-
-    if (resTables.ok) {
-      return "ERROR: TABLES";
-    }
-
-    _connections.add(cNew);
-    _updateList(_connections, newSelected: cNew);
-
-    return "OK";
-  }
-
-  Future<bool> updateBD(Conection current, Conection cNew) async {
-
-    bool error = false;
-
-    if (!_connectionsMap.containsKey(current.database)) {
-       error = true;
-    }
-    else
-    {
-      if(kIsWeb)
-      {
-        final ResUpdate = await DbApi.actionApi( 'update',current, cNew)
-            .then((data) => ApiResponse.fromJson(data));
-
-        if(!ResUpdate.ok)
-        {
-          error = false;
-        }
-      }
-      else
-      {
-        await _withConnection(cNew, (conn) async {
-          final err = await actionsBD.editDB(current.database, cNew.database);
-          error = err;
-        });
-      }
-      final index = _connections.indexWhere((c) => c.database == current.database);
-      _connections[index] = cNew;
-      _updateList(_connections, newSelected: cNew);
-
-    }
-    return error;
+    return viewMode == ConnectionViewMode.editing
+        ? S.of(context).cancel
+        : S.of(context).delete;
   }
 
 
-  Future<bool> deleteBD(Conection toDelete,  {bool deleteSQL = false}) async {
+}
 
-    bool error = false;
-
-    if (!_connectionsMap.containsKey(toDelete.database)) {
-      error = true;
-    }
-    else
-    {
-      if(kIsWeb)
-      {
-        final ResDelete = await DbApi.actionApi( 'delete', toDelete)
-            .then((data) => ApiResponse.fromJson(data));
-         print(ResDelete.ok);//false
-        if(!ResDelete.ok)
-        {
-          error = true;
-        }
-      }
-      else
-      {
-        await _withConnection(toDelete, (conn) async {
-          final err = await actionsBD.deleteDB(toDelete.database);
-          if (err==true) return err;
-        });
-      }
-
-
-      _connections.removeWhere((c) => c.database == toDelete.database);
-      _updateList(_connections, newSelected: null);
-      return false;
-    }
-    return error;
-  }
-
-
-
-  Future<T>_withConnection<T>(Conection c, Future<T> Function(MySqlConnection conn) action) async {
-
-    if(kIsWeb) {
-      return await action(null as MySqlConnection);
-    }
-    MySqlConnection? conn;
-
-    try {
-      conn = await connectSQL(c);
-      return await action(conn);
-    } catch (e) {
-      rethrow;
-    } finally {
-      try {
-        await conn?.close();
-      } catch (exeption) {
-
-      }
-    }
-  }
-  Future<MySqlConnection> connectSQL(Conection cNew) async {
-
-    final settings = ConnectionSettings(
-      host: cNew.host,
-      port: int.parse(cNew.port),
-      user: cNew.user,
-      password: cNew.password,
-    );
-
-    return await MySqlConnection.connect(settings);
-  }
-
-  void _updateList(List<Conection> newList, {Conection? newSelected}) async {
-
-    _connections
-      ..clear()
-      ..addAll(newList);
-
-    selected = newSelected;
-    notifyListeners();
-
-    bool errorExp = await csvExportatorconnections(_connections);
-
-    if (!kIsWeb && errorExp) {
-      String action = LocalizationHelper.no_file(
-        context,
-        S.of(context).connections,
-      );
-      error(context, action);
-      return;
-    }
-  }
-
-  Future<String> controlsErrors(String errorMsg) async {
-
-    String type = S.of(context).sql_error;
-
-    if (errorMsg.contains("Unknown database")) {
-      type = "${S.of(context).there_is_no_database_with_that_name} ${selected?.database}";
-    }
-    else if (errorMsg.contains(" Host desconocido") | errorMsg.contains("Unknown host")) {
-      type = S.of(context).unknown_host;
-    }
-    else if (errorMsg.contains("is not allowed to connect to this MySQL server")) {
-      type = S.of(context).could_not_connect_with_the_server;
-    }
-    else if (errorMsg.contains("SocketException") | errorMsg.contains('Connection refused (check host or port)')) {
-      type = S.of(context).the_port_is_not_correct;
-    }
-    else if (errorMsg.contains("Access denied for user")) {
-      type = S.of(context).the_user_or_password_are_incorrect;
-    }
-    return type;
-  }
-
-  Future<void> load(String path) async {
-    try {
-      final data = await csvImportconnections(
-        assetPath: path,
-      );
-
-      _connections = data;
-      notifyListeners();
-
-    } catch (e) {
-      print("Error cargando conexiones: $e");
-      _connections = [];
-      notifyListeners();
-    }
-
-  }
-
-  }
 
 
 
