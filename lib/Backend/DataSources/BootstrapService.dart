@@ -67,6 +67,9 @@ class BootstrapService {
 
         case DataSourceMode.sql:
               return FileDataSource();
+
+        case DataSourceMode.api:
+          return FileDataSource();
       }
   }
 }
