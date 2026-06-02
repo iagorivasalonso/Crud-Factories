@@ -1,11 +1,10 @@
 import 'package:crud_factories/Backend/DataSources/BootstrapService.dart';
 import 'package:crud_factories/Backend/Feature/Connection/Controller/ConnectionController.dart' show Connectioncontroller;
-import 'package:crud_factories/Backend/Feature/Connection/Datasource/connection_file_data_source.dart' show CsvConnectionDataSource;
-import 'package:crud_factories/Backend/Feature/Connection/Service/sql_connection_service.dart' show SqlConnectionService;
-import 'package:crud_factories/Backend/Feature/Connection/Sesion/sql_connection_sesion_service.dart' show SqlConnectionSessionService;
+import 'package:crud_factories/Backend/Feature/Connection/Datasource/CsvConnectionDataSource.dart' show CsvConnectionDataSource;
+import 'package:crud_factories/Backend/Feature/Connection/Datasource/IConnection_repository.dart';
 import 'package:crud_factories/Backend/Feature/Router/CsvRouterDataSource.dart' show CsvRouterDataSource;
-import 'package:crud_factories/Backend/Feature/Sector/IsectorDataSource.dart';
-import 'package:crud_factories/Backend/Feature/Sector/sqlSectorDataSource.dart';
+import 'package:crud_factories/Backend/Feature/Sector/sector_service_factory.dart' show SectorRepositoryFactory;
+import 'package:crud_factories/Backend/Global/controllers/Conection.dart';
 import 'package:crud_factories/Backend/Providers/ConectionProvider.dart';
 import 'package:crud_factories/Backend/Providers/EmpleoyeeProvider.dart';
 import 'package:crud_factories/Backend/Providers/FactoryProvider.dart';
@@ -15,11 +14,7 @@ import 'package:crud_factories/Backend/Providers/MailProvider.dart' show MailPro
 
 
 import 'package:crud_factories/Backend/Providers/SectorProvider.dart';
-import 'package:crud_factories/Backend/Repositories/connectionRepository.dart' show ConnectionRepository;
 import 'package:crud_factories/Backend/Repositories/routesRepository.dart';
-import 'package:crud_factories/Backend/Repositories/sectorRepository.dart';
-import 'package:crud_factories/Backend/Feature/Sector/CsvSectorDataSource.dart' show CsvSectorDataSource;
-import 'package:crud_factories/Frontend/conection.dart';
 import 'package:crud_factories/Objects/AppRoutesState.dart';
 import 'package:crud_factories/Objects/RouteCSV.dart' show RouteCSV;
 import 'package:crud_factories/Objects/buldRouteFiles.dart';
@@ -29,23 +24,33 @@ import 'package:provider/provider.dart';
 
 import '../Feature/Connection/Service/IConnectionService.dart' show IConnectionService;
 import '../Feature/Connection/Sesion/IConnection_sesion_service.dart';
+
 import 'RoutesProvider.dart';
 
 enum DataSourceMode {
   csv,
   sql,
+  api
 }
 
 
 class AppProvider extends ChangeNotifier {
 
+  bool isApi;
+
+  AppProvider({
+     required this.isApi
+  });
+
   bool loaded = false;
   bool _loading = false;
   bool initialized = false;
-
+  RouteFiles? files;
   bool get isLoading => _loading;
 
   DataSourceMode mode = DataSourceMode.csv;
+
+
 
   Future<void> switchSource (
       BuildContext context,
@@ -90,7 +95,7 @@ class AppProvider extends ChangeNotifier {
       final bundle = await source.loadRoutes();
 
       await _applyRoutes(context, bundle.routes);
-
+      files = RouteFilesBuilder.buildRouteFiles(bundle.routes);
 
     } catch (e) {
       print("ERROR loadRoutes: $e");
@@ -121,16 +126,69 @@ class AppProvider extends ChangeNotifier {
     }
   }
 
-  Future<void> _loadDependencies(BuildContext context, RouteFiles files) async {
+  Future<void> _loadDependencies(BuildContext context, RouteFiles files, DataSourceMode newMode) async {
 
 
-    final routesRepo = routerRepository(
-      CsvRouterDataSource(files.routes),
+    print("modo$isApi");
+    // =========================
+    // 1. ROUTES (SIEMPRE PRIMERO)
+    // =========================
+
+    final routesProvider = context.read<RoutesProvider>();
+    routesProvider.setRepository(
+      routerRepository(
+        CsvRouterDataSource(files.routes),
+      ),
+    );
+    await routesProvider.load();
+
+    // =========================
+    // 2. CONNECTION PROVIDER
+    // =========================
+
+    final repo = context.read<IConnectionDataSource>() as CsvConnectionDataSource;
+
+    repo.init(files.connections);
+
+    final controller = Connectioncontroller(
+      provider: context.read<ConnectionProvider>(),
+      service: context.read<IConnectionService>(),
+      repository: context.read<IConnectionDataSource>(),
+      sessionService: context.read<IConnectionSesionService>(),
     );
 
-    context.read<RoutesProvider>().setRepository(routesRepo);
-    await context.read<ConectionProvider>().load(files.connections);
-   // await context.read<SectorProvider>().load(files.sectors);
+
+    await controller.load(); //solo csv
+    final session = controller.provider.selected;
+
+    final provider = context.read<ConnectionProvider>();
+    final executeQuery = provider.executeQuery;
+
+    // =========================
+    // 3. SECTOR PROVIDER
+    // =========================
+
+    final sectorProvider = context.read<SectorProvider>();
+
+     if(executeQuery != null)
+     {
+       final config = provider.config;
+
+       await sectorProvider.setRepositoryAndReload(
+         SectorRepositoryFactory.create(
+             mode,
+             files,
+             db:executeQuery,
+             config:config
+         ),
+       );
+
+     }
+
+
+    await sectorProvider.load();
+
+
     await context.read<EmployeeProvider>().load(files.employees);
     await context.read<FactoryProvider>().load(files.factories);
     await context.read<LineSendProvider>().load(files.lines);
@@ -141,9 +199,8 @@ class AppProvider extends ChangeNotifier {
 
     final files = RouteFilesBuilder.buildRouteFiles(routes);
 
-    context.read<RoutesProvider>().setRoutes(routes);
 
-    await _loadDependencies(context, files);
+    await _loadDependencies(context, files,mode);
 
   }
 
