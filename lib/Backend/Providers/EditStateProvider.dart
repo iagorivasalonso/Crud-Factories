@@ -18,16 +18,4 @@ class EditStateProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<bool> confirmDiscard(BuildContext context) async {
-
-    if (!_hasChanges) return true;
-
-    final ok = await changesNoSave(context);
-
-    if (ok) {
-      clear();
-    }
-
-    return ok;
-  }
 }
