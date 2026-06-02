@@ -415,6 +415,27 @@ class _conectionState extends State<conection> {
           );
         }
     }
+    else
+    {
+         var message = await controller.disconnect();
+
+         switch(message){
+           case DisconnectResult.success:
+
+             await context.read<AppProvider>().switchSource(
+               context,
+               DataSourceMode.csv,
+             );
+
+             await confirm(context, S.of(context).properly_disconnected);
+
+           case DisconnectResult.noConnection:
+             await error(context, S.of(context).You_must_have_a_selected_connection);
+           case DisconnectResult.error:
+             await error(context, S.of(context).cannot_disconnect);
+           break;
+         }
+    }
   }
 
   void _handleAction2(BuildContext context, ConnectionProvider provider) async {
