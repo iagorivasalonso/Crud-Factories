@@ -7,6 +7,7 @@ import 'package:mysql1/mysql1.dart';
 
 class SqlConnectionService implements IConnectionService {
 
+  SqlConnectionService();
   Future<MySqlConnection> _open (Conection c)  async {
     
     final settings = ConnectionSettings(
