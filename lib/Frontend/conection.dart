@@ -1,21 +1,15 @@
-import 'package:crud_factories/Alertdialogs/confirmDelete.dart';
 import 'package:crud_factories/Alertdialogs/error.dart';
-import 'package:crud_factories/Alertdialogs/warning.dart';
 import 'package:crud_factories/Backend/Data/controlsMessagesError/errors.dart' show EditResult, CreateResult, DeleteResult;
 import 'package:crud_factories/Backend/Feature/Connection/Controller/ConnectionController.dart' show Connectioncontroller, ConnectResultModel, DisconnectResult;
 import 'package:crud_factories/Backend/Global/controllers/Conection.dart' show connectionControler;
-import 'package:crud_factories/Backend/Global/list.dart';
-import 'package:crud_factories/Backend/Global/variables.dart';
 import 'package:crud_factories/Backend/Providers/App_provaider.dart';
 import 'package:crud_factories/Backend/Providers/ConectionProvider.dart';
 import 'package:crud_factories/Backend/Providers/EditStateProvider.dart' show EditStateProvider;
-import 'package:crud_factories/Backend/SQL/importLines.dart';
+import 'package:crud_factories/Objects/ApiConfig.dart' show ApiConfig;
 import 'package:crud_factories/Objects/Conection.dart';
 import 'package:crud_factories/Widgets/headViewsAndroid.dart' show appBarAndroid;
 import 'package:crud_factories/Widgets/layoutVariant.dart';
 import 'package:crud_factories/generated/l10n.dart';
-import 'package:crud_factories/helpers/localization_helper.dart' show LocalizationHelper;
-import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:crud_factories/Functions/isNotAndroid.dart';
@@ -306,16 +300,16 @@ class _conectionState extends State<conection> {
     controlerConex.passbd.text = c.password;
 
     provider.select(c);
-/*
+
     final config = ApiConfig(
       host: controlerConex.hostbd.text,
-      port: int.parse(controlerConex.portbd.text),
+      port: controlerConex.portbd.text,
       database: controlerConex.namebd.text,
       user: controlerConex.userbd.text,
       password: controlerConex.passbd.text,
     );
 
-    provider.setConfig(config);*/
+    provider.setConfig(config);
   }
 
   void _handleAction1(BuildContext context, ConnectionProvider provider) async {
@@ -409,7 +403,9 @@ class _conectionState extends State<conection> {
 
           await context.read<AppProvider>().switchSource(
             context,
-            DataSourceMode.sql,
+            context.read<AppProvider>().isApi == true
+               ?  DataSourceMode.api
+               :  DataSourceMode.sql,
           );
 
         } else {
