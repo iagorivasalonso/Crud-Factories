@@ -3,8 +3,8 @@ import 'package:crud_factories/Objects/BaseEntity.dart';
 
 class Sector extends BaseEntity {
 
-  String id;
-  String name;
+  final String id;
+  final String name;
 
   Sector ({
     required this.id,
