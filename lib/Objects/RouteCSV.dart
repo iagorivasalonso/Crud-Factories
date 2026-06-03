@@ -2,9 +2,9 @@ import 'package:crud_factories/Objects/BaseEntity.dart';
 
 class RouteCSV extends BaseEntity {
 
-  String id;
-  String name;
-  String route;
+  final String id;
+  final String name;
+  final String route;
 
   RouteCSV ({
     required this.id,
