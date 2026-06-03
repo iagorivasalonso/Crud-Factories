@@ -5,12 +5,12 @@ import 'package:crud_factories/Objects/BaseEntity.dart';
 
 class Conection extends BaseEntity {
 
-  String id;
-  String database;
-  String host;
-  String port;
-  String user;
-  String password;
+ final String id;
+ final String database;
+ final String host;
+ final String port;
+ final String user;
+ final String password;
 
   Conection({
     required this.id,
