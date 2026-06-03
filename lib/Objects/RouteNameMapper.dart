@@ -28,6 +28,7 @@ class RouteNameMapper {
 
       case 'factories':
       case 'fabricas':
+      case 'empresas':
         return RouteFileKey.factories;
 
       case 'lines':
@@ -36,6 +37,7 @@ class RouteNameMapper {
 
       case 'mails':
       case 'correos':
+      case 'emails':
         return RouteFileKey.mails;
 
       default:
