@@ -39,7 +39,7 @@ class SqlSectorDataSource  implements ISectorDataSource{
   Future<void> insert(Sector s) async {
 
     await executeQuery.execute(
-      "INSERT INTO sectors VALUES (?, ?)",
+      'INSERT INTO sectors VALUES (?, ?)',
       [s.id, s.name],
     );
   }
@@ -48,7 +48,7 @@ class SqlSectorDataSource  implements ISectorDataSource{
   Future<void> upload(Sector s) async {
 
     await executeQuery.execute(
-       "UPDATE sectors SET sector = ? where id=?",
+       'UPDATE sectors SET sector = ? where id=?',
         [s.name,s.id]
     );
   }
