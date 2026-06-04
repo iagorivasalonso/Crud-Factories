@@ -23,7 +23,11 @@ class CsvSectorDataSource  implements ISectorDataSource{
        final sectors = await load();
 
     final updated = sectors.where((s) => s.id != id).toList();
-    await csvExportatorSectors(updated,path: this.path);
+
+    await csvExportatorSectors(
+        updated,path:
+         this.path
+    );
   }
 
 
