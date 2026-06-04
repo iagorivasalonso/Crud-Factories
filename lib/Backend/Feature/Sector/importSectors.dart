@@ -23,7 +23,7 @@ Future<List<Sector>> csvImportSectors({
   } else if (kIsWeb) {
     csvContent = await rootBundle.loadString(assetPath!);
   } else{
-    // 🟢 3. DESKTOP → usar routeFirst como archivo real
+    // 🟢 3. DESKTOP → usar route como archivo real
     final file = File(assetPath!);
 
     if (await file.exists()) {
