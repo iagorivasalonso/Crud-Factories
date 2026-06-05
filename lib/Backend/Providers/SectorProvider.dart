@@ -98,7 +98,9 @@ class SectorProvider extends ChangeNotifier {
     return r;
   }
 
-
+  // =========================
+  //  RELOAD REPO
+  // =========================
 
   Future<void> setRepositoryAndReload(SectorRepository repo) async {
      repository = repo;
