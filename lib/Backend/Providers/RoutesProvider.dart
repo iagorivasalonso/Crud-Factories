@@ -47,6 +47,17 @@ class RoutesProvider extends ChangeNotifier {
 
   }
 
+  // ======================
+  //    UPDATE
+  // ======================
+
+  void updateRoute(int index, String fileName) {
+    routes[index] = routes[index].copyWith(
+      route: fileName,
+    );
+
+    notifyListeners();
+  }
 
   // =========================
   // LOAD

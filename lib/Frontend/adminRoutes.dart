@@ -197,13 +197,16 @@ class _AdminRoutesDialogState extends State<AdminRoutesDialog> {
     final bytes = result.files.first.bytes;
     final fileName = result.files.first.name;
 
-    setState(() {
-      route.route = fileName;
+    context.read<RoutesProvider>().updateRoute(
+      index,
+      fileName,
+    );
 
-      if (index == 0) {
+    if (index == 0) {
+      setState(() {
         pendingImportBytes = bytes;
+      });
       }
-    });
 
   }
 
