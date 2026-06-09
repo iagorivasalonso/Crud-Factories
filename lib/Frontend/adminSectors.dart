@@ -61,7 +61,7 @@ Future<void> adminSector(BuildContext context) async {
                      materialButton(
                        nameAction: S.of(context).close,
                        function:  () {
-                         saveChanges = false;
+
                          Navigator.of(context).pop(false);
                        },
                      ),
