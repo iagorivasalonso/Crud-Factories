@@ -360,7 +360,7 @@ class _conectionState extends State<conection> {
 
     if (provider.selected == null) {
       final newConnection = Conection(
-        id: "100",
+        id: "-",
         database: controlerConex.namebd.text,
         host: controlerConex.hostbd.text,
         port: controlerConex.portbd.text,
