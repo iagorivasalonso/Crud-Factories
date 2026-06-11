@@ -7,8 +7,10 @@ child: const MyApp(),
 );*/
 import 'package:crud_factories/Backend/Feature/Connection/Controller/ConnectionController.dart' show Connectioncontroller;
 import 'package:crud_factories/Backend/Feature/Connection/Datasource/CsvConnectionDataSource.dart' show CsvConnectionDataSource;
+import 'package:crud_factories/Backend/Feature/Connection/Service/api_connection_service.dart' show ApiConnectionService;
 import 'package:crud_factories/Backend/Feature/Connection/Service/sql_connection_service.dart' show SqlConnectionService;
 import 'package:crud_factories/Backend/Feature/Connection/Sesion/IConnection_sesion_service.dart' show IConnectionSesionService;
+import 'package:crud_factories/Backend/Feature/Connection/Sesion/api_connection_sesion_service.dart' show apiConnectionSesionService;
 import 'package:crud_factories/Backend/Feature/Connection/Sesion/sql_connection_sesion_service.dart' show SqlConnectionSessionService;
 import 'package:crud_factories/Backend/Providers/App_provaider.dart';
 import 'package:crud_factories/Backend/Providers/ConectionProvider.dart' show ConnectionProvider;
@@ -22,22 +24,27 @@ import 'package:crud_factories/Backend/Providers/SectorProvider.dart' show Secto
 import 'package:crud_factories/Backend/Repositories/routesRepository.dart' show routerRepository;
 import 'package:provider/provider.dart';
 import 'package:provider/single_child_widget.dart';
-import '../../../Providers/EmpleoyeeProvider.dart' show EmployeeProvider;
-import '../../../Providers/MailProvider.dart' show MailProvider;
-import '../../Router/CsvRouterDataSource.dart';
-import '../Datasource/IConnection_repository.dart' show IConnectionDataSource;
-import '../Service/IConnectionService.dart';
+import '../../Providers/MailProvider.dart' show MailProvider;
+import '../../Feature/Router/CsvRouterDataSource.dart';
+import '../../Feature/Connection/Datasource/IConnection_repository.dart' show IConnectionDataSource;
+import '../../Feature/Connection/Service/IConnectionService.dart';
 
 class DependencyInjection {
 
+  static const bool isAPI = true;
+
    static List<SingleChildWidget> providers = [
+
 
      // =========================
      // APP
      // =========================
 
      ChangeNotifierProvider(
-       create: (_) => AppProvider(),
+       create: (_) => AppProvider(
+           isApi: isAPI,
+       ),
+
      ),
 
      ChangeNotifierProvider(
@@ -48,6 +55,10 @@ class DependencyInjection {
        create: (_) => EditStateProvider(),
      ),
 
+                                     // =========================
+                                     // ROUTER
+                                     // =========================
+
      ChangeNotifierProvider(
        create: (_) => RoutesProvider(
          routerRepository(
@@ -55,34 +66,14 @@ class DependencyInjection {
          ),
        ),
      ),
-     // =========================
-     // CONNECTION STATE
-     // =========================
+
+                                     // =========================
+                                     // CONNECTION STATE
+                                     // =========================
 
      ChangeNotifierProvider(
        create: (_) => ConnectionProvider(),
      ),
-
-     ChangeNotifierProvider(
-         create: (_) => SectorProvider(),
-     ),
-     ChangeNotifierProvider(
-         create: (_) => FactoryProvider()
-     ),
-
-     ChangeNotifierProvider(
-         create: (_) => EmployeeProvider()
-     ),
-
-     ChangeNotifierProvider(
-         create: (_) => LineSendProvider()
-     ),
-
-
-     ChangeNotifierProvider(
-         create: (_) => MailProvider()
-     ),
-
 
 
      // =========================
@@ -100,13 +91,17 @@ class DependencyInjection {
      Provider<IConnectionService>(
 
        create: (_) =>
-           SqlConnectionService(),
+           isAPI == true
+            ? ApiConnectionService()
+            : SqlConnectionService(),
      ),
 
      Provider<IConnectionSesionService>(
 
        create: (_) =>
-           SqlConnectionSessionService(),
+       isAPI == true
+           ? apiConnectionSesionService()
+           : SqlConnectionSessionService(),
      ),
 
      // =========================
@@ -122,6 +117,34 @@ class DependencyInjection {
              sessionService: context.read<IConnectionSesionService>(),
            ),
      ),
+
+                                       // =========================
+                                       // SECTOR
+                                       // =========================
+     ChangeNotifierProvider(
+       create: (_) => SectorProvider(),
+     ),
+
+     ChangeNotifierProvider(
+         create: (_) => FactoryProvider()
+     ),
+/*
+     ChangeNotifierProvider(
+         create: (_) => EmployeeProvider()
+     ),*/
+
+     ChangeNotifierProvider(
+         create: (_) => LineSendProvider()
+     ),
+
+
+     ChangeNotifierProvider(
+         create: (_) => MailProvider()
+     ),
+
+
    ];
+
+
 }
 
