@@ -3,7 +3,7 @@ import 'package:crud_factories/Backend/Feature/Connection/Controller/ConnectionC
 import 'package:crud_factories/Backend/Feature/Connection/Datasource/CsvConnectionDataSource.dart' show CsvConnectionDataSource;
 import 'package:crud_factories/Backend/Feature/Connection/Datasource/IConnection_repository.dart';
 import 'package:crud_factories/Backend/Feature/Router/CsvRouterDataSource.dart' show CsvRouterDataSource;
-import 'package:crud_factories/Backend/Feature/Sector/sector_service_factory.dart' show SectorRepositoryFactory;
+import 'package:crud_factories/Backend/Feature/Sector/sector_service.dart' show Repository;
 import 'package:crud_factories/Backend/Global/controllers/Conection.dart';
 import 'package:crud_factories/Backend/Providers/ConectionProvider.dart';
 import 'package:crud_factories/Backend/Providers/FactoryProvider.dart';
@@ -14,6 +14,7 @@ import 'package:crud_factories/Backend/Providers/MailProvider.dart' show MailPro
 
 import 'package:crud_factories/Backend/Providers/SectorProvider.dart';
 import 'package:crud_factories/Backend/Repositories/routesRepository.dart';
+import 'package:crud_factories/Backend/Repositories/sectorRepository.dart' show SectorRepository;
 import 'package:crud_factories/Objects/AppRoutesState.dart';
 import 'package:crud_factories/Objects/RouteCSV.dart' show RouteCSV;
 import 'package:crud_factories/Objects/buldRouteFiles.dart';
@@ -127,8 +128,6 @@ class AppProvider extends ChangeNotifier {
 
   Future<void> _loadDependencies(BuildContext context, RouteFiles files, DataSourceMode newMode) async {
 
-
-    print("modo$isApi");
     // =========================
     // 1. ROUTES (SIEMPRE PRIMERO)
     // =========================
@@ -174,7 +173,7 @@ class AppProvider extends ChangeNotifier {
        final config = provider.config;
 
        await sectorProvider.setRepositoryAndReload(
-         SectorRepositoryFactory.create(
+         Repository.create(
              mode,
              files,
              db:executeQuery,
@@ -184,14 +183,15 @@ class AppProvider extends ChangeNotifier {
 
      }
 
-
     await sectorProvider.load();
+
+     /*
 
 
     await context.read<EmployeeProvider>().load(files.employees);
     await context.read<FactoryProvider>().load(files.factories);
     await context.read<LineSendProvider>().load(files.lines);
-    await context.read<MailProvider>().load(files.mails);
+    await context.read<MailProvider>().load(files.mails);*/
   }
 
   Future<void> _applyRoutes(BuildContext context, List<RouteCSV> routes) async {
