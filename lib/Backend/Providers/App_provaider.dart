@@ -3,7 +3,7 @@ import 'package:crud_factories/Backend/Feature/Connection/Controller/ConnectionC
 import 'package:crud_factories/Backend/Feature/Connection/Datasource/CsvConnectionDataSource.dart' show CsvConnectionDataSource;
 import 'package:crud_factories/Backend/Feature/Connection/Datasource/IConnection_repository.dart';
 import 'package:crud_factories/Backend/Feature/Router/CsvRouterDataSource.dart' show CsvRouterDataSource;
-import 'package:crud_factories/Backend/Feature/Sector/sector_service.dart' show Repository;
+import 'package:crud_factories/Backend/Feature/Sector/sector_service.dart' show Repository, RepositorySector;
 import 'package:crud_factories/Backend/Global/controllers/Conection.dart';
 import 'package:crud_factories/Backend/Providers/ConectionProvider.dart';
 import 'package:crud_factories/Backend/Providers/FactoryProvider.dart';
@@ -173,7 +173,7 @@ class AppProvider extends ChangeNotifier {
        final config = provider.config;
 
        await sectorProvider.setRepositoryAndReload(
-         Repository.create(
+         RepositorySector.create(
              mode,
              files,
              db:executeQuery,

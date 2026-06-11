@@ -14,7 +14,7 @@ import 'sqlSectorDataSource.dart';
 
 
 
-  class Repository {
+  class RepositorySector {
 
       static SectorRepository create(
             DataSourceMode mode,
