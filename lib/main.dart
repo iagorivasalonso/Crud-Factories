@@ -8,7 +8,7 @@ import 'package:window_manager/window_manager.dart';
 import 'Alertdialogs/closeApp.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:crud_factories/generated/l10n.dart';
-import 'Backend/Feature/Connection/Controller/DependecyInjection.dart';
+import 'Backend/Data/Dependencies/Dependecyinection.dart';
 import 'Backend/Global/routes.dart';
 import 'Platform/appAndroid.dart';
 
