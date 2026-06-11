@@ -1,5 +1,4 @@
 import 'package:crud_factories/Backend/Feature/Connection/ExecuteQuery/IexecuteQuery.dart' show Iexecutequery;
-import 'package:crud_factories/Backend/Feature/Connection/ExecuteQuery/sqlExecuteQuery.dart' show sqlExecuteQuery;
 import 'package:crud_factories/Backend/Feature/Sector/CsvSectorDataSource.dart' show CsvSectorDataSource;
 import 'package:crud_factories/Backend/Feature/Sector/IsectorDataSource.dart' show ISectorDataSource;
 import 'package:crud_factories/Backend/Feature/Sector/apiSectorDataSource%20.dart';
@@ -7,7 +6,6 @@ import 'package:crud_factories/Backend/Feature/Sector/apiSectorDataSource%20.dar
 import 'package:crud_factories/Backend/Providers/App_provaider.dart' show DataSourceMode;
 import 'package:crud_factories/Backend/Repositories/sectorRepository.dart' show SectorRepository;
 import 'package:crud_factories/Objects/AppRoutesState.dart' show RouteFiles;
-import 'package:flutter/foundation.dart';
 
 import '../../../Objects/ApiConfig.dart';
 import 'sqlSectorDataSource.dart';
