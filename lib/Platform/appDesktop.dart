@@ -77,10 +77,10 @@ class _appDesktopState extends State<appDesktop> {
     double mHeight = MediaQuery.of(context).size.height;
     
     final providerRoutes = context.watch<RoutesProvider>().routes;
-    final providerconnections = context.watch<ConectionProvider>().connections;
+    final providerconnections = context.watch<ConnectionProvider>().connections;
     final providerSectors = context.watch<SectorProvider>().sectors;
     final providerFactories = context.watch<FactoryProvider>().factories;
-    final providerEmployees = context.watch<EmployeeProvider>().employees;
+    final providerEmployees = context.watch<EmployeeProvider>().empleoyees;
     final providerLines = context.watch<LineSendProvider>().LineSends;
     final providerMails = context.watch<MailProvider>().mails;
 
