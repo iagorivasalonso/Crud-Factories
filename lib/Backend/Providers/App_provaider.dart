@@ -167,20 +167,16 @@ class AppProvider extends ChangeNotifier {
 
     final sectorProvider = context.read<SectorProvider>();
 
-     if(executeQuery != null)
-     {
-       final config = provider.config;
-
-       await sectorProvider.setRepositoryAndReload(
-         RepositorySector.create(
-             mode,
-             files,
-             db:executeQuery,
-             config:config
-         ),
-       );
-
-     }
+    await sectorProvider.setRepositoryAndReload(
+      RepositorySector.create(
+        mode,
+        files,
+        db: executeQuery,
+        config:  mode == DataSourceMode.api
+                   ? provider.config
+                   : null,
+       ),
+    );
 
     await sectorProvider.load();
 

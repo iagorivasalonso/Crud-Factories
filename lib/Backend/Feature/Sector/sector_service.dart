@@ -17,7 +17,7 @@ import 'sqlSectorDataSource.dart';
       static SectorRepository create(
             DataSourceMode mode,
             RouteFiles files,
-            {Iexecutequery? db, required ApiConfig config,}
+            {Iexecutequery? db, ApiConfig? config,}
       ) {
         late ISectorDataSource datasource;
 
@@ -38,7 +38,9 @@ import 'sqlSectorDataSource.dart';
 
            break;
           case DataSourceMode.api:
-
+            if (config == null) {
+              throw Exception("ApiConfig not initialized");
+            }
             datasource = ApiSectorDataSource(
                 config:config,
             );
