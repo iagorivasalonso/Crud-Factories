@@ -157,7 +157,6 @@ class AppProvider extends ChangeNotifier {
 
 
     await controller.load(); //solo csv
-    final session = controller.provider.selected;
 
     final provider = context.read<ConnectionProvider>();
     final executeQuery = provider.executeQuery;
@@ -184,6 +183,8 @@ class AppProvider extends ChangeNotifier {
      }
 
     await sectorProvider.load();
+
+
 
      /*
 
