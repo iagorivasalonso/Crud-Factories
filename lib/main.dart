@@ -36,15 +36,16 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
 
     if (kIsWeb) {
-      return FluentApp(
+      return MaterialApp(
         navigatorKey: navigatorKey,
         debugShowCheckedModeBanner: false,
         localizationsDelegates: const [
           S.delegate,
-          ...GlobalMaterialLocalizations.delegates,
+          GlobalMaterialLocalizations.delegate,
           GlobalWidgetsLocalizations.delegate,
           GlobalCupertinoLocalizations.delegate,
         ],
+
         supportedLocales: S.delegate.supportedLocales,
         home: Builder(
             builder: (context) {

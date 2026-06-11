@@ -7,7 +7,6 @@ import 'package:crud_factories/Backend/AppContent.dart' show AppContent;
 import 'package:crud_factories/Backend/CSV/Export_general/export_service.dart' show ExportService;
 import 'package:crud_factories/Backend/Global/list.dart';
 import 'package:crud_factories/Backend/Providers/ConectionProvider.dart';
-import 'package:crud_factories/Backend/Providers/EmpleoyeeProvider.dart';
 import 'package:crud_factories/Backend/Providers/FactoryProvider.dart';
 import 'package:crud_factories/Backend/Providers/LineSendProvider.dart';
 import 'package:crud_factories/Backend/Providers/MailProvider.dart';
@@ -16,6 +15,7 @@ import 'package:crud_factories/Backend/Providers/SectorProvider.dart';
 import 'package:crud_factories/Backend/Global/variables.dart';
 import 'package:crud_factories/Frontend/adminRoutes.dart';
 import 'package:crud_factories/Frontend/adminSectors.dart';
+import 'package:crud_factories/Functions/changesNoSave.dart';
 import 'package:crud_factories/generated/l10n.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -23,6 +23,7 @@ import 'package:menu_bar/menu_bar.dart';
 import 'package:provider/provider.dart';
 import '../Backend/Providers/App_provaider.dart';
 import '../Backend/Providers/EditStateProvider.dart';
+import '../Backend/Providers/EmployeeProvider.dart';
 import '../Backend/Providers/RoutesProvider.dart';
 
 
@@ -61,12 +62,13 @@ class _appDesktopState extends State<appDesktop> {
   }
   @override
   void dispose() {
+    /*
     controlerConex.namebd.dispose();
     controlerConex.hostbd.dispose();
     controlerConex.portbd.dispose();
     controlerConex.userbd.dispose();
     controlerConex.passbd.dispose();
-    super.dispose();
+    super.dispose();*/
   }
   @override
   Widget build(BuildContext context) {
@@ -85,7 +87,6 @@ class _appDesktopState extends State<appDesktop> {
     double wItem = 80;
     double wItemMax = 120;
     Color colorBar = Colors.white;
-
 
     List<BarButton> _menuBarButtons() {
       return [
@@ -454,26 +455,17 @@ class _appDesktopState extends State<appDesktop> {
 
     return mHeight>50.0
 
-    ? MaterialApp(
-      theme: ThemeData(
-          menuTheme: const MenuThemeData(
-            style: MenuStyle(
-              padding: MaterialStatePropertyAll(EdgeInsets.symmetric(vertical: 16)),
-            ),
-          )
+    ? MenuBarWidget(
+      barButtons: _menuBarButtons(),
+      barStyle: const MenuStyle(
+        backgroundColor: MaterialStatePropertyAll(Color(0xca0347f3)),
       ),
-      home: MenuBarWidget(
-        barButtons: _menuBarButtons(),
-        barStyle: const MenuStyle(
-          backgroundColor: MaterialStatePropertyAll(Color(0xca0347f3)),
-        ),
-        child:Container(
-          width: mWidth,
-          height:  mHeight,
-            color: Colors.white,
-          child:  AppContent(),
-        ),
-      )
+      child:Container(
+        width: mWidth,
+        height:  mHeight,
+        color: Colors.white,
+        child:  AppContent(),
+      ),
     )
         :Container(
         width: mWidth,
@@ -485,9 +477,19 @@ class _appDesktopState extends State<appDesktop> {
   }
 
   Future<bool> canNavigate(BuildContext context) async {
-    return await context
-        .read<EditStateProvider>()
-        .confirmDiscard(context);
-  }
+
+      final provider = context.read<EditStateProvider>();
+
+      if (!provider.hasChanges) return true;
+
+      final ok = await changesNoSave(context);
+
+      if (ok) {
+        provider.clear();
+      }
+
+      return ok;
+    }
+
 }
 
