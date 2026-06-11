@@ -6,7 +6,6 @@ import 'package:crud_factories/Backend/Feature/Router/CsvRouterDataSource.dart' 
 import 'package:crud_factories/Backend/Feature/Sector/sector_service_factory.dart' show SectorRepositoryFactory;
 import 'package:crud_factories/Backend/Global/controllers/Conection.dart';
 import 'package:crud_factories/Backend/Providers/ConectionProvider.dart';
-import 'package:crud_factories/Backend/Providers/EmpleoyeeProvider.dart';
 import 'package:crud_factories/Backend/Providers/FactoryProvider.dart';
 import 'package:crud_factories/Backend/Providers/LineSendProvider.dart';
 import 'package:crud_factories/Backend/Providers/MailProvider.dart' show MailProvider;
