@@ -50,9 +50,22 @@ class CsvSectorDataSource  implements ISectorDataSource{
   }
 
   @override
-  Future<void> upload(Sector sector) {
-    // TODO: implement upload
-    throw UnimplementedError();
+  Future<void> upload(Sector sector) async {
+
+    final sectors = await load();
+
+    final index = sectors.indexWhere((s) => s.id == sector.id);
+
+    if (index == -1) {
+      throw Exception('Sector con id ${sector.id} no encontrado');
+    }
+
+    sectors[index] = sector;
+
+    await csvExportatorSectors(
+    sectors,
+    path: path,
+    );
   }
   
 }
