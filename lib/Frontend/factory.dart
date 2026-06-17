@@ -1,13 +1,11 @@
 import 'package:crud_factories/Alertdialogs/confirm.dart';
 import 'package:crud_factories/Alertdialogs/error.dart';
-import 'package:crud_factories/Alertdialogs/warning.dart';
-import 'package:crud_factories/Backend/CSV/exportEmpleoyes.dart';
+import 'package:crud_factories/Backend/Data/controlsMessagesError/errors.dart' show CreateResult, EditResult;
 import 'package:crud_factories/Backend/Global/controllers/Factory.dart';
-import 'package:crud_factories/Backend/Global/list.dart';
-import 'package:crud_factories/Backend/Global/variables.dart';
-import 'package:crud_factories/Backend/CSV/exportFactories.dart';
-import 'package:crud_factories/Functions/createId.dart';
-import 'package:crud_factories/Functions/validatorCamps.dart';
+import 'package:crud_factories/Backend/Providers/EditStateProvider.dart' show EditStateProvider;
+import 'package:crud_factories/Backend/Providers/EmployeeProvider.dart';
+import 'package:crud_factories/Backend/Providers/FactoryProvider.dart';
+import 'package:crud_factories/Backend/Providers/SectorProvider.dart' show SectorProvider;
 import 'package:crud_factories/Objects/Empleoye.dart';
 import 'package:crud_factories/Objects/Factory.dart';
 import 'package:crud_factories/Objects/Sector.dart';
@@ -18,49 +16,41 @@ import 'package:crud_factories/Widgets/textfield.dart';
 import 'package:crud_factories/Widgets/headViewsAndroid.dart';
 import 'package:crud_factories/Widgets/textfieldCalendar.dart';
 import 'package:crud_factories/generated/l10n.dart';
-import 'package:crud_factories/helpers/localization_helper.dart';
-import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 import 'package:crud_factories/Alertdialogs/createSector.dart';
 import 'package:crud_factories/Functions/isNotAndroid.dart';
 import 'package:crud_factories/Widgets/dropDownButton.dart';
 import 'package:crud_factories/Widgets/listElements.dart';
 import 'package:crud_factories/Widgets/materialButton.dart';
+import 'package:provider/provider.dart';
 
 
 
 
-class newFactory extends StatefulWidget {
+class FactoryFromPage extends StatefulWidget {
 
-  int select;
-  Factory? factorySelect;
-
-
-  newFactory(this.select,[this.factorySelect]);
+  FactoryFromPage();
 
   @override
-  State<newFactory> createState() => _newFactoryState();
+  State<FactoryFromPage> createState() => _FactoryFromPageState();
 }
 
-class _newFactoryState extends State<newFactory> {
+class _FactoryFromPageState extends State<FactoryFromPage> {
 
   final ScrollController horizontalScroll = ScrollController();
   final ScrollController verticalScroll = ScrollController();
 
-  List<Empleoye> contacsCurrent = [];
-  List<Empleoye> contacsPreEdit = [];
+
   List<String> idsDelete = [];
-  List<String> sectorsString = [];
 
-  DateTime seletedDate =DateTime.now();
+  List<Empleoyee> newEmployeesTemp = [];
 
-  int contactSelect = 0;
-  String id ="";
-  String date="";
   Sector? selectedSector;
-  String tmp = " ";
-  String allAddress = "";
+
   late final factoryController controllers;
+  Empleoyee? selectedEmployee;
+
+  List<String> pendingDelete = [];
 
   @override
   void initState() {
@@ -68,40 +58,32 @@ class _newFactoryState extends State<newFactory> {
     controllers = factoryController(
       name: TextEditingController(),
       highDate: TextEditingController(),
-      sector: TextEditingController(),
       telephone1: TextEditingController(),
       telephone2: TextEditingController(),
       mail: TextEditingController(),
       web: TextEditingController(),
       address: TextEditingController(),
       city: TextEditingController(),
-      postalCode: TextEditingController(),
+      postcode: TextEditingController(),
       province: TextEditingController(),
       contacts: [TextEditingController()],
       employee: TextEditingController(),
       employeeNew: TextEditingController(),
     );
 
-    if (widget.factorySelect != null && widget.select != -1) {
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        campCharge();
-        setState(() {});
-      });
-    }
   }
 
   @override
   void dispose() {
     controllers.name.dispose();
     controllers.highDate.dispose();
-    controllers.sector.dispose();
     controllers.telephone1.dispose();
     controllers.telephone2.dispose();
     controllers.mail.dispose();
     controllers.web.dispose();
     controllers.address.dispose();
     controllers.city.dispose();
-    controllers.postalCode.dispose();
+    controllers.postcode.dispose();
     controllers.province.dispose();
     controllers.employee.dispose();
     controllers.employeeNew.dispose();
@@ -111,58 +93,75 @@ class _newFactoryState extends State<newFactory> {
     super.dispose();
   }
 
-  @override
-  void didUpdateWidget(covariant newFactory oldWidget) {
-    super.didUpdateWidget(oldWidget);
+  String? _lastFactoryId;
 
-    if (widget.factorySelect?.id != oldWidget.factorySelect?.id) {
-      campCharge();
-      setState(() {});
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+
+    final factory = context.read<FactoryProvider>().selected;
+
+    if (factory == null) return;
+
+    if (_lastFactoryId != factory.id) {
+      _lastFactoryId = factory.id;
+
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (!mounted) return;
+        setState(() {
+          loadSelectedFactory(factory);
+        });
+      });
     }
   }
+
   @override
-  Widget build(BuildContext context0) {
+  Widget build(BuildContext context) {
 
-    BuildContext context = isNotAndroid() ? context0 :  context1;
-    int select = widget.select;
-    sectorsString.clear();
+    final factorySelected = context.watch<FactoryProvider>().selected;
 
 
-
-    String action = S.of(context).update;
-    String action2 = "";
-    String title = "";
-
-
-    if (select == -1) {
-      title = S.of(context).newFemale;
-      action = S.of(context).create;
-      action2 = S.of(context).reboot;
-
-      if (allFactories.isNotEmpty) {
-        String idLast = allFactories[allFactories
-            .length - 1].id;
-        id = createId(idLast);
-      }
-      else {
-        id = "1";
-      }
-
-    }
-    else {
-      title = S.of(context).edit;
-
-      action = S.of(context).update;
-      action2 = S.of(context).undo;
-   }
-
+    final isEditing = factorySelected != null;
     final Sector newSectorOption = Sector(
-        id: "new",
-        name: S.of(context).newMale,
+      id: "-",
+      name: S.of(context).newMale,
     );
+
+
+
+    final title = isEditing
+        ? S.of(context).edit
+        : S.of(context).newFemale;
+
+    final action = isEditing
+        ? S.of(context).update
+        : S.of(context).create;
+
+    final action2 = isEditing
+        ? S.of(context).undo
+        : S.of(context).reboot;
+
 
     String name = S.of(context).company;
     String title1 = "$title $name";
+
+
+
+    final factoryId = isEditing
+        ? factorySelected!.id
+        : createNextFactoryId(context.read<FactoryProvider>().factories);
+
+    final employeesProvider = context
+        .watch<EmployeeProvider>()
+        .empleoyees
+        .where((e) => e.idFactory == factoryId)
+        .where((e) => !idsDelete.contains(e.id))
+        .toList();
+
+    final employees = [
+      ...employeesProvider,
+      ...newEmployeesTemp,
+    ];
 
     return !isNotAndroid()
        ? Scaffold(
@@ -200,7 +199,8 @@ class _newFactoryState extends State<newFactory> {
                           defaultTextfield(
                             nameCamp: S.of(context).name,
                             controllerCamp: controllers.name,
-                            campOld: select == -1 ? '' : widget.factorySelect!.name,
+                            campOld: factorySelected?.name ?? '',
+                            context: context,
                           ),
 
                           Padding(
@@ -215,7 +215,7 @@ class _newFactoryState extends State<newFactory> {
                                     child: textfieldCalendar(
                                       context: context,
                                       nameCamp: S.of(context).discharge_date,
-                                      campOld: select == -1 ? '' : widget.factorySelect!.highDate,
+                                      campOld: factorySelected?.highDate ?? '',
                                       controllerCamp: controllers.highDate,
                                     ),
                                   ),
@@ -224,16 +224,16 @@ class _newFactoryState extends State<newFactory> {
                                 Flexible(
                                   child: GenericDropdown<Sector>(
                                     items: [
-                                      if(select==-1)
+                                      if (!isEditing)
                                       newSectorOption,
-                                      ...sectors
+                                      ...context.watch<SectorProvider>().sectors
                                     ],
                                     camp:S.of(context).sector,
                                     selectedItem: selectedSector,
                                     hint:  S.of(context).select,
                                     itemLabel: (sector) => sector.name,
                                     onChanged: (sectorChoose) =>
-                                        _onSectorChanged(context, sectorChoose, select),
+                                        _onSectorChanged(context, sectorChoose,isEditing),
 
                                   ),
                                 ),
@@ -252,7 +252,10 @@ class _newFactoryState extends State<newFactory> {
                                   child: defaultTextfield(
                                     nameCamp: S.of(context).phone_1,
                                     controllerCamp: controllers.telephone1,
-                                    campOld: select == -1 ? '' : widget.factorySelect!.thelephones[0],
+                                    campOld: factorySelected?.thelephones.isNotEmpty == true
+                                        ? factorySelected!.thelephones[0]
+                                        : '',
+                                    context: context,
                                   ),
                                 ),
 
@@ -260,7 +263,10 @@ class _newFactoryState extends State<newFactory> {
                                   child: defaultTextfield(
                                     nameCamp: S.of(context).phone_2,
                                     controllerCamp: controllers.telephone2,
-                                    campOld: select == -1 ? '' : widget.factorySelect!.thelephones[1],
+                                    campOld: (factorySelected?.thelephones.length ?? 0) > 1
+                                        ? factorySelected?.thelephones[1] ?? ''
+                                        : '',
+                                    context: context,
                                   ),
                                 ),
                               ]
@@ -273,7 +279,8 @@ class _newFactoryState extends State<newFactory> {
                                   child: defaultTextfield(
                                     nameCamp: S.of(context).mail,
                                     controllerCamp: controllers.mail,
-                                    campOld: select == -1 ? '' : widget.factorySelect!.mail,
+                                    campOld: factorySelected?.mail ?? '',
+                                    context: context,
                                   ),
                                 ),
 
@@ -281,7 +288,8 @@ class _newFactoryState extends State<newFactory> {
                                   child: defaultTextfield(
                                     nameCamp: S.of(context).web_page,
                                     controllerCamp: controllers.web,
-                                    campOld: select == -1 ? '' : widget.factorySelect!.web,
+                                    campOld: factorySelected?.web ?? '',
+                                    context: context,
                                   ),
                                 ),
                               ]
@@ -290,7 +298,8 @@ class _newFactoryState extends State<newFactory> {
                           defaultTextfield(
                             nameCamp: S.of(context).address,
                             controllerCamp: controllers.address,
-                            campOld: select == -1 ? '' : allAddress,
+                            campOld: factorySelected?.address.fullAddress ?? '',
+                            context: context,
                           ),
                           layoutVariant(
                               crossAxisAlignment: CrossAxisAlignment.start,
@@ -299,15 +308,17 @@ class _newFactoryState extends State<newFactory> {
                                   child: defaultTextfield(
                                     nameCamp: S.of(context).city,
                                     controllerCamp: controllers.city,
-                                    campOld: select == -1 ? '' : widget.factorySelect!.address['city']
+                                    campOld: factorySelected?.address.city ?? '',
+                                    context: context,
                                   ),
                                 ),
 
                                 Flexible(
                                   child: defaultTextfield(
                                     nameCamp: S.of(context).postal_code,
-                                    controllerCamp: controllers.postalCode,
-                                    campOld: select == -1 ? '' : widget.factorySelect!.address['city'],
+                                    controllerCamp: controllers.postcode,
+                                    campOld : factorySelected?.address.postcode ?? '',
+                                    context: context,
                                   ),
                                 ),
                               ]
@@ -320,7 +331,8 @@ class _newFactoryState extends State<newFactory> {
                               child: defaultTextfield(
                                 nameCamp: S.of(context).province,
                                 controllerCamp: controllers.province,
-                                campOld: select == -1 ? '' : widget.factorySelect!.address['province']!,
+                                campOld: factorySelected?.address.province ?? '',
+                                context: context,
                               ),
                             ),
                           ),
@@ -329,46 +341,67 @@ class _newFactoryState extends State<newFactory> {
                           layoutVariant(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             items: [
+
+                              // TEXTFIELD
                               Flexible(
-                                child: defaultTextfield(
-                                  nameCamp: S.of(context).employees,
-                                  controllerCamp: controllers.employeeNew,
-                                  campOld: '',
+                                child: Align(
+                                  alignment: Alignment.topLeft,
+                                  child: SizedBox(
+                                    height: 120, // 👈 clave para igualar con la lista
+                                    child: defaultTextfield(
+                                      nameCamp: S.of(context).employees,
+                                      controllerCamp: controllers.employeeNew,
+                                      campOld: '',
+                                      context: context,
+                                    ),
+                                  ),
                                 ),
                               ),
 
+                              // BOTONES (uno debajo del otro)
                               Padding(
-                                padding: const EdgeInsets.only(left: 22.0),
+                                padding: const EdgeInsets.only(top: 70.0,right: 20.0), // 👈 baja los botones
                                 child: SizedBox(
                                   width: 50,
                                   child: Column(
                                     mainAxisSize: MainAxisSize.min,
-                                    crossAxisAlignment: CrossAxisAlignment.stretch,
                                     children: [
-                                      Padding(
-                                        padding: const EdgeInsets.only(top: 25.0),
-                                        child: materialButton(
-                                          icon: const Icon(Icons.add),
-                                          function: () => _addEmplepoye(controllers, contacsCurrent, id),
-                                        ),
+                                      materialButton(
+                                        icon: const Icon(Icons.add),
+                                        function: () => _addEmplepoye(context, controllers, factoryId),
                                       ),
                                       const SizedBox(height: 12),
                                       materialButton(
                                         icon: const Icon(Icons.delete),
-                                        function: () => _deleteEmplepoye(
-                                            contacsCurrent,
-                                            idsDelete,
-                                            contactSelect,
-                                            context
-                                        ),
+                                        function: () => _deleteEmplepoye(context),
                                       ),
                                     ],
                                   ),
                                 ),
                               ),
 
+                              // LISTA
                               Flexible(
-                                child: ContactList(contacsCurrent: contacsCurrent),
+                                child: Padding(
+                                  padding: const EdgeInsets.only(top: 50.0),
+                                  child: SizedBox(
+                                    height: 170,
+                                    child: Container(
+                                      width: 250,
+                                      decoration: BoxDecoration(
+                                        border: Border.all(color: Colors.grey),
+                                        borderRadius: BorderRadius.circular(4),
+                                      ),
+                                      child: ContactList(
+                                        contacsCurrent:employees,
+                                        selected: selectedEmployee,
+                                        onSelect: (e) {
+                                          setState(() => selectedEmployee = e);
+                                        },
+                                      ),
+                                    ),
+                                  ),
+                                ),
                               ),
                             ],
                           ),
@@ -379,14 +412,11 @@ class _newFactoryState extends State<newFactory> {
                                   children: [
                                     materialButton(
                                         nameAction: action,
-                                        function: () =>
-                                            _onSaveFactory(
+                                        function: () =>_onSaveFactory(
                                                 context,
-                                                select,
+                                                factorySelected,
                                                 controllers,
-                                                contacsPreEdit,
-                                                contacsCurrent,
-                                                idsDelete
+                                                factoryId
                                             )
                                     ),
 
@@ -397,9 +427,8 @@ class _newFactoryState extends State<newFactory> {
                                         function: () =>
                                             _onResetFactory(
                                                 context,
-                                                select,
                                                 controllers,
-                                                contacsCurrent
+                                                factorySelected,
                                             ),
                                       ),
                                     ),
@@ -417,240 +446,273 @@ class _newFactoryState extends State<newFactory> {
         ),
       ),
     )
-       : Scaffold(
+    : Scaffold(
            appBar: appBarAndroid(context, name: title1),
            body: Text("factori"),
         );
   }
-  void campCharge () {
 
-      id = widget.factorySelect!.id;
+  void loadSelectedFactory(Factory factory) {
+    controllers.name.text = factory.name;
+    controllers.highDate.text = factory.highDate;
 
-      controllers.name.text = widget.factorySelect!.name;
-      controllers.highDate.text = widget.factorySelect!.highDate;
-      tmp = widget.factorySelect!.sector;
-
-      selectedSector = sectors.firstWhere(
-            (s) => s.id == tmp,
-        orElse: () => sectors.first,
-      );
-
-      controllers.sector.text = selectedSector!.name;
-
-      controllers.telephone1.text = widget.factorySelect!.thelephones[0];
-      controllers.telephone2.text =  widget.factorySelect!.thelephones[1];
-      controllers.mail.text =  widget.factorySelect!.mail;
-      controllers.web.text =  widget.factorySelect!.web;
-
-      var address =  widget.factorySelect!.address['street']!;
-      var number =  widget.factorySelect!.address['number']!;
-      var apartament =  widget.factorySelect!.address['apartament']!;
+    final sectors = context.read<SectorProvider>().sectors;
 
 
-      allAddress = apartament == ""
-          ? '$address,$number'
-          : '$address,$number-$apartament';
+    controllers.telephone1.text =
+    factory.thelephones.isNotEmpty ? factory.thelephones[0] : '';
 
-      controllers.address.text = allAddress!;
-      controllers.city.text =  widget.factorySelect!.address['city']!;
-      controllers.postalCode.text =  widget.factorySelect!.address['postalCode']!;
-      controllers.province.text =  widget.factorySelect!.address['province']!;
+    controllers.telephone2.text =
+    factory.thelephones.length > 1 ? factory.thelephones[1] : '';
 
+    controllers.mail.text = factory.mail;
+    controllers.web.text = factory.web;
 
-      String idFactory = widget.factorySelect!.id;
+    controllers.address.text =
+        factory.address.fullAddress; // mejor que reconstruir manualmente
 
+    controllers.city.text = factory.address.city;
+    controllers.postcode.text = factory.address.postcode;
+    controllers.province.text = factory.address.province;
 
-      contacsPreEdit.clear();
-      contacsCurrent.clear();
-
-
-      for (var e in empleoyes) {
-        if (e.idFactory == idFactory) {
-          contacsPreEdit.add(e);
-          contacsCurrent.add(e);
-        }
-      }
-
+    selectedEmployee = null;
   }
-  Future<void> _onSectorChanged(BuildContext context,Sector? sectorChoose,int select) async {
+
+  Future<void> _onSectorChanged(BuildContext context,Sector? sectorChoose, bool isEditing) async {
+
+    final providerSectors = context.read<SectorProvider>();
 
     if (sectorChoose == null) return;
 
-    if (sectorChoose!.name == S.of(context).newMale)
+    if (sectorChoose.name == S.of(context).newMale)
     {
-        final newSector = await createSector(context, "");
+        final sector = await createSector(context);
 
-        if(newSector != null)
+        if(sector != null)
         {
-           setState(() {
-              selectedSector = newSector;
-              controllers.sector.text = newSector.name;
-           });
+          final result = await providerSectors.create(sector);
+
+          switch (result) {
+            case CreateResult.success:
+              await confirm(context,S.of(context).sector_created_successfully);
+              break;
+            case CreateResult.alreadyExists:
+              await error(context,S.of(context).sector_already_exists);
+              break;
+            case CreateResult.invalidData:
+              await error(context, S.of(context).not_valid);
+              break;
+          }
         }
     }
-    else if (saveChanges == false && select != -1)
+    else if (!context.read<EditStateProvider>().hasChanges && isEditing)
     {
-      saveChanges = true;
+      context.read<EditStateProvider>().markChanged();
     }
-    else
-    {
-      selectedSector = sectors.firstWhere((s) => s.id == sectorChoose.id);
+
+      selectedSector = providerSectors.sectors.firstWhere(
+              (s) => s.id == sectorChoose.id,
+      );
 
       setState(() {
-        controllers.sector.text = sectorChoose!.name;
+        selectedSector = sectorChoose;
       });
+
+  }
+
+  Future<void> _addEmplepoye(BuildContext context,factoryController controllers, String idFactory) async {
+
+    final employees = context.read<EmployeeProvider>().empleoyees;
+
+    if (controllers.employeeNew.text.trim().isEmpty) {
+      return;
     }
 
+    final maxId = employees.isEmpty
+        ? 0
+        : employees
+        .map((e) => int.tryParse(e.id) ?? 0)
+        .reduce((a, b) => a > b ? a : b);
+
+
+
+
+    final newEmployee = Empleoyee(
+      id: (maxId + 1).toString(),
+      name: controllers.employeeNew.text,
+      idFactory: idFactory,
+    );
+
+
+    setState(() {
+      newEmployeesTemp.add(newEmployee);
+    });
+    controllers.employeeNew.clear();
+
   }
 
-  Future<void> _addEmplepoye(factoryController controllers,
-      List<Empleoye> contacsCurrent, String id) async {
-    setState(() {
-      saveChanges = true;
-      String idNew = "";
+  Future<void> _deleteEmplepoye(BuildContext context) async {
 
-      if (empleoyes.isNotEmpty) {
-        String idLast = empleoyes.last.id;
-        idNew = createId(idLast);
-      } else {
-        idNew = "1";
+    if (selectedEmployee == null) return;
+
+    final employee = selectedEmployee!;
+
+    setState(() {
+      newEmployeesTemp.removeWhere((e) => e.id == employee.id);
+
+      if (!idsDelete.contains(employee.id)) {
+        idsDelete.add(employee.id);
       }
 
-      contacsCurrent.add(Empleoye(
-        id: idNew,
-        name: controllers.employeeNew.text,
-        idFactory: id,
-      ));
-
-      controllers.employeeNew.clear();
+      selectedEmployee = null;
     });
-  }
 
-  Future<void> _deleteEmplepoye(List<Empleoye> contacsCurrent,
-      List<String> idsDelete, int contactSelect, BuildContext context) async {
-    setState(() {
-      saveChanges = true;
-
-      Empleoye delete = contacsCurrent[contactSelect];
-      idsDelete.add(delete.id);
-
-      if (contacsCurrent[contactSelect] == delete) {
-        contacsCurrent.removeAt(contactSelect);
-        String action = S
-            .of(context)
-            .the_employee_has_been_correctly_removed;
-        confirm(context, action);
-      }
-    });
+    confirm(context, S.of(context).the_employee_has_been_correctly_removed);
   }
 
   Future<void> _onSaveFactory(
       BuildContext context,
-      int select,
+      Factory? factorySelected,
       factoryController controllers,
-      contacsPreEdit,
-      contacsCurrent,
-      List<String> idsDelete,
+      String factoryId
       ) async {
+            final isEditing = factorySelected != null;
+            
+            final factoryProvider = context.read<FactoryProvider>();
 
-    final tel1 = controllers.telephone1.text.replaceAll(" ", "");
-    final tel2 = controllers.telephone2.text.replaceAll(" ", "");
+            final tel1 = controllers.telephone1.text.replaceAll(" ", "");
+            final tel2 = controllers.telephone2.text.replaceAll(" ", "");
 
-    final errorMsg = FactoryValidator.validate(
-      context,
-      controllers,
-      select,
-      allFactories,
-    );
+            final errorMsg = FactoryValidator.validate(
+              context,
+              controllers,
+              factorySelected,
+              factoryProvider.factories,
+            );
 
-    if (errorMsg != null) {
-      error(context, errorMsg);
-      return;
-    }
+            if (errorMsg != null) {
+              error(context, errorMsg);
+              return;
+            }
 
-    final addressData = AddressParser.parse(controllers.address.text);
+            final address = AddressParser.parse(
+               controllers.address.text,
+               controllers.city.text,
+               controllers.province.text,
+               controllers.postcode.text
+             );
 
-    final factory = Factory(
-      id: id,
-      name: controllers.name.text,
-      highDate: controllers.highDate.text,
-      sector: selectedSector!.id,
-      thelephones: [tel1, tel2],
-      mail: controllers.mail.text,
-      web: controllers.web.text,
-      address: {
-        'street': addressData['street'] ?? '',
-        'number': addressData['number'] ?? '',
-        'apartament': addressData['apartament'] ?? '',
-        'city': controllers.city.text,
-        'postalCode': controllers.postalCode.text,
-        'province': controllers.province.text,
-      },
-    );
+            final factory = Factory(
+                id: isEditing ? factorySelected!.id : factoryId,
+                name: controllers.name.text,
+                highDate: controllers.highDate.text,
+                sector: selectedSector?.id ?? "",
+                thelephones: [tel1,tel2] ,
+                mail: controllers.mail.text,
+                web: controllers.web.text,
+                address: address
+            );
 
-    if (select == -1) {
-      allFactories.add(factory);
-    } else if (saveChanges) {
-      allFactories[select] = factory;
-    }
+            if (!isEditing)
+            {
+                final result = await factoryProvider.create(factory);
 
-    saveChanges = false;
+                switch(result){
+                  case CreateResult.success:
+                    await confirm(context,S.of(context).factory_created_successfully);
+                  break;
 
-    empleoyes.removeWhere((e) => idsDelete.contains(e.id));
+                  case CreateResult.alreadyExists:
+                    await error(context, S.of(context).factory_already_exists);
+                  break;
+                  case CreateResult.invalidData:
+                    await error(context, S.of(context).factory_save_error);
+                }
 
-    for (var e in contacsCurrent) {
-      final index = empleoyes.indexWhere((emp) => emp.id == e.id);
-      if (index == -1) {
-        empleoyes.add(e);
-      } else {
-        empleoyes[index] = e;
-      }
-    }
+                await _onResetFactory(context, controllers);
+            }
+            else
+            {
+                 final result = await factoryProvider.update(factory);
 
-    await csvExportatorEmpleoyes(empleoyes);
-    await csvExportatorFactories(allFactories);
+                 switch(result)
+                 {
 
-    await confirm(
-      context,
-      LocalizationHelper.manage_array(
-        context,
-        S.of(context).company,
-        S.of(context).saved_female,
-        S.of(context).theFemale,
-      ),
-    );
+                   case EditResult.success:
 
-    await _onResetFactory(context, select, controllers, contacsCurrent);
+                     await confirm(context,S.of(context).factory_updated_successfully);
+                   break;
+
+                   case EditResult.alreadyExists:
+                     await error(context, S.of(context).factory_already_exists);
+                   break;
+
+                   case EditResult.notFound:
+                     await error(context,S.of(context).factory_not_found);
+                   break;
+
+                   case EditResult.invalidData:
+                     await error(context, S.of(context).invalid_data);
+                    break;
+                   case EditResult.error:
+                     // TODO: Handle this case.
+                     throw UnimplementedError();
+                 }
+            }
+
+            final providerEmployees = context.read<EmployeeProvider>();
+
+             // Empleados eliminados
+              await providerEmployees.removeEmployees(idsDelete);
+              idsDelete.clear();
+
+             // Empleados nuevos
+
+            for (final e in newEmployeesTemp) {
+              await providerEmployees.addEmployees([e]);
+            }
+
+            newEmployeesTemp.clear();
+
+
   }
 
-  Future<void> _onResetFactory(BuildContext context, int select,
-      factoryController controllers, List<Empleoye> contacsCurrent) async {
-    if (select == -1) {
-      controllers.name.clear();
-      controllers.highDate.clear();
-      controllers.telephone1.clear();
-      controllers.telephone2.clear();
-      controllers.mail.clear();
-      controllers.web.clear();
-      controllers.web.clear();
-      controllers.address.clear();
-      controllers.city.clear();
-      controllers.postalCode.clear();
-      controllers.province.clear();
-      controllers.contacts.clear();
-      controllers.employee.clear();
-      selectedSector = null;
-      controllers.sector.clear();
+  Future<void> _onResetFactory(
+      BuildContext context,
+      factoryController controllers,
+      [Factory? factorySelected]
+      ) async {
+    context.read<EditStateProvider>().clear();
 
-      setState(() {
-        contacsCurrent.clear();
-      });
-      controllers.employeeNew.clear();
-    }
-    else {
-      campCharge();
-    }
+    controllers.name.clear();
+    controllers.highDate.clear();
+    controllers.telephone1.clear();
+    controllers.telephone2.clear();
+    controllers.mail.clear();
+    controllers.web.clear();
+    controllers.address.clear();
+    controllers.city.clear();
+    controllers.postcode.clear();
+    controllers.province.clear();
 
-    saveChanges = false;
+    controllers.employeeNew.clear();
+
+    selectedSector = null;
+    selectedEmployee = null;
+
+    idsDelete.clear();
+    newEmployeesTemp.clear();
+
+    setState(() {});
+  }
+
+  String createNextFactoryId(List<Factory> factories) {
+    final ids = factories
+        .map((f) => int.tryParse(f.id))
+        .whereType<int>();
+
+    final maxId = ids.isEmpty ? 0 : ids.reduce((a, b) => a > b ? a : b);
+
+    return (maxId + 1).toString();
   }
 }
