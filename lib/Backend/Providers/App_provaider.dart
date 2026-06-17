@@ -203,7 +203,20 @@ class AppProvider extends ChangeNotifier {
         await factoryProvider.load();
 
 
+    final employeeProvider = context.read<EmployeeProvider>();
 
+        await employeeProvider.setRepositoryAndReload(
+           RepositoryEmployee.create(
+               mode,
+               files,
+               db: executeQuery,
+               config:mode == DataSourceMode.api
+                   ? provider.config
+                   : null,
+           )
+        );
+
+    await employeeProvider.load();
      /*
     await context.read<LineSendProvider>().load(files.lines);
     await context.read<MailProvider>().load(files.mails);*/
