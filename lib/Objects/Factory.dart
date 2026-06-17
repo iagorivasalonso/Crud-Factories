@@ -4,15 +4,14 @@ import 'package:crud_factories/Objects/BaseEntity.dart';
 
 class Factory extends BaseEntity {
 
-  String id;
-  String name;
-  String highDate;
-  String sector;
-  List<String> thelephones;
-  String mail;
-  String web;
-
-  Map<String, String> address;
+  final String id;
+  final String name;
+  final String highDate;
+  final String sector;
+  final List<String> thelephones;
+  final String mail;
+  final String web;
+  final Address address;
 
 
   Factory ({
@@ -26,58 +25,31 @@ class Factory extends BaseEntity {
     required this.address,
   });
 
-  String allAdress() {
-
-    final street = address['street'] ?? '';
-    final number = address['number'] ?? '';
-    final apartament = address['apartament'] ?? '';
-
-
-    String addressComplete='';
-
-     if(apartament=="")
-     {
-       addressComplete=  '$street, $number';
-     }
-     else
-     {
-       addressComplete='$street, $number - $apartament';
-     }
-
-    return addressComplete;
-
-  }
-  Factory copyWith({
-    String? id,
-    String? name,
-    String? highDate,
-    String? sector,
-    List<String>? thelephones,
-    String? mail,
-    String? web,
-    Map<String, String>? address,
-  }) {
-    return Factory(
-      id: id ?? this.id,
-      name: name ?? this.name,
-      highDate: highDate ?? this.highDate,
-      sector: sector ?? this.sector,
-      thelephones: thelephones != null ? List.from(thelephones) : List.from(this.thelephones),
-      mail: mail ?? this.mail,
-      web: web ?? this.web,
-      address: address != null ? Map.from(address) : Map.from(this.address),
-    );
-  }
-
-  factory Factory.empty() {
-    return Factory(
-      name: '',
-      sector: '',
-      address: {},
-      thelephones: [], id: '', highDate: '', mail: '', web: '',
-    );
-  }
 }
 
+class Address {
+  final String street;
+  final String number;
+  final String? apartment;
+  final String city;
+  final String province;
+  final String postcode;
+
+  Address({
+    required this.street,
+    required this.number,
+    this.apartment,
+    required this.city,
+    required this.province,
+    required this.postcode,
+  });
+
+  String get fullAddress {
+    if (apartment == null || apartment!.isEmpty) {
+      return '$street, $number';
+    }
+    return '$street, $number - $apartment';
+  }
+}
 
 
