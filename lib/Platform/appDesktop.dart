@@ -260,7 +260,7 @@ class _appDesktopState extends State<appDesktop> {
 
                                     context.read<FilterProvider>().setSector("0");  //Todos los sectors
 
-                                    if(providerFactories.isEmpty)
+                                    if(providerFactories.isNotEmpty)
                                     {
                                       context.read<NavigationProvider>()
                                           .go(AppView.factories);
