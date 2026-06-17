@@ -2,10 +2,13 @@ import 'package:crud_factories/Backend/DataSources/BootstrapService.dart';
 import 'package:crud_factories/Backend/Feature/Connection/Controller/ConnectionController.dart' show Connectioncontroller;
 import 'package:crud_factories/Backend/Feature/Connection/Datasource/CsvConnectionDataSource.dart' show CsvConnectionDataSource;
 import 'package:crud_factories/Backend/Feature/Connection/Datasource/IConnection_repository.dart';
+import 'package:crud_factories/Backend/Feature/Employee/employee_service.dart' show RepositoryEmployee;
+import 'package:crud_factories/Backend/Feature/Factory/factory_service.dart' show RepositoryFactory;
 import 'package:crud_factories/Backend/Feature/Router/CsvRouterDataSource.dart' show CsvRouterDataSource;
 import 'package:crud_factories/Backend/Feature/Sector/sector_service.dart' show Repository, RepositorySector;
 import 'package:crud_factories/Backend/Global/controllers/Conection.dart';
 import 'package:crud_factories/Backend/Providers/ConectionProvider.dart';
+import 'package:crud_factories/Backend/Providers/EmployeeProvider.dart' show EmployeeProvider;
 import 'package:crud_factories/Backend/Providers/FactoryProvider.dart';
 import 'package:crud_factories/Backend/Providers/LineSendProvider.dart';
 import 'package:crud_factories/Backend/Providers/MailProvider.dart' show MailProvider;
@@ -180,13 +183,28 @@ class AppProvider extends ChangeNotifier {
 
     await sectorProvider.load();
 
+    // =========================
+    // 4. FACTORY PROVIDER
+    // =========================
+
+    final factoryProvider = context.read<FactoryProvider>();
+
+        await factoryProvider.setRepositoryAndReload(
+           RepositoryFactory.create(
+               mode,
+               files,
+               db: executeQuery,
+               config: mode == DataSourceMode.api
+                   ? provider.config
+                   : null,
+           ),
+        );
+
+        await factoryProvider.load();
+
 
 
      /*
-
-
-    await context.read<EmployeeProvider>().load(files.employees);
-    await context.read<FactoryProvider>().load(files.factories);
     await context.read<LineSendProvider>().load(files.lines);
     await context.read<MailProvider>().load(files.mails);*/
   }
