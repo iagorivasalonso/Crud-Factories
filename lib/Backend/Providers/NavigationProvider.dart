@@ -20,21 +20,12 @@ enum AppView {
 }
 
 class NavigationProvider extends ChangeNotifier {
+  AppView _current = AppView.home;
 
-   AppView _current = AppView.home;
+  AppView get current => _current;
 
-   AppView get current => _current;
-
-   String? sectorId;
-
-   void go(
-       AppView view, {
-         String? sector,
-       }) {
-
-     _current = view;
-     sectorId = sector;
-
-     notifyListeners();
-   }
+  void go(AppView view) {
+    _current = view;
+    notifyListeners();
+  }
 }
