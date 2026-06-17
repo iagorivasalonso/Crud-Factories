@@ -197,7 +197,16 @@ class _appDesktopState extends State<appDesktop> {
                           width: wItem,
                           child:  Text(S.of(context).sectors)),
                       onTap: () async {
-                        await newSector(context);
+                        if(providerSectors.isEmpty)
+                        {
+                          await newSector(context);
+                        }
+                        else
+                        {
+                            await adminSector(context);
+
+                        }
+
                       }
                   ),
                   if(providerSectors.length < 2 || providerFactories.isEmpty)
