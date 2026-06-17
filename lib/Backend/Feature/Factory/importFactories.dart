@@ -23,7 +23,7 @@ Future<List<Factory>> csvImportFactories({
   } else if (kIsWeb) {
     csvContent = await rootBundle.loadString(assetPath!);
   } else{
-    // 🟢 3. DESKTOP → usar routeFirst como archivo real
+    // 🟢 3. DESKTOP → usar routecomo archivo real
     final file = File(assetPath!);
 
     if (await file.exists()) {
@@ -37,6 +37,7 @@ Future<List<Factory>> csvImportFactories({
 }
 
 List<Factory> readFactoriesFromCsvContent(String content) {
+
   final lines = const LineSplitter()
       .convert(content)
       .where((line) => line.trim().isNotEmpty)
@@ -47,7 +48,7 @@ List<Factory> readFactoriesFromCsvContent(String content) {
   for (final line in lines.skip(1)) {
     final parts = line.split(";");
     if (parts.length < 14) continue;
-
+    print("meter$parts");
     factories.add(Factory(
       id: parts[0].trim(),
       name: parts[1].trim(),
@@ -59,16 +60,17 @@ List<Factory> readFactoriesFromCsvContent(String content) {
       ],
       mail: parts[6].trim(),
       web: parts[7].trim(),
-      address: {
-        'street': parts[8].trim(),
-        'number': parts[9].trim(),
-        'apartament': parts[10].trim(),
-        'city': parts[11].trim(),
-        'postalCode': parts[12].trim(),
-        'province': parts[13].trim(),
-      },
+      address: Address(
+          street: parts[8].trim(),
+          number: parts[9].trim(),
+          apartment: parts[10].trim(),
+          city: parts[11].trim(),
+          postcode: parts[12].trim(),
+          province: parts[13].trim())
+
     ));
   }
+
 
   return factories;
 }
