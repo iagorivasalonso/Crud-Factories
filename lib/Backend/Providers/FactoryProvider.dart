@@ -1,105 +1,247 @@
-import 'dart:io';
-
-import 'package:crud_factories/Backend/CSV/importEmpleoyes.dart';
-import 'package:crud_factories/Backend/CSV/importFactories.dart';
-import 'package:crud_factories/Backend/Global/files.dart';
-import 'package:crud_factories/generated/l10n.dart' show S;
-import 'package:flutter/cupertino.dart' show BuildContext;
+import 'package:crud_factories/Backend/Data/controlsMessagesError/errors.dart' show CreateResult, EditResult, DeleteResult;
+import 'package:crud_factories/Backend/Repositories/factoryRepository.dart' show FactoryRepository;
+import 'package:crud_factories/Functions/createId.dart' show createId;
 import 'package:flutter/foundation.dart' hide Factory;
 import 'package:crud_factories/Objects/Factory.dart';
 
-import '../Global/list.dart' show errorFiles;
-
 class FactoryProvider extends ChangeNotifier {
 
+  FactoryRepository? repository;
+
   List<Factory> _factories = [];
+  Factory? selected;
 
   List<Factory> get factories => List.unmodifiable(_factories);
 
-  void setFactories(List<Factory> newFactories) {
-    _factories
-      ..clear()
-      ..addAll(List.from(newFactories));
+  // =========================
+  //        LOAD
+  // =========================
 
-    notifyListeners();
-  }
-
-  void addFactory(Factory factory) {
-    _factories.add(factory);
-    notifyListeners();
-  }
-
-  void updateFactory(int index, Factory factory) {
-    _factories[index] = factory;
-    notifyListeners();
-  }
-
-  void deleteBySector(String sectorId) {
-    _factories.removeWhere((f) => f.sector == sectorId);
-    notifyListeners();
-  }
-
-  List<String> getIdsBySector(String sectorId) {
-    return _factories
-        .where((f) => f.sector == sectorId)
-        .map((f) => f.id)
-        .toList();
-  }
-
-  void delete(String id) {
-    _factories.removeWhere((f) => f.id == id);
-    notifyListeners();
-  }
-
-  void clear() {
-    _factories.clear();
-    notifyListeners();
-  }
-
-  Future<void> importFactory(BuildContext context, {
-    required File file,
-    Uint8List? bytes,
-    String? content,
-    String? assetPath,
-  }) async {
+  Future<void> load() async {
     try {
-      final imported = await csvImportFactories(
-        file: fFactories,
-        bytes: bytes,
-        content: content,
-        assetPath: assetPath,
-      );
-
-      _factories.addAll(imported);
-    } catch (e) {
-      final s = S.of(context);
-
-      final msg = e.toString().toLowerCase();
-
-      if (msg.contains("not found") ||
-          msg.contains("archivo") ||
-          msg.contains("asset")) {
-        errorFiles.add("${s.file_not_found} ${s.company}");
-      } else {
-        errorFiles.add("${s.file_format_error} ${s.company}");
-      }
-    }
-  }
-
-  Future<void> load(String path) async {
-
-    try {
-      final data = await csvImportFactories(
-        assetPath: path,
-      );
+      final data = await _repo.load();
 
       _factories = data;
-      notifyListeners();
 
+      notifyListeners();
     } catch (e) {
       print("Error cargando factories: $e");
       _factories = [];
       notifyListeners();
     }
   }
+
+  // =========================
+  // SELECT
+  // =========================
+
+  void select(Factory? f) {
+    //no ose si va hacer falta
+    selected = f;
+    notifyListeners();
+  }
+
+  // =========================
+  //   SET FACTORIES
+  // =========================
+
+  void setFactories(List<Factory> data) {
+    _factories
+      ..clear()
+      ..addAll(List.from(data));
+
+    notifyListeners();
+  }
+
+  // ==============================
+  //   SET FACTORIES BY SECTOR
+  // ==============================
+
+  List<Factory> factoriesBySector(String sectorId) {
+    if (sectorId == "0") return _factories;
+
+    final cleanSectorId = sectorId.trim();
+
+    return _factories.where((f) {
+      final factorySector = f.sector?.toString().trim();
+      return factorySector == cleanSectorId;
+    }).toList();
+  }
+
+
+  // =========================
+  //   ADD FACTORIES
+  // =========================
+
+  void addFactories(Factory factory) {
+    _factories.add(factory);
+    notifyListeners();
+  }
+
+
+  // =========================
+  //  EXISTFACTORY
+  // =========================
+
+  bool exist(String name, {String? exclude}) {
+    final nameLower = name.toLowerCase();
+
+    return _factories.any((f) {
+      final factoryMame = f.name.toLowerCase();
+
+      if (exclude != null && factoryMame == exclude.toLowerCase()) {
+        return false;
+      }
+
+      return factoryMame == nameLower;
+    });
+  }
+
+  // =========================
+  //  CLEAR
+  // =========================
+
+  void clear() {
+    _factories.clear();
+    notifyListeners();
+  }
+
+  // =========================
+  //  GETREPO
+  // =========================
+
+  FactoryRepository get _repo {
+    final r = repository;
+    if (r == null) {
+      throw Exception("Repository not initialized");
+    }
+    return r;
+  }
+
+  // =========================
+  //  RELOAD REPO
+  // =========================
+
+  Future<void> setRepositoryAndReload(FactoryRepository repo) async {
+    repository = repo;
+    _factories = [];
+    notifyListeners();
+
+    await load();
+  }
+
+  // =========================
+  //  CREATE
+  // =========================
+
+  Future<CreateResult> create(Factory factory) async {
+    final name = factory.name?.trim();
+
+    if (name == null || name.isEmpty) {
+      return CreateResult.invalidData;
+    }
+
+    final exits = exist(name);
+
+    if (exits) {
+      return CreateResult.alreadyExists;
+    }
+
+    final newFactory = Factory(
+        id: factory.id,
+        name: factory.name,
+        highDate: factory.highDate,
+        sector: factory.sector,
+        thelephones: factory.thelephones,
+        mail: factory.mail,
+        web: factory.web,
+        address: Address(
+            street: factory.address.street,
+            number: factory.address.number,
+            city: factory.address.city,
+            province: factory.address.province,
+            postcode: factory.address.postcode
+        )
+    );
+
+    _factories.add(newFactory);
+    notifyListeners();
+    await _repo.insert(newFactory);
+
+    return CreateResult.success;
+  }
+
+  // =========================
+  //  UPDATE
+  // =========================
+  Future<EditResult> update(Factory update) async {
+    if (update.name == null || update.name!.trim().isEmpty) {
+      return EditResult.invalidData;
+    }
+
+    final name = update.name!.trim();
+
+    final index = _factories.indexWhere((f) => f.id == update.id);
+    if (index == -1) {
+      return EditResult.notFound;
+    }
+
+    final oldFactory = _factories[index];
+
+    if (exist(name, exclude: oldFactory.name)) {
+      return EditResult.alreadyExists;
+    }
+
+
+    final newFactory = Factory(
+      id: update.id,
+      name: update.name,
+      highDate: update.highDate,
+      sector: update.sector,
+      thelephones: update.thelephones,
+      mail: update.mail,
+      web: update.web,
+      address: Address(
+        street: update.address.street,
+        number: update.address.number,
+        city: update.address.city,
+        province: update.address.province,
+        postcode: update.address.postcode,
+      ),
+    );
+
+    _factories[index] = newFactory;
+
+    notifyListeners();
+
+    await _repo.upload(newFactory);
+    return EditResult.success;
+  }
+
+  Future<DeleteResult> delete(String id) async {
+    final index = _factories.indexWhere((f) => f.id == id);
+
+    if (index == -1) {
+      return DeleteResult.notFound;
+    }
+
+    final removed = _factories[index];
+
+    // optimista
+    _factories.removeAt(index);
+    notifyListeners();
+
+    try {
+      await _repo.delete(id);
+      return DeleteResult.success;
+    } catch (e) {
+      // rollback
+      _factories.insert(index, removed);
+      notifyListeners();
+      return DeleteResult.notFound;
+    }
+  }
+
 }
+
+
