@@ -21,9 +21,11 @@ import 'package:crud_factories/Backend/Providers/NavigationProvider.dart';
 import 'package:crud_factories/Backend/Providers/App_provaider.dart' show AppProvider;
 import 'package:crud_factories/Backend/Providers/RoutesProvider.dart' show RoutesProvider;
 import 'package:crud_factories/Backend/Providers/SectorProvider.dart' show SectorProvider;
+import 'package:crud_factories/Backend/Providers/filterProvider.dart' show FilterProvider;
 import 'package:crud_factories/Backend/Repositories/routesRepository.dart' show routerRepository;
 import 'package:provider/provider.dart';
 import 'package:provider/single_child_widget.dart';
+import '../../Providers/EmployeeProvider.dart';
 import '../../Providers/MailProvider.dart' show MailProvider;
 import '../../Feature/Router/CsvRouterDataSource.dart';
 import '../../Feature/Connection/Datasource/IConnection_repository.dart' show IConnectionDataSource;
@@ -31,7 +33,7 @@ import '../../Feature/Connection/Service/IConnectionService.dart';
 
 class DependencyInjection {
 
-  static const bool isAPI = true;
+  static const bool isAPI = false;
 
    static List<SingleChildWidget> providers = [
 
@@ -49,6 +51,10 @@ class DependencyInjection {
 
      ChangeNotifierProvider(
        create: (_) => NavigationProvider(),
+     ),
+
+     ChangeNotifierProvider(
+       create: (_) => FilterProvider(),
      ),
 
      ChangeNotifierProvider(
@@ -125,13 +131,24 @@ class DependencyInjection {
        create: (_) => SectorProvider(),
      ),
 
+
+                                       // =========================
+                                       // FACTORY
+                                       // =========================
+
      ChangeNotifierProvider(
          create: (_) => FactoryProvider()
      ),
-/*
+
+
+                                       // =========================
+                                       // EMPLOYEE
+                                       // =========================
      ChangeNotifierProvider(
          create: (_) => EmployeeProvider()
-     ),*/
+     ),
+
+
 
      ChangeNotifierProvider(
          create: (_) => LineSendProvider()
