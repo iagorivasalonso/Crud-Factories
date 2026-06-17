@@ -4,7 +4,7 @@
 import 'package:crud_factories/Alertdialogs/error.dart' show error;
 import 'package:crud_factories/Backend/Global/controllers/Factory.dart' show factoryController;
 import 'package:crud_factories/Functions/validatorCamps.dart' show ValidatorCamps;
-import 'package:crud_factories/Objects/Factory.dart' show Factory;
+import 'package:crud_factories/Objects/Factory.dart' show Factory, Address;
 import 'package:crud_factories/generated/l10n.dart' show S;
 import 'package:crud_factories/helpers/localization_helper.dart' show LocalizationHelper;
 import 'package:fluent_ui/fluent_ui.dart';
@@ -12,13 +12,12 @@ import 'package:fluent_ui/fluent_ui.dart';
 class FactoryValidator {
 
   static String? validate(BuildContext context, factoryController controllers,
-      int select,List<Factory> allFactories) {
+      Factory? factorySelected,List<Factory> factories) {
 
     final name = controllers.name.text.trim();
-    final sector = controllers.sector.text.trim();
     final mail = controllers.mail.text.trim();
     final date = controllers.highDate.text.trim();
-    final postal = controllers.postalCode.text.trim();
+    final postal = controllers.postcode.text.trim();
     final address = controllers.address.text.trim();
 
     final tel1 = controllers.telephone1.text.replaceAll(" ", "");
@@ -26,11 +25,10 @@ class FactoryValidator {
 
     // 🔴 REQUIRED FIELDS
     if (name.isEmpty) return S.of(context).name_required;
-    if (sector.isEmpty) return S.of(context).sector_required;
 
     // 🔴 UNIQUE NAME
-    final allNames = allFactories.map((e) => e.name).toList();
-    final oldName = select != -1 ? allFactories[select].name : "";
+    final allNames = factories.map((e) => e.name).toList();
+    final oldName = factorySelected?.name ?? '';
 
     final nameError = ValidatorCamps.primaryKeyValidate(
       name,
@@ -79,7 +77,7 @@ class FactoryValidator {
 
 
     if (postal.isNotEmpty) {
-      final err = ValidatorCamps.postalCodeValidate(postal, context);
+      final err = ValidatorCamps.postcodeValidate(postal, context);
       if (err != null) return err;
     }
 
@@ -88,18 +86,30 @@ class FactoryValidator {
 }
 
 class AddressParser {
-  static Map<String, String> parse(String text) {
+
+  static Address parse(
+      String text,
+      String city,
+      String province,
+      String postcode,
+      ) {
+
     final partsDash = text.split("-");
-    final apartament = partsDash.length > 1 ? partsDash[1] : "";
+
+    final apartment = partsDash.length > 1 ? partsDash[1] : "";
 
     final partsComma = partsDash[0].split(",");
+
     final street = partsComma.isNotEmpty ? partsComma[0] : "";
     final number = partsComma.length > 1 ? partsComma[1] : "";
 
-    return {
-      "street": street,
-      "number": number,
-      "apartament": apartament,
-    };
+    return Address(
+      street: street,
+      number: number,
+      apartment: apartment,
+      city: city,
+      province: province,
+      postcode: postcode,
+    );
   }
 }
