@@ -28,6 +28,7 @@ class SqlFactoryDataSource implements IFactoryDataSource {
                  'number, apartment,city, province, postcode '
                                                     'FROM factories'
       );
+
       return result.map((row) => Factory(
         id: row['id'].toString(),
         name: row['name']?.toString() ?? '',
