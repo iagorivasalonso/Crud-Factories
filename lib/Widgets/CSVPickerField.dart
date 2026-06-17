@@ -9,7 +9,6 @@ class CSVPickerField extends StatelessWidget {
   final String value;
   final String campName;
   final String actionName;
-  final ValueChanged<String> onChanged;
   final Future<void> Function() function;
   final bool automatic;
   final int index;
@@ -19,7 +18,6 @@ class CSVPickerField extends StatelessWidget {
     required this.value,
     required this.campName,
     required this.actionName,
-    required this.onChanged,
     required this.function,
     required this.index,
     this.automatic = false,
@@ -33,10 +31,10 @@ class CSVPickerField extends StatelessWidget {
           child: Padding(
             padding: const EdgeInsets.only(right: 3.0),
             child: defaultTextfield(
+              context: context,
               nameCamp: campName,
               controllerCamp: TextEditingController(text: value),
               automatic: automatic,
-              onChanged: (v) => onChanged(v),
             ),
           ),
         ),
