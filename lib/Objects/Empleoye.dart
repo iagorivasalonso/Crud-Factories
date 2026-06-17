@@ -3,13 +3,13 @@
 
 import 'package:crud_factories/Objects/BaseEntity.dart';
 
-class Empleoye extends BaseEntity {
+class Empleoyee extends BaseEntity {
 
   String id;
   String name;
   String idFactory;
 
-  Empleoye ({
+  Empleoyee ({
     required this.id,
     required this.name,
     required this.idFactory
