@@ -10,9 +10,10 @@ import 'package:crud_factories/Backend/Providers/ConectionProvider.dart';
 import 'package:crud_factories/Backend/Providers/FactoryProvider.dart';
 import 'package:crud_factories/Backend/Providers/LineSendProvider.dart';
 import 'package:crud_factories/Backend/Providers/MailProvider.dart';
-import 'package:crud_factories/Backend/Providers/NavigationProvider.dart' show navigationProvider, AppView, NavigationProvider;
+import 'package:crud_factories/Backend/Providers/NavigationProvider.dart' show navigationProvider, AppView, NavigationProvider, FilterProvider;
 import 'package:crud_factories/Backend/Providers/SectorProvider.dart';
 import 'package:crud_factories/Backend/Global/variables.dart';
+import 'package:crud_factories/Backend/Providers/filterProvider.dart' show FilterProvider;
 import 'package:crud_factories/Frontend/adminRoutes.dart';
 import 'package:crud_factories/Frontend/adminSectors.dart';
 import 'package:crud_factories/Functions/changesNoSave.dart';
@@ -248,7 +249,18 @@ class _appDesktopState extends State<appDesktop> {
                                   onTap: () async {
                                     if(!await canNavigate(context)) return;
 
-                                    context.read<NavigationProvider>().go(AppView.createFactory);
+                                    context.read<FilterProvider>().setSector("0");  //Todos los sectors
+
+                                    if(providerFactories.isEmpty)
+                                    {
+                                      context.read<NavigationProvider>()
+                                          .go(AppView.factories);
+                                    }
+                                    else
+                                    {
+                                      noCategory(context, S.of(context).companies);
+                                    }
+
                                   }
                               ),
                               const MenuDivider(),
@@ -257,13 +269,20 @@ class _appDesktopState extends State<appDesktop> {
                               MenuButton(
                                   text: Text(sector.name),
                                   onTap: () async {
+                                    final sectorId = context.read<FilterProvider>().sectorId;
+                                    final factoriesCurrent= context.read<FactoryProvider>().factoriesBySector(sectorId);
+                                    context.read<FilterProvider>().setSector(sector.id);
 
-                                    if(!await canNavigate(context)) return;
+                                    if(factoriesCurrent.isNotEmpty)
+                                    {
+                                      context.read<NavigationProvider>()
+                                          .go(AppView.factories);
+                                    }
+                                    else
+                                    {
+                                      error(context, S.of(context).it_does_not_have_companies_in_this_sector);
+                                    }
 
-                                    context.read<NavigationProvider>().go(
-                                      AppView.factories,
-                                      sector: sector.id,
-                                    );
                                   }
                               )
                             ]
@@ -354,12 +373,10 @@ class _appDesktopState extends State<appDesktop> {
                                             : wItem,
                                         child: Text(sector.name)),
                                     onTap: () async {
-                                      if(!await canNavigate(context)) return;
 
-                                      context.read<NavigationProvider>().go(
-                                         AppView.shipments,
-                                         sector: sector.id
-                                      );
+
+                                          context.read<NavigationProvider>().go(AppView.shipments);
+
                                     }
                                 ),
                             ]
