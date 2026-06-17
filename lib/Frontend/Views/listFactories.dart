@@ -1,29 +1,24 @@
 import 'package:crud_factories/Alertdialogs/error.dart' show error;
-import 'package:crud_factories/Backend/CSV/exportEmpleoyes.dart';
-import 'package:crud_factories/Backend/CSV/exportFactories.dart';
-import 'package:crud_factories/Backend/Global/list.dart';
-import 'package:crud_factories/Backend/Global/variables.dart';
-import 'package:crud_factories/Frontend/factory.dart' show newFactory;
+import 'package:crud_factories/Backend/Data/controlsMessagesError/errors.dart';
+import 'package:crud_factories/Backend/Providers/EmployeeProvider.dart' show EmployeeProvider;
+import 'package:crud_factories/Backend/Providers/FactoryProvider.dart';
+import 'package:crud_factories/Backend/Providers/NavigationProvider.dart';
+import 'package:crud_factories/Backend/Providers/filterProvider.dart' show FilterProvider;
+import 'package:crud_factories/Frontend/factory.dart' show FactoryFromPage;
 import 'package:crud_factories/Objects/Factory.dart';
 import 'package:crud_factories/generated/l10n.dart' show S;
 import 'package:flutter/material.dart';
 import 'package:crud_factories/Alertdialogs/warning.dart';
-import 'package:crud_factories/Backend/SQL/deleteFactory.dart';
-import 'package:crud_factories/Functions/changesNoSave.dart';
-import 'package:crud_factories/Functions/isNotAndroid.dart';
 import 'package:crud_factories/Widgets/GenericListViewPage.dart';
 import 'package:crud_factories/Widgets/factoryCard.dart';
 import 'package:crud_factories/helpers/localization_helper.dart';
 import 'package:crud_factories/Alertdialogs/noCategory.dart';
+import 'package:provider/provider.dart';
 
 
 
 class listFactories extends StatefulWidget {
-  BuildContext context;
-  List<Factory> list;
-  String sector; //esto es lo q necesito para la condicion
 
-  listFactories(this.context, this.list, this.sector);
 
   @override
   State<listFactories> createState() => _listFactoriesState();
@@ -31,152 +26,141 @@ class listFactories extends StatefulWidget {
 
 class _listFactoriesState extends State<listFactories> {
 
-  late ValueNotifier<List<Factory>> displayFactoriesNotifier;
 
-  int selectIndex = 0;
+  Future<List<Factory>> _onFilter(
+      String filter,
+      String search,
+      ) async {
 
-  int select = 0;
+    final factories = context
+        .read<FactoryProvider>()
+        .factoriesBySector(
+      context.read<FilterProvider>().sectorId,
+    );
 
-  Factory? factorySelect =null;
-
-  @override
-  void initState() {
-    super.initState();
-
-    factorySelect = widget.list.isNotEmpty ? widget.list[0] : null;
-
-    // Inicializar el ValueNotifier
-    displayFactoriesNotifier = ValueNotifier<List<Factory>>(widget.list);
-
-  }
-
-  void didUpdateWidget(covariant listFactories oldWidget) {
-    super.didUpdateWidget(oldWidget);
-
-
-    if (oldWidget.sector != widget.sector) {
-      displayFactoriesNotifier.value = List.from(widget.list);
-
-      if (widget.list.isNotEmpty) {
-        factorySelect = widget.list.first;
-        selectIndex = 0;
-      } else {
-        factorySelect = null;
-        selectIndex = -1;
-      }
+    if (search.trim().isEmpty) {
+      return factories;
     }
-  }
-
-  bool _contains(String text, String search) {
-    return text.toLowerCase().contains(search.toLowerCase());
-  }
-
-  Future<void> _onFilter(String filter, String search) async {
 
     final lowerSearch = search.toLowerCase();
 
-    final filtered = widget.list.where((factory) {
-      final filterMap = {
-        'Name': factory.name,
-        'Nombre': factory.name,
-        'Address': factory.allAdress(),
-        'Dirección': factory.allAdress(),
-        'Phone': factory.thelephones.isNotEmpty ? factory.thelephones[0] : '',
-        'Teléfono': factory.thelephones.isNotEmpty ? factory.thelephones[0] : '',
-        'City': factory.address['city'] ?? '',
-        'Ciudad': factory.address['city'] ?? '',
+    final filtered = factories.where((factory) {
+      final fieldText = switch (filter) {
+        var f when f == S.of(context).name =>
+        factory.name,
+
+        var f when f == S.of(context).address =>
+        factory.address.fullAddress ?? '',
+
+        var f when f == S.of(context).phone =>
+        factory.thelephones.isNotEmpty
+            ? factory.thelephones.first
+            : '',
+
+        var f when f == S.of(context).city =>
+        factory.address.city ?? '',
+
+        _ => factory.name,
       };
 
-      final fieldText = filterMap[filter] ?? factory.name;
-
-      return _contains(fieldText, lowerSearch);
+      return fieldText.toLowerCase().contains(lowerSearch);
     }).toList();
 
-    displayFactoriesNotifier.value = filtered;
-
-    if (filtered.isNotEmpty) {
-      selectIndex = 0;
-    } else {
-      selectIndex = -1;
-    }
-    setState(() {
-
-    });
+    return filtered;
   }
 
   Future<bool> _onDelete(BuildContext context, Factory factory) async {
 
-    final confirmDelete = await warning(
-      context,
-      LocalizationHelper.confirm_delete(context, "${factory.name}"),
-    );
+       final confirmDelete = await warning(
+           context,
+           LocalizationHelper.confirm_delete(
+               context,
+                factory.name
+           )
+       );
 
-    if (confirmDelete) {
-      empleoyes.removeWhere((f) => f.idFactory == factory.id);
-      factoriesSector.remove(factory);
-      allFactories.remove(factory);
-
-
-      if (BaseDateSelected.isNotEmpty) {
-        await sqlDeleteFactory(factory.id);
-      } else {
-        csvExportatorEmpleoyes(empleoyes);
-        csvExportatorFactories(allFactories);
-      }
+       if (!confirmDelete) {
+         return false;
+       }
 
 
-      final updated = List<Factory>.from(displayFactoriesNotifier.value)
-        ..remove(factory);
+       final employeeProvider = context.read<EmployeeProvider>();
+       final factoryProvider = context.read<FactoryProvider>();
 
-      displayFactoriesNotifier.value = updated;
+       //Borrado de empleados asociados
+        await employeeProvider.removeFactoryEmployees(
+           factory.id
+        );
 
-      setState(() {
-        if (displayFactoriesNotifier.value.isNotEmpty) {
-          factorySelect = displayFactoriesNotifier.value.first;
-          selectIndex = 0;
-        } else {
-          factorySelect = null;
-          selectIndex = -1;
-        }
-      });
+        //borra la empresa
 
-      if (displayFactoriesNotifier.value.isEmpty) {
-        WidgetsBinding.instance.addPostFrameCallback((_) {
-          String array = S.of(context).companies;
-          noCategory(context, array);
-        });
+        final index = factoryProvider.factories.indexWhere(
+            (f) => f.id == factory.id
+        );
+
+        final result = await factoryProvider.delete(factory.id);
+
+         if (result != DeleteResult.success) {
+           return false;
+         }
+
+         final remaining = factoryProvider.factoriesBySector(
+               context.read<FilterProvider>().sectorId,
+         );
+
+       if (remaining.isNotEmpty) {
+         final newIndex = index < remaining.length
+             ? index
+             : remaining.length - 1;
+
+         factoryProvider.select(
+           remaining[newIndex],
+         );
+       }
+       else
+       {
+         factoryProvider.select(null);
+       }
+
+       final sectorId = context.read<FilterProvider>().sectorId;
+       final factoriesCurrent= context.read<FactoryProvider>().factoriesBySector(sectorId);
+
+       if(factoriesCurrent.isEmpty)
+       {
+         WidgetsBinding.instance.addPostFrameCallback((_) {
+
+           context.read<NavigationProvider>()
+               .go(AppView.home);
+
+           if (sectorId=="0") {
+             noCategory(context, S.of(context).companies);
+           } else {
+             error(context, S.of(context).it_does_not_have_companies_in_this_sector);
+           }
+
+         });
+       }
         return true;
-      }
-    }
-
-    return false;
   }
 
-  Future<void> _onTap(int index, BuildContext context) async {
-
-    if (saveChanges) {
-      bool discard = await changesNoSave(context);
-
-      if (!discard) return;
-
-      saveChanges = false;
-    }
-
-    setState(() {
-      factorySelect = displayFactoriesNotifier.value[index];
-      selectIndex = index; // opcional pero recomendable
-    });
-
-  }
 
   @override
-  Widget build(BuildContext context0) {
+  Widget build(BuildContext context) {
 
-    BuildContext context = isNotAndroid() ? context0 :  context1;
+    final sectorId = context.watch<FilterProvider>().sectorId;
+    final providerFactories = context.watch<FactoryProvider>().factoriesBySector(sectorId);
+
+    if (providerFactories.isNotEmpty &&
+        context.read<FactoryProvider>().selected == null) {
+          WidgetsBinding.instance.addPostFrameCallback((_) {
+            context.read<FactoryProvider>().select(
+              providerFactories.first,
+            );
+          });
+    }
 
     double mWidth = MediaQuery.of(context).size.width;
     double mWidthList = mWidth > 280 ? 260 : 0;
-
 
     final filterOptions = [
       S.of(context).name,
@@ -185,41 +169,34 @@ class _listFactoriesState extends State<listFactories> {
       S.of(context).city,
     ];
 
-
-
     return Row(
           children: [
-            if(factorySelect != null)
             SizedBox(
               width: mWidthList,
-              child: ValueListenableBuilder<List<Factory>>(
-                  valueListenable: displayFactoriesNotifier,
-                    builder: (context0, list, _) {
-
-                      return GenericListViewPage<Factory>(
-                        itens: list,
-                        filters: filterOptions,
-                        defaultFilter: S.of(context).name,
-                        itemBuilder: (factory, index) => factoryCard(
-                          name: factory.name,
-                          address: factory.allAdress(),
-                          telephone: factory.thelephones.isNotEmpty
-                              ? factory.thelephones[0]
-                              : '',
-                          city: factory.address['city'],
-                        ),
-                        onFilter: _onFilter,
-                        onDelete: (factory) => _onDelete(context, factory),
-                        onTap: (factory, index) => _onTap(index, context),
-                      );
-                    },
-                  ),
+              child: GenericListViewPage<Factory>(
+                itens: providerFactories,
+                filters: filterOptions,
+                defaultFilter: S.of(context).name,
+                itemBuilder: (factory, index) => factoryCard(
+                  name: factory.name,
+                  address: factory.address?.fullAddress ?? '',
+                  telephone: (factory.thelephones.isNotEmpty == true)
+                      ? factory.thelephones.first
+                      : '',
+                  city: factory.address?.city ?? '',
+                ),
+                onFilter: _onFilter,
+                onDelete: (factory) => _onDelete(context, factory),
+                onTap: (factory, index) async {
+                  context.read<FactoryProvider>().select(factory);
+                },
+              ),
             ),
 
             SizedBox(
               width: mWidth-mWidthList,
-              child: factorySelect != null
-                  ? newFactory(select, factorySelect)
+              child: context.watch<FactoryProvider>().selected != null
+                  ? FactoryFromPage()
                   : Text(""),
             ),
           ],
