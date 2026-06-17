@@ -130,8 +130,8 @@ class ValidatorCamps {
     return null;
   }
 
-  static String? postalCodeValidate(String postalCode, BuildContext context) {
-    final value = postalCode.trim();
+  static String? postcodeValidate(String postcode, BuildContext context) {
+    final value = postcode.trim();
     final camp = S.of(context).postal_code;
 
     if (value.isEmpty) return null;
