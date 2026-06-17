@@ -35,11 +35,6 @@ Future<List<Sector>> csvImportSectors({
   return readSectorsFromCsvContent(csvContent);
 }
 
-Future<List<Sector>> readSectorsFromCsv(File file) async {
-  final content = await file.readAsString(encoding: utf8);
-  return readSectorsFromCsvContent(content);
-}
-
 List<Sector> readSectorsFromCsvContent(String content) {
   final lines = const LineSplitter()
       .convert(content)
