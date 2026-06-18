@@ -1,38 +1,70 @@
+import 'package:crud_factories/Backend/Feature/Connection/Controller/ConnectionController.dart' show DisconnectResponse;
+import 'package:crud_factories/Backend/Feature/Connection/ExecuteQuery/IexecuteQuery.dart' show Iexecutequery;
+import 'package:crud_factories/Backend/Feature/Connection/ExecuteQuery/sqlExecuteQuery.dart';
 import 'package:crud_factories/Backend/Feature/Connection/Sesion/IConnection_sesion_service.dart';
-import 'package:crud_factories/Backend/Global/variables.dart';
+
 import 'package:crud_factories/Objects/Conection.dart';
 import 'package:mysql1/mysql1.dart';
 
-class SqlConnectionSessionService implements IConnectionSesionService{
+class SqlConnectionSessionService implements IConnectionSesionService {
+
+  MySqlConnection? _connection;
+  Iexecutequery? _executeQuery;
+
+  Conection? _active;
 
   @override
-  Future<MySqlConnection> connect(Conection c) async {
+  Future<void> connect(Conection c) async {
 
-    try {
 
-      final settings = ConnectionSettings(
+    _active = c;
+
+    _connection = await MySqlConnection.connect(
+      ConnectionSettings(
         host: c.host,
         port: int.parse(c.port),
         user: c.user,
         password: c.password,
         db: c.database,
-      );
+      ),
+    );
 
-      executeQuery = await MySqlConnection.connect(settings);
-
-      return executeQuery;
-
-    } catch (e) {
-      rethrow; // 👈 IMPORTANTÍSIMO
-    }
+    _executeQuery = sqlExecuteQuery(_connection!);
   }
 
   @override
-  Future<bool> disconnect(Conection c) async {
-
-    await executeQuery?.close();
-
-    return true;
+  Iexecutequery get executeQuery {
+    final q = _executeQuery;
+    if (q == null) {
+      throw Exception("Session not connected");
+    }
+    return q;
   }
 
+  @override
+  Future<DisconnectResponse> disconnect() async {
+    final wasConnected = _connection != null;
+
+    try {
+      await _connection?.close();
+
+      return DisconnectResponse(
+        ok: true,
+        message: wasConnected
+            ? "Disconnected successfully"
+            : "There was no active connection",
+      );
+
+    } catch (e) {
+      return DisconnectResponse(
+        ok: false,
+        message: e.toString(),
+      );
+
+    } finally {
+      _connection = null;
+      _executeQuery = null;
+      _active = null;
+    }
+  }
 }
