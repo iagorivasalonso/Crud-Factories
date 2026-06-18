@@ -4,8 +4,9 @@ class ApiResponse {
 
   final bool ok;
   final String message;
+  final dynamic data;
 
-  ApiResponse({required this.ok, required this.message});
+  ApiResponse({required this.ok, required this.message,required this.data});
 
   factory ApiResponse.fromJson(Map<String, dynamic> json) {
     String msg;
@@ -22,6 +23,7 @@ class ApiResponse {
     return ApiResponse(
       ok: json['ok'] ?? false,
       message: msg,
+      data: json['data']
     );
   }
 }
