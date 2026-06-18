@@ -202,6 +202,9 @@ class AppProvider extends ChangeNotifier {
 
         await factoryProvider.load();
 
+    // =========================
+    // 5. EMPLOYEE PROVIDER
+    // =========================
 
     final employeeProvider = context.read<EmployeeProvider>();
 
