@@ -16,7 +16,7 @@ class SqlSectorDataSource  implements ISectorDataSource{
   Future<void> delete(String id) async {
 
     await executeQuery.execute(
-      "DELETE FROM sectors WHERE id=?",
+      'DELETE FROM sectors WHERE id=?',
       [id],
     );
   }
