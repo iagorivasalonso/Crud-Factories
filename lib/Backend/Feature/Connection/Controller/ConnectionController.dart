@@ -1,9 +1,11 @@
 
 import 'package:crud_factories/Backend/Feature/Connection/Datasource/IConnection_repository.dart';
+import 'package:crud_factories/Backend/Feature/Connection/ExecuteQuery/IexecuteQuery.dart';
 import 'package:crud_factories/Backend/Feature/Connection/ExecuteQuery/sqlExecuteQuery.dart' show sqlExecuteQuery;
 import 'package:crud_factories/Backend/Feature/Connection/Service/IConnectionService.dart';
 import 'package:crud_factories/Backend/Feature/Connection/Sesion/IConnection_sesion_service.dart';
 import 'package:crud_factories/Backend/Feature/Connection/SeverService/ServerService.dart' show Serverservice;
+import 'package:crud_factories/Backend/Global/variables.dart';
 import 'package:crud_factories/Backend/Providers/ConectionProvider.dart';
 import 'package:crud_factories/Backend/Data/controlsMessagesError/errors.dart';
 import 'package:crud_factories/Functions/createId.dart' show createId;
@@ -74,10 +76,10 @@ class Connectioncontroller {
 
      try {
 
-       final connection = await sessionService.connect(selected);
+       await sessionService.connect(selected);
 
 
-       provider.setExecuteQuery(sqlExecuteQuery(connection));
+       provider.setExecuteQuery(sessionService.executeQuery);
        provider.setSession(Connectionsesion(
            selectedDb: selected.database,
            baseDate: DateTime.now().toString()
@@ -107,21 +109,22 @@ class Connectioncontroller {
    Future<DisconnectResult> disconnect() async {
 
      try {
-       final selected = provider.selected;
 
-       if (selected == null)
-         return DisconnectResult.noConnection;
-
-       await sessionService.disconnect(selected);
+       final result = await sessionService.disconnect();
 
        provider.setSession(null);
        provider.setStatus(ConnectionStatus.disconnected);
        provider.setViewMode(ConnectionViewMode.normal);
 
-       return DisconnectResult.success;
-     } catch (e) {
-       print("error disconnect $e");
+       if (result.ok) {
+         return DisconnectResult.success;
+       } else {
+         return DisconnectResult.error;
+       }
 
+     } catch (e,stackTrace) {
+       print("error disconnect $e");
+       print(stackTrace);
        return DisconnectResult.error;
      }
    }
@@ -303,4 +306,23 @@ Future<String> controlsErrors(BuildContext context,String errorMsg,ConnectionPro
     type = S.of(context).the_user_or_password_are_incorrect;
   }
   return type;
+}
+
+class ConnectionResult {
+  final bool ok;
+  final String message;
+
+  ConnectionResult(this.ok, this.message);
+}
+
+class DisconnectResponse {
+  final bool ok;
+  final bool noActiveSession;
+  final String? message;
+
+  DisconnectResponse({
+    required this.ok,
+    this.noActiveSession = false,
+    this.message,
+  });
 }
