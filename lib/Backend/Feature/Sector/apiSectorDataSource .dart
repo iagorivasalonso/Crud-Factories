@@ -47,14 +47,14 @@ class ApiSectorDataSource implements ISectorDataSource{
   }
 
   @override
-  Future<void> insert(Sector sector) async {
+  Future<void> insert(Sector s) async {
 
       await saveToWebStorage(
         'sectors',
-        sector.id,
+        s.id,
         {
-          'id': sector.id,
-          'sector': sector.name,
+          'id': s.id,
+          'sector': s.name,
         },
         config,
       );
@@ -62,14 +62,14 @@ class ApiSectorDataSource implements ISectorDataSource{
   }
 
   @override
-  Future<void> upload(Sector sector) async  {
+  Future<void> upload(Sector s) async  {
 
     await saveToWebStorage(
     'sectors',
-    sector.id,
+    s.id,
     {
-      'id': sector.id,
-      'sector': sector.name,
+      'id': s.id,
+      'sector': s.name,
     },
     config,
         isUpdate: true
