@@ -4,9 +4,6 @@ import 'package:crud_factories/Backend/connectors_API/DbApi.dart' show DbApi;
 
 class ApiExecuteQuery implements Iexecutequery {
 
-  final DbApi api;
-
-  ApiExecuteQuery(this.api);
 
   @override
   Future<List<Map<String, dynamic>>> query(
