@@ -38,12 +38,12 @@ class SqlEmployeeDataSource implements  IEmployeeDataSource {
   Future<void> insert(Empleoyee e) async {
 
     await executeQuery.execute(
-        "INSERT INTO employees VALUES (?, ?)",
+        'INSERT INTO employees VALUES (?, ?)',
         [e.name,e.idFactory,e.id]
     );
   }
 
-
+//esto solo se usa en CSV
   @override
   Future<void> upload(Empleoyee empleoyee) {
     // TODO: implement upload
