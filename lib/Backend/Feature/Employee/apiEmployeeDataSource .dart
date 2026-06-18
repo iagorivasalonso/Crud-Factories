@@ -52,15 +52,15 @@ class ApiEmployeeDataSource implements IEmployeeDataSource {
   }
 
   @override
-  Future<void> insert(Empleoyee employee)  async{
+  Future<void> insert(Empleoyee e)  async{
 
     saveToWebStorage(
         'employees', // prefijo
-        employee.id,        // id único de la fábrica
+        e.id,        // id único de la fábrica
         {
-          'id': employee.id,
-          'name': employee.name,
-          'idFactory': employee.idFactory,
+          'id': e.id,
+          'name': e.name,
+          'idFactory': e.idFactory,
         },
         config
     );
@@ -68,7 +68,7 @@ class ApiEmployeeDataSource implements IEmployeeDataSource {
   }
 
   @override
-  Future<void> upload(Empleoyee empleoyee) {
+  Future<void> upload(Empleoyee e) {
     // TODO: implement upload
     throw UnimplementedError();
   }
