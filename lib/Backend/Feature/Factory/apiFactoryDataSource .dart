@@ -61,31 +61,31 @@ class apiFactoryDataSource implements IFactoryDataSource {
   }
 
   @override
-  Future<void> insert(Factory factory)  async{
+  Future<void> insert(Factory f)  async{
 
     saveToWebStorage(
         'factories', // prefijo
-        factory.id,        // id único de la fábrica
+        f.id,        // id único de la fábrica
         {
-          'id': factory.id,
-          'name': factory.name,
-          'highDate': factory.highDate,
-          'sector': factory.sector,
-          'telephone1': factory.thelephones.isNotEmpty
-              ? factory.thelephones[0]
+          'id': f.id,
+          'name': f.name,
+          'highDate': f.highDate,
+          'sector': f.sector,
+          'telephone1': f.thelephones.isNotEmpty
+              ? f.thelephones[0]
               : '',
-          'telephone2': factory.thelephones.length > 1
-              ? factory.thelephones[1]
+          'telephone2': f.thelephones.length > 1
+              ? f.thelephones[1]
               : '',
-          'mail': factory.mail,
-          'web': factory.web,
+          'mail': f.mail,
+          'web': f.web,
           'address': {
-            'street': factory.address.street,
-            'number': factory.address.number,
-            'apartment': factory.address.apartment,
-            'city':  factory.address.city,
-            'province': factory.address.province,
-            'postcode': factory.address.postcode,
+            'street': f.address.street,
+            'number': f.address.number,
+            'apartment': f.address.apartment,
+            'city':  f.address.city,
+            'province': f.address.province,
+            'postcode': f.address.postcode,
           },
         },
         config
@@ -93,31 +93,31 @@ class apiFactoryDataSource implements IFactoryDataSource {
   }
 
   @override
-  Future<void> upload(Factory factory) async {
+  Future<void> upload(Factory f) async {
 
     saveToWebStorage(
         'factories', // prefijo
-        factory.id,        // id único de la fábrica
+        f.id,        // id único de la fábrica
          {
-              'id': factory.id,
-              'name': factory.name,
-              'highDate': factory.highDate,
-              'sector': factory.sector,
-              'telephone1': factory.thelephones.isNotEmpty
-                  ? factory.thelephones[0]
+              'id': f.id,
+              'name': f.name,
+              'highDate': f.highDate,
+              'sector': f.sector,
+              'telephone1': f.thelephones.isNotEmpty
+                  ? f.thelephones[0]
                   : '',
-              'telephone2': factory.thelephones.length > 1
-                  ? factory.thelephones[1]
+              'telephone2': f.thelephones.length > 1
+                  ? f.thelephones[1]
                   : '',
-              'mail': factory.mail,
-              'web': factory.web,
+              'mail': f.mail,
+              'web': f.web,
               'address': {
-                  'street': factory.address.street,
-                  'number': factory.address.number,
-                  'apartment': factory.address.apartment,
-                  'city':  factory.address.city,
-                  'province': factory.address.province,
-                  'postcode': factory.address.postcode,
+                  'street': f.address.street,
+                  'number': f.address.number,
+                  'apartment': f.address.apartment,
+                  'city':  f.address.city,
+                  'province': f.address.province,
+                  'postcode': f.address.postcode,
               },
       },
         config,
