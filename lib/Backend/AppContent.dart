@@ -25,21 +25,12 @@ print(nav.current);
          );
 
        case AppView.factories:
-         return Container(
-           color: Colors.white,
-           child: const Center(
-             child: Text("FACTORIES"),
-           ),
-         );
+         return listFactories();
+
        case AppView.createFactory:
-         return Container(
-           color: Colors.white,
-           child: const Center(
-             child: Text("nuFACTORIES"),
-           ),
-         );
-         throw UnimplementedError();
-       case AppView.createMail:
+         return FactoryFromPage();
+
+       case AppView.creataddress:
          return Container(
            color: Colors.white,
            child: const Center(
