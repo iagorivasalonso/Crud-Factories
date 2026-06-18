@@ -1,4 +1,8 @@
 import 'package:crud_factories/Backend/Providers/NavigationProvider.dart';
+import 'package:crud_factories/Frontend/Views/listFactories.dart' show listFactories;
+import 'package:crud_factories/Frontend/conection.dart';
+import 'package:crud_factories/Frontend/factory.dart' show FactoryFromPage;
+import 'package:crud_factories/Objects/Conection.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -58,6 +62,7 @@ print(nav.current);
              child: Text("import"),
            ),
          );
+
        case AppView.mails:
          return Container(
            color: Colors.white,
@@ -80,13 +85,7 @@ print(nav.current);
            ),
          );
        case AppView.connections:
-         return Container(
-           color: Colors.white,
-           child: const Center(
-             child: Text("conect"),
-           ),
-         );
-
+         return conection();
      }
 
   }
