@@ -18,7 +18,7 @@ class sqlExecuteQuery implements Iexecutequery{
 
     final result = await connection.query(sql, params ?? []);
 
-    return result.map((row) => row.fields).toList();
+    return result.map((r)=>r.fields).toList();
   }
 
   @override
@@ -28,5 +28,5 @@ class sqlExecuteQuery implements Iexecutequery{
       ]) async {
     await connection.query(sql, params ?? []);
   }
-  
+
 }
