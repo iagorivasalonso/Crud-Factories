@@ -178,6 +178,10 @@ class SectorProvider extends ChangeNotifier {
     return EditResult.success;
   }
 
+  // =========================
+  //  DELETE
+  // =========================
+
   Future<DeleteResult> delete(
       int index,
       FactoryProvider factoryProvider,
