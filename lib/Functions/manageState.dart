@@ -4,31 +4,6 @@ import 'package:flutter/src/widgets/framework.dart';
 
 class manageState {
 
-  static String parseState(String value, BuildContext context, bool chargueLines) {
-    // Mapear los valores de string a estados
-    final stateMap = <String, String>{
-      S.of(context).prepared.toLowerCase(): S.of(context).prepared,
-      S.of(context).sent.toLowerCase(): S.of(context).sent,
-      S.of(context).in_progress.toLowerCase(): S.of(context).in_progress,
-      S.of(context).returned.toLowerCase(): S.of(context).returned,
-      S.of(context).he_responded.toLowerCase(): S.of(context).he_responded,
-    };
-
-    // Si es para cargar líneas, usar nombres de enum internos (LineSendState)
-    if (chargueLines) {
-      stateMap.clear();
-      stateMap.addAll({
-        "linesendstate.prepared": S.of(context).prepared,
-        "linesendstate.sent": S.of(context).sent,
-        "linesendstate.in_progress": S.of(context).in_progress,
-        "linesendstate.returned": S.of(context).returned,
-        "linesendstate.has_responded": S.of(context).he_responded,
-      });
-    }
-
-    final key = value.toLowerCase().trim();
-    return stateMap[key] ?? S.of(context).prepared;
-  }
 
   static String seeLanguage (BuildContext context, option){
      
@@ -54,17 +29,17 @@ class manageState {
 
   static LineSendState stringToState(String value) {
     switch (value.trim().toLowerCase()) {
-      case "preparado":
+      case "preparad":
         return LineSendState.prepared;
-      case "pendiente":
+      case "pending":
         return LineSendState.pending;
-      case "enviado":
+      case "sent":
         return LineSendState.sent;
-      case "en progreso":
+      case "in_progress":
         return LineSendState.in_progress;
-      case "devuelto":
+      case "returned":
         return LineSendState.returned;
-      case "ha respondido":
+      case "has_returned":
         return LineSendState.has_responded;
       default:
         return LineSendState.prepared;
