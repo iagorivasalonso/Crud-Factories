@@ -51,7 +51,11 @@ class CsvLineSendDatasource implements ILineSendDatasource {
   }
 
   @override
-  Future<void> upload(List<LineSend> lines) async {
+  Future<bool> upload(List<LineSend> lines) async {
+
+    if(lines.isEmpty)
+      return false;
+
         final lineSends = await load();
 
         final idsToUpdate = lines.map((l) => l.id).toSet();
@@ -65,6 +69,8 @@ class CsvLineSendDatasource implements ILineSendDatasource {
               update,
               path: this.path,
         );
+
+        return false;
   }
 
 

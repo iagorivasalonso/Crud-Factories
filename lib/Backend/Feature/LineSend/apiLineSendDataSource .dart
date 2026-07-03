@@ -78,7 +78,10 @@ class apiLinesendDatasource implements ILineSendDatasource{
 
 
   @override
-  Future<void> upload(List<LineSend> l) async {
+  Future<bool> upload(List<LineSend> l) async {
+
+          if(l.isEmpty)
+                return false;
 
           for(final line in l) {
 
@@ -96,6 +99,7 @@ class apiLinesendDatasource implements ILineSendDatasource{
                  isUpdate: true
             );
           }
-
+          return true;
     }
+
   }
