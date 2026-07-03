@@ -12,6 +12,7 @@ import 'package:crud_factories/Backend/Feature/Connection/Service/sql_connection
 import 'package:crud_factories/Backend/Feature/Connection/Sesion/IConnection_sesion_service.dart' show IConnectionSesionService;
 import 'package:crud_factories/Backend/Feature/Connection/Sesion/api_connection_sesion_service.dart' show apiConnectionSesionService;
 import 'package:crud_factories/Backend/Feature/Connection/Sesion/sql_connection_sesion_service.dart' show SqlConnectionSessionService;
+import 'package:crud_factories/Backend/Global/viewsModels/SendFrom.dart';
 import 'package:crud_factories/Backend/Providers/App_provaider.dart';
 import 'package:crud_factories/Backend/Providers/ConectionProvider.dart' show ConnectionProvider;
 import 'package:crud_factories/Backend/Providers/EditStateProvider.dart' show EditStateProvider;
@@ -26,7 +27,6 @@ import 'package:crud_factories/Backend/Repositories/routesRepository.dart' show 
 import 'package:provider/provider.dart';
 import 'package:provider/single_child_widget.dart';
 import '../../Providers/EmployeeProvider.dart';
-import '../../Providers/MailProvider.dart' show MailProvider;
 import '../../Feature/Router/CsvRouterDataSource.dart';
 import '../../Feature/Connection/Datasource/IConnection_repository.dart' show IConnectionDataSource;
 import '../../Feature/Connection/Service/IConnectionService.dart';
@@ -150,16 +150,28 @@ class DependencyInjection {
 
 
 
+                                         // =========================
+                                         // LINESEND
+                                         // =========================
+
      ChangeNotifierProvider(
-         create: (_) => LineSendProvider()
+       create: (context) => LineSendProvider(
+         factoryProvider: context.read<FactoryProvider>(),
+         sectorProvider: context.read<SectorProvider>(),
+       ),
      ),
 
-
+  ChangeNotifierProvider(
+      create: (context) => SendFromViewModel(
+      sectorProvider: context.read<SectorProvider>(),
+      factoryProvider: context.read<FactoryProvider>(),
+  ),
+   /*
      ChangeNotifierProvider(
          create: (_) => MailProvider()
      ),
-
-
+*/
+  )
    ];
 
 
