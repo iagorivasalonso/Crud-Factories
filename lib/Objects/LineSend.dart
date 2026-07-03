@@ -1,3 +1,4 @@
+import 'package:crud_factories/Backend/Global/controllers/LineSend.dart' show LineSendController;
 import 'package:crud_factories/Objects/BaseEntity.dart';
 import 'package:crud_factories/generated/l10n.dart';
 import 'package:flutter/src/widgets/framework.dart';
@@ -26,36 +27,42 @@ class LineSend extends BaseEntity {
   });
 
   static String showFormatDate(String date, BuildContext context) {
+    try {
+      if (date.isEmpty) return "";
 
-    List <String> listMmonth = [
-      ' ',
-      S.of(context).january,
-      S.of(context).february,
-      S.of(context).march,
-      S.of(context).april,
-      S.of(context).may,
-      S.of(context).june,
-      S.of(context).july,
-      S.of(context).august,
-      S.of(context).september,
-      S.of(context).october,
-      S.of(context).november,
-      S.of(context).december,
-    ];
+      final parts = date.split("-");
 
-    List <String> partDate = date.split("-");
+      if (parts.length < 3) return date;
 
-    String dateFormat = " ";
+      final day = parts[0];
+      final monthIndex = int.tryParse(parts[1]) ?? 0;
+      final year = parts[2];
 
-    int nMonth = int.parse(partDate[1]);
+      final listMmonth = [
+        ' ',
+        S.of(context).january,
+        S.of(context).february,
+        S.of(context).march,
+        S.of(context).april,
+        S.of(context).may,
+        S.of(context).june,
+        S.of(context).july,
+        S.of(context).august,
+        S.of(context).september,
+        S.of(context).october,
+        S.of(context).november,
+        S.of(context).december,
+      ];
 
-    String day = partDate[0];
-    String month = listMmonth[nMonth];
-    String year = partDate[2];
+      final safeMonth =
+      (monthIndex >= 1 && monthIndex < listMmonth.length)
+          ? listMmonth[monthIndex]
+          : "";
 
-    dateFormat = "$day ${S.of(context).de.toLowerCase()} $month ${S.of(context).ofThe.toLowerCase()} $year";
-
-    return dateFormat;
+      return "$day ${S.of(context).de.toLowerCase()} $safeMonth ${S.of(context).ofThe.toLowerCase()} $year";
+    } catch (e) {
+      return date;
+    }
   }
 
 
@@ -94,4 +101,14 @@ class cardSend {
     required this.description
 });
 
+}
+
+class SendRow {
+  final LineSendController controller;
+  bool selected;
+
+  SendRow({
+    required this.controller,
+    this.selected = false,
+  });
 }
