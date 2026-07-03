@@ -4,6 +4,7 @@ import 'package:crud_factories/Backend/Feature/Connection/Datasource/CsvConnecti
 import 'package:crud_factories/Backend/Feature/Connection/Datasource/IConnection_repository.dart';
 import 'package:crud_factories/Backend/Feature/Employee/employee_service.dart' show RepositoryEmployee;
 import 'package:crud_factories/Backend/Feature/Factory/factory_service.dart' show RepositoryFactory;
+import 'package:crud_factories/Backend/Feature/LineSend/lineSend_service.dart';
 import 'package:crud_factories/Backend/Feature/Router/CsvRouterDataSource.dart' show CsvRouterDataSource;
 import 'package:crud_factories/Backend/Feature/Sector/sector_service.dart' show Repository, RepositorySector;
 import 'package:crud_factories/Backend/Global/controllers/Conection.dart';
@@ -220,9 +221,31 @@ class AppProvider extends ChangeNotifier {
         );
 
     await employeeProvider.load();
-     /*
-    await context.read<LineSendProvider>().load(files.lines);
-    await context.read<MailProvider>().load(files.mails);*/
+
+    // =========================
+    // 6. LINES PROVIDER
+    // =========================
+
+    final lineProvider = context.read<LineSendProvider>();
+
+        await lineProvider.setRepositoryAndReload(
+             RepositoryLineSend.create(
+                 mode,
+                 files,
+                 db: executeQuery,
+                 config:mode == DataSourceMode.api
+                     ? provider.config
+                     : null,
+             )
+        );
+
+    await lineProvider.load();
+
+   lineProvider.enrichWithFactories(
+      context.read<FactoryProvider>().factories,
+    );
+
+    //await context.read<MailProvider>().load(files.mails);
   }
 
   Future<void> _applyRoutes(BuildContext context, List<RouteCSV> routes) async {
