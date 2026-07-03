@@ -1,48 +1,48 @@
 import 'package:crud_factories/Alertdialogs/confirm.dart';
 import 'package:crud_factories/Alertdialogs/error.dart';
-import 'package:crud_factories/Backend/Global/controllers/LineSend.dart';
-import 'package:crud_factories/Backend/Global/list.dart';
-import 'package:crud_factories/Backend/Global/variables.dart';
-import 'package:crud_factories/Backend/CSV/exportLines.dart';
-import 'package:crud_factories/Backend/SQL/createLine.dart';
-import 'package:crud_factories/Functions/createId.dart';
-import 'package:crud_factories/Functions/manageState.dart';
-import 'package:crud_factories/Functions/validatorCamps.dart';
-import 'package:crud_factories/Objects/Factory.dart';
+import 'package:crud_factories/Backend/Global/viewsModels/SendFrom.dart' show SendFromViewModel;
+import 'package:crud_factories/Backend/Providers/FactoryProvider.dart' show FactoryProvider;
+import 'package:crud_factories/Backend/Providers/SectorProvider.dart' show SectorProvider;
+import 'package:crud_factories/Backend/Providers/filterProvider.dart';
+import 'package:crud_factories/Backend/Repositories/mailRepository.dart' show SendFromViewModel;
+import 'package:crud_factories/Functions/isNotAndroid.dart' show isNotAndroid;
 import 'package:crud_factories/Objects/LineSend.dart';
 import 'package:crud_factories/Objects/Sector.dart';
+import 'package:crud_factories/Widgets/CustomDataTable.dart';
 import 'package:crud_factories/Widgets/headViewsAndroid.dart';
 import 'package:crud_factories/Widgets/textfield.dart';
 import 'package:crud_factories/generated/l10n.dart';
 import 'package:crud_factories/helpers/localization_helper.dart';
-import 'package:flutter/foundation.dart' show kIsWeb;
-import 'package:intl/intl.dart';
-import 'package:flutter/material.dart';
+import 'package:fluent_ui/fluent_ui.dart';
+import 'package:flutter/material.dart' show Scaffold;
+import 'package:provider/provider.dart' show WatchContext, ReadContext, Consumer;
 import 'package:collection/collection.dart';
-import 'package:crud_factories/Backend/SQL/modifyLines.dart';
-import 'package:crud_factories/Functions/isNotAndroid.dart';
-import 'package:crud_factories/Widgets/CustomDataTable.dart';
-import 'package:crud_factories/Widgets/dropDownButton.dart' show GenericDropdown;
-import 'package:crud_factories/Widgets/headView.dart' show headView;
-import 'package:crud_factories/Widgets/materialButton.dart';
-
-import 'package:crud_factories/Widgets/textfieldCalendar.dart';
+import '../Backend/Providers/LineSendProvider.dart';
+import '../Widgets/dropDownButton.dart';
+import '../Widgets/materialButton.dart';
+import '../Widgets/textfieldCalendar.dart';
 
 
-class newSend extends StatefulWidget {
+class SendFromPage extends StatefulWidget {
 
-  String selectCamp;
-  String filter;
-  int select;
+ final List<LineSend> lines;
+ final String? selectCamp;
+ final SendFilter? filter;
+ final int? select;
 
-  newSend(this.selectCamp, this.filter, this.select);
+  SendFromPage({
+    super.key,
+    this.lines = const [],
+    this.filter,
+    this.selectCamp,
+    this.select, required
+  });
 
   @override
-  State<newSend> createState() => _newSendState();
+  State<SendFromPage> createState() => _SendFromPageState();
 }
 
-class _newSendState extends State<newSend>{
-
+class _SendFromPageState extends State<SendFromPage> {
 
 
   final ScrollController horizontalScroll = ScrollController();
@@ -50,650 +50,487 @@ class _newSendState extends State<newSend>{
   final ScrollController verticalScrollTable = ScrollController();
 
 
-  String tView ="";
-  Sector? selectedSector;
 
-  String selectedItem = LineSendState.prepared.name;
-  List<LineSend> linesSelected = [];
-  List<LineSend> linesSave = [];
-  String sector = "";
-  String campKey = " ";
-  String messageResult ="";
-  int cantFactory= 0;
-  List<String> stateSends =[];
-  String tList = "";
-  String action1 = "";
-  String action2 = "";
-  int allLinesCreated = 0;
-  bool allSectors = true;
-  String sectorName= "";
-  List<bool> send = [];
+  bool allSectors = false;
 
-  List<bool> observationModify = [];
-  List<bool> stateModify = [];
 
-  late List<LineSendController> linesControllers;
 
   @override
   void initState() {
     super.initState();
 
-    linesControllers = [];
 
-    if (widget.select == -1  && linesControllers.isEmpty) {
-      selectedSector = null;
-      factoriesSector = allFactories;
-      generateControllers();
+    vm = context.read<SendFromViewModel>();
 
-    } else {
-      _initEditData();
-    }
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      vm.init(
+        isEditing: false,
+        lines: widget.lines,
+      );
+
+        if(widget.lines.isNotEmpty)
+        {
+           final text = widget.filter == SendFilter.date
+                ? widget.lines.first.date
+                : widget.lines.first.factory;
+
+           controllerSearchSend.text = text;
+
+           vm.changueFilter(widget.lines, text,widget.filter);
+        }
+    });
   }
+
   @override
-  void didUpdateWidget(covariant newSend oldWidget) {
+  void didUpdateWidget(covariant SendFromPage oldWidget) {
     super.didUpdateWidget(oldWidget);
 
-    if (oldWidget.select != widget.select ||
-        oldWidget.selectCamp != widget.selectCamp ||
+    if (oldWidget.lines != widget.lines ||
         oldWidget.filter != widget.filter) {
 
-      if (widget.select == -1 && linesControllers.isEmpty) {
-        selectedSector = null;
-        factoriesSector = allFactories;
+      if (widget.lines.isNotEmpty) {
+        final text = widget.filter == SendFilter.date
+            ? widget.lines.first.date
+            : widget.lines.first.factory;
 
-        generateControllers();
-        controllerSearchSend.text =
-            DateFormat('dd-MM-yyyy').format(DateTime.now());
-
-        // ✅ después de generar
-        loadFactoriesFromModel(context, factoriesSector, linesControllers);
-
-      } else {
-        _initEditData();
+        controllerSearchSend.text = text;
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          if (mounted) {
+            vm.changueFilter(widget.lines, text,widget.filter);
+          }
+        });
       }
     }
   }
-  void _initEditData() {
-
-    if(widget.filter=="Fecha")
-    {
-        linesSelected = lineSector.where((e) {
-          return e.date == widget.selectCamp;  // si tienes sector seleccionado
-        }).toList();
-    }
-    else
-    {
-      linesSelected = lineSector.where((e) {
-        return e.factory == widget.selectCamp;  // si tienes sector seleccionado
-      }).toList();
-    }
-
-    print(linesSelected);
-    controllerSearchSend.text = widget.selectCamp;
-
-      loadLinesFromModel(linesSelected);
-
-
-
-    if (linesControllers.isNotEmpty) {
-      final firstSector = linesControllers.first.sector.text;
-
-      allSectors = linesControllers.any(
-            (e) => e.sector.text != firstSector,
-      );
-    }
-     sectorName = linesControllers.isNotEmpty
-        ? linesControllers.first.sector.text
-        : "";
-
-
-
-  }
-
 
   @override
   void dispose() {
-    for (final line in linesControllers) {
-      line.dispose();
-    }
-    super.dispose();
+    horizontalScroll.dispose();
+    verticalScroll.dispose();
+    verticalScrollTable.dispose();
 
+    super.dispose();
   }
+
+  TextEditingController controllerSearchSend = TextEditingController();
+
+  late SendFromViewModel vm;
+
+
 
   @override
   Widget build(BuildContext context0) {
 
-    BuildContext context = isNotAndroid() ? context0 :  context1;
-    int select = widget.select;
-    String filter = widget.filter;
+    final vm = context.watch<SendFromViewModel>();
+    final providerLines = context.watch<LineSendProvider>();
+
+    final isEditing = widget.lines.isNotEmpty;
+
+   String  action1 = isEditing
+        ? S.of(context).save
+        : S.of(context).newMale;
+
+    String action2 = isEditing
+        ? S.of(context).undo
+        : S.of(context).reboot;
+
+    final providerSectors = context
+        .watch<SectorProvider>()
+        .sectors;
+
+    final selectedSector = providerSectors.firstWhereOrNull(
+          (s) => s.id == vm.sectorId,
+    );
 
 
-    List<LineSendState> stateSends = LineSendState.values.toList();
 
-    if(select == -1)
+
+    String messageResult = "";
+
+    String campKey = "";
+    String titleSector="";
+
+    final sectorsWithFactories = providerSectors.where((sector) {
+      return context
+          .watch<FactoryProvider>()
+          .factoriesBySector(sector.id)
+          .isNotEmpty;
+    }).toList();
+
+    if(isEditing)
     {
-      tView = S.of(context).new_shipment;
-      tList = S.of(context).companies;
-      action1 = S.of(context).newMale;
-      action2 = S.of(context).reboot;
+         campKey = widget.filter == SendFilter.date
+                   ?  S.of(context).company
+                   :  S.of(context).date;
 
+         final sectorId = context.watch<FilterProvider>().sectorId;
 
-      if (selectedSector == null || selectedSector!.id == "-1") {
-        factoriesSector = allFactories;
-      } else {
-        factoriesSector = allFactories
-            .where((factory) => factory.sector == selectedSector!.id)
-            .toList();
-      }
+            if (sectorId=="0")
+            {
+               allSectors = widget.filter == SendFilter.date
+                       ? true
+                       : false;
 
+               titleSector = widget.filter == SendFilter.date
+                            ? S.of(context).allSectors
+                            : S.of(context).list_of_sends;
+            }
+            else
+            {
+               allSectors = false;
+               
+               final sectorSelected = providerSectors.firstWhere(
+                    (s) => s.id == sectorId
+                );
+
+               titleSector =  widget.filter == SendFilter.date
+                   ? '${S.of(context).sectorOf} ${sectorSelected.name}'
+                   : S.of(context).list_of_sends;
+            }
+
+            final lines = widget.lines;
+
+            messageResult = widget.filter == SendFilter.date
+                ?   LocalizationHelper.sendsDay(context, lines.length)
+                :    LocalizationHelper.sendsDay(context, lines.length);
 
     }
-    else if(saveChanges == false)
+    else
     {
-      tView = S.of(context).edit_shipment;
-      tList = S.of(context).shipment;
-      action1 = S.of(context).save;
-      action2 = S.of(context).undo;
-
-      int cant = linesSelected.length;
-
-      if(filter == S.of(context).date)
-      {
-        campKey = S.of(context).company;
-        messageResult = LocalizationHelper.sendsDay(context, cant);
-      }
-      else
-      {
-        campKey = S.of(context).date;
-        messageResult = LocalizationHelper.sendsFactory(context, cant);
-      }
+          allSectors = selectedSector == null
+                ? true
+                : false;
 
 
+          messageResult = LocalizationHelper.factoriesBD(context, vm.controllers.length);
     }
-
-
 
     return !isNotAndroid()
         ? Scaffold(
-      body: Scrollbar(
-        controller: verticalScroll,
-        thumbVisibility: true,
-        child: Scrollbar(
-          controller: horizontalScroll,
+        body: Scrollbar(
+          controller: verticalScroll,
           thumbVisibility: true,
-          notificationPredicate: (notification) =>
-          notification.metrics.axis == Axis.horizontal,
-          child: SingleChildScrollView(
-            controller: verticalScroll,
-            scrollDirection: Axis.vertical,
+          child: Scrollbar(
+            controller: horizontalScroll,
+            thumbVisibility: true,
+            notificationPredicate: (notification) =>
+            notification.metrics.axis == Axis.horizontal,
             child: SingleChildScrollView(
-              controller: horizontalScroll,
-              scrollDirection: Axis.horizontal,
-              child: Padding(
-                padding: const EdgeInsets.only(left: 30.0, top: 30.0),
-                child: Container(
-                    constraints: BoxConstraints(
-                      minWidth: MediaQuery.of(context).size.width,
-                      minHeight: MediaQuery.of(context).size.height,
-                    ),
-                  child: Align(
-                      alignment: Alignment.topLeft,
-                      child: SizedBox(
-                        width: 980,
-                        child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              headView(
-                                  title: tView
-                              ),
-                              Container(
-                                width: 500,
-                                child: select == -1
-                                    ? textfieldCalendar(
-                                  context: context,
-                                  nameCamp: S.of(context).date,
-                                  controllerCamp: controllerSearchSend,
-                                )
-                                : defaultTextfield(
-                                    nameCamp: filter,
-                                    controllerCamp: controllerSearchSend
+              controller: verticalScroll,
+              scrollDirection: Axis.vertical,
+              child: SingleChildScrollView(
+                controller: horizontalScroll,
+                scrollDirection: Axis.horizontal,
+                child: Padding(
+                  padding: const EdgeInsets.only(left: 30.0, top: 30.0),
+                  child: Container(
+                      constraints: BoxConstraints(
+                        minWidth: MediaQuery.of(context).size.width,
+                        minHeight: MediaQuery.of(context).size.height,
+                      ),
+                      child: Align(
+                        alignment: Alignment.topLeft,
+                        child: SizedBox(
+                          width: 980,
+                          child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Container(
+                                  width: 500,
+                                  child: isEditing == false
+                                      ? textfieldCalendar(
+                                    context: context,
+                                    nameCamp: S
+                                        .of(context)
+                                        .date,
+                                    controllerCamp: controllerSearchSend,
+                                  )
+                                      : defaultTextfield(
+                                      nameCamp: widget.filter == SendFilter.date
+                                                ? S.of(context).date
+                                                : S.of(context).company,
+                                      controllerCamp: controllerSearchSend,
+                                      context: context
+                                  ),
                                 ),
-                              ),
-
 
                                 Padding(
-                                    padding: const EdgeInsets.only(left: 40.0, top: 20.0),
-                                    child: SizedBox(
-                                      height: 40,
-                                      width: 300,
-                                      child: select == -1
+                                  padding: const EdgeInsets.only(left: 35.0,top: 15.0),
+                                  child: SizedBox(
+                                    width: 300,
+                                    height: 50,
+                                    child: isEditing == false
                                       ? GenericDropdown<Sector>(
-                                        items: sectors,
-                                        camp:S.of(context).sector,
-                                        opDefault: S.of(context).allMale,
-                                        selectedItem: selectedSector,
-                                        hint: sector,
-                                        itemLabel: (sector) => sector.name,
-                                        onChanged: (sectorChoose) =>_onSectorChanged(context, sectorChoose, select),
-                                      )
-                                      :!allSectors && linesControllers.isNotEmpty
-                                        ? Padding(
-                                          padding: const EdgeInsets.only(top: 20.0),
-                                          child: Text(sectorName.isNotEmpty?"${S.of(context).companies_of} $sectorName":"",
-                                            style: const TextStyle(fontWeight: FontWeight.bold),
-                                          )
-                                        )
-                                        : SizedBox.shrink(),
+                                      items:sectorsWithFactories,
+                                      camp: S.of(context).sector,
+                                      opDefault: S.of(context).allMale,
+                                      selectedItem: selectedSector,
+                                      hint: S.of(context).sector,
+                                      itemLabel: (sector) => sector.name,
+                                      onChanged: (sectorChoose) =>
+                                          _onSectorChanged(context, sectorChoose),
+                                    )
+                                    : Padding(
+                                        padding: const EdgeInsets.only(left: 30.0, top: 30.0),
+                                        child: Text(titleSector,
+                                          style: TextStyle(fontWeight: FontWeight.bold),),
                                     ),
                                   ),
+                                ),
 
                                 Padding(
-                                  padding: const EdgeInsets.only(top: 40, left: 90, bottom: 30),
-                                  child: select == -1
-                                       ? customDataTable(
-                                         key: ValueKey(linesControllers),
-                                         scrollController: verticalScrollTable,
-                                         columns: allSectors == false
-                                                   ? [S.of(context).company, S.of(context).observations, S.of(context).state, S.of(context).select]
-                                                   : [S.of(context).company, S.of(context).sector ,S.of(context).observations, S.of(context).state, S.of(context).select],
-                                         showSectorColumn: allSectors,
-                                         select: -1,
-                                         states: stateSends,
-                                         sendValues: send,
-                                         selectedItem: null,
-                                         linesControllers: linesControllers,
-                                         mesage: messageResult,
-                                         onStateChanged: (index , value ) {
-                                           setState(() {
-                                             linesControllers[index].state = value as LineSendState;
-                                           });
-                                         },
-                                         onSendChanged: (i, value) {
+                                  padding: const EdgeInsets.only(left: 50.0,top: 30.0,bottom: 50.0),
+                                  child: SizedBox(
+                                    child: isEditing == false
+                                    ?Consumer<SendFromViewModel>(
+                                      builder: (context, vm, _) {
+                                        return customDataTable(
+                                          key: const ValueKey("new"),
+                                          scrollController: verticalScrollTable,
 
-                                             send[i] = value;
-                                             saveChanges = true;
-                                             setState(() {});
-                                         },
-                                         onSelectedAllChanged: (value) {
-                                              for (int i = 0; i < send.length; i++)
-                                              {
-                                                send[i] = value;
-                                              }
-                                          saveChanges = true;
-                                          setState(() {});
-                                         },
-                                      )
+                                          columns: allSectors == false
+                                              ? [
+                                            S.of(context).company,
+                                            S.of(context).observations,
+                                            S.of(context).state,
+                                            S.of(context).select
+                                          ]
+                                              : [
+                                            S.of(context).company,
+                                            S.of(context).sector,
+                                            S.of(context).observations,
+                                            S.of(context).state,
+                                            S.of(context).select
+                                          ],
 
-                                      : customDataTable(
-                                      scrollController: verticalScrollTable,
-                                      columns: allSectors == false
-                                        ? [campKey, S.of(context).observations, S.of(context).state]
-                                        : [campKey, S.of(context).sector ,S.of(context).observations, S.of(context).state],
-                                           showSectorColumn: allSectors,
-                                          states: stateSends,
-                                          selectedItem: null,
-                                          linesControllers: linesControllers,
-                                          mesage: messageResult,
-                                          onObservationChanged: (index , String ) {
-                                            if(linesControllers[index].observations.text!=linesSelected[index].observations)
-                                            {
-                                               linesSelected[index].observations=linesControllers[index].observations.text;
-                                               observationModify[index] = true;
-
-                                               setState(() {
-                                                 saveChanges = true;
-                                               });
-                                            }
-                                            else
-                                            {
-                                              observationModify[index] = false;
-                                            }
+                                          showSectorColumn: allSectors,
+                                          lines: vm.controllers,
+                                          sendValues: vm.send,
+                                          onStateChanged: (index, value) {
 
 
                                           },
-                                          onStateChanged: (index , value ) {
-                                            setState(() {
-                                              linesControllers[index].state = value;
 
-                                              if (linesControllers[index].state.name != linesSave[index].state) {
-                                                stateModify[index] = true;
-                                                saveChanges = true;
-                                              } else {
-                                                stateModify[index] = false;
+                                          onSendChanged: (i, value) {
+                                            vm.toggleSend(i, value);
+                                        },
+
+
+                                          onSelectedAllChanged: (value) {
+                                            for (int i = 0; i <
+                                                vm.send.length; i++) {
+                                              vm.send[i] = value;
+                                            }
+                                            vm.notifyListeners();
+                                          },
+
+                                          mesage: messageResult,
+                                        );
+                                      },
+                                    )
+                                    : Consumer<SendFromViewModel>(
+                                           builder: (context, vm, _) {
+                                      return customDataTable(
+                                      key: const ValueKey("edit"),
+                                      scrollController: verticalScrollTable,
+
+                                      columns: allSectors == false
+                                      ? [
+                                            campKey,
+                                            S.of(context).observations,
+                                            S.of(context).state,
+
+                                            ]
+                                                : [
+                                            campKey,
+                                            S.of(context).sector,
+                                            S.of(context).observations,
+                                            S.of(context).state,
+
+                                            ],
+
+                                      showSectorColumn: allSectors,
+                                      filter: widget.filter,
+                                      lines: vm.controllers,
+                                      sendValues: vm.send,
+                                      onObservationChanged: (index, value) {
+
+                                        providerLines.updateLines(
+                                           vm.controllers[index].id,
+                                          observations: value,
+                                        );
+                                      },
+
+                                      onStateChanged: (index, value) {
+
+                                        providerLines.updateLines(
+                                          vm.controllers[index].id,
+                                          state: value.name,
+                                        );
+                                      },
+
+                                      onSendChanged: (i, value) {
+                                      vm.toggleSend(i, value);
+                                      },
+
+
+                                      onSelectedAllChanged: (value) {
+                                              for (int i = 0; i < vm.send.length; i++)
+                                              {
+                                                vm.send[i] = value;
                                               }
-                                            });
-                                          }, sendValues: [], onSendChanged: (int p1, bool p2) {  }, onSelectedAllChanged: (value) {  },
-                                     ),
-                                    ),
+                                              vm.notifyListeners();
+                                      },
 
-                                    Padding(
-                                        padding: const EdgeInsets.only(left: 700.0),
-                                        child: Row(
-                                          crossAxisAlignment: CrossAxisAlignment.start,
-                                          children: [
-                                            materialButton(
-                                                nameAction: action1,
-                                                function: () =>
-                                                _onSaveSend(context,select,controllerSearchSend,linesControllers)
-                                            ),
-
-                                            Padding(
-                                              padding: const EdgeInsets.only(left: 20.0),
-                                              child: materialButton(
-                                                nameAction: action2,
-                                                function: () => _onResetCamps(context),
-                                                ),
-                                        )
-                                       ],
-                                    ),
-                                   ),
-                                ]
-                              ),
-                      ),
+                                      mesage: messageResult,
+                                      );
+                                      },
+                                      ),
+                                  ),
+                                ),
+                               const SizedBox(height: 20,),
+                                Padding(
+                                  padding: const EdgeInsets.only(bottom: 40.0),
+                                  child: Row(
+                                    children: [
+                                      Padding(
+                                        padding: const EdgeInsets.only(left: 550.0),
+                                        child: materialButton(
+                                          nameAction: action1,
+                                          function: () =>isEditing == false
+                                                  ? createSend()
+                                                  : editSend(),
+                                        ),
+                                      ),
+                                      Padding(
+                                        padding: const EdgeInsets.only(left: 20.0),
+                                        child: materialButton(
+                                            nameAction: action2,
+                                            function: () =>
+                                                vm.reset()
+                                        ),
+                                      )
+                                    ],
+                                  ),
+                                ),
+                              ]
+                          ),
+                        ),
                       )
                   ),
-              ),
+                ),
               ),
             ),
           ),
         )
     ) : Scaffold(
-             appBar: appBarAndroid(context, name: "sasd"),
-             body: Text("creart email"),
+      appBar: appBarAndroid(context, name: "sasd"),
+      body: Text("creart email"),
     );
-
   }
-  Future<void> loadFactoriesFromModel(
-      BuildContext context,
-      List<Factory> factories,
-      List<LineSendController> controllersLines,
-      ) async {
 
-    for (int i = 0; i < factories.length && i < controllersLines.length; i++) {
-
-      final sectorSelected = sectors.firstWhereOrNull(
-            (sector) => sector.id == factories[i].sector,
-      );
-
-
-      controllersLines[i].sector.text = sectorSelected?.name ??
-          S.of(context).The_sector_does_not_exist;
-      controllersLines[i].date.text = controllerSearchSend.text;
-      controllersLines[i].factory.text = factories[i].name;
-      controllersLines[i].state = LineSendState.prepared;
-
+  void _onSectorChanged(BuildContext context, Sector? sectorChoose) {
+    if (sectorChoose != null) {
+      context.read<SendFromViewModel>()
+          .changeSector(sectorChoose.id);
     }
-    _updateMessageResult(context);
-    setState(() {});
-  }
-
-  Future<void> loadLinesFromModel(
-      List<LineSend> lines
-      ) async {
-
-    final oldControllers = linesControllers;
-
-
-     final newControllers = lines.map((line) {
-            final sectorSelected = sectors.firstWhereOrNull(
-                  (s) => s.id == line.sector,
-            );
-
-            return LineSendController(
-              date: TextEditingController(text: line.date),
-              factory: TextEditingController(text: line.factory),
-              sector: TextEditingController(text: sectorSelected?.name ?? ''),
-              observations: TextEditingController(text: line.observations),
-              state: manageState.stringToState(line.state),
-            );
-          }).toList();
-    linesControllers = newControllers;
-    for (final c in oldControllers) {
-      c.dispose();
-    }
-
-    linesSave = lines.map((e) => e.copyWith()).toList();
-          observationModify = List.filled(lines.length, false);
-          stateModify = List.filled(lines.length, false);
-  }
-
-  void _onSectorChanged(BuildContext context, Sector? sectorChoose, int select) {
-    if (sectorChoose == null || sectorChoose.id == -1) {
-      selectedSector = null;
-      allSectors = true;
-      factoriesSector = allFactories;
-    } else {
-      selectedSector = sectorChoose;
-      allSectors = false;
-      factoriesSector = allFactories
-          .where((f) => f.sector == sectorChoose.id)
-          .toList();
-    }
-
-    _updateMessageResult(context);
-    setState(() {});
-  }
-
-  Future<void> _onSaveSend(BuildContext context,int select, controllerSearch, List<LineSendController> linesControllers) async{
-
-    List <LineSend> current = [];
-    allLines.sort((a, b) => int.parse(a.id).compareTo(int.parse(b.id)));
-
-      String idNew = "";
-
-      if (allLines.isNotEmpty) {
-        String idLast = allLines[allLines.length - 1].id;
-        idNew = createId(idLast);
-      }
-      else {
-        idNew = "1";
-      }
-
-      int idInit = int.parse(idNew);
-
-      if (select == -1) {
-        final dateError = ValidatorCamps.dateValidate(
-          controllerSearch.text,
-          context,
-        );
-
-        if (dateError != null) {
-          String format = 'DD-MM-AAAA';
-          error(context, dateError, format);
-          return;
-        }
-
-          for (int i = 0; i < factoriesSector.length; i++) {
-
-            if (send[i] == true){
-              current.add(LineSend(
-                id: (idInit + current.length).toString(),
-                date: controllerSearch.text,
-                factory: factoriesSector[i].name,
-                observations: linesControllers[i].observations.text,
-                state: manageState.parseState(linesControllers[i].state.name, context, true),
-              ));
-
-
-            }
-
-              // Reset UI
-              linesControllers[i].observations.text = "";
-              linesControllers[i].state = LineSendState.prepared;
-              send[i] = false;
-            }
-
-
-          allLinesCreated += current.length;
-          confirm(context, LocalizationHelper.sendsFactory(context, allLinesCreated));
-
-        setState(() {
-          // Reinicia todos los checkboxes
-          send = List.generate(factoriesSector.length, (_) => false);
-
-          // Reinicia estados y observaciones de líneas (aunque ya lo hicimos arriba)
-          for (var ctrl in linesControllers) {
-            ctrl.state = LineSendState.prepared;
-            ctrl.observations.text = "";
-          }
-        });
-
-
-      }
-      else {
-
-
-        int linesModify = 0;
-
-        for (int i = 0; i < linesSelected.length; i++) {
-
-
-          final newObservations = linesControllers[i].observations.text;
-          final newState = linesControllers[i].state.name;
-
-          if (observationModify[i] || stateModify[i]) {
-            linesModify++;
-          }
-
-          // 👉 aplicar cambios
-          linesSelected[i].observations = newObservations;
-          linesSelected[i].state = newState;
-        }
-        allLines = List.from(linesSelected);
-        if(linesModify > 0)
-        confirm(
-          context,
-          LocalizationHelper.cantLinesModify(context, linesModify),
-        );
-
-        observationModify = List.filled(linesSelected.length, false);
-        stateModify = List.filled(linesSelected.length, false);
-        // 👉 sincronizar con allLines
-        final selectedMap = {
-          for (var line in linesSelected) line.id: line
-        };
-
-        allLines = allLines.map((line) {
-          return selectedMap[line.id] ?? line;
-        }).toList();
-      }
-
-    saveChanges = false;
-    allLines += current;
-    if (BaseDateSelected.isNotEmpty) {
-
-      if (select == -1) {
-        await sqlCreateLine(current, context);
-      } else {
-        await sqlModifyLines(linesSelected);
-      }
-
-    } else {
-
-      bool errorExp = await csvExportatorLines(allLines);
-
-      if (!kIsWeb && errorExp) {
-        String action = LocalizationHelper.no_file(
-          context,
-          S.of(context).shipments,
-        );
-        error(context, action);
+    else {
+      if (sectorChoose == null) {
+        vm.changeSector("0");
         return;
       }
-
-      if (select == -1) {
-        await _onResetCamps(context);
-      }
     }
   }
 
+  Future<void> createSend() async {
 
-  Future<void> _onResetCamps(BuildContext context) async {
+    final lines = <LineSend>[];
 
-    final select = widget.select;
+    final providerLines = context.read<LineSendProvider>();
 
-      if (select == -1)
+    final firstId = providerLines.LineSends.isEmpty
+        ? 1
+        : providerLines.LineSends
+        .map((l) => int.parse(l.id))
+        .reduce((a, b) => a > b ? a : b) + 1;
+
+    for (int i = 0; i < vm.controllers.length; i++) {
+
+      int id = firstId + i;  //se le va sumando la nueva pos
+
+      if(vm.send[i] == true)
       {
-          selectedSector = null;
-          factoriesSector = allFactories;
-
-          controllerSearchSend.text = DateFormat('dd-MM-yyyy').format(DateTime.now());
-
-          allLinesCreated = 0;
-          saveChanges = false;
-
-          generateControllers();
+        lines.add(
+            LineSend(
+              id: id.toString(),
+              date: controllerSearchSend.text,
+              factory: vm.controllers[i].factory,
+              observations: vm.controllers[i].observations.text,
+              state: vm.controllers[i].state.name,
+            )
+        );
       }
-      else
-      {
-          for(int i = 0; i < linesControllers.length; i++)
-          {
-              linesControllers[i].observations.text = linesSave[i].observations;
-              linesControllers[i].state = manageState.stringToState(linesSave[i].state);
-              observationModify[i] = false;
-              stateModify[i] = false;
-          }
 
-          saveChanges = false;
-      }
-    _updateMessageResult(context);
-     setState(() {});
-  }
-
-  void generateControllers() {
-
-    final oldControllers = linesControllers;
-
-
-
-    linesControllers = List.generate(factoriesSector.length, (index) {
-
-      final sectorObj = sectors.firstWhereOrNull(
-            (s) => s.id == factoriesSector[index].sector,
-      );
-
-      return LineSendController(
-        date: TextEditingController(
-          text: DateFormat('dd-MM-yyyy').format(DateTime.now()),
-        ),
-        factory: TextEditingController(
-          text: factoriesSector[index].name,
-        ),
-        sector: TextEditingController(
-          text: sectorObj?.name ?? '',
-        ),
-        observations: TextEditingController(text: ""),
-        state: LineSendState.prepared,
-      );
-    });
-
-    send = List.generate(factoriesSector.length, (_) => false);
-
-    for (final c in oldControllers) {
-      c.dispose();
     }
 
+    final selectedCount = vm.send
+        .where((e) => e)
+        .length;
+    final result = await providerLines.addLines(lines);
+
+    switch (result) {
+      case AddLineResult.success:
+        await confirm(
+          context,
+          LocalizationHelper.sendsDay(context, selectedCount),
+        );
+        break;
+
+      case AddLineResult.duplicate:
+        error(context, S
+            .of(context)
+            .send_duplicate);
+        break;
+
+      case AddLineResult.invalidData:
+        await error(context, S
+            .of(context)
+            .send_invalid_data);
+        break;
+
+      case AddLineResult.error:
+        error(context, S
+            .of(context)
+            .send_error);
+        break;
+    }
+    vm.reset();
   }
 
-  void _updateMessageResult(BuildContext context) {
-    int cant = factoriesSector.length;
+  Future<void> editSend() async {
 
-    if (widget.select == -1 && linesControllers.isEmpty) {
-      // Mensaje para nueva shipment
-      messageResult = LocalizationHelper.factoriesBD(context, cant);
-    } else {
-      // Mensaje para edición
-      if (widget.filter == S.of(context).date) {
-        campKey = S.of(context).company;
-        messageResult = LocalizationHelper.sendsDay(context, cant);
-      } else {
-        campKey = S.of(context).date;
-        messageResult = LocalizationHelper.sendsFactory(context, cant);
-      }
+    final provaider = context.read<LineSendProvider>();
+    int cantSends = provaider.modifiedIds.length;
+    final ok = await provaider.saveChanges();
+
+    if(ok)
+    {
+
+       await confirm(
+         context,
+         LocalizationHelper.cantLinesModify(context, cantSends),
+       );
+
     }
+    else
+    {
+       await error(context, S
+           .of(context)
+           .send_error);
+    }
+
   }
 }
-
 
 
 
