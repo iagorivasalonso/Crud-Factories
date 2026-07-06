@@ -68,7 +68,9 @@ class _listSendsState extends State<listSends> {
      }
    }
 
-   void _selectSend (LineSendProvider current, int index, cardSend send) {
+   void _selectSend (LineSendProvider current, int index, cardSend send) async {
+
+     if(!await context.read<NavigationProvider>().canNavigate(context)) return;
 
      final sectorId = context.read<FilterProvider>().sectorId;
 
@@ -88,7 +90,8 @@ class _listSendsState extends State<listSends> {
        );
      });
    }
-  Future<List<cardSend>> _sendFilter(String filter, String search) async {
+
+   Future<List<cardSend>> _sendFilter(String filter, String search) async {
     final sectorId = context.watch<FilterProvider>().sectorId;
     final provider = context.read<LineSendProvider>();
 
@@ -117,8 +120,8 @@ class _listSendsState extends State<listSends> {
           S.of(context).You_can_only_delete_the_lines_that_were_returned_Do_you_want_to_delete,
         ),
     );
-    if(!confirmDelete) return false;
 
+    if(!confirmDelete) return false;
 
     final result = await lineProvider.removeReturned(
        factory: filter == SendFilter.company ? send.title : null,

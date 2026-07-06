@@ -1,6 +1,7 @@
 import 'package:crud_factories/Alertdialogs/confirm.dart';
 import 'package:crud_factories/Alertdialogs/error.dart';
 import 'package:crud_factories/Backend/Global/viewsModels/SendFrom.dart' show SendFromViewModel;
+import 'package:crud_factories/Backend/Providers/EditStateProvider.dart' show EditStateProvider;
 import 'package:crud_factories/Backend/Providers/FactoryProvider.dart' show FactoryProvider;
 import 'package:crud_factories/Backend/Providers/SectorProvider.dart' show SectorProvider;
 import 'package:crud_factories/Backend/Providers/filterProvider.dart';
@@ -307,14 +308,14 @@ class _SendFromPageState extends State<SendFromPage> {
                                           lines: vm.controllers,
                                           sendValues: vm.send,
                                           onStateChanged: (index, value) {
-
+                                            context.read<EditStateProvider>().markChanged();
 
                                           },
 
                                           onSendChanged: (i, value) {
+                                            context.read<EditStateProvider>().markChanged();
                                             vm.toggleSend(i, value);
-                                        },
-
+                                          },
 
                                           onSelectedAllChanged: (value) {
                                             for (int i = 0; i <
@@ -354,7 +355,7 @@ class _SendFromPageState extends State<SendFromPage> {
                                       lines: vm.controllers,
                                       sendValues: vm.send,
                                       onObservationChanged: (index, value) {
-
+                                        context.read<EditStateProvider>().markChanged();
                                         providerLines.updateLines(
                                            vm.controllers[index].id,
                                           observations: value,
@@ -362,7 +363,7 @@ class _SendFromPageState extends State<SendFromPage> {
                                       },
 
                                       onStateChanged: (index, value) {
-
+                                        context.read<EditStateProvider>().markChanged();
                                         providerLines.updateLines(
                                           vm.controllers[index].id,
                                           state: value.name,
@@ -406,8 +407,9 @@ class _SendFromPageState extends State<SendFromPage> {
                                         padding: const EdgeInsets.only(left: 20.0),
                                         child: materialButton(
                                             nameAction: action2,
-                                            function: () =>
-                                                vm.reset()
+                                            function: () =>isEditing == false
+                                                ? vm.reset()
+                                                : vm.changueFilter(widget.lines,"",widget.filter),
                                         ),
                                       )
                                     ],
@@ -505,6 +507,7 @@ class _SendFromPageState extends State<SendFromPage> {
         break;
     }
     vm.reset();
+    context.read<EditStateProvider>().clear();
   }
 
   Future<void> editSend() async {
@@ -528,7 +531,7 @@ class _SendFromPageState extends State<SendFromPage> {
            .of(context)
            .send_error);
     }
-
+    context.read<EditStateProvider>().clear();
   }
 }
 

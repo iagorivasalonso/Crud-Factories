@@ -188,6 +188,8 @@ class _listFactoriesState extends State<listFactories> {
                 onFilter: _onFilter,
                 onDelete: (factory) => _onDelete(context, factory),
                 onTap: (factory, index) async {
+                  if(!await context.read<NavigationProvider>().canNavigate(context)) return;
+
                   context.read<FactoryProvider>().select(factory);
                 },
               ),
