@@ -36,6 +36,10 @@ class ConnectionProvider extends ChangeNotifier {
 
   ApiConfig? _config;
 
+  ApiConfig? get configOrNull => _config;
+
+  bool get hasConfig => _config != null;
+
   ConnectionStatus status = ConnectionStatus.disconnected;
   Iexecutequery? executeQuery;
   bool get isConnected => session != null;
