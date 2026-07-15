@@ -235,6 +235,7 @@ class _conectionState extends State<conection> {
                                         nameCamp: S
                                             .of(context)
                                             .password,
+                                        context: context,
                                         controllerCamp: controlerConex.passbd,
                                         campEdit: editCamps,
                                       ),
