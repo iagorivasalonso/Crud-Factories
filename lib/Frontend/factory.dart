@@ -456,8 +456,6 @@ class _FactoryFromPageState extends State<FactoryFromPage> {
     controllers.name.text = factory.name;
     controllers.highDate.text = factory.highDate;
 
-    final sectors = context.read<SectorProvider>().sectors;
-
 
     controllers.telephone1.text =
     factory.thelephones.isNotEmpty ? factory.thelephones[0] : '';
