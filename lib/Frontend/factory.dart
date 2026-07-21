@@ -611,6 +611,7 @@ class _FactoryFromPageState extends State<FactoryFromPage> {
                 address: address
             );
 
+            factoryProvider.select(factory);
             if (!isEditing)
             {
                 final result = await factoryProvider.create(factory);
