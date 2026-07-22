@@ -1,43 +1,42 @@
-import 'dart:convert';
-import 'package:crud_factories/Alertdialogs/confirm.dart';
-import 'package:crud_factories/Alertdialogs/error.dart';
-import 'package:crud_factories/Alertdialogs/warning.dart';
-import 'package:crud_factories/Backend/Global/list.dart';
-import 'package:crud_factories/Backend/SQL/createMail.dart';
-import 'package:crud_factories/Backend/SQL/modifyMail.dart';
-import 'package:crud_factories/Backend/Global/variables.dart';
-import 'package:crud_factories/Backend/CSV/exportMails.dart';
-import 'package:crud_factories/Functions/validatorCamps.dart';
+
+import 'dart:ffi';
+
+import 'package:crud_factories/Alertdialogs/confirm.dart' show confirm;
+import 'package:crud_factories/Alertdialogs/error.dart' show error;
+import 'package:crud_factories/Alertdialogs/selectCompany.dart' show newMailConfiguration;
+import 'package:crud_factories/Backend/Data/controlsMessagesError/errors.dart';
+import 'package:crud_factories/Backend/Feature/Mail/Service/mailConfiguration.dart';
+import 'package:crud_factories/Backend/Providers/EditStateProvider.dart' show EditStateProvider;
+import 'package:crud_factories/Backend/Providers/MailProvider.dart';
+import 'package:crud_factories/Functions/isNotAndroid.dart' show isNotAndroid;
 import 'package:crud_factories/Objects/Mail.dart';
+import 'package:crud_factories/Objects/MailMessage.dart' show MailMessage;
 import 'package:crud_factories/Validators/mail.dart';
-import 'package:crud_factories/Widgets/headView.dart';
-import 'package:crud_factories/Widgets/textfield.dart';
-import 'package:crud_factories/Widgets/textFieldPassword.dart';
+import 'package:crud_factories/Widgets/headAlertDialog.dart' show headDialog;
+import 'package:crud_factories/Widgets/headView.dart' show headView;
+import 'package:crud_factories/Widgets/headViewsAndroid.dart' show appBarAndroid;
+import 'package:crud_factories/Widgets/textFieldPassword.dart' show textfieldPassword;
+import 'package:crud_factories/Widgets/textfield.dart' show defaultTextfield;
 import 'package:crud_factories/generated/l10n.dart';
-import 'package:crud_factories/helpers/localization_helper.dart';
-import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
-import 'package:mailer/mailer.dart';
-import 'package:mailer/smtp_server.dart';
 import 'package:crud_factories/Backend/Global/controllers/Mail.dart';
-import 'package:crud_factories/Backend/connectors_API/MailApi.dart';
-import 'package:crud_factories/Functions/isNotAndroid.dart';
-import 'package:crud_factories/Widgets/headViewsAndroid.dart';
-import 'package:crud_factories/Widgets/materialButton.dart';
+import 'package:mailer/mailer.dart';
+import 'package:provider/provider.dart';
+
+import '../Backend/Feature/Mail/Service/mailConfigurationService.dart';
+import '../Widgets/materialButton.dart';
 
 
-class newMail extends StatefulWidget {
 
-  int select;
+class MailFormPage extends StatefulWidget {
 
-
-  newMail(this.select);
+  MailFormPage();
 
 
-  State<newMail> createState() => _newMailState();
+  State<MailFormPage> createState() => _MailFormPageState();
 }
 
-class _newMailState extends State<newMail> {
+class _MailFormPageState extends State<MailFormPage> {
 
   final ScrollController horizontalScroll = ScrollController();
   final ScrollController verticalScroll = ScrollController();
@@ -53,6 +52,12 @@ class _newMailState extends State<newMail> {
       password: TextEditingController(),
       passwordVerify: TextEditingController(),
     );
+
+    final mail = context.read<MailProvider>().selected;
+
+    if(mail  != null) {
+      loadSelectedMail(mail);
+    }
   }
 
   @override
@@ -65,31 +70,32 @@ class _newMailState extends State<newMail> {
   }
 
   @override
-  Widget build(BuildContext context0) {
+  Widget build(BuildContext context) {
 
-    BuildContext context = isNotAndroid() ? context0 :  context1;
-    int select = widget.select;
+    final mailSelected = context.watch<MailProvider>().selected;
 
-    String action = "";
-    String action2 = "";
-    String title = "";
+    final isEditing = mailSelected != null;
 
-    if (select == -1) {
-      title = S.of(context).newMale;
-      action = S.of(context).create;
-      action2 = S.of(context).reboot;
-    }
-    else {
-      title = S.of(context).edit;
+    final title = isEditing
+          ? S.of(context).edit
+          : S.of(context).newMale;
 
-      campCharge(context,select,controllers);
+    final action = isEditing
+          ? S.of(context).update
+          : S.of(context).create;
 
-      action = S.of(context).update;
-      action2 = S.of(context).undo;
-    }
+    final action2 = isEditing
+        ? S.of(context).undo
+        : S.of(context).clear;
 
     String name = S.of(context).mail;
     String title1 = "$title $name";
+
+
+    final mailId = isEditing
+          ? mailSelected!.id
+          :createNextMailId(context.read<MailProvider>().mails);
+
 
     return !isNotAndroid()
         ? Scaffold(
@@ -125,19 +131,21 @@ class _newMailState extends State<newMail> {
                           ),
 
                           defaultTextfield(
-                              nameCamp: S.of(context).new_mail,
-                              controllerCamp: controllers.mail,
-                              campOld: select == -1 ? '' : mails[select].address,
+                            nameCamp: S.of(context).new_mail,
+                            controllerCamp: controllers.mail,
+                            campOld: mailSelected?.mail ?? '',
+                            context: context
                           ),
 
                           textfieldPassword(
-                              nameCamp: S.of(context).password,
-                              controllerCamp: controllers.password,
+                            nameCamp: S.of(context).password,
+                            controllerCamp: controllers.password,
+                            context: context,
                           ),
 
                           textfieldPassword(
-                              nameCamp: S.of(context).verify_password,
-                              controllerCamp: controllers.passwordVerify!,
+                            nameCamp: S.of(context).verify_password,
+                            controllerCamp: controllers.passwordVerify!,
                           ),
 
                           Padding(
@@ -145,26 +153,26 @@ class _newMailState extends State<newMail> {
                             child: Row(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                    materialButton(
-                                    nameAction: action,
-                                    function: () => _onSaveMail(
-                                      context,
-                                      select,
-                                      controllers,
-                                    ),
+                                materialButton(
+                                  nameAction: action,
+                                  function: () => _onSaveMail(
+                                    context,
+                                    mailSelected,
+                                    controllers,
+                                    mailId
                                   ),
+                                ),
 
                                 Padding(
-                                      padding: const EdgeInsets.only(left: 20.0),
-                                      child: materialButton(
-                                          nameAction: action2,
-                                          function: () => _onResetMail(
-                                            context,
-                                            select,
-                                            controllers,
-                                          ),
-                                        )
+                                    padding: const EdgeInsets.only(left: 20.0),
+                                    child: materialButton(
+                                      nameAction: action2,
+                                      function: () => _onResetMail(
+                                        mailSelected,
+                                        controllers
                                       ),
+                                    )
+                                )
                               ],
                             ),
                           ),
@@ -180,197 +188,160 @@ class _newMailState extends State<newMail> {
       ),
     )
         : Scaffold(
-           appBar: appBarAndroid(context, name: title1),
-           body: Text("creart email"),
+      appBar: appBarAndroid(context, name: title1),
+      body: Text("creart email"),
     );
   }
-}
 
-Future<void> _onSaveMail(BuildContext context, int select,MailController controllers) async {
+  void loadSelectedMail(Mail mail) {
 
-  final errorMsg = MailValidator.validate(
-    context: context,
-    controllers: controllers,
-    mails: mails,
-    select: select,
-  );
-
-  if (errorMsg != null) {
-    await error(context, errorMsg);
-    return;
+    controllers.mail.text = mail.mail;
+    controllers.password.text = '';
+    controllers.passwordVerify!.text = '';
   }
-  else
-  {
-    final username = controllers.mail.text;
 
-    final message = Message()
-      ..from = Address(username, username.split("@")[0])
-      ..recipients.add(username)
-      ..subject = S.of(context).connection_test
-      ..text = S.of(context).this_is_a_connection_test_from_the_application;
+  void _onResetMail( Mail? mailSelected, MailController controllers) {
 
-    final result = await sendingMail(context, controllers, message, select);
+          if(mailSelected != null)
+          {
+            loadSelectedMail(mailSelected);
+          }
+          else
+          {
+            controllers.mail.clear();
+            controllers.password.clear();
+            controllers.passwordVerify?.clear();
+          }
 
-    if (result.isEmpty) {
-      await error(context, "Error enviando correo");
-    }
-    else
-    {
-       confirm(context, S.of(context).message);
-    }
+
   }
-}
 
-Future<List<String>> sendingMail(context,controllers, Message message, [select]) async {
+  Future<void> _onSaveMail (BuildContext context, Mail? mailSelected, MailController controllers,String mailId) async {
 
-  List<String> mailSends = [];
+       final isEditing = mailSelected != null;
 
-  String username = controllers.mail.text;
-  String password = controllers.password.text;
+       final mailProvider = context.read<MailProvider>();
 
-  List <String> separeaddress = username.split("@");
-  List <String> extCompany = separeaddress[1].split(".");
+       final errorMsg = MailValidator.validate(
+            context,
+            controllers,
+            mailSelected,
+            mailProvider.mails
+       );
 
-  String company = extCompany[0];
-/*
-  final newMail = Mail(
-    address: controllers.mail.text,
-    password: controllers.password.text,
-    id: '0',
-    company: company,
-  );
+       if (errorMsg != null) {
+         error(context, errorMsg);
+         return;
+       }
 
-  if (select == -1) {
-    // CREAR
-    mails.add(newMail);
-  } else {
-    // EDITAR
-    mails[select] = newMail;
-  }
-*/
-      try {
+       Mail?  mail = MailConfigurationService.buildMail(
+           controllers: controllers,
+           mailId: isEditing ? mailSelected.id : mailId,
+           mailSelected: mailSelected
+       );
 
-        SmtpServer? smtpServer;
+         final config = MailConfigurationService.fromMail(controllers.mail.text);
 
-            if (company == "gmail")
+         final mailConfiguration = config ?? await newMailConfiguration(context);
+
+
+         if (mailConfiguration == null) return;
+
+             mail = MailConfigurationService.createMail(
+               id: isEditing ? mailSelected.id : mailId,
+               controllers: controllers,
+               configuration: mailConfiguration,
+             );
+
+             mailProvider.select(mail);
+
+             final result = await _testConnection(
+               context,
+               mailProvider,
+               mail,
+             );
+
+             if(!result.success) {
+               error(context, result.failed.first.error);
+               return;
+             }
+
+
+
+       if(isEditing)
+       {
+            final result = await mailProvider.update(mail);
+
+            switch(result)
             {
-              smtpServer = gmail(username, password);
+              case EditResult.success:
+                await confirm(context,S.of(context).mail_updated_successfully);
+              break;
+
+              case EditResult.alreadyExists:
+                await error(context, S.of(context).mail_already_exists);
+               break;
+
+              case EditResult.notFound:
+                await error(context,S.of(context).mail_not_found);
+              break;
+              case EditResult.invalidData:
+                await error(context, S.of(context).invalid_data);
+               break;
+              case EditResult.error:
+                // TODO: Handle this case.
+                throw UnimplementedError();
             }
-            else if (company == "hotmail")
-            {
-              smtpServer = hotmail(username, password);
-            }
-            else
-            {
-               String action = S.of(context).account_not_configured_on_the_server;
-               error(context, action);
-            }
+       }
+       else
+       {
+          final result = await mailProvider.create(mail);
 
-        if (smtpServer != null)
-        {
-
-              if(kIsWeb)
-              {
-
-                List<Map<String, dynamic>> attachmentList = [];
-
-                for (var file in controllers.attachments) {
-                  if (file.bytes != null) {
-                    attachmentList.add({
-                      'filename': file.name,
-                      'content': base64Encode(file.bytes!),
-                      'contentType': 'application/octet-stream',
-                    });
-                  }
-                }
-
-                MessageMail messageMail = MessageMail(
-                        host: smtpServer.host,
-                        port: 465,
-                        secure: true,
-                        username: smtpServer.username!,
-                        password:smtpServer.password!,
-                        mails: message.recipients,
-                        subject: message.subject!,
-                        message: message.text!,
-                        attachments: attachmentList
-                    );
-
-                    final mailResponse = await Mailapi.sendingMailApi(messageMail);
-
-
-                final results = mailResponse['results'] as List<dynamic>?;
-
-                if (results != null && results.isNotEmpty) {
-                  final statuses = results.map((e) => (e as Map<String, dynamic>)['status']).join("\n");
-
-                  if (results != null && results.isNotEmpty) {
-                    for (var r in results) {
-                      final map = r as Map<String, dynamic>;
-                      final status = map['status'] ?? '';
-
-                      // Regex para extraer correo
-                      final regex = RegExp(r'\b[\w\.-]+@[\w\.-]+\.\w+\b');
-                      final match = regex.firstMatch(status);
-                      if (match != null) {
-                        final email = match.group(0);
-                        mailSends.add(email.toString());
-
-                      }
-                    }
-                  }
-                }
-              }
-              else
-              {
-                try {
-                  final sendReport = await send(message, smtpServer);
-
-                  for(int i = 0; i  < message.recipients.length; i++)
-                  {
-                    mailSends.add(message.recipients[i].toString());
-                  }
-
-                } catch (e) {
-                  print("Error enviando correo: $e");
-                }
-              }
-
-        }
-
-      } catch (e) {
-        print(e.toString());
-       mailSends = [];
-      }
-
-  return mailSends;
-}
-
-
-Future<void>_onResetMail(BuildContext context,int select,  MailController controllers) async {
-
-  if (select == -1) {
-    controllers.mail.text = "";
-    controllers.password.text = "";
-    controllers.passwordVerify!.text = "";
+          switch(result)
+          {
+            case CreateResult.success:
+                await confirm(context,S.of(context).mail_created_successfully);
+              break;
+            case CreateResult.alreadyExists:
+                await error(context, S.of(context).mail_already_exists);
+             break;
+            case CreateResult.invalidData:
+              await error(context, S.of(context).invalid_data);
+            break;
+          }
+       }
+       context.read<EditStateProvider>().clear();
   }
-  else {
-    campCharge(context,select,controllers);
+
+  Future <MailResult> _testConnection (
+      BuildContext context,
+      MailProvider mailProvider,
+      Mail mail,
+      ) async {
+
+    final mailMessage = MailMessage(
+      recipients: [mail.mail],
+      subject: S.of(context).connection_test,
+      message: S.of(context).this_is_a_connection_test_from_the_application,
+    );
+
+
+    return await mailProvider.send(
+      mailMessage,
+      account: mail,
+      noAccountMessage: S.of(context).no_mail_account_selected,
+    );
 
   }
-  saveChanges = false;
-}
 
-void campCharge(
-    BuildContext context,
-    int select,
-    MailController controllers,
-              ) {
+  String createNextMailId(List<Mail> mails) {
 
-  if(saveChanges == false)
-  {
-    controllers.mail.text = mails[select].address;
-    controllers.password.clear();
-    controllers.passwordVerify!.clear();
+    final ids = mails.map((m) => int.parse(m.id));
+
+    final maxId = ids.isEmpty ? 0 : ids.reduce((a, b) => a > b ? a : b);
+
+      return (maxId + 1).toString();
   }
 }
+
+
