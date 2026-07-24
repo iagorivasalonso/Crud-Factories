@@ -240,12 +240,6 @@ class _MailFormPageState extends State<MailFormPage> {
          return;
        }
 
-       Mail?  mail = MailConfigurationService.buildMail(
-           controllers: controllers,
-           mailId: isEditing ? mailSelected.id : mailId,
-           mailSelected: mailSelected
-       );
-
          final config = MailConfigurationService.fromMail(controllers.mail.text);
 
          final mailConfiguration = config ?? await newMailConfiguration(context);
@@ -253,8 +247,10 @@ class _MailFormPageState extends State<MailFormPage> {
 
          if (mailConfiguration == null) return;
 
-             mail = MailConfigurationService.createMail(
-               id: isEditing ? mailSelected.id : mailId,
+           final id = isEditing ? mailSelected!.id : mailId;
+
+           final  mail = MailConfigurationService.createMail(
+               id: id,
                controllers: controllers,
                configuration: mailConfiguration,
              );
