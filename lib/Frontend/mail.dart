@@ -112,7 +112,7 @@ class _MailFormPageState extends State<MailFormPage> {
               controller: horizontalScroll,
               scrollDirection: Axis.horizontal,
               child: Padding(
-                padding: const EdgeInsets.only(left: 30.0, top: 30.0),
+                padding: const EdgeInsets.only(left: 10.0, top: 30.0),
                 child: Container(
                   constraints: BoxConstraints(
                     minWidth: MediaQuery.of(context).size.width,
@@ -120,62 +120,70 @@ class _MailFormPageState extends State<MailFormPage> {
                   ),
                   child: Align(
                     alignment: Alignment.topLeft,
-                    child: SizedBox(
-                      width: 700,
-                      child: Column(
-                        children: [
-                          headView(
-                              title: title1
+                    child: Column(
+                      children: [
+                        SizedBox(
+                          width: 600,
+                          child: Column(
+                            children: [
+                              headView(
+                                  title: title1
+                              ),
+
+                              defaultTextfield(
+                                nameCamp: S.of(context).new_mail,
+                                controllerCamp: controllers.mail,
+                                campOld: mailSelected?.mail ?? '',
+                                context: context
+                              ),
+
+                              textfieldPassword(
+                                nameCamp: S.of(context).password,
+                                controllerCamp: controllers.password,
+                                context: context,
+                              ),
+
+                              textfieldPassword(
+                                nameCamp: S.of(context).verify_password,
+                                controllerCamp: controllers.passwordVerify!,
+                              ),
+
+                            ],
                           ),
+                        ),
 
-                          defaultTextfield(
-                            nameCamp: S.of(context).new_mail,
-                            controllerCamp: controllers.mail,
-                            campOld: mailSelected?.mail ?? '',
-                            context: context
-                          ),
-
-                          textfieldPassword(
-                            nameCamp: S.of(context).password,
-                            controllerCamp: controllers.password,
-                            context: context,
-                          ),
-
-                          textfieldPassword(
-                            nameCamp: S.of(context).verify_password,
-                            controllerCamp: controllers.passwordVerify!,
-                          ),
-
-                          Padding(
-                            padding: const EdgeInsets.only(left: 500.0, top: 150.0),
-                            child: Row(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                materialButton(
-                                  nameAction: action,
-                                  function: () => _onSaveMail(
-                                    context,
-                                    mailSelected,
-                                    controllers,
-                                    mailId
-                                  ),
-                                ),
-
-                                Padding(
-                                    padding: const EdgeInsets.only(left: 20.0),
-                                    child: materialButton(
-                                      nameAction: action2,
-                                      function: () => _onResetMail(
+                        SizedBox(
+                            width: 700,
+                            child: Padding(
+                              padding: const EdgeInsets.only(left: 500.0, top: 150.0),
+                              child: Row(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  materialButton(
+                                    nameAction: action,
+                                    function: () => _onSaveMail(
+                                        context,
                                         mailSelected,
-                                        controllers
-                                      ),
-                                    )
-                                )
-                              ],
+                                        controllers,
+                                        mailId
+                                    ),
+                                  ),
+
+                                  Padding(
+                                      padding: const EdgeInsets.only(left: 20.0),
+                                      child: materialButton(
+                                        nameAction: action2,
+                                        function: () => _onResetMail(
+                                            mailSelected,
+                                            controllers
+                                        ),
+                                      )
+                                  )
+                                ],
+                              ),
                             ),
-                          ),
-                        ],
-                      ),
+                        )
+                      ],
                     ),
                   ),
                 ),
