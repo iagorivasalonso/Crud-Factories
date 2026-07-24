@@ -12,7 +12,6 @@ import 'package:crud_factories/Functions/isNotAndroid.dart' show isNotAndroid;
 import 'package:crud_factories/Objects/Mail.dart';
 import 'package:crud_factories/Objects/MailMessage.dart' show MailMessage;
 import 'package:crud_factories/Validators/mail.dart';
-import 'package:crud_factories/Widgets/headAlertDialog.dart' show headDialog;
 import 'package:crud_factories/Widgets/headView.dart' show headView;
 import 'package:crud_factories/Widgets/headViewsAndroid.dart' show appBarAndroid;
 import 'package:crud_factories/Widgets/textFieldPassword.dart' show textfieldPassword;
@@ -20,7 +19,6 @@ import 'package:crud_factories/Widgets/textfield.dart' show defaultTextfield;
 import 'package:crud_factories/generated/l10n.dart';
 import 'package:flutter/material.dart';
 import 'package:crud_factories/Backend/Global/controllers/Mail.dart';
-import 'package:mailer/mailer.dart';
 import 'package:provider/provider.dart';
 
 import '../Backend/Feature/Mail/Service/mailConfigurationService.dart';
