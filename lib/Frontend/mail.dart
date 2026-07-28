@@ -90,11 +90,6 @@ class _MailFormPageState extends State<MailFormPage> {
     String title1 = "$title $name";
 
 
-    final mailId = isEditing
-          ? mailSelected!.id
-          :createNextMailId(context.read<MailProvider>().mails);
-
-
     return !isNotAndroid()
         ? Scaffold(
       body: Scrollbar(
@@ -164,8 +159,7 @@ class _MailFormPageState extends State<MailFormPage> {
                                     function: () => _onSaveMail(
                                         context,
                                         mailSelected,
-                                        controllers,
-                                        mailId
+                                        controllers
                                     ),
                                   ),
 
@@ -222,7 +216,7 @@ class _MailFormPageState extends State<MailFormPage> {
 
   }
 
-  Future<void> _onSaveMail (BuildContext context, Mail? mailSelected, MailController controllers,String mailId) async {
+  Future<void> _onSaveMail (BuildContext context, Mail? mailSelected, MailController controllers) async {
 
        final isEditing = mailSelected != null;
 
@@ -247,7 +241,7 @@ class _MailFormPageState extends State<MailFormPage> {
 
          if (mailConfiguration == null) return;
 
-           final id = isEditing ? mailSelected!.id : mailId;
+           final id = isEditing ? mailSelected!.id : "0";
 
            final  mail = MailConfigurationService.createMail(
                id: id,
@@ -336,14 +330,6 @@ class _MailFormPageState extends State<MailFormPage> {
 
   }
 
-  String createNextMailId(List<Mail> mails) {
-
-    final ids = mails.map((m) => int.parse(m.id));
-
-    final maxId = ids.isEmpty ? 0 : ids.reduce((a, b) => a > b ? a : b);
-
-      return (maxId + 1).toString();
-  }
 }
 
 
