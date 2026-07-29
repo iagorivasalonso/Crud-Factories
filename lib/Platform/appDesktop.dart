@@ -144,8 +144,15 @@ print("edz$providerMails");
 
                                   if (!await context.read<NavigationProvider>().canNavigate(context)) return;
 
-                                  context.read<NavigationProvider>()
-                                      .go(AppView.createShipment);
+                                  if(providerFactories.isNotEmpty)
+                                  {
+                                    context.read<NavigationProvider>()
+                                        .go(AppView.createShipment);
+                                  }
+                                  else
+                                  {
+                                    noCategory(context, S.of(context).companies);
+                                  }
 
                                 }
                             ),
@@ -283,7 +290,7 @@ print("edz$providerMails");
                                   text: Text(sector.name),
                                   onTap: () async {
                                     final sectorId = context.read<FilterProvider>().sectorId;
-                                    final factoriesCurrent= context.read<FactoryProvider>().factoriesBySector(sectorId);
+                                    final factoriesCurrent = context.read<FactoryProvider>().factoriesBySector(sectorId);
                                     context.read<FilterProvider>().setSector(sector.id);
 
                                     if(factoriesCurrent.isNotEmpty)
