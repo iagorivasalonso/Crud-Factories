@@ -37,7 +37,7 @@ class RouteNameMapper {
 
       case 'mails':
       case 'correos':
-      case 'emails':
+      case 'addresss':
         return RouteFileKey.mails;
 
       default:
