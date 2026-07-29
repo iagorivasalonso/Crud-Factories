@@ -3,7 +3,7 @@ import 'package:crud_factories/Widgets/headAlertDialog.dart';
 import 'package:crud_factories/generated/l10n.dart';
 import 'package:flutter/material.dart';
 
-Future<bool> errors(BuildContext context, List<String> errorFiles) async {
+Future<bool> showErrors(BuildContext context, List<String> errorFiles) async {
 
   double heightAlert = 185.0 + (errorFiles.length * 15.0);
   double dialogHeight = heightAlert.clamp(185.0, 400.0);
