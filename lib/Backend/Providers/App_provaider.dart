@@ -5,6 +5,7 @@ import 'package:crud_factories/Backend/Feature/Connection/Datasource/IConnection
 import 'package:crud_factories/Backend/Feature/Employee/employee_service.dart' show RepositoryEmployee;
 import 'package:crud_factories/Backend/Feature/Factory/factory_service.dart' show RepositoryFactory;
 import 'package:crud_factories/Backend/Feature/LineSend/lineSend_service.dart';
+import 'package:crud_factories/Backend/Feature/Mail/mail_service.dart';
 import 'package:crud_factories/Backend/Feature/Router/CsvRouterDataSource.dart' show CsvRouterDataSource;
 import 'package:crud_factories/Backend/Feature/Sector/sector_service.dart' show Repository, RepositorySector;
 import 'package:crud_factories/Backend/Global/controllers/Conection.dart';
@@ -40,10 +41,10 @@ enum DataSourceMode {
 
 class AppProvider extends ChangeNotifier {
 
-  bool isApi;
+  DataSourceMode mode;
 
   AppProvider({
-     required this.isApi
+     required this.mode
   });
 
   bool loaded = false;
@@ -52,7 +53,7 @@ class AppProvider extends ChangeNotifier {
   RouteFiles? files;
   bool get isLoading => _loading;
 
-  DataSourceMode mode = DataSourceMode.csv;
+  bool get isApi => mode == DataSourceMode.api;
 
 
 
@@ -88,7 +89,7 @@ class AppProvider extends ChangeNotifier {
 
     try {
 
-      final source = await BootstrapService().resolve(context);
+      final source = await BootstrapService().resolve(context,isApi);
 
 
        if(source == null)
@@ -165,6 +166,16 @@ class AppProvider extends ChangeNotifier {
     final provider = context.read<ConnectionProvider>();
     final executeQuery = provider.executeQuery;
 
+    final efectiveMode = switch (mode) {
+      DataSourceMode.csv => DataSourceMode.csv,
+
+      DataSourceMode.sql => DataSourceMode.sql,
+
+      DataSourceMode.api =>
+      provider.hasConfig ? DataSourceMode.api : DataSourceMode.csv,
+    };
+    final config = provider.configOrNull;
+
     // =========================
     // 3. SECTOR PROVIDER
     // =========================
@@ -173,12 +184,10 @@ class AppProvider extends ChangeNotifier {
 
     await sectorProvider.setRepositoryAndReload(
       RepositorySector.create(
-        mode,
+        efectiveMode,
         files,
         db: executeQuery,
-        config:  mode == DataSourceMode.api
-                   ? provider.config
-                   : null,
+        config: config
        ),
     );
 
@@ -192,12 +201,10 @@ class AppProvider extends ChangeNotifier {
 
         await factoryProvider.setRepositoryAndReload(
            RepositoryFactory.create(
-               mode,
+               efectiveMode,
                files,
                db: executeQuery,
-               config: mode == DataSourceMode.api
-                   ? provider.config
-                   : null,
+               config: config
            ),
         );
 
@@ -211,12 +218,10 @@ class AppProvider extends ChangeNotifier {
 
         await employeeProvider.setRepositoryAndReload(
            RepositoryEmployee.create(
-               mode,
+               efectiveMode,
                files,
                db: executeQuery,
-               config:mode == DataSourceMode.api
-                   ? provider.config
-                   : null,
+               config: config
            )
         );
 
@@ -230,12 +235,10 @@ class AppProvider extends ChangeNotifier {
 
         await lineProvider.setRepositoryAndReload(
              RepositoryLineSend.create(
-                 mode,
+                 efectiveMode,
                  files,
                  db: executeQuery,
-                 config:mode == DataSourceMode.api
-                     ? provider.config
-                     : null,
+                 config: config
              )
         );
 
@@ -245,7 +248,23 @@ class AppProvider extends ChangeNotifier {
       context.read<FactoryProvider>().factories,
     );
 
-    //await context.read<MailProvider>().load(files.mails);
+    // =========================
+    // 7. MAILS PROVIDER
+    // =========================
+
+    final mailProvider = context.read<MailProvider>();
+
+          await mailProvider.setRepositoryAndReload(
+                RepositoryMail.create(
+                    efectiveMode,
+                    files,
+                    db: executeQuery,
+                    config: config
+                )
+          );
+
+    await mailProvider.load();
+
   }
 
   Future<void> _applyRoutes(BuildContext context, List<RouteCSV> routes) async {
