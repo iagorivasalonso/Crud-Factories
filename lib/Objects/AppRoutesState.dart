@@ -5,7 +5,7 @@ class RouteFiles {
   final String sectors;
   final String factories;
   final String employees;
-  final String lines;
+  final String linesSends;
   final String mails;
 
   RouteFiles({
@@ -15,7 +15,7 @@ class RouteFiles {
     required this.sectors,
     required this.factories,
     required this.employees,
-    required this.lines,
+    required this.linesSends,
     required this.mails,
   });
 }
