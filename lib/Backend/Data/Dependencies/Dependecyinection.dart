@@ -170,12 +170,22 @@ class DependencyInjection {
         factoryProvider: context.read<FactoryProvider>(),
       )
   ),
-   /*
+
+
+
+                                          // =========================
+                                          // MAIL
+                                          // =========================
+
      ChangeNotifierProvider(
-         create: (_) => MailProvider()
+         create: (_) => MailProvider(
+             isAPI == true
+                ? ApiMailService()
+                : NativeMailService()
+         )
      ),
-*/
-  )
+
+
    ];
 
 
