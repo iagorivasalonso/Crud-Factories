@@ -1,20 +1,12 @@
-import 'dart:typed_data';
-
-import 'package:crud_factories/Backend/CSV/importLines.dart';
-import 'package:crud_factories/Backend/CSV/importMails.dart';
 import 'package:crud_factories/Backend/Data/controlsMessagesError/errors.dart';
 import 'package:crud_factories/Backend/Feature/Mail/Service/ImailService.dart';
-import 'package:crud_factories/Backend/Feature/Mail/Service/NativeMailService.dart';
-import 'package:crud_factories/Backend/Global/files.dart';
-import 'package:crud_factories/Backend/Global/list.dart';
 import 'package:crud_factories/Backend/Repositories/mailRepository.dart';
 import 'package:crud_factories/Functions/createId.dart';
 import 'package:crud_factories/Objects/Mail.dart' show Mail, MailResult, MailFailure;
-import 'package:crud_factories/generated/l10n.dart' show S;
+import 'package:crud_factories/Objects/MailMessage.dart' show MailMessage;
 import 'package:fluent_ui/fluent_ui.dart';
-import 'package:universal_html/html.dart' show File;
 
-import '../../Objects/MailMessage.dart';
+
 
 class MailProvider  extends ChangeNotifier {
 
@@ -249,6 +241,7 @@ Future<EditResult> update(Mail update) async {
       sent: const [],
       failed: [
         MailFailure(
+          mail: '',
           error: noAccountMessage,
         ),
       ],

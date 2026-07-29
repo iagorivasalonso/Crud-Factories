@@ -62,6 +62,7 @@ class NativeMailService  implements IMailService{
         sent: const [],
         failed: [
           MailFailure(
+            mail: '',
             error: e.toString(),
           ),
         ],
