@@ -140,11 +140,9 @@ class LineSendProvider extends ChangeNotifier {
 
   List<cardSend> displayLines({String shipmentText = "",  String? sectorId}){
 
-    final lines = sectorId == "0"
+    final lines = (sectorId == null || sectorId == "0")
         ? _linesSends
         : _linesSends.where((e) => e.sector == sectorId).toList();
-
-
 
          if(selectedFilter == SendFilter.date)
         {
@@ -232,6 +230,19 @@ class LineSendProvider extends ChangeNotifier {
         (sectorId == null || sectorId == "0" || line.sector == sectorId) &&
             (date == null || line.date == date) &&
             (factory == null || line.factory == factory);
+    }).toList();
+  }
+
+  List<Factory> getFactories({
+       required List<Factory> factories,
+       required List<LineSend> lines,
+       String? sectorId
+       }) {
+
+
+
+    return factories.where((factory){
+       return lines.any((line) => line.factory == factory.name);
     }).toList();
   }
 
@@ -380,6 +391,29 @@ class LineSendProvider extends ChangeNotifier {
       return false;
   }
 
+  // ==============================
+  // UPDATE STATES
+  // ==============================
+
+  Future<void> updateStates({
+    required Set<String> sentFactories,
+    required Set<String> failedFactories,
+  }) async {
+
+    for(var i = 0; i <_linesSends.length; i++)
+    {
+          final line = _linesSends[i];
+
+          if (sentFactories.contains(line.factory)) {
+            _linesSends[i] =
+                line.copyWith(state: LineSendState.sent.name);
+          } else if (failedFactories.contains(line.factory)) {
+            _linesSends[i] =
+                line.copyWith(state: LineSendState.returned.name);
+          }
+    }
+    notifyListeners();
+  }
 
   // ==============================
   // DELETE LINES STATE RETURNED

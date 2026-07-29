@@ -53,21 +53,6 @@ class FactoryProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  // ==============================
-  //   SET FACTORIES BY SECTOR
-  // ==============================
-
-  List<Factory> factoriesBySector(String sectorId) {
-    if (sectorId == "0") return _factories;
-
-    final cleanSectorId = sectorId.trim();
-
-    return _factories.where((f) {
-      final factorySector = f.sector?.toString().trim();
-      return factorySector == cleanSectorId;
-    }).toList();
-  }
-
 
   // =========================
   //   ADD FACTORIES
@@ -95,6 +80,37 @@ class FactoryProvider extends ChangeNotifier {
 
       return factoryMame == nameLower;
     });
+  }
+
+  // ==============================
+  //   SET FACTORIES BY SECTOR
+  // ==============================
+
+  List<Factory> factoriesBySector(String sectorId) {
+    if (sectorId == "0") return _factories;
+
+    final cleanSectorId = sectorId.trim();
+
+    return _factories.where((f) {
+      final factorySector = f.sector?.toString().trim();
+      return factorySector == cleanSectorId;
+    }).toList();
+  }
+
+  // =========================
+  //  SEARCH BY MAIL
+  // =========================
+
+  Factory? findByMail(String mail) {
+
+      for (final factory in _factories) {
+          if(factory.mail.toLowerCase() == mail.toLowerCase())
+          {
+            return factory;
+          }
+      }
+
+      return null;
   }
 
   // =========================
