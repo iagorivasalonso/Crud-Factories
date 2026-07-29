@@ -1,7 +1,9 @@
 import 'package:crud_factories/Backend/Global/variables.dart';
+import 'package:crud_factories/Backend/Providers/EditStateProvider.dart' show EditStateProvider;
 import 'package:crud_factories/Functions/validatorCamps.dart' show ValidatorCamps;
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 import 'package:show_platform_date_picker/show_platform_date_picker.dart' show ShowPlatformDatePicker;
 
 Padding textfieldCalendar({
@@ -11,9 +13,8 @@ Padding textfieldCalendar({
   required TextEditingController controllerCamp,
 }){
 
-  BuildContext context = context1;
 
-  final ShowPlatformDatePicker platformDatePicker = ShowPlatformDatePicker(buildContext: context1);
+  final ShowPlatformDatePicker platformDatePicker = ShowPlatformDatePicker(buildContext: context);
 
   DateTime dateCurrent = new DateTime.now();
 
@@ -67,10 +68,10 @@ Padding textfieldCalendar({
                   controllerCamp.text = formattedDate;
                 }
 
-                if (campOld!.isNotEmpty) {
-                  saveChanges = controllerCamp.text != campOld;
+                if (campOld != null && campOld.isNotEmpty) {
+                  context.read<EditStateProvider>().markChanged();
                 } else {
-                  saveChanges = controllerCamp.text.isNotEmpty;
+                  context.read<EditStateProvider>().clear();
                 }
               },
             ),

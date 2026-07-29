@@ -1,71 +1,45 @@
 import 'package:crud_factories/Objects/Empleoye.dart';
-import 'package:fluent_ui/fluent_ui.dart';
-import 'package:flutter/material.dart' hide Colors;
+import 'package:flutter/material.dart';
 
-class ContactList extends StatefulWidget {
 
-  final List<Empleoye> contacsCurrent;
 
-  const ContactList({super.key, required this.contacsCurrent});
+class ContactList extends StatelessWidget {
+  final List<Empleoyee> contacsCurrent;
+  final Empleoyee? selected;
+  final Function(Empleoyee) onSelect;
 
-  @override
-  _ContactListState createState() => _ContactListState();
-}
+  const ContactList({
+    required this.contacsCurrent,
+    required this.onSelect,
+    this.selected,
+  });
 
-class _ContactListState extends State<ContactList> {
-  int contactSelect = -1; // Inicialmente ninguno seleccionado
-
-  @override
   Widget build(BuildContext context) {
 
-    final borderColor = Theme.of(context).colorScheme.outline;
+    return ListView.builder(
+      padding: EdgeInsets.zero,
+      itemCount: contacsCurrent.length,
+      itemBuilder: (context, index) {
+        final employee = contacsCurrent[index];
+        final isSelected = selected?.id == employee.id;
 
-    return Padding(
-      padding: const EdgeInsets.only(
-        left: 55.0,
-        top: 20.0,
-        bottom: 30.0,
-        right: 70.0,
-      ),
-      child: Container(
-        width: 340,
-        height: 170,
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(4), // estilo TextField
-          border: Border.all(
-            color: borderColor, // mismo color que inputs
-            width: 1.0,
+        return GestureDetector(
+          onTap: () => onSelect(employee),
+          child: Container(
+            height: 28,
+            padding: const EdgeInsets.symmetric(horizontal: 8),
+            alignment: Alignment.centerLeft,
+            color: isSelected
+                ? Colors.blue.withOpacity(0.2)
+                : Colors.transparent,
+            child: Text(
+              employee.name,
+              style: const TextStyle(fontSize: 14),
+              overflow: TextOverflow.ellipsis,
+            ),
           ),
-        ),
-        child: ClipRRect(
-          borderRadius: BorderRadius.circular(4),
-          child: ListView.builder(
-            itemCount: widget.contacsCurrent.length,
-            itemBuilder: (BuildContext context, int index) {
-              final employee = widget.contacsCurrent[index];
-              final isSelected = index == contactSelect;
-
-              return GestureDetector(
-                onTap: () {
-                  setState(() {
-                    contactSelect = index;
-                  });
-                },
-                child: Container(
-                  color: isSelected ? Colors.blue : Colors.white,
-                  padding: const EdgeInsets.only(top: 3.0, left: 10.0),
-                  child: Text(
-                    employee.name,
-                    style: TextStyle(
-                      color: isSelected ? Colors.white : Colors.black,
-                    ),
-                  ),
-                ),
-              );
-            },
-          ),
-        ),
-      ),
+        );
+      },
     );
   }
 }

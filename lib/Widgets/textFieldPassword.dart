@@ -1,9 +1,14 @@
+import 'package:crud_factories/Backend/Providers/EditStateProvider.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 Padding textfieldPassword({
   required String nameCamp,
+  String? campOld,
   required TextEditingController controllerCamp,
   bool? campEdit,
+  BuildContext? context,
+
 }){
 
   return  Padding(
@@ -28,11 +33,53 @@ Padding textfieldPassword({
               enabled: campEdit,
               obscureText: true,
               controller: controllerCamp,
-              decoration: const InputDecoration(
-                border: OutlineInputBorder(),
+              decoration: InputDecoration(
+                filled: true,
+                fillColor: campEdit == false
+                    ? Colors.grey.shade200
+                    : Colors.white,
+
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(10),
+                  borderSide: BorderSide(
+                    color: Colors.blue.shade300,
+                    width: 1.2,
+                  ),
+                ),
+
+                enabledBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(10),
+                  borderSide: BorderSide(
+                    color: Colors.grey.shade400,
+                  ),
+                ),
+
+                focusedBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(10),
+                  borderSide: BorderSide(
+                    color: Colors.blue.shade600,
+                    width: 2,
+                  ),
+                ),
+
                 isDense: true,
-                contentPadding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+                contentPadding: const EdgeInsets.symmetric(
+                  horizontal: 12,
+                  vertical: 12,
+                ),
               ),
+              onChanged: (value) {
+
+                 if(context == null) return;
+
+                  final changed = (campOld ?? '') != controllerCamp.text;
+
+                  if (changed) {
+                    context.read<EditStateProvider>().markChanged();
+                  } else {
+                    context.read<EditStateProvider>().clear();
+                  }
+              },
             ),
           ),
         ),

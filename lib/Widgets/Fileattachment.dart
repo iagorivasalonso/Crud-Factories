@@ -60,9 +60,9 @@ class _FilePickerFieldState extends State<Fileattachment> {
   }
 
   @override
-  Widget build(BuildContext context0) {
+  Widget build(BuildContext context) {
 
-    BuildContext context = isNotAndroid() ? context0 :  context1;
+
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -75,6 +75,7 @@ class _FilePickerFieldState extends State<Fileattachment> {
               SizedBox(
                 width: 600,
                 child: defaultTextfield(
+                  context: context,
                   nameCamp: S.of(context).affair,
                   controllerCamp: widget.camp,
                   campOld: '',

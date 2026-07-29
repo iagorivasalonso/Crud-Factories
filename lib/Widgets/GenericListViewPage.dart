@@ -11,7 +11,7 @@ class GenericListViewPage<T> extends StatefulWidget {
   final List<String> filters;
   final Widget Function(T item, int index) itemBuilder;
   final Future<void> Function(T item, int index)? onTap;
-  final Future<void> Function(String filter, String search)? onFilter;
+  final Future<List<T>> Function(String filter, String search)? onFilter;
   final Future<bool> Function(T item)? onDelete;
   final void Function(int index)? onSelect;
   final String defaultFilter;
@@ -52,9 +52,11 @@ class _GenericListViewPageState<T> extends State<GenericListViewPage<T>> {
     super.didUpdateWidget(oldWidget);
 
     if (oldWidget.itens != widget.itens) {
-      setState(() {
+      if (searchText.isEmpty) {
         displayItems = List.from(widget.itens);
-      });
+      } else {
+        _runFilter(searchText);
+      }
     }
   }
 
@@ -63,14 +65,19 @@ class _GenericListViewPageState<T> extends State<GenericListViewPage<T>> {
     searchText = value;
 
     if (widget.onFilter != null) {
+      final filtered =
       await widget.onFilter!(selectedFilter ?? '', searchText);
+
+      setState(() {
+        displayItems = filtered;
+      });
     }
   }
 
   @override
-  Widget build(BuildContext context0) {
+  Widget build(BuildContext context) {
 
-    BuildContext context = isNotAndroid() ? context0 :  context1;
+
 
     List<String> opSearch = [S.of(context).allMale, S.of(context).filter];
 
@@ -194,14 +201,20 @@ class _GenericListViewPageState<T> extends State<GenericListViewPage<T>> {
                          }
                          return false;
                        },
-                       onDismissed: (_) async {
-                         if (widget.onDelete != null)
-                         setState(() => displayItems.removeAt(index));
+                       onDismissed: (_) {
+                         setState(() {
+                           displayItems.removeAt(index);
+                         });
                        },
                        child: GestureDetector(
                          onTap: () async {
-                           if (widget.onTap != null) await widget.onTap!(item, index);
-                           if (widget.onSelect != null) widget.onSelect!(index);
+                           if (widget.onTap != null) {
+                             await widget.onTap!(item, index);
+                           }
+
+                           if (widget.onSelect != null) {
+                             widget.onSelect!(index);
+                           }
                          },
                          child: widget.itemBuilder(item, index),
                        ),

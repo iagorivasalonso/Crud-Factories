@@ -1,45 +1,50 @@
 import 'package:crud_factories/Backend/Global/controllers/LineSend.dart' show LineSendController;
 import 'package:crud_factories/Backend/Global/variables.dart';
+import 'package:crud_factories/Backend/Providers/LineSendProvider.dart';
+import 'package:crud_factories/Backend/Providers/SectorProvider.dart';
 import 'package:crud_factories/Functions/isNotAndroid.dart' show isNotAndroid;
 import 'package:crud_factories/Functions/manageState.dart' show manageState;
 import 'package:crud_factories/Objects/LineSend.dart' show LineSendState;
 import 'package:crud_factories/generated/l10n.dart' show S;
 import 'package:fluent_ui/fluent_ui.dart' hide Checkbox;
 import 'package:flutter/material.dart' hide Scrollbar;
+import 'package:provider/provider.dart';
+
+import '../Objects/Sector.dart';
 
 class customDataTable extends StatelessWidget {
 
   final ScrollController scrollController;
   final List<String> columns;
+
   final bool showSectorColumn;
-  final int? select;
-  final List<LineSendState> states;
-  final String? selectedItem;
+
+  final List<LineSendController> lines;
   final List<bool> sendValues;
-  final List<LineSendController> linesControllers;
-  final bool showFactoryInsteadOfDate;
+
+
   final String mesage;
+
   final void Function(int, String)? onObservationChanged;
   final void Function(int, LineSendState) onStateChanged;
   final void Function(int, bool) onSendChanged;
   Function(dynamic value) onSelectedAllChanged;
+
+  SendFilter? filter;
 
   customDataTable({
     super.key,
     required this.scrollController,
     required this.columns,
     required this.showSectorColumn,
-    this.showFactoryInsteadOfDate = false,
-    this.select,
-    required this.states,
-    this.selectedItem,
     required this.sendValues,
-    required this.linesControllers,
+    required this.lines,
     required this.mesage,
     this.onObservationChanged,
     required this.onStateChanged,
     required this.onSendChanged,
     required this.onSelectedAllChanged,
+    this.filter,
 
   });
 
@@ -47,196 +52,161 @@ class customDataTable extends StatelessWidget {
 
 
   @override
-  Widget build(BuildContext context0) {
+  Widget build(BuildContext context) {
 
-    BuildContext context = isNotAndroid() ? context0 :  context1;
+    final isCreateMode = key is ValueKey<String> && (key as ValueKey<String>).value == 'new';
 
-    return Container(
-      width: 900,
-      child: Column(
+    return Column(
         children: [
           Row(
             children: [
-              Scrollbar(
-                  controller: scrollController,
-                  thumbVisibility: true,       ///vere como queda
-                  child: SizedBox(
-                    height: 250,
+              SizedBox(
+                height: 250,
+                child: Scrollbar(
+                    controller: scrollController,
+                  ///vere como queda
                     child: SingleChildScrollView(
-                        controller: scrollController,
-                        scrollDirection: Axis.vertical,
-                        child: DataTable(
+                          controller: scrollController,
+                          scrollDirection: Axis.vertical,
+                          child: DataTable(
+                            headingRowHeight: 40,
+                            dataRowMinHeight: 40,
+                            dataRowMaxHeight: 40,
                             columns: columns
-                                .map((c)=> DataColumn(
-                                label: SizedBox(width: 100, child: Text(c)),
-                               ),
-                                ).toList(),
-                            rows: select == -1
-                              ? tableLinesNew(context)
-                              :  tableLinesEdit(context)
+                                .map((c) => DataColumn(label: Text(c)))
+                                .toList(),
+                            rows: _buildRows(context, isCreateMode),
 
-                        ),
-                  ),
-               ),
+                          ),
                     ),
+                 ),
+              ),
+
             ],
           ),
           Padding(
-            padding: const EdgeInsets.only(top: 15.0),
+            padding: const EdgeInsets.only(top:40.0),
             child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(mesage),
-                Column(
-                  children: [
-                    if(select == -1)
-                    Row(
-                      children: [
-                        SizedBox(
-                          width: 230,
-                          child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(mesage),
+                  Column(
+                    children: [
+                      if (isCreateMode == true)
+                      Row(
+                        children: [
+                          Row(
                             children: [
                               Text(S.of(context).select_all),
                               Checkbox(
-                                value: sendValues.every((v) => v), // true si todos están seleccionados
-                                onChanged: (value) {
-                                  if (value != null) {
-                                    onSelectedAllChanged(value);
+                                value: sendValues.isNotEmpty && sendValues.every((v) => v),// true si todos están seleccionados
+                                onChanged: (v) {
+                                  if (v != null) {
+                                    onSelectedAllChanged!(v);
                                   }
                                 },
                               ),
                             ],
                           ),
-                        ),
 
-                      ],
-                    ),
+                        ],
+                      ),
 
-                  ],
-                ),
-              ],
-            ),
-          )
+                    ],
+                  ),
+                ],
+              ),
+          ),
         ],
-      ),
     );
   }
 
-  List<DataRow> tableLinesNew (BuildContext context) {
 
-    return List <DataRow>.generate(linesControllers.length,
-          (index) => DataRow(
-          cells: [
-            DataCell(
-                Text(linesControllers[index].factory.text)
-            ),
 
-            if (showSectorColumn)
-            DataCell(
-                Text(linesControllers[index].sector.text)
+  List<DataRow> _buildRows(BuildContext context, bool isCreateMode) {
+
+    return List.generate(lines.length, (index) {
+
+      final line = lines[index];
+
+        String? nameSector ="";
+        String campKey = "";
+
+        if(isCreateMode)
+        {
+          final providerSectors = context.watch<SectorProvider>().sectors;
+
+          final sectorCurrent =  providerSectors.firstWhere(
+                (s) => s.id == line.sector,
+            orElse: () => Sector(id: '', name: ''),
+          );
+
+          nameSector = sectorCurrent?.name;
+
+          campKey = line.factory;
+        }
+        else
+        {
+           nameSector = line.sector;
+
+           campKey = this.filter == SendFilter.company
+                      ? line.date
+                      : line.factory;
+        }
+
+      return DataRow(
+        cells: [
+
+          DataCell(Text(campKey)),
+
+          if (showSectorColumn)
+            DataCell(Text(nameSector!)),
+
+          DataCell(
+            TextField(
+              controller: line.observations,
+              onChanged: (value) {
+                onObservationChanged?.call(index, value);
+              },
             ),
-            DataCell(
-              TextField(
-                controller: linesControllers[index].observations,
-                decoration: const InputDecoration(
-                  border: OutlineInputBorder(),
-                  isDense: true,
-                  contentPadding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+          ),
+
+          DataCell(
+            DropdownButtonFormField<LineSendState>(
+              value: line.state,
+              items: LineSendState.values
+                  .map((s) => DropdownMenuItem(
+                value: s,
+                child: Text(
+                  manageState.seeLanguage(context, s.name),
                 ),
-              ),
+              ))
+                  .toList(),
+              onChanged: (value) {
+                if (value != null) {
+                  line.state = value;
+                  onStateChanged(index, value);
+                }
+              },
             ),
+          ),
+
+          if (isCreateMode)
             DataCell(
-              SizedBox(
-                height: 40,
-                child: DropdownButtonFormField<LineSendState>(
-                  value: linesControllers[index].state, // ✅ el valor actual (un solo enum)
-                  items: LineSendState.values.map((state) {
-                    return DropdownMenuItem<LineSendState>(
-                      value: state,                     // ✅ un solo enum, no la lista
-                      child: Text(manageState.seeLanguage(context,state.name)), // ✅ texto traducido
-                    );
-                  }).toList(),
-                  onChanged: (value) {
-                    if (value != null) {
-                      linesControllers[index].state = value; // actualizar la fila
-                      onStateChanged(index, value);
+              Center(
+                child: Checkbox(
+                  value: index < sendValues.length ? sendValues[index] : false,
+                  onChanged: (v) {
+                    if (v != null) {
+                      onSendChanged.call(index, v);
                     }
                   },
                 ),
               ),
             ),
-
-            DataCell(
-              CheckboxListTile(
-                value: sendValues[index],
-                onChanged:( bool? value) {
-                  if (value != null) {
-                    onSendChanged(index, value); // <- notifica al padre
-                  }
-
-                },
-              ),
-            ),
-          ]
-      ),
-
-    );
-  }
-
-  List<DataRow> tableLinesEdit (BuildContext context) {
-
-    return List <DataRow>.generate(linesControllers.length,
-          (index) => DataRow(
-          cells: [
-            DataCell(
-                Text(columns[0]== S.of(context).company
-                      ? linesControllers[index].factory.text
-                      : linesControllers[index].date.text)
-            ),
-
-            if (showSectorColumn)
-            DataCell(
-                  Text(linesControllers[index].sector.text)
-            ),
-            DataCell(
-              TextField(
-                controller: linesControllers[index].observations,
-                decoration: const InputDecoration(
-                  border: OutlineInputBorder(),
-                  isDense: true,
-                  contentPadding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-
-                ),
-                onChanged: (value){
-                  if (onObservationChanged != null) {
-                    onObservationChanged!(index, value);
-                  }
-                },
-              ),
-            ),
-            DataCell(
-                SizedBox(
-                  height: 40,
-                  child: DropdownButtonFormField<LineSendState>(
-                    value: linesControllers[index].state,
-                    items: LineSendState.values.map((state) {
-                      return DropdownMenuItem<LineSendState>(
-                        value: state,
-                        child: Text(manageState.seeLanguage(context,state.name)),
-                      );
-                    }).toList(),
-                    onChanged: (value) {
-                      if (value != null) {
-                        linesControllers[index].state = value; // actualizar la fila
-                        onStateChanged(index, value);
-                      }
-                    },
-                  ),
-                )
-            ),
-          ]
-      ),
-
-    );
+        ],
+      );
+    });
   }
 }
+

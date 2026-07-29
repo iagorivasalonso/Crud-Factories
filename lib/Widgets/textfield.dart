@@ -1,14 +1,16 @@
 import 'package:crud_factories/Backend/Global/variables.dart';
+import 'package:crud_factories/Backend/Providers/EditStateProvider.dart' show EditStateProvider;
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 Padding defaultTextfield({
   required String nameCamp,
   String? campOld,
   required TextEditingController controllerCamp,
-  FocusNode? focusNode,
   bool? automatic = false,
   bool? campEdit,
   ValueChanged<String>? onChanged,
+  required BuildContext context,
 }){
 
   return Padding(
@@ -31,17 +33,43 @@ Padding defaultTextfield({
           child: SizedBox(
             height: 40,
             child: TextField(
-              focusNode: focusNode,
-              onTapOutside: (_) {
-                focusNode?.unfocus();
-              },
               enabled: campEdit ?? true,
               controller: controllerCamp,
               style: TextStyle(color: automatic == true ? Colors.grey: Colors.black),
-              decoration: const InputDecoration(
-                border: OutlineInputBorder(),
+              decoration: InputDecoration(
+                filled: true,
+                fillColor: campEdit == false
+                    ? Colors.grey.shade200
+                    : Colors.white,
+
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(10),
+                  borderSide: BorderSide(
+                    color: Colors.blue.shade300,
+                    width: 1.2,
+                  ),
+                ),
+
+                enabledBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(10),
+                  borderSide: BorderSide(
+                    color: Colors.grey.shade400,
+                  ),
+                ),
+
+                focusedBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(10),
+                  borderSide: BorderSide(
+                    color: Colors.blue.shade600,
+                    width: 2,
+                  ),
+                ),
+
                 isDense: true,
-                contentPadding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+                contentPadding: const EdgeInsets.symmetric(
+                  horizontal: 12,
+                  vertical: 12,
+                ),
               ),
               onChanged: (value) {
                 // 👉 SI el padre manda lógica, la usamos
@@ -51,10 +79,12 @@ Padding defaultTextfield({
                 }
 
                 // 👉 SI NO, usamos lógica interna (fallback)
-                if (campOld != null && campOld.isNotEmpty) {
-                  saveChanges = value != campOld;
+                final changed = (campOld ?? "") != controllerCamp.text;
+
+                if (changed) {
+                  context.read<EditStateProvider>().markChanged();
                 } else {
-                  saveChanges = value.isNotEmpty;
+                  context.read<EditStateProvider>().clear();
                 }
               },
             ),

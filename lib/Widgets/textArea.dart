@@ -1,10 +1,16 @@
 import 'package:crud_factories/Backend/Global/variables.dart';
+import 'package:crud_factories/Backend/Providers/EditStateProvider.dart' show EditStateProvider;
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as context show read;
+import 'package:http/http.dart' show read;
+import 'package:provider/provider.dart';
 
 Row textArea({
+  required BuildContext context,
   required String nameCamp,
   required String campOld,
   required TextEditingController controllerCamp,
+  bool? automatic = false,
 }){
 
   return Row(
@@ -22,15 +28,46 @@ Row textArea({
         child: TextField(
           minLines: 6,
           maxLines: 20,
-          decoration: const InputDecoration(
-            border: OutlineInputBorder(),
-          ),
           controller: controllerCamp,
+          style: TextStyle(color: automatic == true ? Colors.grey: Colors.black),
+          decoration: InputDecoration(
+            filled: true,
+            fillColor:  Colors.white,
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(10),
+              borderSide: BorderSide(
+                color: Colors.blue.shade300,
+                width: 1.2,
+              ),
+            ),
+
+            enabledBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(10),
+              borderSide: BorderSide(
+                color: Colors.grey.shade400,
+              ),
+            ),
+
+            focusedBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(10),
+              borderSide: BorderSide(
+                color: Colors.blue.shade600,
+                width: 2,
+              ),
+            ),
+
+            isDense: true,
+            contentPadding: const EdgeInsets.symmetric(
+              horizontal: 12,
+              vertical: 12,
+            ),
+          ),
           onChanged: (s) {
-            if (campOld.isNotEmpty) {
-              saveChanges = controllerCamp.text != campOld;
+
+            if (campOld != null && campOld.isNotEmpty) {
+              context.read<EditStateProvider>().markChanged();
             } else {
-              saveChanges = controllerCamp.text.isNotEmpty;
+              context.read<EditStateProvider>().clear();
             }
           },
         ),

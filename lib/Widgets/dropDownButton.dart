@@ -7,7 +7,7 @@ class GenericDropdown<T> extends StatelessWidget {
   final String? opDefault;
   final List<T> items;
   final T? selectedItem;
-  final ValueChanged<T?> onChanged;
+  final ValueChanged<T?>? onChanged;
   final String hint;
   final String Function(T) itemLabel;
 

@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 Padding tableElements<T>({
   required List<String>columnsTable,
   required List<T>contentTable,
-  required TextEditingController controllerCamp,
   required List<String> Function(T) rowBuilder,
 }) {
   final ScrollController verticalScrollTable = ScrollController();
