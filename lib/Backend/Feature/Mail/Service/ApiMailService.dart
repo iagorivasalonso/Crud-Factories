@@ -13,33 +13,19 @@ class ApiMailService  implements IMailService{
 
       try {
 
-        final attachments = <Map<String, dynamic>>[];
-
-        for (final attachment in message.attachments) {
-
-
-
-            attachments.add({
-              'filename': attachment.name,
-              'content': base64Encode(attachment.bytes!),
-              'contentType': 'application/octet-stream',
-            });
-        }
-
          final request = ApiMailRequest(
                 mail: mail,
                 message: message,
-                attachments: attachments
          );
 
         final response = await MailApi.send(request);
 
-        final statusCode = response['statusCode'] as int;
-        final body = response['body'];
+         final statusCode = response['statusCode'] as int;
+         final body = response['body'] as Map<String, dynamic>;
 
         if (statusCode >= 200 && statusCode < 300)
         {
-             final results = body as List<dynamic>;
+             final results = body['results'] as List<dynamic>;
 
              final sent = <String>[];
              final failed = <MailFailure>[];
@@ -49,12 +35,12 @@ class ApiMailService  implements IMailService{
                final result = item as Map<String, dynamic>;
 
                if (result['status'] == 'sent') {
-                 sent.add(result['address']);
+                 sent.add(result['mail']);
                } else {
                  failed.add(
                    MailFailure(
-                     mail: result['address'],
-                     error: result['message'] ?? 'Error al enviar',
+                     mail: result['mail'],
+                     error: result['info'] ?? 'Error al enviar',
                    ),
                  );
                }
@@ -67,13 +53,16 @@ class ApiMailService  implements IMailService{
              );
         }
 
-        return MailResult(
-            success: false,
-            sent: const [],
-            failed: [
-              body?['message']  ?? 'Error HTTP $statusCode'
-            ]
-        );
+         return MailResult(
+           success: false,
+           sent: const [],
+           failed: [
+             MailFailure(
+               mail: '',
+               error: body?['message'] ?? 'Error HTTP $statusCode',
+             ),
+           ],
+         );
 
       } catch (e) {
 
@@ -82,6 +71,7 @@ class ApiMailService  implements IMailService{
               sent: const [],
               failed: [
                 MailFailure(
+                  mail: '',
                   error: e.toString(),
                 ),
               ]
