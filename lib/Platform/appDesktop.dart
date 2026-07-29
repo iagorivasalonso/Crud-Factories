@@ -131,7 +131,7 @@ print("edz$providerMails");
                                   if (!await context.read<NavigationProvider>().canNavigate(context)) return;
 
                                   context.read<NavigationProvider>()
-                                      .go(AppView.createMail);
+                                      .go(AppView.creataddress);
 
 
                                 }
@@ -317,7 +317,14 @@ print("edz$providerMails");
 
                         if(!await context.read<NavigationProvider>().canNavigate(context)) return;
 
-                        context.read<NavigationProvider>().go(AppView.mails);
+                        if(providerMails.isNotEmpty)
+                        {
+                          context.read<NavigationProvider>().go(AppView.mails);
+                        }
+                        else
+                        {
+                          noCategory(context, S.of(context).mails);
+                        }
 
                       }
                   ),
@@ -428,13 +435,13 @@ print("edz$providerMails");
                          bool enter = true;
                         if(providerMails.isEmpty)
                         {
-                          String action =S.of(context).if_you_have_no_registered_emails_do_you_wish_to_continue;
+                          String action = S.of(context).if_you_have_no_registered_addresss_do_you_wish_to_continue;
                           enter = await warning(context,action);
                         }
 
-                        if(!enter) return;
+                       if(!enter) return;
 
-                        context.read<NavigationProvider>().go(AppView.sendMail);
+                          context.read<NavigationProvider>().go(AppView.sendMail);
 
                       }
                   ),
