@@ -16,12 +16,16 @@ import 'package:crud_factories/Backend/Global/variables.dart';
 import 'package:crud_factories/Backend/Providers/filterProvider.dart' show FilterProvider;
 import 'package:crud_factories/Frontend/adminRoutes.dart';
 import 'package:crud_factories/Frontend/adminSectors.dart';
+import 'package:crud_factories/Frontend/mail.dart' show newMailConfiguration;
 import 'package:crud_factories/Functions/changesNoSave.dart';
+import 'package:crud_factories/Objects/Mail.dart' show Mail;
+import 'package:crud_factories/Objects/MailMessage.dart' show MailMessage;
 import 'package:crud_factories/generated/l10n.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:menu_bar/menu_bar.dart';
 import 'package:provider/provider.dart';
+import '../Alertdialogs/selectCompany.dart';
 import '../Backend/Providers/App_provaider.dart';
 import '../Backend/Providers/EditStateProvider.dart';
 import '../Backend/Providers/EmployeeProvider.dart';
@@ -84,6 +88,7 @@ class _appDesktopState extends State<appDesktop> {
     final providerEmployees = context.watch<EmployeeProvider>().empleoyees;
     final providerLines = context.watch<LineSendProvider>().LineSends;
     final providerMails = context.watch<MailProvider>().mails;
+print("edz$providerMails");
 
     double wItem = 80;
     double wItemMax = 120;
@@ -110,7 +115,7 @@ class _appDesktopState extends State<appDesktop> {
                                     child: Text(S.of(context).company)),
                                 onTap: () async {
 
-                                  if (!await canNavigate(context)) return;
+                                  if (!await context.read<NavigationProvider>().canNavigate(context)) return;
 
                                   context.read<NavigationProvider>()
                                       .go(AppView.createFactory);
@@ -123,7 +128,7 @@ class _appDesktopState extends State<appDesktop> {
                                     child: Text(S.of(context).mail)),
                                 onTap: () async {
 
-                                  if (!await canNavigate(context)) return;
+                                  if (!await context.read<NavigationProvider>().canNavigate(context)) return;
 
                                   context.read<NavigationProvider>()
                                       .go(AppView.createMail);
@@ -137,7 +142,7 @@ class _appDesktopState extends State<appDesktop> {
                                     child: Text(S.of(context).shipment)),
                                 onTap: () async {
 
-                                  if (!await canNavigate(context)) return;
+                                  if (!await context.read<NavigationProvider>().canNavigate(context)) return;
 
                                   context.read<NavigationProvider>()
                                       .go(AppView.createShipment);
@@ -166,7 +171,7 @@ class _appDesktopState extends State<appDesktop> {
                           child: Text(S.of(context).import)),
                       onTap: () async {
 
-                        if (!await canNavigate(context)) return;
+                        if (!await context.read<NavigationProvider>().canNavigate(context)) return;
 
                         context.read<NavigationProvider>()
                             .go(AppView.importData);
@@ -204,7 +209,6 @@ class _appDesktopState extends State<appDesktop> {
                         else
                         {
                             await adminSector(context);
-
                         }
 
                       }
@@ -216,7 +220,7 @@ class _appDesktopState extends State<appDesktop> {
                             child: Text(S.of(context).companies)),
                             onTap: () async {
 
-                                if(!await canNavigate(context)) return;
+                                if(!await context.read<NavigationProvider>().canNavigate(context)) return;
 
                                 if(providerFactories.isNotEmpty)
                                 {
@@ -256,7 +260,7 @@ class _appDesktopState extends State<appDesktop> {
                                       width:  wItem,
                                       child: Text(S.of(context).allFemale)),
                                   onTap: () async {
-                                    if(!await canNavigate(context)) return;
+                                    if(!await context.read<NavigationProvider>().canNavigate(context)) return;
 
                                     context.read<FilterProvider>().setSector("0");  //Todos los sectors
 
@@ -304,7 +308,7 @@ class _appDesktopState extends State<appDesktop> {
                           child: Text(S.of(context).mails)),
                       onTap: () async {
 
-                        if(!await canNavigate(context)) return;
+                        if(!await context.read<NavigationProvider>().canNavigate(context)) return;
 
                         context.read<NavigationProvider>().go(AppView.mails);
 
@@ -318,7 +322,7 @@ class _appDesktopState extends State<appDesktop> {
                           child: Text(S.of(context).shipments)
                       ),
                       onTap: () async {
-                             if(!await canNavigate(context)) return;
+                             if(!await context.read<NavigationProvider>().canNavigate(context)) return;
 
                              if(providerLines.isNotEmpty)
                              {
@@ -367,7 +371,9 @@ class _appDesktopState extends State<appDesktop> {
                                       width:  wItem,
                                       child: Text(S.of(context).allMale)),
                                   onTap: () async {
-                                      if(!await canNavigate(context)) return;
+                                      if(!await context.read<NavigationProvider>().canNavigate(context)) return;
+
+                                      context.read<FilterProvider>().setSector("0");
 
                                       context.read<NavigationProvider>()
                                           .go(AppView.shipments);
@@ -384,7 +390,9 @@ class _appDesktopState extends State<appDesktop> {
                                     onTap: () async {
 
 
-                                          context.read<NavigationProvider>().go(AppView.shipments);
+
+                                      context.read<FilterProvider>().setSector(sector.id);
+                                      context.read<NavigationProvider>().go(AppView.shipments);
 
                                     }
                                 ),
@@ -408,7 +416,7 @@ class _appDesktopState extends State<appDesktop> {
                           child: Text(S.of(context).sending_mails)),
                       onTap: () async {
 
-                        if(!await canNavigate(context)) return;
+                        if(!await context.read<NavigationProvider>().canNavigate(context)) return;
 
                          bool enter = true;
                         if(providerMails.isEmpty)
@@ -429,7 +437,7 @@ class _appDesktopState extends State<appDesktop> {
                           child: Text(S.of(context).DB_connection)),
                       onTap: () async {
 
-                        if(!await canNavigate(context)) return;
+                        if(!await context.read<NavigationProvider>().canNavigate(context)) return;
 
                         context.read<NavigationProvider>().go(AppView.connections);
                       }
@@ -501,21 +509,6 @@ class _appDesktopState extends State<appDesktop> {
     );
 
   }
-
-  Future<bool> canNavigate(BuildContext context) async {
-
-      final provider = context.read<EditStateProvider>();
-
-      if (!provider.hasChanges) return true;
-
-      final ok = await changesNoSave(context);
-
-      if (ok) {
-        provider.clear();
-      }
-
-      return ok;
-    }
-
+  
 }
 
