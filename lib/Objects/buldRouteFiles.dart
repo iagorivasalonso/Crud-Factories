@@ -15,7 +15,7 @@ class RouteFilesBuilder  {
       employees: registry.get(RouteFileKey.employees),
       sectors: registry.get(RouteFileKey.sectors),
       factories: registry.get(RouteFileKey.factories),
-      lines: registry.get(RouteFileKey.lines),
+      linesSends: registry.get(RouteFileKey.lines),
       mails: registry.get(RouteFileKey.mails),
     );
   }
