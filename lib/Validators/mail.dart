@@ -7,12 +7,12 @@ import 'package:fluent_ui/fluent_ui.dart';
 
 class MailValidator {
 
-  static String? validate({
-    required BuildContext context,
-    required MailController controllers,
-    required List<Mail> mails,
-    required int select,
-  }) {
+  static String? validate(
+    BuildContext context,
+    MailController controllers,
+    Mail? mailSelected,
+    List<Mail> mails,
+      ) {
 
     final mail = controllers.mail.text.trim();
     final pass = controllers.password.text;
@@ -28,17 +28,17 @@ class MailValidator {
     if (mailError != null) return mailError;
 
     // 🔴 UNIQUE
-    final allKeys = mails.map((e) => e.address).toList();
-    final old = select != -1 ? mails[select].address : "";
+    final allMails = mails.map((e) => e.mail).toList();
+    final old = mailSelected?.mail ?? '';
 
-    final keyError = ValidatorCamps.primaryKeyValidate(
+    final mailErrors = ValidatorCamps.primaryKeyValidate(
       mail,
-      allKeys,
+      allMails,
       old,
       context,
     );
 
-    if (keyError != null) return keyError;
+    if (mailErrors != null) return mailErrors;
 
     // 🔴 PASSWORD MATCH
     if (pass != pass2) {

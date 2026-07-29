@@ -8,6 +8,7 @@ class SendMailValidator {
 
   static SendMailResult validateAll({
     required BuildContext context,
+    required List<String> recipients,
     required String mail,
     required String password,
     required String mailTo,
@@ -34,18 +35,34 @@ class SendMailValidator {
     }
 
 // 🔴 DESTINATARIO (ESTE ES EL IMPORTANTE)
-    if (mailTo.trim().isNotEmpty) {
-      final error = ValidatorCamps.mailValidate(mailTo, context);
-      if (error != null) {
-        return SendMailResult.error(
-          S.of(context).The_recipient_is_not_a_valid_mail,
-        );
-      }
+
+    if(isRecipient) {
+         if(mailTo.trim().isEmpty){
+           return SendMailResult.error(
+             S.of(context).recipient_required,
+           );
+         }
+
+         final error = ValidatorCamps.mailValidate(mailTo, context);
+
+         if(error != null)
+         {
+           return SendMailResult.error(
+             S.of(context).The_recipient_is_not_a_valid_mail,
+           );
+         }
     }
 
-    List<String> warnings = [];
 
-    if (subject.isEmpty) {
+    if (!isRecipient && recipients.isEmpty) {
+      return SendMailResult.error(
+        S.of(context).select_at_least_one_recipient,
+      );
+    }
+
+    final warnings = <String>[];
+
+    if (subject.trim().isEmpty) {
       warnings.add(
         LocalizationHelper.camp_empty_continue(
           context,
@@ -54,7 +71,7 @@ class SendMailValidator {
       );
     }
 
-    if (message.isEmpty) {
+    if (message.trim().isEmpty) {
       warnings.add(
         LocalizationHelper.camp_empty_continue(
           context,
@@ -80,6 +97,10 @@ class SendMailResult {
     this.error,
     this.warnings = const [],
   });
+
+  bool get hasError => error != null;
+
+  bool get hasWarnings => warnings.isNotEmpty;
 
 
 
