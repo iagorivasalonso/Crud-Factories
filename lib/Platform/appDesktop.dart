@@ -5,7 +5,6 @@ import 'package:crud_factories/Alertdialogs/noCategory.dart';
 import 'package:crud_factories/Alertdialogs/warning.dart';
 import 'package:crud_factories/Backend/AppContent.dart' show AppContent;
 import 'package:crud_factories/Backend/CSV/Export_general/export_service.dart' show ExportService;
-import 'package:crud_factories/Backend/Global/list.dart';
 import 'package:crud_factories/Backend/Providers/ConectionProvider.dart';
 import 'package:crud_factories/Backend/Providers/FactoryProvider.dart';
 import 'package:crud_factories/Backend/Providers/LineSendProvider.dart';
@@ -16,18 +15,12 @@ import 'package:crud_factories/Backend/Global/variables.dart';
 import 'package:crud_factories/Backend/Providers/filterProvider.dart' show FilterProvider;
 import 'package:crud_factories/Frontend/adminRoutes.dart';
 import 'package:crud_factories/Frontend/adminSectors.dart';
-import 'package:crud_factories/Frontend/mail.dart' show newMailConfiguration;
-import 'package:crud_factories/Functions/changesNoSave.dart';
-import 'package:crud_factories/Objects/Mail.dart' show Mail;
-import 'package:crud_factories/Objects/MailMessage.dart' show MailMessage;
 import 'package:crud_factories/generated/l10n.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:menu_bar/menu_bar.dart';
 import 'package:provider/provider.dart';
-import '../Alertdialogs/selectCompany.dart';
 import '../Backend/Providers/App_provaider.dart';
-import '../Backend/Providers/EditStateProvider.dart';
 import '../Backend/Providers/EmployeeProvider.dart';
 import '../Backend/Providers/RoutesProvider.dart';
 
@@ -65,16 +58,8 @@ class _appDesktopState extends State<appDesktop> {
 
     });
   }
-  @override
-  void dispose() {
-    /*
-    controlerConex.namebd.dispose();
-    controlerConex.hostbd.dispose();
-    controlerConex.portbd.dispose();
-    controlerConex.userbd.dispose();
-    controlerConex.passbd.dispose();
-    super.dispose();*/
-  }
+
+
   @override
   Widget build(BuildContext context) {
 
@@ -88,7 +73,6 @@ class _appDesktopState extends State<appDesktop> {
     final providerEmployees = context.watch<EmployeeProvider>().empleoyees;
     final providerLines = context.watch<LineSendProvider>().LineSends;
     final providerMails = context.watch<MailProvider>().mails;
-print("edz$providerMails");
 
     double wItem = 80;
     double wItemMax = 120;
