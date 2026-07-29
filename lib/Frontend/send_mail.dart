@@ -1,25 +1,23 @@
-
-import 'dart:convert';
-import 'dart:io';
-import 'package:crud_factories/Alertdialogs/warning.dart';
-import 'package:crud_factories/Validators/sendMail.dart' show SendMailValidator;
-import 'package:flutter/foundation.dart' hide Factory;
-import 'package:flutter/material.dart';
 import 'package:crud_factories/Alertdialogs/confirm.dart';
-import 'package:crud_factories/Alertdialogs/error.dart';
-import 'package:crud_factories/Alertdialogs/warning.dart';
-import 'package:crud_factories/Backend/Global/list.dart';
-import 'package:crud_factories/Backend/Global/variables.dart';
-import 'package:crud_factories/Frontend/mail.dart' show sendingMail;
-import 'package:crud_factories/Functions/validatorCamps.dart';
+import 'package:crud_factories/Alertdialogs/error.dart' show error;
+import 'package:crud_factories/Alertdialogs/errorList.dart';
+import 'package:crud_factories/Alertdialogs/selectCompany.dart' show newMailConfiguration;
+import 'package:crud_factories/Alertdialogs/warning.dart' show warning;
+import 'package:crud_factories/Backend/Data/controlsMessagesError/errors.dart';
+import 'package:crud_factories/Backend/Feature/Mail/Service/mailConfigurationService.dart';
+import 'package:crud_factories/Backend/Providers/EditStateProvider.dart' show EditStateProvider;
+import 'package:crud_factories/Backend/Providers/FactoryProvider.dart';
+import 'package:crud_factories/Backend/Providers/LineSendProvider.dart' show LineSendProvider;
+import 'package:crud_factories/Backend/Providers/MailProvider.dart' show MailProvider;
+import 'package:crud_factories/Validators/sendMail.dart' show SendMailValidator;
+import 'package:crud_factories/helpers/localization_helper.dart';
+import 'package:flutter/material.dart';
 import 'package:crud_factories/Objects/Factory.dart';
 import 'package:crud_factories/Objects/Mail.dart';
-import 'package:crud_factories/Objects/LineSend.dart';
 import 'package:crud_factories/Widgets/genericRadioGroup.dart';
 import 'package:crud_factories/Widgets/headView.dart';
 import 'package:crud_factories/Widgets/headViewsAndroid.dart';
 import 'package:crud_factories/generated/l10n.dart';
-import 'package:crud_factories/helpers/localization_helper.dart';
 import 'package:crud_factories/Backend/Global/controllers/Mail.dart';
 import 'package:crud_factories/Functions/isNotAndroid.dart';
 import 'package:crud_factories/Widgets/dropDownButton.dart';
@@ -30,118 +28,109 @@ import 'package:crud_factories/Widgets/tableElements.dart';
 import 'package:crud_factories/Widgets/textArea.dart';
 import 'package:crud_factories/Widgets/textFieldPassword.dart';
 import 'package:crud_factories/Widgets/textfield.dart';
-import 'package:mailer/mailer.dart' show Message, Address;
-import 'package:mailer/src/entities/attachment.dart';
+import 'package:provider/provider.dart' show WatchContext, ReadContext;
 
-import '../Alertdialogs/warning.dart' show warning;
-
+import '../Objects/MailMessage.dart';
 
 
-class sendMail extends StatefulWidget {
+
+class SendMail extends StatefulWidget {
 
 
-  sendMail();
+   const SendMail({super.key});
 
   @override
-  State<sendMail> createState() => _sendMailState();
+  State<SendMail> createState() => _SendMailState();
 }
 
-class _sendMailState extends State<sendMail> {
+class _SendMailState extends State<SendMail> {
 
 
   final ScrollController horizontalScroll = ScrollController();
   final ScrollController verticalScroll = ScrollController();
-  final ScrollController verticalScrollTable = ScrollController();
 
-  List <String> columns = [];
-  List <String> columnsTable = [];
-  List <LineSend> sends = [];
-  List <LineSend> sendsDay = [];
-  List <Factory> selectedFactories = [];
+  late final MailController controller;
+
+
+
   String? selectedSend;
-  Mail? selectedMail;
-  bool otherMail= false;
-  bool mailSave = false;
-  int cantFactories = 0;
-  double marginBox = 0;
+  String? selectedOption;
 
-  String nameRoute = "";
+  List<Factory> selectedFactories = [];
 
-  late final MailController controllers;
+  bool otherMail = false;
+
+  String previousMail = "";
+  String previusPassword = "";
 
   @override
   void initState() {
     super.initState();
-    controllers = MailController(
+
+    controller = MailController(
       mail: TextEditingController(),
       password: TextEditingController(),
       mailTo: TextEditingController(),
       subject: TextEditingController(),
-      message: TextEditingController()
-
+      message: TextEditingController(),
     );
 
-    if(dateSends.isNotEmpty)
-    {
-       selectedSend = dateSends.first;
+    final provider = context.read<MailProvider>();
 
-       WidgetsBinding.instance.addPostFrameCallback((_) {
-         _onDateSelect(selectedSend);
-       });
-    }
+    otherMail = provider.mails.isEmpty;
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+
+      if (provider.selected == null && provider.mails.isNotEmpty) {
+        provider.select(provider.mails.first);
+      }
+    });
+
+  }
+
+  bool _initialized = false;
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+
+    if (_initialized) return;
+
+    selectedOption = S.of(context).a_recipient;
+
+    _initialized = true;
   }
 
   @override
   void dispose() {
-
     horizontalScroll.dispose();
     verticalScroll.dispose();
-    verticalScrollTable.dispose();
 
-    controllers.mail.dispose();
-    controllers.password.dispose();
-    controllers.mailTo!.dispose();
-    controllers.subject!.dispose();
-    controllers.message!.dispose();
+    controller.mail.dispose();
+    controller.password.dispose();
+    controller.mailTo!.dispose();
+    controller.subject!.dispose();
+    controller.message!.dispose();
 
     super.dispose();
   }
 
-  String? selectedOption;
-
-
-
 
   @override
-  Widget build(BuildContext context0) {
+  Widget build(BuildContext context) {
 
-    BuildContext context = isNotAndroid() ? context0 :  context1;
+    final providerMails = context.watch<MailProvider>();
+    final providerLines = context.watch<LineSendProvider>();
 
-    if(selectedOption==null)
-    {
-      selectedOption = S.of(context).a_recipient;
-    }
+    final mails = providerMails.mails;
+    final lines = providerLines.LineSends;
 
-    if(mails.isEmpty)
-    {
-        otherMail = true;
-    }
-    else
-    {
-           if (selectedMail==null)
-           {
-               controllers.mail.text = mails[0].address;
-               controllers.password.text =  mails[0].password;
-               mailSave = true;
-           }
-
-           if(otherMail == true)
-           {
-             controllers.mailTo!.text  = "";
-             controllers.password.text = "";
-           }
-    }
-
+    final dateSends = providerLines
+        .displayLines(shipmentText: S
+        .of(context)
+        .shipment)
+        .map((card) => card.description)
+        .toList();
 
     return !isNotAndroid()
         ? Scaffold(
@@ -163,8 +152,14 @@ class _sendMailState extends State<sendMail> {
                 padding: const EdgeInsets.only(left: 30.0, top: 30.0),
                 child: Container(
                   constraints: BoxConstraints(
-                    minWidth: MediaQuery.of(context).size.width,
-                    minHeight: MediaQuery.of(context).size.height,
+                    minWidth: MediaQuery
+                        .of(context)
+                        .size
+                        .width,
+                    minHeight: MediaQuery
+                        .of(context)
+                        .size
+                        .height,
                   ),
                   child: Align(
                     alignment: Alignment.topLeft,
@@ -173,175 +168,218 @@ class _sendMailState extends State<sendMail> {
                       child: Column(
                           children: [
                             headView(
-                                title: S.of(context).sending_mails
+                                title: S
+                                    .of(context)
+                                    .sending_mails
                             ),
 
                             Padding(
                               padding: otherMail == false
-                                       ? const EdgeInsets.only(left: 30.0)
-                                       : const EdgeInsets.only(left: 3.0),
+                                  ? const EdgeInsets.only(left: 30.0)
+                                  : const EdgeInsets.only(left: 3.0),
                               child: layoutVariant(
                                 items: [
                                   Flexible(
                                     flex: 4,
                                     child: otherMail == false
                                         ? GenericDropdown<Mail>(
-                                          items: mails,
-                                          camp: S.of(context).sender,
-                                          selectedItem: selectedMail,
-                                          hint: mails[0].address,
-                                          itemLabel: (Mail) => Mail.address,
-                                          onChanged: (mailChoose) => _onMailChanged(mailChoose),
-                                        )
+                                      items: mails,
+                                      camp: S
+                                          .of(context)
+                                          .sender,
+                                      selectedItem: providerMails.selected,
+                                      hint: mails.isNotEmpty
+                                          ? mails.first.mail
+                                          : "",
+                                      itemLabel: (mail) => mail.mail,
+                                      onChanged: _onMailChanged,
+                                    )
                                         : Row(
-                                            children: [
-                                              Expanded(
-                                                child: defaultTextfield(
-                                                  nameCamp: S.of(context).mail,
-                                                  controllerCamp: controllers.mail,
-                                                ),
-                                              ),
-                                              const SizedBox(width: 16),
-                                              Expanded(
-                                                child: textfieldPassword(
-                                                  nameCamp: S.of(context).password,
-                                                  controllerCamp: controllers.password,
-                                                ),
-                                              ),
-                                            ],
+                                      children: [
+                                        Expanded(
+                                          child: defaultTextfield(
+                                            nameCamp: S
+                                                .of(context)
+                                                .mail,
+                                            controllerCamp: controller.mail,
+                                            context: context,
+                                          ),
+                                        ),
+                                        const SizedBox(width: 16),
+                                        Expanded(
+                                          child: textfieldPassword(
+                                            nameCamp: S
+                                                .of(context)
+                                                .password,
+                                            controllerCamp: controller.password,
+                                          ),
+                                        ),
+                                      ],
                                     ),
                                   ),
 
                                   if(mails.isNotEmpty)
-                                  Flexible(
-                                    flex: 1,
-                                    child: Padding(
-                                      padding: otherMail == false
-                                                   ? const EdgeInsets.only(top: 10)
-                                                   :  const EdgeInsets.only(top: 20),
-                                      child: materialButton(
-                                        nameAction: otherMail == false
-                                            ? S.of(context).orther
-                                            : S.of(context).back,
-                                        function: () async {
-                                          setState(() {
-                                            otherMail = !otherMail;
-                                          });
-                                        },
+                                    Flexible(
+                                      flex: 1,
+                                      child: Padding(
+                                        padding: otherMail == false
+                                            ? const EdgeInsets.only(top: 10)
+                                            : const EdgeInsets.only(top: 20),
+                                        child: materialButton(
+                                            nameAction: otherMail == false
+                                                ? S
+                                                .of(context)
+                                                .orther
+                                                : S
+                                                .of(context)
+                                                .back,
+                                            function: _changeMailMode
+                                        ),
                                       ),
-                                    ),
-                                  )
+                                    )
                                 ],
                               ),
                             ),
 
-                            if(allLines.isNotEmpty)
-                            Padding(
-                              padding: const EdgeInsets.only(left: 30.0),
-                              child: Align(
-                                alignment: Alignment.topLeft,
-                                child: Padding(
-                                        padding: const EdgeInsets.only(right:150.0, bottom: 10.0),
-                                        child: GenericRadioGroup<String>(
-                                          items: [S.of(context).a_recipient,S.of(context).multiple_recipients],
-                                          camp: S.of(context).select,
-                                          selectedItem: selectedOption,
-                                          label: (item) => item,
-                                          onChanged: (value) {
-                                            if (value != null) {
-                                              setState(() {
-                                                selectedOption = value;
-                                              });
-                                            }
-                                          },
-                                          direction: Axis.horizontal,
-                                        ),
-                                      ),
+                            if(lines.isNotEmpty)
+                              Padding(
+                                padding: const EdgeInsets.only(left: 30.0),
+                                child: Align(
+                                  alignment: Alignment.topLeft,
+                                  child: Padding(
+                                    padding: const EdgeInsets.only(
+                                        right: 150.0, bottom: 10.0),
+                                    child: GenericRadioGroup<String>(
+                                      items: [S
+                                          .of(context)
+                                          .a_recipient, S
+                                          .of(context)
+                                          .multiple_recipients
+                                      ],
+                                      camp: S
+                                          .of(context)
+                                          .select,
+                                      selectedItem: selectedOption,
+                                      label: (item) => item,
+                                      onChanged: _onOptionChanged,
+                                      direction: Axis.horizontal,
+                                    ),
+                                  ),
+                                ),
                               ),
-                            ),
-
 
                             Padding(
                               padding: const EdgeInsets.all(0),
-                              child: selectedOption == S.of(context).a_recipient
-                              ? Align(
+                              child: selectedOption == S
+                                  .of(context)
+                                  .a_recipient
+                                  ? Align(
                                 alignment: Alignment.topLeft,
                                 child: SizedBox(
                                   width: 600,
                                   child: defaultTextfield(
-                                    nameCamp: S.of(context).a_recipient,
-                                    controllerCamp: controllers.mailTo!,
+                                    nameCamp: S
+                                        .of(context)
+                                        .a_recipient,
+                                    controllerCamp: controller.mailTo!,
+                                    context: context,
                                   ),
                                 ),
                               )
-                              : Column(
-                                children: [
-                                 Align(
-                                   alignment: Alignment.topLeft,
-                                   child: SizedBox(
+                                  : Padding(
+                                    padding: const EdgeInsets.only(left: 80.0),
+                                    child: Column(
+                                  children: [
+                                    Align(
+                                      alignment: Alignment.topLeft,
+                                      child: SizedBox(
                                         width: 420,
                                         child: GenericDropdown<String>(
                                           items: dateSends,
-                                          camp: S.of(context).multiple_recipients,
+                                          camp: S
+                                              .of(context)
+                                              .multiple_recipients,
                                           selectedItem: selectedSend,
-                                          hint: S.of(context).select,
+                                          hint: S
+                                              .of(context)
+                                              .select,
                                           itemLabel: (dateSend) => dateSend,
                                           onChanged: _onDateSelect,
                                         ),
                                       ),
-                                 ),
+                                    ),
 
-                                  tableElements(
-                                    columnsTable: [S.of(context).company, S.of(context).mail],
-                                    contentTable: selectedFactories,
-                                    controllerCamp: TextEditingController(),
-                                    rowBuilder:  (factory) => [factory.name, factory.mail],
+                                    if(selectedFactories.isNotEmpty)
+                                    tableElements(
+                                      columnsTable: [S
+                                          .of(context)
+                                          .company, S
+                                          .of(context)
+                                          .mail
+                                      ],
+                                      contentTable: selectedFactories,
+                                      rowBuilder: (factory) =>
+                                      [
+                                        factory.name,
+                                        factory.mail
+                                      ],
+                                    ),
+                                  ],
+                                    ),
                                   ),
-
-                                ],
-                              ),
                             ),
 
                             Align(
-                                alignment: Alignment.topLeft,
-                                child: Fileattachment(
-                                  camp: controllers.subject!,
-                                  multiple: true,
-                                  attachments: controllers.attachments,
-                                  allowedExtensions: ['pdf', 'csv', 'jpg'], // extensiones permitidas
-                                  onFilesChanged: (files) {
-                                    setState(() {
-                                      controllers.attachments.addAll(files);
-                                    });
-                                  },
-                                ),
-                              ),
-
-                            Padding(
-                              padding: const EdgeInsets.only(left: 30.0,top: 30.0),
-                              child: textArea(
-                                  nameCamp: S.of(context).message,
-                                  campOld: '',
-                                  controllerCamp: controllers.message!
+                              alignment: Alignment.topLeft,
+                              child: Fileattachment(
+                                camp: controller.subject!,
+                                multiple: true,
+                                attachments: controller.attachments,
+                                allowedExtensions: ['pdf', 'csv', 'jpg'],
+                                // extensiones permitidas
+                                onFilesChanged: (files) {
+                                  setState(() {
+                                    controller.attachments.addAll(files);
+                                  });
+                                },
                               ),
                             ),
 
                             Padding(
-                              padding: const EdgeInsets.only(left: 650.0,top:  20.0),
+                              padding: const EdgeInsets.only(
+                                  left: 30.0, top: 30.0),
+                              child: textArea(
+                                  nameCamp: S
+                                      .of(context)
+                                      .message,
+                                  campOld: '',
+                                  controllerCamp: controller.message!,
+                                  context: context
+                              ),
+                            ),
+
+                            Padding(
+                              padding: const EdgeInsets.only(
+                                  left: 650.0, top: 40.0, bottom: 20.0),
                               child: Row(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   materialButton(
-                                      nameAction: S.of(context).send,
-                                      function: () => _onSendMail(context,controllers,otherMail,selectedOption,selectedFactories),
+                                    nameAction: S
+                                        .of(context)
+                                        .send,
+                                    function: () =>
+                                        _onSendMail(context, controller),
 
                                   ),
 
                                   Padding(
                                     padding: const EdgeInsets.only(left: 20.0),
                                     child: materialButton(
-                                        nameAction: S.of(context).reboot,
-                                        function: () => _onResetMail(context,controllers,setState,selectedOption),
+                                      nameAction: S
+                                          .of(context)
+                                          .reboot,
+                                      function: () => _onResetMail(context,controller),
 
                                     ),
                                   ),
@@ -359,136 +397,257 @@ class _sendMailState extends State<sendMail> {
       ),
     )
         : Scaffold(
-          appBar: appBarAndroid(context, name: S.of(context).sending_mails),
-          body: Text("creart email"),
+      appBar: appBarAndroid(context, name: S
+          .of(context)
+          .sending_mails),
+      body: const Text("creart email"),
     );
   }
 
-  Future<void>_onMailChanged(Mail? mailChoose) async {
+  void _onMailChanged(Mail? mailChoose) {
 
-      setState(() {
-        selectedMail = mailChoose;
+    context.read<MailProvider>().select(mailChoose);
+  }
 
-        controllers.mail.text = mailChoose!.address;
-
-        try {
-          Codec<String, String> stringToBase64 = utf8.fuse(base64);
-          String password = stringToBase64.decode(controllers.password.text);
-          controllers.password.text = password;
-        } catch (e) {
-          controllers.password.text = '';
-        }
-
-        mailSave = true;
-      });
-    }
-
-  Future<void> _onDateSelect(String? dateChoose) async {
+  void _onDateSelect(String? dateChoose) {
     if (dateChoose == null) return;
 
-    final newSendsDay = lineSector
-        .where((sector) => sector.date == dateChoose)
-        .toList();
+    final lineProvider = context.read<LineSendProvider>();
+    final factoryProvider = context.read<FactoryProvider>();
 
-    final newFactories = allFactories
-        .where((factory) => newSendsDay.any((send) => send.factory == factory.name))
-        .toList();
+    final linesDay = lineProvider.getLines(date: dateChoose);
+
+    final factoriesDay = lineProvider.getFactories(
+        factories: factoryProvider.factories,
+        lines: linesDay
+    );
 
     setState(() {
       selectedSend = dateChoose;
-      sendsDay = newSendsDay;
-      selectedFactories = newFactories;
-      cantFactories = selectedFactories.length;
+      selectedFactories = factoriesDay;
     });
   }
-}
 
-Future<void> _onSendMail(BuildContext context,MailController controllers, bool otherMail, String? selectedOption, selectedFactories) async {
+  void _changeMailMode() {
+    setState(() {
+      if (!otherMail) {
+        previousMail = controller.mail.text;
+        previusPassword = controller.password.text;
 
-  String action = '';
+        controller.mail.clear();
+        controller.password.clear();
+      } else {
+        controller.mail.text = previousMail;
+        controller.password.text = previusPassword;
+      }
 
-  final result = SendMailValidator.validateAll(
-    context: context,
-    mail: controllers.mail.text,
-    password: controllers.password.text,
-    mailTo: controllers.mailTo?.text ?? '',
-    subject: controllers.subject!.text,
-    message: controllers.message!.text,
-    otherMail: otherMail,
-    isRecipient: selectedOption == S.of(context).a_recipient,
-  );
-
-// 🔴 ERROR (no deja seguir)
-  if (result.error != null) {
-    error(context, result.error!);
-    return;
+      otherMail = !otherMail;
+    });
   }
 
-// 🔴 WARNING (solo avisa)
-  if (result.warnings.isNotEmpty) {
-    for (final warn in result.warnings) {
-      final ok = await warning(context, warn);
-      if (!ok) return;
-    }
+  void _onOptionChanged(String? value) {
+    if (value == null) return;
+
+    setState(() {
+      selectedOption = value;
+    });
   }
 
-    List <String> separeaddress = (controllers.mailTo?.text ?? '').split("@");
-    final recipients = [
-      controllers.mailTo?.text ?? '',
-      ...selectedFactories
-          .where((f) => f.mail != null && f.mail.isNotEmpty)
-          .map((f) => f.mail)
-    ]
-        .whereType<String>()
-        .where((mail) => mail.trim().isNotEmpty) // eliminar vacíos
-        .map((mail) => mail.trim()) // quitar espacios
-        .toSet() // eliminar duplicados
-        .toList();
 
-    final message = Message()
-      ..from = Address(
-          (controllers.mailTo?.text ?? '').trim(),
-          separeaddress.isNotEmpty ? separeaddress[0] : 'User'
-      )
-      ..recipients.addAll(recipients) // agregamos solo los válidos
-      ..subject = controllers.subject!.text.trim()
-      ..text = controllers.message!.text.trim()
-      ..attachments =  !kIsWeb
-          ? controllers.attachments
-          .where((f) => f.path != null)
-          .map((file) => FileAttachment(File(file.path!)))
-          .toList()
-          : [];
+  Future<void> _onSendMail(BuildContext context, MailController controller, ) async {
 
-      List<String> mailSend = await sendingMail(context,controllers,message);
-      saveChanges = false;
+    final mailProvider = context.read<MailProvider>();
+    final factoryProvider = context.read<FactoryProvider>();
+    final lineProvider = context.read<LineSendProvider>();
 
-      if(mailSend.isNotEmpty)
-      {
-        action = LocalizationHelper.sendMails(context, mailSend.length);
-        confirm(context,action);
-      }
-      else
-      {
-        action = S.of(context).the_shipment_could_not_be_completed;
-        error(context,action);
-      }
-}
+               final recipients = selectedOption == S.of(context).a_recipient
+                      ?[controller.mailTo!.text.trim()]
+                      : selectedFactories
+                               .map((f) => f.mail.trim())
+                               .where((mail) => mail.isNotEmpty)
+                               .toList();
 
-Future<void> _onResetMail(BuildContext context,MailController controllers, Function(VoidCallback) setState, String? selectedOption) async {
+                final errorMsg = SendMailValidator.validateAll(
+                  context: context,
+                  recipients: recipients,
+                  mail: controller.mail.text,
+                  password: controller.password.text,
+                  mailTo: controller.mailTo?.text ?? '',
+                  subject: controller.subject!.text ?? '',
+                  message: controller.message!.text ?? '',
+                  otherMail: otherMail,
+                  isRecipient: selectedOption == S.of(context).a_recipient,
+                );
 
-  controllers.mail.text = "";
-  controllers.password.text = "";
-  controllers.mailTo!.text = "";
-  controllers.subject!.text ="";
-  controllers.message!.text="";
-  controllers.attachments.clear();
+              // 🔴 ERROR (no deja seguir)
+                if (errorMsg.error != null) {
+                  error(context, errorMsg.error!);
+                  return;
+                }
 
-  saveChanges = false;
+              // 🔴 WARNING (solo avisa)
+                if (errorMsg.warnings.isNotEmpty) {
+                  for (final warn in errorMsg.warnings) {
+                    final accepted  = await warning(context, warn);
+                    if (!accepted ) return;
+                  }
+                }
 
-  setState(() {
-    selectedOption = S.of(context).a_recipient;
-  });
+                final config = MailConfigurationService.fromMail(
+                    otherMail
+                          ? controller.mail.text.trim()
+                          : mailProvider.selected!.mail
+                );
 
+                final mailConfiguration = config ?? await newMailConfiguration(context);
+
+
+                if (mailConfiguration == null) return;
+
+                Mail mail;
+
+             if (otherMail)
+             {
+               final mailId = "0"; //ya el repositorio se encargara de asignarle el suyo
+
+                   mail = MailConfigurationService.createMail(
+                        id: mailId,
+                        controllers: controller,
+                        configuration: mailConfiguration,
+                     );
+             }
+             else
+             {
+                mail = mailProvider.selected!;
+             }
+
+              if (otherMail) {
+                mailProvider.select(mail);
+              }
+
+              final result = await _createMail(
+                context,
+                mailProvider,
+                mail,
+                recipients,
+                controller
+              );
+
+              if(selectedOption != S.of(context).a_recipient)
+              {
+                      final sentFactories = result.sent
+                          .map((mail) => factoryProvider.findByMail(mail)?.name)
+                          .whereType<String>()
+                          .toSet();
+
+                      final failedFactories = result.failed
+                          .map((e) => factoryProvider.findByMail(e.mail)?.name)
+                          .whereType<String>()
+                          .toSet();
+
+                      await lineProvider.updateStates(
+                          sentFactories: sentFactories,
+                          failedFactories: failedFactories
+                      );
+              }
+
+
+              if(result.sent.isNotEmpty)
+              {
+                   String action = LocalizationHelper.sendMails(context, result.sent.length);
+
+                   await confirm(context, action);
+
+                   if(otherMail)
+                   {
+                        action = S.of(context).do_you_want_to_save_the_account;
+                        bool saveAccount  = await  warning(context, action);
+
+                        if(saveAccount)
+                        {
+                           final resultCreate = await mailProvider.create(mail);
+
+                           switch(resultCreate)
+                           {
+                             case CreateResult.success:
+                               await confirm(context,S.of(context).mail_saved_successfully);
+                               break;
+                             case CreateResult.alreadyExists:
+                               await error(context, S.of(context).mail_already_exists);
+                               break;
+                             case CreateResult.invalidData:
+                               await error(context, S.of(context).invalid_data);
+                               break;
+                           }
+                        }
+                   }
+              }
+
+              if(result.failed.isNotEmpty)
+              {
+                    final errorsMails = result.failed
+                        .map((e) => "${e.mail} : ${e.error}")
+                        .toList();
+
+                   await  showErrors(context, errorsMails);
+              }
+
+              await _onResetMail(context,controller);
+
+             context.read<EditStateProvider>().clear();
+
+  }
+
+  Future <MailResult> _createMail (
+      BuildContext context,
+      MailProvider mailProvider,//aqui va el mensaje montaado
+      Mail mail,
+      List<String> recipients,
+      MailController controller,
+      ) async {
+
+    final attachment = controller.attachments.map((file) {
+       return MailAttachment(
+           name: file.name,
+           path: file.path,
+           bytes: file.bytes,
+       );
+    }).toList();
+
+    final mailMessage = MailMessage(
+      recipients: recipients,
+      subject: controller.subject!.text.trim(),
+      message: controller.message!.text.trim(),
+      attachments: attachment
+    );
+
+    return await mailProvider.send(
+      mailMessage,
+      account: mail,
+      noAccountMessage: S.of(context).no_mail_account_selected,
+    );
+
+  }
+
+  Future<void> _onResetMail(BuildContext context, MailController controllers) async {
+
+    controllers.mail.text = "";
+    controllers.password.text = "";
+    controllers.mailTo!.text = "";
+    controllers.subject!.text = "";
+    controllers.message!.text = "";
+    controllers.attachments.clear();
+
+    context.read<EditStateProvider>().clear();
+
+    setState(() {
+      selectedOption = S
+          .of(context)
+          .a_recipient;
+
+      selectedSend = null;
+      selectedFactories.clear();
+    });
+  }
 }
 
