@@ -403,6 +403,22 @@ print("edz$providerMails");
                                         child: Text(sector.name)),
                                     onTap: () async {
 
+                                      final sectorId = sector.id;
+
+                                      final factories = context.read<FactoryProvider>().factoriesBySector(sectorId);
+
+                                      final sectorHasLines = context
+                                          .read<LineSendProvider>()
+                                          .sectorHasLines(
+                                          sectorId: sectorId,
+                                          factories: factories);
+
+                                      if(!sectorHasLines)
+                                      {
+                                        String array = S.of(context).lines;
+                                        await noCategory(context, array);
+                                        return;
+                                      }
 
 
                                       context.read<FilterProvider>().setSector(sector.id);
