@@ -1,8 +1,9 @@
-import 'package:crud_factories/Backend/CSV/Export_general/csv_builder.dart' show buildCsv;
+import 'package:crud_factories/Backend/Export_general/csv_builder.dart' show buildCsv;
+import 'package:crud_factories/Backend/Export_general/export_csv_io.dart';
 import 'package:crud_factories/Backend/Global/files.dart';
 import 'package:crud_factories/Objects/Conection.dart';
 import 'package:csv/csv.dart';
-import '../../../CSV/Export_general/export_csv.dart';
+
 
 Future<bool> csvExportatorconnections(List<Conection> connections,{required String path}) async {
 

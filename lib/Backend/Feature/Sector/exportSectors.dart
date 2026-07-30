@@ -1,7 +1,7 @@
 import 'package:crud_factories/Objects/Sector.dart' show Sector;
 import 'package:csv/csv.dart';
 
-import '../../CSV/Export_general/export_csv_io.dart';
+import '../../Export_general/export_csv_io.dart';
 
 Future<bool> csvExportatorSectors(List<Sector> sectors, {required String path}) async {
 
