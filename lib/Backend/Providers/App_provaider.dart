@@ -1,5 +1,5 @@
 import 'package:crud_factories/Backend/DataSources/BootstrapService.dart';
-import 'package:crud_factories/Backend/Feature/Connection/Controller/ConnectionController.dart' show Connectioncontroller;
+import 'package:crud_factories/Backend/Feature/Connection/Controller/ConnectionController.dart' show ConnectionController;
 import 'package:crud_factories/Backend/Feature/Connection/Datasource/CsvConnectionDataSource.dart' show CsvConnectionDataSource;
 import 'package:crud_factories/Backend/Feature/Connection/Datasource/IConnection_repository.dart';
 import 'package:crud_factories/Backend/Feature/Employee/employee_service.dart' show RepositoryEmployee;
@@ -153,7 +153,7 @@ class AppProvider extends ChangeNotifier {
 
     repo.init(files.connections);
 
-    final controller = Connectioncontroller(
+    final controller = ConnectionController(
       provider: context.read<ConnectionProvider>(),
       service: context.read<IConnectionService>(),
       repository: context.read<IConnectionDataSource>(),
