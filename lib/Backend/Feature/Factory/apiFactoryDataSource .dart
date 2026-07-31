@@ -125,5 +125,43 @@ class apiFactoryDataSource implements IFactoryDataSource {
     );
   }
 
+  @override
+  @override
+  Future<void> save(List<Factory> factories) async {
+
+    for (final factory in factories) {
+
+      await saveToWebStorage(
+        'factories',
+        factory.id,
+        {
+          'id': factory.id,
+          'name': factory.name,
+          'highDate': factory.highDate,
+          'sector': factory.sector,
+          'telephone1': factory.thelephones.isNotEmpty
+              ? factory.thelephones[0]
+              : '',
+          'telephone2': factory.thelephones.length > 1
+              ? factory.thelephones[1]
+              : '',
+          'mail': factory.mail,
+          'web': factory.web,
+          'address': {
+            'street': factory.address.street,
+            'number': factory.address.number,
+            'apartment': factory.address.apartment,
+            'city': factory.address.city,
+            'province': factory.address.province,
+            'postcode': factory.address.postcode,
+          },
+        },
+        config,
+      );
+
+    }
+
+  }
+
 
 }

@@ -61,4 +61,12 @@ class CsvFactorydatasource implements IFactoryDataSource {
     factories[index] = factory;
   }
 
+  @override
+  Future<void> save(List<Factory> factories)  async {
+
+    await csvExportatorFactories(
+        factories,
+        path: this.path
+    );
+  }
 }

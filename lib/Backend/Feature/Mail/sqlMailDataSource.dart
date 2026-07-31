@@ -39,7 +39,7 @@ class SqlMailDataSource implements IMailDataSource {
 
   @override
   Future<void> insert(Mail m) async {
-print("entro en sql");
+
     await executeQuery.execute(
        'INSERT INTO mails VALUES (?,?,?,?,?,?)',
        [m.id,m.mail,m.host,m.port,m.secure,m.password]
@@ -53,6 +53,25 @@ print("entro en sql");
       'UPDATE mails SET mail, host, port, secure, password WHERE id=?',
         [m.id,m.mail,m.host,m.port,m.secure,m.password]
     );
+  }
+
+  @override
+  Future<void> save(List<Mail> mails) async {
+
+    for (final mail in mails) {
+
+      await executeQuery.execute(
+          'INSERT INTO mails VALUES (?,?,?,?,?,?)',
+          [
+            mail.id,
+            mail.mail,
+            mail.host,
+            mail.port,
+            mail.secure,
+            mail.password]
+      );
+
+    }
   }
 
 }

@@ -102,4 +102,24 @@ class apiLinesendDatasource implements ILineSendDatasource{
           return true;
     }
 
+  @override
+  Future<void> save(List<LineSend> lines) async {
+
+    for(final line in lines) {
+
+      saveToWebStorage(
+        'lineSends', // prefijo
+        line.id,        // id único de la fábrica
+        {
+          'id': line.id,
+          'date': line.date,
+          'factory': line.factory,
+          'observations': line.observations,
+          'state': line.state
+        },
+        config,
+      );
+    }
+  }
+
   }

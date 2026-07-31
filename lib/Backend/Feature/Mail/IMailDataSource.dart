@@ -11,4 +11,6 @@ abstract class IMailDataSource {
 
     Future<void> upload(Mail mail);
 
+    Future<void> save(List<Mail> mails);
+
 }

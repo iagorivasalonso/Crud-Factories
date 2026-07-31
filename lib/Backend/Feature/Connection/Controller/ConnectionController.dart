@@ -6,12 +6,14 @@ import 'package:crud_factories/Backend/Feature/Connection/Service/IConnectionSer
 import 'package:crud_factories/Backend/Feature/Connection/Sesion/IConnection_sesion_service.dart';
 import 'package:crud_factories/Backend/Feature/Connection/SeverService/ServerService.dart' show Serverservice;
 import 'package:crud_factories/Backend/Global/variables.dart';
+import 'package:crud_factories/Backend/ImportGeneral/import_Processor.dart' show processImport;
 import 'package:crud_factories/Backend/Providers/ConectionProvider.dart';
 import 'package:crud_factories/Backend/Data/controlsMessagesError/errors.dart';
 import 'package:crud_factories/Functions/createId.dart' show createId;
 import 'package:crud_factories/Objects/AppRoutesState.dart' show RouteFiles;
 import 'package:crud_factories/Objects/Conection.dart';
 import 'package:crud_factories/Objects/ConnectionSesion.dart' show Connectionsesion;
+import 'package:crud_factories/Objects/importResult.dart' show ImportResult;
 import 'package:crud_factories/generated/l10n.dart' show S;
 import 'package:flutter/material.dart';
 
@@ -32,7 +34,7 @@ enum DisconnectResult {
 }
 
 
-class Connectioncontroller {
+class ConnectionController {
 
    final ConnectionProvider provider;
    final IConnectionDataSource repository;
@@ -40,7 +42,7 @@ class Connectioncontroller {
    final IConnectionSesionService sessionService;
 
 
-   Connectioncontroller({
+   ConnectionController({
        required this.provider,
        required this.service,
        required this.repository,
@@ -59,6 +61,36 @@ class Connectioncontroller {
 
    }
 
+   // =========================
+   //  IMPORTLIST
+   // =========================
+   Future<ImportResult> import({
+     required BuildContext context,
+     required List<Conection> ConnectionsNew
+   }) async {
+
+     final result = ImportResult(
+         entity: S.of(context).sectors
+     );
+
+     if (ConnectionsNew.isEmpty) return result;
+
+     final connections = await repository.load();
+
+     result.inserted = await processImport(
+       newList: ConnectionsNew,
+       existingList: connections,
+       getKey: (c) => c.database,
+       setId: (c, id) => c.id = id,
+     );
+
+     if (result.inserted > 0) {
+       await repository.saveAll(connections);
+       await load();
+     }
+
+     return result;
+   }
    // =========================
    // CONNECTSQL
    // =========================
@@ -221,7 +253,6 @@ class Connectioncontroller {
        }
        return EditResult.success;
      } catch (e) {
-       print(e);
         return  EditResult.error;
      }
    }

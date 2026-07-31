@@ -56,4 +56,22 @@ class SqlEmployeeDataSource implements  IEmployeeDataSource {
     throw UnimplementedError();
   }
 
+  @override
+  Future<void> save(List<Empleoyee> employees)  async {
+
+    for (final employee in employees) {
+
+      await executeQuery.execute(
+        'INSERT INTO employees (id, name, idFactory) VALUES (?, ?, ?)',
+        [
+          employee.id,
+          employee.name,
+          employee.idFactory,
+        ],
+      );
+
+    }
+
+  }
+
 }

@@ -15,4 +15,6 @@ abstract class IEmployeeDataSource {
 
   Future<void> deleteByFactory(String factoryId);
 
+   Future<void> save(List<Empleoyee> employees);
+
 }

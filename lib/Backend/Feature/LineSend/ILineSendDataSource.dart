@@ -10,4 +10,6 @@ abstract class ILineSendDatasource {
     Future<void> delete(List<LineSend>lines);
 
     Future<bool> upload(List<LineSend>lines);
+
+    Future<void> save(List<LineSend> lines);
 }

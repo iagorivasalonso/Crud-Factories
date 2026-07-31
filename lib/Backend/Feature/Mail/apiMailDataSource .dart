@@ -89,4 +89,25 @@ class apiMailDataSource implements IMailDataSource {
         isUpdate: true
     );
   }
+
+  @override
+  Future<void> save(List<Mail> mails) async {
+
+    for (final mail in mails) {
+      await saveToWebStorage(
+      'mail', // prefijo
+      mail.id,        // id único de la fábrica
+      {
+        'id': mail.id,
+        'mail': mail.mail,
+        'host': mail.host,
+        'port': mail.port,
+        'secure': mail.secure,
+        'password': mail.password
+      },
+      config
+      );
+    }
+
+  }
 }

@@ -12,4 +12,6 @@ abstract class IFactoryDataSource {
 
    Future<void> upload(Factory factory);
 
+   Future<void> save(List<Factory> factories);
+
 }

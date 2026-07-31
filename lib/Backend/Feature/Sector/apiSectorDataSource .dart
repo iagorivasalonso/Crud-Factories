@@ -76,6 +76,22 @@ class ApiSectorDataSource implements ISectorDataSource{
     );
   }
 
+  @override
+  Future<void> save(List<Sector> sectors)  async {
+
+      for(final sector in sectors)
+      {
+        await saveToWebStorage(
+        'sectors',
+        sector.id,
+        {
+          'id': sector.id,
+          'sector': sector.name,
+        },
+        config,
+        );
+      }
+  }
 
 
 }

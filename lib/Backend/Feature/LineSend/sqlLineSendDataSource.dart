@@ -79,4 +79,23 @@ class SqlLinesendDatasource implements ILineSendDatasource{
     return true;
   }
 
+  @override
+  Future<void> save(List<LineSend> lines) async {
+
+    for (final line in lines) {
+
+      await executeQuery.query(
+          'INSERT INTO lineSends (id, date, factory, state, observations) VALUES (?, ?, ?, ?, ?)',
+          [
+            line.id,
+            line.date,
+            line.factory,
+            line.observations,
+            line.state
+          ]
+      );
+    }
+
+  }
+
 }

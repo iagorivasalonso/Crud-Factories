@@ -51,4 +51,13 @@ class CsvConnectionDataSource implements IConnectionDataSource {
         path: _path!
     );
   }
+
+  @override
+  Future<void> saveAll(List<Conection> connections) async {
+
+         await csvExportatorconnections(
+              connections,
+              path: _path!,
+          );
+  }
 }

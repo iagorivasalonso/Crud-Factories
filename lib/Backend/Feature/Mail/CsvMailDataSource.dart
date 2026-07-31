@@ -66,4 +66,13 @@ class CsvMailDatasource implements IMailDataSource {
         path: path
       );
   }
+
+  @override
+  Future<void> save(List<Mail> mails) async {
+
+     await csvExportatorMails(
+        mails,
+        path: path
+    );
+  }
 }

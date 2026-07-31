@@ -8,4 +8,6 @@ abstract class IConnectionDataSource  {
    Future<void> save (Conection connection);
 
    Future<void> delete(String id);
+
+   Future<void> saveAll(List<Conection> connections);
  }

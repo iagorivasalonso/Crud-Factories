@@ -68,6 +68,23 @@ class ApiEmployeeDataSource implements IEmployeeDataSource {
   }
 
   @override
+  Future<void> save(List<Empleoyee> employees) async {
+
+    for (final employee in employees) {
+      await saveToWebStorage(
+        'employees',
+        employee.id,
+        {
+          'id': employee.id,
+          'name': employee.name,
+          'idFactory': employee.idFactory,
+        },
+        config,
+      );
+    }
+
+  }
+    @override
   Future<void> upload(Empleoyee e) {
     // TODO: implement upload
     throw UnimplementedError();

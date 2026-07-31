@@ -67,5 +67,14 @@ class CsvSectorDataSource  implements ISectorDataSource{
     path: path,
     );
   }
+
+  @override
+  Future<void> save(List<Sector> sector) async {
+
+    await csvExportatorSectors(
+    sector,
+    path: this.path,
+    );
+  }
   
 }

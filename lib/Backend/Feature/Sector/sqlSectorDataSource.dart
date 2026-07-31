@@ -53,7 +53,21 @@ class SqlSectorDataSource  implements ISectorDataSource{
     );
   }
 
+  @override
+  Future<void> save(List<Sector> sectors) async {
 
+   for(final sector in sectors) {
+
+      await executeQuery.execute(
+        'INSERT INTO sectors VALUES (?, ?)',
+         [
+           sector.id,
+           sector.name
+        ],
+      );
+
+    }
+  }
 }
 
 

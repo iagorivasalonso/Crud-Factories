@@ -73,5 +73,15 @@ class CsvLineSendDatasource implements ILineSendDatasource {
         return false;
   }
 
+  @override
+  Future<void> save(List<LineSend> lines) async{
+
+        await csvExportatorLineSend(
+            lines,
+            path: this.path,
+        );
+
+  }
+
 
 }

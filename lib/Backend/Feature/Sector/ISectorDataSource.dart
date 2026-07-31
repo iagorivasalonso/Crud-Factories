@@ -10,4 +10,6 @@ abstract class ISectorDataSource {
 
   Future<void> upload(Sector sector);
 
+  Future<void> save(List<Sector> sectors);
+
 }

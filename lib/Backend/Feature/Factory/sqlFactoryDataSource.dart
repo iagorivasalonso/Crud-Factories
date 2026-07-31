@@ -70,4 +70,30 @@ class SqlFactoryDataSource implements IFactoryDataSource {
         f.address.street,f.address.number,f.address.apartment, f.address.city,f.address.province,f.address.postcode,f.id.toString()]
     );
   }
+
+  @override
+  Future<void> save(List<Factory> factories) async {
+    for (final f in factories) {
+      await executeQuery.query(
+          'INSERT INTO factories values(?,?,?,?,?,?,?,?,?,?,?,?,?,?)',
+          [
+            f.id.toString(),
+            f.name,
+            f.highDate,
+            f.sector,
+            f.thelephones[0],
+            f.thelephones[1],
+            f.mail,
+            f.web,
+            f.address.street,
+            f.address.number,
+            f.address.apartment,
+            f.address.city,
+            f.address.province,
+            f.address.postcode
+          ]
+
+      );
+    }
+  }
 }
