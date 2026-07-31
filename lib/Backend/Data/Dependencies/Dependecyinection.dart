@@ -5,7 +5,7 @@ providers: DependencyInjection.providers,
 child: const MyApp(),
 ),
 );*/
-import 'package:crud_factories/Backend/Feature/Connection/Controller/ConnectionController.dart' show Connectioncontroller;
+import 'package:crud_factories/Backend/Feature/Connection/Controller/ConnectionController.dart' show ConnectionController;
 import 'package:crud_factories/Backend/Feature/Connection/Datasource/CsvConnectionDataSource.dart' show CsvConnectionDataSource;
 import 'package:crud_factories/Backend/Feature/Connection/Service/api_connection_service.dart' show ApiConnectionService;
 import 'package:crud_factories/Backend/Feature/Connection/Service/sql_connection_service.dart' show SqlConnectionService;
@@ -18,6 +18,7 @@ import 'package:crud_factories/Backend/Providers/App_provaider.dart';
 import 'package:crud_factories/Backend/Providers/ConectionProvider.dart' show ConnectionProvider;
 import 'package:crud_factories/Backend/Providers/EditStateProvider.dart' show EditStateProvider;
 import 'package:crud_factories/Backend/Providers/FactoryProvider.dart';
+import 'package:crud_factories/Backend/Providers/ImportProvaider.dart';
 import 'package:crud_factories/Backend/Providers/LineSendProvider.dart';
 import 'package:crud_factories/Backend/Providers/MailProvider.dart' show MailProvider;
 import 'package:crud_factories/Backend/Providers/NavigationProvider.dart';
@@ -117,9 +118,9 @@ class DependencyInjection {
      // CONTROLLER
      // =========================
 
-     Provider<Connectioncontroller>(
+     Provider<ConnectionController>(
        create: (context) =>
-           Connectioncontroller(
+           ConnectionController(
              provider: context.read<ConnectionProvider>(),
              repository: context.read<IConnectionDataSource>(),
              service: context.read<IConnectionService>(),
@@ -184,6 +185,22 @@ class DependencyInjection {
                 : NativeMailService()
          )
      ),
+
+                                         // =========================
+                                         // IMPORT
+                                         // =========================
+
+     ChangeNotifierProvider(
+         create: (context) => ImportProvaider(
+             routesProvider: context.read<RoutesProvider>(),
+             connectionController: context.read<ConnectionController>(),
+             sectorProvider:  context.read<SectorProvider>(),
+             factoryProvaider:  context.read<FactoryProvider>(),
+             employeeProvider: context.read<EmployeeProvider>(),
+             lineProvider: context.read<LineSendProvider>(),
+             mailProvider: context.read<MailProvider>(),
+         )
+     )
 
 
    ];
