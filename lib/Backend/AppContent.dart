@@ -1,10 +1,17 @@
 import 'package:crud_factories/Backend/Providers/NavigationProvider.dart';
 import 'package:crud_factories/Frontend/Views/listFactories.dart' show listFactories;
+import 'package:crud_factories/Frontend/Views/listSends.dart';
 import 'package:crud_factories/Frontend/conection.dart';
 import 'package:crud_factories/Frontend/factory.dart' show FactoryFromPage;
+import 'package:crud_factories/Frontend/importData.dart' show NewImport;
+import 'package:crud_factories/Frontend/mail.dart';
+import 'package:crud_factories/Frontend/send.dart';
+import 'package:crud_factories/Frontend/send_mail.dart';
 import 'package:crud_factories/Objects/Conection.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+
+import '../Frontend/Views/listMails.dart';
 
 class AppContent extends StatelessWidget {
   const AppContent({super.key});
@@ -13,7 +20,7 @@ class AppContent extends StatelessWidget {
   Widget build(BuildContext context) {
 
      final nav = context.watch<NavigationProvider>();
-print(nav.current);
+
      switch(nav.current)
      {
        case AppView.home:
@@ -31,50 +38,23 @@ print(nav.current);
          return FactoryFromPage();
 
        case AppView.creataddress:
-         return Container(
-           color: Colors.white,
-           child: const Center(
-             child: Text("nuMail"),
-           ),
-         );
+         return MailFormPage();
 
        case AppView.createShipment:
-         return Container(
-           color: Colors.white,
-           child: const Center(
-             child: Text("nuSend"),
-           ),
-         );
+         return SendFromPage();
 
        case AppView.importData:
-         return Container(
-           color: Colors.white,
-           child: const Center(
-             child: Text("import"),
-           ),
-         );
+         return NewImport();
 
        case AppView.mails:
-         return Container(
-           color: Colors.white,
-           child: const Center(
-             child: Text("maillist"),
-           ),
-         );
+         return listMails();
+
        case AppView.shipments:
-         return Container(
-           color: Colors.white,
-           child: const Center(
-             child: Text("envlist"),
-           ),
-         );
+         return listSends();
+
        case AppView.sendMail:
-         return Container(
-           color: Colors.white,
-           child: const Center(
-             child: Text("env;ail"),
-           ),
-         );
+         return SendMail();
+
        case AppView.connections:
          return conection();
      }
