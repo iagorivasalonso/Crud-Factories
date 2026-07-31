@@ -1,9 +1,13 @@
 
-import 'package:crud_factories/Backend/Feature/Sector/IsectorDataSource.dart';
+import 'package:crud_factories/Backend/Feature/Sector/exportSectors.dart' show csvExportatorSectors;
+import 'package:crud_factories/Backend/ImportGeneral/import_Processor.dart' show processImport;
 import 'package:crud_factories/Backend/Providers/FactoryProvider.dart' show FactoryProvider;
 import 'package:crud_factories/Backend/Repositories/sectorRepository.dart' show SectorRepository;
 import 'package:crud_factories/Backend/Data/controlsMessagesError/errors.dart' show CreateResult, EditResult, DeleteResult;
 import 'package:crud_factories/Functions/createId.dart';
+import 'package:crud_factories/Objects/importResult.dart' show ImportResult;
+import 'package:crud_factories/generated/l10n.dart' show S;
+import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter/foundation.dart';
 import 'package:crud_factories/Objects/Sector.dart';
 
@@ -13,6 +17,12 @@ class SectorProvider extends ChangeNotifier {
 
 
   SectorRepository? repository;
+
+
+  void setRepository(SectorRepository repository) {
+    this.repository = repository;
+  }
+
 
 
   List<Sector> _sectors = [];
@@ -57,6 +67,37 @@ class SectorProvider extends ChangeNotifier {
   void addSector(Sector sector) {
     _sectors.add(sector);
     notifyListeners();
+  }
+
+  // =========================
+  //  IMPORTLIST
+  // =========================
+  Future<ImportResult> import({
+         required BuildContext context,
+         required List<Sector> sectorsNew
+        }) async {
+
+    final result = ImportResult(
+        entity: S.of(context).sectors
+    );
+
+    if (sectorsNew.isEmpty) return result;
+
+    final sectors = await _repo.load();
+
+    result.inserted = await processImport(
+      newList: sectorsNew,
+      existingList: sectors,
+      getKey: (s) => s.name,
+      setId: (s, id) => s.id = id,
+    );
+
+    if (result.inserted > 0) {
+      await _repo.save(sectors);
+      await load();
+    }
+
+    return result;
   }
 
   // =========================

@@ -1,8 +1,13 @@
 import 'package:crud_factories/Backend/Data/controlsMessagesError/errors.dart' show CreateResult, EditResult, DeleteResult;
 import 'package:crud_factories/Backend/Repositories/factoryRepository.dart' show FactoryRepository;
 import 'package:crud_factories/Functions/createId.dart' show createId;
+import 'package:crud_factories/Objects/importResult.dart' show ImportResult;
+import 'package:crud_factories/generated/l10n.dart' show S;
+import 'package:fluent_ui/fluent_ui.dart' show BuildContext;
 import 'package:flutter/foundation.dart' hide Factory;
 import 'package:crud_factories/Objects/Factory.dart';
+
+import '../ImportGeneral/import_Processor.dart';
 
 class FactoryProvider extends ChangeNotifier {
 
@@ -61,6 +66,37 @@ class FactoryProvider extends ChangeNotifier {
   void addFactories(Factory factory) {
     _factories.add(factory);
     notifyListeners();
+  }
+
+  // =========================
+  //  IMPORTLIST
+  // =========================
+  Future<ImportResult> import({
+    required BuildContext context,
+    required List<Factory> factoriesNew
+  }) async {
+
+    final result = ImportResult(
+        entity: S.of(context).companies
+    );
+
+    if (factoriesNew.isEmpty) return result;
+
+    final factories = await _repo.load();
+
+    result.inserted = await processImport(
+      newList: factoriesNew,
+      existingList: factories,
+      getKey: (f) => f.name,
+      setId: (f, id) => f.id = id,
+    );
+
+    if (result.inserted > 0) {
+      await _repo.save(factories);
+      await load();
+    }
+
+    return result;
   }
 
 

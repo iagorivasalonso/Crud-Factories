@@ -1,9 +1,12 @@
 import 'package:crud_factories/Backend/Data/controlsMessagesError/errors.dart';
 import 'package:crud_factories/Backend/Feature/Mail/Service/ImailService.dart';
+import 'package:crud_factories/Backend/ImportGeneral/import_Processor.dart' show processImport;
 import 'package:crud_factories/Backend/Repositories/mailRepository.dart';
 import 'package:crud_factories/Functions/createId.dart';
 import 'package:crud_factories/Objects/Mail.dart' show Mail, MailResult, MailFailure;
 import 'package:crud_factories/Objects/MailMessage.dart' show MailMessage;
+import 'package:crud_factories/Objects/importResult.dart' show ImportResult;
+import 'package:crud_factories/generated/l10n.dart' show S;
 import 'package:fluent_ui/fluent_ui.dart';
 
 
@@ -70,6 +73,37 @@ class MailProvider  extends ChangeNotifier {
   void addMail(Mail mail) {
     _mails.add(mail);
     notifyListeners();
+  }
+
+  // =========================
+  //  IMPORTLIST
+  // =========================
+  Future<ImportResult> import({
+    required BuildContext context,
+    required List<Mail> mailsNew
+  }) async {
+
+    final result = ImportResult(
+        entity: S.of(context).mails
+    );
+
+    if (mailsNew.isEmpty) return result;
+
+    final mails = await _repo.load();
+
+    result.inserted = await processImport(
+      newList: mailsNew,
+      existingList: mails,
+      getKey: (m) => m.mail,
+      setId: (m, id) => m.id = id,
+    );
+
+    if (result.inserted > 0) {
+      await _repo.save(mails);
+      await load();
+    }
+
+    return result;
   }
 
   // =========================

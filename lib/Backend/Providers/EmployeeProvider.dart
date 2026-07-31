@@ -1,6 +1,9 @@
 
 
+import 'package:crud_factories/Backend/ImportGeneral/import_Processor.dart' show processImport;
 import 'package:crud_factories/Backend/Repositories/employeeRepository.dart' show EmployeeRepository;
+import 'package:crud_factories/Objects/importResult.dart' show ImportResult;
+import 'package:crud_factories/generated/l10n.dart' show S;
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter/foundation.dart';
 import 'package:crud_factories/Objects/Empleoye.dart';
@@ -28,6 +31,36 @@ class EmployeeProvider extends ChangeNotifier {
     }catch(e) {
       print("Error load: $e");
     }
+  }
+  // =========================
+  //  IMPORTLIST
+  // =========================
+  Future<ImportResult> import({
+    required BuildContext context,
+    required List<Empleoyee> EmployeesNews
+  }) async {
+
+    final result = ImportResult(
+        entity: S.of(context).employees
+    );
+
+    if (EmployeesNews.isEmpty) return result;
+
+    final employees = await _repo.load();
+
+    result.inserted = await processImport(
+      newList: EmployeesNews,
+      existingList: employees,
+      getKey: (e) => e.name,
+      setId: (e, id) => e.id = id,
+    );
+
+    if (result.inserted > 0) {
+      await load();
+      await _repo.save(employees);
+    }
+
+    return result;
   }
 
   // =========================

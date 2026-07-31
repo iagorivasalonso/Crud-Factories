@@ -1,10 +1,13 @@
 import 'package:crud_factories/Backend/Data/controlsMessagesError/errors.dart';
 import 'package:crud_factories/Backend/Global/controllers/LineSend.dart' show LineSendController;
+import 'package:crud_factories/Backend/ImportGeneral/import_Processor.dart' show processImport;
 import 'package:crud_factories/Backend/Providers/FactoryProvider.dart' show FactoryProvider;
 import 'package:crud_factories/Backend/Providers/SectorProvider.dart' show SectorProvider;
 import 'package:crud_factories/Backend/Repositories/lineSendRepository.dart';
 import 'package:crud_factories/Objects/Factory.dart';
 import 'package:crud_factories/Objects/LineSend.dart' show LineSend, LineSendState, cardSend;
+import 'package:crud_factories/Objects/importResult.dart' show ImportResult;
+import 'package:crud_factories/generated/l10n.dart' show S;
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter/foundation.dart' hide Factory;
 import 'package:intl/intl.dart';
@@ -111,6 +114,37 @@ class LineSendProvider extends ChangeNotifier {
     } catch (_) {
       return AddLineResult.error;
     }
+  }
+
+  // =========================
+  //  IMPORTLIST
+  // =========================
+  Future<ImportResult> import({
+    required BuildContext context,
+    required List<LineSend> linesNew
+  }) async {
+
+    final result = ImportResult(
+        entity: S.of(context).lines
+    );
+
+    if (linesNew.isEmpty) return result;
+
+    final lines = await _repo.load();
+
+    result.inserted = await processImport(
+      newList: linesNew,
+      existingList: lines,
+      getKey: (l) => l.factory,
+      setId: (l, id) => l.id = id,
+    );
+
+    if (result.inserted > 0) {
+      await _repo.save(lines);
+      await load();
+    }
+
+    return result;
   }
 
   // =========================

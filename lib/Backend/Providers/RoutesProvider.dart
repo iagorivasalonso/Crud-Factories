@@ -1,11 +1,15 @@
+
 import 'package:crud_factories/Backend/Repositories/routesRepository.dart' show routerRepository;
 import 'package:crud_factories/Objects/AppRoutesState.dart';
 import 'package:crud_factories/Objects/RouteCSV.dart' show RouteCSV;
+import 'package:crud_factories/Backend/ImportGeneral/import_Processor.dart' show processImport;
+import 'package:crud_factories/Objects/importResult.dart' show ImportResult;
 import 'package:crud_factories/generated/l10n.dart' show S;
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter/foundation.dart' show Uint8List;
 
 import '../Data/controlsMessagesError/errors.dart';
+import '../ImportGeneral/import_Processor.dart';
 
 
 
@@ -47,6 +51,38 @@ class RoutesProvider extends ChangeNotifier {
 
   }
 
+
+  // =========================
+  //  IMPORTLIST
+  // =========================
+  Future<ImportResult> import({
+    required BuildContext context,
+    required List<RouteCSV> routesNew
+  }) async {
+
+    final result = ImportResult(
+        entity: S.of(context).route
+    );
+
+    if (routesNew.isEmpty) return result;
+
+    final route = await _repo.load();
+
+    result.inserted = await processImport(
+      newList: routesNew,
+      existingList: route,
+      getKey: (r) => r.route,
+      setId: (r, id) => r.id = id,
+    );
+
+    if (result.inserted > 0) {
+      await _repo.save(route);
+      await load();
+    }
+
+    return result;
+  }
+
   // ======================
   //    UPDATE
   // ======================
@@ -71,6 +107,17 @@ class RoutesProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  // =========================
+  //  GETREPO
+  // =========================
+
+  routerRepository get _repo {
+    final r = repository;
+    if (r == null) {
+      throw Exception("Repository not initialized");
+    }
+    return r;
+  }
 
   // =========================
   //  SETREPO
