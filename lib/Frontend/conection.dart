@@ -253,7 +253,7 @@ class _conectionState extends State<conection> {
                                       nameAction: provider.action1Label(
                                           context),
                                       function: () =>
-                                          _handleAction1(context, provider)
+                                          _handleAction1(context)
 
                                   ),
 
@@ -263,7 +263,7 @@ class _conectionState extends State<conection> {
                                         nameAction: provider.action2Label(
                                             context),
                                         function: () =>
-                                            _handleAction2(context, provider)
+                                            _handleAction2(context)
 
                                     ),
                                   ),
@@ -313,9 +313,10 @@ class _conectionState extends State<conection> {
     provider.setConfig(config);
   }
 
-  void _handleAction1(BuildContext context, ConnectionProvider provider) async {
+  void _handleAction1(BuildContext context) async {
 
     final controller = context.read<ConnectionController>();
+    final provider = context.read<ConnectionProvider>();
 
     if (provider.viewMode == ConnectionViewMode.editing) //edicion de conexion
     {
@@ -439,9 +440,10 @@ class _conectionState extends State<conection> {
     }
   }
 
-  void _handleAction2(BuildContext context, ConnectionProvider provider) async {
+  void _handleAction2(BuildContext context) async {
 
     final controller = context.read<ConnectionController>();
+    final provider = context.read<ConnectionProvider>();
 
     if (provider.viewMode == ConnectionViewMode.editing) {
       provider.toggleEditMode();
