@@ -1,6 +1,6 @@
 import 'package:crud_factories/Alertdialogs/error.dart';
 import 'package:crud_factories/Backend/Data/controlsMessagesError/errors.dart' show EditResult, CreateResult, DeleteResult;
-import 'package:crud_factories/Backend/Feature/Connection/Controller/ConnectionController.dart' show Connectioncontroller, ConnectResultModel, DisconnectResult;
+import 'package:crud_factories/Backend/Feature/Connection/Controller/ConnectionController.dart' show ConnectionController, ConnectResultModel, DisconnectResult;
 import 'package:crud_factories/Backend/Global/controllers/Conection.dart' show connectionControler;
 import 'package:crud_factories/Backend/Providers/App_provaider.dart';
 import 'package:crud_factories/Backend/Providers/ConectionProvider.dart';
@@ -315,7 +315,7 @@ class _conectionState extends State<conection> {
 
   void _handleAction1(BuildContext context, ConnectionProvider provider) async {
 
-    final controller = context.read<Connectioncontroller>();
+    final controller = context.read<ConnectionController>();
 
     if (provider.viewMode == ConnectionViewMode.editing) //edicion de conexion
     {
@@ -441,7 +441,7 @@ class _conectionState extends State<conection> {
 
   void _handleAction2(BuildContext context, ConnectionProvider provider) async {
 
-    final controller = context.read<Connectioncontroller>();
+    final controller = context.read<ConnectionController>();
 
     if (provider.viewMode == ConnectionViewMode.editing) {
       provider.toggleEditMode();
