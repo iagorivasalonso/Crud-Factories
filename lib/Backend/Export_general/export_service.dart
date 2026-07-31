@@ -1,6 +1,6 @@
-import 'package:crud_factories/Backend/CSV/Export_general/csv_builder.dart' show buildCsv;
-import 'package:crud_factories/Backend/CSV/Export_general/export_csv_web.dart' show downloadZip;
-import 'package:crud_factories/Backend/CSV/Export_general/zip_builder.dart' show ZipBuilder;
+import 'package:crud_factories/Backend/Export_general/csv_builder.dart' show buildCsv;
+import 'package:crud_factories/Backend/Export_general/export_csv_web.dart' show downloadZip;
+import 'package:crud_factories/Backend/Export_general/zip_builder.dart' show ZipBuilder;
 import 'package:crud_factories/Objects/Conection.dart';
 import 'package:crud_factories/Objects/Empleoye.dart';
 import 'package:crud_factories/Objects/Factory.dart';
@@ -17,7 +17,7 @@ class ExportService {
     required List<Conection> connections,
     required List<Sector> sectors,
     required List<Factory> factories,
-    required List<Empleoye> employees,
+    required List<Empleoyee> employees,
     required List<LineSend> lines,
     required List<Mail> mails,
   }) async {
@@ -66,7 +66,7 @@ class ExportService {
           'number',
           'apartment',
           'city',
-          'postalCode',
+          'postcode',
           'province',
         ],
         rows: factories.map((f) => [
@@ -82,7 +82,7 @@ class ExportService {
           f.address.number,
           f.address.apartment,
           f.address.city,
-          f.address.postalCode,
+          f.address.postcode,
           f.address.province,
         ]).toList(),
       ),
@@ -108,12 +108,14 @@ class ExportService {
       ),
 
       'mails.csv': buildCsv(
-        headers: ['id', 'address', 'company', 'password'],
+        headers: ['id', 'mail', 'host', 'port', 'secure','password'],
         rows: mails.map((m) => [
           m.id,
-          m.address,
-          m.company,
-          m.password,
+          m.mail,
+          m.host,
+          m.port,
+          m.secure,
+          m.password
         ]).toList(),
       ),
     };
