@@ -33,6 +33,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "Import_data_in_CSV_format": MessageLookupByLibrary.simpleMessage(
       "Importar datos en formato CSV",
     ),
+    "The_connection_is_not_selected": MessageLookupByLibrary.simpleMessage(
+      "la conexión no está seleccionada",
+    ),
     "The_recipient_is_not_a_valid_mail": MessageLookupByLibrary.simpleMessage(
       "El destinatario no es un correo electrónico válido",
     ),
@@ -58,6 +61,9 @@ class MessageLookup extends MessageLookupByLibrary {
         MessageLookupByLibrary.simpleMessage(
           "No puede dejar el campo vacío. ¿Desea continuar?",
         ),
+    "You_must_have_a_selected_connection": MessageLookupByLibrary.simpleMessage(
+      "Debe de tener una conexión seleccionada",
+    ),
     "You_must_select_a_connection": MessageLookupByLibrary.simpleMessage(
       "Debes seleccionar una conexion",
     ),
@@ -74,6 +80,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "affair": MessageLookupByLibrary.simpleMessage("Asunto"),
     "allFemale": MessageLookupByLibrary.simpleMessage("Todas"),
     "allMale": MessageLookupByLibrary.simpleMessage("Todos"),
+    "allSectors": MessageLookupByLibrary.simpleMessage("Todos los sectores"),
     "all_changes_will_be_lost_do_you_want_to_continue":
         MessageLookupByLibrary.simpleMessage(
           "Todos los cambios se perderán. ¿Desea continuar?",
@@ -88,6 +95,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "back": MessageLookupByLibrary.simpleMessage("Volver"),
     "because_it_does_not_have": MessageLookupByLibrary.simpleMessage(
       "Porque no tiene",
+    ),
+    "can_not_find_the_connection": MessageLookupByLibrary.simpleMessage(
+      "no encuentra la conexión",
     ),
     "can_not_go_blank_fields": MessageLookupByLibrary.simpleMessage(
       "No pueden quedar campos en blanco",
@@ -106,6 +116,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "Error de categoría",
     ),
     "city": MessageLookupByLibrary.simpleMessage("Ciudad"),
+    "clear": MessageLookupByLibrary.simpleMessage("Limpiar"),
     "close": MessageLookupByLibrary.simpleMessage("Cerrar"),
     "companies": MessageLookupByLibrary.simpleMessage("Empresas"),
     "companies_en_base_datos": MessageLookupByLibrary.simpleMessage(
@@ -193,6 +204,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "do_you_really_want_to_delete": MessageLookupByLibrary.simpleMessage(
       "¿Realmente desea eliminar",
     ),
+    "do_you_want_to_save_the_account": MessageLookupByLibrary.simpleMessage(
+      "¿Desea guardar la cuenta?",
+    ),
     "does_not_belong_to_our_database": MessageLookupByLibrary.simpleMessage(
       "No pertenece a nuestra base de datos",
     ),
@@ -217,12 +231,30 @@ class MessageLookup extends MessageLookupByLibrary {
     "error_importing": MessageLookupByLibrary.simpleMessage(
       "Error al importar",
     ),
+    "error_loading_route": MessageLookupByLibrary.simpleMessage(
+      "error carga ruta",
+    ),
     "error_modifying_the_database_name": MessageLookupByLibrary.simpleMessage(
       "Error al modificar el el nombre de la base de datos",
     ),
     "examine": MessageLookupByLibrary.simpleMessage("Examinar"),
     "export_success": MessageLookupByLibrary.simpleMessage(
       "Datos exportados correctamente",
+    ),
+    "factory_already_exists": MessageLookupByLibrary.simpleMessage(
+      "La empresa ya existe en la base de datos",
+    ),
+    "factory_created_successfully": MessageLookupByLibrary.simpleMessage(
+      "La empresa se ha creado correctamente",
+    ),
+    "factory_not_found": MessageLookupByLibrary.simpleMessage(
+      "Empresa no encontrada",
+    ),
+    "factory_save_error": MessageLookupByLibrary.simpleMessage(
+      "No se pudo guardar la empresa",
+    ),
+    "factory_updated_successfully": MessageLookupByLibrary.simpleMessage(
+      "La empresa se ha actualizado correctamente",
     ),
     "february": MessageLookupByLibrary.simpleMessage("Febrero"),
     "file": MessageLookupByLibrary.simpleMessage("Archivo"),
@@ -261,7 +293,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "he": MessageLookupByLibrary.simpleMessage("el"),
     "he_responded": MessageLookupByLibrary.simpleMessage("Respondió"),
     "host": MessageLookupByLibrary.simpleMessage("Host"),
-    "if_you_have_no_registered_emails_do_you_wish_to_continue":
+    "if_you_have_no_registered_addresss_do_you_wish_to_continue":
         MessageLookupByLibrary.simpleMessage(
           "No tiene correos registrados ¿desea continuar?",
         ),
@@ -286,10 +318,17 @@ class MessageLookup extends MessageLookupByLibrary {
     "is_connected_to": MessageLookupByLibrary.simpleMessage(
       "Está conectado a ",
     ),
+    "is_empty_do_you_want_to_continue": MessageLookupByLibrary.simpleMessage(
+      "está vacío. ¿Desea continuar?",
+    ),
     "is_required": MessageLookupByLibrary.simpleMessage("Es obligatorio"),
     "it_cannot_eliminate_the_sector_with_companies":
         MessageLookupByLibrary.simpleMessage(
           "no puede eliminar el sector con empresas",
+        ),
+    "it_does_not_have_companies_in_this_sector":
+        MessageLookupByLibrary.simpleMessage(
+          "no tiene empresas en este sector",
         ),
     "it_empty": MessageLookupByLibrary.simpleMessage("esta vacio"),
     "it_has_been": MessageLookupByLibrary.simpleMessage("Ha sido"),
@@ -309,16 +348,31 @@ class MessageLookup extends MessageLookupByLibrary {
       "Líneas correctamente",
     ),
     "list_of": MessageLookupByLibrary.simpleMessage("Lista de"),
+    "list_of_address": MessageLookupByLibrary.simpleMessage("Lista de emails"),
     "list_of_companies": MessageLookupByLibrary.simpleMessage(
       "Lista de empresas",
     ),
-    "list_of_emails": MessageLookupByLibrary.simpleMessage("Lista de emails"),
     "list_of_sends": MessageLookupByLibrary.simpleMessage("Lista de envios"),
     "lists": MessageLookupByLibrary.simpleMessage("Listas"),
     "load_data": MessageLookupByLibrary.simpleMessage("Cargar datos"),
     "mail": MessageLookupByLibrary.simpleMessage("Email"),
+    "mail_already_exists": MessageLookupByLibrary.simpleMessage(
+      "Esta cuenta de correo ya existe.",
+    ),
+    "mail_created_successfully": MessageLookupByLibrary.simpleMessage(
+      "La cuenta de correo se ha creado correctamente.",
+    ),
+    "mail_not_found": MessageLookupByLibrary.simpleMessage(
+      "No se ha encontrado la cuenta de correo.",
+    ),
     "mail_required": MessageLookupByLibrary.simpleMessage(
-      "El email es requerido",
+      "El emmail es requerido",
+    ),
+    "mail_saved_successfully": MessageLookupByLibrary.simpleMessage(
+      "La cuenta de correo se ha guardado correctamente.",
+    ),
+    "mail_updated_successfully": MessageLookupByLibrary.simpleMessage(
+      "La cuenta de correo se ha actualizado correctamente.",
     ),
     "mails": MessageLookupByLibrary.simpleMessage("Emails"),
     "march": MessageLookupByLibrary.simpleMessage("Marzo"),
@@ -342,7 +396,13 @@ class MessageLookup extends MessageLookupByLibrary {
     "newMale": MessageLookupByLibrary.simpleMessage("Nuevo"),
     "new_mail": MessageLookupByLibrary.simpleMessage("Nuevo email"),
     "new_shipment": MessageLookupByLibrary.simpleMessage("Nuevo envio"),
+    "new_smtp_configuration": MessageLookupByLibrary.simpleMessage(
+      "Nueva configuración SMTP",
+    ),
     "no": MessageLookupByLibrary.simpleMessage("No"),
+    "no_connection_found": MessageLookupByLibrary.simpleMessage(
+      "No se encontró la conexión",
+    ),
     "no_data_available": MessageLookupByLibrary.simpleMessage(
       "No hay datos disponibles. ¿Qué desea hacer?",
     ),
@@ -353,6 +413,12 @@ class MessageLookup extends MessageLookupByLibrary {
       "No existe el archivo de",
     ),
     "no_has": MessageLookupByLibrary.simpleMessage("No tiene"),
+    "no_mail_account_selected": MessageLookupByLibrary.simpleMessage(
+      "No hay ninguna cuenta de correo seleccionada.",
+    ),
+    "no_new_data_to_import": MessageLookupByLibrary.simpleMessage(
+      "No tiene datos a importar",
+    ),
     "not_a_valid_mail": MessageLookupByLibrary.simpleMessage(
       "No es un correo electrónico válido",
     ),
@@ -388,8 +454,14 @@ class MessageLookup extends MessageLookupByLibrary {
     "port": MessageLookupByLibrary.simpleMessage("Puerto"),
     "postal_code": MessageLookupByLibrary.simpleMessage("Código postal"),
     "prepared": MessageLookupByLibrary.simpleMessage("Preparado"),
+    "properly_disconnected": MessageLookupByLibrary.simpleMessage(
+      "Desconectado correctamente",
+    ),
     "province": MessageLookupByLibrary.simpleMessage("Provincia"),
     "reboot": MessageLookupByLibrary.simpleMessage("Reiniciar"),
+    "recipient_required": MessageLookupByLibrary.simpleMessage(
+      "Destinatario requerido",
+    ),
     "returned": MessageLookupByLibrary.simpleMessage("Devuelto"),
     "route": MessageLookupByLibrary.simpleMessage("Ruta"),
     "route_file_cannot_be_read": MessageLookupByLibrary.simpleMessage(
@@ -397,17 +469,24 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "route_selector": MessageLookupByLibrary.simpleMessage("Selector de rutas"),
     "routes": MessageLookupByLibrary.simpleMessage("Rutas"),
+    "routes_imported_successfully": MessageLookupByLibrary.simpleMessage(
+      "Rutas importadas correctamente",
+    ),
     "save": MessageLookupByLibrary.simpleMessage("Guardar"),
     "save_sector": MessageLookupByLibrary.simpleMessage("Guardar_sector"),
     "saved": MessageLookupByLibrary.simpleMessage("Guardado"),
     "saved_female": MessageLookupByLibrary.simpleMessage("Guardada"),
     "search": MessageLookupByLibrary.simpleMessage("Buscar..."),
     "sector": MessageLookupByLibrary.simpleMessage("Sector"),
+    "sectorOf": MessageLookupByLibrary.simpleMessage("Sector de"),
     "sector_already_exists": MessageLookupByLibrary.simpleMessage(
       "ya existe el sector",
     ),
     "sector_created_successfully": MessageLookupByLibrary.simpleMessage(
       "sector creado correctamente",
+    ),
+    "sector_delete_correctly": MessageLookupByLibrary.simpleMessage(
+      "Sector eliminado correctamente",
     ),
     "sector_delete_error": MessageLookupByLibrary.simpleMessage(
       "error al eliminar el sector",
@@ -425,9 +504,18 @@ class MessageLookup extends MessageLookupByLibrary {
       "El sector es requerido",
     ),
     "sectors": MessageLookupByLibrary.simpleMessage("Sectores"),
+    "secure_connection": MessageLookupByLibrary.simpleMessage(
+      "Conexión segura (SSL/TLS)",
+    ),
     "select": MessageLookupByLibrary.simpleMessage("Seleccionar"),
     "select_all": MessageLookupByLibrary.simpleMessage("Seleccionar todos"),
+    "select_at_least_one_recipient": MessageLookupByLibrary.simpleMessage(
+      "Debes seleccionar al menos un destinatario",
+    ),
     "select_file": MessageLookupByLibrary.simpleMessage("Seleccionar archivo"),
+    "select_file_first": MessageLookupByLibrary.simpleMessage(
+      "Selecciona un archivo primero",
+    ),
     "select_how_continue": MessageLookupByLibrary.simpleMessage(
       "Selecciona cómo continuar",
     ),
@@ -436,21 +524,26 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "send": MessageLookupByLibrary.simpleMessage("Enviar"),
     "send_a": MessageLookupByLibrary.simpleMessage("Enviar a"),
+    "send_duplicate": MessageLookupByLibrary.simpleMessage(
+      "Ya existe un envío",
+    ),
+    "send_error": MessageLookupByLibrary.simpleMessage("Error inesperado"),
+    "send_invalid_data": MessageLookupByLibrary.simpleMessage(
+      "Datos inválidos",
+    ),
     "sender": MessageLookupByLibrary.simpleMessage("Remitente"),
     "sending_mails": MessageLookupByLibrary.simpleMessage("Envío de emails"),
     "sends": MessageLookupByLibrary.simpleMessage("Envios"),
     "sent": MessageLookupByLibrary.simpleMessage("Enviado"),
     "september": MessageLookupByLibrary.simpleMessage("Septiembre"),
     "server": MessageLookupByLibrary.simpleMessage("Servidor"),
-    "shipment": MessageLookupByLibrary.simpleMessage("Envio"),
+    "shipment": MessageLookupByLibrary.simpleMessage("Envío"),
     "shipments": MessageLookupByLibrary.simpleMessage("Envíos"),
+    "smtp_host": MessageLookupByLibrary.simpleMessage("Host SMTP"),
     "source": MessageLookupByLibrary.simpleMessage("Fuente"),
     "sql": MessageLookupByLibrary.simpleMessage("SQL"),
     "sqlConnectionAlreadyExists": MessageLookupByLibrary.simpleMessage(
       "La conexión ya existe",
-    ),
-    "sqlConnectionNotFound": MessageLookupByLibrary.simpleMessage(
-      "No se encontró la conexión",
     ),
     "sql_error": MessageLookupByLibrary.simpleMessage("Error SQL"),
     "state": MessageLookupByLibrary.simpleMessage("Estado"),
@@ -466,6 +559,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "theFemale": MessageLookupByLibrary.simpleMessage("La"),
     "theMale": MessageLookupByLibrary.simpleMessage("El"),
     "the_company": MessageLookupByLibrary.simpleMessage("La empresa"),
+    "the_connection_already_exists": MessageLookupByLibrary.simpleMessage(
+      "La conexión ya existe",
+    ),
     "the_connection_has_changed_do_you_want_to_save_it":
         MessageLookupByLibrary.simpleMessage(
           "La conexion ha cambiado ¿desea guardarla?",
@@ -544,6 +640,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "to_import": MessageLookupByLibrary.simpleMessage("Para importar"),
     "undo": MessageLookupByLibrary.simpleMessage("Deshacer"),
     "unknown_host": MessageLookupByLibrary.simpleMessage("Host desconocido"),
+    "unsaved_changes": MessageLookupByLibrary.simpleMessage(
+      "Tienes cambios sin guardar. ¿Quieres salir sin guardar?",
+    ),
     "update": MessageLookupByLibrary.simpleMessage("Actualizar"),
     "user": MessageLookupByLibrary.simpleMessage("Usuario"),
     "utilities": MessageLookupByLibrary.simpleMessage("Utilidades"),

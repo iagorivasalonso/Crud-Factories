@@ -132,14 +132,14 @@ class LocalizationHelper {
     );
   }
 
-  static String empleoyesBeFactory( BuildContext context,String empleoye) {
+  static String employeesBeFactory( BuildContext context,String empleoye) {
 
     String preVar = S.of(context).the_employee;
     String postVar = S.of(context).does_not_belong_to_the_company.toLowerCase();
 
     return Intl.message(
       '$preVar $empleoye $postVar',
-      name: 'empleoyesBeFactory',
+      name: 'employeesBeFactory',
       args: [empleoye, preVar, postVar],
       examples: const {'empleoye': 'empleoye','preVar': 'the employee', 'postVar': 'does not belong to the company'},
     );
@@ -213,7 +213,7 @@ class LocalizationHelper {
   static String camp_empty_continue( BuildContext context,String camp) {
 
     String preVar = S.of(context).the_field;
-    String postVar = S.of(context).You_cannot_leave_the_field_empty_you_want_to_continue.toLowerCase();
+    String postVar = S.of(context).is_empty_do_you_want_to_continue.toLowerCase();
 
     return Intl.message(
       '$preVar $camp $postVar',
@@ -301,7 +301,7 @@ class LocalizationHelper {
         examples: const {'formatMust': 'formatMust','preVar': 'format', 'postVar':'must be'},
     );
   }
-
+/*
   static String manage_array( BuildContext context,String array,String actionArray, [String? pr]) {
 
     String preVar = S.of(context).theMale;
@@ -323,7 +323,7 @@ class LocalizationHelper {
       examples: const {'manageArray': 'manageArray','preVar': 'the','intermVar': 'he', 'postVar':'correctly'},
     );
   }
-
+*/
   static String no_array_departament( BuildContext context,String array) {
 
     String preVar = S.of(context).no_has;
