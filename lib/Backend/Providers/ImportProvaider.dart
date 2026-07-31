@@ -48,13 +48,13 @@ class ImportProvaider extends ChangeNotifier {
         _content = null;
       }
 
-      Future<String> importAll({
+      Future<List<ImportResult>> importAll({
           required BuildContext context,
 
       }) async {
 
         if (_content == null) {
-          return "";
+          return [];
         }
 
           final routesNews = readRoutesFromCsvContent(_content!);
@@ -75,9 +75,7 @@ class ImportProvaider extends ChangeNotifier {
           results.add(await lineProvider.import(context: context, linesNew: linesNews));
           results.add(await mailProvider.import(context: context, mailsNew: mailsNews));
 
-          return showImportSummary(
-            results,
-          );
+          return results;
       }
       Future<void> pickFile(BuildContext context, TextEditingController controllerDatePicker) async {
 
@@ -104,17 +102,6 @@ class ImportProvaider extends ChangeNotifier {
 // Actualizamos el TextField
         controllerDatePicker.text = platformFile.name;
 
-
-      }
-
-      String showImportSummary(List<ImportResult> results) {
-
-        final imported = results.where((r) => r.inserted > 0);
-
-
-         return imported
-            .map((r) => "${r.entity}: ${r.inserted}")
-            .join("\n");
 
       }
 }
