@@ -39,7 +39,7 @@ Future<void> adminSector(BuildContext context) async {
                          padding: const EdgeInsets.only(left: 30.0, right: 30.0),
                          child: tableEditSector(
                            sectors: providerSector.sectors,
-                           onEdit: (index) => editSector(context, index,providerSector),
+                           onEdit: (index) => editSector(context, index),
                            onDelete: (index) => deleteSector(context, index),
                          )
                      );
@@ -97,7 +97,10 @@ Future<void> newSector(BuildContext context) async {
   }
 }
 
-Future<void> editSector(BuildContext context, int index, SectorProvider providerSector) async {
+Future<void> editSector(BuildContext context, int index) async {
+
+  final providerSectors = context.watch<SectorProvider>();
+
   final old = providerSector.sectors[index];
 
   final updated = await createSector(context, old);
