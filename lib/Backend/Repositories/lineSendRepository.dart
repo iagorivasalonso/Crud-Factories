@@ -27,4 +27,9 @@ class LinesendRepository {
 
      return datasource.upload(lines);
    }
+
+   Future<void> save(List<LineSend> lines) {
+
+      return datasource.save(lines);
+   }
 }

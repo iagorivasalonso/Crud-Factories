@@ -35,4 +35,9 @@ class SectorRepository {
 
       return datasource.upload(sector);
   }
+
+  Future<void> save(List<Sector>sectors) {
+
+      return datasource.save(sectors);
+  }
 }

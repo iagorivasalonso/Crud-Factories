@@ -10,15 +10,22 @@ class ConnectionRepository {
   ConnectionRepository(this.dataSource);
 
   Future<void> save( Conection connection){
+
      return dataSource.save(connection);
   }
 
   Future<void> delete(String id, List<Conection> connections){
+
     return dataSource.delete(id);
   }
 
   Future<List<Conection>> load() {
      return dataSource.load();
+  }
+
+  Future<void> saveAll(List<Conection>connections) async {
+
+      return dataSource.saveAll(connections);
   }
 
 }

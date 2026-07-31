@@ -19,6 +19,7 @@ class EmployeeRepository {
   }
 
   Future<void> deleteByFactory(String factoryId) {
+
     return dataSource.deleteByFactory(factoryId);
   }
 
@@ -26,4 +27,10 @@ class EmployeeRepository {
 
     return dataSource.load();
   }
+
+  Future<void> save(List<Empleoyee> empleoyees) async {
+
+     return dataSource.save(empleoyees);
+  }
+
 }

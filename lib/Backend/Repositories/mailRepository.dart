@@ -58,4 +58,9 @@ class MailRepository {
 
      return dataSource.upload(encryptedMail);
    }
+
+   Future<void> save (List<Mail>mails) {
+
+      return dataSource.save(mails);
+   }
 }

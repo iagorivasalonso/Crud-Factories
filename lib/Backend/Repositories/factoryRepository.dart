@@ -28,4 +28,9 @@ class FactoryRepository {
 
     return dataSource.upload(factory);
   }
+
+  Future<void> save(List<Factory> factories) async {
+
+    return dataSource.save(factories);
+  }
 }
