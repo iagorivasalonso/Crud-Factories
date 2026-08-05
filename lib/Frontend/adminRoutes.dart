@@ -17,16 +17,6 @@ import 'package:provider/provider.dart';
 import '../Alertdialogs/confirm.dart';
 import '../Backend/Data/controlsMessagesError/errors.dart';
 
-class Adminroutes {
-
-   static Future<void> show (BuildContext context) {
-
-       return showDialog(
-           context: context,
-           builder: (_) => const AdminRoutesDialog(),
-       );
-   }
-}
 
 class AdminRoutesDialog extends StatefulWidget {
   const AdminRoutesDialog({super.key});
@@ -48,26 +38,6 @@ class _AdminRoutesDialogState extends State<AdminRoutesDialog> {
 
   }
 
-  Map<String, String> getNamesMap(BuildContext context) {
-    return {
-      "1": S.of(context).routes,
-      "2": S.of(context).connections,
-      if (!kIsWeb) "3": S.of(context).server,
-      "4": S.of(context).sectors,
-      "5": S.of(context).companies,
-      "6": S.of(context).employees,
-      "7": S.of(context).lines,
-      "8": S.of(context).mails,
-    };
-  }
-  Map<String, String> getSqlNamesMap(BuildContext context) {
-    return {
-      "1": S.of(context).routes,
-      "2": S.of(context).connections,
-      if (!kIsWeb) "3": S.of(context).server,
-    };
-  }
-
   bool _initialized = false;
 
   @override
@@ -87,10 +57,20 @@ class _AdminRoutesDialogState extends State<AdminRoutesDialog> {
   @override
   Widget build(BuildContext context) {
 
+    final isApi = context.read<AppProvider>().isApi;
+
     return Consumer<RoutesProvider>(
           builder: (context, provider,_){
 
-            final routes = provider.routes;
+            final isSql = selectedOption == S.of(context).sql;
+
+            final routes = isSql
+                ? provider.routes.where((route) => ["1", "2", "3"].contains(route.id)).toList()
+                : provider.routes;
+
+            final routesToShow = isApi
+                ? routes.where((route) => route.id != "3").toList()
+                : routes;
 
              return Dialog(
               shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(0)),
@@ -129,10 +109,10 @@ class _AdminRoutesDialogState extends State<AdminRoutesDialog> {
                       child: Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 20.0),
                           child: ListView.builder(
-                              itemCount: routes.length,
+                              itemCount: routesToShow.length,
                               itemBuilder: (context, index) {
 
-                                final route = routes[index];
+                                final route = routesToShow[index];
 
                                 if (kIsWeb && route.id == "3") {
                                   return const SizedBox.shrink();
@@ -142,8 +122,8 @@ class _AdminRoutesDialogState extends State<AdminRoutesDialog> {
                                   padding: const EdgeInsets.all(10),
                                   child: CSVPickerField(
                                       index: index,
-                                      value: routes[index].route,
-                                      campName: routes[index].name,
+                                      value: routesToShow[index].route,
+                                      campName: routesToShow[index].name,
                                       actionName: S.of(context).examine,
                                       function: () => _pickFile(index,route),
                                   ),
