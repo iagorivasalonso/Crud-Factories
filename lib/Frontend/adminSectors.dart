@@ -101,7 +101,7 @@ Future<void> editSector(BuildContext context, int index) async {
 
   final providerSectors = context.watch<SectorProvider>();
 
-  final old = providerSector.sectors[index];
+  final old = providerSectors.sectors[index];
 
   final updated = await createSector(context, old);
 
