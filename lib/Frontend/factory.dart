@@ -672,7 +672,7 @@ class _FactoryFromPageState extends State<FactoryFromPage> {
             }
 
             newEmployeesTemp.clear();
-
+            context.read<EditStateProvider>().clear();
 
   }
 
