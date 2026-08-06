@@ -243,6 +243,8 @@ class _MailFormPageState extends State<MailFormPage> {
 
            final id = isEditing ? mailSelected!.id : "0";
 
+           context.read<EditStateProvider>().clear();
+
            final  mail = MailConfigurationService.createMail(
                id: id,
                controllers: controllers,
@@ -306,7 +308,7 @@ class _MailFormPageState extends State<MailFormPage> {
             break;
           }
        }
-       context.read<EditStateProvider>().clear();
+
   }
 
   Future <MailResult> _testConnection (
