@@ -51,13 +51,12 @@ class _GenericListViewPageState<T> extends State<GenericListViewPage<T>> {
   void didUpdateWidget(GenericListViewPage<T> oldWidget) {
     super.didUpdateWidget(oldWidget);
 
-    if (oldWidget.itens != widget.itens) {
       if (searchText.isEmpty) {
-        displayItems = List.from(widget.itens);
+          displayItems = List.from(widget.itens);
       } else {
         _runFilter(searchText);
       }
-    }
+
   }
 
 
@@ -76,8 +75,6 @@ class _GenericListViewPageState<T> extends State<GenericListViewPage<T>> {
 
   @override
   Widget build(BuildContext context) {
-
-
 
     List<String> opSearch = [S.of(context).allMale, S.of(context).filter];
 
