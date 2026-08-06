@@ -95,7 +95,7 @@ class SendFromViewModel extends ChangeNotifier {
   // CHANGUE FILTER
   // -------------------------
 
-  void changueFilter (List<LineSend> linesSelected,String value, SendFilter? filter) {
+  void viewLines (List<LineSend> linesSelected,String value, SendFilter? filter) {
 
     final lines = linesSelected.where((line) {
       switch(filter)
