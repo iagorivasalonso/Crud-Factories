@@ -54,7 +54,11 @@ class _MailFormPageState extends State<MailFormPage> {
     final mail = context.read<MailProvider>().selected;
 
     if(mail  != null) {
-      loadSelectedMail(mail);
+       WidgetsBinding.instance.addPostFrameCallback((_) {
+           if(!mounted)
+             loadSelectedMail(mail);
+       });
+
     }
   }
 
@@ -194,6 +198,8 @@ class _MailFormPageState extends State<MailFormPage> {
   }
 
   void loadSelectedMail(Mail mail) {
+
+    context.read<EditStateProvider>().clear();
 
     controllers.mail.text = mail.mail;
     controllers.password.text = '';
