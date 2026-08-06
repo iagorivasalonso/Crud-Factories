@@ -60,7 +60,7 @@ class FactoryValidator {
       if (err != null) return err;
     }
 
-    if (address.isNotEmpty) {
+    if (address.replaceAll(",","").trim().isNotEmpty) {
       final err = ValidatorCamps.addressValidate(address, context);
 
       if(err != null)
@@ -93,6 +93,17 @@ class AddressParser {
       String province,
       String postcode,
       ) {
+
+    if (text.trim().isEmpty) {
+      return Address(
+        street: "",
+        number: "",
+        apartment: "",
+        city: city,
+        province: province,
+        postcode: postcode,
+      );
+    }
 
     final partsDash = text.split("-");
 
