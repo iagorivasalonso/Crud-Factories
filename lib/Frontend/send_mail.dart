@@ -123,6 +123,19 @@ class _SendMailState extends State<SendMail> {
     final providerLines = context.watch<LineSendProvider>();
 
     final mails = providerMails.mails;
+    Mail? selectedMail;
+
+    if(providerMails.selected != null)
+    {
+
+      for (final mail in mails) {
+        if (mail.id == providerMails.selected!.id) {
+          selectedMail = mail;
+          break;
+        }
+      }
+    }
+
     final lines = providerLines.LineSends;
 
     final dateSends = providerLines
@@ -187,7 +200,7 @@ class _SendMailState extends State<SendMail> {
                                       camp: S
                                           .of(context)
                                           .sender,
-                                      selectedItem: providerMails.selected,
+                                      selectedItem: selectedMail,
                                       hint: mails.isNotEmpty
                                           ? mails.first.mail
                                           : "",
