@@ -5,7 +5,6 @@ import 'package:crud_factories/Backend/Providers/EditStateProvider.dart' show Ed
 import 'package:crud_factories/Backend/Providers/FactoryProvider.dart' show FactoryProvider;
 import 'package:crud_factories/Backend/Providers/SectorProvider.dart' show SectorProvider;
 import 'package:crud_factories/Backend/Providers/filterProvider.dart';
-import 'package:crud_factories/Backend/Repositories/mailRepository.dart' show SendFromViewModel;
 import 'package:crud_factories/Functions/isNotAndroid.dart' show isNotAndroid;
 import 'package:crud_factories/Objects/LineSend.dart';
 import 'package:crud_factories/Objects/Sector.dart';
@@ -478,6 +477,8 @@ class _SendFromPageState extends State<SendFromPage> {
     final selectedCount = vm.send
         .where((e) => e)
         .length;
+
+    context.read<EditStateProvider>().clear();
     final result = await providerLines.addLines(lines);
 
     switch (result) {
@@ -531,7 +532,6 @@ class _SendFromPageState extends State<SendFromPage> {
            .of(context)
            .send_error);
     }
-    context.read<EditStateProvider>().clear();
   }
 }
 
