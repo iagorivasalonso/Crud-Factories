@@ -92,7 +92,7 @@ class _listSendsState extends State<listSends> {
    }
 
    Future<List<cardSend>> _sendFilter(String filter, String search) async {
-    final sectorId = context.watch<FilterProvider>().sectorId;
+    final sectorId = context.read<FilterProvider>().sectorId;
     final provider = context.read<LineSendProvider>();
 
     provider.changeFilter(
@@ -111,7 +111,7 @@ class _listSendsState extends State<listSends> {
 
     final lineProvider = context.read<LineSendProvider>();
     final filter = lineProvider.selectedFilter;
-    final sectorId = context.watch<FilterProvider>().sectorId;
+    final sectorId = context.read<FilterProvider>().sectorId;
 
     final confirmDelete = await warning(
         context,
@@ -205,7 +205,7 @@ class _listSendsState extends State<listSends> {
                   onDelete: (send) =>_onDelete(context,send),
                   onTap: (send, index) async => _onTap(context, index, send),
                   
-                  onFilter: (filter, search) async => _sendFilter(filter,sectorId),
+                  onFilter: (filter, search) async => _sendFilter(filter,search),
             )
             ),
           Expanded(
