@@ -51,11 +51,18 @@ class _MailFormPageState extends State<MailFormPage> {
       passwordVerify: TextEditingController(),
     );
 
+    final provider = context.read<MailProvider>();
+
+    if(provider.selected == null && provider.mails.isNotEmpty)
+    {
+       provider.select(provider.mails.first);
+    }
+
     final mail = context.read<MailProvider>().selected;
 
     if(mail  != null) {
        WidgetsBinding.instance.addPostFrameCallback((_) {
-           if(!mounted)
+           if(mounted)
              loadSelectedMail(mail);
        });
 
