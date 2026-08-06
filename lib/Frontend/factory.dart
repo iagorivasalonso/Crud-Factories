@@ -168,11 +168,11 @@ class _FactoryFromPageState extends State<FactoryFromPage> {
       body: Scrollbar(
         controller: verticalScroll,
         thumbVisibility: true,
-        notificationPredicate: (notification) =>
-        notification.metrics.axis == Axis.vertical,
         child: Scrollbar(
           controller: horizontalScroll,
           thumbVisibility: true,
+          notificationPredicate: (notification) =>
+          notification.metrics.axis == Axis.horizontal,
           child: SingleChildScrollView(
             controller: verticalScroll,
             scrollDirection: Axis.vertical,
@@ -593,8 +593,11 @@ class _FactoryFromPageState extends State<FactoryFromPage> {
               return;
             }
 
+            final addressText = controllers.address.text;
             final address = AddressParser.parse(
-               controllers.address.text,
+                addressText.replaceAll(",","").trim().isEmpty
+                    ? ""
+                    : addressText,
                controllers.city.text,
                controllers.province.text,
                controllers.postcode.text
@@ -636,9 +639,7 @@ class _FactoryFromPageState extends State<FactoryFromPage> {
 
                  switch(result)
                  {
-
                    case EditResult.success:
-
                      await confirm(context,S.of(context).factory_updated_successfully);
                    break;
 
@@ -657,6 +658,7 @@ class _FactoryFromPageState extends State<FactoryFromPage> {
                      // TODO: Handle this case.
                      throw UnimplementedError();
                  }
+                 context.read<EditStateProvider>().clear();
             }
 
             final providerEmployees = context.read<EmployeeProvider>();
@@ -672,7 +674,7 @@ class _FactoryFromPageState extends State<FactoryFromPage> {
             }
 
             newEmployeesTemp.clear();
-            context.read<EditStateProvider>().clear();
+
 
   }
 
@@ -683,18 +685,28 @@ class _FactoryFromPageState extends State<FactoryFromPage> {
       ) async {
     context.read<EditStateProvider>().clear();
 
-    controllers.name.clear();
-    controllers.highDate.clear();
-    controllers.telephone1.clear();
-    controllers.telephone2.clear();
-    controllers.mail.clear();
-    controllers.web.clear();
-    controllers.address.clear();
-    controllers.city.clear();
-    controllers.postcode.clear();
-    controllers.province.clear();
+    final isEditing = factorySelected != null;
 
-    controllers.employeeNew.clear();
+    if(!isEditing)
+    {
+      controllers.name.clear();
+      controllers.highDate.clear();
+      controllers.telephone1.clear();
+      controllers.telephone2.clear();
+      controllers.mail.clear();
+      controllers.web.clear();
+      controllers.address.clear();
+      controllers.city.clear();
+      controllers.postcode.clear();
+      controllers.province.clear();
+
+      controllers.employeeNew.clear();
+    }
+    else
+    {
+      loadSelectedFactory(factorySelected);
+    }
+
 
     selectedSector = null;
     selectedEmployee = null;
