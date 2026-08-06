@@ -546,7 +546,9 @@ class _SendMailState extends State<SendMail> {
                 controller
               );
 
-              if(selectedOption != S.of(context).a_recipient)
+               context.read<EditStateProvider>().clear();
+
+               if(selectedOption != S.of(context).a_recipient)
               {
                       final sentFactories = result.sent
                           .map((mail) => factoryProvider.findByMail(mail)?.name)
