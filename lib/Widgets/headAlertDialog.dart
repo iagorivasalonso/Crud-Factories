@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 
 StatefulBuilder headDialog({
 
-  required String title}) {
+  required String title, VoidCallback? onClose}) {
 
   Color Cexit = Colors.lightBlue;
 
@@ -32,13 +32,13 @@ StatefulBuilder headDialog({
                   icon: const Icon(Icons.close),
                   color: Colors.white,
                   onPressed: (){
-
-                    if(title == S.of(context).category_error)
-                    {
-                      Navigator.of(context).pop(3);
+                    if (onClose != null) {
+                      onClose();
+                      return;
                     }
-                    else
-                    {
+                    if (title == S.of(context).category_error) {
+                      Navigator.of(context).pop(3);
+                    } else {
                       Navigator.of(context).pop(false);
                     }
 
