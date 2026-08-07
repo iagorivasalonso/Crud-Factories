@@ -50,9 +50,10 @@ class _SendFromPageState extends State<SendFromPage> {
   final ScrollController verticalScrollTable = ScrollController();
 
 
+
   bool allSectors = false;
 
-  String text = "";
+
 
   @override
   void initState() {
@@ -62,22 +63,21 @@ class _SendFromPageState extends State<SendFromPage> {
     vm = context.read<SendFromViewModel>();
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      final isEditing = widget.lines.isNotEmpty;
-
       vm.init(
-        isEditing: isEditing,
+        isEditing: false,
         lines: widget.lines,
       );
 
-      if (widget.lines.isNotEmpty) {
-        text = widget.filter == SendFilter.date
-            ? widget.lines.first.date
-            : widget.lines.first.factory;
+        if(widget.lines.isNotEmpty)
+        {
+           final text = widget.filter == SendFilter.date
+                ? widget.lines.first.date
+                : widget.lines.first.factory;
 
-        controllerSearchSend.text = text;
+           controllerSearchSend.text = text;
 
-        vm.viewLines(widget.lines, text, widget.filter);
-      }
+           vm.changueFilter(widget.lines, text,widget.filter);
+        }
     });
   }
 
@@ -87,6 +87,7 @@ class _SendFromPageState extends State<SendFromPage> {
 
     if (oldWidget.lines != widget.lines ||
         oldWidget.filter != widget.filter) {
+
       if (widget.lines.isNotEmpty) {
         final text = widget.filter == SendFilter.date
             ? widget.lines.first.date
@@ -95,7 +96,7 @@ class _SendFromPageState extends State<SendFromPage> {
         controllerSearchSend.text = text;
         WidgetsBinding.instance.addPostFrameCallback((_) {
           if (mounted) {
-            vm.viewLines(widget.lines, text, widget.filter);
+            vm.changueFilter(widget.lines, text,widget.filter);
           }
         });
       }
@@ -116,28 +117,22 @@ class _SendFromPageState extends State<SendFromPage> {
   late SendFromViewModel vm;
 
 
+
   @override
   Widget build(BuildContext context0) {
+
     final vm = context.watch<SendFromViewModel>();
     final providerLines = context.watch<LineSendProvider>();
 
     final isEditing = widget.lines.isNotEmpty;
 
-    String action1 = isEditing
-        ? S
-        .of(context)
-        .save
-        : S
-        .of(context)
-        .newMale;
+   String  action1 = isEditing
+        ? S.of(context).save
+        : S.of(context).newMale;
 
     String action2 = isEditing
-        ? S
-        .of(context)
-        .undo
-        : S
-        .of(context)
-        .reboot;
+        ? S.of(context).undo
+        : S.of(context).reboot;
 
     final providerSectors = context
         .watch<SectorProvider>()
@@ -148,10 +143,12 @@ class _SendFromPageState extends State<SendFromPage> {
     );
 
 
+
+
     String messageResult = "";
 
     String campKey = "";
-    String titleSector = "";
+    String titleSector="";
 
     final sectorsWithFactories = providerSectors.where((sector) {
       return context
@@ -160,62 +157,52 @@ class _SendFromPageState extends State<SendFromPage> {
           .isNotEmpty;
     }).toList();
 
-    if (isEditing) {
-      campKey = widget.filter == SendFilter.date
-          ? S
-          .of(context)
-          .company
-          : S
-          .of(context)
-          .date;
+    if(isEditing)
+    {
+         campKey = widget.filter == SendFilter.date
+                   ?  S.of(context).company
+                   :  S.of(context).date;
 
-      final sectorId = context
-          .watch<FilterProvider>()
-          .sectorId;
+         final sectorId = context.watch<FilterProvider>().sectorId;
 
-      if (sectorId == "0") {
-        allSectors = widget.filter == SendFilter.date
-            ? true
-            : false;
+            if (sectorId=="0")
+            {
+               allSectors = widget.filter == SendFilter.date
+                       ? true
+                       : false;
 
-        titleSector = widget.filter == SendFilter.date
-            ? S
-            .of(context)
-            .allSectors
-            : S
-            .of(context)
-            .list_of_sends;
-      }
-      else {
-        allSectors = false;
+               titleSector = widget.filter == SendFilter.date
+                            ? S.of(context).allSectors
+                            : S.of(context).list_of_sends;
+            }
+            else
+            {
+               allSectors = false;
+               
+               final sectorSelected = providerSectors.firstWhere(
+                    (s) => s.id == sectorId
+                );
 
-        final sectorSelected = providerSectors.firstWhere(
-                (s) => s.id == sectorId
-        );
+               titleSector =  widget.filter == SendFilter.date
+                   ? '${S.of(context).sectorOf} ${sectorSelected.name}'
+                   : S.of(context).list_of_sends;
+            }
 
-        titleSector = widget.filter == SendFilter.date
-            ? '${S
-            .of(context)
-            .sectorOf} ${sectorSelected.name}'
-            : S
-            .of(context)
-            .list_of_sends;
-      }
+            final lines = widget.lines;
 
-      final lines = widget.lines;
+            messageResult = widget.filter == SendFilter.date
+                ?   LocalizationHelper.sendsDay(context, lines.length)
+                :    LocalizationHelper.sendsDay(context, lines.length);
 
-      messageResult = widget.filter == SendFilter.date
-          ? LocalizationHelper.sendsDay(context, lines.length)
-          : LocalizationHelper.sendsDay(context, lines.length);
     }
-    else {
-      allSectors = selectedSector == null
-          ? true
-          : false;
+    else
+    {
+          allSectors = selectedSector == null
+                ? true
+                : false;
 
 
-      messageResult =
-          LocalizationHelper.factoriesBD(context, vm.controllers.length);
+          messageResult = LocalizationHelper.factoriesBD(context, vm.controllers.length);
     }
 
     return !isNotAndroid()
@@ -238,14 +225,8 @@ class _SendFromPageState extends State<SendFromPage> {
                   padding: const EdgeInsets.only(left: 30.0, top: 30.0),
                   child: Container(
                       constraints: BoxConstraints(
-                        minWidth: MediaQuery
-                            .of(context)
-                            .size
-                            .width,
-                        minHeight: MediaQuery
-                            .of(context)
-                            .size
-                            .height,
+                        minWidth: MediaQuery.of(context).size.width,
+                        minHeight: MediaQuery.of(context).size.height,
                       ),
                       child: Align(
                         alignment: Alignment.topLeft,
@@ -266,57 +247,42 @@ class _SendFromPageState extends State<SendFromPage> {
                                   )
                                       : defaultTextfield(
                                       nameCamp: widget.filter == SendFilter.date
-                                          ? S
-                                          .of(context)
-                                          .date
-                                          : S
-                                          .of(context)
-                                          .company,
+                                                ? S.of(context).date
+                                                : S.of(context).company,
                                       controllerCamp: controllerSearchSend,
                                       context: context
                                   ),
                                 ),
 
                                 Padding(
-                                  padding: const EdgeInsets.only(
-                                      left: 35.0, top: 15.0),
+                                  padding: const EdgeInsets.only(left: 35.0,top: 15.0),
                                   child: SizedBox(
                                     width: 300,
                                     height: 50,
                                     child: isEditing == false
-                                        ? GenericDropdown<Sector>(
-                                      items: sectorsWithFactories,
-                                      camp: S
-                                          .of(context)
-                                          .sector,
-                                      opDefault: S
-                                          .of(context)
-                                          .allMale,
+                                      ? GenericDropdown<Sector>(
+                                      items:sectorsWithFactories,
+                                      camp: S.of(context).sector,
+                                      opDefault: S.of(context).allMale,
                                       selectedItem: selectedSector,
-                                      hint: S
-                                          .of(context)
-                                          .sector,
+                                      hint: S.of(context).sector,
                                       itemLabel: (sector) => sector.name,
                                       onChanged: (sectorChoose) =>
-                                          _onSectorChanged(
-                                              context, sectorChoose),
+                                          _onSectorChanged(context, sectorChoose),
                                     )
-                                        : Padding(
-                                      padding: const EdgeInsets.only(
-                                          left: 30.0, top: 30.0),
-                                      child: Text(titleSector,
-                                        style: TextStyle(
-                                            fontWeight: FontWeight.bold),),
+                                    : Padding(
+                                        padding: const EdgeInsets.only(left: 30.0, top: 30.0),
+                                        child: Text(titleSector,
+                                          style: TextStyle(fontWeight: FontWeight.bold),),
                                     ),
                                   ),
                                 ),
 
                                 Padding(
-                                  padding: const EdgeInsets.only(
-                                      left: 50.0, top: 30.0, bottom: 50.0),
+                                  padding: const EdgeInsets.only(left: 50.0,top: 30.0,bottom: 50.0),
                                   child: SizedBox(
                                     child: isEditing == false
-                                        ? Consumer<SendFromViewModel>(
+                                    ?Consumer<SendFromViewModel>(
                                       builder: (context, vm, _) {
                                         return customDataTable(
                                           key: const ValueKey("new"),
@@ -324,50 +290,29 @@ class _SendFromPageState extends State<SendFromPage> {
 
                                           columns: allSectors == false
                                               ? [
-                                            S
-                                                .of(context)
-                                                .company,
-                                            S
-                                                .of(context)
-                                                .observations,
-                                            S
-                                                .of(context)
-                                                .state,
-                                            S
-                                                .of(context)
-                                                .select
+                                            S.of(context).company,
+                                            S.of(context).observations,
+                                            S.of(context).state,
+                                            S.of(context).select
                                           ]
                                               : [
-                                            S
-                                                .of(context)
-                                                .company,
-                                            S
-                                                .of(context)
-                                                .sector,
-                                            S
-                                                .of(context)
-                                                .observations,
-                                            S
-                                                .of(context)
-                                                .state,
-                                            S
-                                                .of(context)
-                                                .select
+                                            S.of(context).company,
+                                            S.of(context).sector,
+                                            S.of(context).observations,
+                                            S.of(context).state,
+                                            S.of(context).select
                                           ],
 
                                           showSectorColumn: allSectors,
                                           lines: vm.controllers,
                                           sendValues: vm.send,
                                           onStateChanged: (index, value) {
-                                            context
-                                                .read<EditStateProvider>()
-                                                .markChanged();
+                                            context.read<EditStateProvider>().markChanged();
+
                                           },
 
                                           onSendChanged: (i, value) {
-                                            context
-                                                .read<EditStateProvider>()
-                                                .markChanged();
+                                            context.read<EditStateProvider>().markChanged();
                                             vm.toggleSend(i, value);
                                           },
 
@@ -383,99 +328,87 @@ class _SendFromPageState extends State<SendFromPage> {
                                         );
                                       },
                                     )
-                                        : Consumer<SendFromViewModel>(
-                                      builder: (context, vm, _) {
-                                        return customDataTable(
-                                          key: const ValueKey("edit"),
-                                          scrollController: verticalScrollTable,
+                                    : Consumer<SendFromViewModel>(
+                                           builder: (context, vm, _) {
+                                      return customDataTable(
+                                      key: const ValueKey("edit"),
+                                      scrollController: verticalScrollTable,
 
-                                          columns: allSectors == false
-                                              ? [
+                                      columns: allSectors == false
+                                      ? [
                                             campKey,
-                                            S
-                                                .of(context)
-                                                .observations,
-                                            S
-                                                .of(context)
-                                                .state,
+                                            S.of(context).observations,
+                                            S.of(context).state,
 
-                                          ]
-                                              : [
+                                            ]
+                                                : [
                                             campKey,
-                                            S
-                                                .of(context)
-                                                .sector,
-                                            S
-                                                .of(context)
-                                                .observations,
-                                            S
-                                                .of(context)
-                                                .state,
+                                            S.of(context).sector,
+                                            S.of(context).observations,
+                                            S.of(context).state,
 
-                                          ],
+                                            ],
 
-                                          showSectorColumn: allSectors,
-                                          filter: widget.filter,
-                                          lines: vm.controllers,
-                                          sendValues: vm.send,
-                                          onObservationChanged: (index, value) {
-                                            context
-                                                .read<EditStateProvider>()
-                                                .markChanged();
-                                            providerLines.updateLines(
-                                              vm.controllers[index].id,
-                                              observations: value,
-                                            );
-                                          },
-
-                                          onStateChanged: (index, value) {
-                                            context
-                                                .read<EditStateProvider>()
-                                                .markChanged();
-                                            providerLines.updateLines(
-                                              vm.controllers[index].id,
-                                              state: value.name,
-                                            );
-                                          },
-
-                                          onSendChanged: (i, value) {
-                                            vm.toggleSend(i, value);
-                                          },
-
-
-                                          onSelectedAllChanged: (value) {
-                                            for (int i = 0; i <
-                                                vm.send.length; i++) {
-                                              vm.send[i] = value;
-                                            }
-                                            vm.notifyListeners();
-                                          },
-
-                                          mesage: messageResult,
+                                      showSectorColumn: allSectors,
+                                      filter: widget.filter,
+                                      lines: vm.controllers,
+                                      sendValues: vm.send,
+                                      onObservationChanged: (index, value) {
+                                        context.read<EditStateProvider>().markChanged();
+                                        providerLines.updateLines(
+                                           vm.controllers[index].id,
+                                          observations: value,
                                         );
                                       },
-                                    ),
+
+                                      onStateChanged: (index, value) {
+                                        context.read<EditStateProvider>().markChanged();
+                                        providerLines.updateLines(
+                                          vm.controllers[index].id,
+                                          state: value.name,
+                                        );
+                                      },
+
+                                      onSendChanged: (i, value) {
+                                      vm.toggleSend(i, value);
+                                      },
+
+
+                                      onSelectedAllChanged: (value) {
+                                              for (int i = 0; i < vm.send.length; i++)
+                                              {
+                                                vm.send[i] = value;
+                                              }
+                                              vm.notifyListeners();
+                                      },
+
+                                      mesage: messageResult,
+                                      );
+                                      },
+                                      ),
                                   ),
                                 ),
-                                const SizedBox(height: 20,),
+                               const SizedBox(height: 20,),
                                 Padding(
                                   padding: const EdgeInsets.only(bottom: 40.0),
                                   child: Row(
                                     children: [
                                       Padding(
-                                        padding: const EdgeInsets.only(
-                                            left: 550.0),
+                                        padding: const EdgeInsets.only(left: 550.0),
                                         child: materialButton(
                                           nameAction: action1,
-                                          function: () => _onSaveSend(),
+                                          function: () =>isEditing == false
+                                                  ? createSend()
+                                                  : editSend(),
                                         ),
                                       ),
                                       Padding(
-                                        padding: const EdgeInsets.only(
-                                            left: 20.0),
+                                        padding: const EdgeInsets.only(left: 20.0),
                                         child: materialButton(
                                             nameAction: action2,
-                                            function: () => _onResetSend()
+                                            function: () =>isEditing == false
+                                                ? vm.reset()
+                                                : vm.changueFilter(widget.lines,"",widget.filter),
                                         ),
                                       )
                                     ],
@@ -510,103 +443,98 @@ class _SendFromPageState extends State<SendFromPage> {
     }
   }
 
-  Future<void> _onSaveSend() async {
-    final isEditing = widget.lines.isNotEmpty;
+  Future<void> createSend() async {
+
+    final lines = <LineSend>[];
+
     final providerLines = context.read<LineSendProvider>();
 
-    if (!isEditing) {
-      final lines = <LineSend>[];
+    final firstId = providerLines.LineSends.isEmpty
+        ? 1
+        : providerLines.LineSends
+        .map((l) => int.parse(l.id))
+        .reduce((a, b) => a > b ? a : b) + 1;
 
-      final firstId = providerLines.LineSends.isEmpty
-          ? 1
-          : providerLines.LineSends
-          .map((l) => int.parse(l.id))
-          .reduce((a, b) => a > b ? a : b) + 1;
+    for (int i = 0; i < vm.controllers.length; i++) {
 
-      for (int i = 0; i < vm.controllers.length; i++) {
-        int id = firstId + i; //se le va sumando la nueva pos
+      int id = firstId + i;  //se le va sumando la nueva pos
 
-        if (vm.send[i] == true) {
-          lines.add(
-              LineSend(
-                id: id.toString(),
-                date: controllerSearchSend.text,
-                factory: vm.controllers[i].factory,
-                observations: vm.controllers[i].observations.text,
-                state: vm.controllers[i].state.name,
-              )
-          );
-        }
-      }
-
-      final selectedCount = vm.send
-          .where((e) => e)
-          .length;
-
-      context.read<EditStateProvider>().clear();
-      final result = await providerLines.addLines(lines);
-
-      switch (result) {
-        case AddLineResult.success:
-          await confirm(
-            context,
-            LocalizationHelper.sendsDay(context, selectedCount),
-          );
-          break;
-
-        case AddLineResult.duplicate:
-          error(context, S
-              .of(context)
-              .send_duplicate);
-          break;
-
-        case AddLineResult.invalidData:
-          await error(context, S
-              .of(context)
-              .send_invalid_data);
-          break;
-
-        case AddLineResult.error:
-          error(context, S
-              .of(context)
-              .send_error);
-          break;
-      }
-      vm.reset();
-      context.read<EditStateProvider>().clear();
-    }
-    else {
-      int cantSends = providerLines.modifiedIds.length;
-      final ok = await providerLines.saveChanges();
-      context.read<EditStateProvider>().clear();
-
-      if (ok) {
-        await confirm(
-          context,
-          LocalizationHelper.cantLinesModify(context, cantSends),
+      if(vm.send[i] == true)
+      {
+        lines.add(
+            LineSend(
+              id: id.toString(),
+              date: controllerSearchSend.text,
+              factory: vm.controllers[i].factory,
+              observations: vm.controllers[i].observations.text,
+              state: vm.controllers[i].state.name,
+            )
         );
       }
-      else {
-        await error(context, S
-            .of(context)
-            .send_error);
-      }
-    }
-  }
 
-  Future<void> _onResetSend() async {
-    final isEditing = widget.lines.isNotEmpty;
+    }
 
-    if (!isEditing) {
-      vm.reset();
-    }
-    else {
-      vm.viewLines(vm.originalLines, text, widget.filter);
-    }
+    final selectedCount = vm.send
+        .where((e) => e)
+        .length;
 
     context.read<EditStateProvider>().clear();
+    final result = await providerLines.addLines(lines);
+
+    switch (result) {
+      case AddLineResult.success:
+        await confirm(
+          context,
+          LocalizationHelper.sendsDay(context, selectedCount),
+        );
+        break;
+
+      case AddLineResult.duplicate:
+        error(context, S
+            .of(context)
+            .send_duplicate);
+        break;
+
+      case AddLineResult.invalidData:
+        await error(context, S
+            .of(context)
+            .send_invalid_data);
+        break;
+
+      case AddLineResult.error:
+        error(context, S
+            .of(context)
+            .send_error);
+        break;
+    }
+    vm.reset();
+    context.read<EditStateProvider>().clear();
+  }
+
+  Future<void> editSend() async {
+
+    final provaider = context.read<LineSendProvider>();
+    int cantSends = provaider.modifiedIds.length;
+    final ok = await provaider.saveChanges();
+
+    if(ok)
+    {
+
+       await confirm(
+         context,
+         LocalizationHelper.cantLinesModify(context, cantSends),
+       );
+
+    }
+    else
+    {
+       await error(context, S
+           .of(context)
+           .send_error);
+    }
   }
 }
+
 
 
 
