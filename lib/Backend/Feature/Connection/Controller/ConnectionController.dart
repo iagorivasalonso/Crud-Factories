@@ -270,7 +270,7 @@ class ConnectionController {
        );
 
        if(!exits) {
-          DeleteResult.notFound;
+         return DeleteResult.notFound;
        }
        await service.delete(c);
 
