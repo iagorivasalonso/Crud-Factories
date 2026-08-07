@@ -12,12 +12,9 @@ import 'package:flutter/material.dart';
 
 Future<Sector?> createSector(BuildContext  context, [Sector? sectorOld]) async {
 
-
-
   final controllerSector = TextEditingController(
     text: sectorOld?.name ?? '',
   );
-
 
   final isEdit = sectorOld != null;
 
@@ -30,27 +27,37 @@ Future<Sector?> createSector(BuildContext  context, [Sector? sectorOld]) async {
       : S.of(context).create_sector;
 
 
-  Sector? sector = await showDialog(
+  Sector? sector = await showDialog<Sector>(
       context: context,
       builder: (BuildContext dialogContext) {
+
+        Future<void> closeDialog() async {
+          final hasChanges =
+              controllerSector.text.trim() != (sectorOld?.name ?? '');
+
+          if (hasChanges) {
+            final confirmExit = await warning(
+              dialogContext,
+              S.of(dialogContext).unsaved_changes,
+            );
+
+            if (confirmExit == true && dialogContext.mounted) {
+              Navigator.of(dialogContext).pop();
+            }
+          } else {
+            if (dialogContext.mounted) {
+              Navigator.of(dialogContext).pop();
+            }
+          }
+        }
+
         return PopScope(
           canPop: false,
           onPopInvokedWithResult:(didPop,result) async {
 
             if (didPop) return;
 
-            final hasChanges = controllerSector.text.trim() != (sectorOld?.name ?? '');
-
-            if (hasChanges) {
-              final confirmExit = await warning(
-                context, S.of(context).unsaved_changes,
-              );
-              if (confirmExit == true) {
-                Navigator.of(context).pop();
-              }
-            } else {
-              Navigator.of(context).pop();
-            }
+                await closeDialog();
             },
           child: Dialog(
               shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(0)),
@@ -61,7 +68,10 @@ Future<Sector?> createSector(BuildContext  context, [Sector? sectorOld]) async {
                   ),
                   child: Column(
                        children: [
-                         headDialog(title: title),
+                         headDialog(
+                             title: title,
+                             onClose: closeDialog,
+                         ),
                          Padding(
                            padding: const EdgeInsets.only(top:20.0,left: 40.0),
                            child: headView(
@@ -108,6 +118,8 @@ Future<Sector?> createSector(BuildContext  context, [Sector? sectorOld]) async {
           ),
         );
       });
+     controllerSector.dispose();
+
      return sector;
 
 }
