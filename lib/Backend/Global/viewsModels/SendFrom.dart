@@ -14,6 +14,7 @@ class SendFromViewModel extends ChangeNotifier {
   List<LineSendController> controllers = [];
 
   List<bool> send = [];
+  List<LineSend> originalLines = [];
 
   String sectorId = "0";
 
@@ -109,7 +110,12 @@ class SendFromViewModel extends ChangeNotifier {
         case SendFilter.company:
           return line.factory == value;
       }
+
     }).toList();
+
+    originalLines = lines
+        .map((line) => line.copyWith())
+        .toList();
 
     _loadEdit(lines);
 
