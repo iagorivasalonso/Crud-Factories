@@ -82,6 +82,10 @@ Future<void> newSector(BuildContext context) async {
 
   final sector = await createSector(context);
 
+  if (sector == null) {
+    return;
+  }
+
   final result = await context.read<SectorProvider>().create(sector!);
 
   switch (result) {
