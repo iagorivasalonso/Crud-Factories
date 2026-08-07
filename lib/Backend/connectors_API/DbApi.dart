@@ -7,22 +7,24 @@ class DbApi {
 
   static Future<Map<String, dynamic>> actionApi(
       String action, Conection? connection, [Conection? newDataBase]) async {
-    if (connection == null) {
+    if (connection == null && action != 'disconnect') {
       return {'ok': false, 'message': 'Debes seleccionar una conexión'};
     }
 
     try {
       final body = {
         'action': action,
-        'host': connection.host,
-        'port': connection.port,
-        'user': connection.user,
-        'password': connection.password,
-        'database': connection.database,
-        if (action == 'update' && newDataBase != null)
-          'newDatabase': newDataBase.database,
       };
 
+      if (connection != null) {
+        body.addAll({
+          'host': connection.host,
+          'port': connection.port,
+          'user': connection.user,
+          'password': connection.password,
+          'database': connection.database,
+        });
+      }
       final res = await http.post(
         Uri.parse('$baseUrl/db'),
         headers: {'Content-Type': 'application/json'},
@@ -57,5 +59,24 @@ class DbApi {
     } catch (e) {
       return {'ok': false, 'message': 'Error de conexión: $e'};
     }
+  }
+
+  static Future<Map<String, dynamic>> queryData(
+      String sql,
+      List<Object?>? params,
+      ) async {
+
+    final body = {
+      'sql': sql,
+      'params': params ?? [],
+    };
+
+    final res = await http.post(
+      Uri.parse('$baseUrl/query'),
+      headers: {'Content-Type': 'application/json'},
+      body: jsonEncode(body),
+    );
+
+    return jsonDecode(res.body);
   }
 }
