@@ -1,15 +1,14 @@
 
 
-
-import 'package:crud_factories/Backend/Feature/Sector/apiSectorDataSource%20.dart' show ApiConfig;
+import 'package:crud_factories/Objects/ApiConfig.dart' show ApiConfig;
 
 Future<Uri> connectApi(String nameTable, ApiConfig config) async {
 
   return Uri(
     scheme: 'http',
-    host: 'localhost',
+    host: config.host,
     port: 3000,
-    path: 'db/${config.database}/$nameTable',
+    path: '/db/${config.database}/$nameTable',
     queryParameters: {
       'host': config.host,
       'port': config.port,
@@ -17,4 +16,5 @@ Future<Uri> connectApi(String nameTable, ApiConfig config) async {
       'password': config.password,
     },
   );
+
 }
