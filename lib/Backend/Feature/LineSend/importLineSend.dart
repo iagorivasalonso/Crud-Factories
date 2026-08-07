@@ -1,7 +1,6 @@
 import 'dart:convert' show utf8, latin1, LineSplitter;
 import 'dart:io' show File;
 import 'dart:typed_data';
-import 'package:crud_factories/Backend/CSV/importLines.dart';
 import 'package:crud_factories/Objects/LineSend.dart';
 import 'package:crud_factories/Objects/Sector.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
