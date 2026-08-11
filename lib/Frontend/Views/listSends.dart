@@ -159,8 +159,6 @@ class _listSendsState extends State<listSends> {
     final providerLines = context.watch<LineSendProvider>();
     final sectorId = context.watch<FilterProvider>().sectorId;
 
-    
-
     double mWidth = MediaQuery.of(context).size.width;
     final mWidthList = mWidth >= 280 ? 280.0 : 0.0;
 
@@ -189,7 +187,7 @@ class _listSendsState extends State<listSends> {
                       title: send.title,
                       description: providerLines.selectedFilter == SendFilter.date
                           ? LineSend.showFormatDate(send.description, context)
-                          : send.description,
+                          : "${S.of(context).sends}: ${send.description}",
                       color: selectCard == index? Colors.white : Colors.grey),
                   onDelete: (send) =>_onDelete(context,send),
                   onTap: (send, index) async => _onTap(context, index, send),
