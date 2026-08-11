@@ -273,9 +273,9 @@ class _appDesktopState extends State<appDesktop> {
                               MenuButton(
                                   text: Text(sector.name),
                                   onTap: () async {
-                                    final sectorId = context.read<FilterProvider>().sectorId;
-                                    final factoriesCurrent = context.read<FactoryProvider>().factoriesBySector(sectorId);
+
                                     context.read<FilterProvider>().setSector(sector.id);
+                                    final factoriesCurrent = context.read<FactoryProvider>().factoriesBySector(sector.id);
 
                                     if(factoriesCurrent.isNotEmpty)
                                     {
@@ -389,11 +389,13 @@ class _appDesktopState extends State<appDesktop> {
 
                                       final sectorId = sector.id;
 
-                                      final factories = context.read<FactoryProvider>().factoriesBySector(sectorId);
+                                      final factoryProvider = context.read<FactoryProvider>();
+                                      final lineSendProvider = context.read<LineSendProvider>();
+                                      final filterProvider = context.read<FilterProvider>();
+                                      final navigationProvider = context.read<NavigationProvider>();
 
-                                      final sectorHasLines = context
-                                          .read<LineSendProvider>()
-                                          .sectorHasLines(
+                                      final factories = factoryProvider.factoriesBySector(sectorId);
+                                      final sectorHasLines = lineSendProvider.sectorHasLines(
                                           sectorId: sectorId,
                                           factories: factories);
 
@@ -405,8 +407,8 @@ class _appDesktopState extends State<appDesktop> {
                                       }
 
 
-                                      context.read<FilterProvider>().setSector(sector.id);
-                                      context.read<NavigationProvider>().go(AppView.shipments);
+                                      filterProvider.setSector(sector.id);
+                                      navigationProvider.go(AppView.shipments);
 
                                     }
                                 ),
