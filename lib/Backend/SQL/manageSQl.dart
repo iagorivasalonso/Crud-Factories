@@ -1,34 +1,29 @@
 import 'package:crud_factories/Backend/Global/variables.dart';
-import 'package:mysql1/src/single_connection.dart';
 
 
 class actionsBD {
-
   static Future<bool> createDB(String nameBD, conn) async {
 
     try {
-
       await conn.query('CREATE DATABASE $nameBD');
       await conn.query('USE `$nameBD`');
-
       return true;
-
-    }catch(_){
+    }catch(SQLException){
       return false;
     }
-
   }
 
-  static Future<bool> createTables(MySqlConnection conn) async {
+  static Future<bool> createTables() async {
 
-
+    bool err=false;
+    print(executeQuery);
     try {
-      await conn.query('CREATE TABLE IF NOT EXISTS sectors '
+      await executeQuery.query('CREATE TABLE IF NOT EXISTS sectors '
           '(id int NOT NULL AUTO_INCREMENT PRIMARY KEY,'
           ' sector varchar(50) NOT NULL)'
       );
 
-      await conn.query('CREATE TABLE IF NOT EXISTS factories '
+      await executeQuery.query('CREATE TABLE IF NOT EXISTS factories '
           '(id int NOT NULL AUTO_INCREMENT PRIMARY KEY,'
           ' name varchar(255) NOT NULL, '
           ' highDate varchar(12) NOT NULL,'
@@ -39,14 +34,14 @@ class actionsBD {
           ' web varchar(100) NOT NULL,'
           ' address varchar(255) NOT NULL, '
           ' number varchar(4) NOT NULL,'
-          ' apartment varchar(10) NOT NULL,'
+          ' apartament varchar(10) NOT NULL,'
           ' city varchar(10) NOT NULL, '
           ' province varchar(10) NOT NULL, '
-          ' postcode varchar(5) NOT NULL, '
+          ' postalcode varchar(5) NOT NULL, '
           ' FOREIGN KEY fk_sectors(sector) REFERENCES sectors(id))'
       );
 
-      await conn.query('CREATE TABLE IF NOT EXISTS employees '
+      await executeQuery.query('CREATE TABLE IF NOT EXISTS employees '
           '(id int NOT NULL AUTO_INCREMENT PRIMARY KEY,'
           ' name varchar(50) NOT NULL,'
           ' idFactory int(11) NOT NULL,'
@@ -54,7 +49,7 @@ class actionsBD {
           ' ON DELETE CASCADE)'
       );
 
-      await conn.query('CREATE TABLE IF NOT EXISTS lineSends '
+      await executeQuery.query('CREATE TABLE IF NOT EXISTS lineSends '
           '(id int NOT NULL AUTO_INCREMENT PRIMARY KEY,'
           ' date varchar(12) NOT NULL, '
           ' factory varchar(255) NOT NULL,'
@@ -62,73 +57,55 @@ class actionsBD {
           ' state varchar(20) NOT NULL)'
       );
 
-      await conn.query('CREATE TABLE IF NOT EXISTS mails'
-         '(id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,'
-          'mail VARCHAR(100) NOT NULL,'
-          'host VARCHAR(100) NOT NULL,'
-          'port INT NOT NULL,'
-          'secure BOOLEAN NOT NULL,'
-          'password VARCHAR(255) NOT NULL)'
+      await executeQuery.query('CREATE TABLE IF NOT EXISTS mails '
+          '(id int NOT NULL AUTO_INCREMENT PRIMARY KEY,'
+          ' company varchar(20) NOT NULL, '
+          ' email varchar(50) NOT NULL,'
+          ' password varchar(100) NOT NULL)'
       );
-      return true;
-    }catch(e){
-      print(e);
-      return false;
+
+    }catch(SQLException){
+      err = true;
     }
 
-
+    return err;
   }
 
-  static Future<bool> deleteDB(String nameBD, MySqlConnection conn) async {
+  static Future<bool> deleteDB(String nameBD) async {
+
+    bool err= false;
 
     try {
 
-      await conn.query('DROP DATABASE $nameBD');
-      return true;
-    }catch(_){
-      return false;
+      await executeQuery.query('DROP DATABASE $nameBD');
+
+    }catch(SQLException){
+      err=true;
     }
 
-
+    return err;
   }
 
-  static Future<bool> editDB(String nameBD, String nameBDnew, MySqlConnection conn) async {
+  static Future<bool> editDB(String nameBD, String nameBDnew) async {
 
+    bool err=false;
 
     try {
-
-      await conn.query(
-        'USE `$nameBD`',
-      );
-
-      var results =
-      await conn.query(
-          'SHOW TABLES'
-      );
-
-      await conn.query(
-          'CREATE DATABASE $nameBDnew'
-      );
-
-            
+      var results = await executeQuery.query('SHOW TABLES');
+      await executeQuery.query('CREATE DATABASE $nameBDnew');
       for (final row in results) {
-
-            final nameTable = row[0].toString();
-
-            await conn.query(
-                'RENAME TABLE '
-                    '$nameBD.$nameTable '
-                    'TO '
-                    '$nameBDnew.$nameTable');
+        final nameTable = row[0].toString();
+        await executeQuery.query(
+            'RENAME TABLE $nameBD.$nameTable TO $nameBDnew.$nameTable');
       }
 
-      await conn.query('DROP DATABASE $nameBD');
-      return true;
+      await executeQuery.query('DROP DATABASE $nameBD');
+
     }catch(e){
-      print(e);
-      return true;
+      err = true;
     } finally {
-      await conn.close();
+      await executeQuery.close();
     }
+    return err;
   }
 }

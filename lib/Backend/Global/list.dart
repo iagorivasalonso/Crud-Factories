@@ -10,21 +10,24 @@ import 'package:crud_factories/Objects/Sector.dart';
 import 'controllers/List.dart';
 import 'controllers/Router.dart';
 
-//List<Sector> sectors = [];
+List<Sector> sectors = [];
 List<Factory> allFactories = [];
 List<Factory> factoriesSector = [];
-
+List<Empleoye> empleoyes = [];
+List<Mail> mails =[];
+List<LineSend> allLines = [];
 List<LineSend> lineSector = [];
 List<cardSend> resultSend = [];
-
-
+List<Conection> conections = [];
+List<String> namesRoutesOrdened = [];
+List<RouteCSV> routesCSV = [];
 List<String> fileContent = [];
 List<String> errorFiles =[];
 List<String> dateSends = [];
-List <String> SQLRoutes = [];/*
+List <String> SQLRoutes = [];
 List <String> allRoutesOrdened = [];
 List <String> currentRoutes = [];
-ist<String> namesRoutesOrdened = [];*/
 
 List<RouterController> routeControllers =[];
 late ListController listController;
+late connectionControler controlerConex;
