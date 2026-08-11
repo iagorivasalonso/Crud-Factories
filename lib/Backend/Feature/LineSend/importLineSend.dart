@@ -57,6 +57,6 @@ List<LineSend> readLinesFromCsvContent(String content) {
       state: parts[4].trim(),
     ));
   }
-print(lineSend);
+
   return lineSend;
 }
