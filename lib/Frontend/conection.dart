@@ -52,20 +52,38 @@ class _conectionState extends State<conection> {
 
   bool _loaded = false;
 
+  bool? get editCamps => null;
+
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
 
     final provider = context.read<ConnectionProvider>();
+    final selected = provider.selected;
 
-    if (!_loaded && provider.selected != null) {
-
+    if (selected != null) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
-        _loadConection(provider.selected!, provider);
+        if (!mounted) return;
+
+        _loadConection(selected, provider);
       });
-      _loaded = true;
     }
   }
+
+  @override
+  void dispose() {
+    horizontalScroll.dispose();
+    verticalScroll.dispose();
+
+    controlerConex.namebd.dispose();
+    controlerConex.portbd.dispose();
+    controlerConex.hostbd.dispose();
+    controlerConex.userbd.dispose();
+    controlerConex.passbd.dispose();
+
+    super.dispose();
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -73,10 +91,19 @@ class _conectionState extends State<conection> {
 
     final provider = context.watch<ConnectionProvider>();
 
-    final editCamps = true;
+    final selected = provider.selected;
 
-    if (!isNotAndroid()) {
-      return Scaffold(
+    final dropdownConnections = provider.connections;
+
+    final selectedForDropdown = selected == null
+        ? null
+        : dropdownConnections.firstWhere(
+          (c) => c.id == selected.id,
+      orElse: () => selected,
+    );
+
+     return !isNotAndroid()
+             ? Scaffold(
         body: Scrollbar(
           controller: verticalScroll,
           thumbVisibility: true,
@@ -126,22 +153,15 @@ class _conectionState extends State<conection> {
                                       width: 700,
                                       height: 40,
                                       child: GenericDropdown<Conection>(
-                                        items: provider.connections,
-                                        camp: S
-                                            .of(context)
-                                            .database_connection,
-                                        selectedItem: provider.selected,
-                                        hint: S
-                                            .of(context)
-                                            .newFemale,
-                                        itemLabel: (Conection) =>
-                                        Conection.database,
-                                        onChanged: (c) async {
-                                    //      if (!await canNavigate(context))
-                                        //    return;
+                                        items: dropdownConnections,
+                                        camp: S.of(context).database_connection,
+                                        selectedItem: selectedForDropdown,
+                                        hint: S.of(context).newFemale,
+                                        itemLabel: (connection) => connection.database,
+                                        onChanged: (c) {
+                                          if (c == null) return;
 
                                           provider.select(c);
-
                                           _loadConection(c, provider);
                                         },
                                       ),
@@ -155,7 +175,9 @@ class _conectionState extends State<conection> {
                                         nameAction: provider.editButtonLabel(
                                             context),
                                         function: () {
+
                                           final ok = provider.toggleEditMode();
+
                                           if (!ok) {
                                             String message = S
                                                 .of(context)
@@ -280,18 +302,18 @@ class _conectionState extends State<conection> {
             ),
           ),
         ),
-      );
-    } else {
-      return Scaffold(
+      )
+            :Scaffold(
         appBar: appBarAndroid(context, name: S
             .of(context)
             .database_connection),
         body: Text("conection"),
       );
     }
-  }
 
-  Future<void> _loadConection(Conection? c, ConnectionProvider provider) async {
+
+  void _loadConection(Conection? c, ConnectionProvider provider)  {
+
     if (c == null) return;
 
     controlerConex.namebd.text = c.database;
@@ -300,7 +322,6 @@ class _conectionState extends State<conection> {
     controlerConex.userbd.text = c.user;
     controlerConex.passbd.text = c.password;
 
-    provider.select(c);
 
     final config = ApiConfig(
       host: controlerConex.hostbd.text,
@@ -320,8 +341,12 @@ class _conectionState extends State<conection> {
 
     if (provider.viewMode == ConnectionViewMode.editing) //edicion de conexion
     {
+      final selected = provider.selected;
+      if (selected == null) {
+        return;
+      }
           final update = Conection(
-            id: provider.selected!.id,
+            id: selected.id,
             database: controlerConex.namebd.text,
             host: controlerConex.hostbd.text,
             port: controlerConex.portbd.text,
@@ -329,7 +354,8 @@ class _conectionState extends State<conection> {
             password: controlerConex.passbd.text,
           );
 
-          final result = await controller.update(provider.selected!, update);
+          context.read<EditStateProvider>().clear();
+          final result = await controller.update(selected, update);
 
           switch(result)
           {
@@ -339,6 +365,7 @@ class _conectionState extends State<conection> {
 
             case EditResult.success:
              await confirm(context, S.of(context).connection_has_been_successfully_edited);
+             provider.toggleEditMode();
               break;
 
             case EditResult.alreadyExists:
@@ -353,8 +380,7 @@ class _conectionState extends State<conection> {
               await error(context, S.of(context).could_not_be_edited);
               break;
           }
-          context.read<EditStateProvider>().clear();
-          provider.toggleEditMode();
+
 
           return;
     }
@@ -370,6 +396,7 @@ class _conectionState extends State<conection> {
         password: controlerConex.passbd.text,
       );
 
+       context.read<EditStateProvider>().clear();
        final result = await controller.create(newConnection);
 
        switch(result)
@@ -386,22 +413,25 @@ class _conectionState extends State<conection> {
             await confirm(context, S.of(context).connection_has_been_successfully_created);
            break;
        }
-      context.read<EditStateProvider>().clear();
+
       return;
     }
 
     if (!provider.isConnected)
     {
         final file =context.read<AppProvider>().files;
-        print(file?.server);
         final result = await controller.connectSQL(context,file?.server);
 
         if (result.success) {
 
+          final selected = provider.selected;
 
-          final message = "${S.of(context).is_connected_to} ${provider.selected!.database}";
+          if (selected == null)
+            return;
 
-          await confirm(context, message);
+          final selectedId = selected.id;
+
+          final message = "${S.of(context).is_connected_to} ${selected.database}";
 
           await context.read<AppProvider>().switchSource(
             context,
@@ -409,6 +439,16 @@ class _conectionState extends State<conection> {
                ?  DataSourceMode.api
                :  DataSourceMode.sql,
           );
+
+          // Recuperamos la conexión después de recargar las conexiones
+          final newSelected = provider.connections.firstWhere(
+                (c) => c.id == selectedId,
+                orElse: () => selected,
+          );
+
+          provider.selected = newSelected;
+
+          await confirm(context, message);
 
         } else {
           await error(
@@ -430,9 +470,10 @@ class _conectionState extends State<conection> {
              );
 
              await confirm(context, S.of(context).properly_disconnected);
-
+             break;
            case DisconnectResult.noConnection:
              await error(context, S.of(context).You_must_have_a_selected_connection);
+             break;
            case DisconnectResult.error:
              await error(context, S.of(context).cannot_disconnect);
            break;
@@ -447,6 +488,7 @@ class _conectionState extends State<conection> {
 
     if (provider.viewMode == ConnectionViewMode.editing) {
       provider.toggleEditMode();
+      context.read<EditStateProvider>().clear();
 
       _loadConection(provider.selected, provider);
 
@@ -457,6 +499,7 @@ class _conectionState extends State<conection> {
 
     if (selected != null)
     {
+        context.read<EditStateProvider>().clear();
         final delete = await controller.delete(selected);
 
         switch(delete) {
@@ -471,6 +514,13 @@ class _conectionState extends State<conection> {
             // TODO: Handle this case.
             throw UnimplementedError();
           case DeleteResult.success:
+
+            controlerConex.namebd.clear();
+            controlerConex.hostbd.clear();
+            controlerConex.portbd.clear();
+            controlerConex.userbd.clear();
+            controlerConex.passbd.clear();
+
             await confirm(context, S.of(context).connection_has_been_successfully_deleted);
             break;
 
