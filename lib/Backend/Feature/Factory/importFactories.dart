@@ -48,7 +48,7 @@ List<Factory> readFactoriesFromCsvContent(String content) {
   for (final line in lines.skip(1)) {
     final parts = line.split(";");
     if (parts.length < 14) continue;
-    print("meter$parts");
+
     factories.add(Factory(
       id: parts[0].trim(),
       name: parts[1].trim(),
