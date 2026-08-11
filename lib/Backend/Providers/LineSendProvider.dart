@@ -362,7 +362,6 @@ class LineSendProvider extends ChangeNotifier {
 
     for (final line in _linesSends) {
       line.sector = factoryMap[line.factory];
-      print(line.sector);
     }
 
     notifyListeners();

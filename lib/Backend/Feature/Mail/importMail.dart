@@ -42,7 +42,7 @@ List<Mail> readMailsFromCsvContent(String content) {
       .toList();
 
   final mail = <Mail>[];
-  print(lines);
+
   for (final line in lines.skip(1)) {
 
     final parts = line.split(";");
