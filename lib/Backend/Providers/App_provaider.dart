@@ -56,13 +56,17 @@ class AppProvider extends ChangeNotifier {
   bool get isApi => mode == DataSourceMode.api;
 
 
-
-  Future<void> switchSource (
+  Future switchSource(
       BuildContext context,
       DataSourceMode newMode,
       ) async {
 
-    // 1. Bootstrap (elige origen base: CSV bundle, etc)
+    // Guardamos la conexión actualmente seleccionada
+    final connectionProvider = context.read<ConnectionProvider>();
+    final selectedConnection = connectionProvider.selected;
+    final selectedId = selectedConnection?.id;
+
+    // 1. Bootstrap
     final source = BootstrapService.fromMode(newMode);
     if (source == null) return;
 
@@ -73,12 +77,21 @@ class AppProvider extends ChangeNotifier {
     initialized = true;
 
     notifyListeners();
-    // 3. inyectar repos según modo
+
+    // 2. Cargar dependencias
     await _loadDependencies(context, files, newMode);
 
+    // 3. Restaurar la conexión seleccionada
+    if (selectedId != null) {
 
+      final newSelected = connectionProvider.connections.firstWhere(
+            (c) => c.id == selectedId,
+        orElse: () => selectedConnection!,
+      );
+
+      connectionProvider.select(newSelected);
+    }
   }
-
 
   Future<void> loadApp(BuildContext context) async {
     if (_loading) return;
@@ -156,12 +169,12 @@ class AppProvider extends ChangeNotifier {
     final controller = ConnectionController(
       provider: context.read<ConnectionProvider>(),
       service: context.read<IConnectionService>(),
-      repository: context.read<IConnectionDataSource>(),
+      repository: repo,
       sessionService: context.read<IConnectionSesionService>(),
     );
 
 
-    await controller.load(); //solo csv
+     //  await controller.load(); //solo csv
 
     final provider = context.read<ConnectionProvider>();
     final executeQuery = provider.executeQuery;

@@ -77,8 +77,19 @@ class ConnectionProvider extends ChangeNotifier {
 
 
   void setConnections(List<Conection> data) {
+    final selectedId = selected?.id;
 
     connections = data;
+
+    if (selectedId != null) {
+      final index = connections.indexWhere(
+            (c) => c.id == selectedId,
+      );
+
+      if (index != -1) {
+        selected = connections[index];
+      }
+    }
 
     notifyListeners();
   }
@@ -90,22 +101,6 @@ class ConnectionProvider extends ChangeNotifier {
   void setSession(Connectionsesion? connectionsesion) {
 
     session = connectionsesion;
-
-    notifyListeners();
-  }
-
-  // =========================
-  // SET_CONNECTED_SESSION
-  // =========================
-
-  void setConnectedSession(Connectionsesion? s) {
-    session = s;
-
-    status = s == null
-        ? ConnectionStatus.disconnected
-        : ConnectionStatus.connected;
-
-    _viewMode = ConnectionViewMode.normal;
 
     notifyListeners();
   }
@@ -127,7 +122,19 @@ class ConnectionProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  // =========================
+  // METHODS CLEAR
+  // =========================
 
+  void clearExecuteQuery() {
+    executeQuery = null;
+    notifyListeners();
+  }
+
+  void clearConfig() {
+    _config = null;
+    notifyListeners();
+  }
 
 
   // =========================
@@ -145,6 +152,7 @@ class ConnectionProvider extends ChangeNotifier {
   // =========================
   void addConnection(Conection connection) {
     connections.add(connection);
+    selected = connection;
     notifyListeners();
   }
 
@@ -152,14 +160,15 @@ class ConnectionProvider extends ChangeNotifier {
   // SELECT EDIT MODE
   // =========================
   bool toggleEditMode() {
-    if (!isConnected) return false;
+    if (selected ==null) {
+      return false;
+    }
+      _viewMode = _viewMode == ConnectionViewMode.editing
+          ? ConnectionViewMode.normal
+          : ConnectionViewMode.editing;
 
-    _viewMode = _viewMode == ConnectionViewMode.editing
-        ? ConnectionViewMode.normal
-        : ConnectionViewMode.editing;
-
-    notifyListeners();
-    return true;
+      notifyListeners();
+      return true;
   }
 
   // =========================

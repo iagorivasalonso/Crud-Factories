@@ -1,16 +1,12 @@
 
 import 'package:crud_factories/Backend/Feature/Connection/Datasource/IConnection_repository.dart';
-import 'package:crud_factories/Backend/Feature/Connection/ExecuteQuery/IexecuteQuery.dart';
-import 'package:crud_factories/Backend/Feature/Connection/ExecuteQuery/sqlExecuteQuery.dart' show sqlExecuteQuery;
-import 'package:crud_factories/Backend/Feature/Connection/Service/IConnectionService.dart';
+import 'package:crud_factories/Backend/Feature/Connection/Service/IConnectionService.dart' show IConnectionService;
 import 'package:crud_factories/Backend/Feature/Connection/Sesion/IConnection_sesion_service.dart';
 import 'package:crud_factories/Backend/Feature/Connection/SeverService/ServerService.dart' show Serverservice;
-import 'package:crud_factories/Backend/Global/variables.dart';
 import 'package:crud_factories/Backend/ImportGeneral/import_Processor.dart' show processImport;
 import 'package:crud_factories/Backend/Providers/ConectionProvider.dart';
 import 'package:crud_factories/Backend/Data/controlsMessagesError/errors.dart';
 import 'package:crud_factories/Functions/createId.dart' show createId;
-import 'package:crud_factories/Objects/AppRoutesState.dart' show RouteFiles;
 import 'package:crud_factories/Objects/Conection.dart';
 import 'package:crud_factories/Objects/ConnectionSesion.dart' show Connectionsesion;
 import 'package:crud_factories/Objects/importResult.dart' show ImportResult;
@@ -70,7 +66,7 @@ class ConnectionController {
    }) async {
 
      final result = ImportResult(
-         entity: S.of(context).sectors
+         entity: S.of(context).connections
      );
 
      if (ConnectionsNew.isEmpty) return result;
@@ -97,19 +93,26 @@ class ConnectionController {
 
    Future<ConnectResultModel>connectSQL(BuildContext context, String? serverPath) async {
 
-     await Serverservice.startServer(serverPath!);
+     if (serverPath == null) {
+       return ConnectResultModel.error(
+         S.of(context).There_is_no_connection_to_the_server,
+       );
+     }
 
      final selected = provider.selected;
 
-     if (selected == null)
-       return ConnectResultModel.error(S.of(context).There_is_no_connection_to_the_server);
+     if (selected == null) {
+       return ConnectResultModel.error(
+         S.of(context).There_is_no_connection_to_the_server,
+       );
+     }
 
      provider.setStatus(ConnectionStatus.connecting);
 
      try {
+       await Serverservice.startServer(serverPath);
 
        await sessionService.connect(selected);
-
 
        provider.setExecuteQuery(sessionService.executeQuery);
        provider.setSession(Connectionsesion(
@@ -121,8 +124,6 @@ class ConnectionController {
        provider.setViewMode(ConnectionViewMode.normal);
 
        return ConnectResultModel.success();
-
-    ;
 
      } catch (e) {
 
@@ -144,15 +145,18 @@ class ConnectionController {
 
        final result = await sessionService.disconnect();
 
+       if (!result.ok) {
+         return DisconnectResult.error;
+       }
+
        provider.setSession(null);
+       provider.clearExecuteQuery();
+       provider.clearConfig();
        provider.setStatus(ConnectionStatus.disconnected);
        provider.setViewMode(ConnectionViewMode.normal);
 
-       if (result.ok) {
+
          return DisconnectResult.success;
-       } else {
-         return DisconnectResult.error;
-       }
 
      } catch (e,stackTrace) {
        print("error disconnect $e");
@@ -166,12 +170,12 @@ class ConnectionController {
    // =========================
 
    bool exist(String name, {String? exclude}) {
-     final nameLower = name.toLowerCase();
+     final nameLower = name.trim().toLowerCase();
 
      return provider.connections.any((c) {
-       final connectionName = c.database.toLowerCase();
+       final connectionName = c.database.trim().toLowerCase();
 
-       if (exclude != null && connectionName == exclude.toLowerCase()) {
+       if (exclude != null && connectionName == exclude.trim().toLowerCase()) {
          return false;
        }
 
@@ -203,15 +207,16 @@ class ConnectionController {
               : "1";
           conection.id = idNew; //asignamos el id
 
-          await service.create(conection);
+          final success = await service.create(conection);
+
+          if (!success) {
+            return CreateResult.invalidData;
+          }
 
 
-       repository.save(conection);
+            await repository.save(conection);
 
-       provider.selected = conection;
-       provider.addConnection(conection);
-
-
+            provider.addConnection(conection);
 
           return CreateResult.success;
      } catch(e) {
@@ -229,28 +234,43 @@ class ConnectionController {
    Future<EditResult> update(Conection oldConnection, Conection newC) async {
 
      try {
-        final name =newC.database?.trim();
+        final name = newC.database?.trim();
 
         if(name == null || name.isEmpty) {
            return EditResult.invalidData;
         }
-        await service.update(oldConnection, newC);
 
-        final index = provider.connections.indexWhere(
-             (x) => x.database == oldConnection.database,
-        );
         if (exist(name, exclude: oldConnection.database)) {
           return EditResult.alreadyExists;
         }
 
-       if (index != -1) {
-         provider.connections[index] = newC;
-         repository.save(newC);
-       }
-       else
-       {
-         return EditResult.notFound;
-       }
+        final index = provider.connections.indexWhere(
+              (x) => x.id == oldConnection.id,
+        );
+
+        if (index == -1) {
+          return EditResult.notFound;
+        }
+
+        final success = await service.update(
+          oldConnection,
+          newC,
+        );
+
+        if (!success) {
+          return EditResult.error;
+        }
+        newC.id = oldConnection.id;
+        await repository.save(newC);
+
+             provider.connections[index] = newC;
+
+        if (provider.selected?.id == oldConnection.id) {
+          provider.selected = newC;
+        }
+
+        provider.notifyListeners();
+
        return EditResult.success;
      } catch (e) {
         return  EditResult.error;
@@ -260,6 +280,8 @@ class ConnectionController {
    // =========================
    // DELETE
    // =========================
+
+
 
    Future<DeleteResult> delete(Conection c) async {
 
@@ -272,20 +294,29 @@ class ConnectionController {
        if(!exits) {
          return DeleteResult.notFound;
        }
-       await service.delete(c);
+
+       final success = await service.delete(c);
+
+       if (!success) {
+         return DeleteResult.error;
+       }
+
+       await repository.delete(c.id);
 
        provider.connections.removeWhere(
-             (x) => x.database == c.database,
+             (x) => x.id == c.id,
        );
 
        if (provider.selected?.id == c.id) {
          provider.selected = null;
        }
 
+       provider.notifyListeners();
+
        return DeleteResult.success;
 
      } catch (e) {
-       print("Error update: $e");
+       print("Error delete: $e");
        return DeleteResult.error;
 
      }
