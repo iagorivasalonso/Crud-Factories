@@ -22,7 +22,6 @@ class RouterRegistry {
   factory RouterRegistry.fromRoutes(List<RouteCSV> routes,){
     final map = <RouteFileKey, String>{};
     for (final r in routes) {
-      print(r.route);
       final key = RouteNameMapper.fromString(r.name);
 
       if (key == null) {
