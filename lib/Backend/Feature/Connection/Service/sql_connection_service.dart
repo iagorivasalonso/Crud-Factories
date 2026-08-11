@@ -47,13 +47,11 @@ class SqlConnectionService implements IConnectionService {
          'USE `${c.database}`',
        );
 
-       final tables =
-       await actionsBD.createTables(
+       final tables = await actionsBD.createTables(
          conn,
        );
 
-       return !tables;
-
+       return tables;
 
     }catch(_) {
       return false;
