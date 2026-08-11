@@ -24,7 +24,12 @@ class DbApi {
           'password': connection.password,
           'database': connection.database,
         });
+
+        if (newDataBase != null) {
+          body['newDatabase'] = newDataBase.database;
+        }
       }
+
       final res = await http.post(
         Uri.parse('$baseUrl/db'),
         headers: {'Content-Type': 'application/json'},
@@ -32,6 +37,14 @@ class DbApi {
       );
 
       final data = jsonDecode(res.body);
+
+      if (data is! Map<String, dynamic>) {
+        return {
+          'ok': false,
+          'message': 'Respuesta inválida del servidor: ${res.body}',
+        };
+      }
+
 
 
       String message;
@@ -56,8 +69,14 @@ class DbApi {
 
       return {'ok': data['ok'] ?? false, 'message': message};
 
-    } catch (e) {
-      return {'ok': false, 'message': 'Error de conexión: $e'};
+    } catch (e, stackTrace) {
+      print('ERROR EN DbApi.actionApi: $e');
+      print(stackTrace);
+
+      return {
+        'ok': false,
+        'message': 'Error de conexión: $e'
+      };
     }
   }
 
