@@ -1,9 +1,6 @@
 
 import 'dart:convert';
-
-import 'package:crud_factories/Frontend/send_mail.dart';
-import 'package:crud_factories/Objects/Mail.dart';
-import 'package:crud_factories/Objects/MailMessage.dart' show MailMessage, ApiMailRequest;
+import 'package:crud_factories/Objects/MailMessage.dart' show ApiMailRequest;
 import 'package:http/http.dart' as http;
 
 class MailApi {
