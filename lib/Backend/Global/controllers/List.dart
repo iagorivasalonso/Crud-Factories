@@ -10,19 +10,19 @@ class ListController {
 
   List<RouteCSV> routesNew;
   List<Sector> sectorsNew;
-  List<Empleoye> empleoyesNew;
+  List<Empleoyee> employeesNew;
   List<Mail> mailsNew;
   List<LineSend> linesNew;
-  List<Conection> conectionsNew;
+  List<Conection> connectionsNew;
   List<Factory> factoriesNew;
 
   ListController ({
     required this.routesNew,
     required this.sectorsNew,
-    required this.empleoyesNew,
+    required this.employeesNew,
     required this.mailsNew,
     required this.linesNew,
-    required this.conectionsNew,
+    required this.connectionsNew,
     required this.factoriesNew
 });
 }
