@@ -4,7 +4,6 @@ import 'package:crud_factories/Objects/BaseEntity.dart';
 
 class Factory extends BaseEntity {
 
-  final String id;
   final String name;
   final String highDate;
   final String sector;
@@ -15,7 +14,7 @@ class Factory extends BaseEntity {
 
 
   Factory ({
-    required this.id,
+    required super.id,
     required this.name,
     required this.highDate,
     required this.sector,

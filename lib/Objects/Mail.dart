@@ -4,7 +4,7 @@ import 'package:crud_factories/Objects/BaseEntity.dart';
 
 class Mail extends BaseEntity {
 
-   String id;
+
    String mail;
    String host;
    String port;
@@ -12,7 +12,7 @@ class Mail extends BaseEntity {
    String password;
 
    Mail({
-    required this.id,
+    required super.id,
     required this.mail,
     required this.host,
     required this.port,

@@ -1,3 +1,7 @@
 abstract class BaseEntity {
-  late String id;
+  String id;
+
+  BaseEntity({
+    required this.id,
+  });
 }

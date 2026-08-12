@@ -9,7 +9,7 @@ enum LineSendState {prepared, pending, sent, in_progress, returned,has_responded
 
 class LineSend extends BaseEntity {
 
-  String id;
+
   String date;
   String factory;
   String? sector; //  Atributo opcional
@@ -18,7 +18,7 @@ class LineSend extends BaseEntity {
 
 
   LineSend({
-    required this.id,
+    required super.id,
     required this.date,
     required this.factory,
     this.sector,
