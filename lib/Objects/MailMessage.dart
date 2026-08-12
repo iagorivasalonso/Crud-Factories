@@ -4,7 +4,7 @@ import 'package:crud_factories/Objects/BaseEntity.dart';
 import 'package:crud_factories/Objects/Mail.dart';
 import 'package:flutter/foundation.dart' show Uint8List;
 
-class MailMessage  extends BaseEntity {
+class MailMessage {
 
   final List<String> recipients;
   final String subject;
