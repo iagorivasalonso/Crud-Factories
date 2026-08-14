@@ -85,18 +85,22 @@ class SectorProvider extends ChangeNotifier {
 
     final sectors = await _repo.load();
 
-    result.inserted = await processImport(
+    print('IMPORT SECTORS: ${sectors.length}');
+    for (final s in sectors) {
+      print('  BD -> id=${s.id}, name=${s.name}');
+    }
+
+    final newSectors = await processImport(
       newList: sectorsNew,
       existingList: sectors,
       getKey: (s) => s.name,
       setId: (s, id) => s.id = id,
     );
 
-    if (result.inserted > 0) {
-      await _repo.save(sectors);
-      await load();
+    print('NUEVOS SECTORS:');
+    for (final s in newSectors) {
+      print('  NUEVO -> id=${s.id}, name=${s.name}');
     }
-
     return result;
   }
 

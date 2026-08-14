@@ -80,32 +80,33 @@ class MailProvider  extends ChangeNotifier {
   // =========================
   Future<ImportResult> import({
     required BuildContext context,
-    required List<Mail> mailsNew
+    required List<Mail> mailsNew,
   }) async {
 
     final result = ImportResult(
-        entity: S.of(context).mails
+      entity: S.of(context).mails,
     );
 
     if (mailsNew.isEmpty) return result;
 
     final mails = await _repo.load();
 
-    result.inserted = await processImport(
+    final newMails = await processImport(
       newList: mailsNew,
       existingList: mails,
       getKey: (m) => m.mail,
       setId: (m, id) => m.id = id,
     );
 
-    if (result.inserted > 0) {
-      await _repo.save(mails);
+    result.inserted = newMails.length;
+
+    if (newMails.isNotEmpty) {
+      await _repo.save(newMails);
       await load();
     }
 
     return result;
   }
-
   // =========================
   //  EXISTSMAILS
   // =========================

@@ -37,27 +37,35 @@ class EmployeeProvider extends ChangeNotifier {
   // =========================
   Future<ImportResult> import({
     required BuildContext context,
-    required List<Empleoyee> EmployeesNews
+    required List<Empleoyee> EmployeesNews,
   }) async {
 
     final result = ImportResult(
-        entity: S.of(context).employees
+      entity: S.of(context).employees,
     );
 
     if (EmployeesNews.isEmpty) return result;
 
     final employees = await _repo.load();
 
-    result.inserted = await processImport(
+    final newEmployees = await processImport(
       newList: EmployeesNews,
       existingList: employees,
       getKey: (e) => e.name,
       setId: (e, id) => e.id = id,
     );
 
-    if (result.inserted > 0) {
+    result.inserted = newEmployees.length;
+
+    if (newEmployees.isNotEmpty) {
+
+      for (final e in newEmployees) {
+        print(
+          'EMPLOYEE -> id=${e.id}, name=${e.name}, idFactory=${e.idFactory}',
+        );
+      }
+      await _repo.save(newEmployees);
       await load();
-      await _repo.save(employees);
     }
 
     return result;

@@ -43,66 +43,137 @@ class ImportProvaider extends ChangeNotifier {
        });
 
       String? _content;
+      String? _fileName;
 
       void clear() {
         _content = null;
       }
 
       Future<List<ImportResult>> importAll({
-          required BuildContext context,
-
+        required BuildContext context,
       }) async {
 
-        if (_content == null) {
+        if (_content == null || _fileName == null) {
           return [];
         }
 
-          final routesNews = readRoutesFromCsvContent(_content!);
-          final connectionsNews = readconnectionsFromCsvContent(_content!);
-          final sectorsNews = readSectorsFromCsvContent(_content!);
-          final factoriesNews = readFactoriesFromCsvContent(_content!);
-          final employeesNews = readEmployeeFromCsvContent(_content!);
-          final linesNews = readLinesFromCsvContent(_content!);
-          final mailsNews = readMailsFromCsvContent(_content!);
+        final results = <ImportResult>[];
+        print('IMPORTANDO ARCHIVO: "$_fileName"');
+        print('========== LINES ==========$_fileName');
+        switch (_fileName) {
 
-          final results = <ImportResult>[];
+          case 'routes.csv':
+            final data = readRoutesFromCsvContent(_content!);
 
-          results.add(await routesProvider.import(context: context, routesNew: routesNews));
-          results.add(await connectionController.import(context: context, ConnectionsNew: connectionsNews));
-          results.add(await sectorProvider.import(context: context, sectorsNew: sectorsNews));
-          results.add(await factoryProvaider.import(context: context, factoriesNew: factoriesNews));
-          results.add(await employeeProvider.import(context: context, EmployeesNews: employeesNews));
-          results.add(await lineProvider.import(context: context, linesNew: linesNews));
-          results.add(await mailProvider.import(context: context, mailsNew: mailsNews));
+            results.add(
+              await routesProvider.import(
+                context: context,
+                routesNew: data,
+              ),
+            );
+            break;
 
-          return results;
+          case 'connections.csv':
+            final data = readconnectionsFromCsvContent(_content!);
+
+            results.add(
+              await connectionController.import(
+                context: context,
+                connectionsNew: data,
+              ),
+            );
+            break;
+
+          case 'sectors.csv':
+            final data = readSectorsFromCsvContent(_content!);
+
+            results.add(
+              await sectorProvider.import(
+                context: context,
+                sectorsNew: data,
+              ),
+            );
+            break;
+
+          case 'factories.csv':
+            final data = readFactoriesFromCsvContent(_content!);
+
+            results.add(
+              await factoryProvaider.import(
+                context: context,
+                factoriesNew: data,
+              ),
+            );
+            break;
+
+          case 'employees.csv':
+            final data = readEmployeeFromCsvContent(_content!);
+
+            results.add(
+              await employeeProvider.import(
+                context: context,
+                EmployeesNews: data,
+              ),
+            );
+            break;
+
+          case 'lines.csv':
+            final data = readLinesFromCsvContent(_content!);
+
+            results.add(
+              await lineProvider.import(
+                context: context,
+                linesNew: data,
+              ),
+            );
+            break;
+
+          case 'mails.csv':
+            final data = readMailsFromCsvContent(_content!);
+
+            results.add(
+              await mailProvider.import(
+                context: context,
+                mailsNew: data,
+              ),
+            );
+            break;
+        }
+
+        return results;
       }
-      Future<void> pickFile(BuildContext context, TextEditingController controllerDatePicker) async {
 
 
-        FilePickerResult? result =  await FilePicker.platform.pickFiles(
+      Future<void> pickFile(
+          BuildContext context,
+          TextEditingController controllerDatePicker,
+          ) async {
+
+        FilePickerResult? result =
+        await FilePicker.platform.pickFiles(
           dialogTitle: S.of(context).select_file,
           type: FileType.custom,
           allowedExtensions: ['csv'],
           withData: true,
         );
 
-        if(result == null) return;
-
+        if (result == null) return;
 
         final platformFile = result.files.single;
 
-// 🔥 SIEMPRE usamos bytes (multiplataforma)
         if (platformFile.bytes == null) {
           throw Exception("No se pudo leer el archivo CSV");
         }
 
+        print('ARCHIVO: ${platformFile.name}');
+
+        _fileName = platformFile.name;
         _content = utf8.decode(platformFile.bytes!);
 
-// Actualizamos el TextField
+        print('CONTENIDO:\n$_content');
+
         controllerDatePicker.text = platformFile.name;
-
-
       }
+
 }
 

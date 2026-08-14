@@ -57,32 +57,33 @@ class RoutesProvider extends ChangeNotifier {
   // =========================
   Future<ImportResult> import({
     required BuildContext context,
-    required List<RouteCSV> routesNew
+    required List<RouteCSV> routesNew,
   }) async {
 
     final result = ImportResult(
-        entity: S.of(context).route
+      entity: S.of(context).route,
     );
 
     if (routesNew.isEmpty) return result;
 
-    final route = await _repo.load();
+    final routes = await _repo.load();
 
-    result.inserted = await processImport(
+    final newRoutes = await processImport(
       newList: routesNew,
-      existingList: route,
+      existingList: routes,
       getKey: (r) => r.route,
       setId: (r, id) => r.id = id,
     );
 
-    if (result.inserted > 0) {
-      await _repo.save(route);
+    result.inserted = newRoutes.length;
+
+    if (newRoutes.isNotEmpty) {
+      await _repo.save(newRoutes);
       await load();
     }
 
     return result;
   }
-
   // ======================
   //    UPDATE
   // ======================

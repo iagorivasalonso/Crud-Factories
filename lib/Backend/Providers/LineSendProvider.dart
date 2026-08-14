@@ -132,15 +132,17 @@ class LineSendProvider extends ChangeNotifier {
 
     final lines = await _repo.load();
 
-    result.inserted = await processImport(
+     final newLines= await processImport(
       newList: linesNew,
       existingList: lines,
       getKey: (l) => l.factory,
       setId: (l, id) => l.id = id,
     );
 
-    if (result.inserted > 0) {
-      await _repo.save(lines);
+    result.inserted = newLines.length;
+
+    if (newLines.isNotEmpty) {
+      await _repo.save(newLines);
       await load();
     }
 
@@ -451,34 +453,42 @@ class LineSendProvider extends ChangeNotifier {
   // ==============================
   // DELETE LINES STATE RETURNED
   // ==============================
+  Future<DeleteResult> removeReturned({
+    String? factory,
+    String? date,
+  }) async {
+    try {
+      final linesToDelete = _linesSends.where((line) {
+        final isReturned = line.state == LineSendState.returned.name;
+        final matchFactory =
+            factory == null || line.factory == factory;
+        final matchDate =
+            date == null || line.date == date;
 
-  Future<DeleteResult> removeReturned({String? factory, String? date}) async {
+        return isReturned && matchFactory && matchDate;
+      }).toList();
 
-       try {
+      if (linesToDelete.isEmpty) {
+        return DeleteResult.notFound;
+      }
 
-         final before = _linesSends.length;
+      await repository!.delete(linesToDelete);
 
-         final linesToDelete = _linesSends.where((line) {
-           final isReturned = line.state == LineSendState.returned.name;
-           final matchFactory = factory == null || line.factory == factory;
-           final matchDate = date == null || line.date == date;
+      _linesSends.removeWhere(
+            (line) => linesToDelete.any((deleted) => deleted.id == line.id),
+      );
 
-           return isReturned && matchFactory && matchDate;
-         }).toList();
-         final deleted =  before - _linesSends.length;
+      modifiedIds.removeWhere(
+            (id) => linesToDelete.any((line) => line.id == id),
+      );
 
-         if (deleted == 0) {
-           return DeleteResult.notFound;
-         }
-         await repository!.delete(linesToDelete);
+      notifyListeners();
 
-         notifyListeners();
+      return DeleteResult.success;
 
-         return DeleteResult.success;
-
-       } catch (_) {
-          return DeleteResult.error;
-       }
+    } catch (_) {
+      return DeleteResult.error;
+    }
   }
 
   // =========================

@@ -70,29 +70,30 @@ class FactoryProvider extends ChangeNotifier {
 
   // =========================
   //  IMPORTLIST
-  // =========================
   Future<ImportResult> import({
     required BuildContext context,
-    required List<Factory> factoriesNew
+    required List<Factory> factoriesNew,
   }) async {
 
     final result = ImportResult(
-        entity: S.of(context).companies
+      entity: S.of(context).companies,
     );
 
     if (factoriesNew.isEmpty) return result;
 
     final factories = await _repo.load();
 
-    result.inserted = await processImport(
+    final newFactories = await processImport(
       newList: factoriesNew,
       existingList: factories,
       getKey: (f) => f.name,
       setId: (f, id) => f.id = id,
     );
 
-    if (result.inserted > 0) {
-      await _repo.save(factories);
+    result.inserted = newFactories.length;
+
+    if (newFactories.isNotEmpty) {
+      await _repo.save(newFactories);
       await load();
     }
 
