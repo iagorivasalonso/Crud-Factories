@@ -165,12 +165,8 @@ class ImportProvaider extends ChangeNotifier {
           throw Exception("No se pudo leer el archivo CSV");
         }
 
-        print('ARCHIVO: ${platformFile.name}');
-
         _fileName = platformFile.name;
         _content = utf8.decode(platformFile.bytes!);
-
-        print('CONTENIDO:\n$_content');
 
         controllerDatePicker.text = platformFile.name;
       }
