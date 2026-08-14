@@ -103,7 +103,7 @@ Future<void> newSector(BuildContext context) async {
 
 Future<void> editSector(BuildContext context, int index) async {
 
-  final providerSectors = context.watch<SectorProvider>();
+  final providerSectors = context.read<SectorProvider>();
 
   final old = providerSectors.sectors[index];
 

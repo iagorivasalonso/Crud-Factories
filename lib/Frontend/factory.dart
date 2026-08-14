@@ -467,7 +467,9 @@ class _FactoryFromPageState extends State<FactoryFromPage> {
     controllers.web.text = factory.web;
 
     controllers.address.text =
-        factory.address.fullAddress; // mejor que reconstruir manualmente
+    factory.address.fullAddress.trim() == ','
+        ? ''
+        : factory.address.fullAddress; // mejor que reconstruir manualmente
 
     controllers.city.text = factory.address.city;
     controllers.postcode.text = factory.address.postcode;
