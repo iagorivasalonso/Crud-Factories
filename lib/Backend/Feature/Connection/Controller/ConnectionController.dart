@@ -62,26 +62,28 @@ class ConnectionController {
    // =========================
    Future<ImportResult> import({
      required BuildContext context,
-     required List<Conection> ConnectionsNew
+     required List<Conection> connectionsNew,
    }) async {
 
      final result = ImportResult(
-         entity: S.of(context).connections
+       entity: S.of(context).connections,
      );
 
-     if (ConnectionsNew.isEmpty) return result;
+     if (connectionsNew.isEmpty) return result;
 
      final connections = await repository.load();
 
-     result.inserted = await processImport(
-       newList: ConnectionsNew,
+     final newConnections = await processImport(
+       newList: connectionsNew,
        existingList: connections,
        getKey: (c) => c.database,
        setId: (c, id) => c.id = id,
      );
 
-     if (result.inserted > 0) {
-       await repository.saveAll(connections);
+     result.inserted = newConnections.length;
+
+     if (newConnections.isNotEmpty) {
+       await repository.saveAll(newConnections);
        await load();
      }
 
