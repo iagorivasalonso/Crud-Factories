@@ -27,9 +27,9 @@ class SqlEmployeeDataSource implements  IEmployeeDataSource {
     );
 
     return result.map((row) => Empleoyee(
-      id: row['id'].toString(),
-      name: row['name'],
-      idFactory: row['idFactory'],
+      id: row['id']?.toString() ?? '',
+      name: row['name']?.toString() ?? '',
+      idFactory: row['idFactory']?.toString() ?? '',
     )).toList();
 
   }

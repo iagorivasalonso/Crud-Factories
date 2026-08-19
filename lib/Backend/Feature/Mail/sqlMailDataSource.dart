@@ -28,12 +28,12 @@ class SqlMailDataSource implements IMailDataSource {
      );
      
      return result.map((row) => Mail(
-         id: row['id'].toString(), 
-         mail: row['mail'],
-         host: row['host'],
-         port: row['port'],
-         secure: row['secure'],
-         password: row['password'],
+       id: row['id']?.toString() ?? '',
+       mail: row['mail']?.toString() ?? '',
+       host: row['host']?.toString() ?? '',
+       port: row['port']?.toString() ?? '',
+       secure: row['secure'] == true || row['secure'] == 1,
+       password: row['password']?.toString() ?? '',
      )).toList();
   }
 
@@ -50,8 +50,23 @@ class SqlMailDataSource implements IMailDataSource {
   Future<void> upload(Mail m) async {
 
     await executeQuery.execute(
-      'UPDATE mails SET mail, host, port, secure, password WHERE id=?',
-        [m.id,m.mail,m.host,m.port,m.secure,m.password]
+      '''
+    UPDATE mails
+    SET mail = ?,
+        host = ?,
+        port = ?,
+        secure = ?,
+        password = ?
+    WHERE id = ?
+    ''',
+      [
+        m.mail,
+        m.host,
+        m.port,
+        m.secure,
+        m.password,
+        m.id,
+      ],
     );
   }
 

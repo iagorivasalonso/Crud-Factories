@@ -44,9 +44,9 @@ class ApiEmployeeDataSource implements IEmployeeDataSource {
 
     return data.map((item) {
       return Empleoyee(
-        id: item['id'].toString(),
-        name: item['name'] ?? '',
-       idFactory: item['idFactory']
+        id: item['id']?.toString() ?? '',
+        name: item['name']?.toString() ?? '',
+        idFactory: item['idFactory']?.toString() ?? '',
       );
     }).toList();
   }

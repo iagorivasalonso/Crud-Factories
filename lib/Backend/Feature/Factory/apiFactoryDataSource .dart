@@ -41,20 +41,20 @@ class apiFactoryDataSource implements IFactoryDataSource {
 
     return data.map((item) {
       return Factory(
-        id: item['id'].toString(),
-        name: item['name'] ?? '',
-        highDate: item['highDate'] ?? '',
-        sector: item['sector'] ?? '',
-        thelephones: [item['telephone1'] ?? '',item['telephone2'] ?? ''],
-        mail: item['mail'] ?? '',
-        web: item['web'] ?? '',
+        id: item['id']?.toString() ?? '',
+        name: item['name']?.toString() ?? '',
+        highDate: item['highDate']?.toString() ?? '',
+        sector: item['sector']?.toString() ?? '',
+        thelephones: [item['telephone1']?.toString() ?? '',item['telephone2']?.toString() ?? ''],
+        mail: item['mail']?.toString() ?? '',
+        web: item['web']?.toString() ?? '',
         address: Address(
-          street: item['street'] ?? '',
-          number: item['number'] ?? '',
-          apartment: item['apartment'],
-          city: item['city'] ?? '',
-          province: item['province'] ?? '',
-          postcode: item['postcode'] ?? '',
+          street: item['address']?.toString() ?? '',
+          number: item['number']?.toString() ?? '',
+          apartment: item['apartment']?.toString() ?? '',
+          city: item['city']?.toString() ?? '',
+          province: item['province']?.toString() ?? '',
+          postcode: item['postcode']?.toString() ?? '',
         ),
       );
     }).toList();
@@ -80,7 +80,7 @@ class apiFactoryDataSource implements IFactoryDataSource {
           'mail': f.mail,
           'web': f.web,
           'address': {
-            'street': f.address.street,
+            'address': f.address.street,
             'number': f.address.number,
             'apartment': f.address.apartment,
             'city':  f.address.city,
@@ -112,7 +112,7 @@ class apiFactoryDataSource implements IFactoryDataSource {
               'mail': f.mail,
               'web': f.web,
               'address': {
-                  'street': f.address.street,
+                  'address': f.address.street,
                   'number': f.address.number,
                   'apartment': f.address.apartment,
                   'city':  f.address.city,
@@ -126,11 +126,8 @@ class apiFactoryDataSource implements IFactoryDataSource {
   }
 
   @override
-  @override
   Future<void> save(List<Factory> factories) async {
-
     for (final factory in factories) {
-
       await saveToWebStorage(
         'factories',
         factory.id,
@@ -147,20 +144,16 @@ class apiFactoryDataSource implements IFactoryDataSource {
               : '',
           'mail': factory.mail,
           'web': factory.web,
-          'address': {
-            'street': factory.address.street,
-            'number': factory.address.number,
-            'apartment': factory.address.apartment,
-            'city': factory.address.city,
-            'province': factory.address.province,
-            'postcode': factory.address.postcode,
-          },
+          'address': factory.address.street,
+          'number': factory.address.number,
+          'apartment': factory.address.apartment,
+          'city': factory.address.city,
+          'province': factory.address.province,
+          'postcode': factory.address.postcode,
         },
         config,
       );
-
     }
-
   }
 
 

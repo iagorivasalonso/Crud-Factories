@@ -30,10 +30,10 @@ class SqlFactoryDataSource implements IFactoryDataSource {
       );
 
       return result.map((row) => Factory(
-        id: row['id'].toString(),
+        id: row['id']?.toString() ?? '',
         name: row['name']?.toString() ?? '',
         highDate: row['highDate']?.toString() ?? '',
-        sector: row['sector'] ?? '',
+        sector: row['sector']?.toString() ?? '',
         thelephones: [
           row['telephone1']?.toString() ?? '',
           row['telephone2']?.toString() ?? '',
@@ -64,8 +64,8 @@ class SqlFactoryDataSource implements IFactoryDataSource {
   @override
   Future<void> upload(Factory f) async{
 
-    await executeQuery.query('UPDATE factories SET name=?, highDate=?, sector=?, thelephones=?, mail=?, web=?, '
-        'street=?, number=?, apartament=?, city=?, postalCode=?, province=? WHERE id=?',
+    await executeQuery.query('UPDATE factories SET name=?, highDate=?, sector=?, telephone1=?, telephone2=?, mail=?, web=?, '
+        'address=?, number=?, apartment=?, city=?, postCode=?, province=? WHERE id=?',
         [f.name,f.highDate,f.sector,f.thelephones[0],f.thelephones[1],f.mail,f.web,
         f.address.street,f.address.number,f.address.apartment, f.address.city,f.address.province,f.address.postcode,f.id.toString()]
     );

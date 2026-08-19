@@ -30,13 +30,14 @@ class SqlLinesendDatasource implements ILineSendDatasource{
      );
 
     return result.map((row) => LineSend(
-        id: row['id'].toString(),
-        date: row['date'],
-        factory: row['factory'],
-        observations: row['observations'],
-        state: row['state'],
+        id: row['id']?.toString() ?? '',
+        date: row['date']?.toString() ?? '',
+        factory: row['factory']?.toString() ?? '',
+        observations: row['observations']?.toString() ?? '',
+        state: row['state']?.toString() ?? '',
     )).toList();
   }
+
   @override
   Future<void> insert(List<LineSend> l) async{
 
@@ -48,8 +49,8 @@ class SqlLinesendDatasource implements ILineSendDatasource{
               line.id,
               line.date,
               line.factory,
-              line.observations,
-              line.state
+              line.state,
+              line.observations
            ]
          );
      }
@@ -59,20 +60,26 @@ class SqlLinesendDatasource implements ILineSendDatasource{
   @override
   Future<bool> upload(List<LineSend> l) async {
 
-    if(l.isEmpty)
-      return false;
+    if (l.isEmpty) return false;
 
     for (final line in l) {
 
       await executeQuery.query(
-          'UPDATE  lineSends SET date, factory, state, observations WHERE id=?) VALUES (?, ?, ?, ?, ?)',
-          [
-            line.id,
-            line.date,
-            line.factory,
-            line.observations,
-            line.state
-          ]
+        '''
+      UPDATE lineSends
+      SET date = ?,
+          factory = ?,
+          state = ?,
+          observations = ?
+      WHERE id = ?
+      ''',
+        [
+          line.date,
+          line.factory,
+          line.state,
+          line.observations,
+          line.id,
+        ],
       );
     }
 
@@ -90,8 +97,8 @@ class SqlLinesendDatasource implements ILineSendDatasource{
             line.id,
             line.date,
             line.factory,
-            line.observations,
-            line.state
+            line.state,
+            line.observations
           ]
       );
     }

@@ -7,119 +7,126 @@ import 'package:crud_factories/Objects/ApiConfig.dart';
 import 'package:crud_factories/Objects/LineSend.dart';
 import 'package:http/http.dart' as http;
 
+class apiLinesendDatasource implements ILineSendDatasource {
 
-class apiLinesendDatasource implements ILineSendDatasource{
+  final ApiConfig config;
 
- final ApiConfig config;
-
- apiLinesendDatasource({required this.config});
+  apiLinesendDatasource({
+    required this.config,
+  });
 
   @override
   Future<void> delete(List<LineSend> l) async {
+    for (final line in l) {
 
-   for(final line in l) {
-
-      final data = await connectApi('linesends/${line.id}', config);
+      final data = await connectApi(
+        'linesends/${line.id}',
+        config,
+      );
 
       final res = await http.delete(data);
 
       if (res.statusCode != 200) {
-        throw Exception('HTTP ${res.statusCode}: ${res.body}');
+        throw Exception(
+          'HTTP ${res.statusCode}: ${res.body}',
+        );
       }
-   }
+    }
   }
 
- @override
- Future<List<LineSend>> load() async {
+  @override
+  Future<List<LineSend>> load() async {
 
-   final uri = await connectApi('lineSends', config);
+    final uri = await connectApi(
+      'lines',
+      config,
+    );
 
-   final res = await http.get(uri);
+    final res = await http.get(uri);
 
-   if (res.statusCode != 200) {
-     throw Exception('HTTP ${res.statusCode}: ${res.body}');
-   }
+    if (res.statusCode != 200) {
+      throw Exception(
+        'HTTP ${res.statusCode}: ${res.body}',
+      );
+    }
 
-   final List data = jsonDecode(res.body);
+    final List data = jsonDecode(res.body);
 
-   return data.map((item){
-       return LineSend(
-         id: item['id'].toString(),
-         date: item['date'],
-         factory: item['factory'],
-         observations: item['observations'],
-         state: item['state'],
-       );
-   }).toList();
+    return data.map((item) {
 
+      return LineSend(
+        id: item['id']?.toString() ?? '',
+        date: item['date']?.toString() ?? '',
+        factory: item['factory']?.toString() ?? '',
+        observations: item['observations']?.toString() ?? '',
+        state: item['state']?.toString() ?? '',
+      );
 
- }
+    }).toList();
+  }
 
   @override
   Future<void> insert(List<LineSend> l) async {
 
-    for(final line in l) {
+    for (final line in l) {
 
-      saveToWebStorage(
-          'lineSends', // prefijo
-          line.id,        // id único de la fábrica
-          {
-            'id': line.id,
-            'date': line.date,
-            'factory': line.factory,
-            'observations': line.observations,
-            'state': line.state
-          },
-          config,
-      );
-    }
-
-  }
-
-
-  @override
-  Future<bool> upload(List<LineSend> l) async {
-
-          if(l.isEmpty)
-                return false;
-
-          for(final line in l) {
-
-            saveToWebStorage(
-                 'lineSends', // prefijo
-                  line.id,        // id único de la fábrica
-                  {
-                    'id': line.id,
-                    'date': line.date,
-                    'factory': line.factory,
-                    'observations': line.observations,
-                    'state': line.state
-                  },
-                  config,
-                 isUpdate: true
-            );
-          }
-          return true;
-    }
-
-  @override
-  Future<void> save(List<LineSend> lines) async {
-
-    for(final line in lines) {
-
-      saveToWebStorage(
-        'lineSends', // prefijo
-        line.id,        // id único de la fábrica
+      await saveToWebStorage(
+        'linesends',
+        line.id,
         {
           'id': line.id,
           'date': line.date,
           'factory': line.factory,
           'observations': line.observations,
-          'state': line.state
+          'state': line.state,
         },
         config,
       );
     }
   }
 
+  @override
+  Future<bool> upload(List<LineSend> l) async {
+
+    if (l.isEmpty) return false;
+
+    for (final line in l) {
+
+      await saveToWebStorage(
+        'lineSends',
+        line.id,
+        {
+          'id': line.id,
+          'date': line.date,
+          'factory': line.factory,
+          'observations': line.observations,
+          'state': line.state,
+        },
+        config,
+        isUpdate: true,
+      );
+    }
+
+    return true;
   }
+
+  @override
+  Future<void> save(List<LineSend> lines) async {
+
+    for (final line in lines) {
+
+      await saveToWebStorage(
+        'lineSends',
+        line.id,
+        {
+          'id': line.id,
+          'date': line.date,
+          'factory': line.factory,
+          'observations': line.observations,
+          'state': line.state,
+        },
+        config,
+      );
+    }
+  }
+}

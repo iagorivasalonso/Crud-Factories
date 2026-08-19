@@ -29,8 +29,8 @@ class SqlSectorDataSource  implements ISectorDataSource{
     );
 
     return result.map((row) => Sector(
-      id: row['id'].toString(),
-      name: row['sector'],
+      id: row['id']?.toString() ?? '',
+      name: row['sector']?.toString() ?? '',
     )).toList();
 
   }

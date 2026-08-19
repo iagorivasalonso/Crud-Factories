@@ -42,12 +42,12 @@ class apiMailDataSource implements IMailDataSource {
 
       return data.map((item){
          return Mail(
-           id: item['id'].toString(),
-           mail: item['mail'],
-           host: item['host'],
-           port: item['port'],
-           secure: item['secure'],
-           password: item['password'],
+           id: item['id']?.toString() ?? '',
+           mail: item['mail']?.toString() ?? '',
+           host: item['host']?.toString() ?? '',
+           port: item['port']?.toString() ?? '',
+           secure: item['secure'] == true || item['secure'] == 1,
+           password: item['password']?.toString() ?? '',
          );
       }).toList();
 
@@ -58,7 +58,7 @@ class apiMailDataSource implements IMailDataSource {
   Future<void> insert(Mail m) async {
 
     saveToWebStorage(
-        'mail', // prefijo
+        'mails', // prefijo
          m.id,        // id único de la fábrica
         {
           'id': m.id,
@@ -75,7 +75,7 @@ class apiMailDataSource implements IMailDataSource {
   Future<void> upload(Mail m) async{
 
     saveToWebStorage(
-        'mail', // prefijo
+        'mails', // prefijo
          m.id,        // id único de la fábrica
           {
             'id': m.id,
@@ -95,7 +95,7 @@ class apiMailDataSource implements IMailDataSource {
 
     for (final mail in mails) {
       await saveToWebStorage(
-      'mail', // prefijo
+      'mails', // prefijo
       mail.id,        // id único de la fábrica
       {
         'id': mail.id,

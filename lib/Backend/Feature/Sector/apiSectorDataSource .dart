@@ -40,8 +40,8 @@ class ApiSectorDataSource implements ISectorDataSource{
 
     return data.map((item) {
       return Sector(
-        id: item['id'].toString(),
-        name: item['sector'],
+        id: item['id']?.toString() ?? '',
+        name: item['sector']?.toString() ?? '',
       );
     }).toList();
   }
