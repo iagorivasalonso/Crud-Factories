@@ -16,6 +16,7 @@ class FactoryValidator {
 
     final name = controllers.name.text.trim();
     final mail = controllers.mail.text.trim();
+    final web = controllers.web.text.trim();
     final date = controllers.highDate.text.trim();
     final postal = controllers.postcode.text.trim();
     final address = controllers.address.text.trim();
@@ -47,6 +48,11 @@ class FactoryValidator {
 
     if (mail.isNotEmpty) {
       final err = ValidatorCamps.mailValidate(mail, context);
+      if (err != null) return err;
+    }
+
+    if(web.isNotEmpty){
+      final err = ValidatorCamps.webValidate(web, context);
       if (err != null) return err;
     }
 
