@@ -459,7 +459,14 @@ class _FactoryFromPageState extends State<FactoryFromPage> {
 
     controllers.telephone1.text =
     factory.thelephones.isNotEmpty ? factory.thelephones[0] : '';
+    final sectors = context.read<SectorProvider>().sectors;
 
+    for (final sector in sectors) {
+      if (sector.id == factory.sector) {
+        selectedSector = sector;
+        break;
+      }
+    }
     controllers.telephone2.text =
     factory.thelephones.length > 1 ? factory.thelephones[1] : '';
 
