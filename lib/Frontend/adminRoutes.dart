@@ -28,14 +28,12 @@ class AdminRoutesDialog extends StatefulWidget {
 class _AdminRoutesDialogState extends State<AdminRoutesDialog> {
 
   String? selectedOption;
-  Uint8List? pendingImportBytes;
-
+  final Map<String, Uint8List> pendingFiles = {};
 
   @override
   void initState() {
     super.initState();
     selectedOption = null;
-
   }
 
   bool _initialized = false;
@@ -45,187 +43,262 @@ class _AdminRoutesDialogState extends State<AdminRoutesDialog> {
     super.didChangeDependencies();
 
     if (!_initialized) {
-      selectedOption ??= S.of(context).csv;
+      selectedOption ??= S
+          .of(context)
+          .csv;
 
-        context.read<RoutesProvider>().initialize(context);
+      context.read<RoutesProvider>().initialize(context);
 
       _initialized = true;
     }
   }
 
+  List<RouteCSV> get defaultRoutes =>
+      [
+        RouteCSV(id: "1", name: "routes", route: ""),
+        RouteCSV(id: "2", name: "connections", route: ""),
+        RouteCSV(id: "3", name: "server", route: ""),
+        RouteCSV(id: "4", name: "employees", route: ""),
+        RouteCSV(id: "5", name: "sectors", route: ""),
+        RouteCSV(id: "6", name: "factories", route: ""),
+        RouteCSV(id: "7", name: "lines", route: ""),
+        RouteCSV(id: "8", name: "mails", route: ""),
+      ];
 
   @override
   Widget build(BuildContext context) {
-
-    final isApi = context.read<AppProvider>().isApi;
+    final isApi = context
+        .read<AppProvider>()
+        .isApi;
 
     return Consumer<RoutesProvider>(
-          builder: (context, provider,_){
+      builder: (context, provider, _) {
+        final isSql = selectedOption == S
+            .of(context)
+            .sql;
 
-            final isSql = selectedOption == S.of(context).sql;
+        final routes = isSql
+            ? provider.routes
+            .where((route) => ["1", "2", "3"].contains(route.id))
+            .toList()
+            : provider.routes;
 
-            final routes = isSql
-                ? provider.routes.where((route) => ["1", "2", "3"].contains(route.id)).toList()
-                : provider.routes;
+        final routesToShow = isApi
+            ? routes.where((route) => route.id != "3").toList()
+            : routes;
 
-            final routesToShow = isApi
-                ? routes.where((route) => route.id != "3").toList()
-                : routes;
-
-             return Dialog(
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(0)),
-              child: ConstrainedBox(
-                constraints: BoxConstraints(
-                  maxHeight: MediaQuery.of(context).size.height * 0.8,
-                  maxWidth: 500,
+        final routesDisplay = routesToShow.isEmpty
+            ? defaultRoutes
+            : routesToShow;
+        return Dialog(
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(0)),
+          child: ConstrainedBox(
+            constraints: BoxConstraints(
+              maxHeight: MediaQuery
+                  .of(context)
+                  .size
+                  .height * 0.8,
+              maxWidth: 500,
+            ),
+            child: Column(
+              children: [
+                headDialog(title: S
+                    .of(context)
+                    .route_selector),
+                const SizedBox(height: 10),
+                Padding(
+                  padding: const EdgeInsets.only(left: 30.0),
+                  child: SizedBox(
+                    width: 325,
+                    child: GenericRadioGroup<String>(
+                      items: [S
+                          .of(context)
+                          .csv, S
+                          .of(context)
+                          .sql
+                      ],
+                      camp: S
+                          .of(context)
+                          .select,
+                      selectedItem: selectedOption,
+                      label: (item) => item,
+                      onChanged: (value) {
+                        if (value != null) {
+                          setState(() {
+                            selectedOption = value;
+                          });
+                        }
+                      },
+                      direction: Axis.horizontal,
+                    ),
+                  ),
                 ),
-                child: Column(
-                  children: [
-                    headDialog(title: S.of(context).route_selector),
-                    const SizedBox(height: 10),
-                    Padding(
-                      padding: const EdgeInsets.only(left: 30.0),
-                      child: SizedBox(
-                        width: 325,
-                        child:  GenericRadioGroup<String>(
-                          items: [S.of(context).csv, S.of(context).sql],
-                          camp: S.of(context).select,
-                          selectedItem: selectedOption,
-                          label: (item) => item,
-                          onChanged: (value) {
-                            if (value != null) {
-                              setState(() {
-                                selectedOption = value;
-                              });
-                            }
-                          },
-                          direction: Axis.horizontal,
-                        ),
-                      ),
-                    ),
-                    const SizedBox(height: 10),
-                    Flexible(
-                      flex: 3,
-                      child: Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 20.0),
-                          child: ListView.builder(
-                              itemCount: routesToShow.length,
-                              itemBuilder: (context, index) {
+                const SizedBox(height: 10),
+                Flexible(
+                  flex: 3,
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                    child: ListView.builder(
+                      itemCount: routesDisplay.length,
+                      itemBuilder: (context, index) {
+                        final route = routesDisplay[index];
 
-                                final route = routesToShow[index];
+                        if (kIsWeb && route.id == "3") {
+                          return const SizedBox.shrink();
+                        }
 
-                                if (kIsWeb && route.id == "3") {
-                                  return const SizedBox.shrink();
-                                }
-
-                                return Padding(
-                                  padding: const EdgeInsets.all(10),
-                                  child: CSVPickerField(
-                                      index: index,
-                                      value: routesToShow[index].route,
-                                      campName: routesToShow[index].name,
-                                      actionName: S.of(context).examine,
-                                      function: () => _pickFile(index,route),
-                                  ),
-                                );
-                              }
-                          )
-                      ),
-                    ),
-                    const SizedBox(height: kIsWeb ? 40 : 10),
-                    Padding(
-                      padding: const EdgeInsets.only(left: 150.0),
-                      child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-
-                          materialButton(
-                            nameAction: S
+                        return Padding(
+                          padding: const EdgeInsets.all(10),
+                          child: CSVPickerField(
+                            index: index,
+                            value: route.route,
+                            campName: route.name,
+                            actionName: S
                                 .of(context)
-                                .import,
-                            function: _handleImport
-
+                                .examine,
+                            function: () => _pickFile(index, route),
                           ),
-                          const SizedBox(width: 20),
-                          materialButton(
-                            nameAction: S
-                                .of(context)
-                                .cancel,
-                            function: () => Navigator.pop(context),
-                          ),
-                        ],
-                      ),
+                        );
+                      },
                     ),
-                  ],
+                  ),
                 ),
-              ),
-            );
-            },
+                const SizedBox(height: kIsWeb ? 40 : 10),
+                Padding(
+                  padding: const EdgeInsets.only(left: 150.0),
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+
+                      materialButton(
+                          nameAction: S
+                              .of(context)
+                              .import,
+                          function: _handleImport
+
+                      ),
+                      const SizedBox(width: 20),
+                      materialButton(
+                        nameAction: S
+                            .of(context)
+                            .cancel,
+                        function: () => Navigator.pop(context),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+        );
+      },
     );
-
-
   }
-  Future<void> _pickFile(int index, RouteCSV route) async {
 
+  Future<void> _pickFile(int index, RouteCSV route) async {
     final result = await FilePicker.platform.pickFiles(
       allowMultiple: false,
       withData: true,
     );
 
     if (result == null) return;
+    if (!mounted) return;
 
-    final bytes = result.files.first.bytes;
-    final fileName = result.files.first.name;
+    final file = result.files.first;
+    final bytes = file.bytes;
 
-    context.read<RoutesProvider>().updateRoute(
-      index,
-      fileName,
+    if (bytes == null) return;
+
+    setState(() {
+      pendingFiles[route.name] = bytes;
+    });
+
+    final provider = context.read<RoutesProvider>();
+
+    final existingIndex = provider.routes.indexWhere(
+          (r) => r.id == route.id,
     );
 
-    if (index == 0) {
-      setState(() {
-        pendingImportBytes = bytes;
-      });
-      }
-
+    if (existingIndex != -1) {
+      provider.updateRoute(
+        existingIndex,
+        file.name,
+      );
+    } else {
+      provider.addRoute(
+        RouteCSV(
+          id: route.id,
+          name: route.name,
+          route: file.name,
+        ),
+      );
+    }
   }
 
-  Future<void>  _handleImport() async {
-
-    if(pendingImportBytes != null)
-    {
-       error(context, S.of(context).select_file_first);
+  Future<void> _handleImport() async {
+    if (pendingFiles.isEmpty) {
+      await error(
+        context,
+        S
+            .of(context)
+            .select_file_first,
+      );
+      return;
     }
 
-    final result = await context.read<RoutesProvider>().importRoutesFromBytes(
-      bytes: pendingImportBytes!,
-    );
+    final bytes = pendingFiles.values.first;
 
+    final routesProvider = context.read<RoutesProvider>();
     final app = context.read<AppProvider>();
 
-    await app.reloadFromRoutes(
-      context,
-      context.read<RoutesProvider>().routes,
-    );
-    if (mounted) {
+    try {
+      final result = await routesProvider.importRoutesFromBytes(
+        bytes: bytes,
+      );
+
+      if (result.$1 != LoadResult.success) {
+        if (!mounted) return;
+
+        await error(
+          context,
+          result.$1 == LoadResult.invalidFile
+              ? S
+              .of(context)
+              .not_valid
+              : S
+              .of(context)
+              .error_loading_route,
+        );
+        return;
+      }
+
+      await app.reloadFromRoutes(
+        context,
+        routesProvider.routes,
+      );
+
+      if (!mounted) return;
+
       Navigator.pop(context);
+
+      await confirm(
+        context,
+        S
+            .of(context)
+            .routes_imported_successfully,
+      );
+    } catch (e, st) {
+      debugPrint("ERROR IMPORTANDO RUTAS: $e");
+      debugPrintStack(stackTrace: st);
+
+      if (!mounted) return;
+
+      await error(
+        context,
+        S
+            .of(context)
+            .error_loading_route,
+      );
     }
-
-    switch(result)
-    {
-      case LoadResult.invalidFile:
-        await error(context, S.of(context).not_valid);
-      break;
-
-      case LoadResult.error:
-        await error(context, S.of(context).error_loading_route);
-      break;
-
-      case LoadResult.success:
-        await confirm(context, S.of(context).routes_imported_successfully);
-      break;
-    }
-
   }
 }
-
