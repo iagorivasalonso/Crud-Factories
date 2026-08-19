@@ -1,21 +1,18 @@
-
+import 'package:crud_factories/Alertdialogs/defaultData.dart' show FuenteData, defaultData;
 import 'package:crud_factories/Alertdialogs/typeConnection.dart' show TypeConnection, TypeConnectionDialog;
 import 'package:crud_factories/Backend/DataSources/IappDataSource.dart' show AppDataSource;
-import 'package:crud_factories/Backend/DataSources/fileSystem.dart' show filesDataSource, FileDataSource;
-import 'package:crud_factories/Backend/DataSources/filesDataWeb.dart' show WebUploadDataSource, AssetDataSource;
+import 'package:crud_factories/Backend/DataSources/fileSystem.dart' show FileDataSource;
+import 'package:crud_factories/Backend/DataSources/filesDataWeb.dart' show AssetDataSource;
 import 'package:crud_factories/Backend/Providers/App_provaider.dart';
 import 'package:crud_factories/Backend/Providers/NavigationProvider.dart';
 import 'package:crud_factories/Frontend/adminRoutes.dart' show AdminRoutesDialog;
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as context show read;
 import 'package:provider/provider.dart';
-
 
 
 class BootstrapService {
 
-  Future<AppDataSource?> resolve(BuildContext context) async {
+  Future<AppDataSource?> resolve(BuildContext context, bool isApi) async {
 
     final app = context.read<AppProvider>();
 
@@ -25,9 +22,29 @@ class BootstrapService {
     }
 
 
-    // 🌐 WEB
-    if (kIsWeb) {
-      return AssetDataSource();
+    // 🌐 WEB/API
+    if (isApi) {
+
+         final type = await defaultData(context);
+
+         if (type == null) {
+           return null;
+         }
+
+           switch(type){
+
+             case FuenteData.defaultData:
+                         return AssetDataSource();
+             case FuenteData.newData:
+
+               showDialog(
+                 context: context,
+                 builder: (_) => const AdminRoutesDialog(),
+               );
+
+               return null;
+
+           }
     }
 
 
@@ -54,22 +71,12 @@ class BootstrapService {
           builder: (_) => const AdminRoutesDialog(),
         );
 
-        return null;     // si es vsacio que vaya a la ventana
+        return null;     // si es vacio que vaya a la ventana
     }
   }
 
-  static AppDataSource fromMode(DataSourceMode mode) {
+  static AppDataSource fromMode(DataSourceMode newMode) {
 
-      switch(mode)
-      {
-         case DataSourceMode.csv:
-            return FileDataSource();
-
-        case DataSourceMode.sql:
-              return FileDataSource();
-
-        case DataSourceMode.api:
-          return FileDataSource();
-      }
+      return FileDataSource();
   }
 }
