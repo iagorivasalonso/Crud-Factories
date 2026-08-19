@@ -82,36 +82,32 @@ class LineSendProvider extends ChangeNotifier {
   // =========================
   //  ADDLINES
   // =========================
-  void addLine(LineSend lineSend) {
-
-    _linesSends.add(lineSend);
-
-    notifyListeners();
-  }
   Future<AddLineResult> addLines(List<LineSend> lines) async {
     try {
-      int added = 0;
+      final newLines = <LineSend>[];
 
       for (final line in lines) {
         final exists = _linesSends.any((l) => l.id == line.id);
 
-        if (exists) {
-          continue; // 👈 ignoras duplicado
+        if (!exists) {
+          newLines.add(line);
         }
-
-        _linesSends.add(line);
-
-        added++;
       }
-      await _repo.insert(lines);
-      notifyListeners();
 
-      if (added == 0) {
+      if (newLines.isEmpty) {
         return AddLineResult.duplicate;
       }
 
+      await _repo.insert(newLines);
+
+      _linesSends.addAll(newLines);
+
+      notifyListeners();
+
       return AddLineResult.success;
-    } catch (_) {
+
+    } catch (e) {
+      print('ERROR addLines: $e');
       return AddLineResult.error;
     }
   }
@@ -121,21 +117,21 @@ class LineSendProvider extends ChangeNotifier {
   // =========================
   Future<ImportResult> import({
     required BuildContext context,
-    required List<LineSend> linesNew
+    required List<LineSend> linesNew,
   }) async {
 
     final result = ImportResult(
-        entity: S.of(context).lines
+      entity: S.of(context).lines,
     );
 
     if (linesNew.isEmpty) return result;
 
     final lines = await _repo.load();
 
-     final newLines= await processImport(
+    final newLines = await processImport(
       newList: linesNew,
       existingList: lines,
-      getKey: (l) => l.factory,
+      getKey: (l) => '${l.date}_${l.factory}',
       setId: (l, id) => l.id = id,
     );
 
@@ -406,24 +402,21 @@ class LineSendProvider extends ChangeNotifier {
   // SAVE CHANGES
   //==============================
 
-  Future <bool> saveChanges () async {
+  Future<bool> saveChanges() async {
+    if (modifiedIds.isEmpty) return true;
 
-      if(modifiedIds.isEmpty) return true;
+    final linesToUpdate = _linesSends
+        .where((l) => modifiedIds.contains(l.id))
+        .toList();
 
-      final linesToUpdate = _linesSends
-             .where((l) => modifiedIds.contains(l.id))
-             .toList();
+    final success = await repository!.upload(linesToUpdate);
 
-      final success = await repository!.upload(linesToUpdate);
+    if (success) {
+      modifiedIds.clear();
+      notifyListeners();
+    }
 
-      if(!success)
-      {
-        modifiedIds.clear();
-        notifyListeners();
-        return true;
-      }
-
-      return false;
+    return success;
   }
 
   // ==============================
@@ -449,6 +442,7 @@ class LineSendProvider extends ChangeNotifier {
     }
     notifyListeners();
   }
+
 
   // ==============================
   // DELETE LINES STATE RETURNED
@@ -490,7 +484,6 @@ class LineSendProvider extends ChangeNotifier {
       return DeleteResult.error;
     }
   }
-
   // =========================
   //  RELOAD REPO
   // =========================
