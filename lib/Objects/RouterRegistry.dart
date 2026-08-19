@@ -1,6 +1,6 @@
-
 import 'package:crud_factories/Objects/RouteCSV.dart' show RouteCSV;
-import 'package:crud_factories/Objects/RouteNameMapper.dart' show RouteNameMapper;
+
+import 'RouteNameMapper.dart';
 
 enum RouteFileKey {
   routes,
@@ -19,8 +19,9 @@ class RouterRegistry {
 
   RouterRegistry(this._routes);
 
-  factory RouterRegistry.fromRoutes(List<RouteCSV> routes,){
+  factory RouterRegistry.fromRoutes(List<RouteCSV> routes) {
     final map = <RouteFileKey, String>{};
+
     for (final r in routes) {
       final key = RouteNameMapper.fromString(r.name);
 
@@ -29,7 +30,7 @@ class RouterRegistry {
         continue;
       }
 
-      map[key] =r.route;
+      map[key] = r.route;
     }
 
     return RouterRegistry(map);
@@ -38,6 +39,7 @@ class RouterRegistry {
   String? tryGet(RouteFileKey key) {
     return _routes[key];
   }
+
   String get(RouteFileKey key) {
     final value = _routes[key];
 
@@ -47,5 +49,4 @@ class RouterRegistry {
 
     return value;
   }
-
 }
