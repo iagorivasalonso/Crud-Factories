@@ -34,10 +34,16 @@ class RoutesProvider extends ChangeNotifier {
   void initialize(BuildContext context) {
     if (_baseRoutes.isNotEmpty) return;
 
-    _baseRoutes.addAll([
-      RouteCSV(id: "1", name: S.of(context).routes, route: ''),
-    ]);
-
+    _baseRoutes = [
+      RouteCSV(id: "1", name: "routes", route: ""),
+      RouteCSV(id: "2", name: "connections", route: ""),
+      RouteCSV(id: "3", name: "server", route: ""),
+      RouteCSV(id: "4", name: "employees", route: ""),
+      RouteCSV(id: "5", name: "sectors", route: ""),
+      RouteCSV(id: "6", name: "factories", route: ""),
+      RouteCSV(id: "7", name: "lines", route: ""),
+      RouteCSV(id: "8", name: "mails", route: ""),
+    ];
   }
 
   // =========================
@@ -51,6 +57,14 @@ class RoutesProvider extends ChangeNotifier {
 
   }
 
+  // =========================
+  //  SAVE ROUTES
+  // =========================
+
+  Future<void> saveRoutes() async {
+    await repository.save(routes);
+    await load();
+  }
 
   // =========================
   //  IMPORTLIST
@@ -85,11 +99,22 @@ class RoutesProvider extends ChangeNotifier {
     return result;
   }
   // ======================
+  //   ADD ROUTE
+  // ======================
+  void addRoute(RouteCSV route) {
+    _baseRoutes.add(route);
+    notifyListeners();
+  }
+
+  // ======================
   //    UPDATE
   // ======================
-
   void updateRoute(int index, String fileName) {
-    routes[index] = routes[index].copyWith(
+    if (index < 0 || index >= _baseRoutes.length) return;
+
+    final route = _baseRoutes[index];
+
+    _baseRoutes[index] = route.copyWith(
       route: fileName,
     );
 
@@ -100,14 +125,12 @@ class RoutesProvider extends ChangeNotifier {
   // LOAD
   // =========================
   Future<void> load() async {
-
     final loaded = await repository.load();
 
-    _baseRoutes = loaded;
+    _baseRoutes = List<RouteCSV>.from(loaded);
 
     notifyListeners();
   }
-
   // =========================
   //  GETREPO
   // =========================
@@ -135,19 +158,24 @@ class RoutesProvider extends ChangeNotifier {
   Future<(LoadResult, List<dynamic>)> importRoutesFromBytes({
     required Uint8List bytes,
   }) async {
-
     try {
-
       final imported = await repository.importFromBytes(bytes);
+
+      for (final r in imported) {
+        print("➡️ ${r.id} | ${r.name} | ${r.route}");
+      }
 
       if (imported.isEmpty) {
         return (LoadResult.invalidFile, []);
       }
 
+      _baseRoutes = List<RouteCSV>.from(imported);
+
+      notifyListeners();
+
       return (LoadResult.success, imported);
 
     } catch (e, stack) {
-
       debugPrint("importRoutesFromBytes error: $e");
       debugPrintStack(stackTrace: stack);
 
