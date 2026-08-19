@@ -5,18 +5,19 @@ import 'package:crud_factories/Objects/RouterRegistry.dart' show RouterRegistry,
 
 class RouteFilesBuilder  {
 
-  static RouteFiles buildRouteFiles(List<RouteCSV> routes) {
-    final registry = RouterRegistry.fromRoutes(routes);
 
-    return RouteFiles(
-      routes: registry.get(RouteFileKey.routes),
-      connections: registry.get(RouteFileKey.connections),
-      server: registry.tryGet(RouteFileKey.server),
-      employees: registry.get(RouteFileKey.employees),
-      sectors: registry.get(RouteFileKey.sectors),
-      factories: registry.get(RouteFileKey.factories),
-      linesSends: registry.get(RouteFileKey.lines),
-      mails: registry.get(RouteFileKey.mails),
-    );
+  static RouteFiles buildRouteFiles(List<RouteCSV> routes) {
+  final registry = RouterRegistry.fromRoutes(routes);
+
+  return RouteFiles(
+  routes: registry.tryGet(RouteFileKey.routes) ?? '',
+  connections: registry.tryGet(RouteFileKey.connections) ?? '',
+  server: registry.tryGet(RouteFileKey.server),
+  employees: registry.tryGet(RouteFileKey.employees) ?? '',
+  sectors: registry.tryGet(RouteFileKey.sectors) ?? '',
+  factories: registry.tryGet(RouteFileKey.factories) ?? '',
+  linesSends: registry.tryGet(RouteFileKey.lines) ?? '',
+  mails: registry.tryGet(RouteFileKey.mails) ?? '',
+  );
   }
 }
