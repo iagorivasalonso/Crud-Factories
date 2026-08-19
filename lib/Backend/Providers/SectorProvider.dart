@@ -84,11 +84,7 @@ class SectorProvider extends ChangeNotifier {
     if (sectorsNew.isEmpty) return result;
 
     final sectors = await _repo.load();
-
-    print('IMPORT SECTORS: ${sectors.length}');
-    for (final s in sectors) {
-      print('  BD -> id=${s.id}, name=${s.name}');
-    }
+    
 
     final newSectors = await processImport(
       newList: sectorsNew,
@@ -97,11 +93,15 @@ class SectorProvider extends ChangeNotifier {
       setId: (s, id) => s.id = id,
     );
 
-    print('NUEVOS SECTORS:');
-    for (final s in newSectors) {
-      print('  NUEVO -> id=${s.id}, name=${s.name}');
+    result.inserted = newSectors.length;
+
+    if (newSectors.isNotEmpty) {
+      await _repo.save(newSectors);
+      await load();
     }
+
     return result;
+
   }
 
   // =========================
