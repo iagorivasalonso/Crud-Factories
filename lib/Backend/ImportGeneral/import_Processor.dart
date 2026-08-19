@@ -1,13 +1,13 @@
 import 'package:crud_factories/Objects/BaseEntity.dart' show BaseEntity;
 
-Future<int> processImport<T extends BaseEntity>({
+Future<List<T>> processImport<T extends BaseEntity>({
   required List<T> newList,
   required List<T> existingList,
   required String Function(T) getKey,
   required void Function(T, String) setId,
 }) async {
 
-  int count = 0;
+  final inserted = <T>[];
 
   int maxId = existingList.isNotEmpty
       ? existingList
@@ -26,7 +26,7 @@ Future<int> processImport<T extends BaseEntity>({
       setId(item, maxId.toString());
 
       existingList.add(item);
-      count++;
+      inserted.add(item);
     }
     else
     {
@@ -38,5 +38,5 @@ Future<int> processImport<T extends BaseEntity>({
     }
   }
 
-  return count;
+  return inserted;
 }
