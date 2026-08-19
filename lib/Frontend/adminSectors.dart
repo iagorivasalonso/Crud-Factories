@@ -6,6 +6,7 @@ import 'package:crud_factories/Backend/Global/variables.dart';
 import 'package:crud_factories/Widgets/headAlertDialog.dart';
 import 'package:crud_factories/Widgets/tableEditSector.dart';
 import 'package:crud_factories/generated/l10n.dart';
+import 'package:fluent_ui/fluent_ui.dart' show FluentIcons;
 import 'package:flutter/material.dart';
 import 'package:crud_factories/Alertdialogs/createSector.dart';
 import 'package:crud_factories/Alertdialogs/error.dart';
@@ -35,6 +36,30 @@ Future<void> adminSector(BuildContext context) async {
                Expanded(
                  child: Consumer<SectorProvider>(
                    builder: (context,providerSector,_){
+
+                     if (providerSector.sectors.isEmpty) {
+                       return Center(
+                         child: Column(
+                           mainAxisAlignment: MainAxisAlignment.center,
+                           children: [
+                             const Icon(
+                               FluentIcons.folder_open,
+                               size: 40,
+                             ),
+                             const SizedBox(height: 15),
+                             Text(
+                               S.of(context).no_sectors,
+                               textAlign: TextAlign.center,
+                             ),
+                             const SizedBox(height: 10),
+                             Text(
+                               S.of(context).create_first_sector,
+                               textAlign: TextAlign.center,
+                             ),
+                           ],
+                         ),
+                       );
+                     }
                      return Padding(
                          padding: const EdgeInsets.only(left: 30.0, right: 30.0),
                          child: tableEditSector(
