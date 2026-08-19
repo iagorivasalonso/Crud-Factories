@@ -115,7 +115,9 @@ Future<bool> _onDelete(BuildContext context,Mail mail) async {
             itemBuilder: (mail, index) =>
                 defaultCard(
                   title: mail.mail,
-                  description: mail.host.split('.').elementAt(1),
+                  description: mail.host.contains('.')
+                    ? mail.host.split('.').elementAt(1)
+                    : mail.host,
                   color: selectCard == index
                       ? Colors.white
                       : Colors.grey,
