@@ -179,7 +179,9 @@ class _listFactoriesState extends State<listFactories> {
                 defaultFilter: S.of(context).name,
                 itemBuilder: (factory, index) => factoryCard(
                   name: factory.name,
-                  address: factory.address?.fullAddress ?? '',
+                  address: (factory.address?.fullAddress.trim() ?? '').replaceAll(',', '').trim().isEmpty
+                      ? ''
+                      : factory.address?.fullAddress ?? '',
                   telephone: (factory.thelephones.isNotEmpty == true)
                       ? factory.thelephones.first
                       : '',
