@@ -143,26 +143,32 @@ class AppProvider extends ChangeNotifier {
       rethrow;
     }
   }
-
-  Future<void> _loadDependencies(BuildContext context, RouteFiles files, DataSourceMode newMode) async {
+  Future<void> _loadDependencies(
+      BuildContext context,
+      RouteFiles files,
+      DataSourceMode newMode,
+      ) async {
 
     // =========================
-    // 1. ROUTES (SIEMPRE PRIMERO)
+    // 1. ROUTES
     // =========================
 
     final routesProvider = context.read<RoutesProvider>();
+
     routesProvider.setRepository(
       routerRepository(
         CsvRouterDataSource(files.routes),
       ),
     );
+
     await routesProvider.load();
 
     // =========================
     // 2. CONNECTION PROVIDER
     // =========================
 
-    final repo = context.read<IConnectionDataSource>() as CsvConnectionDataSource;
+    final repo =
+    context.read<IConnectionDataSource>() as CsvConnectionDataSource;
 
     repo.init(files.connections);
 
@@ -173,111 +179,131 @@ class AppProvider extends ChangeNotifier {
       sessionService: context.read<IConnectionSesionService>(),
     );
 
-
-     //  await controller.load(); //solo csv
-
     final provider = context.read<ConnectionProvider>();
     final executeQuery = provider.executeQuery;
 
     final efectiveMode = switch (mode) {
       DataSourceMode.csv => DataSourceMode.csv,
-
       DataSourceMode.sql => DataSourceMode.sql,
-
       DataSourceMode.api =>
       provider.hasConfig ? DataSourceMode.api : DataSourceMode.csv,
     };
+
     final config = provider.configOrNull;
 
+    if (efectiveMode == DataSourceMode.csv &&
+        files.connections.isNotEmpty) {
+      await controller.load();
+    }
+
     // =========================
-    // 3. SECTOR PROVIDER
+    // 3. SECTORS
     // =========================
 
     final sectorProvider = context.read<SectorProvider>();
 
-    await sectorProvider.setRepositoryAndReload(
-      RepositorySector.create(
-        efectiveMode,
-        files,
-        db: executeQuery,
-        config: config
-       ),
-    );
+    if (efectiveMode != DataSourceMode.csv ||
+        files.sectors.isNotEmpty) {
 
-    await sectorProvider.load();
+      await sectorProvider.setRepositoryAndReload(
+        RepositorySector.create(
+          efectiveMode,
+          files,
+          db: executeQuery,
+          config: config,
+        ),
+      );
+
+      await sectorProvider.load();
+    }
 
     // =========================
-    // 4. FACTORY PROVIDER
+    // 4. FACTORIES
     // =========================
 
     final factoryProvider = context.read<FactoryProvider>();
 
-        await factoryProvider.setRepositoryAndReload(
-           RepositoryFactory.create(
-               efectiveMode,
-               files,
-               db: executeQuery,
-               config: config
-           ),
-        );
+    if (efectiveMode != DataSourceMode.csv ||
+        files.factories.isNotEmpty) {
 
-        await factoryProvider.load();
+      await factoryProvider.setRepositoryAndReload(
+        RepositoryFactory.create(
+          efectiveMode,
+          files,
+          db: executeQuery,
+          config: config,
+        ),
+      );
+
+      await factoryProvider.load();
+    }
 
     // =========================
-    // 5. EMPLOYEE PROVIDER
+    // 5. EMPLOYEES
     // =========================
 
     final employeeProvider = context.read<EmployeeProvider>();
 
-        await employeeProvider.setRepositoryAndReload(
-           RepositoryEmployee.create(
-               efectiveMode,
-               files,
-               db: executeQuery,
-               config: config
-           )
-        );
+    if (efectiveMode != DataSourceMode.csv ||
+        files.employees.isNotEmpty) {
 
-    await employeeProvider.load();
+      await employeeProvider.setRepositoryAndReload(
+        RepositoryEmployee.create(
+          efectiveMode,
+          files,
+          db: executeQuery,
+          config: config,
+        ),
+      );
+
+      await employeeProvider.load();
+    }
 
     // =========================
-    // 6. LINES PROVIDER
+    // 6. LINES
     // =========================
 
     final lineProvider = context.read<LineSendProvider>();
 
-        await lineProvider.setRepositoryAndReload(
-             RepositoryLineSend.create(
-                 efectiveMode,
-                 files,
-                 db: executeQuery,
-                 config: config
-             )
-        );
+    if (efectiveMode != DataSourceMode.csv ||
+        files.linesSends.isNotEmpty) {
 
-    await lineProvider.load();
+      await lineProvider.setRepositoryAndReload(
+        RepositoryLineSend.create(
+          efectiveMode,
+          files,
+          db: executeQuery,
+          config: config,
+        ),
+      );
 
-   lineProvider.enrichWithFactories(
-      context.read<FactoryProvider>().factories,
-    );
+      await lineProvider.load();
+
+      lineProvider.enrichWithFactories(
+        context.read<FactoryProvider>().factories,
+      );
+    }
 
     // =========================
-    // 7. MAILS PROVIDER
+    // 7. MAILS
     // =========================
 
     final mailProvider = context.read<MailProvider>();
 
-          await mailProvider.setRepositoryAndReload(
-                RepositoryMail.create(
-                    efectiveMode,
-                    files,
-                    db: executeQuery,
-                    config: config
-                )
-          );
+    if (efectiveMode != DataSourceMode.csv ||
+        files.mails.isNotEmpty) {
 
-    await mailProvider.load();
+      await mailProvider.setRepositoryAndReload(
+        RepositoryMail.create(
+          efectiveMode,
+          files,
+          db: executeQuery,
+          config: config,
+        ),
+      );
 
+      await mailProvider.load();
+    }
   }
 
   Future<void> _applyRoutes(BuildContext context, List<RouteCSV> routes) async {
