@@ -84,7 +84,6 @@ class DbApi {
       String sql,
       List<Object?>? params,
       ) async {
-
     final body = {
       'sql': sql,
       'params': params ?? [],
@@ -96,6 +95,26 @@ class DbApi {
       body: jsonEncode(body),
     );
 
-    return jsonDecode(res.body);
+    if (res.statusCode < 200 || res.statusCode >= 300) {
+      throw Exception(
+        'HTTP ${res.statusCode}: ${res.body}',
+      );
+    }
+
+    try {
+      final data = jsonDecode(res.body);
+
+      if (data is! Map<String, dynamic>) {
+        throw Exception(
+          'Respuesta inválida del servidor: ${res.body}',
+        );
+      }
+
+      return data;
+    } on FormatException {
+      throw Exception(
+        'El servidor no devolvió JSON: ${res.body}',
+      );
+    }
   }
 }
