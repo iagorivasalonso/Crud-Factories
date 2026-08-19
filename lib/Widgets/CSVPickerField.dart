@@ -6,20 +6,23 @@ import 'package:provider/provider.dart';
 import 'materialButton.dart';
 
 class CSVPickerField extends StatelessWidget {
-  final String value;
+
+  final TextEditingController? controller;
+  final String? value;
   final String campName;
   final String actionName;
   final Future<void> Function() function;
   final bool automatic;
-  final int index;
+  final int? index;
 
   const CSVPickerField({
     super.key,
-    required this.value,
+    this.controller,
+    this.value,
     required this.campName,
     required this.actionName,
     required this.function,
-    required this.index,
+    this.index,
     this.automatic = false,
   });
 
@@ -33,7 +36,7 @@ class CSVPickerField extends StatelessWidget {
             child: defaultTextfield(
               context: context,
               nameCamp: campName,
-              controllerCamp: TextEditingController(text: value),
+              controllerCamp: controller ?? TextEditingController(text: value),
               automatic: automatic,
             ),
           ),
