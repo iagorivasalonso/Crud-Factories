@@ -17,10 +17,10 @@ Map<String,WidgetBuilder> getAppRoutes() {
   int select=-1;
 
   return {
-    '/factory' :(context) => newFactory(select),
-    '/mail' :(context) => newMail(select),
-    '/send' :(context) =>  newSend("", "", select),
-    '/importData' :(context) => newImport(),
+   // '/factory' :(context) => newFactory(),
+   // '/mail' :(context) => newMail(select),
+   // '/send' :(context) =>  newSend("", "", select),
+   // '/importData' :(context) => newImport(),
     //'/listSectors' :(context) => adminSectorAndroid(),
   //  '/listRoutes' :(context) => adminRoutes(),
     '/exit' :(context) {
