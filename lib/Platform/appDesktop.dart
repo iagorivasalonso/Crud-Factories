@@ -168,6 +168,7 @@ class _appDesktopState extends State<appDesktop> {
 
                       }
                   ),
+                  if(!kIsWeb)
                   MenuButton(
                       text:  SizedBox(
                           width: wItem,
