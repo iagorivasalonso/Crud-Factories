@@ -18,6 +18,7 @@ import 'package:crud_factories/Backend/Providers/MailProvider.dart' show MailPro
 
 
 import 'package:crud_factories/Backend/Providers/SectorProvider.dart';
+import 'package:crud_factories/Backend/Repositories/connectionRepository.dart' show ConnectionRepository;
 import 'package:crud_factories/Backend/Repositories/routesRepository.dart';
 import 'package:crud_factories/Backend/Repositories/sectorRepository.dart' show SectorRepository;
 import 'package:crud_factories/Objects/AppRoutesState.dart';
@@ -167,15 +168,18 @@ class AppProvider extends ChangeNotifier {
     // 2. CONNECTION PROVIDER
     // =========================
 
-    final repo =
+
+    final dataSource =
     context.read<IConnectionDataSource>() as CsvConnectionDataSource;
 
-    repo.init(files.connections);
+    dataSource.init(files.connections);
+
+    final repository = context.read<ConnectionRepository>();
 
     final controller = ConnectionController(
       provider: context.read<ConnectionProvider>(),
       service: context.read<IConnectionService>(),
-      repository: repo,
+      repository: repository,
       sessionService: context.read<IConnectionSesionService>(),
     );
 

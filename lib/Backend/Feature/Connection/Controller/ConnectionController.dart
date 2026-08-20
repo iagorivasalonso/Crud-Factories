@@ -6,6 +6,7 @@ import 'package:crud_factories/Backend/Feature/Connection/SeverService/ServerSer
 import 'package:crud_factories/Backend/ImportGeneral/import_Processor.dart' show processImport;
 import 'package:crud_factories/Backend/Providers/ConectionProvider.dart';
 import 'package:crud_factories/Backend/Data/controlsMessagesError/errors.dart';
+import 'package:crud_factories/Backend/Repositories/connectionRepository.dart' show ConnectionRepository;
 import 'package:crud_factories/Functions/createId.dart' show createId;
 import 'package:crud_factories/Objects/Conection.dart';
 import 'package:crud_factories/Objects/ConnectionSesion.dart' show Connectionsesion;
@@ -33,7 +34,7 @@ enum DisconnectResult {
 class ConnectionController {
 
    final ConnectionProvider provider;
-   final IConnectionDataSource repository;
+   final ConnectionRepository repository;
    final IConnectionService service;
    final IConnectionSesionService sessionService;
 
