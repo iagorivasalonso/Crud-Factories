@@ -2,7 +2,6 @@ import 'package:crud_factories/Alertdialogs/confirm.dart';
 import 'package:crud_factories/Backend/Data/controlsMessagesError/errors.dart' show CreateResult, EditResult, DeleteResult;
 import 'package:crud_factories/Backend/Providers/FactoryProvider.dart';
 import 'package:crud_factories/Backend/Providers/SectorProvider.dart' show CreateResult, SectorProvider, EditResult, DeleteResult;
-import 'package:crud_factories/Backend/Global/variables.dart';
 import 'package:crud_factories/Widgets/headAlertDialog.dart';
 import 'package:crud_factories/Widgets/tableEditSector.dart';
 import 'package:crud_factories/generated/l10n.dart';
