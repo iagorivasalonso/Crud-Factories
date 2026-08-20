@@ -1,6 +1,5 @@
 import 'package:crud_factories/Backend/Export_general/csv_builder.dart' show buildCsv;
 import 'package:crud_factories/Backend/Export_general/export_csv_io.dart';
-import 'package:crud_factories/Backend/Global/files.dart';
 import 'package:crud_factories/Objects/Conection.dart';
 import 'package:csv/csv.dart';
 
