@@ -11,7 +11,6 @@ import 'package:crud_factories/Backend/Providers/LineSendProvider.dart';
 import 'package:crud_factories/Backend/Providers/MailProvider.dart';
 import 'package:crud_factories/Backend/Providers/NavigationProvider.dart' show navigationProvider, AppView, NavigationProvider, FilterProvider;
 import 'package:crud_factories/Backend/Providers/SectorProvider.dart';
-import 'package:crud_factories/Backend/Global/variables.dart';
 import 'package:crud_factories/Backend/Providers/filterProvider.dart' show FilterProvider;
 import 'package:crud_factories/Frontend/adminRoutes.dart';
 import 'package:crud_factories/Frontend/adminSectors.dart';
@@ -475,7 +474,7 @@ class _appDesktopState extends State<appDesktop> {
                    ),
                    onTap: () async {
 
-                        if(routeFirst.isNotEmpty && providerRoutes.isNotEmpty)
+                        if(providerRoutes.isNotEmpty)
                         {
                               await ExportService.exportAllZip(
                                 routes: providerRoutes,
