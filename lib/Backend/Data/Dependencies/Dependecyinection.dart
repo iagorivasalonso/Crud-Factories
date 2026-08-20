@@ -91,44 +91,48 @@ class DependencyInjection {
      // REPOSITORY
      // =========================
 
+
+
      Provider<IConnectionDataSource>(
        create: (_) => CsvConnectionDataSource(),
      ),
 
-     // =========================
-     // SERVICES
-     // =========================
+     Provider<ConnectionRepository>(
+       create: (context) => ConnectionRepository(
+         context.read<IConnectionDataSource>(),
+       ),
+     ),
+
+// =========================
+// SERVICES
+// =========================
 
      Provider<IConnectionService>(
-
        create: (_) =>
-           isAPI == true
-            ? ApiConnectionService()
-            : SqlConnectionService(),
+       isAPI
+           ? ApiConnectionService()
+           : SqlConnectionService(),
      ),
 
      Provider<IConnectionSesionService>(
-
        create: (_) =>
-       isAPI == true
+       isAPI
            ? apiConnectionSesionService()
            : SqlConnectionSessionService(),
      ),
 
-     // =========================
-     // CONTROLLER
-     // =========================
+// =========================
+// CONTROLLER
+// =========================
 
      Provider<ConnectionController>(
-       create: (context) =>
-           ConnectionController(
-             provider: context.read<ConnectionProvider>(),
-             repository: context.read<ConnectionRepository>(),
-             service: context.read<IConnectionService>(),
-             sessionService: context.read<IConnectionSesionService>(),
-           ),
+       create: (context) => ConnectionController(
+         provider: context.read<ConnectionProvider>(),
+         repository: context.read<ConnectionRepository>(),
+         service: context.read<IConnectionService>(),
+         sessionService: context.read<IConnectionSesionService>(),
+       ),
      ),
-
                                        // =========================
                                        // SECTOR
                                        // =========================
