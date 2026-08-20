@@ -173,6 +173,11 @@ class MessageLookup extends MessageLookupByLibrary {
       "No se pudo eliminar la base de datos",
     ),
     "create": MessageLookupByLibrary.simpleMessage("Crear"),
+    "create_all": MessageLookupByLibrary.simpleMessage("Crear todas"),
+    "create_first_sector": MessageLookupByLibrary.simpleMessage(
+      "Crea el primer sector para comenzar",
+    ),
+    "create_one": MessageLookupByLibrary.simpleMessage("Crear una"),
     "create_sector": MessageLookupByLibrary.simpleMessage("Crear sector"),
     "created": MessageLookupByLibrary.simpleMessage("Creado"),
     "creation_of_the_sector": MessageLookupByLibrary.simpleMessage(
@@ -419,6 +424,10 @@ class MessageLookup extends MessageLookupByLibrary {
     "no_new_data_to_import": MessageLookupByLibrary.simpleMessage(
       "No tiene datos a importar",
     ),
+    "no_routes": MessageLookupByLibrary.simpleMessage(
+      "No hay rutas disponibles",
+    ),
+    "no_sectors": MessageLookupByLibrary.simpleMessage("Mo hay sectores"),
     "not_a_valid_mail": MessageLookupByLibrary.simpleMessage(
       "No es un correo electrónico válido",
     ),
@@ -473,7 +482,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "Rutas importadas correctamente",
     ),
     "save": MessageLookupByLibrary.simpleMessage("Guardar"),
-    "save_sector": MessageLookupByLibrary.simpleMessage("Guardar_sector"),
+    "save_sector": MessageLookupByLibrary.simpleMessage("Guardar sector"),
     "saved": MessageLookupByLibrary.simpleMessage("Guardado"),
     "saved_female": MessageLookupByLibrary.simpleMessage("Guardada"),
     "search": MessageLookupByLibrary.simpleMessage("Buscar..."),
@@ -519,6 +528,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "select_how_continue": MessageLookupByLibrary.simpleMessage(
       "Selecciona cómo continuar",
     ),
+    "select_route": MessageLookupByLibrary.simpleMessage("Seleccionar ruta"),
     "select_shipment": MessageLookupByLibrary.simpleMessage(
       "Seleccionar envío",
     ),
@@ -654,7 +664,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "want_to_complete_it": MessageLookupByLibrary.simpleMessage(
       "¿Desea completarlo?",
     ),
-    "was_modified": MessageLookupByLibrary.simpleMessage("Fue modificado"),
+    "was_modified": MessageLookupByLibrary.simpleMessage("Fue modificada"),
     "we_do_not_have_any_shipping_on_that_date":
         MessageLookupByLibrary.simpleMessage(
           "No tenemos ningún envío en esa fecha",

@@ -279,9 +279,9 @@ class S {
     return Intl.message('Empresas', name: 'companies', desc: '', args: []);
   }
 
-  /// `Envio`
+  /// `Envío`
   String get shipment {
-    return Intl.message('Envio', name: 'shipment', desc: '', args: []);
+    return Intl.message('Envío', name: 'shipment', desc: '', args: []);
   }
 
   /// `Envíos`
@@ -344,11 +344,41 @@ class S {
     return Intl.message('Guardar', name: 'save', desc: '', args: []);
   }
 
-  /// `Guardar_sector`
+  /// `Guardar sector`
   String get save_sector {
     return Intl.message(
-      'Guardar_sector',
+      'Guardar sector',
       name: 'save_sector',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Ya existe un envío`
+  String get send_duplicate {
+    return Intl.message(
+      'Ya existe un envío',
+      name: 'send_duplicate',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Datos inválidos`
+  String get send_invalid_data {
+    return Intl.message(
+      'Datos inválidos',
+      name: 'send_invalid_data',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Error inesperado`
+  String get send_error {
+    return Intl.message(
+      'Error inesperado',
+      name: 'send_error',
       desc: '',
       args: [],
     );
@@ -445,10 +475,10 @@ class S {
   }
 
   /// `Lista de emails`
-  String get list_of_emails {
+  String get list_of_address {
     return Intl.message(
       'Lista de emails',
-      name: 'list_of_emails',
+      name: 'list_of_address',
       desc: '',
       args: [],
     );
@@ -522,6 +552,21 @@ class S {
   /// `Sectores`
   String get sectors {
     return Intl.message('Sectores', name: 'sectors', desc: '', args: []);
+  }
+
+  /// `Todos los sectores`
+  String get allSectors {
+    return Intl.message(
+      'Todos los sectores',
+      name: 'allSectors',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Sector de`
+  String get sectorOf {
+    return Intl.message('Sector de', name: 'sectorOf', desc: '', args: []);
   }
 
   /// `Seleccionar`
@@ -629,6 +674,46 @@ class S {
     return Intl.message(
       'Cuenta no configurada en el servidor',
       name: 'account_not_configured_on_the_server',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `No tiene datos a importar`
+  String get no_new_data_to_import {
+    return Intl.message(
+      'No tiene datos a importar',
+      name: 'no_new_data_to_import',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `No hay rutas disponibles`
+  String get no_routes {
+    return Intl.message(
+      'No hay rutas disponibles',
+      name: 'no_routes',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Crear una`
+  String get create_one {
+    return Intl.message('Crear una', name: 'create_one', desc: '', args: []);
+  }
+
+  /// `Crear todas`
+  String get create_all {
+    return Intl.message('Crear todas', name: 'create_all', desc: '', args: []);
+  }
+
+  /// `Seleccionar ruta`
+  String get select_route {
+    return Intl.message(
+      'Seleccionar ruta',
+      name: 'select_route',
       desc: '',
       args: [],
     );
@@ -814,6 +899,16 @@ class S {
     );
   }
 
+  /// `Mo hay sectores`
+  String get no_sectors {
+    return Intl.message(
+      'Mo hay sectores',
+      name: 'no_sectors',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `El sector es requerido`
   String get sector_required {
     return Intl.message(
@@ -824,10 +919,10 @@ class S {
     );
   }
 
-  /// `El email es requerido`
+  /// `El emmail es requerido`
   String get mail_required {
     return Intl.message(
-      'El email es requerido',
+      'El emmail es requerido',
       name: 'mail_required',
       desc: '',
       args: [],
@@ -879,6 +974,26 @@ class S {
     return Intl.message(
       'no puede eliminar el sector con empresas',
       name: 'it_cannot_eliminate_the_sector_with_companies',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Sector eliminado correctamente`
+  String get sector_delete_correctly {
+    return Intl.message(
+      'Sector eliminado correctamente',
+      name: 'sector_delete_correctly',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Crea el primer sector para comenzar`
+  String get create_first_sector {
+    return Intl.message(
+      'Crea el primer sector para comenzar',
+      name: 'create_first_sector',
       desc: '',
       args: [],
     );
@@ -974,6 +1089,31 @@ class S {
     );
   }
 
+  /// `Conexión segura (SSL/TLS)`
+  String get secure_connection {
+    return Intl.message(
+      'Conexión segura (SSL/TLS)',
+      name: 'secure_connection',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Nueva configuración SMTP`
+  String get new_smtp_configuration {
+    return Intl.message(
+      'Nueva configuración SMTP',
+      name: 'new_smtp_configuration',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Host SMTP`
+  String get smtp_host {
+    return Intl.message('Host SMTP', name: 'smtp_host', desc: '', args: []);
+  }
+
   /// `No es una página web válida`
   String get not_a_valid_webpage {
     return Intl.message(
@@ -999,6 +1139,66 @@ class S {
     return Intl.message(
       'No pueden quedar campos en blanco',
       name: 'can_not_go_blank_fields',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `La empresa se ha creado correctamente`
+  String get factory_created_successfully {
+    return Intl.message(
+      'La empresa se ha creado correctamente',
+      name: 'factory_created_successfully',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `La empresa se ha actualizado correctamente`
+  String get factory_updated_successfully {
+    return Intl.message(
+      'La empresa se ha actualizado correctamente',
+      name: 'factory_updated_successfully',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `La empresa ya existe en la base de datos`
+  String get factory_already_exists {
+    return Intl.message(
+      'La empresa ya existe en la base de datos',
+      name: 'factory_already_exists',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `No se pudo guardar la empresa`
+  String get factory_save_error {
+    return Intl.message(
+      'No se pudo guardar la empresa',
+      name: 'factory_save_error',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `no tiene empresas en este sector`
+  String get it_does_not_have_companies_in_this_sector {
+    return Intl.message(
+      'no tiene empresas en este sector',
+      name: 'it_does_not_have_companies_in_this_sector',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Empresa no encontrada`
+  String get factory_not_found {
+    return Intl.message(
+      'Empresa no encontrada',
+      name: 'factory_not_found',
       desc: '',
       args: [],
     );
@@ -1081,6 +1281,21 @@ class S {
     );
   }
 
+  /// `Limpiar`
+  String get clear {
+    return Intl.message('Limpiar', name: 'clear', desc: '', args: []);
+  }
+
+  /// `Tienes cambios sin guardar. ¿Quieres salir sin guardar?`
+  String get unsaved_changes {
+    return Intl.message(
+      'Tienes cambios sin guardar. ¿Quieres salir sin guardar?',
+      name: 'unsaved_changes',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `No se pudo conectar con el servidor`
   String get could_not_connect_with_the_server {
     return Intl.message(
@@ -1142,10 +1357,10 @@ class S {
   }
 
   /// `No tiene correos registrados ¿desea continuar?`
-  String get if_you_have_no_registered_emails_do_you_wish_to_continue {
+  String get if_you_have_no_registered_addresss_do_you_wish_to_continue {
     return Intl.message(
       'No tiene correos registrados ¿desea continuar?',
-      name: 'if_you_have_no_registered_emails_do_you_wish_to_continue',
+      name: 'if_you_have_no_registered_addresss_do_you_wish_to_continue',
       desc: '',
       args: [],
     );
@@ -1162,10 +1377,10 @@ class S {
   }
 
   /// `No se encontró la conexión`
-  String get sqlConnectionNotFound {
+  String get no_connection_found {
     return Intl.message(
       'No se encontró la conexión',
-      name: 'sqlConnectionNotFound',
+      name: 'no_connection_found',
       desc: '',
       args: [],
     );
@@ -1226,6 +1441,26 @@ class S {
     return Intl.message(
       'No se puede desconectar',
       name: 'cannot_disconnect',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Desconectado correctamente`
+  String get properly_disconnected {
+    return Intl.message(
+      'Desconectado correctamente',
+      name: 'properly_disconnected',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Debe de tener una conexión seleccionada`
+  String get You_must_have_a_selected_connection {
+    return Intl.message(
+      'Debe de tener una conexión seleccionada',
+      name: 'You_must_have_a_selected_connection',
       desc: '',
       args: [],
     );
@@ -1366,11 +1601,41 @@ class S {
     );
   }
 
+  /// `Rutas importadas correctamente`
+  String get routes_imported_successfully {
+    return Intl.message(
+      'Rutas importadas correctamente',
+      name: 'routes_imported_successfully',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `error carga ruta`
+  String get error_loading_route {
+    return Intl.message(
+      'error carga ruta',
+      name: 'error_loading_route',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Seleccionar archivo`
   String get select_file {
     return Intl.message(
       'Seleccionar archivo',
       name: 'select_file',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Selecciona un archivo primero`
+  String get select_file_first {
+    return Intl.message(
+      'Selecciona un archivo primero',
+      name: 'select_file_first',
       desc: '',
       args: [],
     );
@@ -1646,6 +1911,16 @@ class S {
     );
   }
 
+  /// `la conexión no está seleccionada`
+  String get The_connection_is_not_selected {
+    return Intl.message(
+      'la conexión no está seleccionada',
+      name: 'The_connection_is_not_selected',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `No puedes realizar esta acción mientras estás conectado`
   String get You_cannot_do_this_while_connected {
     return Intl.message(
@@ -1666,11 +1941,111 @@ class S {
     );
   }
 
+  /// `Debes seleccionar al menos un destinatario`
+  String get select_at_least_one_recipient {
+    return Intl.message(
+      'Debes seleccionar al menos un destinatario',
+      name: 'select_at_least_one_recipient',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Destinatario requerido`
+  String get recipient_required {
+    return Intl.message(
+      'Destinatario requerido',
+      name: 'recipient_required',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `El destinatario no es un correo electrónico válido`
   String get The_recipient_is_not_a_valid_mail {
     return Intl.message(
       'El destinatario no es un correo electrónico válido',
       name: 'The_recipient_is_not_a_valid_mail',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `La cuenta de correo se ha creado correctamente.`
+  String get mail_created_successfully {
+    return Intl.message(
+      'La cuenta de correo se ha creado correctamente.',
+      name: 'mail_created_successfully',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `La cuenta de correo se ha guardado correctamente.`
+  String get mail_saved_successfully {
+    return Intl.message(
+      'La cuenta de correo se ha guardado correctamente.',
+      name: 'mail_saved_successfully',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `La cuenta de correo se ha actualizado correctamente.`
+  String get mail_updated_successfully {
+    return Intl.message(
+      'La cuenta de correo se ha actualizado correctamente.',
+      name: 'mail_updated_successfully',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Esta cuenta de correo ya existe.`
+  String get mail_already_exists {
+    return Intl.message(
+      'Esta cuenta de correo ya existe.',
+      name: 'mail_already_exists',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `No se ha encontrado la cuenta de correo.`
+  String get mail_not_found {
+    return Intl.message(
+      'No se ha encontrado la cuenta de correo.',
+      name: 'mail_not_found',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `No hay ninguna cuenta de correo seleccionada.`
+  String get no_mail_account_selected {
+    return Intl.message(
+      'No hay ninguna cuenta de correo seleccionada.',
+      name: 'no_mail_account_selected',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `está vacío. ¿Desea continuar?`
+  String get is_empty_do_you_want_to_continue {
+    return Intl.message(
+      'está vacío. ¿Desea continuar?',
+      name: 'is_empty_do_you_want_to_continue',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `¿Desea guardar la cuenta?`
+  String get do_you_want_to_save_the_account {
+    return Intl.message(
+      '¿Desea guardar la cuenta?',
+      name: 'do_you_want_to_save_the_account',
       desc: '',
       args: [],
     );
@@ -1776,10 +2151,10 @@ class S {
     );
   }
 
-  /// `Fue modificado`
+  /// `Fue modificada`
   String get was_modified {
     return Intl.message(
-      'Fue modificado',
+      'Fue modificada',
       name: 'was_modified',
       desc: '',
       args: [],
@@ -2303,6 +2678,26 @@ class S {
     return Intl.message(
       'La conexion ha cambiado ¿desea guardarla?',
       name: 'the_connection_has_changed_do_you_want_to_save_it',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `La conexión ya existe`
+  String get the_connection_already_exists {
+    return Intl.message(
+      'La conexión ya existe',
+      name: 'the_connection_already_exists',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `no encuentra la conexión`
+  String get can_not_find_the_connection {
+    return Intl.message(
+      'no encuentra la conexión',
+      name: 'can_not_find_the_connection',
       desc: '',
       args: [],
     );
