@@ -1,11 +1,9 @@
 
-import 'dart:ffi';
 
 import 'package:crud_factories/Alertdialogs/confirm.dart' show confirm;
 import 'package:crud_factories/Alertdialogs/error.dart' show error;
 import 'package:crud_factories/Alertdialogs/selectCompany.dart' show newMailConfiguration;
 import 'package:crud_factories/Backend/Data/controlsMessagesError/errors.dart';
-import 'package:crud_factories/Backend/Feature/Mail/Service/mailConfiguration.dart';
 import 'package:crud_factories/Backend/Providers/EditStateProvider.dart' show EditStateProvider;
 import 'package:crud_factories/Backend/Providers/MailProvider.dart';
 import 'package:crud_factories/Functions/isNotAndroid.dart' show isNotAndroid;
