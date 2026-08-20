@@ -1,6 +1,5 @@
 import 'dart:io';
 
-import 'package:crud_factories/Backend/Global/list.dart';
 
 
 class ServerService {

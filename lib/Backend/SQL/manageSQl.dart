@@ -1,4 +1,4 @@
-import 'package:crud_factories/Backend/Global/variables.dart';
+
 import 'package:mysql1/src/single_connection.dart';
 
 
