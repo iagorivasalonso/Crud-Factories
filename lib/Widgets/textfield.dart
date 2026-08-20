@@ -1,4 +1,4 @@
-import 'package:crud_factories/Backend/Global/variables.dart';
+
 import 'package:crud_factories/Backend/Providers/EditStateProvider.dart' show EditStateProvider;
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';

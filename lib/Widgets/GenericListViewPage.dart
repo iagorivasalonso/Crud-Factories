@@ -1,5 +1,5 @@
 
-import 'package:crud_factories/Backend/Global/variables.dart';
+
 import 'package:crud_factories/Functions/isNotAndroid.dart' show isNotAndroid;
 import 'package:crud_factories/Widgets/dropDownButton.dart' show GenericDropdown;
 import 'package:crud_factories/generated/l10n.dart';

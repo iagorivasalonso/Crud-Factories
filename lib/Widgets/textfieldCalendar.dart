@@ -1,4 +1,3 @@
-import 'package:crud_factories/Backend/Global/variables.dart';
 import 'package:crud_factories/Backend/Providers/EditStateProvider.dart' show EditStateProvider;
 import 'package:crud_factories/Functions/validatorCamps.dart' show ValidatorCamps;
 import 'package:flutter/material.dart';

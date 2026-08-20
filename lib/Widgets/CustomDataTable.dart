@@ -1,5 +1,4 @@
 import 'package:crud_factories/Backend/Global/controllers/LineSend.dart' show LineSendController;
-import 'package:crud_factories/Backend/Global/variables.dart';
 import 'package:crud_factories/Backend/Providers/LineSendProvider.dart';
 import 'package:crud_factories/Backend/Providers/SectorProvider.dart';
 import 'package:crud_factories/Functions/isNotAndroid.dart' show isNotAndroid;

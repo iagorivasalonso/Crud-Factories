@@ -1,8 +1,6 @@
-import 'package:crud_factories/Backend/Global/variables.dart';
+
 import 'package:crud_factories/Backend/Providers/EditStateProvider.dart' show EditStateProvider;
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as context show read;
-import 'package:http/http.dart' show read;
 import 'package:provider/provider.dart';
 
 Row textArea({
