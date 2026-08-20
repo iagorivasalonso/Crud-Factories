@@ -1,2 +1,3 @@
-1;envios@madrid.com;outlook;ZW52aW9zMjAyNQ==
-2;control@barcelona.com;yahoo;Y29udHJvbDIwMjU=
+id;mail;host;port;secure;password
+1;envios@madrid.com;smtp.office365.com;587;false;ik8+a8aZw8iTXrBvhXplUQ==
+2;control@barcelona.com;smtp.mail.yahoo.com;465;true;jE4mdtuFncqRWqdLhHtkUA==
