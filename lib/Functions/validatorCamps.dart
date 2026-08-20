@@ -67,8 +67,8 @@ class ValidatorCamps {
     return null;
   }
 
-  static String? mailValidate(String email, BuildContext context) {
-    final value = email.trim();
+  static String? mailValidate(String address, BuildContext context) {
+    final value = address.trim();
 
     if (value.isEmpty) return null;
 
@@ -98,13 +98,18 @@ class ValidatorCamps {
     return null;
   }
 
-  static String? addressValidate(String address, BuildContext context) {
-    final value = address.replaceAll(" ", "");
 
-    if (value.isEmpty) return null;
+  static String? addressValidate(String address, BuildContext context) {
+    final value = address.trim();
+
+    // Vacío o solamente comas = sin dirección
+    if (value.isEmpty || value.replaceAll(',', '').trim().isEmpty) {
+      return null;
+    }
 
     final valid = RegExp(
-      r"^[a-zA-Z0-9áéíóúÁÉÍÓÚñÑ]+,[0-9a-zA-ZáéíóúÁÉÍÓÚñÑ]+",
+      r'^.+,\s*\d+(?:\s*-\s*.*)?$',
+      unicode: true,
     ).hasMatch(value);
 
     if (!valid) {
