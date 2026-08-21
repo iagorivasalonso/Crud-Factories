@@ -52,16 +52,20 @@ class _conectionState extends State<conection> {
 
   bool _loaded = false;
 
-  bool? get editCamps => null;
+
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
 
+    if (_loaded) return;
+
     final provider = context.read<ConnectionProvider>();
     final selected = provider.selected;
 
     if (selected != null) {
+      _loaded = true;
+
       WidgetsBinding.instance.addPostFrameCallback((_) {
         if (!mounted) return;
 
@@ -201,7 +205,7 @@ class _conectionState extends State<conection> {
                                         .of(context)
                                         .data_base,
                                     controllerCamp: controlerConex.namebd,
-                                    campEdit: editCamps,
+                                    campEdit: selected == null || provider.viewMode == ConnectionViewMode.editing,
                                   ),
                                 ),
                               ),
@@ -218,7 +222,7 @@ class _conectionState extends State<conection> {
                                             .of(context)
                                             .host,
                                         controllerCamp: controlerConex.hostbd,
-                                        campEdit: editCamps,
+                                        campEdit: selected == null || provider.viewMode == ConnectionViewMode.editing,
                                       ),
                                     ),
                                     Expanded(
@@ -229,7 +233,7 @@ class _conectionState extends State<conection> {
                                             .of(context)
                                             .port,
                                         controllerCamp: controlerConex.portbd,
-                                        campEdit: editCamps,
+                                        campEdit: selected == null || provider.viewMode == ConnectionViewMode.editing,
                                       ),
                                     ),
                                   ]
@@ -247,7 +251,7 @@ class _conectionState extends State<conection> {
                                             .of(context)
                                             .user,
                                         controllerCamp: controlerConex.userbd,
-                                        campEdit: editCamps,
+                                        campEdit: selected == null || provider.viewMode == ConnectionViewMode.editing,
                                       ),
 
                                     ),
@@ -259,7 +263,7 @@ class _conectionState extends State<conection> {
                                             .password,
                                         context: context,
                                         controllerCamp: controlerConex.passbd,
-                                        campEdit: editCamps,
+                                        campEdit: selected == null || provider.viewMode == ConnectionViewMode.editing,
                                       ),
                                     ),
                                   ]),
