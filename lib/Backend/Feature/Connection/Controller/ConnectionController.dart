@@ -1,5 +1,4 @@
 
-import 'package:crud_factories/Backend/Feature/Connection/Datasource/IConnection_repository.dart';
 import 'package:crud_factories/Backend/Feature/Connection/Service/IConnectionService.dart' show IConnectionService;
 import 'package:crud_factories/Backend/Feature/Connection/Sesion/IConnection_sesion_service.dart';
 import 'package:crud_factories/Backend/Feature/Connection/SeverService/ServerService.dart' show Serverservice;
@@ -21,7 +20,8 @@ import 'package:flutter/material.dart';
 enum ConnectResult {
     success,
     noConnectionSelected,
-    error
+    error,
+   protected
 }
 
 enum DisconnectResult {
@@ -247,6 +247,10 @@ class ConnectionController {
           return EditResult.alreadyExists;
         }
 
+        if (oldConnection.database.trim().toLowerCase() == "defaultdb") {
+          return EditResult.invalidData;
+        }
+
         final index = provider.connections.indexWhere(
               (x) => x.id == oldConnection.id,
         );
@@ -293,6 +297,9 @@ class ConnectionController {
        final exits = provider.connections.any(
            (x) => x.id == c.id
        );
+       if (c.database.trim().toLowerCase() == "defaultdb") {
+         return DeleteResult.error;
+       }
 
        if(!exits) {
          return DeleteResult.notFound;
