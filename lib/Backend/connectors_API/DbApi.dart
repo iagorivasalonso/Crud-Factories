@@ -1,18 +1,24 @@
-import 'package:crud_factories/Objects/Conection.dart';
 import 'dart:convert';
+import 'package:crud_factories/Objects/Conection.dart' show Conection;
 import 'package:http/http.dart' as http;
 
 class DbApi {
-  static const baseUrl = 'http://localhost:3000/db';
+  static const baseUrl = 'https://crud-factories.onrender.com';
 
   static Future<Map<String, dynamic>> actionApi(
-      String action, Conection? connection, [Conection? newDataBase]) async {
+      String action,
+      Conection? connection, [
+        Conection? newDataBase,
+      ]) async {
     if (connection == null && action != 'disconnect') {
-      return {'ok': false, 'message': 'Debes seleccionar una conexión'};
+      return {
+        'ok': false,
+        'message': 'Debes seleccionar una conexión',
+      };
     }
-
+print(action);
     try {
-      final body = {
+      final body = <String, dynamic>{
         'action': action,
       };
 
@@ -30,11 +36,21 @@ class DbApi {
         }
       }
 
+      print('========== DbApi.actionApi ==========');
+      print('URL: ${Uri.parse('$baseUrl/db')}');
+      print('BODY: ${jsonEncode(body)}');
+
       final res = await http.post(
-        Uri.parse('$baseUrl/db'),
-        headers: {'Content-Type': 'application/json'},
+        Uri.parse('$baseUrl/db/db'),
+        headers: {
+          'Content-Type': 'application/json',
+        },
         body: jsonEncode(body),
       );
+
+      print('STATUS CODE: ${res.statusCode}');
+      print('RESPONSE: ${res.body}');
+      print('====================================');
 
       final data = jsonDecode(res.body);
 
@@ -45,17 +61,13 @@ class DbApi {
         };
       }
 
-
-
       String message;
 
-// Caso normal: data['message'] existe
       if (data['message'] != null && data['message'] is String) {
         message = data['message'];
-      }
-// Caso error: puede ser Map o String
-      else if (data['error'] != null) {
-        if (data['error'] is Map && data['error']['message'] is String) {
+      } else if (data['error'] != null) {
+        if (data['error'] is Map &&
+            data['error']['message'] is String) {
           message = data['error']['message'];
         } else if (data['error'] is String) {
           message = data['error'];
@@ -66,16 +78,17 @@ class DbApi {
         message = 'Error desconocido';
       }
 
-
-      return {'ok': data['ok'] ?? false, 'message': message};
-
+      return {
+        'ok': data['ok'] ?? false,
+        'message': message,
+      };
     } catch (e, stackTrace) {
       print('ERROR EN DbApi.actionApi: $e');
       print(stackTrace);
 
       return {
         'ok': false,
-        'message': 'Error de conexión: $e'
+        'message': 'Error de conexión: $e',
       };
     }
   }
@@ -91,7 +104,9 @@ class DbApi {
 
     final res = await http.post(
       Uri.parse('$baseUrl/query'),
-      headers: {'Content-Type': 'application/json'},
+      headers: {
+        'Content-Type': 'application/json',
+      },
       body: jsonEncode(body),
     );
 
