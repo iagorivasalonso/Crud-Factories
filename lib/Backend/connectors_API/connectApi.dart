@@ -2,12 +2,11 @@
 
 import 'package:crud_factories/Objects/ApiConfig.dart' show ApiConfig;
 
-Future<Uri> connectApi(String nameTable, ApiConfig config) async {
 
+Future<Uri> connectApi(String nameTable, ApiConfig config) async {
   return Uri(
-    scheme: 'http',
-    host: config.host,
-    port: 3000,
+    scheme: 'https',
+    host: 'crud-factories.onrender.com',
     path: '/db/${config.database}/$nameTable',
     queryParameters: {
       'host': config.host,
@@ -16,5 +15,4 @@ Future<Uri> connectApi(String nameTable, ApiConfig config) async {
       'password': config.password,
     },
   );
-
 }
