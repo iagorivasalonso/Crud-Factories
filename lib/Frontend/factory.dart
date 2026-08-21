@@ -736,3 +736,4 @@ class _FactoryFromPageState extends State<FactoryFromPage> {
     return (maxId + 1).toString();
   }
 }
+

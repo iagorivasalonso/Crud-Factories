@@ -142,3 +142,4 @@ Future<bool> _onDelete(BuildContext context,Mail mail) async {
     );
   }
 }
+

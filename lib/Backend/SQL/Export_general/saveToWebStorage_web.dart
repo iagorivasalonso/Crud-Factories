@@ -1,7 +1,6 @@
 import 'dart:convert';
-import 'package:crud_factories/Backend/Feature/Sector/apiSectorDataSource%20.dart' show ApiConfig;
 import 'package:crud_factories/Backend/connectors_API/connectApi.dart' show connectApi;
-import 'package:crud_factories/Objects/ApiConfig.dart';
+import 'package:crud_factories/Objects/ApiConfig.dart' show ApiConfig;
 import 'package:http/http.dart' as http;
 import 'package:universal_html/html.dart' as html;
 

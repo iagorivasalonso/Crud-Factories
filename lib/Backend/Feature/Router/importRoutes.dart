@@ -19,13 +19,23 @@ Future<List<RouteCSV>> csvImportRoutes({
   if (bytes != null) {
     try {
       csvContent = utf8.decode(bytes);
-    } catch (_) {
-      csvContent = latin1.decode(bytes);
+
+      debugPrint(
+        '✅ Asset cargado correctamente: $path (${csvContent.length} caracteres)',
+      );
+    } catch (e, stack) {
+      debugPrint('❌ ERROR cargando asset: $path');
+      debugPrint('❌ $e');
+      debugPrint('$stack');
+
+      rethrow;
     }
 
     // 🟢 2. web o asset
-  } else if (kIsWeb) {
-    csvContent = await rootBundle.loadString(path);
+  } else if (kIsWeb){
+    debugPrint('🌐 Cargando asset WEB: $path');
+
+  csvContent = await rootBundle.loadString(path);
 
     // 🟢 3. desktop/mobile file
   } else {

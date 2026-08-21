@@ -2,7 +2,7 @@
 
 import 'package:crud_factories/Backend/Feature/Connection/ExecuteQuery/IexecuteQuery.dart' show Iexecutequery;
 import 'package:crud_factories/Objects/Sector.dart';
-import 'IsectorDataSource.dart';
+import 'ISectorDataSource.dart';
 
 class SqlSectorDataSource  implements ISectorDataSource{
 
@@ -69,5 +69,6 @@ class SqlSectorDataSource  implements ISectorDataSource{
     }
   }
 }
+
 
 

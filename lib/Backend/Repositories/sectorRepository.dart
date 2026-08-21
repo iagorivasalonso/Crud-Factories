@@ -1,6 +1,7 @@
 
-import 'package:crud_factories/Backend/Feature/Sector/IsectorDataSource.dart';
+
 import 'package:crud_factories/Objects/Sector.dart' show Sector;
+import 'package:crud_factories/Backend/Feature/Sector/ISectorDataSource.dart';
 
 class SectorRepository {
 

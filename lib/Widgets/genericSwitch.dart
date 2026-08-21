@@ -36,3 +36,4 @@ class GenericSwitch extends StatelessWidget {
      );
   }
 }
+

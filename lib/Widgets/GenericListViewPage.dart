@@ -224,3 +224,4 @@ class _GenericListViewPageState<T> extends State<GenericListViewPage<T>> {
          });
   }
 }
+

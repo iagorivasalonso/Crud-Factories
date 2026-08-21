@@ -56,3 +56,4 @@ class GenericRadioGroup<T> extends StatelessWidget {
         );
   }
 }
+

@@ -36,3 +36,4 @@ class Conection extends BaseEntity {
     'database': database,
   };
 }
+

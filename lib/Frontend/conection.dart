@@ -19,7 +19,7 @@ import 'package:crud_factories/Widgets/materialButton.dart';
 import 'package:crud_factories/Widgets/textFieldPassword.dart';
 import 'package:crud_factories/Widgets/textfield.dart';
 import '../Alertdialogs/confirm.dart';
-import '../Backend/Feature/Sector/apiSectorDataSource .dart';
+import '../Backend/Feature/Sector/apiSectorDataSource.dart';
 
 class conection extends StatefulWidget {
 

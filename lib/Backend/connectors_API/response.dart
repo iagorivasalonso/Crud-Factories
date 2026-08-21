@@ -8,3 +8,4 @@ class ApiResponse {
     return ApiResponse(ok: json['ok'], message: json['message']);
   }
 }
+

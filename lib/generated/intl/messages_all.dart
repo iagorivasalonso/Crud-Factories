@@ -66,3 +66,4 @@ MessageLookupByLibrary? _findGeneratedMessagesFor(String locale) {
   if (actualLocale == null) return null;
   return _findExact(actualLocale);
 }
+

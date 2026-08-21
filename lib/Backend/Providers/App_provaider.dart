@@ -112,7 +112,11 @@ class AppProvider extends ChangeNotifier {
        }
 
       final bundle = await source.loadRoutes();
+      print('ROUTES CARGADAS: ${bundle.routes.length}');
 
+      for (final r in bundle.routes) {
+        print('ROUTE -> id=${r.id}, name=${r.name}, route=${r.route}');
+      }
       await _applyRoutes(context, bundle.routes);
       files = RouteFilesBuilder.buildRouteFiles(bundle.routes);
 
@@ -321,5 +325,6 @@ class AppProvider extends ChangeNotifier {
 
 
 }
+
 
 

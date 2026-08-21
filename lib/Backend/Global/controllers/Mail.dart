@@ -25,3 +25,4 @@ class MailController {
 
   bool get hasAttachments => attachments.isNotEmpty;
 }
+

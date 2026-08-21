@@ -16,3 +16,4 @@ Future<Uri> connectApi(String nameTable, ApiConfig config) async {
     },
   );
 }
+

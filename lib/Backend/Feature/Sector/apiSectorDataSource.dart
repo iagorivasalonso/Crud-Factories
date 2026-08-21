@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:crud_factories/Backend/Feature/Sector/IsectorDataSource.dart' show ISectorDataSource;
+import 'package:crud_factories/Backend/Feature/Sector/ISectorDataSource.dart' show ISectorDataSource;
 import 'package:crud_factories/Backend/SQL/Export_general/saveToWebStorage_web.dart' show saveToWebStorage;
 import 'package:crud_factories/Objects/ApiConfig.dart' show ApiConfig;
 import 'package:crud_factories/Objects/Sector.dart' show Sector;
@@ -95,4 +95,5 @@ class ApiSectorDataSource implements ISectorDataSource{
 
 
 }
+
 
