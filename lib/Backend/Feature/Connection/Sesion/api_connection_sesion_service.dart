@@ -16,6 +16,7 @@ class apiConnectionSesionService implements IConnectionSesionService{
   Future<void> connect(Conection c) async {
 
     final res = await DbApi.actionApi('connect', c);
+    final result = await DbApi.actionApi('createTables', c);
 
     final response = ApiResponse.fromJson(res);
 
