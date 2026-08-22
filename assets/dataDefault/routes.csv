@@ -1,4 +1,3 @@
-id;name;route
 1;Rutas;assets/dataDefault/routes.csv
 2;Conexiones;assets/dataDefault/connections.csv
 3;Servidor;<EMPTY>

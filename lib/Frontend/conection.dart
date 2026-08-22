@@ -106,8 +106,7 @@ class _conectionState extends State<conection> {
       orElse: () => selected,
     );
 
-     return !isNotAndroid()
-             ? Scaffold(
+     return Scaffold(
         body: Scrollbar(
           controller: verticalScroll,
           thumbVisibility: true,
@@ -306,13 +305,8 @@ class _conectionState extends State<conection> {
             ),
           ),
         ),
-      )
-            :Scaffold(
-        appBar: appBarAndroid(context, name: S
-            .of(context)
-            .database_connection),
-        body: Text("conection"),
       );
+
     }
 
 

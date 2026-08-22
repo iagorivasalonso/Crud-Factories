@@ -2,36 +2,44 @@ import 'dart:convert';
 import 'dart:typed_data';
 import 'dart:io' show File;
 import 'package:crud_factories/Objects/Conection.dart' show Conection;
+import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/services.dart';
+import 'package:http/http.dart' as http;
 
 Future<List<Conection>> csvImportconnections({
   File? file,
   Uint8List? bytes,
   String? content,
-  String? assetPath,
+  required String path,
 }) async {
   String csvContent;
 
-  // 🟢 1. Bytes (file picker / web)
+  // 1. Bytes
   if (bytes != null) {
     try {
       csvContent = utf8.decode(bytes);
     } catch (_) {
       csvContent = latin1.decode(bytes);
     }
-  } else if (kIsWeb) {
-    csvContent = await rootBundle.loadString(assetPath!);
-  } else{
 
-    final file = File(assetPath!);
+    // 2. Contenido ya disponible
+  } else if (content != null) {
+    csvContent = content;
 
-    if (await file.exists()) {
-      csvContent = await file.readAsString(encoding: utf8);
-    } else {
-      throw Exception("route not found: $assetPath");
-    }
+    // 3. Asset Flutter
+  } else {
+    final assetPath = path.trim().isEmpty
+        ? 'assets/dataDefault/connections.csv'
+        : path.trim();
+
+    debugPrint(
+      '📦 csvImportConections cargando asset: "$assetPath"',
+    );
+
+    csvContent = await rootBundle.loadString(assetPath);
   }
+
 
   return readconnectionsFromCsvContent(csvContent);
 }

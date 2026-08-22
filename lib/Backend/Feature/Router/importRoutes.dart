@@ -1,55 +1,46 @@
 import 'dart:convert';
 import 'dart:typed_data';
+
+import 'package:fluent_ui/fluent_ui.dart';
+import 'package:flutter/services.dart' show rootBundle, debugPrint;
+
 import 'package:crud_factories/Objects/RouteCSV.dart' show RouteCSV;
-import 'package:flutter/services.dart';
-import 'package:flutter/foundation.dart' show kIsWeb, debugPrint;
-import 'dart:io' show File;
-import 'package:crud_factories/Objects/RouteCSV.dart';
 
 Future<List<RouteCSV>> csvImportRoutes({
-  File? file,
   Uint8List? bytes,
   String? content,
   required String path,
 }) async {
-
   String csvContent;
 
-  // 🟢 1. bytes
+  // 1. Bytes
   if (bytes != null) {
     try {
       csvContent = utf8.decode(bytes);
-
-      debugPrint(
-        '✅ Asset cargado correctamente: $path (${csvContent.length} caracteres)',
-      );
-    } catch (e, stack) {
-      debugPrint('❌ ERROR cargando asset: $path');
-      debugPrint('❌ $e');
-      debugPrint('$stack');
-
-      rethrow;
+    } catch (_) {
+      csvContent = latin1.decode(bytes);
     }
 
-    // 🟢 2. web o asset
-  } else if (kIsWeb){
-    debugPrint('🌐 Cargando asset WEB: $path');
+    // 2. Contenido ya disponible
+  } else if (content != null) {
+    csvContent = content;
 
-  csvContent = await rootBundle.loadString(path);
-
-    // 🟢 3. desktop/mobile file
+    // 3. Asset Flutter
   } else {
-    final file = File(path);
+    final assetPath = path.trim().isEmpty
+        ? 'assets/dataDefault/routes.csv'
+        : path.trim();
 
-    if (!await file.exists()) {
-      return []; // mejor que crash
-    }
+    debugPrint(
+      '📦 csvImportRoutes cargando asset: "$assetPath"',
+    );
 
-    csvContent = await file.readAsString(encoding: utf8);
+    csvContent = await rootBundle.loadString(assetPath);
   }
 
   return readRoutesFromCsvContent(csvContent);
 }
+
 
 List<RouteCSV> readRoutesFromCsvContent(String content) {
   final lines = const LineSplitter()
@@ -60,20 +51,26 @@ List<RouteCSV> readRoutesFromCsvContent(String content) {
   final routes = <RouteCSV>[];
 
   for (final line in lines.skip(1)) {
-    final parts = line.split(";");
-    if (parts.length < 3) continue;
+    final parts = line.split(';');
+
+    if (parts.length < 3) {
+      continue;
+    }
 
     final id = parts[0].trim();
     final name = parts[1].trim();
     final routePath = parts[2].trim();
 
-    routes.add(RouteCSV(
-      id: id,
-      name: name,
-      route: routePath.isEmpty ? "<EMPTY>" : routePath,
-    ));
+    routes.add(
+      RouteCSV(
+        id: id,
+        name: name,
+        route: routePath.isEmpty ? '<EMPTY>' : routePath,
+      ),
+    );
   }
 
-  debugPrint('Routes loaded: ${routes.length}');
+print(routes);
+
   return routes;
 }
