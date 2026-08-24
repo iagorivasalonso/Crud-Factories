@@ -161,12 +161,13 @@ class AppProvider extends ChangeNotifier {
       rethrow;
     }
   }
+
   Future<void> _loadDependencies(
       BuildContext context,
       RouteFiles files,
       DataSourceMode newMode,
       ) async {
-
+print("ENTRO A HACER LA CARGA");
     // =========================
     // 1. ROUTES
     // =========================
