@@ -1,34 +1,44 @@
 import 'package:crud_factories/Objects/RouteCSV.dart';
-import 'package:csv/csv.dart' show CsvToListConverter;
+import 'package:csv/csv.dart';
 
 class csvParse {
-
   static List<RouteCSV> parseRoutes(String raw) {
-    print('===== RAW =====');
+    print('===== PARSE ROUTES =====');
+    print('RAW LENGTH: ${raw.length}');
+    print('RAW:');
     print(raw);
-    print('===== FIN RAW =====');
 
     final data = CsvToListConverter(
       fieldDelimiter: ';',
+      eol: '\n',
     ).convert(raw);
 
-    print('===== CSV PARSED =====');
-    print('Filas: ${data.length}');
+    print('FILAS: ${data.length}');
 
     for (final row in data) {
-      print('ROW: $row');
+      print('ROW: $row | LENGTH: ${row.length}');
     }
 
-    print('===== FIN CSV PARSED =====');
+    final result = <RouteCSV>[];
 
-    return data.skip(1).map((row) {
-      if (row.length < 3) return null;
+    for (final row in data) {
+      if (row.length < 3) {
+        print('DESCARTADA: $row');
+        continue;
+      }
 
-      return RouteCSV(
-        id: row[0].toString(),
-        name: row[1].toString().trim().toLowerCase(),
-        route: row[2].toString().trim(),
+      result.add(
+        RouteCSV(
+          id: row[0].toString().trim(),
+          name: row[1].toString().trim(),
+          route: row[2].toString().trim(),
+        ),
       );
-    }).whereType<RouteCSV>().toList();
+    }
+
+    print('RESULTADO: ${result.length}');
+    print('===== FIN PARSE ROUTES =====');
+
+    return result;
   }
 }
