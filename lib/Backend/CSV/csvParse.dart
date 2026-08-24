@@ -4,8 +4,22 @@ import 'package:csv/csv.dart' show CsvToListConverter;
 class csvParse {
 
   static List<RouteCSV> parseRoutes(String raw) {
+    print('===== RAW =====');
+    print(raw);
+    print('===== FIN RAW =====');
 
-    final List<List<dynamic>> data = CsvToListConverter(fieldDelimiter: ';').convert(raw);
+    final data = CsvToListConverter(
+      fieldDelimiter: ';',
+    ).convert(raw);
+
+    print('===== CSV PARSED =====');
+    print('Filas: ${data.length}');
+
+    for (final row in data) {
+      print('ROW: $row');
+    }
+
+    print('===== FIN CSV PARSED =====');
 
     return data.skip(1).map((row) {
       if (row.length < 3) return null;
