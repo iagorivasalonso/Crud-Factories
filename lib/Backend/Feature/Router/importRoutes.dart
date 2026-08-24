@@ -49,7 +49,12 @@ List<RouteCSV> readRoutesFromCsvContent(String content) {
       .toList();
 
   final routes = <RouteCSV>[];
-
+  print('===== CSV ROWS =====');
+  for (final row in lines) {
+    print(row);
+  }
+  print('Cantidad filas: ${lines.length}');
+  print('===== FIN CSV ROWS =====');
   for (final line in lines.skip(1)) {
     final parts = line.split(';');
 
