@@ -27,7 +27,7 @@ class CsvConnectionDataSource implements IConnectionDataSource {
   @override
   Future<List<Conection>> load() async {
     return csvImportconnections(
-      path: path,
+      assetPath: path,
     );
   }
 
