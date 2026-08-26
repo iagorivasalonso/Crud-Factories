@@ -1,10 +1,12 @@
 import 'dart:convert';
 import 'dart:typed_data';
 
+import 'package:crud_factories/Objects/RouteCSV.dart';
 import 'package:fluent_ui/fluent_ui.dart';
-import 'package:flutter/services.dart' show rootBundle, debugPrint;
+import 'package:flutter/services.dart' show rootBundle;
 
-import 'package:crud_factories/Objects/RouteCSV.dart' show RouteCSV;
+import '../../CSV/csvParse.dart';
+
 
 Future<List<RouteCSV>> csvImportRoutes({
   Uint8List? bytes,
@@ -13,19 +15,14 @@ Future<List<RouteCSV>> csvImportRoutes({
 }) async {
   String csvContent;
 
-  // 1. Bytes
   if (bytes != null) {
     try {
       csvContent = utf8.decode(bytes);
     } catch (_) {
       csvContent = latin1.decode(bytes);
     }
-
-    // 2. Contenido ya disponible
   } else if (content != null) {
     csvContent = content;
-
-    // 3. Asset Flutter
   } else {
     final assetPath = path.trim().isEmpty
         ? 'assets/dataDefault/routes.csv'
@@ -38,44 +35,5 @@ Future<List<RouteCSV>> csvImportRoutes({
     csvContent = await rootBundle.loadString(assetPath);
   }
 
-  return readRoutesFromCsvContent(csvContent);
-}
-
-
-List<RouteCSV> readRoutesFromCsvContent(String content) {
-  final lines = const LineSplitter()
-      .convert(content)
-      .where((line) => line.trim().isNotEmpty)
-      .toList();
-
-  final routes = <RouteCSV>[];
-  print('===== CSV ROWS =====');
-  for (final row in lines) {
-    print(row);
-  }
-  print('Cantidad filas: ${lines.length}');
-  print('===== FIN CSV ROWS =====');
-  for (final line in lines.skip(1)) {
-    final parts = line.split(';');
-
-    if (parts.length < 3) {
-      continue;
-    }
-
-    final id = parts[0].trim();
-    final name = parts[1].trim();
-    final routePath = parts[2].trim();
-
-    routes.add(
-      RouteCSV(
-        id: id,
-        name: name,
-        route: routePath.isEmpty ? '<EMPTY>' : routePath,
-      ),
-    );
-  }
-
-print(routes);
-
-  return routes;
+  return csvParse.parseRoutes(csvContent);
 }
