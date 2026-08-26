@@ -2,6 +2,7 @@
 
 import 'dart:convert';
 
+import 'package:crud_factories/Backend/CSV/csvParse.dart' show csvParse;
 import 'package:crud_factories/Backend/Feature/Connection/Controller/ConnectionController.dart' show ConnectionController;
 import 'package:crud_factories/Backend/Feature/Connection/Datasource/importConections.dart' show readconnectionsFromCsvContent;
 import 'package:crud_factories/Backend/Feature/Employee/importEmployee.dart' show readEmployeeFromCsvContent;
@@ -58,12 +59,11 @@ class ImportProvaider extends ChangeNotifier {
         }
 
         final results = <ImportResult>[];
-        print('IMPORTANDO ARCHIVO: "$_fileName"');
-        print('========== LINES ==========$_fileName');
+
         switch (_fileName) {
 
           case 'routes.csv':
-            final data = readRoutesFromCsvContent(_content!);
+            final data = csvParse.parseRoutes(_content!);
 
             results.add(
               await routesProvider.import(
