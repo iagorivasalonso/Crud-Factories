@@ -12,7 +12,10 @@ class csvParse {
 
     final result = <RouteCSV>[];
 
-
+    for (final row in data) {
+      if (row.length < 3) {
+        continue;
+      }
 
       result.add(
         RouteCSV(
@@ -22,6 +25,7 @@ class csvParse {
         ),
       );
     }
+
 
 
     return result;
