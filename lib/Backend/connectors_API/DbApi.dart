@@ -36,10 +36,6 @@ print(action);
         }
       }
 
-      print('========== DbApi.actionApi ==========');
-      print('URL: ${Uri.parse('$baseUrl/db')}');
-      print('BODY: ${jsonEncode(body)}');
-
       final res = await http.post(
         Uri.parse('$baseUrl/db/db'),
         headers: {
@@ -47,10 +43,6 @@ print(action);
         },
         body: jsonEncode(body),
       );
-
-      print('STATUS CODE: ${res.statusCode}');
-      print('RESPONSE: ${res.body}');
-      print('====================================');
 
       final data = jsonDecode(res.body);
 
