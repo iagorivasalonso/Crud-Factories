@@ -44,7 +44,6 @@ Future<MailConfiguration?> newMailConfiguration (BuildContext context) async {
                         defaultTextfield(
                             nameCamp: S.of(context).company,
                             controllerCamp: companyController,
-                            // campOld: mailSelected?.mail ?? '',
                             context: context
                         ),
 
