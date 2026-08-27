@@ -7,12 +7,16 @@ child: const MyApp(),
 );*/
 import 'package:crud_factories/Backend/Feature/Connection/Controller/ConnectionController.dart' show ConnectionController;
 import 'package:crud_factories/Backend/Feature/Connection/Datasource/CsvConnectionDataSource.dart' show CsvConnectionDataSource;
+import 'package:crud_factories/Backend/Feature/Connection/ExecuteQuery/IexecuteQuery.dart' show Iexecutequery;
 import 'package:crud_factories/Backend/Feature/Connection/Service/api_connection_service.dart' show ApiConnectionService;
 import 'package:crud_factories/Backend/Feature/Connection/Service/sql_connection_service.dart' show SqlConnectionService;
 import 'package:crud_factories/Backend/Feature/Connection/Sesion/IConnection_sesion_service.dart' show IConnectionSesionService;
 import 'package:crud_factories/Backend/Feature/Connection/Sesion/api_connection_sesion_service.dart' show apiConnectionSesionService;
 import 'package:crud_factories/Backend/Feature/Connection/Sesion/sql_connection_sesion_service.dart' show SqlConnectionSessionService;
 import 'package:crud_factories/Backend/Feature/Mail/Service/NativeMailService.dart' show NativeMailService;
+import 'package:crud_factories/Backend/Feature/Session/ApiSessionService.dart';
+import 'package:crud_factories/Backend/Feature/Session/ISessionService.dart' show ISessionservice;
+import 'package:crud_factories/Backend/Feature/Session/SqlSessionService.dart' show SqlSessionService;
 import 'package:crud_factories/Backend/Global/viewsModels/SendFrom.dart';
 import 'package:crud_factories/Backend/Providers/App_provaider.dart';
 import 'package:crud_factories/Backend/Providers/ConectionProvider.dart' show ConnectionProvider;
@@ -25,6 +29,7 @@ import 'package:crud_factories/Backend/Providers/NavigationProvider.dart';
 import 'package:crud_factories/Backend/Providers/App_provaider.dart' show AppProvider;
 import 'package:crud_factories/Backend/Providers/RoutesProvider.dart' show RoutesProvider;
 import 'package:crud_factories/Backend/Providers/SectorProvider.dart' show SectorProvider;
+import 'package:crud_factories/Backend/Providers/SessionProvaider.dart';
 import 'package:crud_factories/Backend/Providers/filterProvider.dart' show FilterProvider;
 import 'package:crud_factories/Backend/Repositories/connectionRepository.dart' show ConnectionRepository;
 import 'package:crud_factories/Backend/Repositories/routesRepository.dart' show routerRepository;
@@ -65,6 +70,7 @@ class DependencyInjection {
      ChangeNotifierProvider(
        create: (_) => EditStateProvider(),
      ),
+
 
                                      // =========================
                                      // ROUTER
@@ -133,6 +139,26 @@ class DependencyInjection {
          sessionService: context.read<IConnectionSesionService>(),
        ),
      ),
+
+     // =========================
+     // SESSION
+     // =========================
+
+     Provider<ISessionservice>(
+       create: (context) => isAPI
+           ? ApiSessionService()
+           : SqlSessionService(
+                  executeQuery: context.read<Iexecutequery>(),
+       ),
+     ),
+
+
+     ChangeNotifierProvider(
+       create: (context) => SessionProvider(
+         service: context.read<ISessionservice>(),
+       ),
+     ),
+
                                        // =========================
                                        // SECTOR
                                        // =========================
