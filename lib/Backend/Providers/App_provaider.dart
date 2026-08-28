@@ -112,26 +112,10 @@ class AppProvider extends ChangeNotifier {
        }
 
       final bundle = await source.loadRoutes();
-      print('===== ROUTES RECIBIDAS EN AppProvider =====');
-      print('Cantidad: ${bundle.routes.length}');
-
-      for (final route in bundle.routes) {
-        print(
-          'id="${route.id}" '
-              'name="${route.name}" '
-              'route="${route.route}"',
-        );
-      }
-
-      print('===== FIN ROUTES =====');
 
       await _applyRoutes(context, bundle.routes);
       files = RouteFilesBuilder.buildRouteFiles(bundle.routes);
-      print('===== ROUTE FILES =====');
-      print('routes="${files!.routes}"');
-      print('connections="${files!.connections}"');
 
-      print('===== FIN ROUTE FILES =====');
 
     } catch (e) {
       print("ERROR loadRoutes: $e");
@@ -167,7 +151,7 @@ class AppProvider extends ChangeNotifier {
       RouteFiles files,
       DataSourceMode newMode,
       ) async {
-print("ENTRO A HACER LA CARGA");
+
     // =========================
     // 1. ROUTES
     // =========================
