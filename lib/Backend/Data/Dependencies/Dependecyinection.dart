@@ -146,12 +146,13 @@ class DependencyInjection {
 
      Provider<ISessionservice>(
        create: (context) => isAPI
-           ? ApiSessionService()
+           ? ApiSessionService(
+              connectionController: context.read<ConnectionController>()
+           )
            : SqlSessionService(
-                  executeQuery: context.read<Iexecutequery>(),
-       ),
+                  connectionProvider: context.read<ConnectionProvider>(),
+            ),
      ),
-
 
      ChangeNotifierProvider(
        create: (context) => SessionProvider(
