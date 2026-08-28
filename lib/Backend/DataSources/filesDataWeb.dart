@@ -13,15 +13,12 @@ class AssetDataSource implements AppDataSource {
 
   @override
   Future<RoutesBundle> loadRoutes() async {
-    print('📦 AssetDataSource: cargando "$path"');
+
 
     final raw = await CsvReader.fromAsset(path);
 
-    print('✅ CSV cargado: ${raw.length} caracteres');
-
     final routes = csvParse.parseRoutes(raw);
 
-    print('✅ Rutas parseadas: ${routes.length}');
 
     final files = RouteFilesBuilder.buildRouteFiles(routes);
 
