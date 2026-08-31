@@ -1,4 +1,5 @@
 import 'package:crud_factories/Backend/Feature/Session/ISessionService.dart';
+import 'package:crud_factories/Backend/Feature/Session/SessionStorage.dart';
 import 'package:crud_factories/Objects/AppSession.dart';
 import 'package:crud_factories/Objects/User.dart' show User;
 import 'package:fluent_ui/fluent_ui.dart';
@@ -12,6 +13,7 @@ enum SessionStatus {
 class SessionProvider extends ChangeNotifier {
 
    final ISessionservice service;
+   final SessionStorage _storage = SessionStorage();
 
    SessionProvider ({
       required this.service,
@@ -32,27 +34,42 @@ class SessionProvider extends ChangeNotifier {
 
    Future<void> login(String username, String password) async {
 
-      _status = SessionStatus.loading;
-      notifyListeners();
 
-      try{
-          final result = await service.login(username, password);
+     _status = SessionStatus.loading;
+     notifyListeners();
 
-          _user = result.user;
-          _session = result.session;
+     try {
 
-          _status =SessionStatus.authenticated;
 
-          notifyListeners();
 
-      } catch (_) {
-         _user = null;
-         _session = null;
+       final result = await service.login(username, password);
 
-         _status = SessionStatus.unauthenticated;
+       print('Login correcto');
+       print('User: ${result.user}');
+       print('Session: ${result.session.id}');
 
-         notifyListeners();
-      }
+       _user = result.user;
+       _session = result.session;
+
+       await _storage.saveSessionId(_session!.id);
+
+       print('SessionId guardado: ${_session!.id}');
+
+       _status = SessionStatus.authenticated;
+
+       notifyListeners();
+
+     } catch (e) {
+
+       print('ERROR LOGIN: $e');
+
+       _user = null;
+       _session = null;
+
+       _status = SessionStatus.unauthenticated;
+
+       notifyListeners();
+     }
    }
 
    Future<void> logout() async {
@@ -64,6 +81,8 @@ class SessionProvider extends ChangeNotifier {
          await service.logout(currentSession.id);
       }
 
+      await _storage.clearSessionId();
+
       _user = null;
       _session = null;
 
@@ -72,45 +91,70 @@ class SessionProvider extends ChangeNotifier {
       notifyListeners();
    }
 
-   Future<bool> restoreSession (String sessionId) async {
+   Future<bool> restoreSession() async {
 
-      _status = SessionStatus.loading;
+     print('========== RESTORE SESSION ==========');
 
-      notifyListeners();
+     final sessionId = await _storage.getSessionId();
 
-      try{
+     print('SessionId guardado: $sessionId');
 
-          final result = await service.restoreSession(
-              sessionId
-          );
+     if (sessionId == null) {
+       print('No hay sesión guardada');
 
-          if(result == null)
-          {
-            _user = null;
-            _session = null;
-            _status = SessionStatus.unauthenticated;
+       _status = SessionStatus.unauthenticated;
+       notifyListeners();
+       return false;
+     }
 
-            notifyListeners();
+     print('Intentando restaurar sesión...');
 
-            return false;
-          }
+     _status = SessionStatus.loading;
+     notifyListeners();
 
-          _user = result.user;
-          _session = result.session;
-          _status= SessionStatus.authenticated;
+     try {
 
-          notifyListeners();
+       final result = await service.restoreSession(sessionId);
 
-          return true;
-      } catch (_) {
+       print('Resultado restoreSession: $result');
+
+       if (result == null) {
+
+         print('Sesión no válida');
+
+         await _storage.clearSessionId();
 
          _user = null;
          _session = null;
-
          _status = SessionStatus.unauthenticated;
 
+         notifyListeners();
+
          return false;
-      }
+       }
+
+       print('Sesión restaurada correctamente');
+       print('Usuario: ${result.user}');
+       print('Session: ${result.session.id}');
+
+       _user = result.user;
+       _session = result.session;
+       _status = SessionStatus.authenticated;
+
+       notifyListeners();
+
+       return true;
+
+     } catch (e) {
+
+       print('ERROR restoreSession: $e');
+
+       _user = null;
+       _session = null;
+       _status = SessionStatus.unauthenticated;
+
+       return false;
+     }
    }
 
 }
