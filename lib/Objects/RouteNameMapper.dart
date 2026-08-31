@@ -35,7 +35,7 @@ class RouteNameMapper {
       case 'lineas':
         return RouteFileKey.lines;
 
-      case 'mails':
+      case 'emails':
       case 'correos':
       case 'addresss':
         return RouteFileKey.mails;
