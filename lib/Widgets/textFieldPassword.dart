@@ -7,6 +7,7 @@ Padding textfieldPassword({
   String? campOld,
   required TextEditingController controllerCamp,
   bool? campEdit,
+  bool obscureText = true,
   BuildContext? context,
 
 }){
@@ -31,7 +32,7 @@ Padding textfieldPassword({
             height: 40,
             child: TextField(
               enabled: campEdit,
-              obscureText: true,
+              obscureText: obscureText,
               controller: controllerCamp,
               decoration: InputDecoration(
                 filled: true,
