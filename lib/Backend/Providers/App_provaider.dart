@@ -32,6 +32,7 @@ import '../Feature/Connection/Service/IConnectionService.dart' show IConnectionS
 import '../Feature/Connection/Sesion/IConnection_sesion_service.dart';
 
 import 'RoutesProvider.dart';
+import 'SessionProvaider.dart';
 
 enum DataSourceMode {
   csv,
@@ -102,6 +103,11 @@ class AppProvider extends ChangeNotifier {
 
 
     try {
+
+
+      // Restaurar sesión guardada
+
+      // await context.read<SessionProvider>().restoreSession();
 
       final source = await BootstrapService().resolve(context,isApi);
 
