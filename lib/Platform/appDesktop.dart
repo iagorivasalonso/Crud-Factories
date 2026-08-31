@@ -19,6 +19,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:menu_bar/menu_bar.dart';
 import 'package:provider/provider.dart';
+import '../Alertdialogs/login.dart';
 import '../Backend/Providers/App_provaider.dart';
 import '../Backend/Providers/EmployeeProvider.dart';
 import '../Backend/Providers/RoutesProvider.dart';
@@ -53,7 +54,6 @@ class _appDesktopState extends State<appDesktop> {
         print(e);
         print(st);
       }
-
 
     });
   }
@@ -502,27 +502,62 @@ class _appDesktopState extends State<appDesktop> {
          ),
       ];
     }
+    
+    return Stack(
+      children: [
+        MenuBarWidget(
+          barButtons: _menuBarButtons(),
+          barStyle: const MenuStyle(
+            backgroundColor: MaterialStatePropertyAll(
+              Color(0xca0347f3),
+            ),
+          ),
+          child: Container(
+            width: mWidth,
+            height: mHeight,
+            color: Colors.white,
+            child: AppContent(),
+          ),
+        ),
+        Positioned(
+          right: 0,
+          top: 0,
+          height: 40,
+          child: Container(
+            color: const Color(0xca0347f3),
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                TextButton(
+                  onPressed: () {
+                    LoginPage(context);
+                  },
+                  child: const Text(
+                    'Iniciar sesión',
+                    style: TextStyle(
+                      color: Colors.white,
+                    ),
+                  ),
+                ),
 
-    return mHeight>50.0
-
-    ? MenuBarWidget(
-      barButtons: _menuBarButtons(),
-      barStyle: const MenuStyle(
-        backgroundColor: MaterialStatePropertyAll(Color(0xca0347f3)),
-      ),
-      child:Container(
-        width: mWidth,
-        height:  mHeight,
-        color: Colors.white,
-        child:  AppContent(),
-      ),
-    )
-        :Container(
-        width: mWidth,
-        height:  mHeight,
-        color: Colors.white,
-        child:  AppContent(),
+                TextButton(
+                  onPressed: () {
+                    // Mi cuenta
+                  },
+                  child: const Text(
+                    'Mi cuenta',
+                    style: TextStyle(
+                      color: Colors.white,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ],
     );
+
 
   }
   
