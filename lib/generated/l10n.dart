@@ -604,6 +604,31 @@ class S {
     return Intl.message('Usuario', name: 'user', desc: '', args: []);
   }
 
+  /// `Acceso de usuarios`
+  String get user_access {
+    return Intl.message(
+      'Acceso de usuarios',
+      name: 'user_access',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Mostrar contraseña`
+  String get show_password {
+    return Intl.message(
+      'Mostrar contraseña',
+      name: 'show_password',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Iniciar sesión`
+  String get login {
+    return Intl.message('Iniciar sesión', name: 'login', desc: '', args: []);
+  }
+
   /// `Utilidades`
   String get utilities {
     return Intl.message('Utilidades', name: 'utilities', desc: '', args: []);
@@ -2727,4 +2752,3 @@ class AppLocalizationDelegate extends LocalizationsDelegate<S> {
     return false;
   }
 }
-
