@@ -360,6 +360,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "list_of_sends": MessageLookupByLibrary.simpleMessage("Lista de envios"),
     "lists": MessageLookupByLibrary.simpleMessage("Listas"),
     "load_data": MessageLookupByLibrary.simpleMessage("Cargar datos"),
+    "login": MessageLookupByLibrary.simpleMessage("Iniciar sesión"),
     "mail": MessageLookupByLibrary.simpleMessage("Email"),
     "mail_already_exists": MessageLookupByLibrary.simpleMessage(
       "Esta cuenta de correo ya existe.",
@@ -549,6 +550,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "server": MessageLookupByLibrary.simpleMessage("Servidor"),
     "shipment": MessageLookupByLibrary.simpleMessage("Envío"),
     "shipments": MessageLookupByLibrary.simpleMessage("Envíos"),
+    "show_password": MessageLookupByLibrary.simpleMessage("Mostrar contraseña"),
     "smtp_host": MessageLookupByLibrary.simpleMessage("Host SMTP"),
     "source": MessageLookupByLibrary.simpleMessage("Fuente"),
     "sql": MessageLookupByLibrary.simpleMessage("SQL"),
@@ -655,6 +657,7 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "update": MessageLookupByLibrary.simpleMessage("Actualizar"),
     "user": MessageLookupByLibrary.simpleMessage("Usuario"),
+    "user_access": MessageLookupByLibrary.simpleMessage("Acceso de usuarios"),
     "utilities": MessageLookupByLibrary.simpleMessage("Utilidades"),
     "ver": MessageLookupByLibrary.simpleMessage("Ver"),
     "verify_password": MessageLookupByLibrary.simpleMessage(
@@ -693,4 +696,3 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
   };
 }
-
