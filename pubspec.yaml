@@ -33,6 +33,7 @@ dependencies:
   http: ^1.1.0
   provider: ^6.0.5
   archive: ^3.6.1
+  shared_preferences: ^2.5.5
 
 dev_dependencies:
   flutter_test:
