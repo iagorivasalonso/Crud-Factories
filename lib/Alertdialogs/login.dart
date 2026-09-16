@@ -1,4 +1,5 @@
 
+import 'package:crud_factories/Backend/Providers/App_provaider.dart' show AppProvider;
 import 'package:crud_factories/Backend/Providers/SessionProvaider.dart';
 import 'package:crud_factories/Widgets/genericCheckbox.dart' show genericCheckbox;
 import 'package:crud_factories/Widgets/headAlertDialog.dart';
@@ -70,9 +71,14 @@ Future<void> LoginPage (BuildContext context) async {
                                   );
 
                                   final sessionProvider = context.read<SessionProvider>();
-                                  print(sessionProvider.status);
-                                  if (sessionProvider.isAuthenticated) {
-                                    Navigator.pop(context);
+
+                                  final user = sessionProvider.user;
+
+                                  if (user != null) {
+                                    await context.read<AppProvider>().loadUserData(
+                                      context,
+                                      user,
+                                    );
                                   }
                                 },
                               ),

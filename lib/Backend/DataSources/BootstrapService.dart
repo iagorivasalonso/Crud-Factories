@@ -77,6 +77,15 @@ class BootstrapService {
 
   static AppDataSource fromMode(DataSourceMode newMode) {
 
-      return FileDataSource();
+    switch (newMode) {
+      case DataSourceMode.csv:
+        return FileDataSource();
+
+      case DataSourceMode.sql:
+        return AssetDataSource();
+
+      case DataSourceMode.api:
+        return AssetDataSource();
+    }
   }
 }
