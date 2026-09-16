@@ -6,15 +6,18 @@ Widget genericCheckbox({
   required bool value,
   required ValueChanged<bool?> onChanged,
 }) {
-  return Row(
-    mainAxisSize: MainAxisSize.min,
-    children: [
-      Checkbox(
-        value: value,
-        onChanged: onChanged,
-      ),
-      const SizedBox(width: 4),
-      Text(text),
-    ],
+  return Padding(
+    padding: const EdgeInsets.only(top: 10.0),
+    child: Row(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Checkbox(
+          value: value,
+          onChanged: onChanged,
+        ),
+        const SizedBox(width: 4),
+        Text(text),
+      ],
+    ),
   );
 }
