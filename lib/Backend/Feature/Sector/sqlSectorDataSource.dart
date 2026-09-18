@@ -7,17 +7,19 @@ import 'ISectorDataSource.dart';
 class SqlSectorDataSource  implements ISectorDataSource{
 
   final Iexecutequery executeQuery;
+  final String userId;
 
   SqlSectorDataSource({
-    required this.executeQuery
+    required this.executeQuery,
+    required this.userId
   });
 
   @override
   Future<void> delete(String id) async {
 
     await executeQuery.execute(
-      'DELETE FROM sectors WHERE id=?',
-      [id],
+      'DELETE FROM sectors WHERE id = ? AND user_id = ?',
+      [id,userId],
     );
   }
 
@@ -25,7 +27,8 @@ class SqlSectorDataSource  implements ISectorDataSource{
   Future<List<Sector>> load() async {
 
     final result = await executeQuery.query(
-      'SELECT id, sector FROM sectors',
+      'SELECT id, sector FROM sectors WHERE userId = ?',
+      [userId]
     );
 
     return result.map((row) => Sector(
@@ -39,8 +42,8 @@ class SqlSectorDataSource  implements ISectorDataSource{
   Future<void> insert(Sector s) async {
 
     await executeQuery.execute(
-      'INSERT INTO sectors VALUES (?, ?)',
-      [s.id, s.name],
+      'INSERT INTO sectors VALUES (?, ?, ?)',
+      [s.id, s.name,userId],
     );
   }
 
@@ -48,8 +51,8 @@ class SqlSectorDataSource  implements ISectorDataSource{
   Future<void> upload(Sector s) async {
 
     await executeQuery.execute(
-       'UPDATE sectors SET sector = ? where id=?',
-        [s.name,s.id]
+      'UPDATE sectors SET sector = ? WHERE id = ? AND user_id = ?',
+      [s.name, s.id, userId],
     );
   }
 
@@ -59,10 +62,9 @@ class SqlSectorDataSource  implements ISectorDataSource{
    for(final sector in sectors) {
 
       await executeQuery.execute(
-        'INSERT INTO sectors VALUES (?, ?)',
+        'INSERT INTO sectors VALUES (?, ?,?)',
          [
-           sector.id,
-           sector.name
+           sector.id, sector.name, userId
         ],
       );
 

@@ -23,6 +23,7 @@ import '../Alertdialogs/login.dart';
 import '../Backend/Providers/App_provaider.dart';
 import '../Backend/Providers/EmployeeProvider.dart';
 import '../Backend/Providers/RoutesProvider.dart';
+import '../Backend/Providers/SessionProvaider.dart';
 
 
 class appDesktop extends StatefulWidget {
@@ -502,7 +503,7 @@ class _appDesktopState extends State<appDesktop> {
          ),
       ];
     }
-    
+
     return Stack(
       children: [
         MenuBarWidget(
@@ -519,6 +520,7 @@ class _appDesktopState extends State<appDesktop> {
             child: AppContent(),
           ),
         ),
+        if(context.watch<ConnectionProvider>().isConnected==true)
         Positioned(
           right: 0,
           top: 0,
@@ -528,28 +530,60 @@ class _appDesktopState extends State<appDesktop> {
             child: Row(
               mainAxisSize: MainAxisSize.min,
               children: [
-                TextButton(
-                  onPressed: () {
-                    LoginPage(context);
-                  },
-                  child: const Text(
-                    'Iniciar sesión',
-                    style: TextStyle(
-                      color: Colors.white,
-                    ),
-                  ),
-                ),
 
-                TextButton(
-                  onPressed: () {
-                    // Mi cuenta
+                Consumer<SessionProvider>(
+                  builder: (context, session, child) {
+
+                    if (!session.isAuthenticated || session.user == null) {
+                      return TextButton(
+                        onPressed: () {
+                          LoginPage(context);
+                        },
+                        child: const Text(
+                          'Iniciar sesión',
+                          style: TextStyle(
+                            color: Colors.white,
+                          ),
+                        ),
+                      );
+                    }
+
+                    return Material(
+                      color: Colors.transparent,
+                      child: PopupMenuButton<String>(
+                        offset: const Offset(0, 40),
+                        onSelected: (value) async {
+                          if (value == 'logout') {
+
+                            String message = "¿Seguro que desea cerrar sesion";
+
+                            final accepted  = await warning(context, message);
+                            if (!accepted ) return;
+
+                            await context.read<SessionProvider>().logout();
+                          }
+                        },
+                        itemBuilder: (context) => [
+                          const PopupMenuItem<String>(
+                            value: 'logout',
+                            child: Row(
+                              children: [
+                                Icon(Icons.logout),
+                                SizedBox(width: 8),
+                                Text('Cerrar sesión'),
+                              ],
+                            ),
+                          ),
+                        ],
+                        child: Text(
+                          '${session.user!.username} ▼',
+                          style: TextStyle(
+                            color: Colors.white,
+                          ),
+                        ),
+                      ),
+                    );
                   },
-                  child: const Text(
-                    'Mi cuenta',
-                    style: TextStyle(
-                      color: Colors.white,
-                    ),
-                  ),
                 ),
               ],
             ),

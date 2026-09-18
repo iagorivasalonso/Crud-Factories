@@ -14,13 +14,14 @@ import 'IEmployeeDataSource.dart';
 class ApiEmployeeDataSource implements IEmployeeDataSource {
 
   final ApiConfig config;
+  final String userId;
 
-  ApiEmployeeDataSource({required this.config});
+  ApiEmployeeDataSource({required this.config, required this.userId});
 
   @override
   Future<void> delete(String id) async {
 
-    final data = await connectApi('employees/$id',config);
+    final data = await connectApi('employees/$id',config,  userId: userId);
 
     final res = await http.delete(data);
 
@@ -32,7 +33,7 @@ class ApiEmployeeDataSource implements IEmployeeDataSource {
   @override
   Future<List<Empleoyee>> load() async {
 
-    final uri  = await connectApi('employees',config);
+    final uri  = await connectApi('employees',config,  userId: userId);
 
     final res = await http.get(uri);
 
@@ -62,7 +63,8 @@ class ApiEmployeeDataSource implements IEmployeeDataSource {
           'name': e.name,
           'idFactory': e.idFactory,
         },
-        config
+        config,
+        userId: userId,
     );
 
   }
@@ -80,6 +82,7 @@ class ApiEmployeeDataSource implements IEmployeeDataSource {
           'idFactory': employee.idFactory,
         },
         config,
+        userId: userId,
       );
     }
 

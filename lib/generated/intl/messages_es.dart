@@ -673,6 +673,7 @@ class MessageLookup extends MessageLookupByLibrary {
           "No tenemos ningún envío en esa fecha",
         ),
     "web_page": MessageLookupByLibrary.simpleMessage("Página web"),
+    "welcome": MessageLookupByLibrary.simpleMessage("Bienvenido"),
     "were_modified": MessageLookupByLibrary.simpleMessage("Fueron modificados"),
     "what_type_of_database_do_you_want_to_use":
         MessageLookupByLibrary.simpleMessage(

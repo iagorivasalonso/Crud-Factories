@@ -11,13 +11,14 @@ class ApiSectorDataSource implements ISectorDataSource{
 
 
   final ApiConfig config;
+  final String userId;
 
-  ApiSectorDataSource({required this.config});
+  ApiSectorDataSource({required this.config, required this.userId});
 
   @override
   Future<void> delete(String id) async {
 
-    final data = await connectApi('sectors/$id',config);
+    final data = await connectApi('sectors/$id',config, userId: userId);
 
     final res = await http.delete(data);
 
@@ -28,7 +29,7 @@ class ApiSectorDataSource implements ISectorDataSource{
 
   @override
   Future<List<Sector>> load() async {
-    final uri = await connectApi('sectors', config);
+    final uri = await connectApi('sectors', config,userId: userId);
 
     final res = await http.get(uri);
 
@@ -55,8 +56,10 @@ class ApiSectorDataSource implements ISectorDataSource{
         {
           'id': s.id,
           'sector': s.name,
+          'user_id': userId,
         },
         config,
+        userId: userId,
       );
 
   }
@@ -65,15 +68,17 @@ class ApiSectorDataSource implements ISectorDataSource{
   Future<void> upload(Sector s) async  {
 
     await saveToWebStorage(
-    'sectors',
-    s.id,
-    {
-      'id': s.id,
-      'sector': s.name,
-    },
-    config,
-        isUpdate: true
-    );
+              'sectors',
+              s.id,
+              {
+                'id': s.id,
+                'sector': s.name,
+                'user_id': userId,
+              },
+              config,
+              userId: userId,
+              isUpdate: true,
+          );
   }
 
   @override
@@ -82,13 +87,14 @@ class ApiSectorDataSource implements ISectorDataSource{
       for(final sector in sectors)
       {
         await saveToWebStorage(
-        'sectors',
-        sector.id,
-        {
-          'id': sector.id,
-          'sector': sector.name,
-        },
-        config,
+            'sectors',
+            sector.id,
+            {
+              'id': sector.id,
+              'sector': sector.name,
+            },
+            config,
+            userId: userId,
         );
       }
   }

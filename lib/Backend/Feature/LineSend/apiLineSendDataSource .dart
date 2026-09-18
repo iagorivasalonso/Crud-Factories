@@ -10,9 +10,10 @@ import 'package:http/http.dart' as http;
 class apiLinesendDatasource implements ILineSendDatasource {
 
   final ApiConfig config;
+  final String userId;
 
   apiLinesendDatasource({
-    required this.config,
+    required this.config, required this.userId,
   });
 
   @override
@@ -21,7 +22,7 @@ class apiLinesendDatasource implements ILineSendDatasource {
 
       final data = await connectApi(
         'linesends/${line.id}',
-        config,
+        config, userId: userId
       );
 
       final res = await http.delete(data);
@@ -39,7 +40,7 @@ class apiLinesendDatasource implements ILineSendDatasource {
 
     final uri = await connectApi(
       'lines',
-      config,
+      config, userId: userId
     );
 
     final res = await http.get(uri);
@@ -81,6 +82,7 @@ class apiLinesendDatasource implements ILineSendDatasource {
           'state': line.state,
         },
         config,
+        userId: userId,
       );
     }
   }
@@ -103,6 +105,7 @@ class apiLinesendDatasource implements ILineSendDatasource {
           'state': line.state,
         },
         config,
+        userId: userId,
         isUpdate: true,
       );
     }
@@ -126,6 +129,7 @@ class apiLinesendDatasource implements ILineSendDatasource {
           'state': line.state,
         },
         config,
+        userId: userId,
       );
     }
   }

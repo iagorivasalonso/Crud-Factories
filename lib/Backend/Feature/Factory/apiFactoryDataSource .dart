@@ -11,13 +11,17 @@ import 'package:http/http.dart' as http;
 class apiFactoryDataSource implements IFactoryDataSource {
 
   final ApiConfig config;
+  final String userId;
 
-  apiFactoryDataSource({required this.config});
+  apiFactoryDataSource({
+    required this.config,
+    required this.userId
+  });
 
   @override
   Future<void> delete(String id) async {
 
-    final data = await connectApi('factories/$id',config);
+    final data = await connectApi('factories/$id',config, userId: userId);
 
     final res = await http.delete(data);
 
@@ -28,8 +32,8 @@ class apiFactoryDataSource implements IFactoryDataSource {
 
   @override
   Future<List<Factory>> load() async {
-
-    final uri = await connectApi('factories', config);
+    print('FACTORIES USER ID: $userId');
+    final uri = await connectApi('factories', config, userId: userId);
 
     final res = await http.get(uri);
 
@@ -88,7 +92,8 @@ class apiFactoryDataSource implements IFactoryDataSource {
             'postcode': f.address.postcode,
           },
         },
-        config
+        config,
+        userId: userId,
     );
   }
 
@@ -121,6 +126,7 @@ class apiFactoryDataSource implements IFactoryDataSource {
               },
       },
         config,
+        userId: userId,
         isUpdate: true,
     );
   }
@@ -152,6 +158,7 @@ class apiFactoryDataSource implements IFactoryDataSource {
           'postcode': factory.address.postcode,
         },
         config,
+        userId: userId,
       );
     }
   }

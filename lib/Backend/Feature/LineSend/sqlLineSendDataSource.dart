@@ -5,9 +5,11 @@ import 'package:crud_factories/Objects/LineSend.dart';
 class SqlLinesendDatasource implements ILineSendDatasource{
 
   final Iexecutequery executeQuery;
+  final String userId;
 
   SqlLinesendDatasource({
-     required this.executeQuery
+     required this.executeQuery,
+     required this.userId
   });
 
   @override
@@ -16,8 +18,8 @@ class SqlLinesendDatasource implements ILineSendDatasource{
     for (final line in l)
     {
       await executeQuery.execute(
-          'DELETE FROM linesends WHERE id =?',
-          [line.id]
+          'DELETE FROM linesends WHERE id = ? AND user_id = ?',
+          [line.id,userId]
       );
     }
   }
@@ -26,7 +28,7 @@ class SqlLinesendDatasource implements ILineSendDatasource{
   Future<List<LineSend>> load() async {
 
     final result = await executeQuery.query(
-       'SELECT id, date, factory,observations,state FROM linesends'
+       'SELECT id, date, factory,observations,state FROM linesends WHERE userId = ?'
      );
 
     return result.map((row) => LineSend(
@@ -44,14 +46,8 @@ class SqlLinesendDatasource implements ILineSendDatasource{
      for (final line in l) {
 
          await executeQuery.query(
-           'INSERT INTO lineSends (id, date, factory, state, observations) VALUES (?, ?, ?, ?, ?)',
-           [
-              line.id,
-              line.date,
-              line.factory,
-              line.state,
-              line.observations
-           ]
+           'INSERT INTO lineSends (id, date, factory, state, observations) VALUES (?, ?, ?, ?,? , ?)',
+           [line.id, line.date, line.factory, line.state, line.observations,userId]
          );
      }
 
@@ -65,21 +61,8 @@ class SqlLinesendDatasource implements ILineSendDatasource{
     for (final line in l) {
 
       await executeQuery.query(
-        '''
-      UPDATE lineSends
-      SET date = ?,
-          factory = ?,
-          state = ?,
-          observations = ?
-      WHERE id = ?
-      ''',
-        [
-          line.date,
-          line.factory,
-          line.state,
-          line.observations,
-          line.id,
-        ],
+        'UPDATE lineSends SET date = ?,factory = ?,state = ?,observations = ? WHERE id = ?  AND user_id = ?',
+        [line.date, line.factory, line.state, line.observations, line.id,userId],
       );
     }
 
@@ -92,13 +75,9 @@ class SqlLinesendDatasource implements ILineSendDatasource{
     for (final line in lines) {
 
       await executeQuery.query(
-          'INSERT INTO lineSends (id, date, factory, state, observations) VALUES (?, ?, ?, ?, ?)',
+          'INSERT INTO lineSends (id, date, factory, state, observations) VALUES (?, ?, ?, ?, ?, ?)',
           [
-            line.id,
-            line.date,
-            line.factory,
-            line.state,
-            line.observations
+            line.id, line.date, line.factory, line.state, line.observations, userId
           ]
       );
     }

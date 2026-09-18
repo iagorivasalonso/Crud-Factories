@@ -1,4 +1,6 @@
 
+import 'package:crud_factories/Alertdialogs/confirm.dart';
+import 'package:crud_factories/Alertdialogs/error.dart';
 import 'package:crud_factories/Backend/Providers/App_provaider.dart' show AppProvider;
 import 'package:crud_factories/Backend/Providers/SessionProvaider.dart';
 import 'package:crud_factories/Widgets/genericCheckbox.dart' show genericCheckbox;
@@ -65,11 +67,28 @@ Future<void> LoginPage (BuildContext context) async {
                               child:  materialButton(
                                 nameAction: S.of(context).login,
                                 function: () async {
-                                  await context.read<SessionProvider>().login(
+
+                                final result =  await context.read<SessionProvider>().login(
                                     usernameController.text.trim(),
                                     passwordController.text,
                                   );
 
+                                Navigator.of(context).pop(false);
+
+                                switch(result) {
+
+                                  case SessionStatus.authenticated:
+
+                                    String messageWelcome = "${S.of(context).welcome}, ${ usernameController.text.trim()}";
+
+                                   await confirm(context, messageWelcome);
+
+                                  case SessionStatus.loading:
+                                    // TODO: Handle this case.
+                                    throw UnimplementedError();
+                                  case SessionStatus.unauthenticated:
+                                      await error(context, S.of(context).the_user_or_password_are_incorrect);
+                                }
                                   final sessionProvider = context.read<SessionProvider>();
 
                                   final user = sessionProvider.user;

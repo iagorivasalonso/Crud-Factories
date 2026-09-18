@@ -18,9 +18,13 @@ class RepositorySector {
       static SectorRepository create(
             DataSourceMode mode,
             RouteFiles files,
-            {Iexecutequery? db, ApiConfig? config,}
+            {Iexecutequery? db, ApiConfig? config, String? userId,}
       ) {
         late ISectorDataSource datasource;
+
+        if (userId == null && mode != DataSourceMode.csv) {
+          throw Exception("UserId is required for SQL mode");
+        }
 
         switch (mode) {
 
@@ -34,7 +38,8 @@ class RepositorySector {
             }
 
             datasource = SqlSectorDataSource(
-                executeQuery:db
+                executeQuery:db,
+                userId:userId!
             );
 
            break;
@@ -44,6 +49,7 @@ class RepositorySector {
             }
             datasource = ApiSectorDataSource(
                 config:config,
+                userId:userId!
             );
 
             break;

@@ -32,7 +32,7 @@ class SessionProvider extends ChangeNotifier {
        _status == SessionStatus.authenticated;
 
 
-   Future<void> login(String username, String password) async {
+   Future<SessionStatus> login(String username, String password) async {
 
 
      _status = SessionStatus.loading;
@@ -57,8 +57,10 @@ class SessionProvider extends ChangeNotifier {
 
        _status = SessionStatus.authenticated;
 
-       notifyListeners();
 
+
+       notifyListeners();
+        return SessionStatus.authenticated;
      } catch (e) {
 
        print('ERROR LOGIN: $e');
@@ -69,6 +71,7 @@ class SessionProvider extends ChangeNotifier {
        _status = SessionStatus.unauthenticated;
 
        notifyListeners();
+       return SessionStatus.unauthenticated;
      }
    }
 

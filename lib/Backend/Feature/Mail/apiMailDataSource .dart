@@ -11,13 +11,14 @@ import 'package:http/http.dart' as http;
 class apiMailDataSource implements IMailDataSource {
 
   final ApiConfig config;
+  final String userId;
 
-  apiMailDataSource({required this.config});
+  apiMailDataSource({required this.config, required this.userId});
 
   @override
   Future<void> delete(String id) async {
 
-    final data = await connectApi('mails/$id', config);
+    final data = await connectApi('mails/$id', config, userId: userId);
 
     final res = await http.delete(data);
 
@@ -30,7 +31,7 @@ class apiMailDataSource implements IMailDataSource {
   @override
   Future<List<Mail>> load() async{
 
-    final uri = await connectApi('mails', config);
+    final uri = await connectApi('mails', config, userId: userId);
 
     final res = await http.get(uri);
 
@@ -68,7 +69,8 @@ class apiMailDataSource implements IMailDataSource {
           'secure': m.secure,
           'password': m.password
         },
-        config
+        config,
+        userId: userId,
     );
   }
 
@@ -86,6 +88,7 @@ class apiMailDataSource implements IMailDataSource {
             'password': m.password
           },
         config,
+        userId: userId,
         isUpdate: true
     );
   }
@@ -95,17 +98,18 @@ class apiMailDataSource implements IMailDataSource {
 
     for (final mail in mails) {
       await saveToWebStorage(
-      'mails', // prefijo
-      mail.id,        // id único de la fábrica
-      {
-        'id': mail.id,
-        'mail': mail.mail,
-        'host': mail.host,
-        'port': mail.port,
-        'secure': mail.secure,
-        'password': mail.password
-      },
-      config
+        'mails', // prefijo
+        mail.id,        // id único de la fábrica
+        {
+          'id': mail.id,
+          'mail': mail.mail,
+          'host': mail.host,
+          'port': mail.port,
+          'secure': mail.secure,
+          'password': mail.password
+        },
+        config,
+        userId: userId,
       );
     }
 

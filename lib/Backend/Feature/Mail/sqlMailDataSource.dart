@@ -6,17 +6,18 @@ import 'package:crud_factories/Objects/Mail.dart';
 class SqlMailDataSource implements IMailDataSource {
 
   final Iexecutequery executeQuery;
+  final String userId;
 
   SqlMailDataSource({
-    required this.executeQuery
+    required this.executeQuery, required this.userId
   });
 
   @override
   Future<void> delete(String id) async{
 
     await executeQuery.execute(
-       'DELETE FROM mails WHERE id=?',
-        [id]
+       'DELETE FROM mails WHERE id= ?  AND user_id = ?',
+        [id, userId]
     );
   }
 
@@ -24,7 +25,8 @@ class SqlMailDataSource implements IMailDataSource {
   Future<List<Mail>> load() async {
 
      final result = await executeQuery.query(
-        'SELECT id, mail, host, port, secure, password FROM mails'
+        'SELECT id, mail, host, port, secure, password FROM mails WHERE userId = ?',
+         [userId]
      );
      
      return result.map((row) => Mail(
@@ -41,8 +43,8 @@ class SqlMailDataSource implements IMailDataSource {
   Future<void> insert(Mail m) async {
 
     await executeQuery.execute(
-       'INSERT INTO mails VALUES (?,?,?,?,?,?)',
-       [m.id,m.mail,m.host,m.port,m.secure,m.password]
+       'INSERT INTO mails VALUES (?,?,?,?,?,?,?)',
+       [m.id,m.mail,m.host,m.port,m.secure,m.password,userId]
     );
   }
 
@@ -50,23 +52,8 @@ class SqlMailDataSource implements IMailDataSource {
   Future<void> upload(Mail m) async {
 
     await executeQuery.execute(
-      '''
-    UPDATE mails
-    SET mail = ?,
-        host = ?,
-        port = ?,
-        secure = ?,
-        password = ?
-    WHERE id = ?
-    ''',
-      [
-        m.mail,
-        m.host,
-        m.port,
-        m.secure,
-        m.password,
-        m.id,
-      ],
+          ' UPDATE mails SET mail = ?, host = ?, port = ?, secure = ?,password = ? WHERE id = ?  AND user_id = ?',
+           [m.mail, m.host, m.port, m.secure, m.password, m.id,userId],
     );
   }
 
@@ -77,16 +64,9 @@ class SqlMailDataSource implements IMailDataSource {
 
       await executeQuery.execute(
           'INSERT INTO mails VALUES (?,?,?,?,?,?)',
-          [
-            mail.id,
-            mail.mail,
-            mail.host,
-            mail.port,
-            mail.secure,
-            mail.password]
+          [mail.id, mail.mail, mail.host, mail.port, mail.secure, mail.password,userId]
       );
 
     }
   }
-
 }

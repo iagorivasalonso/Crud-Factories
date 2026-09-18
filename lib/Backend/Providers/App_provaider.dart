@@ -132,7 +132,7 @@ class AppProvider extends ChangeNotifier {
       // 2. CONNECTIONS
       // =========================
 
-             await loadConnections(context, files!);
+      await loadConnections(context, files!);
 
       // =========================
       // 3. LOCAL DATA
@@ -197,12 +197,7 @@ class AppProvider extends ChangeNotifier {
 
      final executeQuery = provider.executeQuery;
 
-     final efectiveMode = switch (newMode) {
-       DataSourceMode.csv => DataSourceMode.csv,
-       DataSourceMode.sql => DataSourceMode.sql,
-       DataSourceMode.api =>
-       provider.hasConfig ? DataSourceMode.api : DataSourceMode.csv,
-     };
+  
 
      final config = provider.configOrNull;
 
@@ -213,6 +208,8 @@ class AppProvider extends ChangeNotifier {
 
     final sectorProvider = context.read<SectorProvider>();
 
+     final efectiveMode = getEffectiveMode(context);
+     
     if (efectiveMode != DataSourceMode.csv ||
         files.sectors.isNotEmpty) {
 
@@ -222,6 +219,7 @@ class AppProvider extends ChangeNotifier {
           files,
           db: executeQuery,
           config: config,
+          userId: userID,
         ),
       );
 
@@ -243,6 +241,7 @@ class AppProvider extends ChangeNotifier {
           files,
           db: executeQuery,
           config: config,
+          userId: userID,
         ),
       );
 
@@ -264,6 +263,7 @@ class AppProvider extends ChangeNotifier {
           files,
           db: executeQuery,
           config: config,
+          userId: userID,
         ),
       );
 
@@ -285,6 +285,7 @@ class AppProvider extends ChangeNotifier {
           files,
           db: executeQuery,
           config: config,
+          userId: userID,
         ),
       );
 
@@ -310,6 +311,7 @@ class AppProvider extends ChangeNotifier {
           files,
           db: executeQuery,
           config: config,
+          userId: userID,
         ),
       );
 
@@ -366,6 +368,17 @@ class AppProvider extends ChangeNotifier {
       if(files== null) return;
 
       await _loadDependencies(context, files!,mode,user);
+  }
+
+  DataSourceMode getEffectiveMode(BuildContext context) {
+    final provider = context.read<ConnectionProvider>();
+
+    return switch (mode) {
+      DataSourceMode.csv => DataSourceMode.csv,
+      DataSourceMode.sql => DataSourceMode.sql,
+      DataSourceMode.api =>
+      provider.hasConfig ? DataSourceMode.api : DataSourceMode.csv,
+    };
   }
 }
 

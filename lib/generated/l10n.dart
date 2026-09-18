@@ -629,6 +629,11 @@ class S {
     return Intl.message('Iniciar sesión', name: 'login', desc: '', args: []);
   }
 
+  /// `Bienvenido`
+  String get welcome {
+    return Intl.message('Bienvenido', name: 'welcome', desc: '', args: []);
+  }
+
   /// `Utilidades`
   String get utilities {
     return Intl.message('Utilidades', name: 'utilities', desc: '', args: []);

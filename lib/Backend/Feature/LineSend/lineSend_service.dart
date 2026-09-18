@@ -14,10 +14,15 @@ class RepositoryLineSend {
   static LinesendRepository create(
        DataSourceMode mode,
        RouteFiles files,
-       {Iexecutequery? db, ApiConfig? config}
+       {Iexecutequery? db, ApiConfig? config, String? userId}
       ){
 
     late ILineSendDatasource dataSource;
+
+    if (userId == null && mode != DataSourceMode.csv) {
+      throw Exception("UserId is required for SQL mode");
+    }
+
 
     switch(mode){
       case DataSourceMode.csv:
@@ -29,7 +34,8 @@ class RepositoryLineSend {
         }
 
         dataSource = SqlLinesendDatasource(
-            executeQuery: db
+            executeQuery: db,
+            userId:userId!
         );
         break;
       case DataSourceMode.api:
@@ -38,7 +44,8 @@ class RepositoryLineSend {
         }
 
         dataSource = apiLinesendDatasource(
-            config: config
+            config: config,
+            userId:userId!
         );
         break;
     }

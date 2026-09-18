@@ -13,9 +13,13 @@ class RepositoryFactory{
   static FactoryRepository create(
       DataSourceMode mode,
       RouteFiles files,
-      {Iexecutequery? db,  ApiConfig? config,}
+      {Iexecutequery? db,  ApiConfig? config, String? userId,}
       ) {
        late IFactoryDataSource dataSource;
+
+       if (userId == null && mode != DataSourceMode.csv) {
+         throw Exception("UserId is required for SQL mode");
+       }
 
        switch(mode) {
          case DataSourceMode.csv:
@@ -27,7 +31,8 @@ class RepositoryFactory{
            }
 
            dataSource = SqlFactoryDataSource(
-               executeQuery: db
+               executeQuery: db,
+               userId:userId!
            );
            break;
          case DataSourceMode.api:
@@ -35,7 +40,8 @@ class RepositoryFactory{
              throw Exception("ApiConfig not initialized");
            }
             dataSource = apiFactoryDataSource(
-                config: config
+                config: config,
+                userId:userId!
             );
            break;
        }

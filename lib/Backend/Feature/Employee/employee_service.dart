@@ -14,9 +14,14 @@ class RepositoryEmployee {
   static EmployeeRepository create (
       DataSourceMode mode,
       RouteFiles files,
-      {Iexecutequery? db, ApiConfig? config,}
+      {Iexecutequery? db, ApiConfig? config, String? userId,}
       ) {
        late IEmployeeDataSource dataSource;
+
+       if (userId == null && mode != DataSourceMode.csv) {
+         throw Exception("UserId is required for SQL mode");
+       }
+
 
        switch(mode){
 
@@ -31,6 +36,7 @@ class RepositoryEmployee {
 
            dataSource = SqlEmployeeDataSource (
               executeQuery: db,
+              userId:userId!
            );
           break;
          case DataSourceMode.api:
@@ -38,7 +44,8 @@ class RepositoryEmployee {
              throw Exception("ApiConfig not initialized");
            }
            dataSource = ApiEmployeeDataSource(
-              config: config
+              config: config,
+               userId:userId!
            );
           break;
        }
