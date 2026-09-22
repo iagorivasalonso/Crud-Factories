@@ -67,37 +67,44 @@ Future<void> LoginPage (BuildContext context) async {
                               child:  materialButton(
                                 nameAction: S.of(context).login,
                                 function: () async {
+                                  final sessionProvider = context.read<SessionProvider>();
+                                  final appProvider = context.read<AppProvider>();
 
-                                final result =  await context.read<SessionProvider>().login(
+                                  final result = await sessionProvider.login(
                                     usernameController.text.trim(),
                                     passwordController.text,
                                   );
 
-                                Navigator.of(context).pop(false);
+                                  switch (result) {
+                                    case SessionStatus.authenticated:
+                                      final messageWelcome =
+                                          "${S.of(context).welcome}, ${usernameController.text.trim()}";
 
-                                switch(result) {
+                                      await confirm(context, messageWelcome);
 
-                                  case SessionStatus.authenticated:
+                                      final user = sessionProvider.user;
 
-                                    String messageWelcome = "${S.of(context).welcome}, ${ usernameController.text.trim()}";
+                                      if (user != null) {
+                                        await appProvider.loadUserData(
+                                          context,
+                                          user,
+                                        );
+                                      }
 
-                                   await confirm(context, messageWelcome);
+                                      if (context.mounted) {
+                                        Navigator.of(context).pop(false);
+                                      }
+                                      break;
 
-                                  case SessionStatus.loading:
-                                    // TODO: Handle this case.
-                                    throw UnimplementedError();
-                                  case SessionStatus.unauthenticated:
-                                      await error(context, S.of(context).the_user_or_password_are_incorrect);
-                                }
-                                  final sessionProvider = context.read<SessionProvider>();
+                                    case SessionStatus.loading:
+                                      throw UnimplementedError();
 
-                                  final user = sessionProvider.user;
-
-                                  if (user != null) {
-                                    await context.read<AppProvider>().loadUserData(
-                                      context,
-                                      user,
-                                    );
+                                    case SessionStatus.unauthenticated:
+                                      await error(
+                                        context,
+                                        S.of(context).the_user_or_password_are_incorrect,
+                                      );
+                                      break;
                                   }
                                 },
                               ),
