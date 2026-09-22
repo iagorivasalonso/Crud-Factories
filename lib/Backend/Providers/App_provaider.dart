@@ -7,12 +7,14 @@ import 'package:crud_factories/Backend/Feature/Factory/factory_service.dart' sho
 import 'package:crud_factories/Backend/Feature/LineSend/lineSend_service.dart';
 import 'package:crud_factories/Backend/Feature/Mail/mail_service.dart';
 import 'package:crud_factories/Backend/Feature/Sector/sector_service.dart' show Repository, RepositorySector;
+import 'package:crud_factories/Backend/Feature/User/UserService.dart' show RepositoryUser;
 import 'package:crud_factories/Backend/Providers/ConectionProvider.dart';
 import 'package:crud_factories/Backend/Providers/EmployeeProvider.dart' show EmployeeProvider;
 import 'package:crud_factories/Backend/Providers/FactoryProvider.dart';
 import 'package:crud_factories/Backend/Providers/LineSendProvider.dart';
 import 'package:crud_factories/Backend/Providers/MailProvider.dart' show MailProvider;
 import 'package:crud_factories/Backend/Providers/SectorProvider.dart';
+import 'package:crud_factories/Backend/Providers/UserProvider.dart';
 import 'package:crud_factories/Backend/Repositories/connectionRepository.dart' show ConnectionRepository;
 import 'package:crud_factories/Objects/AppRoutesState.dart';
 import 'package:crud_factories/Objects/RouteCSV.dart' show RouteCSV;
@@ -188,7 +190,7 @@ class AppProvider extends ChangeNotifier {
      final userID = user?.id;
 
      print("el user es$userID");
-
+     await context.read<AppProvider>().loadUsers(context);
      // =========================
      // CONFIGURACIÓN DE DATOS
      // =========================
@@ -197,18 +199,16 @@ class AppProvider extends ChangeNotifier {
 
      final executeQuery = provider.executeQuery;
 
-  
 
      final config = provider.configOrNull;
+     final efectiveMode = getEffectiveMode(context);
 
 
-    // =========================
+     // =========================
     // 3. SECTORS
     // =========================
 
     final sectorProvider = context.read<SectorProvider>();
-
-     final efectiveMode = getEffectiveMode(context);
      
     if (efectiveMode != DataSourceMode.csv ||
         files.sectors.isNotEmpty) {
@@ -379,6 +379,23 @@ class AppProvider extends ChangeNotifier {
       DataSourceMode.api =>
       provider.hasConfig ? DataSourceMode.api : DataSourceMode.csv,
     };
+  }
+
+  Future<void> loadUsers(BuildContext context) async {
+    if (files == null) return;
+
+    final connectionProvider = context.read<ConnectionProvider>();
+
+    final userProvider = context.read<UserProvider>();
+
+    await userProvider.setRepositoryAndReload(
+      RepositoryUser.create(
+        getEffectiveMode(context),
+        files!,
+        db: connectionProvider.executeQuery,
+        config: connectionProvider.configOrNull,
+      ),
+    );
   }
 }
 

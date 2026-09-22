@@ -30,6 +30,7 @@ import 'package:crud_factories/Backend/Providers/App_provaider.dart' show AppPro
 import 'package:crud_factories/Backend/Providers/RoutesProvider.dart' show RoutesProvider;
 import 'package:crud_factories/Backend/Providers/SectorProvider.dart' show SectorProvider;
 import 'package:crud_factories/Backend/Providers/SessionProvaider.dart';
+import 'package:crud_factories/Backend/Providers/UserProvider.dart' show UserProvider;
 import 'package:crud_factories/Backend/Providers/filterProvider.dart' show FilterProvider;
 import 'package:crud_factories/Backend/Repositories/connectionRepository.dart' show ConnectionRepository;
 import 'package:crud_factories/Backend/Repositories/routesRepository.dart' show routerRepository;
@@ -140,6 +141,14 @@ class DependencyInjection {
        ),
      ),
 
+
+     // =========================
+     // USER
+     // ========================
+     ChangeNotifierProvider(
+       create: (_) => UserProvider(),
+     ),
+
      // =========================
      // SESSION
      // =========================
@@ -153,6 +162,7 @@ class DependencyInjection {
                   connectionProvider: context.read<ConnectionProvider>(),
             ),
      ),
+
 
      ChangeNotifierProvider(
        create: (context) => SessionProvider(

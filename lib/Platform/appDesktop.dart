@@ -1,5 +1,6 @@
 import 'package:crud_factories/Alertdialogs/closeApp.dart';
 import 'package:crud_factories/Alertdialogs/confirm.dart' show confirm;
+import 'package:crud_factories/Alertdialogs/createUser.dart';
 import 'package:crud_factories/Alertdialogs/error.dart';
 import 'package:crud_factories/Alertdialogs/noCategory.dart';
 import 'package:crud_factories/Alertdialogs/warning.dart';
@@ -11,6 +12,7 @@ import 'package:crud_factories/Backend/Providers/LineSendProvider.dart';
 import 'package:crud_factories/Backend/Providers/MailProvider.dart';
 import 'package:crud_factories/Backend/Providers/NavigationProvider.dart' show navigationProvider, AppView, NavigationProvider, FilterProvider;
 import 'package:crud_factories/Backend/Providers/SectorProvider.dart';
+import 'package:crud_factories/Backend/Providers/UserProvider.dart' show UserProvider;
 import 'package:crud_factories/Backend/Providers/filterProvider.dart' show FilterProvider;
 import 'package:crud_factories/Frontend/adminRoutes.dart';
 import 'package:crud_factories/Frontend/adminSectors.dart';
@@ -98,13 +100,15 @@ class _appDesktopState extends State<appDesktop> {
                                     width:wItem,
                                     child: Text(S.of(context).company)),
                                 onTap: () async {
-
+                             //     createUser(context);
+                                }
+/*
                                   if (!await context.read<NavigationProvider>().canNavigate(context)) return;
 
                                   context.read<NavigationProvider>()
                                       .go(AppView.createFactory);
 
-                                }
+                                }*/
                             ),
                             MenuButton(
                                 text: SizedBox(
@@ -520,7 +524,7 @@ class _appDesktopState extends State<appDesktop> {
             child: AppContent(),
           ),
         ),
-        if(context.watch<ConnectionProvider>().isConnected==true)
+        if(context.watch<ConnectionProvider>().isConnected == true && context.read<AppProvider>().mode != DataSourceMode.csv)
         Positioned(
           right: 0,
           top: 0,
@@ -535,16 +539,36 @@ class _appDesktopState extends State<appDesktop> {
                   builder: (context, session, child) {
 
                     if (!session.isAuthenticated || session.user == null) {
-                      return TextButton(
-                        onPressed: () {
-                          LoginPage(context);
-                        },
-                        child: const Text(
-                          'Iniciar sesión',
-                          style: TextStyle(
-                            color: Colors.white,
+                      return Row(
+                        children: [
+                          TextButton(
+                            onPressed: () {
+                              context.read<UserProvider>().select(null);
+                              LoginPage(context);
+                            },
+                            child: const Text(
+                              'Iniciar sesión',
+                              style: TextStyle(
+                                color: Colors.white,
+                              ),
+                            ),
                           ),
-                        ),
+
+                          TextButton(
+                            onPressed: () {
+                              showDialog(
+                                context: context,
+                                builder: (context) => const createUser(),
+                              );
+                            },
+                            child: const Text(
+                              'Nuevo usuario',
+                              style: TextStyle(
+                                color: Colors.white,
+                              ),
+                            ),
+                          ),
+                        ],
                       );
                     }
 
@@ -562,8 +586,31 @@ class _appDesktopState extends State<appDesktop> {
 
                             await context.read<SessionProvider>().logout();
                           }
+
+                          if (value == 'account') {
+                            final user = context.read<SessionProvider>().user;
+
+                            if (user == null) return;
+
+                            context.read<UserProvider>().select(user);
+
+                            showDialog(
+                              context: context,
+                              builder: (context) => const createUser(),
+                            );
+                          }
                         },
                         itemBuilder: (context) => [
+                        const PopupMenuItem<String>(
+                         value: 'account',
+                        child: Row(
+                          children: [
+                            Icon(Icons.person),
+                            SizedBox(width: 8),
+                            Text('Mi cuenta'),
+                          ],
+                        ),
+                        ),
                           const PopupMenuItem<String>(
                             value: 'logout',
                             child: Row(
@@ -573,14 +620,24 @@ class _appDesktopState extends State<appDesktop> {
                                 Text('Cerrar sesión'),
                               ],
                             ),
+
                           ),
                         ],
+                        child: ConstrainedBox(
+                              constraints: const BoxConstraints(
+                              minWidth: 100,
+                          ),
+                      child: Padding(
+                        padding: const EdgeInsets.only(right: 10.0),
                         child: Text(
                           '${session.user!.username} ▼',
-                          style: TextStyle(
+                          textAlign: TextAlign.right,
+                          style: const TextStyle(
                             color: Colors.white,
                           ),
                         ),
+                      ),
+                    ),
                       ),
                     );
                   },

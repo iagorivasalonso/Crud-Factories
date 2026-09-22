@@ -76,7 +76,9 @@ class MessageLookup extends MessageLookupByLibrary {
           "Cuenta no configurada en el servidor",
         ),
     "acept": MessageLookupByLibrary.simpleMessage("Aceptar"),
+    "active_user": MessageLookupByLibrary.simpleMessage("usuario activo"),
     "address": MessageLookupByLibrary.simpleMessage("Dirección"),
+    "administrator": MessageLookupByLibrary.simpleMessage("administrador"),
     "affair": MessageLookupByLibrary.simpleMessage("Asunto"),
     "allFemale": MessageLookupByLibrary.simpleMessage("Todas"),
     "allMale": MessageLookupByLibrary.simpleMessage("Todos"),
@@ -114,6 +116,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "careful": MessageLookupByLibrary.simpleMessage("Cuidado"),
     "category_error": MessageLookupByLibrary.simpleMessage(
       "Error de categoría",
+    ),
+    "change_password": MessageLookupByLibrary.simpleMessage(
+      "cambiar contraseña",
     ),
     "city": MessageLookupByLibrary.simpleMessage("Ciudad"),
     "clear": MessageLookupByLibrary.simpleMessage("Limpiar"),
@@ -224,6 +229,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "download": MessageLookupByLibrary.simpleMessage("Descargar"),
     "edit": MessageLookupByLibrary.simpleMessage("Editar"),
     "edit_shipment": MessageLookupByLibrary.simpleMessage("Editar envio"),
+    "edit_user": MessageLookupByLibrary.simpleMessage("editar usuario"),
     "edition_of_the_sector": MessageLookupByLibrary.simpleMessage(
       "Edición del sector",
     ),
@@ -241,6 +247,9 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "error_modifying_the_database_name": MessageLookupByLibrary.simpleMessage(
       "Error al modificar el el nombre de la base de datos",
+    ),
+    "error_updating_user": MessageLookupByLibrary.simpleMessage(
+      "error al actualizar el usuario",
     ),
     "examine": MessageLookupByLibrary.simpleMessage("Examinar"),
     "export_success": MessageLookupByLibrary.simpleMessage(
@@ -405,6 +414,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "new_smtp_configuration": MessageLookupByLibrary.simpleMessage(
       "Nueva configuración SMTP",
     ),
+    "new_user": MessageLookupByLibrary.simpleMessage("nuevo usuario"),
     "no": MessageLookupByLibrary.simpleMessage("No"),
     "no_connection_found": MessageLookupByLibrary.simpleMessage(
       "No se encontró la conexión",
@@ -473,6 +483,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "Destinatario requerido",
     ),
     "returned": MessageLookupByLibrary.simpleMessage("Devuelto"),
+    "role": MessageLookupByLibrary.simpleMessage("Rol"),
     "route": MessageLookupByLibrary.simpleMessage("Ruta"),
     "route_file_cannot_be_read": MessageLookupByLibrary.simpleMessage(
       "No se puede leer el archivo de rutas",
@@ -656,8 +667,23 @@ class MessageLookup extends MessageLookupByLibrary {
       "Tienes cambios sin guardar. ¿Quieres salir sin guardar?",
     ),
     "update": MessageLookupByLibrary.simpleMessage("Actualizar"),
+    "usename_required": MessageLookupByLibrary.simpleMessage(
+      "el nombre de usuario es obligatorio",
+    ),
     "user": MessageLookupByLibrary.simpleMessage("Usuario"),
     "user_access": MessageLookupByLibrary.simpleMessage("Acceso de usuarios"),
+    "user_already_exists": MessageLookupByLibrary.simpleMessage(
+      "el usuario ya existe",
+    ),
+    "user_created_successfully": MessageLookupByLibrary.simpleMessage(
+      "usuario creado correctamente",
+    ),
+    "user_not_found": MessageLookupByLibrary.simpleMessage(
+      "el usuario no existe",
+    ),
+    "user_updated_successfully": MessageLookupByLibrary.simpleMessage(
+      "usuario actualizado correctamente",
+    ),
     "utilities": MessageLookupByLibrary.simpleMessage("Utilidades"),
     "ver": MessageLookupByLibrary.simpleMessage("Ver"),
     "verify_password": MessageLookupByLibrary.simpleMessage(

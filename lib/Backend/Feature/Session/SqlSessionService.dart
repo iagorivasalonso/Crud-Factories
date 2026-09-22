@@ -34,7 +34,7 @@ class SqlSessionService implements ISessionservice{
 
     final rowsUsers = await executeQuery.query(
       '''
-    SELECT id, username, password_hash, role, active
+    SELECT id, username, password_hash, email, role, active
     FROM users
     WHERE username = ?
     LIMIT 1
