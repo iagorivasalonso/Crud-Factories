@@ -628,7 +628,7 @@ class _appDesktopState extends State<appDesktop> {
                               minWidth: 100,
                           ),
                       child: Padding(
-                        padding: const EdgeInsets.only(right: 10.0),
+                        padding: const EdgeInsets.only(left:10.0, right: 10.0),
                         child: Text(
                           '${session.user!.username} ▼',
                           textAlign: TextAlign.right,
