@@ -25,7 +25,7 @@ class SqlMailDataSource implements IMailDataSource {
   Future<List<Mail>> load() async {
 
      final result = await executeQuery.query(
-        'SELECT id, mail, host, port, secure, password FROM mails WHERE userId = ?',
+        'SELECT id, mail, host, port, secure, password FROM mails WHERE user_Id = ?',
          [userId]
      );
      
@@ -63,7 +63,7 @@ class SqlMailDataSource implements IMailDataSource {
     for (final mail in mails) {
 
       await executeQuery.execute(
-          'INSERT INTO mails VALUES (?,?,?,?,?,?)',
+          'INSERT INTO mails VALUES (?,?,?,?,?,?,?)',
           [mail.id, mail.mail, mail.host, mail.port, mail.secure, mail.password,userId]
       );
 
