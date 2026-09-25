@@ -40,18 +40,19 @@ class AppProvider extends ChangeNotifier {
   DataSourceMode mode;
 
   AppProvider({
-     required this.mode
+    required this.mode
   });
 
   bool loaded = false;
   bool _loading = false;
   bool initialized = false;
   RouteFiles? files;
+
   bool get isLoading => _loading;
 
   bool get isApi => mode == DataSourceMode.api;
 
-  final localUser = User(           //se usa para trabajar con la app en local
+  final localUser = User( //se usa para trabajar con la app en local
     id: 'local',
     username: 'local',
     role: 'admin',
@@ -59,11 +60,8 @@ class AppProvider extends ChangeNotifier {
   );
 
 
-  Future switchSource(
-      BuildContext context,
-      DataSourceMode newMode,
-      ) async {
-
+  Future switchSource(BuildContext context,
+      DataSourceMode newMode,) async {
     // Guardamos la conexión actualmente seleccionada
     final connectionProvider = context.read<ConnectionProvider>();
     final selectedConnection = connectionProvider.selected;
@@ -85,13 +83,14 @@ class AppProvider extends ChangeNotifier {
 
     final user = newMode == DataSourceMode.csv
         ? localUser
-        : context.read<SessionProvider>().user;
+        : context
+        .read<SessionProvider>()
+        .user;
 
     await _loadDependencies(context, files, newMode, user);
 
     // 3. Restaurar la conexión seleccionada
     if (selectedId != null) {
-
       final newSelected = connectionProvider.connections.firstWhere(
             (c) => c.id == selectedId,
         orElse: () => selectedConnection!,
@@ -107,19 +106,21 @@ class AppProvider extends ChangeNotifier {
     _loading = true;
     notifyListeners();
 
-
     try {
+      final source = await BootstrapService().resolve(
+        context,
+        isApi,
+      );
 
-      final source = await BootstrapService().resolve(context,isApi);
-
-
-       if(source == null)
-       {
-         return;
-       }
+      if (source == null) {
+        return;
+      }
 
       final bundle = await source.loadRoutes();
-      files = RouteFilesBuilder.buildRouteFiles(bundle.routes);
+
+      files = RouteFilesBuilder.buildRouteFiles(
+        bundle.routes,
+      );
 
       // =========================
       // 1. ROUTES
@@ -129,19 +130,19 @@ class AppProvider extends ChangeNotifier {
 
       routesProvider.setRoutes(bundle.routes);
 
-
       // =========================
       // 2. CONNECTIONS
       // =========================
 
       await loadConnections(context, files!);
 
+
+
       // =========================
       // 3. LOCAL DATA
       // =========================
 
       if (mode == DataSourceMode.csv) {
-
         await _loadDependencies(
           context,
           files!,
@@ -149,8 +150,6 @@ class AppProvider extends ChangeNotifier {
           localUser,
         );
       }
-
-
     } catch (e) {
       print("ERROR loadRoutes: $e");
       rethrow;
@@ -160,18 +159,14 @@ class AppProvider extends ChangeNotifier {
     }
   }
 
-  Future<void> reloadFromRoutes(
-      BuildContext context,
-      List<RouteCSV> routes,
-      ) async {
-
+  Future<void> reloadFromRoutes(BuildContext context,
+      List<RouteCSV> routes,) async {
     try {
       print(" routes reload");
 
       await _applyRoutes(context, routes);
 
       print("🔄 RELOAD DONE");
-
     } catch (e, st) {
       print("💥 ERROR reloadFromRoutes:");
       print(e);
@@ -180,39 +175,35 @@ class AppProvider extends ChangeNotifier {
     }
   }
 
-  Future<void> _loadDependencies(
-      BuildContext context,
+  Future<void> _loadDependencies(BuildContext context,
       RouteFiles files,
       DataSourceMode newMode,
-      User? user
-      ) async {
+      User? user) async {
+    final userID = (user ?? localUser).id;
 
-     final userID = user?.id;
+    print("el user es$userID");
+    await context.read<AppProvider>().loadUsers(context);
+    // =========================
+    // CONFIGURACIÓN DE DATOS
+    // =========================
 
-     print("el user es$userID");
-     await context.read<AppProvider>().loadUsers(context);
-     // =========================
-     // CONFIGURACIÓN DE DATOS
-     // =========================
+    final provider = context.read<ConnectionProvider>();
 
-     final provider = context.read<ConnectionProvider>();
-
-     final executeQuery = provider.executeQuery;
+    final executeQuery = provider.executeQuery;
 
 
-     final config = provider.configOrNull;
-     final efectiveMode = getEffectiveMode(context);
+    final config = provider.configOrNull;
+    final efectiveMode = getEffectiveMode(context);
 
 
-     // =========================
+    // =========================
     // 3. SECTORS
     // =========================
 
     final sectorProvider = context.read<SectorProvider>();
-     
+
     if (efectiveMode != DataSourceMode.csv ||
         files.sectors.isNotEmpty) {
-
       await sectorProvider.setRepositoryAndReload(
         RepositorySector.create(
           efectiveMode,
@@ -234,7 +225,6 @@ class AppProvider extends ChangeNotifier {
 
     if (efectiveMode != DataSourceMode.csv ||
         files.factories.isNotEmpty) {
-
       await factoryProvider.setRepositoryAndReload(
         RepositoryFactory.create(
           efectiveMode,
@@ -256,7 +246,6 @@ class AppProvider extends ChangeNotifier {
 
     if (efectiveMode != DataSourceMode.csv ||
         files.employees.isNotEmpty) {
-
       await employeeProvider.setRepositoryAndReload(
         RepositoryEmployee.create(
           efectiveMode,
@@ -278,7 +267,6 @@ class AppProvider extends ChangeNotifier {
 
     if (efectiveMode != DataSourceMode.csv ||
         files.linesSends.isNotEmpty) {
-
       await lineProvider.setRepositoryAndReload(
         RepositoryLineSend.create(
           efectiveMode,
@@ -292,7 +280,9 @@ class AppProvider extends ChangeNotifier {
       await lineProvider.load();
 
       lineProvider.enrichWithFactories(
-        context.read<FactoryProvider>().factories,
+        context
+            .read<FactoryProvider>()
+            .factories,
       );
     }
 
@@ -304,7 +294,6 @@ class AppProvider extends ChangeNotifier {
 
     if (efectiveMode != DataSourceMode.csv ||
         files.mails.isNotEmpty) {
-
       await mailProvider.setRepositoryAndReload(
         RepositoryMail.create(
           efectiveMode,
@@ -320,28 +309,23 @@ class AppProvider extends ChangeNotifier {
   }
 
   Future<void> _applyRoutes(BuildContext context, List<RouteCSV> routes) async {
-
     final files = RouteFilesBuilder.buildRouteFiles(routes);
 
     this.files = files;
 
     final user = localUser;
 
-    if(mode==DataSourceMode.csv)
-    await _loadDependencies(
-        context,
-        files,
-        mode,
-        user
-    );
-
+    if (mode == DataSourceMode.csv)
+      await _loadDependencies(
+          context,
+          files,
+          mode,
+          user
+      );
   }
 
-  Future<void> loadConnections(
-      BuildContext context,
-      RouteFiles files,
-      ) async {
-
+  Future<void> loadConnections(BuildContext context,
+      RouteFiles files,) async {
     final dataSource =
     context.read<IConnectionDataSource>() as CsvConnectionDataSource;
 
@@ -360,14 +344,12 @@ class AppProvider extends ChangeNotifier {
     if (files.connections.isNotEmpty) {
       await controller.load();
     }
-
   }
 
   Future<void> loadUserData(BuildContext context, User user) async {
+    if (files == null) return;
 
-      if(files== null) return;
-
-      await _loadDependencies(context, files!,mode,user);
+    await _loadDependencies(context, files!, mode, user);
   }
 
   DataSourceMode getEffectiveMode(BuildContext context) {
@@ -395,6 +377,35 @@ class AppProvider extends ChangeNotifier {
         db: connectionProvider.executeQuery,
         config: connectionProvider.configOrNull,
       ),
+    );
+  }
+  Future<void> loadSystemMailRepository(
+      BuildContext context,
+      RouteFiles files,
+      ) async {
+    final provider = context.read<ConnectionProvider>();
+
+    final executeQuery = provider.executeQuery;
+    final config = provider.configOrNull;
+    final efectiveMode = getEffectiveMode(context);
+
+    print('========== VOY A CREAR SYSTEM REPOSITORY ==========');
+    print('EFFECTIVE MODE: $efectiveMode');
+
+    final mailProvider = context.read<MailProvider>();
+
+    mailProvider.setSystemRepository(
+      RepositoryMail.createsysten(
+        efectiveMode,
+        files,
+        db: executeQuery,
+        config: config,
+      ),
+    );
+
+    print(
+      'SystemRepository creado: '
+          '${mailProvider.systemRepository != null}',
     );
   }
 }
