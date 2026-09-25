@@ -3,6 +3,7 @@ import 'package:crud_factories/Alertdialogs/confirm.dart';
 import 'package:crud_factories/Alertdialogs/error.dart';
 import 'package:crud_factories/Backend/Providers/App_provaider.dart' show AppProvider;
 import 'package:crud_factories/Backend/Providers/SessionProvaider.dart';
+import 'package:crud_factories/Widgets/ForgotPasswordButton.dart' show ForgotPasswordButton;
 import 'package:crud_factories/Widgets/genericCheckbox.dart' show genericCheckbox;
 import 'package:crud_factories/Widgets/headAlertDialog.dart';
 import 'package:crud_factories/Widgets/materialButton.dart' show materialButton;
@@ -13,6 +14,7 @@ import 'package:provider/provider.dart';
 import '../Widgets/textFieldPassword.dart';
 import '../Widgets/textfield.dart';
 import '../generated/l10n.dart';
+import 'forgotPasswordDialog.dart';
 
 Future<void> LoginPage (BuildContext context) async {
 
@@ -61,52 +63,22 @@ Future<void> LoginPage (BuildContext context) async {
                                 }
 
                             ),
+                            ForgotPasswordButton(
+                              onPressed: () async {
+                                Navigator.of(context).pop();
+                                forgotPassword(context);
+                              }, action: S.of(context).forgot_password,
+                            ),
 
                             Padding(
                               padding: const EdgeInsets.only(left: 35.0, top: 15.0,right: 40.0, bottom: 20.0),
                               child:  materialButton(
                                 nameAction: S.of(context).login,
-                                function: () async {
-                                  final sessionProvider = context.read<SessionProvider>();
-                                  final appProvider = context.read<AppProvider>();
-
-                                  final result = await sessionProvider.login(
-                                    usernameController.text.trim(),
-                                    passwordController.text,
-                                  );
-
-                                  switch (result) {
-                                    case SessionStatus.authenticated:
-                                      final messageWelcome =
-                                          "${S.of(context).welcome}, ${usernameController.text.trim()}";
-
-                                      await confirm(context, messageWelcome);
-
-                                      final user = sessionProvider.user;
-
-                                      if (user != null) {
-                                        await appProvider.loadUserData(
-                                          context,
-                                          user,
-                                        );
-                                      }
-
-                                      if (context.mounted) {
-                                        Navigator.of(context).pop(false);
-                                      }
-                                      break;
-
-                                    case SessionStatus.loading:
-                                      throw UnimplementedError();
-
-                                    case SessionStatus.unauthenticated:
-                                      await error(
-                                        context,
-                                        S.of(context).the_user_or_password_are_incorrect,
-                                      );
-                                      break;
-                                  }
-                                },
+                                function: () => login_in(
+                                    context,
+                                    usernameController,
+                                    passwordController
+                                ),
                               ),
                             ),
 
@@ -118,9 +90,54 @@ Future<void> LoginPage (BuildContext context) async {
             },
 
       );
+
     },
   );
   usernameController.dispose();
   passwordController.dispose();
 }
+
+Future<void> login_in(BuildContext context, TextEditingController usernameController, TextEditingController passwordController) async {
+
+  final sessionProvider = context.read<SessionProvider>();
+    final appProvider = context.read<AppProvider>();
+
+    final result = await sessionProvider.login(
+      usernameController.text.trim(),
+      passwordController.text,
+    );
+
+    switch (result) {
+      case SessionStatus.authenticated:
+        final messageWelcome =
+            "${S.of(context).welcome}, ${usernameController.text.trim()}";
+
+        await confirm(context, messageWelcome);
+
+        final user = sessionProvider.user;
+
+        if (user != null) {
+          await appProvider.loadUserData(
+            context,
+            user,
+          );
+        }
+
+        if (context.mounted) {
+          Navigator.of(context).pop(false);
+        }
+        break;
+
+      case SessionStatus.loading:
+        throw UnimplementedError();
+
+      case SessionStatus.unauthenticated:
+        await error(
+        context,
+        S.of(context).the_user_or_password_are_incorrect,
+        );
+        break;
+    }
+
+  }
 
