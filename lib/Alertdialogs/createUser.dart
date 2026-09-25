@@ -1,9 +1,11 @@
 
 import 'package:crud_factories/Alertdialogs/confirm.dart';
 import 'package:crud_factories/Alertdialogs/error.dart';
+import 'package:crud_factories/Alertdialogs/warning.dart';
 import 'package:crud_factories/Backend/Data/controlsMessagesError/errors.dart';
 import 'package:crud_factories/Backend/Global/controllers/User.dart';
 import 'package:crud_factories/Backend/Providers/SessionProvaider.dart';
+import 'package:crud_factories/Backend/Providers/notificacionProvider.dart' show NotificationProvider;
 import 'package:crud_factories/Objects/User.dart';
 import 'package:crud_factories/Validators/user.dart' show UserValidator;
 import 'package:crud_factories/Widgets/dropDownButton.dart' show GenericDropdown;
@@ -42,18 +44,19 @@ class _createUserState extends State<createUser> {
   void initState() {
     super.initState();
 
-     controllers = UserController(
-         username: TextEditingController(),
-         password: TextEditingController(),
-         passwordVerify: TextEditingController(),
-         mail: TextEditingController(),
-         role: TextEditingController(),
-         active: TextEditingController()
-     );
+    controllers = UserController(
+        username: TextEditingController(),
+        password: TextEditingController(),
+        passwordVerify: TextEditingController(),
+        mail: TextEditingController(),
+        role: TextEditingController(),
+        active: TextEditingController()
+    );
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
-
-      final user = context.read<UserProvider>().selected;
+      final user = context
+          .read<UserProvider>()
+          .selected;
 
       if (!mounted || user == null) return;
 
@@ -264,6 +267,7 @@ class _createUserState extends State<createUser> {
                                   context,
                                   userSelected,
                                   controllers,
+                                  changePassword
                                 ),
                           ),
                           const SizedBox(width: 20),
@@ -293,147 +297,209 @@ class _createUserState extends State<createUser> {
 
   void loadSelectedUser(User user) {
     controllers.username.text = user.username;
-    controllers.password.text = '';
+    controllers.password.clear();
+    controllers.passwordVerify?.clear();
     controllers.mail?.text = user.mail ?? '';
     controllers.role.text = user.role;
 
     userActive = user.active;
+
+    changePassword = false;
+    showPassword1 = false;
+    showPassword2 = false;
 
     selectedRol = user.role == 'admin'
         ? UserRole.admin
         : UserRole.user;
   }
 
- Future<void> _onSaveUser (
-        BuildContext context,
-        User? userSelected,
-        UserController controllers,
-       ) async {
+  Future<void> _onSaveUser(BuildContext context,
+      User? userSelected,
+      UserController controllers, bool changePassword,) async {
+    final isEditing = userSelected != null;
+    final userProvider = context.read<UserProvider>();
 
-       final isEditing = userSelected != null;
-       final userProvider = context.read<UserProvider>();
+    final sessionUser = context
+        .read<SessionProvider>()
+        .user;
 
-       final errorMsg = UserValidator.validate(
-           context,
-           controllers,
-           userSelected,
-           userProvider.users,
-           changePassword
-       );
+    // Si estamos editando, necesitamos sesión.
+    if (isEditing && sessionUser == null) {
+      return;
+    }
 
-       if (errorMsg != null) {
-         error(context, errorMsg);
-         return;
-       }
-
-       final sessionProvider = context.read<SessionProvider>();
-       final currentUser = sessionProvider.user;
-
-       if (currentUser?.role == 'user' && selectedRol == UserRole.admin) {
-
-           error(
-                 context,
-                 "no tiene permisos",
-               );
-
-         return;
-       }
+    // Saber si el usuario actual es admin.
+    bool isAdmin = false;
+    User? currentUser;
 
 
-       final user = User(
-           id: isEditing ? userSelected!.id :"",
-           username: controllers.username.text,
-           mail: controllers.mail?.text.trim(),
-           role: selectedRol == UserRole.admin
-                ? 'admin'
-                : 'user',
-           active: userActive
+    if (sessionUser != null) {
+      final currentUser = userProvider.users.cast<User?>().firstWhere(
+            (u) => u?.id == sessionUser.id,
+        orElse: () => null,
+      );
+
+      isAdmin = currentUser?.role == 'admin';
+    }
+      // Solo un admin puede crear/asignar un usuario admin.
+      if (selectedRol == UserRole.admin && !isAdmin) {
+        final notificationProvider = context.read<NotificationProvider>();
+
+        String msg = S.of(context).requestAdminConfirm;
+
+        final accepted = await warning(context, msg);
+
+        if (accepted) {
+
+          final result = await notificationProvider.requestAdminAccess(
+            context: context,
+            username: controllers.username.text,
+            mail: controllers.mail?.text.trim() ?? '',
+          );
+
+          if (result.success)
+          {
+            await confirm(context, S.of(context).requestAdminSent);
+          }
+          return;
+        }
+        await error(context, S
+            .of(context)
+            .not_authorized);
+        return;
+      }
+
+
+
+
+    // Validación
+    final errorMsg = UserValidator.validate(
+      context,
+      controllers,
+      userSelected,
+      userProvider.users,
+      changePassword,
+    );
+
+    if (errorMsg != null) {
+      await error(context, errorMsg);
+      return;
+    }
+
+    final user = User(
+      id: isEditing ? userSelected!.id : "",
+      username: controllers.username.text,
+      mail: controllers.mail?.text.trim(),
+      role: selectedRol == UserRole.admin
+          ? 'admin'
+          : 'user',
+      active: userActive,
+    );
+
+    // CREAR
+    if (!isEditing) {
+      final result = await userProvider.create(
+        user,
+        controllers.password.text,
+      );
+
+      switch (result) {
+        case CreateResult.success:
+          userProvider.select(null);
+
+          await confirm(
+            context,
+            S
+                .of(context)
+                .user_created_successfully,
+          );
+          break;
+
+        case CreateResult.alreadyExists:
+          await error(
+            context,
+            S
+                .of(context)
+                .user_already_exists,
+          );
+          break;
+
+        case CreateResult.invalidData:
+          await error(
+            context,
+            S
+                .of(context)
+                .invalid_data,
+          );
+          break;
+      }
+
+      return;
+    }
+
+    // EDITAR
+    final newPass = changePassword
+        ? controllers.password.text
+        : "";
+
+    final result = await userProvider.update(
+      user,
+      newPass,
+    );
+
+    switch (result) {
+      case EditResult.success:
+        await confirm(
+          context,
+          S
+              .of(context)
+              .user_updated_successfully,
         );
+        break;
 
+      case EditResult.alreadyExists:
+        await error(
+          context,
+          S
+              .of(context)
+              .user_already_exists,
+        );
+        break;
 
-         if(!isEditing)
-         {
-              final result = await userProvider.create(user,controllers.password.text);
+      case EditResult.notFound:
+        await error(
+          context,
+          S
+              .of(context)
+              .user_not_found,
+        );
+        break;
 
-              switch (result) {
-                case CreateResult.success:
-                  userProvider.select(null);
-                  await confirm(
-                    context,
-                    S.of(context).user_created_successfully,
-                  );
-                  break;
+      case EditResult.invalidData:
+        await error(
+          context,
+          S
+              .of(context)
+              .invalid_data,
+        );
+        break;
 
-                case CreateResult.alreadyExists:
-                  await error(
-                    context,
-                    S.of(context).user_already_exists,
-                  );
-                  break;
+      case EditResult.error:
+        await error(
+          context,
+          S
+              .of(context)
+              .error_updating_user,
+        );
+        break;
+    }
+  }
 
-                case CreateResult.invalidData:
-                  await error(
-                    context,
-                    S.of(context).invalid_data,
-                  );
-                  break;
-              }
-         }
-         else
-         {
-               String newPass = changePassword == true //se prepara la password si cambio
-                   ? controllers.password.text
-                   : "";
-
-               final result = await userProvider.update(user,newPass);
-
-               switch(result){
-                 case EditResult.success:
-                   await confirm(
-                     context,
-                     S.of(context).user_updated_successfully,
-                   );
-                   break;
-
-                 case EditResult.alreadyExists:
-                   await error(
-                     context,
-                     S.of(context).user_already_exists,
-                   );
-                   break;
-
-                 case EditResult.notFound:
-                   await error(
-                     context,
-                     S.of(context).user_not_found,
-                   );
-                   break;
-
-                 case EditResult.invalidData:
-                   await error(
-                     context,
-                     S.of(context).invalid_data,
-                   );
-                   break;
-
-                 case EditResult.error:
-                   await error(
-                     context,
-                     S.of(context).error_updating_user,
-                   );
-                   break;
-               }
-         }
- }
-
-  void _onResetUser( User? userSelected, UserController controllers) {
-
-    if(userSelected != null)
-    {
+  void _onResetUser(User? userSelected, UserController controllers) {
+    if (userSelected != null) {
       loadSelectedUser(userSelected);
     }
-    else
-    {
+    else {
       controllers.username.clear();
       controllers.password.clear();
       controllers.passwordVerify!.clear();
@@ -445,11 +511,7 @@ class _createUserState extends State<createUser> {
       showPassword1 = false;
       showPassword2 = false;
       userActive = true;
-
     }
-
-
   }
+
 }
-
-
