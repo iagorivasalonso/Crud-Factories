@@ -20,6 +20,12 @@ typedef String MessageIfAbsent(String messageStr, List<dynamic> args);
 class MessageLookup extends MessageLookupByLibrary {
   String get localeName => 'es';
 
+  static String m0(username, mail) =>
+      "El usuario ${username} ha solicitado permisos de administrador.\n\nUsuario: ${username}\nCorreo: ${mail}";
+
+  static String m1(username, mail) =>
+      "El usuario ${username} ha solicitado recuperar su contraseña.\n\nUsuario: ${username}\nCorreo: ${mail}";
+
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
     "Application_exit": MessageLookupByLibrary.simpleMessage(
@@ -78,6 +84,10 @@ class MessageLookup extends MessageLookupByLibrary {
     "acept": MessageLookupByLibrary.simpleMessage("Aceptar"),
     "active_user": MessageLookupByLibrary.simpleMessage("usuario activo"),
     "address": MessageLookupByLibrary.simpleMessage("Dirección"),
+    "admin_request_message": m0,
+    "admin_request_subject": MessageLookupByLibrary.simpleMessage(
+      "Solicitud de administrador",
+    ),
     "administrator": MessageLookupByLibrary.simpleMessage("administrador"),
     "affair": MessageLookupByLibrary.simpleMessage("Asunto"),
     "allFemale": MessageLookupByLibrary.simpleMessage("Todas"),
@@ -416,6 +426,9 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "new_user": MessageLookupByLibrary.simpleMessage("nuevo usuario"),
     "no": MessageLookupByLibrary.simpleMessage("No"),
+    "no_admin_with_mail": MessageLookupByLibrary.simpleMessage(
+      "No hay administradores activos con correo disponible",
+    ),
     "no_connection_found": MessageLookupByLibrary.simpleMessage(
       "No se encontró la conexión",
     ),
@@ -445,6 +458,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "not_a_valid_webpage": MessageLookupByLibrary.simpleMessage(
       "No es una página web válida",
     ),
+    "not_authorized": MessageLookupByLibrary.simpleMessage("no autorizado"),
     "not_connected_to_any_database": MessageLookupByLibrary.simpleMessage(
       "No estás conectado a ninguna base de datos",
     ),
@@ -461,6 +475,10 @@ class MessageLookup extends MessageLookupByLibrary {
         ),
     "para": MessageLookupByLibrary.simpleMessage("Para"),
     "password": MessageLookupByLibrary.simpleMessage("Contraseña"),
+    "password_recovery_request_message": m1,
+    "password_recovery_request_subject": MessageLookupByLibrary.simpleMessage(
+      "Solicitud de recuperación de contraseña",
+    ),
     "password_required": MessageLookupByLibrary.simpleMessage(
       "La contraseña es requrida",
     ),
@@ -481,6 +499,12 @@ class MessageLookup extends MessageLookupByLibrary {
     "reboot": MessageLookupByLibrary.simpleMessage("Reiniciar"),
     "recipient_required": MessageLookupByLibrary.simpleMessage(
       "Destinatario requerido",
+    ),
+    "requestAdminConfirm": MessageLookupByLibrary.simpleMessage(
+      "Para obtener permisos de administrador es necesario solicitar autorización. ¿Desea enviar la solicitud?",
+    ),
+    "requestAdminSent": MessageLookupByLibrary.simpleMessage(
+      "Solicitud de permisos enviada correctamente.",
     ),
     "returned": MessageLookupByLibrary.simpleMessage("Devuelto"),
     "role": MessageLookupByLibrary.simpleMessage("Rol"),

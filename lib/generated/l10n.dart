@@ -624,6 +624,16 @@ class S {
     );
   }
 
+  /// `cambiar contraseña`
+  String get change_password {
+    return Intl.message(
+      'cambiar contraseña',
+      name: 'change_password',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Iniciar sesión`
   String get login {
     return Intl.message('Iniciar sesión', name: 'login', desc: '', args: []);
@@ -632,6 +642,186 @@ class S {
   /// `Bienvenido`
   String get welcome {
     return Intl.message('Bienvenido', name: 'welcome', desc: '', args: []);
+  }
+
+  /// `Rol`
+  String get role {
+    return Intl.message('Rol', name: 'role', desc: '', args: []);
+  }
+
+  /// `administrador`
+  String get administrator {
+    return Intl.message(
+      'administrador',
+      name: 'administrator',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `usuario activo`
+  String get active_user {
+    return Intl.message(
+      'usuario activo',
+      name: 'active_user',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `nuevo usuario`
+  String get new_user {
+    return Intl.message('nuevo usuario', name: 'new_user', desc: '', args: []);
+  }
+
+  /// `editar usuario`
+  String get edit_user {
+    return Intl.message(
+      'editar usuario',
+      name: 'edit_user',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `el nombre de usuario es obligatorio`
+  String get usename_required {
+    return Intl.message(
+      'el nombre de usuario es obligatorio',
+      name: 'usename_required',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `no autorizado`
+  String get not_authorized {
+    return Intl.message(
+      'no autorizado',
+      name: 'not_authorized',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `usuario creado correctamente`
+  String get user_created_successfully {
+    return Intl.message(
+      'usuario creado correctamente',
+      name: 'user_created_successfully',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `usuario actualizado correctamente`
+  String get user_updated_successfully {
+    return Intl.message(
+      'usuario actualizado correctamente',
+      name: 'user_updated_successfully',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `el usuario ya existe`
+  String get user_already_exists {
+    return Intl.message(
+      'el usuario ya existe',
+      name: 'user_already_exists',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `el usuario no existe`
+  String get user_not_found {
+    return Intl.message(
+      'el usuario no existe',
+      name: 'user_not_found',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `error al actualizar el usuario`
+  String get error_updating_user {
+    return Intl.message(
+      'error al actualizar el usuario',
+      name: 'error_updating_user',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Solicitud de administrador`
+  String get admin_request_subject {
+    return Intl.message(
+      'Solicitud de administrador',
+      name: 'admin_request_subject',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `El usuario {username} ha solicitado permisos de administrador.\n\nUsuario: {username}\nCorreo: {mail}`
+  String admin_request_message(Object username, Object mail) {
+    return Intl.message(
+      'El usuario $username ha solicitado permisos de administrador.\n\nUsuario: $username\nCorreo: $mail',
+      name: 'admin_request_message',
+      desc: '',
+      args: [username, mail],
+    );
+  }
+
+  /// `Solicitud de recuperación de contraseña`
+  String get password_recovery_request_subject {
+    return Intl.message(
+      'Solicitud de recuperación de contraseña',
+      name: 'password_recovery_request_subject',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `El usuario {username} ha solicitado recuperar su contraseña.\n\nUsuario: {username}\nCorreo: {mail}`
+  String password_recovery_request_message(Object username, Object mail) {
+    return Intl.message(
+      'El usuario $username ha solicitado recuperar su contraseña.\n\nUsuario: $username\nCorreo: $mail',
+      name: 'password_recovery_request_message',
+      desc: '',
+      args: [username, mail],
+    );
+  }
+
+  /// `No hay administradores activos con correo disponible`
+  String get no_admin_with_mail {
+    return Intl.message(
+      'No hay administradores activos con correo disponible',
+      name: 'no_admin_with_mail',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Para obtener permisos de administrador es necesario solicitar autorización. ¿Desea enviar la solicitud?`
+  String get requestAdminConfirm {
+    return Intl.message(
+      'Para obtener permisos de administrador es necesario solicitar autorización. ¿Desea enviar la solicitud?',
+      name: 'requestAdminConfirm',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Solicitud de permisos enviada correctamente.`
+  String get requestAdminSent {
+    return Intl.message(
+      'Solicitud de permisos enviada correctamente.',
+      name: 'requestAdminSent',
+      desc: '',
+      args: [],
+    );
   }
 
   /// `Utilidades`
