@@ -586,13 +586,19 @@ class _appDesktopState extends State<appDesktop> {
 
                             await context.read<SessionProvider>().logout();
                           }
+    if (value == 'account') {
+      final sessionUser = context.read<SessionProvider>().user;
 
-                          if (value == 'account') {
-                            final user = context.read<SessionProvider>().user;
+      if (sessionUser == null) return;
 
-                            if (user == null) return;
+      final userProvider = context.read<UserProvider>();
 
-                            context.read<UserProvider>().select(user);
+      final user = userProvider.users.firstWhere(
+            (u) => u.id == sessionUser.id,
+      );
+
+      userProvider.select(user);
+
 
                             showDialog(
                               context: context,
