@@ -62,7 +62,7 @@ Future<void> forgotPassword (BuildContext context) async {
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
                                   materialButton(
-                                    nameAction: "solicitar",
+                                    nameAction: S.of(context).request,
                                     function: () => requestPassword(
                                         context,
                                         usernameController,
@@ -71,7 +71,7 @@ Future<void> forgotPassword (BuildContext context) async {
                                   ),
                                   const SizedBox(width: 20),
                                   materialButton(
-                                    nameAction: "volver al inicio de sesion",
+                                    nameAction: S.of(context).back_to_login,
                                     function:  () async {
                                       Navigator.of(context).pop();
                                       LoginPage(context);
@@ -100,35 +100,31 @@ Future<void> requestPassword(
     TextEditingController usernameController,
     TextEditingController mailController) async {
 
-   final userProvider = context.read<UserProvider>();
-   final notificationProvider = context.read<NotificationProvider>();
+         final userProvider = context.read<UserProvider>();
+         final notificationProvider = context.read<NotificationProvider>();
 
-   print('========== RECOVERY ==========');
-   print('UserRepository: ${userProvider.repository}');
-   print('username: ${usernameController.text.trim()}');
-   print('mail: ${mailController.text.trim()}');
 
-   final user = await userProvider.repository!
-         .findByUsernameAndMail(
-           usernameController.text.trim(),
-           mailController.text.trim()
-   );
-print(user);
-   if(user == null) {
-     await error(context, "usuario o correo no funcionan");
-     return;
-   }
+         final user = await userProvider.repository!
+               .findByUsernameAndMail(
+                 usernameController.text.trim(),
+                 mailController.text.trim()
+         );
 
-   final result = await notificationProvider.requestPasswordReset(
-       context: context,
-       user: user
-   );
-   print(result.sent);
-   if (result.success) {
-     await confirm(
-       context,
-     "se envio password",
-     );
-   }
+         if(user == null) {
+           await error(context, S.of(context).password_recovery_request_sent);
+           return;
+         }
+
+         final result = await notificationProvider.requestPasswordReset(
+             context: context,
+             user: user
+         );
+
+         if (result.success) {
+           await confirm(
+             context,
+           S.of(context).password_recovery_request_sent,
+           );
+         }
 }
 

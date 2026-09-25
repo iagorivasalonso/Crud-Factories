@@ -824,6 +824,51 @@ class S {
     );
   }
 
+  /// `Has olvidado la contraseña`
+  String get forgot_password {
+    return Intl.message(
+      'Has olvidado la contraseña',
+      name: 'forgot_password',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Solicitar`
+  String get request {
+    return Intl.message('Solicitar', name: 'request', desc: '', args: []);
+  }
+
+  /// `Volver al inicio de sesión`
+  String get back_to_login {
+    return Intl.message(
+      'Volver al inicio de sesión',
+      name: 'back_to_login',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `El usuario o el correo electrónico no son correctos`
+  String get user_or_mail_invalid {
+    return Intl.message(
+      'El usuario o el correo electrónico no son correctos',
+      name: 'user_or_mail_invalid',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Solicitud de recuperación de contraseña enviada correctamente`
+  String get password_recovery_request_sent {
+    return Intl.message(
+      'Solicitud de recuperación de contraseña enviada correctamente',
+      name: 'password_recovery_request_sent',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Utilidades`
   String get utilities {
     return Intl.message('Utilidades', name: 'utilities', desc: '', args: []);
