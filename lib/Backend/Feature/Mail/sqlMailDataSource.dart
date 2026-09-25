@@ -40,6 +40,23 @@ class SqlMailDataSource implements IMailDataSource {
   }
 
   @override
+  Future<List<Mail>> loadSystemMails() async {  // van todos los mails de la bd que sean admin sin id
+
+    final result = await executeQuery.query(
+        'SELECT id, mail, host, port, secure, password FROM mails ORDER BY id',
+    );
+
+    return result.map((row) => Mail(
+      id: row['id']?.toString() ?? '',
+      mail: row['mail']?.toString() ?? '',
+      host: row['host']?.toString() ?? '',
+      port: row['port']?.toString() ?? '',
+      secure: row['secure'] == true || row['secure'] == 1,
+      password: row['password']?.toString() ?? '',
+    )).toList();
+  }
+
+  @override
   Future<void> insert(Mail m) async {
 
     await executeQuery.execute(
@@ -69,4 +86,5 @@ class SqlMailDataSource implements IMailDataSource {
 
     }
   }
+
 }

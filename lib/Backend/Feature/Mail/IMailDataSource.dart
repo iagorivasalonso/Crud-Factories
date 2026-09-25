@@ -13,4 +13,6 @@ abstract class IMailDataSource {
 
     Future<void> save(List<Mail> mails);
 
+    Future<List<Mail>> loadSystemMails();
+
 }
