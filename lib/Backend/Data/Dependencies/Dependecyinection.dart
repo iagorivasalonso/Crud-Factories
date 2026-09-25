@@ -32,6 +32,7 @@ import 'package:crud_factories/Backend/Providers/SectorProvider.dart' show Secto
 import 'package:crud_factories/Backend/Providers/SessionProvaider.dart';
 import 'package:crud_factories/Backend/Providers/UserProvider.dart' show UserProvider;
 import 'package:crud_factories/Backend/Providers/filterProvider.dart' show FilterProvider;
+import 'package:crud_factories/Backend/Providers/notificacionProvider.dart' show NotificationProvider;
 import 'package:crud_factories/Backend/Repositories/connectionRepository.dart' show ConnectionRepository;
 import 'package:crud_factories/Backend/Repositories/routesRepository.dart' show routerRepository;
 import 'package:provider/provider.dart';
@@ -170,6 +171,7 @@ class DependencyInjection {
        ),
      ),
 
+
                                        // =========================
                                        // SECTOR
                                        // =========================
@@ -226,6 +228,17 @@ class DependencyInjection {
                 ? ApiMailService()
                 : NativeMailService()
          )
+     ),
+
+                                       // =========================
+                                       // NOTIFICATION
+                                       // =========================
+
+     ChangeNotifierProvider(
+       create: (context) => NotificationProvider(
+         mailProvider: context.read<MailProvider>(),
+         userProvider: context.read<UserProvider>(),
+       ),
      ),
 
                                          // =========================
