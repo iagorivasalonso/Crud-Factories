@@ -89,4 +89,37 @@ class SqlUserDataSource implements IUserDataSource {
       [id],
     );
   }
+
+  @override
+  Future<User?> findByUsernameAndMail(
+      String username,
+      String mail,
+      ) async {
+          final result = await executeQuery.query(
+            '''
+          SELECT id, username, mail, role, active
+          FROM users
+          WHERE username = ?
+            AND mail = ?
+            AND active = 1
+          LIMIT 1
+          ''',
+            [username, mail],
+          );
+
+          if (result.isEmpty) {
+            return null;
+          }
+
+          final row = result.first;
+
+          return User(
+            id: row['id']?.toString() ?? '',
+            username: row['username']?.toString() ?? '',
+            mail: row['mail']?.toString(),
+            role: row['role']?.toString() ?? '',
+            active: row['active'] == true || row['active'] == 1,
+          );
+  }
+
 }

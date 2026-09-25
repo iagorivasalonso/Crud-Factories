@@ -127,5 +127,43 @@ class ApiUserDataSource  implements IUserDataSource{
     return user;
   }
 
+  @override
+  Future<User?> findByUsernameAndMail(
+      String username,
+      String mail,
+      ) async {
+    final uri = await connectApi(
+      'users',
+      config,
+    );
+
+    final res = await http.get(uri);
+
+    if (res.statusCode != 200) {
+      throw Exception('HTTP ${res.statusCode}: ${res.body}');
+    }
+
+    final List data = jsonDecode(res.body);
+    print('========== USERS API ==========');
+    print('Usuarios recibidos: ${data.length}');
+    print(data);
+    for (final item in data) {
+      final itemUsername = item['username']?.toString() ?? '';
+      final itemMail = item['mail']?.toString() ?? '';
+
+      if (itemUsername.toLowerCase() == username.toLowerCase() &&
+          itemMail.toLowerCase() == mail.toLowerCase()) {
+        return User(
+          id: item['id']?.toString() ?? '',
+          username: itemUsername,
+          mail: itemMail,
+          role: item['role']?.toString() ?? 'user',
+          active: item['active'] == true || item['active'] == 1,
+        );
+      }
+    }
+
+    return null;
+  }
 
 }

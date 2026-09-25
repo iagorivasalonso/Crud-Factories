@@ -15,6 +15,19 @@ class UserRepository {
     return await dataSource.load();
   }
 
+  Future<List<String>> loadAdminRecipients() async {
+    final users = await dataSource.load();
+
+    return users
+        .where((user) =>
+        user.role == 'admin' &&
+        user.active &&
+        user.mail != null &&
+        user.mail!.trim().isNotEmpty)
+        .map((user) => user.mail!.trim())
+        .toList();
+  }
+
   Future<User> create(User user,  String password) async {
 
       final passwordHash = PasswordService.hash(password); // password;
@@ -35,6 +48,16 @@ class UserRepository {
 
   Future<void> delete(String id) async {
     await dataSource.delete(id);
+  }
+
+  Future<User?> findByUsernameAndMail(
+      String username,
+      String mail,
+      ) async {
+    return await dataSource.findByUsernameAndMail(
+      username,
+      mail,
+    );
   }
 
 

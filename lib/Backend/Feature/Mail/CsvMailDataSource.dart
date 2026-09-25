@@ -74,4 +74,10 @@ class CsvMailDatasource implements IMailDataSource {
         path: path
     );
   }
+
+  @override
+  Future<List<Mail>> loadSystemMails() {
+    // TODO: implement loadSystemMails
+    throw UnimplementedError();
+  }
 }

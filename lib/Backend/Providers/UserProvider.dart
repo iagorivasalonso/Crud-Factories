@@ -56,6 +56,26 @@ class UserProvider  extends ChangeNotifier {
       return userName == userLower;
     });
   }
+
+  // =========================
+  // FINDBYUSER
+  // =========================
+
+  User? findByUsernameAndMail(String username, String mail) {
+      final usernameLower = username.trim().toLowerCase();
+      final mailLower = mail.trim().toLowerCase();
+
+      try {
+        return _users.firstWhere(
+              (user) =>
+          user.username.trim().toLowerCase() == usernameLower &&
+              (user.mail ?? '').trim().toLowerCase() == mailLower,
+        );
+      } catch (_) {
+        return null;
+      }
+    }
+
   // =========================
   // LOAD
   // =========================
@@ -69,6 +89,10 @@ class UserProvider  extends ChangeNotifier {
     notifyListeners();
   }
 
+  Future<List<String>> loadAdminUsers() async {
+    return await _repo.loadAdminRecipients();
+  }
+
   // =========================
   // SELECT
   // =========================
@@ -78,7 +102,6 @@ class UserProvider  extends ChangeNotifier {
     selected = u;
     notifyListeners();
   }
-
 
   // =========================
   //  RELOAD REPO
