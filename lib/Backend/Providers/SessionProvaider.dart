@@ -155,7 +155,7 @@ class SessionProvider extends ChangeNotifier {
        _user = null;
        _session = null;
        _status = SessionStatus.unauthenticated;
-
+         notifyListeners();
        return false;
      }
    }
