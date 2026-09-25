@@ -51,4 +51,49 @@ class RepositoryMail {
          }
          return MailRepository(dataSource);
      }
+
+     static MailRepository createsysten(
+         DataSourceMode mode,
+         RouteFiles files,
+         {Iexecutequery? db, ApiConfig? config}) {
+
+       late IMailDataSource dataSource;
+
+       switch (mode) {
+         case DataSourceMode.csv:
+           print('CREANDO CSV SYSTEM MAIL');
+           dataSource = CsvMailDatasource(files.mails);
+           break;
+
+         case DataSourceMode.sql:
+           print('CREANDO SQL SYSTEM MAIL');
+
+           if (db == null) {
+             throw Exception("Database connection is null");
+           }
+
+           dataSource = SqlMailDataSource(
+             executeQuery: db,
+             userId: '',
+           );
+           break;
+
+         case DataSourceMode.api:
+           print('CREANDO API SYSTEM MAIL');
+
+           if (config == null) {
+             throw Exception("ApiConfig not initialized");
+           }
+
+           dataSource = apiMailDataSource(
+             config: config,
+             userId: '',
+           );
+           break;
+       }
+
+       print('DATASOURCE CREADO: ${dataSource.runtimeType}');
+
+       return MailRepository(dataSource);
+     }
 }

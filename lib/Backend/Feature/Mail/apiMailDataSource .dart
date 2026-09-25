@@ -54,6 +54,32 @@ class apiMailDataSource implements IMailDataSource {
 
   }
 
+  @override
+  Future<List<Mail>> loadSystemMails() async {   // van todos los mails de la bd que sean admin sin id
+
+    final uri = await connectApi('mails/system', config);
+
+    final res = await http.get(uri);
+
+    if (res.statusCode != 200) {
+      throw Exception('HTTP ${res.statusCode}: ${res.body}');
+    }
+
+    final List data = jsonDecode(res.body);
+
+    return data.map((item){
+      return Mail(
+        id: item['id']?.toString() ?? '',
+        mail: item['mail']?.toString() ?? '',
+        host: item['host']?.toString() ?? '',
+        port: item['port']?.toString() ?? '',
+        secure: item['secure'] == true || item['secure'] == 1,
+        password: item['password']?.toString() ?? '',
+      );
+    }).toList();
+
+  }
+
 
   @override
   Future<void> insert(Mail m) async {

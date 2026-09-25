@@ -44,6 +44,22 @@ class MailRepository {
       }).toList();
     }
 
+   Future<List<Mail>> loadSystem() async {
+
+     final mails = await dataSource.loadSystemMails();
+
+     return mails.map((mail) {
+       return Mail(
+         id: mail.id,
+         mail: mail.mail,
+         host: mail.host,
+         port: mail.port,
+         secure: mail.secure,
+         password: CryptoService.decrypt(mail.password),
+       );
+     }).toList();
+   }
+
    Future<void> upload(Mail mail) {
 
      final encryptedMail = Mail(
@@ -63,4 +79,5 @@ class MailRepository {
 
       return dataSource.save(mails);
    }
+
 }

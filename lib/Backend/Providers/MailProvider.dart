@@ -16,6 +16,7 @@ class MailProvider  extends ChangeNotifier {
   final IMailService mailService;
 
   MailRepository? repository;
+  MailRepository? systemRepository;
 
   List<Mail> _mails = [];
   Mail? selected;
@@ -44,6 +45,23 @@ class MailProvider  extends ChangeNotifier {
   }
 
   // =========================
+  // LOAD SYSTEM
+  // =========================
+
+  Future<List<Mail>> loadSystemMails() async {
+
+    if (systemRepository == null) {
+      print('ERROR: systemRepository NO está inicializado');
+      return [];
+    }
+
+    final mails = await systemRepository!.loadSystem();
+
+    return mails;
+  }
+
+
+  // =========================
   // SELECT
   // =========================
 
@@ -64,6 +82,11 @@ class MailProvider  extends ChangeNotifier {
       ..addAll(List.from(data));
 
     notifyListeners();
+  }
+
+  void setSystemRepository(MailRepository repo) {
+
+     systemRepository = repo;
   }
 
   // =========================
@@ -285,25 +308,6 @@ Future<EditResult> update(Mail update) async {
 
   return mailService.send(selected!, message);
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
