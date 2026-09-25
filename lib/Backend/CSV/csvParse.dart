@@ -9,11 +9,15 @@ class csvParse {
       eol: '\n',
     ).convert(raw);
 
-
     final result = <RouteCSV>[];
 
     for (final row in data) {
       if (row.length < 3) {
+        continue;
+      }
+
+      // Ignorar cabecera
+      if (row[0].toString().trim().toLowerCase() == 'id') {
         continue;
       }
 
@@ -25,8 +29,6 @@ class csvParse {
         ),
       );
     }
-
-
 
     return result;
   }
