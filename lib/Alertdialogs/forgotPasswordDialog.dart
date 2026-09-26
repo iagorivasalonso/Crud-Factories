@@ -18,12 +18,12 @@ import '../Widgets/textfield.dart';
 import '../generated/l10n.dart';
 import 'login.dart';
 
-Future<void> forgotPassword (BuildContext context) async {
+Future<void> forgotPassword (BuildContext context, String username) async {
 
   final usernameController = TextEditingController();
   final mailController = TextEditingController();
 
-  bool showPassword = false;
+  usernameController.text = username;
 
 
   await showDialog(
@@ -111,7 +111,15 @@ Future<void> requestPassword(
          );
 
          if(user == null) {
-           await error(context, S.of(context).password_recovery_request_sent);
+           await error(context, S.of(context).user_or_mail_invalid);
+           return;
+         }
+
+         if (user.mail == null || user.mail!.trim().isEmpty) {
+           await error(
+             context,
+             S.of(context).account_not_configured_on_the_server,
+           );
            return;
          }
 

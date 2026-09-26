@@ -11,6 +11,7 @@ import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter/material.dart' hide showDialog;
 import 'package:provider/provider.dart';
 
+import '../Backend/Providers/UserProvider.dart';
 import '../Widgets/textFieldPassword.dart';
 import '../Widgets/textfield.dart';
 import '../generated/l10n.dart';
@@ -64,10 +65,8 @@ Future<void> LoginPage (BuildContext context) async {
 
                             ),
                             ForgotPasswordButton(
-                              onPressed: () async {
-                                Navigator.of(context).pop();
-                                forgotPassword(context);
-                              }, action: S.of(context).forgot_password,
+                              onPressed: () => forgot_password(context,  usernameController),
+                              action: S.of(context).forgot_password,
                             ),
 
                             Padding(
@@ -139,5 +138,30 @@ Future<void> login_in(BuildContext context, TextEditingController usernameContro
         break;
     }
 
+  }
+
+
+Future<void> forgot_password(BuildContext context, TextEditingController usernameController) async {
+
+  final username = usernameController.text.trim();
+
+  final userProvider = context.read<UserProvider>();
+
+  final user = userProvider.findByUsernameAndMail(username);
+
+  if (user == null) {
+    await error(
+      context,
+      S.of(context).user_not_found,
+    );
+    return;
+  }
+
+  Navigator.of(context).pop();
+
+  await forgotPassword(
+    context,
+    username,
+  );
   }
 
