@@ -15,7 +15,8 @@ abstract class IUserDataSource {
   Future<void> delete(String id);
 
   Future<User?> findByUsernameAndMail(
-      String username,
-      String mail,
+      String username, [
+        String? mail
+      ]
       );
 }

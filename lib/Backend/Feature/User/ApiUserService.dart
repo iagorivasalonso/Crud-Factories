@@ -129,9 +129,9 @@ class ApiUserDataSource  implements IUserDataSource{
 
   @override
   Future<User?> findByUsernameAndMail(
-      String username,
-      String mail,
-      ) async {
+      String username, [
+        String? mail
+      ]) async {
     final uri = await connectApi(
       'users',
       config,
@@ -152,7 +152,7 @@ class ApiUserDataSource  implements IUserDataSource{
       final itemMail = item['mail']?.toString() ?? '';
 
       if (itemUsername.toLowerCase() == username.toLowerCase() &&
-          itemMail.toLowerCase() == mail.toLowerCase()) {
+          itemMail.toLowerCase() == mail?.toLowerCase()) {
         return User(
           id: item['id']?.toString() ?? '',
           username: itemUsername,

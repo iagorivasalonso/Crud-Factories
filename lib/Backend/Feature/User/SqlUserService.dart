@@ -93,7 +93,7 @@ class SqlUserDataSource implements IUserDataSource {
   @override
   Future<User?> findByUsernameAndMail(
       String username,
-      String mail,
+      [String? mail]
       ) async {
           final result = await executeQuery.query(
             '''
