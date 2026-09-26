@@ -61,20 +61,26 @@ class UserProvider  extends ChangeNotifier {
   // FINDBYUSER
   // =========================
 
-  User? findByUsernameAndMail(String username, String mail) {
-      final usernameLower = username.trim().toLowerCase();
-      final mailLower = mail.trim().toLowerCase();
+  User? findByUsernameAndMail(String username, [
+  String? mail
+  ]) {
+    final usernameLower = username.trim().toLowerCase();
+    final mailLower = mail?.trim().toLowerCase();
 
-      try {
-        return _users.firstWhere(
-              (user) =>
-          user.username.trim().toLowerCase() == usernameLower &&
-              (user.mail ?? '').trim().toLowerCase() == mailLower,
-        );
-      } catch (_) {
-        return null;
-      }
+    try {
+      return _users.firstWhere(
+            (user) =>
+        user.username.trim().toLowerCase() == usernameLower &&
+            (
+                mailLower == null ||
+                    mailLower.isEmpty ||
+                    (user.mail ?? '').trim().toLowerCase() == mailLower
+            ),
+      );
+    } catch (_) {
+      return null;
     }
+  }
 
   // =========================
   // LOAD
