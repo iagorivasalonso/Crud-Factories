@@ -217,16 +217,14 @@ class UserProvider  extends ChangeNotifier {
 
     final removed = _users[index];
 
-    _users.removeAt(index);
-    notifyListeners();
-
     try {
       await _repo.delete(id);
+
+      _users.removeAt(index);
+      notifyListeners();
+
       return DeleteResult.success;
     } catch (e) {
-      // rollback
-      _users.insert(index, removed);
-      notifyListeners();
       return DeleteResult.notFound;
     }
   }

@@ -77,6 +77,9 @@ class MessageLookup extends MessageLookupByLibrary {
       "Debes seleccionar una lista correcta",
     ),
     "a_recipient": MessageLookupByLibrary.simpleMessage("Un destinatario"),
+    "account_delete_error": MessageLookupByLibrary.simpleMessage(
+      "No se pudo eliminar la cuenta.",
+    ),
     "account_not_configured_on_the_server":
         MessageLookupByLibrary.simpleMessage(
           "Cuenta no configurada en el servidor",
@@ -105,6 +108,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "attach": MessageLookupByLibrary.simpleMessage("Adjuntar"),
     "august": MessageLookupByLibrary.simpleMessage("Agosto"),
     "back": MessageLookupByLibrary.simpleMessage("Volver"),
+    "back_to_login": MessageLookupByLibrary.simpleMessage(
+      "Volver al inicio de sesión",
+    ),
     "because_it_does_not_have": MessageLookupByLibrary.simpleMessage(
       "Porque no tiene",
     ),
@@ -215,6 +221,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "de": MessageLookupByLibrary.simpleMessage("De"),
     "december": MessageLookupByLibrary.simpleMessage("Diciembre"),
     "delete": MessageLookupByLibrary.simpleMessage("Eliminar"),
+    "delete_account_confirm": MessageLookupByLibrary.simpleMessage(
+      "¿Está seguro que desea eliminar su cuenta?",
+    ),
     "desea_go_out": MessageLookupByLibrary.simpleMessage(
       "¿Desea salir de la aplicación?",
     ),
@@ -294,6 +303,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "filter": MessageLookupByLibrary.simpleMessage("Filtrar"),
     "filter_by": MessageLookupByLibrary.simpleMessage("Filtrar por"),
     "font_type": MessageLookupByLibrary.simpleMessage("Tipo de fuente"),
+    "forgot_password": MessageLookupByLibrary.simpleMessage(
+      "Has olvidado la contraseña",
+    ),
     "go_out": MessageLookupByLibrary.simpleMessage("Salir"),
     "has": MessageLookupByLibrary.simpleMessage("Tiene"),
     "has_been_deleted_successfully": MessageLookupByLibrary.simpleMessage(
@@ -380,6 +392,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "lists": MessageLookupByLibrary.simpleMessage("Listas"),
     "load_data": MessageLookupByLibrary.simpleMessage("Cargar datos"),
     "login": MessageLookupByLibrary.simpleMessage("Iniciar sesión"),
+    "logout_confirm": MessageLookupByLibrary.simpleMessage(
+      "¿Está seguro que desea cerrar sesión?",
+    ),
     "mail": MessageLookupByLibrary.simpleMessage("Email"),
     "mail_already_exists": MessageLookupByLibrary.simpleMessage(
       "Esta cuenta de correo ya existe.",
@@ -476,6 +491,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "para": MessageLookupByLibrary.simpleMessage("Para"),
     "password": MessageLookupByLibrary.simpleMessage("Contraseña"),
     "password_recovery_request_message": m1,
+    "password_recovery_request_sent": MessageLookupByLibrary.simpleMessage(
+      "Solicitud de recuperación de contraseña enviada correctamente",
+    ),
     "password_recovery_request_subject": MessageLookupByLibrary.simpleMessage(
       "Solicitud de recuperación de contraseña",
     ),
@@ -500,6 +518,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "recipient_required": MessageLookupByLibrary.simpleMessage(
       "Destinatario requerido",
     ),
+    "request": MessageLookupByLibrary.simpleMessage("Solicitar"),
     "requestAdminConfirm": MessageLookupByLibrary.simpleMessage(
       "Para obtener permisos de administrador es necesario solicitar autorización. ¿Desea enviar la solicitud?",
     ),
@@ -702,8 +721,14 @@ class MessageLookup extends MessageLookupByLibrary {
     "user_created_successfully": MessageLookupByLibrary.simpleMessage(
       "usuario creado correctamente",
     ),
+    "user_deleted_successfully": MessageLookupByLibrary.simpleMessage(
+      "El usuario se eliminó correctamente",
+    ),
     "user_not_found": MessageLookupByLibrary.simpleMessage(
       "el usuario no existe",
+    ),
+    "user_or_mail_invalid": MessageLookupByLibrary.simpleMessage(
+      "El usuario o el correo electrónico no son correctos",
     ),
     "user_updated_successfully": MessageLookupByLibrary.simpleMessage(
       "usuario actualizado correctamente",

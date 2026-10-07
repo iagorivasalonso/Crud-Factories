@@ -84,7 +84,8 @@ class actionsBD {
         PRIMARY KEY (user_id, id),
         FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
         FOREIGN KEY (user_id, sector)
-          REFERENCES sectors(user_id, id)
+        REFERENCES sectors(user_id, id)
+        ON DELETE CASCADE
       )
     ''');
 

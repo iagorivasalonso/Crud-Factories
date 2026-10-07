@@ -5,7 +5,9 @@ import 'package:crud_factories/Alertdialogs/error.dart';
 import 'package:crud_factories/Alertdialogs/noCategory.dart';
 import 'package:crud_factories/Alertdialogs/warning.dart';
 import 'package:crud_factories/Backend/AppContent.dart' show AppContent;
+import 'package:crud_factories/Backend/Data/controlsMessagesError/errors.dart';
 import 'package:crud_factories/Backend/Export_general/export_service.dart' show ExportService;
+import 'package:crud_factories/Backend/Feature/LineSend/exportLineSend.dart';
 import 'package:crud_factories/Backend/Providers/ConectionProvider.dart';
 import 'package:crud_factories/Backend/Providers/FactoryProvider.dart';
 import 'package:crud_factories/Backend/Providers/LineSendProvider.dart';
@@ -141,7 +143,6 @@ class _appDesktopState extends State<appDesktop> {
                                   {
                                     noCategory(context, S.of(context).companies);
                                   }
-
                                 }
                             ),
                           ]
@@ -586,18 +587,19 @@ class _appDesktopState extends State<appDesktop> {
 
                             await context.read<SessionProvider>().logout();
                           }
-    if (value == 'account') {
-      final sessionUser = context.read<SessionProvider>().user;
 
-      if (sessionUser == null) return;
+                          if (value == 'account') {
+                            final sessionUser = context.read<SessionProvider>().user;
 
-      final userProvider = context.read<UserProvider>();
+                            if (sessionUser == null) return;
 
-      final user = userProvider.users.firstWhere(
-            (u) => u.id == sessionUser.id,
-      );
+                            final userProvider = context.read<UserProvider>();
 
-      userProvider.select(user);
+                            final user = userProvider.users.firstWhere(
+                                  (u) => u.id == sessionUser.id,
+                            );
+
+                            userProvider.select(user);
 
 
                             showDialog(
@@ -605,18 +607,49 @@ class _appDesktopState extends State<appDesktop> {
                               builder: (context) => const createUser(),
                             );
                           }
+
+                          if(value=='delete_account')
+                          {
+                               final user = context.read<SessionProvider>().user;
+
+                               if(user == null) return;
+
+                               final accepted = await warning(
+                                 context,
+                                 S.of(context).delete_account_confirm,
+                               );
+
+                               if (!accepted) return;
+
+                               final userProvider = context.read<UserProvider>();
+
+                               final result = await userProvider.delete(user.id);
+
+                               if(result == DeleteResult.success)
+                               {
+                                 await confirm(context, S.of(context).user_deleted_successfully);
+                                 await context.read<SessionProvider>().logout();
+                               }
+                               else {
+                                 await error(
+                                   context,
+                                    S.of(context).account_delete_error,
+                                 );
+                               }
+                          }
                         },
                         itemBuilder: (context) => [
-                        const PopupMenuItem<String>(
-                         value: 'account',
-                        child: Row(
-                          children: [
-                            Icon(Icons.person),
-                            SizedBox(width: 8),
-                            Text('Mi cuenta'),
-                          ],
-                        ),
-                        ),
+                          const PopupMenuItem<String>(
+                           value: 'account',
+                          child: Row(
+                            children: [
+                              Icon(Icons.person),
+                              SizedBox(width: 8),
+                              Text('Mi cuenta'),
+                            ],
+                          ),
+                          ),
+                          
                           const PopupMenuItem<String>(
                             value: 'logout',
                             child: Row(
@@ -626,8 +659,18 @@ class _appDesktopState extends State<appDesktop> {
                                 Text('Cerrar sesión'),
                               ],
                             ),
-
                           ),
+                          
+                         const PopupMenuItem(
+                             value: 'delete_account',
+                             child: Row(
+                                 children: [
+                                    Icon(Icons.delete),
+                                    SizedBox(width: 8,),
+                                    Text("eliminar cuenta")
+                                 ],
+                             )
+                         ),
                         ],
                         child: ConstrainedBox(
                               constraints: const BoxConstraints(
