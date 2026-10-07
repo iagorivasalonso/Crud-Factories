@@ -1836,6 +1836,46 @@ class S {
     );
   }
 
+  /// `¿Está seguro que desea cerrar sesión?`
+  String get logout_confirm {
+    return Intl.message(
+      '¿Está seguro que desea cerrar sesión?',
+      name: 'logout_confirm',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `¿Está seguro que desea eliminar su cuenta?`
+  String get delete_account_confirm {
+    return Intl.message(
+      '¿Está seguro que desea eliminar su cuenta?',
+      name: 'delete_account_confirm',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `El usuario se eliminó correctamente`
+  String get user_deleted_successfully {
+    return Intl.message(
+      'El usuario se eliminó correctamente',
+      name: 'user_deleted_successfully',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `No se pudo eliminar la cuenta.`
+  String get account_delete_error {
+    return Intl.message(
+      'No se pudo eliminar la cuenta.',
+      name: 'account_delete_error',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Ha cerrado la conexión`
   String get has_closed_the_connection {
     return Intl.message(
