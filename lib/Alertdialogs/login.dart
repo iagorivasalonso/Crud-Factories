@@ -11,6 +11,7 @@ import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter/material.dart' hide showDialog;
 import 'package:provider/provider.dart';
 
+import '../Backend/Providers/EditStateProvider.dart';
 import '../Backend/Providers/UserProvider.dart';
 import '../Widgets/textFieldPassword.dart';
 import '../Widgets/textfield.dart';
@@ -124,6 +125,7 @@ Future<void> login_in(BuildContext context, TextEditingController usernameContro
 
         if (context.mounted) {
           Navigator.of(context).pop(false);
+          context.read<EditStateProvider>().clear();
         }
         break;
 
