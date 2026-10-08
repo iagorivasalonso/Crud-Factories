@@ -37,7 +37,7 @@ class AppContent extends StatelessWidget {
        case AppView.createFactory:
          return FactoryFromPage();
 
-       case AppView.creataddress:
+       case AppView.createAddress:
          return MailFormPage();
 
        case AppView.createShipment:

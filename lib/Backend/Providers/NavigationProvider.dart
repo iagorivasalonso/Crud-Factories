@@ -9,7 +9,7 @@ enum AppView {
   home,
 
   createFactory,
-  creataddress,
+  createAddress,
   createShipment,
 
   importData,
@@ -47,7 +47,6 @@ class NavigationProvider extends ChangeNotifier {
 
     return ok;
 
-    notifyListeners();
   }
 }
 
