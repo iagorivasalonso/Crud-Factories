@@ -18,6 +18,7 @@ import 'package:crud_factories/Backend/Providers/UserProvider.dart' show UserPro
 import 'package:crud_factories/Backend/Providers/filterProvider.dart' show FilterProvider;
 import 'package:crud_factories/Frontend/adminRoutes.dart';
 import 'package:crud_factories/Frontend/adminSectors.dart';
+import 'package:crud_factories/Frontend/adminUsers.dart';
 import 'package:crud_factories/generated/l10n.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -102,15 +103,13 @@ class _appDesktopState extends State<appDesktop> {
                                     width:wItem,
                                     child: Text(S.of(context).company)),
                                 onTap: () async {
-                             //     createUser(context);
-                                }
-/*
+
                                   if (!await context.read<NavigationProvider>().canNavigate(context)) return;
 
                                   context.read<NavigationProvider>()
                                       .go(AppView.createFactory);
 
-                                }*/
+                                }
                             ),
                             MenuButton(
                                 text: SizedBox(
@@ -121,7 +120,7 @@ class _appDesktopState extends State<appDesktop> {
                                   if (!await context.read<NavigationProvider>().canNavigate(context)) return;
 
                                   context.read<NavigationProvider>()
-                                      .go(AppView.creataddress);
+                                      .go(AppView.createAddress);
 
 
                                 }
@@ -578,14 +577,27 @@ class _appDesktopState extends State<appDesktop> {
                       child: PopupMenuButton<String>(
                         offset: const Offset(0, 40),
                         onSelected: (value) async {
+
+                          if (value == 'admin') {
+                            if(!await context.read<NavigationProvider>().canNavigate(context)) return;
+
+                            context.read<NavigationProvider>().go(AppView.adminUsers);
+                          }
+
                           if (value == 'logout') {
 
-                            String message = "¿Seguro que desea cerrar sesion";
+                              String message = "¿Seguro que desea cerrar sesion";
 
-                            final accepted  = await warning(context, message);
-                            if (!accepted ) return;
+                              final accepted  = await warning(context, message);
+                              if (!accepted ) return;
 
-                            await context.read<SessionProvider>().logout();
+                              await context.read<SessionProvider>().logout();
+
+                              if (context.mounted) {
+                                context.read<NavigationProvider>().go(AppView.home);
+                              }
+
+
                           }
 
                           if (value == 'account') {
@@ -600,7 +612,6 @@ class _appDesktopState extends State<appDesktop> {
                             );
 
                             userProvider.select(user);
-
 
                             showDialog(
                               context: context,
@@ -639,6 +650,19 @@ class _appDesktopState extends State<appDesktop> {
                           }
                         },
                         itemBuilder: (context) => [
+                          if(context.read<SessionProvider>().user!.role =='admin')
+                          const PopupMenuItem<String>(
+                            value: 'admin',
+                            child: Row(
+                              children: [
+                                Icon(Icons.admin_panel_settings),
+                                SizedBox(width: 8),
+                                Text('Administracion'),
+                              ],
+                            ),
+                          ),
+
+
                           const PopupMenuItem<String>(
                            value: 'account',
                           child: Row(
@@ -649,7 +673,7 @@ class _appDesktopState extends State<appDesktop> {
                             ],
                           ),
                           ),
-                          
+
                           const PopupMenuItem<String>(
                             value: 'logout',
                             child: Row(
