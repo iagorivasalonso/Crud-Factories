@@ -1,5 +1,6 @@
 import 'package:crud_factories/Backend/Feature/Connection/Controller/ConnectionController.dart' show DisconnectResponse;
 import 'package:crud_factories/Backend/Feature/Connection/ExecuteQuery/IexecuteQuery.dart' show Iexecutequery;
+import 'package:crud_factories/Backend/core/Results/ConectionsResult.dart' show DisconnectResponse;
 import 'package:crud_factories/Objects/Conection.dart';
 import 'package:mysql1/mysql1.dart' show MySqlConnection;
 

@@ -5,6 +5,7 @@ import 'package:crud_factories/Backend/Feature/Connection/ExecuteQuery/apiExecut
 import 'package:crud_factories/Backend/Feature/Connection/Sesion/IConnection_sesion_service.dart' show IConnectionSesionService;
 import 'package:crud_factories/Backend/connectors_API/DbApi.dart' show DbApi;
 import 'package:crud_factories/Backend/connectors_API/Models/Api_response.dart';
+import 'package:crud_factories/Backend/core/Results/ConectionsResult.dart' show DisconnectResponse;
 import 'package:crud_factories/Objects/Conection.dart';
 
 

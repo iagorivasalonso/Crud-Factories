@@ -2,6 +2,7 @@ import 'package:crud_factories/Backend/Feature/Connection/Controller/ConnectionC
 import 'package:crud_factories/Backend/Feature/Connection/ExecuteQuery/IexecuteQuery.dart' show Iexecutequery;
 import 'package:crud_factories/Backend/Feature/Connection/ExecuteQuery/sqlExecuteQuery.dart';
 import 'package:crud_factories/Backend/Feature/Connection/Sesion/IConnection_sesion_service.dart';
+import 'package:crud_factories/Backend/core/Results/ConectionsResult.dart' show DisconnectResponse;
 
 import 'package:crud_factories/Objects/Conection.dart';
 import 'package:mysql1/mysql1.dart';
