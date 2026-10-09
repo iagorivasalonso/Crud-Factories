@@ -2,7 +2,7 @@
 import 'package:crud_factories/Alertdialogs/confirm.dart';
 import 'package:crud_factories/Alertdialogs/error.dart';
 import 'package:crud_factories/Alertdialogs/warning.dart';
-import 'package:crud_factories/Backend/Data/controlsMessagesError/errors.dart';
+import 'package:crud_factories/Backend/core/controlsMessagesError/errors.dart';
 import 'package:crud_factories/Backend/Global/controllers/User.dart';
 import 'package:crud_factories/Backend/Providers/SessionProvaider.dart';
 import 'package:crud_factories/Backend/Providers/notificacionProvider.dart' show NotificationProvider;

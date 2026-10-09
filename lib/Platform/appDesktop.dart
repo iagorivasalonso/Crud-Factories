@@ -5,7 +5,7 @@ import 'package:crud_factories/Alertdialogs/error.dart';
 import 'package:crud_factories/Alertdialogs/noCategory.dart';
 import 'package:crud_factories/Alertdialogs/warning.dart';
 import 'package:crud_factories/Backend/AppContent.dart' show AppContent;
-import 'package:crud_factories/Backend/Data/controlsMessagesError/errors.dart';
+import 'package:crud_factories/Backend/core/controlsMessagesError/errors.dart';
 import 'package:crud_factories/Backend/Export_general/export_service.dart' show ExportService;
 import 'package:crud_factories/Backend/Feature/LineSend/exportLineSend.dart';
 import 'package:crud_factories/Backend/Providers/ConectionProvider.dart';
