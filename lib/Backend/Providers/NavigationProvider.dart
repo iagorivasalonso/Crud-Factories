@@ -21,6 +21,7 @@ enum AppView {
   sendMail,
   connections,
 
+  adminUsers
 }
 
 class NavigationProvider extends ChangeNotifier {
