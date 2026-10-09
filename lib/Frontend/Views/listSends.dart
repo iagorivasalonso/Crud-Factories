@@ -1,5 +1,5 @@
 import 'package:crud_factories/Alertdialogs/noCategory.dart' show noCategory;
-import 'package:crud_factories/Backend/Data/controlsMessagesError/errors.dart' show DeleteResult;
+import 'package:crud_factories/Backend/core/controlsMessagesError/errors.dart' show DeleteResult;
 import 'package:crud_factories/Backend/Providers/LineSendProvider.dart';
 import 'package:crud_factories/Backend/Providers/NavigationProvider.dart' show NavigationProvider, AppView;
 import 'package:crud_factories/Frontend/send.dart';
