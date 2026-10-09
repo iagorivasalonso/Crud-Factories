@@ -132,11 +132,14 @@ Future<void> login_in(BuildContext context, TextEditingController usernameContro
       case SessionStatus.loading:
         throw UnimplementedError();
 
-      case SessionStatus.unauthenticated:
+      case SessionStatus.inactive:
         await error(
         context,
-        S.of(context).the_user_or_password_are_incorrect,
+          S.of(context).user_not_active,
         );
+        break;
+      case SessionStatus.unauthenticated:
+        // TODO: Handle this case.
         break;
     }
 

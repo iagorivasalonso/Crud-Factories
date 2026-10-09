@@ -4,10 +4,13 @@ import 'package:crud_factories/Objects/AppSession.dart';
 import 'package:crud_factories/Objects/User.dart' show User;
 import 'package:fluent_ui/fluent_ui.dart';
 
+import '../core/Exeptions/inactive_user_exeption.dart' show InactiveUserExeption;
+
 enum SessionStatus {
   unauthenticated,
   loading,
   authenticated,
+  inactive
 }
 
 class SessionProvider extends ChangeNotifier {
@@ -40,8 +43,6 @@ class SessionProvider extends ChangeNotifier {
 
      try {
 
-
-
        final result = await service.login(username, password);
 
        print('Login correcto');
@@ -61,6 +62,16 @@ class SessionProvider extends ChangeNotifier {
 
        notifyListeners();
         return SessionStatus.authenticated;
+
+     } on InactiveUserExeption{
+
+         _user = null;
+         _session = null;
+         _status = SessionStatus.inactive;
+
+         notifyListeners();
+         return SessionStatus.inactive;
+
      } catch (e) {
 
        print('ERROR LOGIN: $e');
@@ -161,3 +172,4 @@ class SessionProvider extends ChangeNotifier {
    }
 
 }
+

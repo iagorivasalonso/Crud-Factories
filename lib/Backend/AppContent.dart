@@ -1,6 +1,7 @@
 import 'package:crud_factories/Backend/Providers/NavigationProvider.dart';
 import 'package:crud_factories/Frontend/Views/listFactories.dart' show listFactories;
 import 'package:crud_factories/Frontend/Views/listSends.dart';
+import 'package:crud_factories/Frontend/adminUsers.dart' show adminPage;
 import 'package:crud_factories/Frontend/conection.dart';
 import 'package:crud_factories/Frontend/factory.dart' show FactoryFromPage;
 import 'package:crud_factories/Frontend/importData.dart' show NewImport;
@@ -57,6 +58,9 @@ class AppContent extends StatelessWidget {
 
        case AppView.connections:
          return conection();
+
+       case AppView.adminUsers:
+          return adminPage();
      }
 
   }

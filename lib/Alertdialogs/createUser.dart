@@ -455,7 +455,14 @@ class _createUserState extends State<createUser> {
               .of(context)
               .user_updated_successfully,
         );
+
+        if (context.mounted) {
+          Navigator.of(context).pop(false);
+        }
+
         break;
+
+
 
       case EditResult.alreadyExists:
         await error(

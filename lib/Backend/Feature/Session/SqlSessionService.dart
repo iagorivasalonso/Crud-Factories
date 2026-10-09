@@ -5,6 +5,7 @@ import 'package:crud_factories/Backend/Providers/ConectionProvider.dart' show Co
 import 'package:crud_factories/Objects/AppSession.dart' show AppSession;
 import 'package:uuid/uuid.dart';
 import '../../../Objects/User.dart';
+import '../../core/Exeptions/inactive_user_exeption.dart' show InactiveUserExeption;
 
 class SqlSessionService implements ISessionservice{
 
@@ -58,6 +59,10 @@ class SqlSessionService implements ISessionservice{
 
     if (!passwordValid) {
       throw Exception('Usuario o contraseña incorrectos');
+    }
+
+    if (userData['active'] == 0 || userData['active'] == false) {
+      throw InactiveUserExeption();
     }
 
     // 2. Usuario válido
