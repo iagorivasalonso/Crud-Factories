@@ -35,17 +35,17 @@ class GenericDropdown<T> extends StatelessWidget {
         Expanded(
           flex: 2,
           child: DropdownButtonHideUnderline(
-            child: DropdownButton2<T>(
+            child: DropdownButton2<T?>(
               isExpanded: true,
               hint: Text(hint),
               items:  [
                if (opDefault != null && opDefault!.isNotEmpty)
-                  DropdownMenuItem<T>(
+                  DropdownMenuItem<T?>(
                       value: null,
                       child: Text(opDefault!),
                   ),
                       ...items.map(
-                      (item) => DropdownMenuItem<T>(
+                      (item) => DropdownMenuItem<T?>(
                       value: item,
                       child: Text(itemLabel(item)),
                       ),
