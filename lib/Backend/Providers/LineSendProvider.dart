@@ -1,4 +1,4 @@
-import 'package:crud_factories/Backend/Data/controlsMessagesError/errors.dart';
+import 'package:crud_factories/Backend/core/controlsMessagesError/errors.dart';
 import 'package:crud_factories/Backend/Global/controllers/LineSend.dart' show LineSendController;
 import 'package:crud_factories/Backend/ImportGeneral/import_Processor.dart' show processImport;
 import 'package:crud_factories/Backend/Providers/FactoryProvider.dart' show FactoryProvider;

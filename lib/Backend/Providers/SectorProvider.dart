@@ -3,7 +3,7 @@ import 'package:crud_factories/Backend/Feature/Sector/exportSectors.dart' show c
 import 'package:crud_factories/Backend/ImportGeneral/import_Processor.dart' show processImport;
 import 'package:crud_factories/Backend/Providers/FactoryProvider.dart' show FactoryProvider;
 import 'package:crud_factories/Backend/Repositories/sectorRepository.dart' show SectorRepository;
-import 'package:crud_factories/Backend/Data/controlsMessagesError/errors.dart' show CreateResult, EditResult, DeleteResult;
+import 'package:crud_factories/Backend/core/controlsMessagesError/errors.dart' show CreateResult, EditResult, DeleteResult;
 import 'package:crud_factories/Functions/createId.dart';
 import 'package:crud_factories/Objects/importResult.dart' show ImportResult;
 import 'package:crud_factories/generated/l10n.dart' show S;

@@ -1,4 +1,4 @@
-import 'package:crud_factories/Backend/Data/controlsMessagesError/errors.dart' show CreateResult, EditResult, DeleteResult;
+import 'package:crud_factories/Backend/core/controlsMessagesError/errors.dart' show CreateResult, EditResult, DeleteResult;
 import 'package:crud_factories/Backend/Repositories/factoryRepository.dart' show FactoryRepository;
 import 'package:crud_factories/Functions/createId.dart' show createId;
 import 'package:crud_factories/Objects/importResult.dart' show ImportResult;

@@ -8,7 +8,7 @@ import 'package:crud_factories/generated/l10n.dart' show S;
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter/foundation.dart' show Uint8List;
 
-import '../Data/controlsMessagesError/errors.dart';
+import '../core/controlsMessagesError/errors.dart';
 import '../ImportGeneral/import_Processor.dart';
 
 
