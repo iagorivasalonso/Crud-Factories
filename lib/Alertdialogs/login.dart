@@ -109,11 +109,6 @@ Future<void> login_in(BuildContext context, TextEditingController usernameContro
 
     switch (result) {
       case SessionStatus.authenticated:
-        final messageWelcome =
-            "${S.of(context).welcome}, ${usernameController.text.trim()}";
-
-        await confirm(context, messageWelcome);
-
         final user = sessionProvider.user;
 
         if (user != null) {
@@ -127,6 +122,11 @@ Future<void> login_in(BuildContext context, TextEditingController usernameContro
           Navigator.of(context).pop(false);
           context.read<EditStateProvider>().clear();
         }
+
+        final messageWelcome =
+            "${S.of(context).welcome}, ${usernameController.text.trim()}";
+
+        await confirm(context, messageWelcome);
         break;
 
       case SessionStatus.loading:
