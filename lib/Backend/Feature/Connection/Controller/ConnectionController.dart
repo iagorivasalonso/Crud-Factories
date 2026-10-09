@@ -4,7 +4,7 @@ import 'package:crud_factories/Backend/Feature/Connection/Sesion/IConnection_ses
 import 'package:crud_factories/Backend/Feature/Connection/SeverService/ServerService.dart' show Serverservice;
 import 'package:crud_factories/Backend/ImportGeneral/import_Processor.dart' show processImport;
 import 'package:crud_factories/Backend/Providers/ConectionProvider.dart';
-import 'package:crud_factories/Backend/Data/controlsMessagesError/errors.dart';
+import 'package:crud_factories/Backend/core/controlsMessagesError/errors.dart';
 import 'package:crud_factories/Backend/Repositories/connectionRepository.dart' show ConnectionRepository;
 import 'package:crud_factories/Functions/createId.dart' show createId;
 import 'package:crud_factories/Objects/Conection.dart';
