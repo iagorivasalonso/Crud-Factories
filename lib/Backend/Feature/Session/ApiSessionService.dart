@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:crud_factories/Backend/Feature/Connection/Controller/ConnectionController.dart';
 import 'package:crud_factories/Backend/Feature/Session/ISessionService.dart';
 import 'package:crud_factories/Backend/Providers/SessionProvider.dart';
+import 'package:crud_factories/Backend/connectors_API/ApiConfigUrl.dart';
 import 'package:crud_factories/Objects/AppSession.dart' show AppSession;
 import 'package:crud_factories/Objects/User.dart' show User;
 import 'package:http/http.dart' as http;
@@ -21,7 +22,7 @@ class ApiSessionService implements ISessionservice{
 
   late final config = connectionController.provider.config;
 
-  static const String baseUrl = 'http://localhost:3000';
+  static String get baseUrl => ApiConfigUrl.baseUrl;
 
   @override
   Future<SessionResult> login(String username, String password) async {
