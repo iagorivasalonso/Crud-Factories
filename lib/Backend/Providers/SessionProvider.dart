@@ -88,21 +88,32 @@ class SessionProvider extends ChangeNotifier {
 
    Future<void> logout() async {
 
-      final currentSession = _session;
+     final currentSession = _session;
 
-      if(currentSession != null)
-      {
+     try {
+
+       if(currentSession != null)
+       {
          await service.logout(currentSession.id);
-      }
+       }
 
-      await _storage.clearSessionId();
+     } catch(e) {
+        print("Error logout server $e");
+     } finally {
 
-      _user = null;
-      _session = null;
+       await _storage.clearSessionId();
 
-      _status = SessionStatus.unauthenticated;
+       _user = null;
+       _session = null;
 
-      notifyListeners();
+       _status = SessionStatus.unauthenticated;
+
+       notifyListeners();
+     }
+
+
+
+
    }
 
    Future<bool> restoreSession() async {
