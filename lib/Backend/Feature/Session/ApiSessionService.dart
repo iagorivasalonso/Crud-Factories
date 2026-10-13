@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:crud_factories/Backend/Feature/Connection/Controller/ConnectionController.dart';
 import 'package:crud_factories/Backend/Feature/Session/ISessionService.dart';
-import 'package:crud_factories/Backend/Providers/SessionProvaider.dart';
+import 'package:crud_factories/Backend/Providers/SessionProvider.dart';
 import 'package:crud_factories/Objects/AppSession.dart' show AppSession;
 import 'package:crud_factories/Objects/User.dart' show User;
 import 'package:http/http.dart' as http;
