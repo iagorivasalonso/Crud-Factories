@@ -1,14 +1,14 @@
 
 import 'dart:convert';
+import 'package:crud_factories/Backend/connectors_API/ApiConfigUrl.dart';
 import 'package:crud_factories/Objects/MailMessage.dart' show ApiMailRequest;
 import 'package:http/http.dart' as http;
 
 class MailApi {
 
-  static const baseUrl = 'http://localhost:3000';
+  static String get baseUrl => ApiConfigUrl.baseUrl;
 
   static Future<Map<String, dynamic>> send(ApiMailRequest request) async {
-
 
           final response = await http.post(
             Uri.parse('$baseUrl/mail/send'),

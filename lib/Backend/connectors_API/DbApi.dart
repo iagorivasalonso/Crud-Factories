@@ -1,9 +1,11 @@
 import 'dart:convert';
+import 'package:crud_factories/Backend/connectors_API/ApiConfigUrl.dart';
 import 'package:crud_factories/Objects/Conection.dart' show Conection;
 import 'package:http/http.dart' as http;
 
 class DbApi {
-  static const baseUrl = 'https://crud-factories.onrender.com';
+
+  static String get baseUrl => ApiConfigUrl.baseUrl;
 
   static Future<Map<String, dynamic>> actionApi(
       String action,
@@ -16,7 +18,7 @@ class DbApi {
         'message': 'Debes seleccionar una conexión',
       };
     }
-print(action);
+
     try {
       final body = <String, dynamic>{
         'action': action,
