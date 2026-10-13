@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:crud_factories/Backend/connectors_API/ApiConfigUrl.dart';
 import 'package:crud_factories/Platform/appDesktop.dart';
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
@@ -20,13 +21,17 @@ final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 void main() async {
 
         WidgetsFlutterBinding.ensureInitialized();
+        // Elegir entorno de la API
+        ApiConfigUrl.useLocalhost = true;
+        const bool isAPI = false;
+
 
       if(!kIsWeb)
         await windowManager.ensureInitialized();
 
         runApp(
             MultiProvider(
-            providers: DependencyInjection.providers,
+            providers: DependencyInjection.createProviders(isApi: isAPI),
             child: MyApp())
            );
 }

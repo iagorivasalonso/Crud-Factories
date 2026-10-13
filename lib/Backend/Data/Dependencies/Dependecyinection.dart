@@ -29,7 +29,7 @@ import 'package:crud_factories/Backend/Providers/NavigationProvider.dart';
 import 'package:crud_factories/Backend/Providers/App_provaider.dart' show AppProvider;
 import 'package:crud_factories/Backend/Providers/RoutesProvider.dart' show RoutesProvider;
 import 'package:crud_factories/Backend/Providers/SectorProvider.dart' show SectorProvider;
-import 'package:crud_factories/Backend/Providers/SessionProvaider.dart';
+import 'package:crud_factories/Backend/Providers/SessionProvider.dart';
 import 'package:crud_factories/Backend/Providers/UserProvider.dart' show UserProvider;
 import 'package:crud_factories/Backend/Providers/filterProvider.dart' show FilterProvider;
 import 'package:crud_factories/Backend/Providers/notificacionProvider.dart' show NotificationProvider;
@@ -47,7 +47,9 @@ class DependencyInjection {
 
   static const bool isAPI = true;
 
-   static List<SingleChildWidget> providers = [
+   static List<SingleChildWidget> createProviders ({
+             required bool isApi
+        })=> [
 
 
      // =========================
