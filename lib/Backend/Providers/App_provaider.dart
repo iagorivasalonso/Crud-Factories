@@ -26,7 +26,7 @@ import 'package:provider/provider.dart';
 import '../Feature/Connection/Service/IConnectionService.dart' show IConnectionService;
 import '../Feature/Connection/Sesion/IConnection_sesion_service.dart';
 import 'RoutesProvider.dart';
-import 'SessionProvaider.dart';
+import 'SessionProvider.dart';
 
 enum DataSourceMode {
   csv,
