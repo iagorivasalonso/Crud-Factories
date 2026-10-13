@@ -2,7 +2,7 @@
 import 'package:crud_factories/Alertdialogs/confirm.dart';
 import 'package:crud_factories/Alertdialogs/error.dart';
 import 'package:crud_factories/Backend/Providers/App_provaider.dart' show AppProvider;
-import 'package:crud_factories/Backend/Providers/SessionProvaider.dart';
+import 'package:crud_factories/Backend/Providers/SessionProvider.dart';
 import 'package:crud_factories/Widgets/ForgotPasswordButton.dart' show ForgotPasswordButton;
 import 'package:crud_factories/Widgets/genericCheckbox.dart' show genericCheckbox;
 import 'package:crud_factories/Widgets/headAlertDialog.dart';
