@@ -28,7 +28,7 @@ import '../Alertdialogs/login.dart';
 import '../Backend/Providers/App_provaider.dart';
 import '../Backend/Providers/EmployeeProvider.dart';
 import '../Backend/Providers/RoutesProvider.dart';
-import '../Backend/Providers/SessionProvaider.dart';
+import '../Backend/Providers/SessionProvider.dart';
 
 
 class appDesktop extends StatefulWidget {
