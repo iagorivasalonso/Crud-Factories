@@ -17,13 +17,20 @@ class apiConnectionSesionService implements IConnectionSesionService{
   Future<void> connect(Conection c) async {
 
     final res = await DbApi.actionApi('connect', c);
-    final result = await DbApi.actionApi('createTables', c);
-
     final response = ApiResponse.fromJson(res);
 
     if (!response.ok) {
       throw Exception(response.message);
     }
+
+    final result = await DbApi.actionApi('createTables', c);
+
+    final tablesResponse = ApiResponse.fromJson(result);
+
+    if (!tablesResponse.ok) {
+      throw Exception(tablesResponse.message);
+    }
+
   }
 
   @override
