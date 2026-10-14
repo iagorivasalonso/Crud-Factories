@@ -225,7 +225,7 @@ class DependencyInjection {
 
      ChangeNotifierProvider(
          create: (_) => MailProvider(
-             isAPI == true
+             isApi == true
                 ? ApiMailService()
                 : NativeMailService()
          )
