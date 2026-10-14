@@ -45,7 +45,6 @@ import '../../Feature/Connection/Service/IConnectionService.dart';
 
 class DependencyInjection {
 
-  static const bool isAPI = true;
 
    static List<SingleChildWidget> createProviders ({
              required bool isApi
@@ -58,7 +57,7 @@ class DependencyInjection {
 
      ChangeNotifierProvider(
        create: (_) => AppProvider(
-         mode: isAPI ? DataSourceMode.api : DataSourceMode.csv,
+         mode: isApi ? DataSourceMode.api : DataSourceMode.csv,
        ),
 
      ),
@@ -119,14 +118,14 @@ class DependencyInjection {
 
      Provider<IConnectionService>(
        create: (_) =>
-       isAPI
+       isApi
            ? ApiConnectionService()
            : SqlConnectionService(),
      ),
 
      Provider<IConnectionSesionService>(
        create: (_) =>
-       isAPI
+       isApi
            ? apiConnectionSesionService()
            : SqlConnectionSessionService(),
      ),
@@ -157,7 +156,7 @@ class DependencyInjection {
      // =========================
 
      Provider<ISessionservice>(
-       create: (context) => isAPI
+       create: (context) => isApi
            ? ApiSessionService(
               connectionController: context.read<ConnectionController>()
            )
