@@ -51,6 +51,7 @@ class _appDesktopState extends State<appDesktop> {
     WidgetsBinding.instance.addPostFrameCallback((_) async {
 
       try {
+
         await context.read<AppProvider>().loadApp(context);
 
         print("✅ APP READY");
@@ -94,7 +95,7 @@ class _appDesktopState extends State<appDesktop> {
                   MenuButton(
                       text: SizedBox(
                           width: wItem,
-                          child: Text(S.of(context).newMale)
+                          child: Text(S.of(context).new_male)
                       ),
                       submenu: SubMenu(
                           menuItems: [
@@ -254,7 +255,7 @@ class _appDesktopState extends State<appDesktop> {
                               MenuButton(
                                   text: SizedBox(
                                       width:  wItem,
-                                      child: Text(S.of(context).allFemale)),
+                                      child: Text(S.of(context).all_female)),
                                   onTap: () async {
                                     if(!await context.read<NavigationProvider>().canNavigate(context)) return;
 
@@ -372,7 +373,7 @@ class _appDesktopState extends State<appDesktop> {
                               MenuButton(
                                   text: SizedBox(
                                       width:  wItem,
-                                      child: Text(S.of(context).allMale)),
+                                      child: Text(S.of(context).all_male)),
                                   onTap: () async {
                                       if(!await context.read<NavigationProvider>().canNavigate(context)) return;
 
@@ -546,8 +547,8 @@ class _appDesktopState extends State<appDesktop> {
                               context.read<UserProvider>().select(null);
                               LoginPage(context);
                             },
-                            child: const Text(
-                              'Iniciar sesión',
+                            child: Text(
+                              S.of(context).login,
                               style: TextStyle(
                                 color: Colors.white,
                               ),
@@ -561,8 +562,8 @@ class _appDesktopState extends State<appDesktop> {
                                 builder: (context) => const createUser(),
                               );
                             },
-                            child: const Text(
-                              'Nuevo usuario',
+                            child: Text(
+                              S.of(context).new_user,
                               style: TextStyle(
                                 color: Colors.white,
                               ),
@@ -586,7 +587,7 @@ class _appDesktopState extends State<appDesktop> {
 
                           if (value == 'logout') {
 
-                              String message = "¿Seguro que desea cerrar sesion";
+                              String message = S.of(context).logout_confirm;
 
                               final accepted  = await warning(context, message);
                               if (!accepted ) return;
@@ -651,47 +652,47 @@ class _appDesktopState extends State<appDesktop> {
                         },
                         itemBuilder: (context) => [
                           if(context.read<SessionProvider>().user!.role =='admin')
-                          const PopupMenuItem<String>(
+                          PopupMenuItem<String>(
                             value: 'admin',
                             child: Row(
                               children: [
                                 Icon(Icons.admin_panel_settings),
                                 SizedBox(width: 8),
-                                Text('Administracion'),
+                                Text(S.of(context).administration),
                               ],
                             ),
                           ),
 
 
-                          const PopupMenuItem<String>(
+                       PopupMenuItem<String>(
                            value: 'account',
                           child: Row(
                             children: [
                               Icon(Icons.person),
                               SizedBox(width: 8),
-                              Text('Mi cuenta'),
+                              Text(S.of(context).my_account),
                             ],
                           ),
                           ),
 
-                          const PopupMenuItem<String>(
+                          PopupMenuItem<String>(
                             value: 'logout',
                             child: Row(
                               children: [
                                 Icon(Icons.logout),
                                 SizedBox(width: 8),
-                                Text('Cerrar sesión'),
+                                Text(S.of(context).logout),
                               ],
                             ),
                           ),
                           
-                         const PopupMenuItem(
+                         PopupMenuItem(
                              value: 'delete_account',
                              child: Row(
                                  children: [
                                     Icon(Icons.delete),
                                     SizedBox(width: 8,),
-                                    Text("eliminar cuenta")
+                                    Text(S.of(context).delete_account)
                                  ],
                              )
                          ),

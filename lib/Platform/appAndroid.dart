@@ -29,7 +29,7 @@ class _appAndroidState extends State<appAndroid> {
                 ) ,
             ),
             ExpansionTile(
-              title: Text(S.of(context).newMale),
+              title: Text(S.of(context).new_male),
               children: <Widget>[
                     ListTile(
                       title: Text(S.of(context).company),
