@@ -74,7 +74,7 @@ Future<TypeConnection?> TypeConnectionDialog (BuildContext  context) async {
                           MaterialButton(
                             color: Colors.lightBlue,
                             child: Text(
-                              S.of(context).newMale,
+                              S.of(context).new_male,
                               style: const TextStyle(
                                 color: Colors.white,
                               ),
