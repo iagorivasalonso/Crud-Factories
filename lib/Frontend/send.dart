@@ -50,7 +50,7 @@ class _SendFromPageState extends State<SendFromPage> {
   final ScrollController verticalScrollTable = ScrollController();
 
 
-  bool allSectors = false;
+  bool all_sectors = false;
 
   String text = "";
 
@@ -129,7 +129,7 @@ class _SendFromPageState extends State<SendFromPage> {
         .save
         : S
         .of(context)
-        .newMale;
+        .new_male;
 
     String action2 = isEditing
         ? S
@@ -174,20 +174,20 @@ class _SendFromPageState extends State<SendFromPage> {
           .sectorId;
 
       if (sectorId == "0") {
-        allSectors = widget.filter == SendFilter.date
+        all_sectors = widget.filter == SendFilter.date
             ? true
             : false;
 
         titleSector = widget.filter == SendFilter.date
             ? S
             .of(context)
-            .allSectors
+            .all_sectors
             : S
             .of(context)
             .list_of_sends;
       }
       else {
-        allSectors = false;
+        all_sectors = false;
 
         final sectorSelected = providerSectors.firstWhere(
                 (s) => s.id == sectorId
@@ -196,7 +196,7 @@ class _SendFromPageState extends State<SendFromPage> {
         titleSector = widget.filter == SendFilter.date
             ? '${S
             .of(context)
-            .sectorOf} ${sectorSelected.name}'
+            .sector_of} ${sectorSelected.name}'
             : S
             .of(context)
             .list_of_sends;
@@ -209,7 +209,7 @@ class _SendFromPageState extends State<SendFromPage> {
           : LocalizationHelper.sendsDay(context, lines.length);
     }
     else {
-      allSectors = selectedSector == null
+      all_sectors = selectedSector == null
           ? true
           : false;
 
@@ -291,7 +291,7 @@ class _SendFromPageState extends State<SendFromPage> {
                                           .sector,
                                       opDefault: S
                                           .of(context)
-                                          .allMale,
+                                          .all_male,
                                       selectedItem: selectedSector,
                                       hint: S
                                           .of(context)
@@ -322,7 +322,7 @@ class _SendFromPageState extends State<SendFromPage> {
                                           key: const ValueKey("new"),
                                           scrollController: verticalScrollTable,
 
-                                          columns: allSectors == false
+                                          columns: all_sectors == false
                                               ? [
                                             S
                                                 .of(context)
@@ -355,7 +355,7 @@ class _SendFromPageState extends State<SendFromPage> {
                                                 .select
                                           ],
 
-                                          showSectorColumn: allSectors,
+                                          showSectorColumn: all_sectors,
                                           lines: vm.controllers,
                                           sendValues: vm.send,
                                           onStateChanged: (index, value) {
@@ -389,7 +389,7 @@ class _SendFromPageState extends State<SendFromPage> {
                                           key: const ValueKey("edit"),
                                           scrollController: verticalScrollTable,
 
-                                          columns: allSectors == false
+                                          columns: all_sectors == false
                                               ? [
                                             campKey,
                                             S
@@ -414,7 +414,7 @@ class _SendFromPageState extends State<SendFromPage> {
 
                                           ],
 
-                                          showSectorColumn: allSectors,
+                                          showSectorColumn: all_sectors,
                                           filter: widget.filter,
                                           lines: vm.controllers,
                                           sendValues: vm.send,
