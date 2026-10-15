@@ -1,5 +1,5 @@
 import 'package:crud_factories/Alertdialogs/error.dart';
-import 'package:crud_factories/Backend/Data/controlsMessagesError/errors.dart' show EditResult, CreateResult, DeleteResult;
+import 'package:crud_factories/Backend/core/controlsMessagesError/errors.dart' show EditResult, CreateResult, DeleteResult;
 import 'package:crud_factories/Backend/Feature/Connection/Controller/ConnectionController.dart' show ConnectionController, ConnectResultModel, DisconnectResult;
 import 'package:crud_factories/Backend/Global/controllers/Conection.dart' show connectionControler;
 import 'package:crud_factories/Backend/Providers/App_provaider.dart';
@@ -159,7 +159,7 @@ class _conectionState extends State<conection> {
                                         items: dropdownConnections,
                                         camp: S.of(context).database_connection,
                                         selectedItem: selectedForDropdown,
-                                        hint: S.of(context).newFemale,
+                                        hint: S.of(context).new_Female,
                                         itemLabel: (connection) => connection.database,
                                         onChanged: (c) {
                                           if (c == null) return;
@@ -431,12 +431,16 @@ class _conectionState extends State<conection> {
 
           final message = "${S.of(context).is_connected_to} ${selected.database}";
 
-          await context.read<AppProvider>().switchSource(
-            context,
-            context.read<AppProvider>().isApi == true
-               ?  DataSourceMode.api
-               :  DataSourceMode.sql,
-          );
+          await context.read<AppProvider>().loadUsers(context);
+
+          final appProvider = context.read<AppProvider>();
+
+          if (appProvider.files != null) {
+            await appProvider.loadSystemMailRepository(
+              context,
+              appProvider.files!,
+            );
+          }
 
           // Recuperamos la conexión después de recargar las conexiones
           final newSelected = provider.connections.firstWhere(

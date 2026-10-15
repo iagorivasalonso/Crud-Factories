@@ -3,7 +3,6 @@
 import 'package:crud_factories/Alertdialogs/confirm.dart' show confirm;
 import 'package:crud_factories/Alertdialogs/error.dart' show error;
 import 'package:crud_factories/Alertdialogs/selectCompany.dart' show newMailConfiguration;
-import 'package:crud_factories/Backend/Data/controlsMessagesError/errors.dart';
 import 'package:crud_factories/Backend/Providers/EditStateProvider.dart' show EditStateProvider;
 import 'package:crud_factories/Backend/Providers/MailProvider.dart';
 import 'package:crud_factories/Functions/isNotAndroid.dart' show isNotAndroid;
@@ -85,7 +84,7 @@ class _MailFormPageState extends State<MailFormPage> {
 
     final title = isEditing
           ? S.of(context).edit
-          : S.of(context).newMale;
+          : S.of(context).new_male;
 
     final action = isEditing
           ? S.of(context).update
@@ -99,8 +98,7 @@ class _MailFormPageState extends State<MailFormPage> {
     String title1 = "$title $name";
 
 
-    return !isNotAndroid()
-        ? Scaffold(
+    return Scaffold(
       body: Scrollbar(
         controller: verticalScroll,
         thumbVisibility: true,
@@ -195,10 +193,6 @@ class _MailFormPageState extends State<MailFormPage> {
           ),
         ),
       ),
-    )
-        : Scaffold(
-      appBar: appBarAndroid(context, name: title1),
-      body: Text("creart email"),
     );
   }
 

@@ -145,8 +145,7 @@ class _SendMailState extends State<SendMail> {
         .map((card) => card.description)
         .toList();
 
-    return !isNotAndroid()
-        ? Scaffold(
+    return Scaffold(
       body: Scrollbar(
         controller: verticalScroll,
         thumbVisibility: true,
@@ -242,7 +241,7 @@ class _SendMailState extends State<SendMail> {
                                             nameAction: otherMail == false
                                                 ? S
                                                 .of(context)
-                                                .orther
+                                                .other
                                                 : S
                                                 .of(context)
                                                 .back,
