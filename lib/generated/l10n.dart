@@ -109,9 +109,9 @@ class S {
     );
   }
 
-  /// `Digitos`
+  /// `Digítos`
   String get digits {
-    return Intl.message('Digitos', name: 'digits', desc: '', args: []);
+    return Intl.message('Digítos', name: 'digits', desc: '', args: []);
   }
 
   /// `Conexión a base de datos`
@@ -314,10 +314,10 @@ class S {
     return Intl.message('Fecha', name: 'date', desc: '', args: []);
   }
 
-  /// `Editar envio`
+  /// `Editar envío`
   String get edit_shipment {
     return Intl.message(
-      'Editar envio',
+      'Editar envío',
       name: 'edit_shipment',
       desc: '',
       args: [],
@@ -394,9 +394,9 @@ class S {
     return Intl.message('Guardada', name: 'saved_female', desc: '', args: []);
   }
 
-  /// `Envios`
+  /// `Envíos`
   String get sends {
-    return Intl.message('Envios', name: 'sends', desc: '', args: []);
+    return Intl.message('Envíos', name: 'sends', desc: '', args: []);
   }
 
   /// `Host`
@@ -484,10 +484,10 @@ class S {
     );
   }
 
-  /// `Lista de envios`
+  /// `Lista de Envíos`
   String get list_of_sends {
     return Intl.message(
-      'Lista de envios',
+      'Lista de Envíos',
       name: 'list_of_sends',
       desc: '',
       args: [],
@@ -499,10 +499,10 @@ class S {
     return Intl.message('Nuevo email', name: 'new_mail', desc: '', args: []);
   }
 
-  /// `Nuevo envio`
+  /// `Nuevo envío`
   String get new_shipment {
     return Intl.message(
-      'Nuevo envio',
+      'Nuevo envío',
       name: 'new_shipment',
       desc: '',
       args: [],
@@ -664,6 +664,11 @@ class S {
     return Intl.message('Iniciar sesión', name: 'login', desc: '', args: []);
   }
 
+  /// `Cerrar sesión`
+  String get logout {
+    return Intl.message('Cerrar sesión', name: 'logout', desc: '', args: []);
+  }
+
   /// `Administración de usuarios`
   String get user_management {
     return Intl.message(
@@ -694,6 +699,16 @@ class S {
     return Intl.message(
       'administrador',
       name: 'administrator',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Administración`
+  String get administration {
+    return Intl.message(
+      'Administración',
+      name: 'administration',
       desc: '',
       args: [],
     );
@@ -1089,6 +1104,21 @@ class S {
     return Intl.message('Mensaje', name: 'message', desc: '', args: []);
   }
 
+  /// `Mi cuenta`
+  String get my_account {
+    return Intl.message('Mi cuenta', name: 'my_account', desc: '', args: []);
+  }
+
+  /// `Eliminar cuenta`
+  String get delete_account {
+    return Intl.message(
+      'Eliminar cuenta',
+      name: 'delete_account',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Reiniciar`
   String get reboot {
     return Intl.message('Reiniciar', name: 'reboot', desc: '', args: []);
@@ -1194,10 +1224,10 @@ class S {
     );
   }
 
-  /// `Mo hay sectores`
+  /// `No hay sectores`
   String get no_sectors {
     return Intl.message(
-      'Mo hay sectores',
+      'No hay sectores',
       name: 'no_sectors',
       desc: '',
       args: [],
@@ -1214,20 +1244,20 @@ class S {
     );
   }
 
-  /// `El emmail es requerido`
+  /// `El email es obligatorio`
   String get mail_required {
     return Intl.message(
-      'El emmail es requerido',
+      'El email es obligatorio',
       name: 'mail_required',
       desc: '',
       args: [],
     );
   }
 
-  /// `La contraseña es requrida`
+  /// `La contraseña es obligatoria`
   String get password_required {
     return Intl.message(
-      'La contraseña es requrida',
+      'La contraseña es obligatoria',
       name: 'password_required',
       desc: '',
       args: [],
@@ -1526,10 +1556,10 @@ class S {
     );
   }
 
-  /// `no se pudo realizar el envio`
+  /// `No se pudo realizar el envío`
   String get the_shipment_could_not_be_completed {
     return Intl.message(
-      'no se pudo realizar el envio',
+      'No se pudo realizar el envío',
       name: 'the_shipment_could_not_be_completed',
       desc: '',
       args: [],
@@ -1601,10 +1631,10 @@ class S {
     );
   }
 
-  /// `la prueba de conexion se envio correctamente`
+  /// `La prueba de conexión se envió correctamente`
   String get the_connection_test_was_sent_successfully {
     return Intl.message(
-      'la prueba de conexion se envio correctamente',
+      'La prueba de conexión se envió correctamente',
       name: 'the_connection_test_was_sent_successfully',
       desc: '',
       args: [],
@@ -1641,10 +1671,10 @@ class S {
     );
   }
 
-  /// `Error al modificar el el nombre de la base de datos`
+  /// `Error al modificar el nombre de la base de datos`
   String get error_modifying_the_database_name {
     return Intl.message(
-      'Error al modificar el el nombre de la base de datos',
+      'Error al modificar el nombre de la base de datos',
       name: 'error_modifying_the_database_name',
       desc: '',
       args: [],
@@ -2246,10 +2276,10 @@ class S {
     );
   }
 
-  /// `la conexión no está seleccionada`
+  /// `La conexión no está seleccionada`
   String get The_connection_is_not_selected {
     return Intl.message(
-      'la conexión no está seleccionada',
+      'La conexión no está seleccionada',
       name: 'The_connection_is_not_selected',
       desc: '',
       args: [],
@@ -2783,16 +2813,6 @@ class S {
     );
   }
 
-  /// `No puede cargar`
-  String get cannot_load {
-    return Intl.message(
-      'No puede cargar',
-      name: 'cannot_load',
-      desc: '',
-      args: [],
-    );
-  }
-
   /// `Porque no tiene`
   String get because_it_does_not_have {
     return Intl.message(
@@ -2813,9 +2833,9 @@ class S {
     );
   }
 
-  /// `La linea`
+  /// `La línea`
   String get the_line {
-    return Intl.message('La linea', name: 'the_line', desc: '', args: []);
+    return Intl.message('La línea', name: 'the_line', desc: '', args: []);
   }
 
   /// `no puede quedar vacío`
@@ -2928,6 +2948,15 @@ class S {
     );
   }
 
+  /// `No se puede cargar`
+  String get cannot_load {
+    return Intl.message(
+      'No se puede cargar',
+      name: 'cannot_load',
+      desc: '',
+      args: [],
+    );
+  }
 
   /// `Sin empresa`
   String get Without_company {
@@ -2999,10 +3028,10 @@ class S {
     );
   }
 
-  /// `La conexion ha cambiado ¿desea guardarla?`
+  /// `La conexión ha cambiado. ¿Desea guardarla?`
   String get the_connection_has_changed_do_you_want_to_save_it {
     return Intl.message(
-      'La conexion ha cambiado ¿desea guardarla?',
+      'La conexión ha cambiado. ¿Desea guardarla?',
       name: 'the_connection_has_changed_do_you_want_to_save_it',
       desc: '',
       args: [],

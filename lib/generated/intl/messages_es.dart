@@ -40,7 +40,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "Importar datos en formato CSV",
     ),
     "The_connection_is_not_selected": MessageLookupByLibrary.simpleMessage(
-      "la conexión no está seleccionada",
+      "La conexión no está seleccionada",
     ),
     "The_recipient_is_not_a_valid_mail": MessageLookupByLibrary.simpleMessage(
       "El destinatario no es un correo electrónico válido",
@@ -93,15 +93,16 @@ class MessageLookup extends MessageLookupByLibrary {
     "admin_request_subject": MessageLookupByLibrary.simpleMessage(
       "Solicitud de administrador",
     ),
+    "administration": MessageLookupByLibrary.simpleMessage("Administración"),
     "administrator": MessageLookupByLibrary.simpleMessage("administrador"),
     "affair": MessageLookupByLibrary.simpleMessage("Asunto"),
-    "all_female": MessageLookupByLibrary.simpleMessage("Todas"),
-    "all_male": MessageLookupByLibrary.simpleMessage("Todos"),
-    "all_sectors": MessageLookupByLibrary.simpleMessage("Todos los sectores"),
     "all_changes_will_be_lost_do_you_want_to_continue":
         MessageLookupByLibrary.simpleMessage(
           "Todos los cambios se perderán. ¿Desea continuar?",
         ),
+    "all_female": MessageLookupByLibrary.simpleMessage("Todas"),
+    "all_male": MessageLookupByLibrary.simpleMessage("Todos"),
+    "all_sectors": MessageLookupByLibrary.simpleMessage("Todos los sectores"),
     "all_the_sector_will_be_showcased": MessageLookupByLibrary.simpleMessage(
       "En el sector, se mostrarán todas las",
     ),
@@ -122,7 +123,6 @@ class MessageLookup extends MessageLookupByLibrary {
     "can_not_go_blank_fields": MessageLookupByLibrary.simpleMessage(
       "No pueden quedar campos en blanco",
     ),
-    "cannot_load": MessageLookupByLibrary.simpleMessage("No se puede cargar"),
     "cancel": MessageLookupByLibrary.simpleMessage("Cancelar"),
     "cannot_disconnect": MessageLookupByLibrary.simpleMessage(
       "No se puede desconectar",
@@ -130,7 +130,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "cannot_go_empty": MessageLookupByLibrary.simpleMessage(
       "no puede quedar vacío",
     ),
-    "cannot_load": MessageLookupByLibrary.simpleMessage("No puede cargar"),
+    "cannot_load": MessageLookupByLibrary.simpleMessage("No se puede cargar"),
     "careful": MessageLookupByLibrary.simpleMessage("Cuidado"),
     "category_error": MessageLookupByLibrary.simpleMessage(
       "Error de categoría",
@@ -149,9 +149,6 @@ class MessageLookup extends MessageLookupByLibrary {
     "company": MessageLookupByLibrary.simpleMessage("Empresa"),
     "company_contacts": MessageLookupByLibrary.simpleMessage(
       "Contactos de la empresa",
-    ),
-    "companies_in_database": MessageLookupByLibrary.simpleMessage(
-      "Empresas en su base de datos",
     ),
     "confirm": MessageLookupByLibrary.simpleMessage("Confirmar"),
     "confirm_delete_sector": MessageLookupByLibrary.simpleMessage(
@@ -223,13 +220,14 @@ class MessageLookup extends MessageLookupByLibrary {
     "de": MessageLookupByLibrary.simpleMessage("De"),
     "december": MessageLookupByLibrary.simpleMessage("Diciembre"),
     "delete": MessageLookupByLibrary.simpleMessage("Eliminar"),
+    "delete_account": MessageLookupByLibrary.simpleMessage("Eliminar cuenta"),
     "delete_account_confirm": MessageLookupByLibrary.simpleMessage(
       "¿Está seguro que desea eliminar su cuenta?",
     ),
     "desea_go_out": MessageLookupByLibrary.simpleMessage(
       "¿Desea salir de la aplicación?",
     ),
-    "digits": MessageLookupByLibrary.simpleMessage("Digitos"),
+    "digits": MessageLookupByLibrary.simpleMessage("Digítos"),
     "discharge_date": MessageLookupByLibrary.simpleMessage("Fecha de alta"),
     "disconnect": MessageLookupByLibrary.simpleMessage("Desconectar"),
     "do_you_really_want_to_delete": MessageLookupByLibrary.simpleMessage(
@@ -249,7 +247,7 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "download": MessageLookupByLibrary.simpleMessage("Descargar"),
     "edit": MessageLookupByLibrary.simpleMessage("Editar"),
-    "edit_shipment": MessageLookupByLibrary.simpleMessage("Editar envio"),
+    "edit_shipment": MessageLookupByLibrary.simpleMessage("Editar envío"),
     "edit_user": MessageLookupByLibrary.simpleMessage("editar usuario"),
     "edition_of_the_sector": MessageLookupByLibrary.simpleMessage(
       "Edición del sector",
@@ -267,7 +265,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "error carga ruta",
     ),
     "error_modifying_the_database_name": MessageLookupByLibrary.simpleMessage(
-      "Error al modificar el el nombre de la base de datos",
+      "Error al modificar el nombre de la base de datos",
     ),
     "error_updating_user": MessageLookupByLibrary.simpleMessage(
       "error al actualizar el usuario",
@@ -391,10 +389,11 @@ class MessageLookup extends MessageLookupByLibrary {
     "list_of_companies": MessageLookupByLibrary.simpleMessage(
       "Lista de empresas",
     ),
-    "list_of_sends": MessageLookupByLibrary.simpleMessage("Lista de envios"),
+    "list_of_sends": MessageLookupByLibrary.simpleMessage("Lista de Envíos"),
     "lists": MessageLookupByLibrary.simpleMessage("Listas"),
     "load_data": MessageLookupByLibrary.simpleMessage("Cargar datos"),
     "login": MessageLookupByLibrary.simpleMessage("Iniciar sesión"),
+    "logout": MessageLookupByLibrary.simpleMessage("Cerrar sesión"),
     "logout_confirm": MessageLookupByLibrary.simpleMessage(
       "¿Está seguro que desea cerrar sesión?",
     ),
@@ -409,7 +408,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "No se ha encontrado la cuenta de correo.",
     ),
     "mail_required": MessageLookupByLibrary.simpleMessage(
-      "El emmail es requerido",
+      "El email es obligatorio",
     ),
     "mail_saved_successfully": MessageLookupByLibrary.simpleMessage(
       "La cuenta de correo se ha guardado correctamente.",
@@ -430,15 +429,16 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "must_be": MessageLookupByLibrary.simpleMessage("Debe ser"),
     "must_have": MessageLookupByLibrary.simpleMessage("Debe de tener"),
+    "my_account": MessageLookupByLibrary.simpleMessage("Mi cuenta"),
     "name": MessageLookupByLibrary.simpleMessage("Nombre"),
     "name_required": MessageLookupByLibrary.simpleMessage(
       "El nombre es requerido",
     ),
     "name_sector": MessageLookupByLibrary.simpleMessage("Nombre del sector"),
     "new_Female": MessageLookupByLibrary.simpleMessage("Nueva"),
-    "new_male": MessageLookupByLibrary.simpleMessage("Nuevo"),
     "new_mail": MessageLookupByLibrary.simpleMessage("Nuevo email"),
-    "new_shipment": MessageLookupByLibrary.simpleMessage("Nuevo envio"),
+    "new_male": MessageLookupByLibrary.simpleMessage("Nuevo"),
+    "new_shipment": MessageLookupByLibrary.simpleMessage("Nuevo envío"),
     "new_smtp_configuration": MessageLookupByLibrary.simpleMessage(
       "Nueva configuración SMTP",
     ),
@@ -469,7 +469,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "no_routes": MessageLookupByLibrary.simpleMessage(
       "No hay rutas disponibles",
     ),
-    "no_sectors": MessageLookupByLibrary.simpleMessage("Mo hay sectores"),
+    "no_sectors": MessageLookupByLibrary.simpleMessage("No hay sectores"),
     "not_a_valid_mail": MessageLookupByLibrary.simpleMessage(
       "No es un correo electrónico válido",
     ),
@@ -501,7 +501,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "Solicitud de recuperación de contraseña",
     ),
     "password_required": MessageLookupByLibrary.simpleMessage(
-      "La contraseña es requrida",
+      "La contraseña es obligatoria",
     ),
     "passwords_do_not_match": MessageLookupByLibrary.simpleMessage(
       "Las contraseñas no coinciden",
@@ -545,7 +545,6 @@ class MessageLookup extends MessageLookupByLibrary {
     "saved_female": MessageLookupByLibrary.simpleMessage("Guardada"),
     "search": MessageLookupByLibrary.simpleMessage("Buscar..."),
     "sector": MessageLookupByLibrary.simpleMessage("Sector"),
-    "sector_of": MessageLookupByLibrary.simpleMessage("Sector de"),
     "sector_already_exists": MessageLookupByLibrary.simpleMessage(
       "ya existe el sector",
     ),
@@ -567,6 +566,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "sector_not_found": MessageLookupByLibrary.simpleMessage(
       "Sector no encontrado",
     ),
+    "sector_of": MessageLookupByLibrary.simpleMessage("Sector de"),
     "sector_required": MessageLookupByLibrary.simpleMessage(
       "El sector es requerido",
     ),
@@ -601,7 +601,7 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "sender": MessageLookupByLibrary.simpleMessage("Remitente"),
     "sending_mails": MessageLookupByLibrary.simpleMessage("Envío de emails"),
-    "sends": MessageLookupByLibrary.simpleMessage("Envios"),
+    "sends": MessageLookupByLibrary.simpleMessage("Envíos"),
     "sent": MessageLookupByLibrary.simpleMessage("Enviado"),
     "september": MessageLookupByLibrary.simpleMessage("Septiembre"),
     "server": MessageLookupByLibrary.simpleMessage("Servidor"),
@@ -633,11 +633,11 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "the_connection_has_changed_do_you_want_to_save_it":
         MessageLookupByLibrary.simpleMessage(
-          "La conexion ha cambiado ¿desea guardarla?",
+          "La conexión ha cambiado. ¿Desea guardarla?",
         ),
     "the_connection_test_was_sent_successfully":
         MessageLookupByLibrary.simpleMessage(
-          "la prueba de conexion se envio correctamente",
+          "La prueba de conexión se envió correctamente",
         ),
     "the_employee": MessageLookupByLibrary.simpleMessage("El empleado"),
     "the_employee_has_been_correctly_removed":
@@ -653,7 +653,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "No se pudo resolver la ruta del archivo",
     ),
     "the_format_of_the": MessageLookupByLibrary.simpleMessage("El formato de"),
-    "the_line": MessageLookupByLibrary.simpleMessage("La linea"),
+    "the_line": MessageLookupByLibrary.simpleMessage("La línea"),
     "the_port_is_not_correct": MessageLookupByLibrary.simpleMessage(
       "El puerto no es correcto",
     ),
@@ -669,7 +669,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "El envío contiene",
     ),
     "the_shipment_could_not_be_completed": MessageLookupByLibrary.simpleMessage(
-      "no se pudo realizar el envio",
+      "No se pudo realizar el envío",
     ),
     "the_user_or_password_are_incorrect": MessageLookupByLibrary.simpleMessage(
       "El usuario o la contraseña son incorrectos",
