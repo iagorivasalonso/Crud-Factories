@@ -76,7 +76,7 @@ class _GenericListViewPageState<T> extends State<GenericListViewPage<T>> {
   @override
   Widget build(BuildContext context) {
 
-    List<String> opSearch = [S.of(context).allMale, S.of(context).filter];
+    List<String> opSearch = [S.of(context).all_male, S.of(context).filter];
 
      double heightButons = 40;
      double heightpanel = 150;
