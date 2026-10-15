@@ -3,7 +3,6 @@ import 'package:crud_factories/Alertdialogs/error.dart' show error;
 import 'package:crud_factories/Alertdialogs/errorList.dart';
 import 'package:crud_factories/Alertdialogs/selectCompany.dart' show newMailConfiguration;
 import 'package:crud_factories/Alertdialogs/warning.dart' show warning;
-import 'package:crud_factories/Backend/Data/controlsMessagesError/errors.dart';
 import 'package:crud_factories/Backend/Feature/Mail/Service/mailConfigurationService.dart';
 import 'package:crud_factories/Backend/Providers/EditStateProvider.dart' show EditStateProvider;
 import 'package:crud_factories/Backend/Providers/FactoryProvider.dart';
@@ -146,7 +145,8 @@ class _SendMailState extends State<SendMail> {
         .map((card) => card.description)
         .toList();
 
-    return Scaffold(
+    return !isNotAndroid()
+        ? Scaffold(
       body: Scrollbar(
         controller: verticalScroll,
         thumbVisibility: true,
@@ -408,8 +408,7 @@ class _SendMailState extends State<SendMail> {
           ),
         ),
       ),
-    )
-        : Scaffold(
+    ) : Scaffold(
       appBar: appBarAndroid(context, name: S
           .of(context)
           .sending_mails),
