@@ -19,7 +19,7 @@ class UserValidator {
 
     // REQUIRED
     if (username.isEmpty) {
-      return S.of(context).usename_required;
+      return S.of(context).name_required;
     }
 
     // PASSWORD
