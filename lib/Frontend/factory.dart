@@ -124,14 +124,14 @@ class _FactoryFromPageState extends State<FactoryFromPage> {
     final isEditing = factorySelected != null;
     final Sector newSectorOption = Sector(
       id: "-",
-      name: S.of(context).newMale,
+      name: S.of(context).new_male,
     );
 
 
 
     final title = isEditing
         ? S.of(context).edit
-        : S.of(context).newFemale;
+        : S.of(context).new_Female;
 
     final action = isEditing
         ? S.of(context).update
@@ -491,7 +491,7 @@ class _FactoryFromPageState extends State<FactoryFromPage> {
 
     if (sectorChoose == null) return;
 
-    if (sectorChoose.name == S.of(context).newMale)
+    if (sectorChoose.name == S.of(context).new_male)
     {
         final sector = await createSector(context);
 
