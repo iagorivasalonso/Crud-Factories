@@ -37,8 +37,8 @@ class LocalizationHelper {
 
     return Intl.plural(
       countFactoriesBD,
-      one: '$preVar $countFactoriesBD ${S.of(context).company_en_base_datos.toLowerCase()}',
-      other: '$preVar $countFactoriesBD ${S.of(context).companies_en_base_datos.toLowerCase()}',
+      one: '$preVar $countFactoriesBD ${S.of(context).companies_in_database.toLowerCase()}',
+      other: '$preVar $countFactoriesBD ${S.of(context).companies_in_database.toLowerCase()}',
       name: "factoriesDatabase",
       args: [countFactoriesBD],
       examples: const {"countFactoriesBD": 0},
@@ -185,7 +185,7 @@ class LocalizationHelper {
 
   static String fieldInAnother( BuildContext context,String array, String arrayFather) {
 
-    String preVar = S.of(context).can_not_load;
+    String preVar = S.of(context).cannot_load;
     String postVar = S.of(context).because_it_does_not_have.toLowerCase();
 
 
@@ -278,7 +278,7 @@ class LocalizationHelper {
 
   static String no_companies_without( BuildContext context,String array) {
 
-    String preVar = S.of(context).can_not_load;
+    String preVar = S.of(context).cannot_load;
     String postVar = S.of(context).Without_company.toLowerCase();
 
     return Intl.message(
