@@ -71,10 +71,10 @@ class _adminPageState extends State<adminPage> {
                                                    items: [
                                                      ...UserRole.values,
                                                     ],
-                                                   opDefault: S.of(context).allMale,
+                                                   opDefault: S.of(context).all_male,
                                                    camp: S.of(context).role,
                                                    selectedItem: selectedRol,
-                                                   hint: S.of(context).allMale,
+                                                   hint: S.of(context).all_male,
                                                    itemLabel: (rol) {
                                                      switch (rol) {
                                                        case UserRole.admin:
