@@ -1,6 +1,5 @@
 import 'package:crud_factories/Alertdialogs/confirm.dart';
 import 'package:crud_factories/Alertdialogs/error.dart';
-import 'package:crud_factories/Backend/Data/controlsMessagesError/errors.dart' show CreateResult, EditResult;
 import 'package:crud_factories/Backend/Global/controllers/Factory.dart';
 import 'package:crud_factories/Backend/Providers/EditStateProvider.dart' show EditStateProvider;
 import 'package:crud_factories/Backend/Providers/EmployeeProvider.dart';
@@ -23,6 +22,8 @@ import 'package:crud_factories/Widgets/dropDownButton.dart';
 import 'package:crud_factories/Widgets/listElements.dart';
 import 'package:crud_factories/Widgets/materialButton.dart';
 import 'package:provider/provider.dart';
+
+import '../Backend/core/controlsMessagesError/errors.dart';
 
 
 

@@ -19,6 +19,7 @@ import 'package:crud_factories/Backend/Global/controllers/Mail.dart';
 import 'package:provider/provider.dart';
 
 import '../Backend/Feature/Mail/Service/mailConfigurationService.dart';
+import '../Backend/core/controlsMessagesError/errors.dart';
 import '../Widgets/materialButton.dart';
 
 
