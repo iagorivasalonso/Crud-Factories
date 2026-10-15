@@ -191,7 +191,7 @@ class ConnectionProvider extends ChangeNotifier {
               return S.of(context).acept;
 
     if(selected == null){
-      return S.of(context).newFemale;
+      return S.of(context).new_Female;
     }
 
     if (session == null) {
