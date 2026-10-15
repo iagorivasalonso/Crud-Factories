@@ -425,13 +425,13 @@ class S {
   }
 
   /// `Nueva`
-  String get newFemale {
-    return Intl.message('Nueva', name: 'newFemale', desc: '', args: []);
+  String get new_Female {
+    return Intl.message('Nueva', name: 'new_Female', desc: '', args: []);
   }
 
   /// `Nuevo`
-  String get newMale {
-    return Intl.message('Nuevo', name: 'newMale', desc: '', args: []);
+  String get new_male {
+    return Intl.message('Nuevo', name: 'new_male', desc: '', args: []);
   }
 
   /// `Conexión`
@@ -555,18 +555,18 @@ class S {
   }
 
   /// `Todos los sectores`
-  String get allSectors {
+  String get all_sectors {
     return Intl.message(
       'Todos los sectores',
-      name: 'allSectors',
+      name: 'all_sectors',
       desc: '',
       args: [],
     );
   }
 
   /// `Sector de`
-  String get sectorOf {
-    return Intl.message('Sector de', name: 'sectorOf', desc: '', args: []);
+  String get sector_of {
+    return Intl.message('Sector de', name: 'sector_of', desc: '', args: []);
   }
 
   /// `Seleccionar`
@@ -590,13 +590,13 @@ class S {
   }
 
   /// `Todas`
-  String get allFemale {
-    return Intl.message('Todas', name: 'allFemale', desc: '', args: []);
+  String get all_female {
+    return Intl.message('Todas', name: 'all_female', desc: '', args: []);
   }
 
   /// `Todos`
-  String get allMale {
-    return Intl.message('Todos', name: 'allMale', desc: '', args: []);
+  String get all_male {
+    return Intl.message('Todos', name: 'all_male', desc: '', args: []);
   }
 
   /// `Usuario`
@@ -612,6 +612,31 @@ class S {
       desc: '',
       args: [],
     );
+  }
+
+  /// `El usuario no está activo en este momento`
+  String get user_not_active {
+    return Intl.message(
+      'El usuario no está activo en este momento',
+      name: 'user_not_active',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Usuarios`
+  String get users {
+    return Intl.message('Usuarios', name: 'users', desc: '', args: []);
+  }
+
+  /// `Activos`
+  String get active {
+    return Intl.message('Activos', name: 'active', desc: '', args: []);
+  }
+
+  /// `Inactivos`
+  String get inactive {
+    return Intl.message('Inactivos', name: 'inactive', desc: '', args: []);
   }
 
   /// `Mostrar contraseña`
@@ -637,6 +662,21 @@ class S {
   /// `Iniciar sesión`
   String get login {
     return Intl.message('Iniciar sesión', name: 'login', desc: '', args: []);
+  }
+
+  /// `Administración de usuarios`
+  String get user_management {
+    return Intl.message(
+      'Administración de usuarios',
+      name: 'user_management',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Acciones`
+  String get actions {
+    return Intl.message('Acciones', name: 'actions', desc: '', args: []);
   }
 
   /// `Bienvenido`
@@ -915,20 +955,10 @@ class S {
   }
 
   /// `Empresas en su base de datos`
-  String get company_en_base_datos {
+  String get companies_in_database {
     return Intl.message(
       'Empresas en su base de datos',
-      name: 'company_en_base_datos',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Empresas en su base de datos`
-  String get companies_en_base_datos {
-    return Intl.message(
-      'Empresas en su base de datos',
-      name: 'companies_en_base_datos',
+      name: 'companies_in_database',
       desc: '',
       args: [],
     );
@@ -1010,8 +1040,8 @@ class S {
   }
 
   /// `Otro`
-  String get orther {
-    return Intl.message('Otro', name: 'orther', desc: '', args: []);
+  String get other {
+    return Intl.message('Otro', name: 'other', desc: '', args: []);
   }
 
   /// `Examinar`
@@ -2477,10 +2507,10 @@ class S {
   }
 
   /// `Modificada`
-  String get modifiedFemale {
+  String get modified_female {
     return Intl.message(
       'Modificada',
-      name: 'modifiedFemale',
+      name: 'modified_female',
       desc: '',
       args: [],
     );
@@ -2754,10 +2784,10 @@ class S {
   }
 
   /// `No puede cargar`
-  String get cant_not_load {
+  String get cannot_load {
     return Intl.message(
       'No puede cargar',
-      name: 'cant_not_load',
+      name: 'cannot_load',
       desc: '',
       args: [],
     );
@@ -2898,15 +2928,6 @@ class S {
     );
   }
 
-  /// `No se puede cargar`
-  String get can_not_load {
-    return Intl.message(
-      'No se puede cargar',
-      name: 'can_not_load',
-      desc: '',
-      args: [],
-    );
-  }
 
   /// `Sin empresa`
   String get Without_company {

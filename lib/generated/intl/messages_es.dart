@@ -85,6 +85,8 @@ class MessageLookup extends MessageLookupByLibrary {
           "Cuenta no configurada en el servidor",
         ),
     "acept": MessageLookupByLibrary.simpleMessage("Aceptar"),
+    "actions": MessageLookupByLibrary.simpleMessage("Acciones"),
+    "active": MessageLookupByLibrary.simpleMessage("Activos"),
     "active_user": MessageLookupByLibrary.simpleMessage("usuario activo"),
     "address": MessageLookupByLibrary.simpleMessage("Dirección"),
     "admin_request_message": m0,
@@ -93,9 +95,9 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "administrator": MessageLookupByLibrary.simpleMessage("administrador"),
     "affair": MessageLookupByLibrary.simpleMessage("Asunto"),
-    "allFemale": MessageLookupByLibrary.simpleMessage("Todas"),
-    "allMale": MessageLookupByLibrary.simpleMessage("Todos"),
-    "allSectors": MessageLookupByLibrary.simpleMessage("Todos los sectores"),
+    "all_female": MessageLookupByLibrary.simpleMessage("Todas"),
+    "all_male": MessageLookupByLibrary.simpleMessage("Todos"),
+    "all_sectors": MessageLookupByLibrary.simpleMessage("Todos los sectores"),
     "all_changes_will_be_lost_do_you_want_to_continue":
         MessageLookupByLibrary.simpleMessage(
           "Todos los cambios se perderán. ¿Desea continuar?",
@@ -120,7 +122,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "can_not_go_blank_fields": MessageLookupByLibrary.simpleMessage(
       "No pueden quedar campos en blanco",
     ),
-    "can_not_load": MessageLookupByLibrary.simpleMessage("No se puede cargar"),
+    "cannot_load": MessageLookupByLibrary.simpleMessage("No se puede cargar"),
     "cancel": MessageLookupByLibrary.simpleMessage("Cancelar"),
     "cannot_disconnect": MessageLookupByLibrary.simpleMessage(
       "No se puede desconectar",
@@ -128,7 +130,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "cannot_go_empty": MessageLookupByLibrary.simpleMessage(
       "no puede quedar vacío",
     ),
-    "cant_not_load": MessageLookupByLibrary.simpleMessage("No puede cargar"),
+    "cannot_load": MessageLookupByLibrary.simpleMessage("No puede cargar"),
     "careful": MessageLookupByLibrary.simpleMessage("Cuidado"),
     "category_error": MessageLookupByLibrary.simpleMessage(
       "Error de categoría",
@@ -140,7 +142,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "clear": MessageLookupByLibrary.simpleMessage("Limpiar"),
     "close": MessageLookupByLibrary.simpleMessage("Cerrar"),
     "companies": MessageLookupByLibrary.simpleMessage("Empresas"),
-    "companies_en_base_datos": MessageLookupByLibrary.simpleMessage(
+    "companies_in_database": MessageLookupByLibrary.simpleMessage(
       "Empresas en su base de datos",
     ),
     "companies_of": MessageLookupByLibrary.simpleMessage("Empresas de"),
@@ -148,7 +150,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "company_contacts": MessageLookupByLibrary.simpleMessage(
       "Contactos de la empresa",
     ),
-    "company_en_base_datos": MessageLookupByLibrary.simpleMessage(
+    "companies_in_database": MessageLookupByLibrary.simpleMessage(
       "Empresas en su base de datos",
     ),
     "confirm": MessageLookupByLibrary.simpleMessage("Confirmar"),
@@ -346,6 +348,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "in_the_department": MessageLookupByLibrary.simpleMessage(
       "en  el departamento",
     ),
+    "inactive": MessageLookupByLibrary.simpleMessage("Inactivos"),
     "invalid_connection": MessageLookupByLibrary.simpleMessage(
       "Conexión no válida",
     ),
@@ -421,7 +424,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "modification_of_the_sector": MessageLookupByLibrary.simpleMessage(
       "Modificación del sector",
     ),
-    "modifiedFemale": MessageLookupByLibrary.simpleMessage("Modificada"),
+    "modified_female": MessageLookupByLibrary.simpleMessage("Modificada"),
     "multiple_recipients": MessageLookupByLibrary.simpleMessage(
       "Varios destinatarios",
     ),
@@ -432,8 +435,8 @@ class MessageLookup extends MessageLookupByLibrary {
       "El nombre es requerido",
     ),
     "name_sector": MessageLookupByLibrary.simpleMessage("Nombre del sector"),
-    "newFemale": MessageLookupByLibrary.simpleMessage("Nueva"),
-    "newMale": MessageLookupByLibrary.simpleMessage("Nuevo"),
+    "new_Female": MessageLookupByLibrary.simpleMessage("Nueva"),
+    "new_male": MessageLookupByLibrary.simpleMessage("Nuevo"),
     "new_mail": MessageLookupByLibrary.simpleMessage("Nuevo email"),
     "new_shipment": MessageLookupByLibrary.simpleMessage("Nuevo envio"),
     "new_smtp_configuration": MessageLookupByLibrary.simpleMessage(
@@ -483,7 +486,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "observations": MessageLookupByLibrary.simpleMessage("Observaciones"),
     "october": MessageLookupByLibrary.simpleMessage("Octubre"),
     "ofThe": MessageLookupByLibrary.simpleMessage("Del"),
-    "orther": MessageLookupByLibrary.simpleMessage("Otro"),
+    "other": MessageLookupByLibrary.simpleMessage("Otro"),
     "other_fields_will_be_autofilled_do_you_want_to_continue":
         MessageLookupByLibrary.simpleMessage(
           "Los demás campos se autocompletarán por defecto. ¿Desea continuar?",
@@ -542,7 +545,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "saved_female": MessageLookupByLibrary.simpleMessage("Guardada"),
     "search": MessageLookupByLibrary.simpleMessage("Buscar..."),
     "sector": MessageLookupByLibrary.simpleMessage("Sector"),
-    "sectorOf": MessageLookupByLibrary.simpleMessage("Sector de"),
+    "sector_of": MessageLookupByLibrary.simpleMessage("Sector de"),
     "sector_already_exists": MessageLookupByLibrary.simpleMessage(
       "ya existe el sector",
     ),
@@ -724,6 +727,12 @@ class MessageLookup extends MessageLookupByLibrary {
     "user_deleted_successfully": MessageLookupByLibrary.simpleMessage(
       "El usuario se eliminó correctamente",
     ),
+    "user_management": MessageLookupByLibrary.simpleMessage(
+      "Administración de usuarios",
+    ),
+    "user_not_active": MessageLookupByLibrary.simpleMessage(
+      "El usuario no está activo en este momento",
+    ),
     "user_not_found": MessageLookupByLibrary.simpleMessage(
       "el usuario no existe",
     ),
@@ -733,6 +742,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "user_updated_successfully": MessageLookupByLibrary.simpleMessage(
       "usuario actualizado correctamente",
     ),
+    "users": MessageLookupByLibrary.simpleMessage("Usuarios"),
     "utilities": MessageLookupByLibrary.simpleMessage("Utilidades"),
     "ver": MessageLookupByLibrary.simpleMessage("Ver"),
     "verify_password": MessageLookupByLibrary.simpleMessage(
