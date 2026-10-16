@@ -1,5 +1,4 @@
-import 'package:crud_factories/Alertdialogs/defaultData.dart' show FuenteData, defaultData;
-import 'package:crud_factories/Alertdialogs/typeConnection.dart' show TypeConnection, TypeConnectionDialog;
+import 'package:crud_factories/Alertdialogs/typeConnection.dart' show FuentData, TypeConnectionDialog;
 import 'package:crud_factories/Backend/DataSources/IappDataSource.dart' show AppDataSource;
 import 'package:crud_factories/Backend/DataSources/fileSystem.dart' show FileDataSource;
 import 'package:crud_factories/Backend/DataSources/filesDataWeb.dart' show AssetDataSource;
@@ -22,34 +21,7 @@ class BootstrapService {
     }
 
 
-    // 🌐 WEB/API
-    if (isApi) {
 
-         final type = await defaultData(context);
-
-         if (type == null) {
-           return null;
-         }
-
-           switch(type){
-
-             case FuenteData.defaultData:
-                         return AssetDataSource();
-             case FuenteData.newData:
-
-               showDialog(
-                 context: context,
-                 builder: (_) => const AdminRoutesDialog(),
-               );
-
-               return null;
-
-           }
-    }
-
-
-
-    // 🪟 WINDOWS / DESKTOP
     final type = await TypeConnectionDialog(context);
 
     if (type == null) {
@@ -57,14 +29,20 @@ class BootstrapService {
     }
 
     switch(type){
-      case TypeConnection.csv:
-         return FileDataSource();
+      case FuentData.csv:
 
-      case TypeConnection.sql:
-           context.read<NavigationProvider>().go(AppView.connections);      //si es sql que vaya a la ventana
-           return FileDataSource();
+         return isApi == true
+                    ? AssetDataSource()
+                    : FileDataSource();
 
-      case TypeConnection.empty:
+      case FuentData.sql:
+
+        return isApi == true
+            ? AssetDataSource()
+            : FileDataSource();
+
+
+      case FuentData.empty:
 
         showDialog(
           context: context,

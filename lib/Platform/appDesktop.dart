@@ -54,7 +54,7 @@ class _appDesktopState extends State<appDesktop> {
 
         await context.read<AppProvider>().loadApp(context);
 
-        await context.read<SessionProvider>().restoreSession();
+       // await context.read<SessionProvider>().restoreSession();
 
         print("✅ APP READY");
 

@@ -83,9 +83,7 @@ class AppProvider extends ChangeNotifier {
 
     final user = newMode == DataSourceMode.csv
         ? localUser
-        : context
-        .read<SessionProvider>()
-        .user;
+        : context.read<SessionProvider>().user;
 
     await _loadDependencies(context, files, newMode, user);
 
@@ -142,7 +140,7 @@ class AppProvider extends ChangeNotifier {
       // 3. LOCAL DATA
       // =========================
 
-      if (mode == DataSourceMode.csv) {
+      if (mode == DataSourceMode.csv || isApi) {
         await _loadDependencies(
           context,
           files!,
@@ -159,8 +157,8 @@ class AppProvider extends ChangeNotifier {
     }
   }
 
-  Future<void> reloadFromRoutes(BuildContext context,
-      List<RouteCSV> routes,) async {
+  Future<void> reloadFromRoutes(BuildContext context, List<RouteCSV> routes,) async {
+
     try {
       print(" routes reload");
 
@@ -179,10 +177,16 @@ class AppProvider extends ChangeNotifier {
       RouteFiles files,
       DataSourceMode newMode,
       User? user) async {
+
     final userID = (user ?? localUser).id;
 
-    print("el user es$userID");
-    await context.read<AppProvider>().loadUsers(context);
+    final efectiveMode = getEffectiveMode(context);
+
+    if (efectiveMode != DataSourceMode.csv)
+    {
+       await context.read<AppProvider>().loadUsers(context);
+    }
+
     // =========================
     // CONFIGURACIÓN DE DATOS
     // =========================
@@ -193,17 +197,15 @@ class AppProvider extends ChangeNotifier {
 
 
     final config = provider.configOrNull;
-    final efectiveMode = getEffectiveMode(context);
 
-
+    print("CARGAS 2");
     // =========================
     // 3. SECTORS
     // =========================
 
     final sectorProvider = context.read<SectorProvider>();
 
-    if (efectiveMode != DataSourceMode.csv ||
-        files.sectors.isNotEmpty) {
+    if (efectiveMode != DataSourceMode.csv || files.sectors.isNotEmpty) {
       await sectorProvider.setRepositoryAndReload(
         RepositorySector.create(
           efectiveMode,
@@ -265,8 +267,7 @@ class AppProvider extends ChangeNotifier {
 
     final lineProvider = context.read<LineSendProvider>();
 
-    if (efectiveMode != DataSourceMode.csv ||
-        files.linesSends.isNotEmpty) {
+    if (efectiveMode != DataSourceMode.csv || files.linesSends.isNotEmpty) {
       await lineProvider.setRepositoryAndReload(
         RepositoryLineSend.create(
           efectiveMode,
@@ -315,7 +316,7 @@ class AppProvider extends ChangeNotifier {
 
     final user = localUser;
 
-    if (mode == DataSourceMode.csv)
+    if (mode == DataSourceMode.csv  || isApi)
       await _loadDependencies(
           context,
           files,

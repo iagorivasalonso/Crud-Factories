@@ -2,13 +2,13 @@ import 'package:crud_factories/Widgets/headAlertDialog.dart';
 import 'package:crud_factories/generated/l10n.dart';
 import 'package:flutter/material.dart';
 
-enum TypeConnection {
+enum FuentData {
   csv,
   sql,
   empty,
 }
 
-Future<TypeConnection?> TypeConnectionDialog (BuildContext  context) async {
+Future<FuentData?> TypeConnectionDialog (BuildContext  context) async {
 
   return await  showDialog(
       context: context,
@@ -50,7 +50,7 @@ Future<TypeConnection?> TypeConnectionDialog (BuildContext  context) async {
                             onPressed: () {
                               Navigator.pop(
                                 context,
-                                TypeConnection.csv,
+                                FuentData.csv,
                               );
                             },
                           ),
@@ -66,7 +66,7 @@ Future<TypeConnection?> TypeConnectionDialog (BuildContext  context) async {
                             onPressed: () {
                               Navigator.pop(
                                 context,
-                                TypeConnection.sql,
+                                FuentData.sql,
                               );
                             },
                           ),
@@ -82,7 +82,7 @@ Future<TypeConnection?> TypeConnectionDialog (BuildContext  context) async {
                             onPressed: () {
                               Navigator.pop(
                                 context,
-                                TypeConnection.empty,
+                                FuentData.empty,
                               );
                             },
                           ),
