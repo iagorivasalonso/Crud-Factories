@@ -251,7 +251,7 @@ class ConnectionController {
           return EditResult.alreadyExists;
         }
 
-        if (oldConnection.database.trim().toLowerCase() == "defaultdb") {
+        if (oldConnection.database.trim().toLowerCase() == "crud_factories") {
           return EditResult.invalidData;
         }
 
@@ -301,7 +301,7 @@ class ConnectionController {
        final exits = provider.connections.any(
            (x) => x.id == c.id
        );
-       if (c.database.trim().toLowerCase() == "defaultdb") {
+       if (c.database.trim().toLowerCase() == "crud_factories") {
          return DeleteResult.error;
        }
 
