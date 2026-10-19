@@ -2,6 +2,7 @@
 import 'package:crud_factories/Backend/Feature/Connection/Service/IConnectionService.dart' show IConnectionService;
 import 'package:crud_factories/Backend/Feature/Connection/Sesion/IConnection_sesion_service.dart';
 import 'package:crud_factories/Backend/Feature/Connection/SeverService/ServerService.dart' show Serverservice;
+import 'package:crud_factories/Backend/Feature/Connection/Storage/ConnectionStorage.dart';
 import 'package:crud_factories/Backend/ImportGeneral/import_Processor.dart' show processImport;
 import 'package:crud_factories/Backend/Providers/ConectionProvider.dart';
 import 'package:crud_factories/Backend/core/controlsMessagesError/errors.dart';
@@ -38,6 +39,7 @@ class ConnectionController {
    final IConnectionService service;
    final IConnectionSesionService sessionService;
 
+   final storage = Connectionstorage();
 
    ConnectionController({
        required this.provider,
@@ -45,6 +47,7 @@ class ConnectionController {
        required this.repository,
        required this.sessionService
        });
+
 
 
    // =========================
@@ -123,9 +126,10 @@ class ConnectionController {
            baseDate: DateTime.now().toString()
        ));
 
+       await storage.saveConnectionId(selected.id);
        provider.setStatus(ConnectionStatus.connected);
        provider.setViewMode(ConnectionViewMode.normal);
-
+       print('ID guardado: ${await storage.getConnectionId()}');
        return ConnectResultModel.success();
 
      } catch (e) {
