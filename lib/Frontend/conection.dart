@@ -422,6 +422,12 @@ class _conectionState extends State<conection> {
 
         if (result.success) {
 
+          DataSourceMode modeCurrent = context.read<AppProvider>().mode == DataSourceMode.csv
+                                  ? DataSourceMode.sql
+                                  : DataSourceMode.api;
+          print(modeCurrent.name);
+          context.read<AppProvider>().mode = modeCurrent;
+
           final selected = provider.selected;
 
           if (selected == null)
@@ -431,6 +437,16 @@ class _conectionState extends State<conection> {
 
           final message = "${S.of(context).is_connected_to} ${selected.database}";
 
+          await context.read<AppProvider>().loadUsers(context);
+
+          final appProvider = context.read<AppProvider>();
+
+          if (appProvider.files != null) {
+            await appProvider.loadSystemMailRepository(
+              context,
+              appProvider.files!,
+            );
+          }
 
           // Recuperamos la conexión después de recargar las conexiones
           final newSelected = provider.connections.firstWhere(
