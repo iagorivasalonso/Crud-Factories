@@ -28,6 +28,14 @@ class _adminPageState extends State<adminPage> {
 
   UserRole? selectedRol;
 
+  @override
+  void dispose() {
+    horizontalScroll.dispose();
+    verticalScroll.dispose();
+    verticalScrollTable.dispose();
+    super.dispose();
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -112,7 +120,7 @@ class _adminPageState extends State<adminPage> {
                                                       rol: selectedRol,
                                                       users: resultUsers,
                                                       onDelete: (index, value) async {
- print("ess");
+
                                                             final accepted = await warning(
                                                               context,
                                                               S.of(context).delete_account_confirm,
@@ -136,14 +144,14 @@ class _adminPageState extends State<adminPage> {
                                                       },
                                                       onEdit: (index, value) async {
 
-                                                           final userEdit = users[index];
+                                                        final userEdit = resultUsers[index];
 
-                                                           userProvider.select(userEdit);
+                                                        userProvider.select(userEdit);
 
-                                                           showDialog(
-                                                             context: context,
-                                                             builder: (context) => const createUser(),
-                                                           );
+                                                        showDialog(
+                                                          context: context,
+                                                          builder: (context) => const createUser(),
+                                                        );
                                                       },
                                                     );
                                                }
