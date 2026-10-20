@@ -4,7 +4,9 @@ import 'package:crud_factories/Backend/core/controlsMessagesError/errors.dart';
 import 'package:crud_factories/Objects/User.dart';
 import 'package:crud_factories/Widgets/dropDownButton.dart' show GenericDropdown;
 import 'package:crud_factories/Widgets/headView.dart';
+import 'package:crud_factories/Widgets/materialButton.dart';
 import 'package:crud_factories/Widgets/tableUser.dart';
+import 'package:crud_factories/generated/l10n.dart' show S;
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -65,20 +67,24 @@ class _adminPageState extends State<adminPage> {
                            child: Align(
                                alignment: Alignment.topLeft,
                                child: SizedBox(
-                                   width: 850,
+                                   width: 700,
                                    child: Column(
                                      children: [
-                                         headView(title: S.of(context).user_management),
-                                         Align(
-                                           alignment: Alignment.topLeft,
-                                           child: Padding(
-                                             padding: const EdgeInsets.only( top:30, left: 10,bottom: 20),
-                                             child: SizedBox(
-                                               width: 300,
-                                               child: GenericDropdown<UserRole>(
-                                                   items: [
-                                                     ...UserRole.values,
-                                                    ],
+                                           headView(title: S.of(context).user_management),
+
+                                       Row(
+                                         children: [
+                                           Expanded(
+                                             child: Padding(
+                                               padding: const EdgeInsets.only(
+                                                 top: 50,
+                                                 left: 10,
+                                                 bottom: 20,
+                                               ),
+                                               child: SizedBox(
+                                                 width: 100,
+                                                 child: GenericDropdown<UserRole>(
+                                                   items: [...UserRole.values],
                                                    opDefault: S.of(context).all_male,
                                                    camp: S.of(context).role,
                                                    selectedItem: selectedRol,
@@ -96,11 +102,28 @@ class _adminPageState extends State<adminPage> {
                                                        selectedRol = role;
                                                      });
                                                    },
+                                                 ),
                                                ),
                                              ),
                                            ),
-                                         ),
+                                           Padding(
+                                             padding: const EdgeInsets.only(right: 10),
+                                             child: materialButton(
+                                               function: () {
+                                                 final userProvider = context.read<UserProvider>();
 
+                                                 userProvider.select(null);
+
+                                                 showDialog(
+                                                   context: context,
+                                                   builder: (context) => const createUser(),
+                                                 );
+                                               },
+                                               nameAction: S.of(context).new_user,
+                                             ),
+                                           ),
+                                         ],
+                                       ),
                                          SizedBox(
                                            height: 500,
                                            child: Consumer<UserProvider>(
@@ -156,8 +179,6 @@ class _adminPageState extends State<adminPage> {
                                                     );
                                                }
                                            ),
-                                           /*
-                                           */
                                          )
                                      ],
                                    ),
