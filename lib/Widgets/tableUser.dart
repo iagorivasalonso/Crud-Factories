@@ -54,7 +54,7 @@ class tableUsers extends StatelessWidget {
                                            DataCell(Text(users[index].username)),
                                            DataCell(Text(users[index].role)),
                                            if(rol == null)
-                                           DataCell(Text(users[index].mail!)),
+                                           DataCell(Text(users[index].mail ?? '')),
                                            DataCell(
                                                 genericCheckbox(
                                                         text: " ",
