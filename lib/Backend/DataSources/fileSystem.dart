@@ -2,6 +2,7 @@
 import 'dart:io';
 import 'dart:typed_data';
 
+import 'package:crud_factories/Backend/Feature/Router/RouterStorage.dart';
 import 'package:path/path.dart' as p;
 
 import 'package:crud_factories/Backend/CSV/FileReader.dart';
@@ -16,14 +17,19 @@ import 'IappDataSource.dart';
 
 class FileDataSource implements AppDataSource {
 
-  static const String fileName = 'routes.csv';
-
   @override
   Future<RoutesBundle> loadRoutes() async {
 
-    final parentDir = Directory.current.parent;
+    final routePath = await RoutersStorage.loadRoutesPath();
 
-    final path = p.join(parentDir.path, fileName);
+    if(routePath.isEmpty)
+    {
+      throw Exception(
+        'No se ha configurado la ruta de routes.csv en SharedPreferences',
+      );
+    }
+
+    final path = p.join(routePath, 'routes.csv');
 
     final file = File(path);
 

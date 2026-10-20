@@ -1,7 +1,11 @@
 
+import 'dart:io';
+
 import 'package:crud_factories/Alertdialogs/error.dart' show error;
+import 'package:crud_factories/Backend/Feature/Router/RouterStorage.dart' show RoutersStorage;
 import 'package:crud_factories/Backend/Providers/App_provaider.dart' show AppProvider;
-import 'package:crud_factories/Backend/Providers/RoutesProvider.dart' show RoutesProvider, LoadResult;
+import 'package:crud_factories/Backend/Providers/RoutesProvider.dart' show RoutesProvider, LoadResult, RoutesStorage;
+import 'package:csv/csv.dart' show ListToCsvConverter;
 
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/foundation.dart';
@@ -29,6 +33,9 @@ class _AdminRoutesDialogState extends State<AdminRoutesDialog> {
 
   String? selectedOption;
   final Map<String, Uint8List> pendingFiles = {};
+  bool serverChanged = false;
+
+  bool _serverPathLoaded = false;
 
   @override
   void initState() {
@@ -43,13 +50,16 @@ class _AdminRoutesDialogState extends State<AdminRoutesDialog> {
     super.didChangeDependencies();
 
     if (!_initialized) {
-      selectedOption ??= S
-          .of(context)
-          .csv;
-
+      selectedOption ??= S.of(context).csv;
       context.read<RoutesProvider>().initialize(context);
-
       _initialized = true;
+    }
+
+    final routesProvider = context.read<RoutesProvider>();
+
+    if (!_serverPathLoaded) {
+      _serverPathLoaded = true;
+      routesProvider.loadRoutesPath();
     }
   }
 
@@ -196,34 +206,70 @@ class _AdminRoutesDialogState extends State<AdminRoutesDialog> {
   }
 
   Future<void> _pickFile(int index, RouteCSV route) async {
+    final isServer = route.id == "3";
+    final isRouteMaster = route.id == "1";
+
     final result = await FilePicker.platform.pickFiles(
+      type: FileType.custom,
+      allowedExtensions: isServer ? ['exe'] : ['csv'],
       allowMultiple: false,
-      withData: true,
+      withData: !isServer,
     );
 
-    if (result == null) return;
-    if (!mounted) return;
+    if (result == null || !mounted) return;
 
     final file = result.files.first;
-    final bytes = file.bytes;
-
-    if (bytes == null) return;
-
-    setState(() {
-      pendingFiles[route.name] = bytes;
-    });
-
     final provider = context.read<RoutesProvider>();
 
     final existingIndex = provider.routes.indexWhere(
           (r) => r.id == route.id,
     );
 
-    if (existingIndex != -1) {
-      provider.updateRoute(
-        existingIndex,
-        file.name,
+      if (isServer) {
+        final filePath = file.path;
+
+        if (filePath == null) {
+          debugPrint('No se pudo obtener la ruta del servidor');
+          return;
+        }
+
+
+        if (existingIndex != -1) {
+          provider.updateRoute(existingIndex, filePath);
+        }
+
+        if (!mounted) return;
+
+        setState(() {
+          serverChanged = true;
+        });
+
+        return;
+      }
+
+      final bytes = file.bytes;
+      if (bytes == null) return;
+
+      //primera ruta
+    if (isRouteMaster) {
+      final filePath = file.path;
+
+      if (filePath == null) {
+        debugPrint('No se pudo obtener la ruta de routes.csv');
+        return;
+      }
+
+      await RoutersStorage.saveRoutesPath(
+        File(filePath).parent.path,
       );
+    }
+
+    setState(() {
+      pendingFiles[route.name] = bytes;
+    });
+
+    if (existingIndex != -1) {
+      provider.updateRoute(existingIndex, file.name);
     } else {
       provider.addRoute(
         RouteCSV(
@@ -233,23 +279,41 @@ class _AdminRoutesDialogState extends State<AdminRoutesDialog> {
         ),
       );
     }
+
+
+
   }
 
+
+
+
+
   Future<void> _handleImport() async {
-    if (pendingFiles.isEmpty) {
+
+    final routesProvider = context.read<RoutesProvider>();
+    final app = context.read<AppProvider>();
+
+    if (pendingFiles.isEmpty && !serverChanged) {
       await error(
         context,
-        S
-            .of(context)
-            .select_file_first,
+        S.of(context).select_file_first,
       );
       return;
     }
 
-    final bytes = pendingFiles.values.first;
+    if (pendingFiles.isEmpty && serverChanged) {
+      await app.reloadFromRoutes(
+        context,
+        routesProvider.routes,
+      );
 
-    final routesProvider = context.read<RoutesProvider>();
-    final app = context.read<AppProvider>();
+      if (!mounted) return;
+
+      Navigator.pop(context);
+      return;
+    }
+
+    final bytes = pendingFiles.values.first;
 
     try {
       final result = await routesProvider.importRoutesFromBytes(

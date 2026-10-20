@@ -1,4 +1,5 @@
 
+import 'package:crud_factories/Backend/Feature/Router/RouterStorage.dart' show RoutersStorage;
 import 'package:crud_factories/Backend/Repositories/routesRepository.dart' show routerRepository;
 import 'package:crud_factories/Objects/AppRoutesState.dart';
 import 'package:crud_factories/Objects/RouteCSV.dart' show RouteCSV;
@@ -189,5 +190,21 @@ class RoutesProvider extends ChangeNotifier {
   }
 
 
+  Future<void> loadRoutesPath() async {
+
+    final routesPath = await RoutersStorage.loadRoutesPath();
+
+    if (routesPath.isEmpty) return;
+
+    final index = _baseRoutes.indexWhere((route) => route.id == '1');
+
+    if (index != -1) {
+      _baseRoutes[index] = _baseRoutes[index].copyWith(
+        route: routesPath,
+      );
+
+      notifyListeners();
+    }
+  }
   }
 
