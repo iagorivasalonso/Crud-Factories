@@ -27,7 +27,7 @@ class SqlFactoryDataSource implements IFactoryDataSource {
       final result = await executeQuery.query(
         'SELECT id, name, highDate, sector, telephone1, telephone2, mail, web, address, '
                  'number, apartment,city, province, postcode '
-            'FROM factories  WHERE userId = ?',
+            'FROM factories  WHERE user_Id = ?',
           [userId]
       );
 

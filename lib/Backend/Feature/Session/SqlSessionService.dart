@@ -35,7 +35,7 @@ class SqlSessionService implements ISessionservice{
 
     final rowsUsers = await executeQuery.query(
       '''
-    SELECT id, username, password_hash, email, role, active
+    SELECT id, username, password_hash, mail, role, active
     FROM users
     WHERE username = ?
     LIMIT 1
@@ -72,7 +72,7 @@ class SqlSessionService implements ISessionservice{
     final sessionId = const Uuid().v4();
     final userId = user.id;
 
-    final createdAt = DateTime.now();
+    final createdAt = DateTime.now().toUtc();
     final expiresAt = createdAt.add(
       const Duration(hours: 24),
     );

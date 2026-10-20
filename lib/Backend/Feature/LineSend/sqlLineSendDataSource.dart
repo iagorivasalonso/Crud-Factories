@@ -28,7 +28,8 @@ class SqlLinesendDatasource implements ILineSendDatasource{
   Future<List<LineSend>> load() async {
 
     final result = await executeQuery.query(
-       'SELECT id, date, factory,observations,state FROM linesends WHERE userId = ?'
+       'SELECT id, date, factory,observations,state FROM linesends WHERE user_Id = ?',
+       [userId],
      );
 
     return result.map((row) => LineSend(

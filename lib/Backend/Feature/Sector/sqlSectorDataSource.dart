@@ -27,7 +27,7 @@ class SqlSectorDataSource  implements ISectorDataSource{
   Future<List<Sector>> load() async {
 
     final result = await executeQuery.query(
-      'SELECT id, sector FROM sectors WHERE userId = ?',
+      'SELECT id, sector FROM sectors WHERE user_Id = ?',
       [userId]
     );
 
