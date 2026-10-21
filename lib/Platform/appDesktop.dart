@@ -527,7 +527,7 @@ class _appDesktopState extends State<appDesktop> {
             child: AppContent(),
           ),
         ),
-        if(context.watch<ConnectionProvider>().isConnected == true && context.read<AppProvider>().mode != DataSourceMode.csv)
+        if (context.watch<ConnectionProvider>().isConnected == true)
         Positioned(
           right: 0,
           top: 0,
