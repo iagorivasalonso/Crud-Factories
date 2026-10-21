@@ -97,9 +97,9 @@ class ConnectionController {
    // CONNECTSQL
    // =========================
 
-   Future<ConnectResultModel>connectSQL(BuildContext context, String? serverPath) async {
+   Future<ConnectResultModel>connectSQL(BuildContext context, String? serverPath, bool isApi) async {
 
-     if (serverPath == null) {
+     if (!isApi && serverPath == null) {
        return ConnectResultModel.error(
          S.of(context).There_is_no_connection_to_the_server,
        );
@@ -116,7 +116,12 @@ class ConnectionController {
      provider.setStatus(ConnectionStatus.connecting);
 
      try {
-       await Serverservice.startServer(serverPath);
+
+       // Arrancar el servidor únicamente si hay una ruta local.
+       if (serverPath != null) {
+         await Serverservice.startServer(serverPath);
+       }
+
 
        await sessionService.connect(selected);
 
@@ -129,11 +134,12 @@ class ConnectionController {
        await storage.saveConnectionId(selected.id);
        provider.setStatus(ConnectionStatus.connected);
        provider.setViewMode(ConnectionViewMode.normal);
-       print('ID guardado: ${await storage.getConnectionId()}');
+
+
        return ConnectResultModel.success();
 
      } catch (e) {
-
+print(e);
        provider.setStatus(ConnectionStatus.disconnected);
 
        final message = await controlsErrors (context,e.toString(),provider);

@@ -417,15 +417,20 @@ class _conectionState extends State<conection> {
 
     if (!provider.isConnected)
     {
+      DataSourceMode modeCurrent = context.read<AppProvider>().mode == DataSourceMode.csv
+          ? DataSourceMode.sql
+          : DataSourceMode.api;
+
         final file =context.read<AppProvider>().files;
-        final result = await controller.connectSQL(context,file?.server);
+
+        bool isApi=modeCurrent == DataSourceMode.api;
+        print(isApi);
+        final result = await controller.connectSQL(context,file?.server,isApi);
 
         if (result.success) {
 
-          DataSourceMode modeCurrent = context.read<AppProvider>().mode == DataSourceMode.csv
-                                  ? DataSourceMode.sql
-                                  : DataSourceMode.api;
-          print(modeCurrent.name);
+
+
           context.read<AppProvider>().mode = modeCurrent;
 
           final selected = provider.selected;
