@@ -2,6 +2,7 @@ import 'package:crud_factories/Backend/DataSources/BootstrapService.dart';
 import 'package:crud_factories/Backend/Feature/Connection/Controller/ConnectionController.dart' show ConnectionController;
 import 'package:crud_factories/Backend/Feature/Connection/Datasource/CsvConnectionDataSource.dart' show CsvConnectionDataSource;
 import 'package:crud_factories/Backend/Feature/Connection/Datasource/IConnection_repository.dart';
+import 'package:crud_factories/Backend/Feature/Connection/Storage/ConnectionStorage.dart';
 import 'package:crud_factories/Backend/Feature/Employee/employee_service.dart' show RepositoryEmployee;
 import 'package:crud_factories/Backend/Feature/Factory/factory_service.dart' show RepositoryFactory;
 import 'package:crud_factories/Backend/Feature/LineSend/lineSend_service.dart';
@@ -16,6 +17,7 @@ import 'package:crud_factories/Backend/Providers/MailProvider.dart' show MailPro
 import 'package:crud_factories/Backend/Providers/SectorProvider.dart';
 import 'package:crud_factories/Backend/Providers/UserProvider.dart';
 import 'package:crud_factories/Backend/Repositories/connectionRepository.dart' show ConnectionRepository;
+import 'package:crud_factories/Frontend/conection.dart';
 import 'package:crud_factories/Objects/AppRoutesState.dart';
 import 'package:crud_factories/Objects/RouteCSV.dart' show RouteCSV;
 import 'package:crud_factories/Objects/User.dart';
@@ -325,26 +327,60 @@ class AppProvider extends ChangeNotifier {
       );
   }
 
-  Future<void> loadConnections(BuildContext context,
-      RouteFiles files,) async {
-    final dataSource =
-    context.read<IConnectionDataSource>() as CsvConnectionDataSource;
+  Future<void> loadConnections(BuildContext context, RouteFiles files,) async {
 
-    dataSource.init(files.connections);
+        final dataSource =
+        context.read<IConnectionDataSource>() as CsvConnectionDataSource;
 
-    final repository = context.read<ConnectionRepository>();
+        dataSource.init(files.connections);
 
-    final controller = ConnectionController(
-      provider: context.read<ConnectionProvider>(),
-      service: context.read<IConnectionService>(),
-      repository: repository,
-      sessionService: context.read<IConnectionSesionService>(),
-    );
+        final repository = context.read<ConnectionRepository>();
+
+        final controller = ConnectionController(
+          provider: context.read<ConnectionProvider>(),
+          service: context.read<IConnectionService>(),
+          repository: repository,
+          sessionService: context.read<IConnectionSesionService>(),
+        );
 
 
-    if (files.connections.isNotEmpty) {
-      await controller.load();
-    }
+        if (files.connections.isNotEmpty) {
+
+            await controller.load();
+
+            final storage = Connectionstorage();
+            final lastConnectionId = await storage.getConnectionId();
+
+            if(lastConnectionId != null)
+            {
+                final connectionProvider = context.read<ConnectionProvider>();
+
+                for(final connection in connectionProvider.connections)
+                {
+                    if(connection.id == lastConnectionId)
+                    {
+                         connectionProvider.select(connection);
+
+                         final result = await controller.connectSQL(
+                             context,
+                             files.server,
+                             isApi
+                          );
+
+                         if (result.success) {
+                             print("Conexión automática correcta");
+
+
+                         } else {
+                           print("Error en la conexión automática: ${result.errorMessage}");
+                         }
+
+                         break;
+
+                    }
+                }
+            }
+        }
   }
 
   Future<void> loadUserData(BuildContext context, User user) async {
@@ -380,6 +416,7 @@ class AppProvider extends ChangeNotifier {
       ),
     );
   }
+
   Future<void> loadSystemMailRepository(
       BuildContext context,
       RouteFiles files,

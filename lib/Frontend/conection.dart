@@ -429,37 +429,13 @@ class _conectionState extends State<conection> {
 
         if (result.success) {
 
-
-
-          context.read<AppProvider>().mode = modeCurrent;
-
           final selected = provider.selected;
 
           if (selected == null)
             return;
 
-          final selectedId = selected.id;
-
           final message = "${S.of(context).is_connected_to} ${selected.database}";
 
-          await context.read<AppProvider>().loadUsers(context);
-
-          final appProvider = context.read<AppProvider>();
-
-          if (appProvider.files != null) {
-            await appProvider.loadSystemMailRepository(
-              context,
-              appProvider.files!,
-            );
-          }
-
-          // Recuperamos la conexión después de recargar las conexiones
-          final newSelected = provider.connections.firstWhere(
-                (c) => c.id == selectedId,
-                orElse: () => selected,
-          );
-
-          provider.selected = newSelected;
 
           await confirm(context, message);
 
