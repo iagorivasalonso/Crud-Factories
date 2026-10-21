@@ -591,14 +591,19 @@ class _appDesktopState extends State<appDesktop> {
 
                               String message = S.of(context).logout_confirm;
 
-                              final accepted  = await warning(context, message);
-                              if (!accepted ) return;
+
+                              final accepted = await warning(context, message);
+                              if (!accepted) return;
 
                               await context.read<SessionProvider>().logout();
 
-                              if (context.mounted) {
-                                context.read<NavigationProvider>().go(AppView.home);
-                              }
+                              if (!context.mounted) return;
+
+                              await context.read<AppProvider>().logoutToLocal(context);
+
+                              if (!context.mounted) return;
+
+                              context.read<NavigationProvider>().go(AppView.home);
 
 
                           }
