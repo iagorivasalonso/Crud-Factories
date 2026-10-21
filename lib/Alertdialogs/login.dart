@@ -112,6 +112,9 @@ Future<void> login_in(BuildContext context, TextEditingController usernameContro
         final user = sessionProvider.user;
 
         if (user != null) {
+
+          appProvider.activateConnectionMode();
+
           await appProvider.loadUserData(
             context,
             user,

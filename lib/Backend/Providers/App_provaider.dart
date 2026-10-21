@@ -40,9 +40,11 @@ enum DataSourceMode {
 class AppProvider extends ChangeNotifier {
 
   DataSourceMode mode;
+  DataSourceMode connectionMode;
 
   AppProvider({
-    required this.mode
+    required this.mode,
+    required this.connectionMode,
   });
 
   bool loaded = false;
@@ -52,7 +54,7 @@ class AppProvider extends ChangeNotifier {
 
   bool get isLoading => _loading;
 
-  bool get isApi => mode == DataSourceMode.api;
+  bool get isApi => connectionMode == DataSourceMode.api;
 
   final localUser = User( //se usa para trabajar con la app en local
     id: 'local',
@@ -60,6 +62,11 @@ class AppProvider extends ChangeNotifier {
     role: 'admin',
     active: true,
   );
+
+  void activateConnectionMode() {
+    mode = connectionMode;
+    notifyListeners();
+  }
 
 
   Future switchSource(BuildContext context,
@@ -445,6 +452,27 @@ class AppProvider extends ChangeNotifier {
       'SystemRepository creado: '
           '${mailProvider.systemRepository != null}',
     );
+  }
+
+  Future <void> onConnectionSuccess(BuildContext context) async {
+
+      await loadUsers(context);
+
+      if (files != null) {
+        await loadSystemMailRepository(context, files!);
+      }
+
+  }
+
+  Future<void> logoutToLocal(BuildContext context) async {
+
+    await context.read<AppProvider>().switchSource(
+      context,
+      DataSourceMode.csv,
+    );
+    context.read<UserProvider>().clear();
+
+
   }
 }
 

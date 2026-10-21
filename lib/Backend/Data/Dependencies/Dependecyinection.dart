@@ -57,7 +57,10 @@ class DependencyInjection {
 
      ChangeNotifierProvider(
        create: (_) => AppProvider(
-         mode: isApi ? DataSourceMode.api : DataSourceMode.csv,
+         mode: DataSourceMode.csv,
+         connectionMode: isApi
+             ? DataSourceMode.api
+             : DataSourceMode.sql,
        ),
 
      ),
