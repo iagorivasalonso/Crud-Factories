@@ -118,7 +118,7 @@ class ConnectionController {
      try {
 
        // Arrancar el servidor únicamente si hay una ruta local.
-       if (serverPath != null) {
+       if (!isApi && serverPath != null) {
          await Serverservice.startServer(serverPath);
        }
 
