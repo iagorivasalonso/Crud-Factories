@@ -272,7 +272,7 @@ class _AdminRoutesDialogState extends State<AdminRoutesDialog> {
     }
 
     setState(() {
-      pendingFiles[route.name] = bytes;
+      pendingFiles[route.id] = bytes;
     });
 
     if (existingIndex != -1) {
@@ -291,33 +291,9 @@ class _AdminRoutesDialogState extends State<AdminRoutesDialog> {
   }
 
 
-
-
-
   Future<void> _handleImport() async {
-
     final routesProvider = context.read<RoutesProvider>();
     final app = context.read<AppProvider>();
-
-    if (pendingFiles.isEmpty && !serverChanged) {
-      await error(
-        context,
-        S.of(context).select_file_first,
-      );
-      return;
-    }
-
-    if (pendingFiles.isEmpty && serverChanged) {
-      await app.reloadFromRoutes(
-        context,
-        routesProvider.routes,
-      );
-
-      if (!mounted) return;
-
-      Navigator.pop(context);
-      return;
-    }
 
     if (pendingFiles.isEmpty) {
       await app.reloadFromRoutes(
@@ -331,7 +307,21 @@ class _AdminRoutesDialogState extends State<AdminRoutesDialog> {
       return;
     }
 
-    final bytes = pendingFiles.values.first;
+    // La ruta con ID "1" es el CSV maestro de rutas.
+    final bytes = pendingFiles["1"];
+
+    // Si solo se seleccionaron otros CSV, no importar ninguno como maestro.
+    if (bytes == null) {
+      await app.reloadFromRoutes(
+        context,
+        routesProvider.routes,
+      );
+
+      if (!mounted) return;
+
+      Navigator.pop(context);
+      return;
+    }
 
     try {
       final result = await routesProvider.importRoutesFromBytes(
@@ -377,9 +367,7 @@ class _AdminRoutesDialogState extends State<AdminRoutesDialog> {
 
       await error(
         context,
-        S
-            .of(context)
-            .error_loading_route,
+        S.of(context).error_loading_route,
       );
     }
   }
