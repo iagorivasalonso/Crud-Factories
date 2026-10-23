@@ -110,15 +110,20 @@ class RoutesProvider extends ChangeNotifier {
   // ======================
   //    UPDATE
   // ======================
-  void updateRoute(int index, String fileName) {
+  void updateRoute(int index, String fileName) async {
     if (index < 0 || index >= _baseRoutes.length) return;
-
+print("1");
     final route = _baseRoutes[index];
 
-    _baseRoutes[index] = route.copyWith(
-      route: fileName,
-    );
+    if (route.id == '1') {
+      // La ruta principal se guarda en SharedPreferences.
+      // No se modifica ni se guarda aquí.
+      return;
+    }
 
+    _baseRoutes[index] = route.copyWith(route: fileName);
+
+    await  repository.save(routes);
     notifyListeners();
   }
 
@@ -129,6 +134,20 @@ class RoutesProvider extends ChangeNotifier {
     final loaded = await repository.load();
 
     _baseRoutes = List<RouteCSV>.from(loaded);
+
+    final routesPath = await RoutersStorage.loadRoutesPath();
+
+    if (routesPath.isNotEmpty) {
+      final index = _baseRoutes.indexWhere(
+            (route) => route.id == '1',
+      );
+
+      if (index != -1) {
+        _baseRoutes[index] = _baseRoutes[index].copyWith(
+          route: routesPath,
+        );
+      }
+    }
 
     notifyListeners();
   }
@@ -171,7 +190,7 @@ class RoutesProvider extends ChangeNotifier {
       }
 
       _baseRoutes = List<RouteCSV>.from(imported);
-
+       await  repository.save(routes);
       notifyListeners();
 
       return (LoadResult.success, imported);
