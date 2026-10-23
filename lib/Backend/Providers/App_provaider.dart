@@ -466,7 +466,7 @@ class AppProvider extends ChangeNotifier {
 
   Future<void> logoutToLocal(BuildContext context) async {
 
-    await context.read<AppProvider>().switchSource(
+    await switchSource(
       context,
       DataSourceMode.csv,
     );
