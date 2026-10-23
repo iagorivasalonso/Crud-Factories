@@ -144,7 +144,6 @@ class AppProvider extends ChangeNotifier {
       await loadConnections(context, files!);
 
 
-
       // =========================
       // 3. LOCAL DATA
       // =========================
@@ -354,6 +353,8 @@ class AppProvider extends ChangeNotifier {
         if (files.connections.isNotEmpty) {
 
             await controller.load();
+
+            if (mode == DataSourceMode.csv) return;
 
             final storage = Connectionstorage();
             final lastConnectionId = await storage.getConnectionId();

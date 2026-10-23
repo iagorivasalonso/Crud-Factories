@@ -31,11 +31,16 @@ class BootstrapService {
     switch(type){
       case FuentData.csv:
 
+         app.mode = DataSourceMode.csv;
          return isApi == true
                     ? AssetDataSource()
                     : FileDataSource();
 
       case FuentData.sql:
+
+        app.mode = isApi
+            ? DataSourceMode.api
+            : DataSourceMode.sql;
 
         return isApi == true
             ? AssetDataSource()
