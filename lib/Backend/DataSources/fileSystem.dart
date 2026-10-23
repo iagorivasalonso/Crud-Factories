@@ -32,7 +32,7 @@ class FileDataSource implements AppDataSource {
       );
     }
 
-    final path = p.join(routePath, 'routes.csv');
+    final path = routePath;
 
     final file = File(path);
 

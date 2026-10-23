@@ -267,7 +267,7 @@ class _AdminRoutesDialogState extends State<AdminRoutesDialog> {
       }
 
       await RoutersStorage.saveRoutesPath(
-        File(filePath).parent.path,
+         filePath
       );
     }
 
