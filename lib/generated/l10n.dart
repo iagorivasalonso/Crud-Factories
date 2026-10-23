@@ -724,9 +724,9 @@ class S {
     );
   }
 
-  /// `nuevo usuario`
+  /// `Nuevo usuario`
   String get new_user {
-    return Intl.message('nuevo usuario', name: 'new_user', desc: '', args: []);
+    return Intl.message('Nuevo usuario', name: 'new_user', desc: '', args: []);
   }
 
   /// `editar usuario`

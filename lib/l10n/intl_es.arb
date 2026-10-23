@@ -99,7 +99,7 @@
   "administrator": "administrador",
   "administration": "Administración",
   "active_user": "usuario activo",
-  "new_user": "nuevo usuario",
+  "new_user": "Nuevo usuario",
   "edit_user": "editar usuario",
   "usename_required" : "el nombre de usuario es obligatorio",
   "not_authorized" : "no autorizado",

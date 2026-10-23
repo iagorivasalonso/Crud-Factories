@@ -442,7 +442,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "new_smtp_configuration": MessageLookupByLibrary.simpleMessage(
       "Nueva configuración SMTP",
     ),
-    "new_user": MessageLookupByLibrary.simpleMessage("nuevo usuario"),
+    "new_user": MessageLookupByLibrary.simpleMessage("Nuevo usuario"),
     "no": MessageLookupByLibrary.simpleMessage("No"),
     "no_admin_with_mail": MessageLookupByLibrary.simpleMessage(
       "No hay administradores activos con correo disponible",
