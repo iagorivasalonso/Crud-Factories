@@ -80,7 +80,7 @@ class AppProvider extends ChangeNotifier {
     final source = BootstrapService.fromMode(newMode);
     if (source == null) return;
 
-    final bundle = await source.loadRoutes();
+    final bundle = await source.loadRoutes(context);
     final files = RouteFilesBuilder.buildRouteFiles(bundle.routes);
 
     mode = newMode;
@@ -123,7 +123,7 @@ class AppProvider extends ChangeNotifier {
         return;
       }
 
-      final bundle = await source.loadRoutes();
+      final bundle = await source.loadRoutes(context);
 
       files = RouteFilesBuilder.buildRouteFiles(
         bundle.routes,
