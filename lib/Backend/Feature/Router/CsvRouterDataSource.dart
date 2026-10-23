@@ -22,13 +22,14 @@ class CsvRouterDataSource implements IRouterDataSource{
 
   @override
   Future<void> save(List<RouteCSV> routers) async {
+    final directory = routers[0].route;
+    final newPath = '$directory\\routes.csv';
 
-     final update = routers;
+    await csvExportatorRoutes(
+      routers,
+      path: newPath,
+    );
 
-     await csvExportatorRoutes(
-         update,
-         path: path,
-     );
   }
 
   @override

@@ -250,6 +250,13 @@ class _AdminRoutesDialogState extends State<AdminRoutesDialog> {
       final bytes = file.bytes;
       if (bytes == null) return;
 
+    final filePath = file.path;
+
+    if (filePath == null) {
+      debugPrint('No se pudo obtener la ruta del CSV');
+      return;
+    }
+
       //primera ruta
     if (isRouteMaster) {
       final filePath = file.path;
@@ -269,17 +276,16 @@ class _AdminRoutesDialogState extends State<AdminRoutesDialog> {
     });
 
     if (existingIndex != -1) {
-      provider.updateRoute(existingIndex, file.name);
+      provider.updateRoute(existingIndex, filePath);
     } else {
       provider.addRoute(
         RouteCSV(
           id: route.id,
           name: route.name,
-          route: file.name,
+          route: filePath,
         ),
       );
     }
-
 
 
   }
@@ -302,6 +308,18 @@ class _AdminRoutesDialogState extends State<AdminRoutesDialog> {
     }
 
     if (pendingFiles.isEmpty && serverChanged) {
+      await app.reloadFromRoutes(
+        context,
+        routesProvider.routes,
+      );
+
+      if (!mounted) return;
+
+      Navigator.pop(context);
+      return;
+    }
+
+    if (pendingFiles.isEmpty) {
       await app.reloadFromRoutes(
         context,
         routesProvider.routes,
