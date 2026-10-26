@@ -48,7 +48,7 @@ class _NewImportState extends State<NewImport> {
 
     final provaiderImport = context.read<ImportProvaider>();
 
-    return !isNotAndroid()
+    return isNotMobile()
         ? Scaffold(
       body: Scrollbar(
         controller: verticalScroll,

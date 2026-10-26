@@ -1,5 +1,5 @@
 
-import 'package:crud_factories/Functions/isNotAndroid.dart' show isNotAndroid;
+import 'package:crud_factories/Functions/isNotAndroid.dart' show isNotMobile;
 import 'package:crud_factories/Widgets/materialButton.dart' show materialButton;
 import 'package:crud_factories/Widgets/textfield.dart';
 import 'package:crud_factories/generated/l10n.dart';

@@ -164,7 +164,7 @@ class _FactoryFromPageState extends State<FactoryFromPage> {
       ...newEmployeesTemp,
     ];
 
-    return !isNotAndroid()
+    return isNotMobile()
        ? Scaffold(
       body: Scrollbar(
         controller: verticalScroll,
@@ -447,7 +447,7 @@ class _FactoryFromPageState extends State<FactoryFromPage> {
         ),
       ),
     )
-    : Scaffold(
+       : Scaffold(
            appBar: appBarAndroid(context, name: title1),
            body: Text("factori"),
         );

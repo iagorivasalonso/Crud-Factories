@@ -5,7 +5,7 @@ import 'package:crud_factories/Alertdialogs/error.dart' show error;
 import 'package:crud_factories/Alertdialogs/selectCompany.dart' show newMailConfiguration;
 import 'package:crud_factories/Backend/Providers/EditStateProvider.dart' show EditStateProvider;
 import 'package:crud_factories/Backend/Providers/MailProvider.dart';
-import 'package:crud_factories/Functions/isNotAndroid.dart' show isNotAndroid;
+import 'package:crud_factories/Functions/isNotAndroid.dart' show isNotMobile;
 import 'package:crud_factories/Objects/Mail.dart';
 import 'package:crud_factories/Objects/MailMessage.dart' show MailMessage;
 import 'package:crud_factories/Validators/mail.dart';
@@ -99,8 +99,9 @@ class _MailFormPageState extends State<MailFormPage> {
     String title1 = "$title $name";
 
 
-    return Scaffold(
-      body: Scrollbar(
+    return isNotMobile()
+        ?  Scaffold(
+            body: Scrollbar(
         controller: verticalScroll,
         thumbVisibility: true,
         child: Scrollbar(
@@ -194,6 +195,9 @@ class _MailFormPageState extends State<MailFormPage> {
           ),
         ),
       ),
+        ): Scaffold(
+      appBar: appBarAndroid(context, name: title1),
+      body: Text("factori"),
     );
   }
 

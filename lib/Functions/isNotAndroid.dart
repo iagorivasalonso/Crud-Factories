@@ -1,8 +1,20 @@
-import 'dart:io';
 import 'package:flutter/foundation.dart';
 
-bool isNotAndroid() {
+bool isNotMobile() {
 
-    return true;
+    if(kIsWeb) {
+         return !isMobileWeb();
+     }
 
+    return defaultTargetPlatform != TargetPlatform.android &&
+        defaultTargetPlatform != TargetPlatform.iOS;
+
+}
+
+bool isMobileWeb () {
+
+     final platform = defaultTargetPlatform;
+
+     return platform == TargetPlatform.android ||
+         platform == TargetPlatform.iOS;
 }

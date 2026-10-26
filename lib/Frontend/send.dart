@@ -5,7 +5,7 @@ import 'package:crud_factories/Backend/Providers/EditStateProvider.dart' show Ed
 import 'package:crud_factories/Backend/Providers/FactoryProvider.dart' show FactoryProvider;
 import 'package:crud_factories/Backend/Providers/SectorProvider.dart' show SectorProvider;
 import 'package:crud_factories/Backend/Providers/filterProvider.dart';
-import 'package:crud_factories/Functions/isNotAndroid.dart' show isNotAndroid;
+import 'package:crud_factories/Functions/isNotAndroid.dart' show isNotMobile;
 import 'package:crud_factories/Objects/LineSend.dart';
 import 'package:crud_factories/Objects/Sector.dart';
 import 'package:crud_factories/Widgets/CustomDataTable.dart';
@@ -218,7 +218,7 @@ class _SendFromPageState extends State<SendFromPage> {
           LocalizationHelper.factoriesBD(context, vm.controllers.length);
     }
 
-    return !isNotAndroid()
+    return isNotMobile()
         ? Scaffold(
         body: Scrollbar(
           controller: verticalScroll,

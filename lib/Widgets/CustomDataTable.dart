@@ -1,7 +1,7 @@
 import 'package:crud_factories/Backend/Global/controllers/LineSend.dart' show LineSendController;
 import 'package:crud_factories/Backend/Providers/LineSendProvider.dart';
 import 'package:crud_factories/Backend/Providers/SectorProvider.dart';
-import 'package:crud_factories/Functions/isNotAndroid.dart' show isNotAndroid;
+import 'package:crud_factories/Functions/isNotAndroid.dart' show isNotMobile;
 import 'package:crud_factories/Functions/manageState.dart' show manageState;
 import 'package:crud_factories/Objects/LineSend.dart' show LineSendState;
 import 'package:crud_factories/generated/l10n.dart' show S;

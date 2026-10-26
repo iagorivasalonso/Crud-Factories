@@ -145,7 +145,7 @@ class _SendMailState extends State<SendMail> {
         .map((card) => card.description)
         .toList();
 
-    return !isNotAndroid()
+    return isNotMobile()
         ? Scaffold(
       body: Scrollbar(
         controller: verticalScroll,
