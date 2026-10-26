@@ -148,7 +148,7 @@ class AppProvider extends ChangeNotifier {
       // 3. LOCAL DATA
       // =========================
 
-      if (mode == DataSourceMode.csv || isApi) {
+      if (getDataSourceMode(context) == DataSourceMode.csv) {
         await _loadDependencies(
           context,
           files!,
@@ -188,7 +188,7 @@ class AppProvider extends ChangeNotifier {
 
     final userID = (user ?? localUser).id;
 
-    final efectiveMode = getEffectiveMode(context);
+    final efectiveMode = getDataSourceMode(context);
 
     if (efectiveMode != DataSourceMode.csv)
     {
@@ -324,7 +324,7 @@ class AppProvider extends ChangeNotifier {
 
     final user = localUser;
 
-    if (mode == DataSourceMode.csv  || isApi)
+    if (getDataSourceMode(context) == DataSourceMode.csv)
       await _loadDependencies(
           context,
           files,
@@ -397,15 +397,17 @@ class AppProvider extends ChangeNotifier {
     await _loadDependencies(context, files!, mode, user);
   }
 
-  DataSourceMode getEffectiveMode(BuildContext context) {
-    final provider = context.read<ConnectionProvider>();
+  DataSourceMode getDataSourceMode(BuildContext context) {
 
-    return switch (mode) {
-      DataSourceMode.csv => DataSourceMode.csv,
-      DataSourceMode.sql => DataSourceMode.sql,
-      DataSourceMode.api =>
-      provider.hasConfig ? DataSourceMode.api : DataSourceMode.csv,
-    };
+    final session = context.read<SessionProvider>();
+
+    if (session.user == null) {
+      return DataSourceMode.csv;
+    }
+
+    return mode;
+
+
   }
 
   Future<void> loadUsers(BuildContext context) async {
@@ -417,7 +419,7 @@ class AppProvider extends ChangeNotifier {
 
     await userProvider.setRepositoryAndReload(
       RepositoryUser.create(
-        getEffectiveMode(context),
+        connectionMode,
         files!,
         db: connectionProvider.executeQuery,
         config: connectionProvider.configOrNull,
@@ -433,7 +435,7 @@ class AppProvider extends ChangeNotifier {
 
     final executeQuery = provider.executeQuery;
     final config = provider.configOrNull;
-    final efectiveMode = getEffectiveMode(context);
+    final efectiveMode = getDataSourceMode(context);
 
     print('========== VOY A CREAR SYSTEM REPOSITORY ==========');
     print('EFFECTIVE MODE: $efectiveMode');
