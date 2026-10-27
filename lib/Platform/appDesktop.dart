@@ -52,9 +52,14 @@ class _appDesktopState extends State<appDesktop> {
 
       try {
 
-        await context.read<AppProvider>().loadApp(context);
+             final app = context.read<AppProvider>();
 
-       // await context.read<SessionProvider>().restoreSession();
+             await app.loadApp(context);
+
+             if(app.connectionMode != DataSourceMode.csv)
+             {
+               await context.read<SessionProvider>().restoreSession();
+             }
 
         print("✅ APP READY");
 
