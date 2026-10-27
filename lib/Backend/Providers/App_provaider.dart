@@ -17,6 +17,7 @@ import 'package:crud_factories/Backend/Providers/MailProvider.dart' show MailPro
 import 'package:crud_factories/Backend/Providers/SectorProvider.dart';
 import 'package:crud_factories/Backend/Providers/UserProvider.dart';
 import 'package:crud_factories/Backend/Repositories/connectionRepository.dart' show ConnectionRepository;
+import 'package:crud_factories/Backend/connectors_API/ApiWakeUpService.dart';
 import 'package:crud_factories/Frontend/conection.dart';
 import 'package:crud_factories/Objects/AppRoutesState.dart';
 import 'package:crud_factories/Objects/RouteCSV.dart' show RouteCSV;
@@ -141,11 +142,36 @@ class AppProvider extends ChangeNotifier {
       // 2. CONNECTIONS
       // =========================
 
-      await loadConnections(context, files!);
+      final connectionReady = await loadConnections(context, files!);
+
+      if(mode != DataSourceMode.csv && !connectionReady)
+      {
+        print("No se restaurará la sesión porque no hay conexión.");
+        return;
+      }
 
 
       // =========================
-      // 3. LOCAL DATA
+      // 3. RESTORE SESION
+      // =========================
+
+      if(mode != DataSourceMode.csv)
+      {
+            final sessionProvider = context.read<SessionProvider>();
+
+            final restored = await sessionProvider.restoreSession();
+
+            if(restored &&sessionProvider.user != null)
+            {
+              await loadUserData(
+                context,
+                sessionProvider.user!,
+              );
+            }
+      }
+
+      // =========================
+      // 4. LOCAL DATA
       // =========================
 
       if (getDataSourceMode(context) == DataSourceMode.csv) {
@@ -206,7 +232,6 @@ class AppProvider extends ChangeNotifier {
 
     final config = provider.configOrNull;
 
-    print("CARGAS 2");
     // =========================
     // 3. SECTORS
     // =========================
@@ -333,7 +358,7 @@ class AppProvider extends ChangeNotifier {
       );
   }
 
-  Future<void> loadConnections(BuildContext context, RouteFiles files,) async {
+  Future<bool> loadConnections(BuildContext context, RouteFiles files,) async {
 
         final dataSource =
         context.read<IConnectionDataSource>() as CsvConnectionDataSource;
@@ -354,7 +379,8 @@ class AppProvider extends ChangeNotifier {
 
             await controller.load();
 
-            if (mode == DataSourceMode.csv) return;
+            if (mode == DataSourceMode.csv)
+              return true;
 
             final storage = Connectionstorage();
             final lastConnectionId = await storage.getConnectionId();
@@ -369,6 +395,17 @@ class AppProvider extends ChangeNotifier {
                     {
                          connectionProvider.select(connection);
 
+                         //Esperar a que la api se conecte en si el modo es api
+                         if(isApi) {
+                              final apiReady = await ApiWakeUpService.waitUntilReady();
+
+                              if(!apiReady)
+                              {
+                                print("La API no está disponible.");
+                                return false;
+                              }
+                         }
+
                          final result = await controller.connectSQL(
                              context,
                              files.server,
@@ -377,18 +414,17 @@ class AppProvider extends ChangeNotifier {
 
                          if (result.success) {
                              print("Conexión automática correcta");
-
-
+                             return true;
                          } else {
                            print("Error en la conexión automática: ${result.errorMessage}");
+                           return false;
                          }
-
-                         break;
-
                     }
                 }
             }
         }
+
+      return false;
   }
 
   Future<void> loadUserData(BuildContext context, User user) async {
