@@ -142,7 +142,7 @@ Future<void> login_in(BuildContext context, TextEditingController usernameContro
         );
         break;
       case SessionStatus.unauthenticated:
-        // TODO: Handle this case.
+           error(context, S.of(context).the_user_or_password_are_incorrect);
         break;
     }
 
