@@ -17,7 +17,7 @@ class ApiWakeUpService {
                    try{
                        final response = await http
                            .get(url)
-                           .timeout(Duration(seconds: 10));
+                           .timeout(const Duration(seconds: 10));
 
                        if(response.statusCode == 200)
                        {
