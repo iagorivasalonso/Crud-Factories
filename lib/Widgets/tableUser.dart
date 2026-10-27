@@ -52,9 +52,9 @@ class tableUsers extends StatelessWidget {
                                    return DataRow(
                                        cells: [
                                            DataCell(Text(users[index].username)),
-                                           DataCell(Text(users[index].role)),
-                                           if(rol == null)
                                            DataCell(Text(users[index].mail ?? '')),
+                                           if(rol == null)
+                                           DataCell(Text(users[index].role)),
                                            DataCell(
                                                 genericCheckbox(
                                                         text: " ",
