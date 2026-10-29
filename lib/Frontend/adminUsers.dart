@@ -67,7 +67,7 @@ class _adminPageState extends State<adminPage> {
                            child: Align(
                                alignment: Alignment.topLeft,
                                child: SizedBox(
-                                   width: 700,
+                                   width: 800,
                                    child: Column(
                                      children: [
                                            headView(title: S.of(context).user_management),

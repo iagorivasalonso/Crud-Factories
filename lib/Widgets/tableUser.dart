@@ -78,7 +78,7 @@ class tableUsers extends StatelessWidget {
                                                       function: () => onDelete?.call(index, 0),
                                                     ),
                                                   ),
-                                                 const SizedBox(width: 30),
+                                                 const SizedBox(width: 28),
                                                   SizedBox(
                                                     width: 50,
                                                     height: 30,
