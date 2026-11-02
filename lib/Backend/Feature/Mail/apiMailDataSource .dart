@@ -84,7 +84,7 @@ class apiMailDataSource implements IMailDataSource {
   @override
   Future<void> insert(Mail m) async {
 
-    saveToWebStorage(
+    await saveToWebStorage(
         'mails', // prefijo
          m.id,        // id único de la fábrica
         {

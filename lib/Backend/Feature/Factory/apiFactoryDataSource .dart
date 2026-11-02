@@ -67,31 +67,29 @@ class apiFactoryDataSource implements IFactoryDataSource {
   @override
   Future<void> insert(Factory f)  async{
 
-    saveToWebStorage(
+   await saveToWebStorage(
         'factories', // prefijo
         f.id,        // id único de la fábrica
-        {
-          'id': f.id,
-          'name': f.name,
-          'highDate': f.highDate,
-          'sector': f.sector,
-          'telephone1': f.thelephones.isNotEmpty
-              ? f.thelephones[0]
-              : '',
-          'telephone2': f.thelephones.length > 1
-              ? f.thelephones[1]
-              : '',
-          'mail': f.mail,
-          'web': f.web,
-          'address': {
-            'address': f.address.street,
-            'number': f.address.number,
-            'apartment': f.address.apartment,
-            'city':  f.address.city,
-            'province': f.address.province,
-            'postcode': f.address.postcode,
-          },
-        },
+     {
+       'id': f.id,
+       'name': f.name,
+       'highDate': f.highDate,
+       'sector': f.sector,
+       'telephone1': f.thelephones.isNotEmpty
+           ? f.thelephones[0]
+           : '',
+       'telephone2': f.thelephones.length > 1
+           ? f.thelephones[1]
+           : '',
+       'mail': f.mail,
+       'web': f.web,
+       'address': f.address.street,
+       'number': f.address.number,
+       'apartment': f.address.apartment,
+       'city': f.address.city,
+       'province': f.address.province,
+       'postcode': f.address.postcode,
+     },
         config,
         userId: userId,
     );
@@ -99,35 +97,32 @@ class apiFactoryDataSource implements IFactoryDataSource {
 
   @override
   Future<void> upload(Factory f) async {
-
-    saveToWebStorage(
-        'factories', // prefijo
-        f.id,        // id único de la fábrica
-         {
-              'id': f.id,
-              'name': f.name,
-              'highDate': f.highDate,
-              'sector': f.sector,
-              'telephone1': f.thelephones.isNotEmpty
-                  ? f.thelephones[0]
-                  : '',
-              'telephone2': f.thelephones.length > 1
-                  ? f.thelephones[1]
-                  : '',
-              'mail': f.mail,
-              'web': f.web,
-              'address': {
-                  'address': f.address.street,
-                  'number': f.address.number,
-                  'apartment': f.address.apartment,
-                  'city':  f.address.city,
-                  'province': f.address.province,
-                  'postcode': f.address.postcode,
-              },
+    await saveToWebStorage(
+      'factories',
+      f.id,
+      {
+        'id': f.id,
+        'name': f.name,
+        'highDate': f.highDate,
+        'sector': f.sector,
+        'telephone1': f.thelephones.isNotEmpty
+            ? f.thelephones[0]
+            : '',
+        'telephone2': f.thelephones.length > 1
+            ? f.thelephones[1]
+            : '',
+        'mail': f.mail,
+        'web': f.web,
+        'address': f.address.street,
+        'number': f.address.number,
+        'apartment': f.address.apartment,
+        'city': f.address.city,
+        'province': f.address.province,
+        'postcode': f.address.postcode,
       },
-        config,
-        userId: userId,
-        isUpdate: true,
+      config,
+      userId: userId,
+      isUpdate: true,
     );
   }
 
