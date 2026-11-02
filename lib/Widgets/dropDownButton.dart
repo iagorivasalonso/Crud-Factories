@@ -25,6 +25,9 @@ class GenericDropdown<T> extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
 
+    final selectedItemExists = selectedItem == null ||
+        items.where((item) => item == selectedItem).length == 1;
+
     return Row(
       children: [
         Flexible(
@@ -51,7 +54,7 @@ class GenericDropdown<T> extends StatelessWidget {
                       ),
                   ),
               ],
-              value: selectedItem,
+              value: selectedItemExists ? selectedItem : null,
               onChanged: onChanged,
               buttonStyleData: const ButtonStyleData(
                 height: 50,
