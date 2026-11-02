@@ -596,6 +596,7 @@ class _FactoryFromPageState extends State<FactoryFromPage> {
               controllers,
               factorySelected,
               factoryProvider.factories,
+              selectedSector
             );
 
             if (errorMsg != null) {

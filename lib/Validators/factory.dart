@@ -9,12 +9,16 @@ import 'package:crud_factories/generated/l10n.dart' show S;
 import 'package:crud_factories/helpers/localization_helper.dart' show LocalizationHelper;
 import 'package:fluent_ui/fluent_ui.dart';
 
+import '../Objects/Sector.dart';
+
 class FactoryValidator {
 
   static String? validate(BuildContext context, factoryController controllers,
-      Factory? factorySelected,List<Factory> factories) {
+      Factory? factorySelected,List<Factory> factories,
+      Sector? selectedSector,) {
 
     final name = controllers.name.text.trim();
+    final sector = selectedSector;
     final mail = controllers.mail.text.trim();
     final web = controllers.web.text.trim();
     final date = controllers.highDate.text.trim();
@@ -26,6 +30,8 @@ class FactoryValidator {
 
     // 🔴 REQUIRED FIELDS
     if (name.isEmpty) return S.of(context).name_required;
+
+    if (sector == null) return S.of(context).sector_required;
 
     // 🔴 UNIQUE NAME
     final allNames = factories.map((e) => e.name).toList();
