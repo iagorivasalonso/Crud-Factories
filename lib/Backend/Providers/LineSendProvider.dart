@@ -83,33 +83,42 @@ class LineSendProvider extends ChangeNotifier {
   //  ADDLINES
   // =========================
   Future<AddLineResult> addLines(List<LineSend> lines) async {
-    try {
-      final newLines = <LineSend>[];
 
-      for (final line in lines) {
-        final exists = _linesSends.any((l) => l.id == line.id);
+      try {
+        final newLines = <LineSend>[];
 
-        if (!exists) {
-          newLines.add(line);
+        for (final line in lines) {
+          final exists = _linesSends.any(
+                (l) => l.date == line.date && l.factory == line.factory,
+          );
+
+          if (!exists) {
+            final factory = factoryProvider.factories.firstWhere(
+                  (f) => f.name == line.factory,
+            );
+
+            line.sector = factory.sector;
+
+            newLines.add(line);
+          }
         }
+
+        if (newLines.isEmpty) {
+          return AddLineResult.duplicate;
+        }
+
+        await _repo.insert(newLines);
+
+        _linesSends.addAll(newLines);
+
+        notifyListeners();
+
+        return AddLineResult.success;
+      } catch (e) {
+        print('ERROR addLines: $e');
+        return AddLineResult.error;
       }
 
-      if (newLines.isEmpty) {
-        return AddLineResult.duplicate;
-      }
-
-      await _repo.insert(newLines);
-
-      _linesSends.addAll(newLines);
-
-      notifyListeners();
-
-      return AddLineResult.success;
-
-    } catch (e) {
-      print('ERROR addLines: $e');
-      return AddLineResult.error;
-    }
   }
 
   // =========================
