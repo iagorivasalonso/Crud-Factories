@@ -590,6 +590,7 @@ class _SendFromPageState extends State<SendFromPage> {
             .send_error);
       }
     }
+    context.read<EditStateProvider>().clear();
   }
 
   Future<void> _onResetSend() async {
