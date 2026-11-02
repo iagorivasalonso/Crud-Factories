@@ -62814,25 +62814,26 @@ r.R$=0
 s.d.l()
 s.e.l()
 s.aJ()},
-L(a){var s,r,q,p,o,n=this,m=null,l="Importar datos",k="import_data",j=A.O(a,!1,t.NQ),i=t.t,h=t.f,g=n.e,f=n.d,e=t.l,d=A.bn(a,m,e).w
-e=A.bn(a,m,e).w
-s=A.l(a,B.e,i)
-s.toString
-s=A.xZ(A.n(l,m,k,A.a([],h),m))
-A.l(a,B.e,i).toString
-r=t.p
-q=A.bL(A.a([A.ax(A.n("Importar datos en formato CSV",m,"Import_data_in_CSV_format",A.a([],h),m),m,m,m,m,m,m,m)],r),B.q,B.p,B.r,m)
-p=n.gFq()
-A.l(a,B.e,i).toString
-o=A.n("Ruta",m,"route",A.a([],h),m)
-A.l(a,B.e,i).toString
-p=A.aR(A.b76(A.n("Examinar",m,"examine",A.a([],h),m),o,p,new A.aQD(n,j,a),m,m),m,700)
-A.l(a,B.e,i).toString
-o=A.dy(new A.aQE(n,a),m,A.n(l,m,k,A.a([],h),m))
-A.l(a,B.e,i).toString
-g=A.Bo(m,A.ht(A.ht(A.fb(A.fb(new A.ab(B.dF,A.cU(m,new A.cF(B.aV,m,m,A.aR(A.c8(A.a([s,new A.ab(B.Rj,q,m),p,new A.ab(B.RZ,A.bL(A.a([o,new A.ab(B.fo,A.dy(new A.aQF(n,a),m,A.n("Eliminar",m,"delete",A.a([],h),m)),m)],r),B.am,B.p,B.r,m),m)],r),B.q,B.p,B.r),m,680),m),B.w,m,new A.ac(d.a.a,1/0,e.a.b,1/0),m,m,m,m,m,m,m,m),m),f,m,B.R),g,m,B.L),f,new A.aQG(),m,m,!0),g,m,m,m,!0),m)
-i=g
-return i},
+L(a){var s,r,q,p,o,n,m,l=this,k=null,j="Importar datos",i="import_data",h=A.O(a,!1,t.NQ),g=l.e,f=l.d,e=t.l,d=A.bn(a,k,e).w
+e=A.bn(a,k,e).w
+s=t.t
+r=A.l(a,B.e,s)
+r.toString
+r=t.f
+q=A.xZ(A.n(j,k,i,A.a([],r),k))
+A.l(a,B.e,s).toString
+p=t.p
+o=A.bL(A.a([A.ax(A.n("Importar datos en formato CSV",k,"Import_data_in_CSV_format",A.a([],r),k),k,k,k,k,k,k,k)],p),B.q,B.p,B.r,k)
+n=l.gFq()
+A.l(a,B.e,s).toString
+m=A.n("Ruta",k,"route",A.a([],r),k)
+A.l(a,B.e,s).toString
+n=A.aR(A.b76(A.n("Examinar",k,"examine",A.a([],r),k),m,n,new A.aQD(l,h,a),k,k),k,700)
+A.l(a,B.e,s).toString
+m=A.dy(new A.aQE(l,a),k,A.n(j,k,i,A.a([],r),k))
+A.l(a,B.e,s).toString
+g=A.Bo(k,A.ht(A.ht(A.fb(A.fb(new A.ab(B.dF,A.cU(k,new A.cF(B.aV,k,k,A.aR(A.c8(A.a([q,new A.ab(B.Rj,o,k),n,new A.ab(B.RZ,A.bL(A.a([m,new A.ab(B.fo,A.dy(new A.aQF(l,a),k,A.n("Eliminar",k,"delete",A.a([],r),k)),k)],p),B.am,B.p,B.r,k),k)],p),B.q,B.p,B.r),k,680),k),B.w,k,new A.ac(d.a.a,1/0,e.a.b,1/0),k,k,k,k,k,k,k,k),k),f,k,B.R),g,k,B.L),f,new A.aQG(),k,k,!0),g,k,k,k,!0),k)
+return g},
 DT(a){return this.asY(a)},
 asY(a){var s=0,r=A.t(t.H),q,p,o
 var $async$DT=A.u(function(b,c){if(b===1)return A.p(c,r)
@@ -63200,12 +63201,12 @@ A.l(m,B.e,o).toString
 a2=A.n(b3,a8,b4,A.a([],n),a8)
 A.l(m,B.e,o).toString
 m=A.n(b3,a8,b4,A.a([],n),a8)
-b5.b=A.XS(e,A.a([e],n),a8,a8,a8,a8,"factoriesDatabase",a0+a2.toLowerCase(),a0+m.toLowerCase(),a8,a8,a8)}m=a7.c
-e=a7.e
-a0=a7.d
-m.toString
+b5.b=A.XS(e,A.a([e],n),a8,a8,a8,a8,"factoriesDatabase",a0+a2.toLowerCase(),a0+m.toLowerCase(),a8,a8,a8)}m=a7.e
+e=a7.d
+a0=a7.c
+a0.toString
 a2=t.l
-m=A.bn(m,a8,a2).w
+a0=A.bn(a0,a8,a2).w
 a3=a7.c
 a3.toString
 a2=A.bn(a3,a8,a2).w
@@ -63236,8 +63237,8 @@ j=A.v9(a4,A.n("Sector",a8,"sector",A.a([],n),a8),new A.aU1(),f,new A.aU2(a7),a5,
 o=j}else o=new A.ab(B.dF,A.ax(g,a8,a8,a8,A.d4(a8,a8,a8,a8,a8,a8,a8,a8,a8,a8,a8,a8,a8,a8,B.hS,a8,a8,!0,a8,a8,a8,a8,a8,a8,a8,a8),a8,a8,a8),a8)
 o=A.aR(o,50,300)
 n=t.p
-e=A.Bo(a8,A.aDb(A.aDb(A.fb(A.fb(new A.ab(B.dF,A.cU(a8,new A.cF(B.aV,a8,a8,A.aR(A.c8(A.a([a3,new A.ab(B.RV,o,a8),new A.ab(B.S0,A.aR(b6?A.Ft(new A.aU3(b5,a7),s):A.Ft(new A.aU4(b5,a7,q),s),a8,a8),a8),B.abh,new A.ab(B.Rd,A.bL(A.a([new A.ab(B.S8,A.dy(new A.aU5(a7),a8,l),a8),new A.ab(B.fo,A.dy(new A.aU6(a7),a8,k),a8)],n),B.q,B.p,B.r,a8),a8)],n),B.am,B.p,B.r),a8,980),a8),B.w,a8,new A.ac(m.a.a,1/0,a2.a.b,1/0),a8,a8,a8,a8,a8,a8,a8,a8),a8),a0,a8,B.R),e,a8,B.L),a0,new A.aU7(),!0),e,A.y4(),!0),a8)
-b5=e
+m=A.Bo(a8,A.aDb(A.aDb(A.fb(A.fb(new A.ab(B.dF,A.cU(a8,new A.cF(B.aV,a8,a8,A.aR(A.c8(A.a([a3,new A.ab(B.RV,o,a8),new A.ab(B.S0,A.aR(b6?A.Ft(new A.aU3(b5,a7),s):A.Ft(new A.aU4(b5,a7,q),s),a8,a8),a8),B.abh,new A.ab(B.Rd,A.bL(A.a([new A.ab(B.S8,A.dy(new A.aU5(a7),a8,l),a8),new A.ab(B.fo,A.dy(new A.aU6(a7),a8,k),a8)],n),B.q,B.p,B.r,a8),a8)],n),B.am,B.p,B.r),a8,980),a8),B.w,a8,new A.ac(a0.a.a,1/0,a2.a.b,1/0),a8,a8,a8,a8,a8,a8,a8,a8),a8),e,a8,B.R),m,a8,B.L),e,new A.aU7(),!0),m,A.y4(),!0),a8)
+b5=m
 return b5},
 op(){var s=0,r=A.t(t.H),q=this,p,o,n,m,l,k,j,i,h,g,f,e,d,c
 var $async$op=A.u(function(a,b){if(a===1)return A.p(b,r)
@@ -63549,8 +63550,8 @@ s.S$=q
 s.R$=0
 p.aJ()},
 L(a8){var s,r,q,p,o,n,m,l,k,j,i,h,g,f,e=this,d=null,c="Un destinatario",b="a_recipient",a="Varios destinatarios",a0="multiple_recipients",a1="Seleccionar",a2=A.O(a8,!0,t.d),a3=A.O(a8,!0,t.N5),a4=t.wI,a5=A.cy(a2.d,a4),a6=a2.e,a7=d
-if(a6!=null)for(s=a5.length,a6=a6.a,r=0;r<s;++r){q=a5[r]
-if(q.a===a6){a7=q
+if(a6!=null)for(s=a5.length,r=0;r<s;++r){q=a5[r]
+if(q.a===a6.a){a7=q
 break}}p=A.cy(a3.d,t.s3)
 a6=t.t
 A.l(a8,B.e,a6).toString

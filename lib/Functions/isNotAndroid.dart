@@ -1,11 +1,12 @@
 import 'package:flutter/foundation.dart';
 
 bool isNotMobile() {
-
+      return true;
+  /*
   return kIsWeb ||
       (defaultTargetPlatform != TargetPlatform.android &&
           defaultTargetPlatform != TargetPlatform.iOS);
-/*
+
     if(kIsWeb) {
          return true;
      }
