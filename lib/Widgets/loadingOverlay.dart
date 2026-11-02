@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 
 Positioned LoadingOverlay() {
-
   return Positioned.fill(
-    child: Container(
-      color: Colors.white,
-      child: const Center(
-        child: CircularProgressIndicator(),
+    child: IgnorePointer(
+      child: Container(
+        color: Colors.white.withOpacity(0.7),
+        child: const Center(
+          child: CircularProgressIndicator(),
+        ),
       ),
     ),
   );
