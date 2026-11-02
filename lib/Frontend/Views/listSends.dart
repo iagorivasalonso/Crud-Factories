@@ -118,20 +118,61 @@ class _listSendsState extends State<listSends> {
     );
 
     if (result == DeleteResult.success) {
-      final filter = lineProvider.selectedFilter;
 
-      setState(() {
-        selectedLines = lineProvider.getLines(
+      final displayLines = lineProvider.displayLines(
+        shipmentText: S.of(context).shipment,
+        sectorId: sectorId,
+      );
+
+      if (displayLines.isEmpty) {
+
+        setState(() {
+          selectedLines = [];
+          selectCard = -1;
+          selectCamp = "";
+        });
+
+        if (mounted) {
+          WidgetsBinding.instance.addPostFrameCallback((_) {
+            context.read<NavigationProvider>().go(AppView.home);
+          });
+        }
+
+      } else {
+
+        // Comprobamos si el día o fábrica seleccionado todavía tiene líneas.
+        final currentLines = lineProvider.getLines(
           sectorId: sectorId,
           date: filter == SendFilter.date ? send.description : null,
           factory: filter == SendFilter.company ? send.title : null,
         );
 
-        if (selectedLines.isEmpty) {
-          selectCard = -1;
-          selectCamp = "";
+        if (currentLines.isNotEmpty) {
+
+          setState(() {
+            selectedLines = currentLines;
+          });
+
+        } else {
+
+          // Si se ha quedado vacío, seleccionamos el primer grupo disponible.
+          final nextSend = displayLines.first;
+
+          final nextLines = lineProvider.getLines(
+            sectorId: sectorId,
+            date: filter == SendFilter.date ? nextSend.description : null,
+            factory: filter == SendFilter.company ? nextSend.title : null,
+          );
+
+          setState(() {
+            selectCard = 0;
+            selectCamp = filter == SendFilter.date
+                ? nextSend.description
+                : nextSend.title;
+            selectedLines = nextLines;
+          });
         }
-      });
+      }
     }
 
     if (result != DeleteResult.success) {
@@ -149,7 +190,12 @@ class _listSendsState extends State<listSends> {
 
     }
 
-     return true;
+
+    if (result != DeleteResult.success) {
+      return false;
+    }
+
+    return true;
   }
 
   @override
