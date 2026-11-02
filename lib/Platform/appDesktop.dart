@@ -618,6 +618,10 @@ class _appDesktopState extends State<appDesktop> {
 
                               if (!context.mounted) return;
 
+                              context.read<FactoryProvider>().select(null);
+                              context.read<MailProvider>().select(null);
+                              context.read<UserProvider>().select(null);
+
                               context.read<NavigationProvider>().go(AppView.home);
 
 
