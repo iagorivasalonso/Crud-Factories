@@ -59,26 +59,28 @@ class customDataTable extends StatelessWidget {
         children: [
           Row(
             children: [
-              SizedBox(
-                height: 250,
-                child: Scrollbar(
-                    controller: scrollController,
-                  ///vere como queda
-                    child: SingleChildScrollView(
-                          controller: scrollController,
-                          scrollDirection: Axis.vertical,
-                          child: DataTable(
-                            headingRowHeight: 40,
-                            dataRowMinHeight: 40,
-                            dataRowMaxHeight: 40,
-                            columns: columns
-                                .map((c) => DataColumn(label: Text(c)))
-                                .toList(),
-                            rows: _buildRows(context, isCreateMode),
+              Expanded(
+                child: SizedBox(
+                  height: 250,
+                  child: Scrollbar(
+                      controller: scrollController,
+                    ///vere como queda
+                      child: SingleChildScrollView(
+                            controller: scrollController,
+                            scrollDirection: Axis.vertical,
+                            child: DataTable(
+                              headingRowHeight: 40,
+                              dataRowMinHeight: 40,
+                              dataRowMaxHeight: 40,
+                              columns: columns
+                                  .map((c) => DataColumn(label: Text(c)))
+                                  .toList(),
+                              rows: _buildRows(context, isCreateMode),
 
-                          ),
-                    ),
-                 ),
+                            ),
+                      ),
+                   ),
+                ),
               ),
 
             ],
