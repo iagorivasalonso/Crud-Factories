@@ -7,7 +7,6 @@ import 'package:crud_factories/Alertdialogs/warning.dart';
 import 'package:crud_factories/Backend/AppContent.dart' show AppContent;
 import 'package:crud_factories/Backend/core/controlsMessagesError/errors.dart';
 import 'package:crud_factories/Backend/Export_general/export_service.dart' show ExportService;
-import 'package:crud_factories/Backend/Feature/LineSend/exportLineSend.dart';
 import 'package:crud_factories/Backend/Providers/ConectionProvider.dart';
 import 'package:crud_factories/Backend/Providers/FactoryProvider.dart';
 import 'package:crud_factories/Backend/Providers/LineSendProvider.dart';
@@ -18,7 +17,6 @@ import 'package:crud_factories/Backend/Providers/UserProvider.dart' show UserPro
 import 'package:crud_factories/Backend/Providers/filterProvider.dart' show FilterProvider;
 import 'package:crud_factories/Frontend/adminRoutes.dart';
 import 'package:crud_factories/Frontend/adminSectors.dart';
-import 'package:crud_factories/Frontend/adminUsers.dart';
 import 'package:crud_factories/generated/l10n.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -29,6 +27,7 @@ import '../Backend/Providers/App_provaider.dart';
 import '../Backend/Providers/EmployeeProvider.dart';
 import '../Backend/Providers/RoutesProvider.dart';
 import '../Backend/Providers/SessionProvider.dart';
+import '../Widgets/dropDownButton.dart';
 
 
 class appDesktop extends StatefulWidget {
@@ -55,14 +54,20 @@ class _appDesktopState extends State<appDesktop> {
              final app = context.read<AppProvider>();
 
              await app.loadApp(context);
+             
+                   print("✅ APP READY");
 
-             if(app.connectionMode != DataSourceMode.csv)
+             if(app.mode == DataSourceMode.csv)
+                return;
+
+             final session = context.read<SessionProvider>();
+             
+             if (!session.isAuthenticated || session.user == null)
              {
-               await context.read<SessionProvider>().restoreSession();
+                context.read<UserProvider>().select(null);
+                LoginPage(context);
              }
-
-        print("✅ APP READY");
-
+             
       } catch (e, st) {
         print("💥 ERROR INIT:");
         print(e);
