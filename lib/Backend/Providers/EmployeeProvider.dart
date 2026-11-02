@@ -117,16 +117,25 @@ class EmployeeProvider extends ChangeNotifier {
   //====================================
   Future<void> removeFactoryEmployees(String factoryId) async {
 
-    try {
-      await repository.deleteByFactory(factoryId);
+    try{
+          final employeesToDelete = _Empleoyees
+               .where((empleoyee) => empleoyee.idFactory == factoryId);
 
-      _Empleoyees.removeWhere(
-            (employee) => employee.idFactory == factoryId,
-      );
+          for(final employee in employeesToDelete)
+          {
+              await repository.delete(employee.id);
+          }
 
-      notifyListeners();
-    } catch (e) {
-      print("Error deleting employees from factory: $e");
+          _Empleoyees.removeWhere(
+              (employee) => employee.idFactory == factoryId,
+          );
+
+          notifyListeners();
+
+    } catch(e, stackTrace){
+      print('Error deleting employees from factory $e');
+       print(stackTrace);
+       rethrow;
     }
   }
 
