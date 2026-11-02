@@ -119,6 +119,8 @@ class _appDesktopState extends State<appDesktop> {
 
                                   if (!await context.read<NavigationProvider>().canNavigate(context)) return;
 
+                                  context.read<FactoryProvider>().select(null);
+
                                   context.read<NavigationProvider>()
                                       .go(AppView.createFactory);
 
@@ -131,6 +133,9 @@ class _appDesktopState extends State<appDesktop> {
                                 onTap: () async {
 
                                   if (!await context.read<NavigationProvider>().canNavigate(context)) return;
+
+
+                                  context.read<MailProvider>().select(null);
 
                                   context.read<NavigationProvider>()
                                       .go(AppView.createAddress);
