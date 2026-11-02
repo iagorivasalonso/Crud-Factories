@@ -8,11 +8,13 @@ import 'package:crud_factories/Backend/Providers/notificacionProvider.dart' show
 import 'package:crud_factories/Widgets/ForgotPasswordButton.dart' show ForgotPasswordButton;
 import 'package:crud_factories/Widgets/genericCheckbox.dart' show genericCheckbox;
 import 'package:crud_factories/Widgets/headAlertDialog.dart';
+import 'package:crud_factories/Widgets/loadingOverlay.dart' show LoadingOverlay;
 import 'package:crud_factories/Widgets/materialButton.dart' show materialButton;
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter/material.dart' hide showDialog;
 import 'package:provider/provider.dart';
 
+import '../Widgets/dropDownButton.dart' show LoadingOverlay;
 import '../Widgets/textFieldPassword.dart';
 import '../Widgets/textfield.dart';
 import '../generated/l10n.dart';
@@ -25,6 +27,7 @@ Future<void> forgotPassword (BuildContext context, String username) async {
 
   usernameController.text = username;
 
+  bool isLoading = false;
 
   await showDialog(
     context: context,
@@ -32,59 +35,90 @@ Future<void> forgotPassword (BuildContext context, String username) async {
       return StatefulBuilder(
             builder: (context,setState) {
                 return Dialog(
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(0)),
-                    child: SingleChildScrollView(
-                      child: ConstrainedBox(
-                            constraints: const BoxConstraints(
-                            maxWidth: 400,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(0),
+                  ),
+                  child: Stack(
+                    children: [
+                      ConstrainedBox(
+                        constraints: const BoxConstraints(
+                          maxWidth: 400,
+                          maxHeight: 900,
                         ),
                         child: Column(
                           mainAxisSize: MainAxisSize.min,
                           children: [
                             headDialog(title: S.of(context).user_access),
 
-                            defaultTextfield(
-                                nameCamp: S.of(context).user,
-                                controllerCamp: usernameController,
-                                context: context
-                            ),
-
-                            defaultTextfield(
-                                nameCamp: S.of(context).mail,
-                                controllerCamp: mailController,
-                                context: context
-                            ),
-
-
-                            Padding(
-                              padding: const EdgeInsets.only(top:20,bottom: 15),
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  materialButton(
-                                    nameAction: S.of(context).request,
-                                    function: () => requestPassword(
-                                        context,
-                                        usernameController,
-                                        mailController
+                            Flexible(
+                              child: SingleChildScrollView(
+                                child: Column(
+                                  children: [
+                                    defaultTextfield(
+                                      nameCamp: S.of(context).user,
+                                      controllerCamp: usernameController,
+                                      context: context,
                                     ),
-                                  ),
-                                  const SizedBox(width: 20),
-                                  materialButton(
-                                    nameAction: S.of(context).back_to_login,
-                                    function:  () async {
-                                      Navigator.of(context).pop();
-                                      LoginPage(context);
-                                    },
-                                  ),
-                                ],
+
+                                    defaultTextfield(
+                                      nameCamp: S.of(context).mail,
+                                      controllerCamp: mailController,
+                                      context: context,
+                                    ),
+
+                                    Padding(
+                                      padding: const EdgeInsets.only(
+                                        top: 20,
+                                        bottom: 15,
+                                      ),
+                                      child: Row(
+                                        mainAxisAlignment: MainAxisAlignment.center,
+                                        children: [
+                                          materialButton(
+                                            nameAction: S.of(context).request,
+                                            function: () async {
+                                              if (isLoading) return;
+
+                                              setState(() => isLoading = true);
+
+                                              await Future.delayed(const Duration(milliseconds: 100));
+
+                                              try {
+                                                await requestPassword(
+                                                  context,
+                                                  usernameController,
+                                                  mailController,
+                                                );
+                                              } finally {
+                                                if (context.mounted) {
+                                                  setState(() => isLoading = false);
+                                                }
+                                              }
+                                            },
+                                          ),
+                                          const SizedBox(width: 20),
+                                          materialButton(
+                                            nameAction: S.of(context).back_to_login,
+                                            function: () {
+                                              Navigator.of(context).pop();
+                                              LoginPage(context);
+                                            },
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ],
+                                ),
                               ),
                             ),
-
                           ],
                         ),
                       ),
-                    )
+
+                      if (isLoading)
+                        LoadingOverlay(),
+                    ],
+                  ),
                 );
             },
 
@@ -98,41 +132,38 @@ Future<void> forgotPassword (BuildContext context, String username) async {
 Future<void> requestPassword(
     BuildContext context,
     TextEditingController usernameController,
-    TextEditingController mailController) async {
+    TextEditingController mailController,
+    ) async {
+  final userProvider = context.read<UserProvider>();
+  final notificationProvider = context.read<NotificationProvider>();
 
-         final userProvider = context.read<UserProvider>();
-         final notificationProvider = context.read<NotificationProvider>();
+  final user = await userProvider.repository!.findByUsernameAndMail(
+    usernameController.text.trim(),
+    mailController.text.trim(),
+  );
 
+  if (user == null) {
+    await error(context, S.of(context).user_or_mail_invalid);
+    return;
+  }
 
-         final user = await userProvider.repository!
-               .findByUsernameAndMail(
-                 usernameController.text.trim(),
-                 mailController.text.trim()
-         );
+  if (user.mail == null || user.mail!.trim().isEmpty) {
+    await error(
+      context,
+      S.of(context).account_not_configured_on_the_server,
+    );
+    return;
+  }
 
-         if(user == null) {
-           await error(context, S.of(context).user_or_mail_invalid);
-           return;
-         }
+  final result = await notificationProvider.requestPasswordReset(
+    context: context,
+    user: user,
+  );
 
-         if (user.mail == null || user.mail!.trim().isEmpty) {
-           await error(
-             context,
-             S.of(context).account_not_configured_on_the_server,
-           );
-           return;
-         }
-
-         final result = await notificationProvider.requestPasswordReset(
-             context: context,
-             user: user
-         );
-
-         if (result.success) {
-           await confirm(
-             context,
-           S.of(context).password_recovery_request_sent,
-           );
-         }
+  if (result.success) {
+    await confirm(
+      context,
+      S.of(context).password_recovery_request_sent,
+    );
+  }
 }
-

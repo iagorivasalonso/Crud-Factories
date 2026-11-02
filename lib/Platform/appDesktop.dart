@@ -27,7 +27,7 @@ import '../Backend/Providers/App_provaider.dart';
 import '../Backend/Providers/EmployeeProvider.dart';
 import '../Backend/Providers/RoutesProvider.dart';
 import '../Backend/Providers/SessionProvider.dart';
-import '../Widgets/dropDownButton.dart';
+import '../Widgets/loadingOverlay.dart';
 
 
 class appDesktop extends StatefulWidget {
@@ -83,7 +83,9 @@ class _appDesktopState extends State<appDesktop> {
 
     double mWidth = MediaQuery.of(context).size.width;
     double mHeight = MediaQuery.of(context).size.height;
-    
+
+    final isLoading = context.watch<AppProvider>().isLoading;
+
     final providerRoutes = context.watch<RoutesProvider>().routes;
     final providerconnections = context.watch<ConnectionProvider>().connections;
     final providerSectors = context.watch<SectorProvider>().sectors;
@@ -746,6 +748,8 @@ class _appDesktopState extends State<appDesktop> {
             ),
           ),
         ),
+        if (isLoading)
+          LoadingOverlay()
       ],
     );
 

@@ -8,9 +8,10 @@ import 'package:crud_factories/Backend/Providers/SessionProvider.dart';
 import 'package:crud_factories/Backend/Providers/notificacionProvider.dart' show NotificationProvider;
 import 'package:crud_factories/Objects/User.dart';
 import 'package:crud_factories/Validators/user.dart' show UserValidator;
-import 'package:crud_factories/Widgets/dropDownButton.dart' show GenericDropdown;
+import 'package:crud_factories/Widgets/dropDownButton.dart' show GenericDropdown, LoadingOverlay;
 import 'package:crud_factories/Widgets/genericCheckbox.dart' show genericCheckbox;
 import 'package:crud_factories/Widgets/headAlertDialog.dart';
+import 'package:crud_factories/Widgets/loadingOverlay.dart' show LoadingOverlay;
 import 'package:crud_factories/Widgets/materialButton.dart' show materialButton;
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter/material.dart' hide showDialog;
@@ -37,6 +38,8 @@ class _createUserState extends State<createUser> {
   bool showPassword2 = false;
   bool userActive = true;
   bool changePassword = false;
+
+  bool isLoading = false;
 
   UserRole selectedRol = UserRole.admin;
 
@@ -85,6 +88,9 @@ class _createUserState extends State<createUser> {
         .selected;
     final isEditing = userSelected != null;
 
+    final sessionUser = context.watch<SessionProvider>().user;
+    final isAdmin = sessionUser?.role == 'admin';
+
     final title = isEditing
         ? S
         .of(context)
@@ -113,186 +119,194 @@ class _createUserState extends State<createUser> {
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(0),
       ),
-      child: ConstrainedBox(
-        constraints: const BoxConstraints(
-          maxWidth: 400,
-          maxHeight: 900,
-        ),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            // NO hace scroll
-            headDialog(title: title),
+      child: Stack(
+        children: [
+          ConstrainedBox(
+            constraints: const BoxConstraints(
+              maxWidth: 400,
+              maxHeight: 900,
+            ),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                // NO hace scroll
+                headDialog(title: title),
 
-            // Solo esto hace scroll
-            Flexible(
-              child: SingleChildScrollView(
-                child: Column(
-                  children: [
-                    defaultTextfield(
-                      nameCamp: S
-                          .of(context)
-                          .user,
-                      controllerCamp: controllers.username,
-                      context: context,
-                    ),
+                // Solo esto hace scroll
+                Flexible(
+                  child: SingleChildScrollView(
+                    child: Column(
+                      children: [
+                        defaultTextfield(
+                          nameCamp: S
+                              .of(context)
+                              .user,
+                          controllerCamp: controllers.username,
+                          context: context,
+                        ),
 
-                    defaultTextfield(
-                      nameCamp: S
-                          .of(context)
-                          .mail,
-                      controllerCamp: controllers.mail!,
-                      context: context,
-                    ),
+                        defaultTextfield(
+                          nameCamp: S
+                              .of(context)
+                              .mail,
+                          controllerCamp: controllers.mail!,
+                          context: context,
+                        ),
 
-                    if (isEditing)
-                      genericCheckbox(
-                        text: S
-                            .of(context)
-                            .change_password,
-                        value: changePassword,
-                        onChanged: (bool? value) {
-                          setState(() {
-                            changePassword = value ?? false;
-                          });
-                        },
-                      ),
-
-                    if (!isEditing || changePassword)
-                      Column(
-                        children: [
-                          textfieldPassword(
-                            nameCamp: S
-                                .of(context)
-                                .password,
-                            controllerCamp: controllers.password,
-                            campEdit: true,
-                            obscureText: !showPassword1,
-                          ),
-
+                        if (isEditing)
                           genericCheckbox(
                             text: S
                                 .of(context)
-                                .show_password,
-                            value: showPassword1,
+                                .change_password,
+                            value: changePassword,
                             onChanged: (bool? value) {
                               setState(() {
-                                showPassword1 = value ?? false;
+                                changePassword = value ?? false;
                               });
                             },
                           ),
 
-                          textfieldPassword(
-                            nameCamp: S
-                                .of(context)
-                                .verify_password,
-                            controllerCamp: controllers.passwordVerify!,
-                            obscureText: !showPassword2,
+                        if (!isEditing || changePassword)
+                          Column(
+                            children: [
+                              textfieldPassword(
+                                nameCamp: S
+                                    .of(context)
+                                    .password,
+                                controllerCamp: controllers.password,
+                                campEdit: true,
+                                obscureText: !showPassword1,
+                              ),
+
+                              genericCheckbox(
+                                text: S
+                                    .of(context)
+                                    .show_password,
+                                value: showPassword1,
+                                onChanged: (bool? value) {
+                                  setState(() {
+                                    showPassword1 = value ?? false;
+                                  });
+                                },
+                              ),
+
+                              textfieldPassword(
+                                nameCamp: S
+                                    .of(context)
+                                    .verify_password,
+                                controllerCamp: controllers.passwordVerify!,
+                                obscureText: !showPassword2,
+                              ),
+
+                              genericCheckbox(
+                                text: S
+                                    .of(context)
+                                    .show_password,
+                                value: showPassword2,
+                                onChanged: (bool? value) {
+                                  setState(() {
+                                    showPassword2 = value ?? false;
+                                  });
+                                },
+                              ),
+                            ],
                           ),
 
-                          genericCheckbox(
-                            text: S
-                                .of(context)
-                                .show_password,
-                            value: showPassword2,
-                            onChanged: (bool? value) {
-                              setState(() {
-                                showPassword2 = value ?? false;
-                              });
-                            },
-                          ),
-                        ],
-                      ),
-
-                    Align(
-                      alignment: Alignment.topLeft,
-                      child: Padding(
-                        padding: const EdgeInsets.only(left: 40.0),
-                        child: SizedBox(
-                          width: 300,
-                          child: GenericDropdown<UserRole>(
-                            items: UserRole.values,
-                            camp: S
-                                .of(context)
-                                .role,
-                            selectedItem: selectedRol,
-                            hint: S
-                                .of(context)
-                                .administrator,
-                            itemLabel: (rol) {
-                              switch (rol) {
-                                case UserRole.admin:
-                                  return S
-                                      .of(context)
-                                      .administrator;
-                                case UserRole.user:
-                                  return S
-                                      .of(context)
-                                      .user;
-                              }
-                            },
-                            onChanged: (role) {
-                              setState(() {
-                                selectedRol = role!;
-                              });
-                            },
+                        if(isAdmin)
+                        Align(
+                          alignment: Alignment.topLeft,
+                          child: Padding(
+                            padding: const EdgeInsets.only(left: 40.0),
+                            child: SizedBox(
+                              width: 300,
+                              child: GenericDropdown<UserRole>(
+                                items: UserRole.values,
+                                camp: S
+                                    .of(context)
+                                    .role,
+                                selectedItem: selectedRol,
+                                hint: S
+                                    .of(context)
+                                    .administrator,
+                                itemLabel: (rol) {
+                                  switch (rol) {
+                                    case UserRole.admin:
+                                      return S
+                                          .of(context)
+                                          .administrator;
+                                    case UserRole.user:
+                                      return S
+                                          .of(context)
+                                          .user;
+                                  }
+                                },
+                                onChanged: (role) {
+                                  setState(() {
+                                    selectedRol = role!;
+                                  });
+                                },
+                              ),
+                            ),
                           ),
                         ),
-                      ),
-                    ),
 
-                    genericCheckbox(
-                      text: S
-                          .of(context)
-                          .active_user,
-                      value: userActive,
-                      onChanged: (bool? value) {
-                        setState(() {
-                          userActive = value ?? false;
-                        });
-                      },
-                    ),
+                        genericCheckbox(
+                          text: S
+                              .of(context)
+                              .active_user,
+                          value: userActive,
+                          onChanged: (bool? value) {
+                            setState(() {
+                              userActive = value ?? false;
+                            });
+                          },
+                        ),
 
-                    const SizedBox(height: 10),
+                        const SizedBox(height: 10),
 
-                    Padding(
-                      padding: const EdgeInsets.only(bottom: 15),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          materialButton(
-                            nameAction: action,
-                            function: () =>
-                                _onSaveUser(
-                                  context,
-                                  userSelected,
-                                  controllers,
-                                  changePassword
+                        Padding(
+                          padding: const EdgeInsets.only(bottom: 15),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              materialButton(
+                                nameAction: action,
+                                function: () => _onSaveUser(
+                                     context,
+                                    userSelected,
+                                    controllers,
+                                    changePassword,
                                 ),
+                              ),
+                              const SizedBox(width: 20),
+                              materialButton(
+                                nameAction: action2,
+                                function: () {
+                                  setState(() {
+                                    _onResetUser(
+                                      userSelected,
+                                      controllers,
+                                    );
+                                  });
+                                },
+                              ),
+                            ],
                           ),
-                          const SizedBox(width: 20),
-                          materialButton(
-                            nameAction: action2,
-                            function: () {
-                              setState(() {
-                                _onResetUser(
-                                  userSelected,
-                                  controllers,
-                                );
-                              });
-                            },
-                          ),
-                        ],
-                      ),
+                        ),
+                      ],
                     ),
-                  ],
+                  ),
                 ),
-              ),
+              ],
             ),
-          ],
-        ),
+          ),
+
+          if (isLoading)
+            LoadingOverlay(),
+        ],
       ),
     );
+
   }
 
   void loadSelectedUser(User user) {
@@ -351,16 +365,24 @@ class _createUserState extends State<createUser> {
 
         if (accepted) {
 
-          final result = await notificationProvider.requestAdminAccess(
-            context: context,
-            username: controllers.username.text,
-            mail: controllers.mail?.text.trim() ?? '',
-          );
+          setState(() => isLoading = true);
 
-          if (result.success)
-          {
-            await confirm(context, S.of(context).requestAdminSent);
+          try {
+            final result = await notificationProvider.requestAdminAccess(
+              context: context,
+              username: controllers.username.text,
+              mail: controllers.mail?.text.trim() ?? '',
+            );
+
+            if (result.success) {
+              await confirm(context, S.of(context).requestAdminSent);
+            }
+          } finally {
+            if (mounted) {
+              setState(() => isLoading = false);
+            }
           }
+
           return;
         }
         await error(context, S

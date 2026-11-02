@@ -20,6 +20,8 @@ import 'package:provider/provider.dart';
 
 import '../Backend/Feature/Mail/Service/mailConfigurationService.dart';
 import '../Backend/core/controlsMessagesError/errors.dart';
+import '../Platform/appDesktop.dart';
+import '../Widgets/loadingOverlay.dart';
 import '../Widgets/materialButton.dart';
 
 
@@ -39,6 +41,8 @@ class _MailFormPageState extends State<MailFormPage> {
 
 
   late final MailController controllers;
+
+  bool isLoading = false;
 
   @override
   void initState() {
@@ -101,100 +105,106 @@ class _MailFormPageState extends State<MailFormPage> {
 
     return isNotMobile()
         ?  Scaffold(
-            body: Scrollbar(
-        controller: verticalScroll,
-        thumbVisibility: true,
-        child: Scrollbar(
-          controller: horizontalScroll,
-          thumbVisibility: true,
-          notificationPredicate: (notification) =>
-          notification.metrics.axis == Axis.horizontal,
-          child: SingleChildScrollView(
-            controller: verticalScroll,
-            scrollDirection: Axis.vertical,
-            child: SingleChildScrollView(
-              controller: horizontalScroll,
-              scrollDirection: Axis.horizontal,
-              child: Padding(
-                padding: const EdgeInsets.only(left: 10.0, top: 30.0),
-                child: Container(
-                  constraints: BoxConstraints(
-                    minWidth: MediaQuery.of(context).size.width,
-                    minHeight: MediaQuery.of(context).size.height,
-                  ),
-                  child: Align(
-                    alignment: Alignment.topLeft,
-                    child: Column(
-                      children: [
-                        SizedBox(
-                          width: 600,
-                          child: Column(
-                            children: [
-                              headView(
-                                  title: title1
-                              ),
-
-                              defaultTextfield(
-                                nameCamp: S.of(context).new_mail,
-                                controllerCamp: controllers.mail,
-                                campOld: mailSelected?.mail ?? '',
-                                context: context
-                              ),
-
-                              textfieldPassword(
-                                nameCamp: S.of(context).password,
-                                controllerCamp: controllers.password,
-                                context: context,
-                              ),
-
-                              textfieldPassword(
-                                nameCamp: S.of(context).verify_password,
-                                controllerCamp: controllers.passwordVerify!,
-                              ),
-
-                            ],
-                          ),
-                        ),
-
-                        SizedBox(
-                            width: 700,
-                            child: Padding(
-                              padding: const EdgeInsets.only(left: 500.0, top: 150.0),
-                              child: Row(
-                                crossAxisAlignment: CrossAxisAlignment.start,
+            body: Stack(
+              children: [
+                Scrollbar(
+                        controller: verticalScroll,
+                        thumbVisibility: true,
+                        child: Scrollbar(
+                          controller: horizontalScroll,
+                          thumbVisibility: true,
+                          notificationPredicate: (notification) =>
+                          notification.metrics.axis == Axis.horizontal,
+                          child: SingleChildScrollView(
+                controller: verticalScroll,
+                scrollDirection: Axis.vertical,
+                child: SingleChildScrollView(
+                  controller: horizontalScroll,
+                  scrollDirection: Axis.horizontal,
+                  child: Padding(
+                    padding: const EdgeInsets.only(left: 10.0, top: 30.0),
+                    child: Container(
+                      constraints: BoxConstraints(
+                        minWidth: MediaQuery.of(context).size.width,
+                        minHeight: MediaQuery.of(context).size.height,
+                      ),
+                      child: Align(
+                        alignment: Alignment.topLeft,
+                        child: Column(
+                          children: [
+                            SizedBox(
+                              width: 600,
+                              child: Column(
                                 children: [
-                                  materialButton(
-                                    nameAction: action,
-                                    function: () => _onSaveMail(
-                                        context,
-                                        mailSelected,
-                                        controllers
-                                    ),
+                                  headView(
+                                      title: title1
                                   ),
 
-                                  Padding(
-                                      padding: const EdgeInsets.only(left: 20.0),
-                                      child: materialButton(
-                                        nameAction: action2,
-                                        function: () => _onResetMail(
-                                            mailSelected,
-                                            controllers
-                                        ),
-                                      )
-                                  )
+                                  defaultTextfield(
+                                    nameCamp: S.of(context).new_mail,
+                                    controllerCamp: controllers.mail,
+                                    campOld: mailSelected?.mail ?? '',
+                                    context: context
+                                  ),
+
+                                  textfieldPassword(
+                                    nameCamp: S.of(context).password,
+                                    controllerCamp: controllers.password,
+                                    context: context,
+                                  ),
+
+                                  textfieldPassword(
+                                    nameCamp: S.of(context).verify_password,
+                                    controllerCamp: controllers.passwordVerify!,
+                                  ),
+
                                 ],
                               ),
                             ),
-                        )
-                      ],
+
+                            SizedBox(
+                                width: 700,
+                                child: Padding(
+                                  padding: const EdgeInsets.only(left: 500.0, top: 150.0),
+                                  child: Row(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      materialButton(
+                                        nameAction: action,
+                                        function: () => _onSaveMail(
+                                            context,
+                                            mailSelected,
+                                            controllers
+                                        ),
+                                      ),
+
+                                      Padding(
+                                          padding: const EdgeInsets.only(left: 20.0),
+                                          child: materialButton(
+                                            nameAction: action2,
+                                            function: () => _onResetMail(
+                                                mailSelected,
+                                                controllers
+                                            ),
+                                          )
+                                      )
+                                    ],
+                                  ),
+                                ),
+                            )
+                          ],
+                        ),
+                      ),
                     ),
                   ),
                 ),
-              ),
+                          ),
+                        ),
+                      ),
+                if (isLoading)
+                  LoadingOverlay()
+              ],
             ),
-          ),
-        ),
-      ),
         ): Scaffold(
       appBar: appBarAndroid(context, name: title1),
       body: Text("factori"),
@@ -261,18 +271,31 @@ class _MailFormPageState extends State<MailFormPage> {
                configuration: mailConfiguration,
              );
 
-             mailProvider.select(mail);
+             setState(() {
+               isLoading = true;
+             });
 
-             final result = await _testConnection(
-               context,
-               mailProvider,
-               mail,
-             );
+             try{
+               mailProvider.select(mail);
 
-             if(!result.success) {
-               error(context, result.failed.first.error);
-               return;
-             }
+               final result = await _testConnection(
+                 context,
+                 mailProvider,
+                 mail,
+               );
+
+               if(!result.success) {
+                 error(context, result.failed.first.error);
+                 return;
+               }
+
+            } finally {
+                  if (mounted) {
+                        setState(() {
+                        isLoading = false;
+                        });
+                  }
+            }
 
 
 
