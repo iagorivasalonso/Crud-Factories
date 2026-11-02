@@ -3,7 +3,7 @@ import 'package:flutter/foundation.dart';
 bool isNotMobile() {
 
     if(kIsWeb) {
-         return !isMobileWeb();
+         return true;
      }
 
     return defaultTargetPlatform != TargetPlatform.android &&

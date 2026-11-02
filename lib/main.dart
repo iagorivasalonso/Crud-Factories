@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:crud_factories/Backend/connectors_API/ApiConfigUrl.dart';
+import 'package:crud_factories/Backend/core/service/Cryptoservice.dart';
 import 'package:crud_factories/Platform/appDesktop.dart';
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
@@ -22,8 +23,8 @@ void main() async {
 
         WidgetsFlutterBinding.ensureInitialized();
         // Elegir entorno de la API
-        ApiConfigUrl.useLocalhost = true;
-        const bool isAPI = false;
+        ApiConfigUrl.useLocalhost = false;
+        const bool isAPI = true;
 
 
       if(!kIsWeb)
@@ -49,16 +50,13 @@ class MyApp extends StatelessWidget {
           GlobalMaterialLocalizations.delegate,
           GlobalWidgetsLocalizations.delegate,
           GlobalCupertinoLocalizations.delegate,
+          FluentLocalizations.delegate,
         ],
 
         supportedLocales: S.delegate.supportedLocales,
-        home: Builder(
-            builder: (context) {
-              MyWindowListener.context = context;
-              _initializeWindow(context);
-
-              return const appDesktop();
-            }
+        home: FluentTheme(
+            data: FluentThemeData(),
+            child: const appDesktop()
         ),
       );
     }

@@ -1,0 +1,9 @@
+id;date;factory;observations;state
+1;01-10-2025;Fábrica Atlántica;Entregado;sent
+2;01-10-2025;Industrias Norte;No disponible;pending
+3;01-11-2025;Metal Centro;Recibido;sent
+4;01-12-2025;Metal Centro;Acuse firmado;sent
+5;01-12-2025;Fábrica Atlántica;Error destinatario;returned
+6;14-01-2025;Industrias Norte;Reprogramado;pending
+7;13-01-2025;Metal Centro;Rechazado;return
+8;14-01-2025;Textiles Levante;Oficina central;sent

@@ -464,7 +464,7 @@ class _SendFromPageState extends State<SendFromPage> {
                                     children: [
                                       Padding(
                                         padding: const EdgeInsets.only(
-                                            left: 550.0),
+                                            left: 750.0),
                                         child: materialButton(
                                           nameAction: action1,
                                           function: () => _onSaveSend(),

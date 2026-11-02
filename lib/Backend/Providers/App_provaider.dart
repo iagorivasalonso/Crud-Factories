@@ -393,53 +393,59 @@ class AppProvider extends ChangeNotifier {
             final storage = Connectionstorage();
             final lastConnectionId = await storage.getConnectionId();
 
-            if(lastConnectionId != null)
-            {
-                final connectionProvider = context.read<ConnectionProvider>();
+            final connectionProvider = context.read<ConnectionProvider>();
 
-                for(final connection in connectionProvider.connections)
-                {
-                    if(connection.id == lastConnectionId)
-                    {
-                         connectionProvider.select(connection);
+            final connection = connectionProvider.connections.firstWhere(
+                  (c) => c.id == lastConnectionId,
+              orElse: () => connectionProvider.connections.first,
+            );
 
-                         //Esperar a que la api se conecte en si el modo es api
-                         if(isApi) {
+            print('MODE: $mode');
+            print('CONNECTION MODE: $connectionMode');
+            print('LAST CONNECTION ID: $lastConnectionId');
 
-                           connectionProvider.setConfig(
-                               ApiConfig(
-                                 host: connection.host,
-                                 port: connection.port,
-                                 database: connection.database,
-                                 user: connection.user,
-                                 password: connection.password,
-                               ),
-                           );
-                              final apiReady = await ApiWakeUpService.waitUntilReady();
+            connectionProvider.select(connection);
 
-                              if(!apiReady)
-                              {
-                                print("La API no está disponible.");
-                                return false;
-                              }
-                         }
+// Guardar la conexión si todavía no había ninguna seleccionada.
+          if (lastConnectionId == null) {
+            await storage.saveConnectionId(connection.id);
+          }
 
-                         final result = await controller.connectSQL(
-                             context,
-                             files.server,
-                             isApi
-                          );
+// Configurar API
+          if (isApi) {
+            connectionProvider.setConfig(
+              ApiConfig(
+                host: connection.host,
+                port: connection.port,
+                database: connection.database,
+                user: connection.user,
+                password: connection.password,
+              ),
+            );
 
-                         if (result.success) {
-                             print("Conexión automática correcta");
-                             return true;
-                         } else {
-                           print("Error en la conexión automática: ${result.errorMessage}");
-                           return false;
-                         }
-                    }
-                }
+            final apiReady = await ApiWakeUpService.waitUntilReady();
+
+            if (!apiReady) {
+              print("La API no está disponible.");
+              return false;
             }
+          }
+
+
+          final result = await controller.connectSQL(
+            context,
+            files.server,
+            isApi,
+          );
+
+          if (result.success) {
+            print("Conexión automática correcta");
+            return true;
+          } else {
+            print("Error en la conexión automática: ${result.errorMessage}");
+            return false;
+          }
+
         }
 
       return false;

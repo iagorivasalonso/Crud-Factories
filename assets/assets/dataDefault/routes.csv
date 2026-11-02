@@ -1,0 +1,8 @@
+1;Rutas;assets/dataDefault/routes.csv
+2;Conexiones;assets/dataDefault/connections.csv
+3;Servidor;<EMPTY>
+4;Sectores;assets/dataDefault/sectors.csv
+5;Empresas;assets/dataDefault/factories.csv
+6;Empleados;assets/dataDefault/employees.csv
+7;Lineas;assets/dataDefault/lines.csv
+8;addresss;assets/dataDefault/mails.csv

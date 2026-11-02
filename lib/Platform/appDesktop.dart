@@ -333,7 +333,7 @@ class _appDesktopState extends State<appDesktop> {
                                         if(factoriesCurrent.isNotEmpty)
                                         {
                                           context.read<NavigationProvider>()
-                                              .go(AppView.createFactory);
+                                              .go(AppView.factories);
                                         }
                                         else
                                         {
@@ -595,11 +595,11 @@ class _appDesktopState extends State<appDesktop> {
               Color(0xca0347f3),
             ),
           ),
-          child: Container(
-            width: mWidth,
-            height: mHeight,
-            color: Colors.white,
-            child: AppContent(),
+          child: SizedBox.expand(
+            child: Container(
+              color: Colors.white,
+              child: AppContent(),
+            ),
           ),
         ),
         if (context.watch<ConnectionProvider>().isConnected == true)
