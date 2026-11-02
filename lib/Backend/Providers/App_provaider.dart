@@ -19,6 +19,7 @@ import 'package:crud_factories/Backend/Providers/UserProvider.dart';
 import 'package:crud_factories/Backend/Repositories/connectionRepository.dart' show ConnectionRepository;
 import 'package:crud_factories/Backend/connectors_API/ApiWakeUpService.dart';
 import 'package:crud_factories/Frontend/conection.dart';
+import 'package:crud_factories/Objects/ApiConfig.dart' show ApiConfig;
 import 'package:crud_factories/Objects/AppRoutesState.dart';
 import 'package:crud_factories/Objects/RouteCSV.dart' show RouteCSV;
 import 'package:crud_factories/Objects/User.dart';
@@ -157,17 +158,24 @@ class AppProvider extends ChangeNotifier {
 
       if(mode != DataSourceMode.csv)
       {
-            final sessionProvider = context.read<SessionProvider>();
+        // Inicializar el repositorio antes del login
+        await loadUsers(context);
 
-            final restored = await sessionProvider.restoreSession();
+        final sessionProvider = context.read<SessionProvider>();
 
-            if(restored &&sessionProvider.user != null)
-            {
-              await loadUserData(
-                context,
-                sessionProvider.user!,
-              );
-            }
+        if (files != null) {
+          await loadSystemMailRepository(context, files!);
+        }
+
+        final restored = await sessionProvider.restoreSession();
+
+        if(restored && sessionProvider.user != null)
+        {
+          await loadUserData(
+            context,
+            sessionProvider.user!,
+          );
+        }
       }
 
       // =========================
@@ -397,6 +405,16 @@ class AppProvider extends ChangeNotifier {
 
                          //Esperar a que la api se conecte en si el modo es api
                          if(isApi) {
+
+                           connectionProvider.setConfig(
+                               ApiConfig(
+                                 host: connection.host,
+                                 port: connection.port,
+                                 database: connection.database,
+                                 user: connection.user,
+                                 password: connection.password,
+                               ),
+                           );
                               final apiReady = await ApiWakeUpService.waitUntilReady();
 
                               if(!apiReady)
@@ -471,7 +489,7 @@ class AppProvider extends ChangeNotifier {
 
     final executeQuery = provider.executeQuery;
     final config = provider.configOrNull;
-    final efectiveMode = getDataSourceMode(context);
+    final efectiveMode = connectionMode;
 
     print('========== VOY A CREAR SYSTEM REPOSITORY ==========');
     print('EFFECTIVE MODE: $efectiveMode');
