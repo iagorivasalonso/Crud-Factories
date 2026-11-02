@@ -160,7 +160,21 @@ class _appDesktopState extends State<appDesktop> {
                                   }
                                   else
                                   {
-                                    noCategory(context, S.of(context).companies);
+                                    final result = await noCategory(
+                                        context,
+                                        S.of(context).companies
+                                    );
+
+                                    if(result== 1)
+                                    {
+                                      context.read<NavigationProvider>()
+                                          .go(AppView.createFactory);
+                                    }
+                                    else
+                                    {
+                                      context.read<NavigationProvider>()
+                                          .go(AppView.importData);
+                                    }
                                   }
                                 }
                             ),
@@ -253,7 +267,7 @@ class _appDesktopState extends State<appDesktop> {
                                    if(result== 1)
                                    {
                                      context.read<NavigationProvider>()
-                                         .go(AppView.factories);
+                                         .go(AppView.createFactory);
                                    }
                                    else
                                    {
@@ -287,7 +301,21 @@ class _appDesktopState extends State<appDesktop> {
                                     }
                                     else
                                     {
-                                      noCategory(context, S.of(context).companies);
+                                      final result = await noCategory(
+                                          context,
+                                          S.of(context).companies
+                                      );
+
+                                      if(result== 1)
+                                      {
+                                        context.read<NavigationProvider>()
+                                            .go(AppView.createFactory);
+                                      }
+                                      else
+                                      {
+                                        context.read<NavigationProvider>()
+                                            .go(AppView.importData);
+                                      }
                                     }
 
                                   }
@@ -302,14 +330,23 @@ class _appDesktopState extends State<appDesktop> {
                                     context.read<FilterProvider>().setSector(sector.id);
                                     final factoriesCurrent = context.read<FactoryProvider>().factoriesBySector(sector.id);
 
-                                    if(factoriesCurrent.isNotEmpty)
-                                    {
-                                      context.read<NavigationProvider>()
-                                          .go(AppView.factories);
-                                    }
-                                    else
-                                    {
-                                      error(context, S.of(context).it_does_not_have_companies_in_this_sector);
+                                        if(factoriesCurrent.isNotEmpty)
+                                        {
+                                          context.read<NavigationProvider>()
+                                              .go(AppView.createFactory);
+                                        }
+                                        else
+                                        {
+                                          final result = await noCategory(
+                                            context,
+                                            S.of(context).companies,
+                                          );
+
+                                          if (result == 1) {
+                                            context.read<NavigationProvider>().go(AppView.createFactory);
+                                          } else if (result == 2) {
+                                            context.read<NavigationProvider>().go(AppView.importData);
+                                          }
                                     }
 
                                   }
@@ -332,7 +369,21 @@ class _appDesktopState extends State<appDesktop> {
                         }
                         else
                         {
-                          noCategory(context, S.of(context).mails);
+                          final result = await noCategory(
+                              context,
+                              S.of(context).mails
+                          );
+
+                          if(result== 1)
+                          {
+                            context.read<NavigationProvider>()
+                                .go(AppView.createAddress);
+                          }
+                          else
+                          {
+                            context.read<NavigationProvider>()
+                                .go(AppView.importData);
+                          }
                         }
 
                       }
@@ -354,28 +405,35 @@ class _appDesktopState extends State<appDesktop> {
                              }
                              else
                              {
-                                 if(providerFactories.isEmpty)
-                                 {
-                                   String array = S.of(context).shipments;
-                                   noCategory(context, array);
-                                   return;
-                                 }
-
+                               if (providerFactories.isEmpty) {
                                  final result = await noCategory(
                                    context,
-                                   S.of(context).shipments,
+                                   S.of(context).companies,
                                  );
 
-                                 if(result == 1)
-                                 {
+                                 if (result == 1) {
                                    context.read<NavigationProvider>()
-                                       .go(AppView.shipments);
+                                       .go(AppView.createFactory);
+                                 } else if (result == 2) {
+                                   context.read<NavigationProvider>()
+                                       .go(AppView.importData);
                                  }
-                                 else if(result == 2)
-                                 {
-                                    context.read<NavigationProvider>()
-                                        .go(AppView.importData);
-                                 }
+
+                                 return;
+                               }
+
+                               final result = await noCategory(
+                                 context,
+                                 S.of(context).shipments,
+                               );
+
+                               if (result == 1) {
+                                 context.read<NavigationProvider>()
+                                     .go(AppView.createShipment);
+                               } else if (result == 2) {
+                                 context.read<NavigationProvider>()
+                                     .go(AppView.importData);
+                               }
 
                              }
                       }
