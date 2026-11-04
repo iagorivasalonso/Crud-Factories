@@ -138,9 +138,6 @@ class NotificationProvider extends ChangeNotifier {
     required String? mailAdmin,
     required String? mailUser}) async {
 
-
-    print("MAIL ADMIN: [$mailAdmin]");
-    print("MAIL USUARIO: [$mailUser]");
     if (mailUser == null ||
         mailUser.trim().isEmpty ||
         mailAdmin == null ||
@@ -170,13 +167,6 @@ class NotificationProvider extends ChangeNotifier {
         final adminAcount = mailProvider.mails.where(
             (mail) => mail.mail == mailAdmin
         );
-    print("CUENTAS EN MAIL PROVIDER: ${mailProvider.mails.length}");
-    print("CUENTA ADMIN ENCONTRADA: ${adminAcount.length}");
-    print("MAIL ADMIN SESIÓN: $mailAdmin");
-
-    for (final mail in mailProvider.mails) {
-      print("CUENTA CONFIGURADA: ${mail.mail}");
-    }
 
     mailProvider.selected = adminAcount.first;
 
