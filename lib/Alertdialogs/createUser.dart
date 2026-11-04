@@ -8,7 +8,7 @@ import 'package:crud_factories/Backend/Providers/SessionProvider.dart';
 import 'package:crud_factories/Backend/Providers/notificacionProvider.dart' show NotificationProvider;
 import 'package:crud_factories/Objects/User.dart';
 import 'package:crud_factories/Validators/user.dart' show UserValidator;
-import 'package:crud_factories/Widgets/dropDownButton.dart' show GenericDropdown, LoadingOverlay;
+import 'package:crud_factories/Widgets/dropDownButton.dart' show GenericDropdown;
 import 'package:crud_factories/Widgets/genericCheckbox.dart' show genericCheckbox;
 import 'package:crud_factories/Widgets/headAlertDialog.dart';
 import 'package:crud_factories/Widgets/loadingOverlay.dart' show LoadingOverlay;
@@ -41,7 +41,7 @@ class _createUserState extends State<createUser> {
 
   bool isLoading = false;
 
-  UserRole selectedRol = UserRole.admin;
+  UserRole selectedRol = UserRole.user;
 
   @override
   void initState() {
@@ -83,13 +83,12 @@ class _createUserState extends State<createUser> {
 
   @override
   Widget build(BuildContext context) {
-    final userSelected = context
-        .watch<UserProvider>()
-        .selected;
-    final isEditing = userSelected != null;
+    
+    final editedUser = context.watch<UserProvider>().selected;
+    final isEditing = editedUser != null;
 
-    final sessionUser = context.watch<SessionProvider>().user;
-    final isAdmin = sessionUser?.role == 'admin';
+    final currentSessionUser = context.watch<SessionProvider>().user;
+    final isAdmin = currentSessionUser?.role == 'admin';
 
     final title = isEditing
         ? S
@@ -100,20 +99,12 @@ class _createUserState extends State<createUser> {
         .new_user;
 
     final action = isEditing
-        ? S
-        .of(context)
-        .update
-        : S
-        .of(context)
-        .create;
+        ? S.of(context).update
+        : S.of(context).create;
 
     final action2 = isEditing
-        ? S
-        .of(context)
-        .undo
-        : S
-        .of(context)
-        .reboot;
+        ? S.of(context).undo
+        : S.of(context).reboot;
 
     return Dialog(
       shape: RoundedRectangleBorder(
@@ -273,7 +264,7 @@ class _createUserState extends State<createUser> {
                                 nameAction: action,
                                 function: () => _onSaveUser(
                                      context,
-                                    userSelected,
+                                    editedUser,
                                     controllers,
                                     changePassword,
                                 ),
@@ -284,7 +275,7 @@ class _createUserState extends State<createUser> {
                                 function: () {
                                   setState(() {
                                     _onResetUser(
-                                      userSelected,
+                                      editedUser,
                                       controllers,
                                     );
                                   });
@@ -327,41 +318,48 @@ class _createUserState extends State<createUser> {
         : UserRole.user;
   }
 
-  Future<void> _onSaveUser(BuildContext context,
-      User? userSelected,
-      UserController controllers, bool changePassword,) async {
-    final isEditing = userSelected != null;
+  Future<void> _onSaveUser(
+      BuildContext context,
+      User? editedUser,
+      UserController controllers,
+      bool changePassword,
+      ) async {
+    final isEditing = editedUser != null;
     final userProvider = context.read<UserProvider>();
 
-    final sessionUser = context
-        .read<SessionProvider>()
-        .user;
+    final currentSessionUser = context.read<SessionProvider>().user;
 
-    // Si estamos editando, necesitamos sesión.
-    if (isEditing && sessionUser == null) {
+    if (isEditing && currentSessionUser == null) {
       return;
     }
 
-    // Saber si el usuario actual es admin.
-    bool isAdmin = false;
-    User? currentUser;
-
-
-    if (sessionUser != null) {
-      final currentUser = userProvider.users.cast<User?>().firstWhere(
-            (u) => u?.id == sessionUser.id,
-        orElse: () => null,
-      );
-
-      isAdmin = currentUser?.role == 'admin';
-    }
+    final previousRole  = editedUser?.role;
+    final isAdmin = currentSessionUser?.role == 'admin';
+    
       // Solo un admin puede crear/asignar un usuario admin.
       if (selectedRol == UserRole.admin && !isAdmin) {
+
+        final errorMsg = UserValidator.validateAdminRequest(
+          context,
+          controllers,
+          editedUser,
+          userProvider.users,
+        );
+
+        if (errorMsg != null) {
+          await error(context, errorMsg);
+          return;
+        }
+
         final notificationProvider = context.read<NotificationProvider>();
 
-        String msg = S.of(context).requestAdminConfirm;
 
-        final accepted = await warning(context, msg);
+        final accepted = await warning(
+            context,
+            S.of(context).requestAdminConfirm,
+        );
+
+        if (!mounted) return;
 
         if (accepted) {
 
@@ -374,8 +372,13 @@ class _createUserState extends State<createUser> {
               mail: controllers.mail?.text.trim() ?? '',
             );
 
+            if(!mounted) return;
+
             if (result.success) {
               await confirm(context, S.of(context).requestAdminSent);
+
+
+              if (!mounted) return;
             }
           } finally {
             if (mounted) {
@@ -398,7 +401,7 @@ class _createUserState extends State<createUser> {
     final errorMsg = UserValidator.validate(
       context,
       controllers,
-      userSelected,
+      editedUser,
       userProvider.users,
       changePassword,
     );
@@ -409,7 +412,7 @@ class _createUserState extends State<createUser> {
     }
 
     final user = User(
-      id: isEditing ? userSelected!.id : "",
+      id: isEditing ? editedUser!.id : "",
       username: controllers.username.text,
       mail: controllers.mail?.text.trim(),
       role: selectedRol == UserRole.admin
@@ -418,43 +421,61 @@ class _createUserState extends State<createUser> {
       active: userActive,
     );
 
+    final isPromotedToAdmin =
+        previousRole == 'user' && user.role == 'admin';
+
     // CREAR
     if (!isEditing) {
-      final result = await userProvider.create(
-        user,
-        controllers.password.text,
-      );
 
-      switch (result) {
-        case CreateResult.success:
-          userProvider.select(null);
 
-          await confirm(
-            context,
-            S
-                .of(context)
-                .user_created_successfully,
-          );
-          break;
+      setState(() => isLoading = true);
 
-        case CreateResult.alreadyExists:
-          await error(
-            context,
-            S
-                .of(context)
-                .user_already_exists,
-          );
-          break;
+      try{
+        final result = await userProvider.create(
+          user,
+          controllers.password.text,
+        );
 
-        case CreateResult.invalidData:
-          await error(
-            context,
-            S
-                .of(context)
-                .invalid_data,
-          );
-          break;
+        if (!mounted) return;
+        switch (result) {
+          case CreateResult.success:
+            userProvider.select(null);
+
+            await confirm(
+              context,
+              S
+                  .of(context)
+                  .user_created_successfully,
+            );
+
+            if (!mounted) return;
+            Navigator.of(context).pop(false);
+            break;
+
+          case CreateResult.alreadyExists:
+            await error(
+              context,
+              S
+                  .of(context)
+                  .user_already_exists,
+            );
+            break;
+
+          case CreateResult.invalidData:
+            await error(
+              context,
+              S
+                  .of(context)
+                  .invalid_data,
+            );
+            break;
+        }
+      }finally {
+        if (mounted) {
+          setState(() => isLoading = false);
+        }
       }
+
 
       return;
     }
@@ -464,69 +485,71 @@ class _createUserState extends State<createUser> {
         ? controllers.password.text
         : "";
 
-    final result = await userProvider.update(
-      user,
-      newPass,
-    );
+    setState(() => isLoading = true);
 
-    switch (result) {
-      case EditResult.success:
-        await confirm(
-          context,
-          S
-              .of(context)
-              .user_updated_successfully,
-        );
+    try {
+      final result = await userProvider.update(user, newPass);
 
-        if (context.mounted) {
+      if (!mounted) return;
+
+      switch (result) {
+        case EditResult.success:
+
+        // NOTIFICAR ASCENSO A ADMINISTRADOR
+          if (isPromotedToAdmin) {
+            final notificationProvider = context.read<NotificationProvider>();
+
+            final mailResult = await notificationProvider.notifyAdminPromotion(
+              context: context,
+              mailAdmin: currentSessionUser!.mail,
+              mailUser: user.mail,
+            );
+
+            if (!mounted) return;
+
+            if (!mailResult.success) {
+              for (final failure in mailResult.failed) {
+                print("CORREO: ${failure.mail}");
+                print("ERROR: ${failure.error}");
+              }
+            }
+          }
+
+          await confirm(
+            context,
+            S.of(context).user_updated_successfully,
+          );
+
+          if (!mounted) return;
           Navigator.of(context).pop(false);
-        }
+          break;
 
-        break;
+        case EditResult.alreadyExists:
+          await error(context, S.of(context).user_already_exists);
+          break;
 
+        case EditResult.notFound:
+          await error(context, S.of(context).user_not_found);
+          break;
 
+        case EditResult.invalidData:
+          await error(context, S.of(context).invalid_data);
+          break;
 
-      case EditResult.alreadyExists:
-        await error(
-          context,
-          S
-              .of(context)
-              .user_already_exists,
-        );
-        break;
-
-      case EditResult.notFound:
-        await error(
-          context,
-          S
-              .of(context)
-              .user_not_found,
-        );
-        break;
-
-      case EditResult.invalidData:
-        await error(
-          context,
-          S
-              .of(context)
-              .invalid_data,
-        );
-        break;
-
-      case EditResult.error:
-        await error(
-          context,
-          S
-              .of(context)
-              .error_updating_user,
-        );
-        break;
+        case EditResult.error:
+          await error(context, S.of(context).error_updating_user);
+          break;
+      }
+    } finally {
+      if (mounted) {
+        setState(() => isLoading = false);
+      }
     }
   }
 
-  void _onResetUser(User? userSelected, UserController controllers) {
-    if (userSelected != null) {
-      loadSelectedUser(userSelected);
+  void _onResetUser(User? editedUser, UserController controllers) {
+    if (editedUser != null) {
+      loadSelectedUser(editedUser);
     }
     else {
       controllers.username.clear();
@@ -536,7 +559,7 @@ class _createUserState extends State<createUser> {
       controllers.role.clear();
       controllers.active.clear();
 
-      selectedRol = UserRole.admin;
+      selectedRol = UserRole.user;
       showPassword1 = false;
       showPassword2 = false;
       userActive = true;

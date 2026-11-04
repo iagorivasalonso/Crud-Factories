@@ -6,6 +6,7 @@ import 'package:crud_factories/Objects/MailMessage.dart';
 import 'package:crud_factories/Objects/User.dart' show User;
 import 'package:crud_factories/generated/l10n.dart' show S;
 import 'package:fluent_ui/fluent_ui.dart';
+import 'package:provider/provider.dart';
 
 
 
@@ -131,5 +132,58 @@ class NotificationProvider extends ChangeNotifier {
 
      return result;
    }
+
+  Future<MailResult> notifyAdminPromotion( {
+    required BuildContext context,
+    required String? mailAdmin,
+    required String? mailUser}) async {
+
+
+    print("MAIL ADMIN: [$mailAdmin]");
+    print("MAIL USUARIO: [$mailUser]");
+    if (mailUser == null ||
+        mailUser.trim().isEmpty ||
+        mailAdmin == null ||
+        mailAdmin.trim().isEmpty) {
+      return MailResult(
+        success: false,
+        sent: [],
+        failed: [
+          MailFailure(
+            mail: '',
+            error: S
+                .of(context)
+                .no_mail_account_selected,
+          ),
+        ],
+      );
+    }
+
+     final mailMessage = MailMessage(
+         recipients: [mailUser!],
+         subject: "respuesta a solicitud admin",
+         message: "le ham aprovado la solicitud de admin"
+     );
+
+    final mailProvider = context.read<MailProvider>();
+
+        final adminAcount = mailProvider.mails.where(
+            (mail) => mail.mail == mailAdmin
+        );
+    print("CUENTAS EN MAIL PROVIDER: ${mailProvider.mails.length}");
+    print("CUENTA ADMIN ENCONTRADA: ${adminAcount.length}");
+    print("MAIL ADMIN SESIÓN: $mailAdmin");
+
+    for (final mail in mailProvider.mails) {
+      print("CUENTA CONFIGURADA: ${mail.mail}");
+    }
+
+    mailProvider.selected = adminAcount.first;
+
+    return await mailProvider.send(
+      mailMessage,
+      noAccountMessage: S.of(context).no_mail_account_selected,
+    );
+  }
 
 }
