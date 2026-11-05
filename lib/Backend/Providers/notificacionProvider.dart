@@ -176,4 +176,46 @@ class NotificationProvider extends ChangeNotifier {
     );
   }
 
+  Future<MailResult> notifyUserStatus({required BuildContext context, String? mailAdmin, String? mailUser, required bool active}) async {
+
+    if (mailUser == null ||
+        mailUser.trim().isEmpty ||
+        mailAdmin == null ||
+        mailAdmin.trim().isEmpty) {
+         return MailResult(
+        success: false,
+        sent: [],
+        failed: [
+          MailFailure(
+            mail: '',
+            error: S
+                .of(context)
+                .no_mail_account_selected,
+          ),
+        ],
+      );
+    }
+
+    final mailMessage = MailMessage(
+        recipients: [mailUser!],
+        subject: "Estado actual de cuenta",
+        message: active == true
+                  ? "su cuenta ha sido activada"
+                  : "su cuenta ha sido desactivada"
+    );
+
+    final mailProvider = context.read<MailProvider>();
+
+    final adminAcount = mailProvider.mails.where(
+            (mail) => mail.mail == mailAdmin
+    );
+
+    mailProvider.selected = adminAcount.first;
+
+    return await mailProvider.send(
+      mailMessage,
+      noAccountMessage: S.of(context).no_mail_account_selected,
+    );
+  }
+
 }
