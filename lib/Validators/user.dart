@@ -66,4 +66,38 @@ class UserValidator {
     return null;
   }
 
+  static String? validateAdminRequest(
+      BuildContext context,
+      UserController controllers,
+      User? userSelected,
+      List<User> users,
+      ) {
+    final username = controllers.username.text;
+    final mail = controllers.mail!.text.trim();
+
+    // Nombre obligatorio
+    if (username.isEmpty) {
+      return S.of(context).name_required;
+    }
+
+    // Correo obligatorio para solicitar administrador
+    if (mail.isEmpty) {
+      return S.of(context).mail_required;
+    }
+
+    // Formato del correo
+    final mailError = ValidatorCamps.mailValidate(mail, context);
+    if (mailError != null) return mailError;
+
+    // Nombre único
+    final allUsers = users.map((e) => e.username).toList();
+    final old = userSelected?.username ?? '';
+
+    return ValidatorCamps.primaryKeyValidate(
+      username,
+      allUsers,
+      old,
+      context,
+    );
+  }
 }

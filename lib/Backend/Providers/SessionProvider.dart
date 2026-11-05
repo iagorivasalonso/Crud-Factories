@@ -48,7 +48,10 @@ class SessionProvider extends ChangeNotifier {
        print('Login correcto');
        print('User: ${result.user}');
        print('Session: ${result.session.id}');
-
+       print('Usuario: ${result.user}');
+       print('Session: ${result.session.id}');
+       print('Mail: ${result.user.mail}');
+       print('Role: ${result.user.role}');
        _user = result.user;
        _session = result.session;
 
@@ -161,6 +164,8 @@ class SessionProvider extends ChangeNotifier {
        print('Sesión restaurada correctamente');
        print('Usuario: ${result.user}');
        print('Session: ${result.session.id}');
+       print('Mail: ${result.user.mail}');
+       print('Role: ${result.user.role}');
 
        _user = result.user;
        _session = result.session;
