@@ -293,7 +293,8 @@ Future<EditResult> update(Mail update) async {
       {Mail? account,required String noAccountMessage}
       ) async {
 
-  if (selected == null) {
+    final mailAccount = account ?? selected;
+    if (mailAccount == null)  {
     return MailResult(
       success: false,
       sent: const [],
@@ -306,7 +307,7 @@ Future<EditResult> update(Mail update) async {
     );
   }
 
-  return mailService.send(selected!, message);
+  return mailService.send(mailAccount, message);
 }
 
 
