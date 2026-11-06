@@ -6,7 +6,7 @@ class PasswordService {
 
     return BCrypt.hashpw(
       password,
-      BCrypt.gensalt(),
+      BCrypt.gensalt(logRounds: 10),
     );
   }
 
