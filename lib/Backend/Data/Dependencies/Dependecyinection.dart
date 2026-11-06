@@ -1,10 +1,3 @@
-/*
-runApp(
-MultiProvider(
-providers: DependencyInjection.providers,
-child: const MyApp(),
-),
-);*/
 import 'package:crud_factories/Backend/Feature/Connection/Controller/ConnectionController.dart' show ConnectionController;
 import 'package:crud_factories/Backend/Feature/Connection/Datasource/CsvConnectionDataSource.dart' show CsvConnectionDataSource;
 import 'package:crud_factories/Backend/Feature/Connection/ExecuteQuery/IexecuteQuery.dart' show Iexecutequery;
