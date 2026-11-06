@@ -21,7 +21,7 @@ class SqlUserDataSource implements IUserDataSource {
     return result.map((row) => User(
         id: row['id']?.toString() ?? '',
         username: row['username']?.toString() ?? '',
-        mail: row['email']?.toString(),
+        mail: row['mail']?.toString(),
         role: row['role']?.toString() ?? '',
         active: row['active'] == true || row['active'] == 1,
     )).toList();
