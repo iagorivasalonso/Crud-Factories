@@ -133,10 +133,8 @@ class ApiSessionService implements ISessionservice{
     }
 
     final data = jsonDecode(res.body);
-    print('========== RESTORE API ==========');
-    print('RESPUESTA COMPLETA: $data');
-    print('USER JSON: ${data['user']}');
-    print('MAIL JSON: ${data['user']['mail']}');
+
+
     if (data['ok'] != true) {
       return null;
     }
