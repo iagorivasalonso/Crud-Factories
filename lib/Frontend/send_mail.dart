@@ -8,7 +8,6 @@ import 'package:crud_factories/Backend/Providers/EditStateProvider.dart' show Ed
 import 'package:crud_factories/Backend/Providers/FactoryProvider.dart';
 import 'package:crud_factories/Backend/Providers/LineSendProvider.dart' show LineSendProvider;
 import 'package:crud_factories/Backend/Providers/MailProvider.dart' show MailProvider;
-import 'package:crud_factories/Platform/appDesktop.dart' show LoadingOverlay;
 import 'package:crud_factories/Validators/sendMail.dart' show SendMailValidator;
 import 'package:crud_factories/helpers/localization_helper.dart';
 import 'package:flutter/material.dart';
