@@ -20,7 +20,6 @@ import 'package:provider/provider.dart';
 
 import '../Backend/Feature/Mail/Service/mailConfigurationService.dart';
 import '../Backend/core/controlsMessagesError/errors.dart';
-import '../Platform/appDesktop.dart';
 import '../Widgets/loadingOverlay.dart';
 import '../Widgets/materialButton.dart';
 
