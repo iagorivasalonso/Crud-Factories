@@ -215,8 +215,6 @@ class UserProvider  extends ChangeNotifier {
       return DeleteResult.notFound;
     }
 
-    final removed = _users[index];
-
     try {
       await _repo.delete(id);
 
