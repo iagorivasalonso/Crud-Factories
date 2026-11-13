@@ -1,4 +1,5 @@
 import 'package:crud_factories/Backend/Feature/Connection/Controller/ConnectionController.dart' show DisconnectResponse;
+import 'package:crud_factories/Backend/Feature/Connection/ExecuteQuery/ITransacionalExecuteQuery.dart';
 import 'package:crud_factories/Backend/Feature/Connection/ExecuteQuery/IexecuteQuery.dart' show Iexecutequery;
 import 'package:crud_factories/Backend/Feature/Connection/ExecuteQuery/sqlExecuteQuery.dart';
 import 'package:crud_factories/Backend/Feature/Connection/Sesion/IConnection_sesion_service.dart';
@@ -13,6 +14,23 @@ class SqlConnectionSessionService implements IConnectionSesionService {
   Iexecutequery? _executeQuery;
 
   Conection? _active;
+
+  @override
+  ITransactionalExecuteQuery get transactionalExecuteQuery {
+       final q = _executeQuery;
+
+       if(q==null)
+       {
+          throw Exception('Session not connected');
+       }
+
+       if(q is! ITransactionalExecuteQuery)
+       {
+           throw Exception("Transactional queries no supported");
+       }
+
+       return q;
+  }
 
   @override
   Future<void> connect(Conection c) async {

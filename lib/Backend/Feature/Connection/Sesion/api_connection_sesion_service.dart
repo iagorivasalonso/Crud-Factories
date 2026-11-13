@@ -1,5 +1,6 @@
 
 import 'package:crud_factories/Backend/Feature/Connection/Controller/ConnectionController.dart' show DisconnectResponse;
+import 'package:crud_factories/Backend/Feature/Connection/ExecuteQuery/ITransacionalExecuteQuery.dart';
 import 'package:crud_factories/Backend/Feature/Connection/ExecuteQuery/IexecuteQuery.dart' show Iexecutequery;
 import 'package:crud_factories/Backend/Feature/Connection/ExecuteQuery/apiExecuteQuery.dart' show ApiExecuteQuery;
 import 'package:crud_factories/Backend/Feature/Connection/Sesion/IConnection_sesion_service.dart' show IConnectionSesionService;
@@ -49,4 +50,12 @@ class apiConnectionSesionService implements IConnectionSesionService{
       message: response.message,
     );
   }
+
+  @override
+  ITransactionalExecuteQuery get transactionalExecuteQuery {
+    throw UnimplementedError(
+        'Las transaciones se gestionan desde la api'
+    );
+  }
+
 }
