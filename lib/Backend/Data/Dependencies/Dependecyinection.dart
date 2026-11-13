@@ -7,6 +7,11 @@ import 'package:crud_factories/Backend/Feature/Connection/Sesion/IConnection_ses
 import 'package:crud_factories/Backend/Feature/Connection/Sesion/api_connection_sesion_service.dart' show apiConnectionSesionService;
 import 'package:crud_factories/Backend/Feature/Connection/Sesion/sql_connection_sesion_service.dart' show SqlConnectionSessionService;
 import 'package:crud_factories/Backend/Feature/Mail/Service/NativeMailService.dart' show NativeMailService;
+import 'package:crud_factories/Backend/Feature/PasswordReset/DataSource/ApiPasswordResetDataSource.dart';
+import 'package:crud_factories/Backend/Feature/PasswordReset/DataSource/SqlPasswordResetDataSource.dart';
+import 'package:crud_factories/Backend/Feature/PasswordReset/Service/ApiPasswordResetService.dart';
+import 'package:crud_factories/Backend/Feature/PasswordReset/Service/IPasswordResetService.dart';
+import 'package:crud_factories/Backend/Feature/PasswordReset/Service/SqlPasswordResetService.dart';
 import 'package:crud_factories/Backend/Feature/Session/ApiSessionService.dart';
 import 'package:crud_factories/Backend/Feature/Session/ISessionService.dart' show ISessionservice;
 import 'package:crud_factories/Backend/Feature/Session/SqlSessionService.dart' show SqlSessionService;
@@ -19,6 +24,7 @@ import 'package:crud_factories/Backend/Providers/ImportProvaider.dart';
 import 'package:crud_factories/Backend/Providers/LineSendProvider.dart';
 import 'package:crud_factories/Backend/Providers/MailProvider.dart' show MailProvider;
 import 'package:crud_factories/Backend/Providers/NavigationProvider.dart';
+import 'package:crud_factories/Backend/Global/navigatorKey.dart';
 import 'package:crud_factories/Backend/Providers/App_provaider.dart' show AppProvider;
 import 'package:crud_factories/Backend/Providers/RoutesProvider.dart' show RoutesProvider;
 import 'package:crud_factories/Backend/Providers/SectorProvider.dart' show SectorProvider;
@@ -28,6 +34,7 @@ import 'package:crud_factories/Backend/Providers/filterProvider.dart' show Filte
 import 'package:crud_factories/Backend/Providers/notificacionProvider.dart' show NotificationProvider;
 import 'package:crud_factories/Backend/Repositories/connectionRepository.dart' show ConnectionRepository;
 import 'package:crud_factories/Backend/Repositories/routesRepository.dart' show routerRepository;
+import 'package:crud_factories/generated/l10n.dart' show S;
 import 'package:provider/provider.dart';
 import 'package:provider/single_child_widget.dart';
 import '../../Feature/Mail/Service/ApiMailService.dart';
@@ -252,8 +259,51 @@ class DependencyInjection {
              lineProvider: context.read<LineSendProvider>(),
              mailProvider: context.read<MailProvider>(),
          )
-     )
+     ),
 
+
+                                       // =========================
+                                       // PASSWORD RESET
+                                       // =========================
+
+     Provider<ApiPasswordResetDataSource>(
+       create: (context) => ApiPasswordResetDataSource(
+         connectionController: context.read<ConnectionController>(),
+       ),
+     ),
+
+     Provider<IPasswordResetService>(
+       create: (context) {
+         if (isApi) {
+           return ApiPasswordResetService(
+             dataSource: context.read<ApiPasswordResetDataSource>(),
+           );
+         }
+
+         final session = context.read<IConnectionSesionService>();
+
+         return SqlPasswordResetService(
+           dataSource: SqlPasswordResetDataSource(
+             executeQuery: session.executeQuery,
+             transactionalExecuteQuery: session.transactionalExecuteQuery,
+           ),
+           mailProvider: context.read<MailProvider>(),
+           messageBuilder: (username, token) {
+             final context = navigatorKey.currentContext;
+
+             if (context == null) {
+               throw Exception('No hay contexto disponible para traducir');
+             }
+
+             return S.of(context).password_recovery_request_message(
+               username,
+               token,
+             );
+           },
+           subject: 'Recuperación de contraseña',
+         );
+       },
+     ),
 
    ];
 
