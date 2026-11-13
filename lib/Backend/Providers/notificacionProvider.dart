@@ -114,7 +114,7 @@ class NotificationProvider extends ChangeNotifier {
 
      final mailMessage = MailMessage(
        recipients: recipients,
-       subject: S.of(context).password_recovery_request_subject,
+       subject: S.of(context).recovery_code,
        message: S.of(context).password_recovery_request_message(
          user.username,
          user.mail ?? '',
@@ -122,7 +122,7 @@ class NotificationProvider extends ChangeNotifier {
        attachments: [],
      );
 
-     mailProvider.select(systemMails.first);
+
 
      final result = await mailProvider.send(
        mailMessage,
@@ -158,8 +158,8 @@ class NotificationProvider extends ChangeNotifier {
 
      final mailMessage = MailMessage(
          recipients: [mailUser!],
-         subject: "respuesta a solicitud admin",
-         message: "le ham aprovado la solicitud de admin"
+         subject: S.of(context).admin_request_response,
+         message: S.of(context).admin_request_approved
      );
 
     final mailProvider = context.read<MailProvider>();
@@ -198,10 +198,10 @@ class NotificationProvider extends ChangeNotifier {
 
     final mailMessage = MailMessage(
         recipients: [mailUser!],
-        subject: "Estado actual de cuenta",
+        subject: S.of(context).account_current_status,
         message: active == true
-                  ? "su cuenta ha sido activada"
-                  : "su cuenta ha sido desactivada"
+                  ? S.of(context).account_activated
+                  : S.of(context).account_deactivated
     );
 
     final mailProvider = context.read<MailProvider>();
