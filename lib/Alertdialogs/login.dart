@@ -26,7 +26,7 @@ Future<void> LoginPage (BuildContext context) async {
   bool showPassword = false;
 
 
-  await showDialog(
+  await showDialog<bool>(
     context: context,
     builder: (context) {
       return StatefulBuilder(
@@ -149,8 +149,10 @@ Future<void> login_in(BuildContext context, TextEditingController usernameContro
   }
 
 
-Future<void> forgot_password(BuildContext context, TextEditingController usernameController) async {
-
+Future<bool?> forgot_password(
+    BuildContext context,
+    TextEditingController usernameController,
+    ) async {
   final username = usernameController.text.trim();
 
   final userProvider = context.read<UserProvider>();
@@ -162,14 +164,13 @@ Future<void> forgot_password(BuildContext context, TextEditingController usernam
       context,
       S.of(context).user_not_found,
     );
-    return;
+    return false;
   }
 
-  Navigator.of(context).pop();
-
-  await forgotPassword(
+  final backToLogin = await forgotPassword(
     context,
     username,
   );
-  }
 
+  return backToLogin ?? false;
+}
