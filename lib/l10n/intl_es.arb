@@ -90,6 +90,14 @@
   "inactive": "Inactivos",
   "show_password": "Mostrar contraseña",
   "change_password": "cambiar contraseña",
+  "invalid_recovery_code": "El código de recuperación no es válido",
+  "complete_both_passwords": "Completa ambas contraseñas",
+  "password_reset_success": "Contraseña restablecida correctamente",
+  "recovery_code": "Código de recuperación",
+  "reset_password": "Restablecer contraseña",
+  "verify_code": "Verificar código",
+  "reset": "Restablecer",
+  "verify": "Verificar",
   "login": "Iniciar sesión",
   "logout": "Cerrar sesión",
   "user_management": "Administración de usuarios",
@@ -101,6 +109,11 @@
   "active_user": "usuario activo",
   "new_user": "Nuevo usuario",
   "edit_user": "editar usuario",
+  "account_current_status": "Estado actual de la cuenta",
+  "account_activated": "Su cuenta ha sido activada",
+  "account_deactivated": "Su cuenta ha sido desactivada",
+  "admin_request_response": "Respuesta a su solicitud de administrador",
+  "admin_request_approved": "Se ha aprobado su solicitud para obtener permisos de administrador",
   "usename_required" : "el nombre de usuario es obligatorio",
   "not_authorized" : "no autorizado",
   "user_created_successfully": "usuario creado correctamente",
@@ -110,8 +123,17 @@
   "error_updating_user": "error al actualizar el usuario",
   "admin_request_subject": "Solicitud de administrador",
   "admin_request_message": "El usuario {username} ha solicitado permisos de administrador.\n\nUsuario: {username}\nCorreo: {mail}",
-  "password_recovery_request_subject": "Solicitud de recuperación de contraseña",
-  "password_recovery_request_message": "El usuario {username} ha solicitado recuperar su contraseña.\n\nUsuario: {username}\nCorreo: {mail}",
+  "password_recovery_request_message": "El usuario {username} ha solicitado recuperar su contraseña.\n\nCódigo de recuperación: {token}\n\nEste código caduca en 10 minutos.",
+  "@password_recovery_request_message": {
+    "placeholders": {
+      "username": {
+        "type": "String"
+      },
+      "token": {
+        "type": "String"
+      }
+    }
+  },
   "no_admin_with_mail": "No hay administradores activos con correo disponible",
   "requestAdminConfirm": "Para obtener permisos de administrador es necesario solicitar autorización. ¿Desea enviar la solicitud?",
   "requestAdminSent": "Solicitud de permisos enviada correctamente.",

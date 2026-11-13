@@ -1,6 +1,8 @@
 import 'package:crud_factories/generated/l10n.dart';
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:intl/intl.dart';
+import '../Backend/Global/navigatorKey.dart';
+
 
 class LocalizationHelper {
 
@@ -390,5 +392,21 @@ class LocalizationHelper {
     );
  }
 
+
+  static String passwordRecoveryRequestMessage({
+    required String username,
+    required String token,
+  }) {
+    final context = navigatorKey.currentContext;
+
+    if (context == null) {
+      throw Exception('No hay contexto de localización disponible');
+    }
+
+    return S.of(context).password_recovery_request_message(
+      username,
+      token,
+    );
+  }
 }
 

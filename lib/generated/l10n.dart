@@ -659,6 +659,76 @@ class S {
     );
   }
 
+  /// `El código de recuperación no es válido`
+  String get invalid_recovery_code {
+    return Intl.message(
+      'El código de recuperación no es válido',
+      name: 'invalid_recovery_code',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Completa ambas contraseñas`
+  String get complete_both_passwords {
+    return Intl.message(
+      'Completa ambas contraseñas',
+      name: 'complete_both_passwords',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Contraseña restablecida correctamente`
+  String get password_reset_success {
+    return Intl.message(
+      'Contraseña restablecida correctamente',
+      name: 'password_reset_success',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Código de recuperación`
+  String get recovery_code {
+    return Intl.message(
+      'Código de recuperación',
+      name: 'recovery_code',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Restablecer contraseña`
+  String get reset_password {
+    return Intl.message(
+      'Restablecer contraseña',
+      name: 'reset_password',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Verificar código`
+  String get verify_code {
+    return Intl.message(
+      'Verificar código',
+      name: 'verify_code',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Restablecer`
+  String get reset {
+    return Intl.message('Restablecer', name: 'reset', desc: '', args: []);
+  }
+
+  /// `Verificar`
+  String get verify {
+    return Intl.message('Verificar', name: 'verify', desc: '', args: []);
+  }
+
   /// `Iniciar sesión`
   String get login {
     return Intl.message('Iniciar sesión', name: 'login', desc: '', args: []);
@@ -734,6 +804,56 @@ class S {
     return Intl.message(
       'editar usuario',
       name: 'edit_user',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Estado actual de la cuenta`
+  String get account_current_status {
+    return Intl.message(
+      'Estado actual de la cuenta',
+      name: 'account_current_status',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Su cuenta ha sido activada`
+  String get account_activated {
+    return Intl.message(
+      'Su cuenta ha sido activada',
+      name: 'account_activated',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Su cuenta ha sido desactivada`
+  String get account_deactivated {
+    return Intl.message(
+      'Su cuenta ha sido desactivada',
+      name: 'account_deactivated',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Respuesta a su solicitud de administrador`
+  String get admin_request_response {
+    return Intl.message(
+      'Respuesta a su solicitud de administrador',
+      name: 'admin_request_response',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Se ha aprobado su solicitud para obtener permisos de administrador`
+  String get admin_request_approved {
+    return Intl.message(
+      'Se ha aprobado su solicitud para obtener permisos de administrador',
+      name: 'admin_request_approved',
       desc: '',
       args: [],
     );
@@ -829,23 +949,13 @@ class S {
     );
   }
 
-  /// `Solicitud de recuperación de contraseña`
-  String get password_recovery_request_subject {
+  /// `El usuario {username} ha solicitado recuperar su contraseña.\n\nCódigo de recuperación: {token}\n\nEste código caduca en 10 minutos.`
+  String password_recovery_request_message(String username, String token) {
     return Intl.message(
-      'Solicitud de recuperación de contraseña',
-      name: 'password_recovery_request_subject',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `El usuario {username} ha solicitado recuperar su contraseña.\n\nUsuario: {username}\nCorreo: {mail}`
-  String password_recovery_request_message(Object username, Object mail) {
-    return Intl.message(
-      'El usuario $username ha solicitado recuperar su contraseña.\n\nUsuario: $username\nCorreo: $mail',
+      'El usuario $username ha solicitado recuperar su contraseña.\n\nCódigo de recuperación: $token\n\nEste código caduca en 10 minutos.',
       name: 'password_recovery_request_message',
       desc: '',
-      args: [username, mail],
+      args: [username, token],
     );
   }
 

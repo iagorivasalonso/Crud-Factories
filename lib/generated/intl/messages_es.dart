@@ -23,8 +23,8 @@ class MessageLookup extends MessageLookupByLibrary {
   static String m0(username, mail) =>
       "El usuario ${username} ha solicitado permisos de administrador.\n\nUsuario: ${username}\nCorreo: ${mail}";
 
-  static String m1(username, mail) =>
-      "El usuario ${username} ha solicitado recuperar su contraseña.\n\nUsuario: ${username}\nCorreo: ${mail}";
+  static String m1(username, token) =>
+      "El usuario ${username} ha solicitado recuperar su contraseña.\n\nCódigo de recuperación: ${token}\n\nEste código caduca en 10 minutos.";
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
@@ -77,6 +77,15 @@ class MessageLookup extends MessageLookupByLibrary {
       "Debes seleccionar una lista correcta",
     ),
     "a_recipient": MessageLookupByLibrary.simpleMessage("Un destinatario"),
+    "account_activated": MessageLookupByLibrary.simpleMessage(
+      "Su cuenta ha sido activada",
+    ),
+    "account_current_status": MessageLookupByLibrary.simpleMessage(
+      "Estado actual de la cuenta",
+    ),
+    "account_deactivated": MessageLookupByLibrary.simpleMessage(
+      "Su cuenta ha sido desactivada",
+    ),
     "account_delete_error": MessageLookupByLibrary.simpleMessage(
       "No se pudo eliminar la cuenta.",
     ),
@@ -89,7 +98,13 @@ class MessageLookup extends MessageLookupByLibrary {
     "active": MessageLookupByLibrary.simpleMessage("Activos"),
     "active_user": MessageLookupByLibrary.simpleMessage("usuario activo"),
     "address": MessageLookupByLibrary.simpleMessage("Dirección"),
+    "admin_request_approved": MessageLookupByLibrary.simpleMessage(
+      "Se ha aprobado su solicitud para obtener permisos de administrador",
+    ),
     "admin_request_message": m0,
+    "admin_request_response": MessageLookupByLibrary.simpleMessage(
+      "Respuesta a su solicitud de administrador",
+    ),
     "admin_request_subject": MessageLookupByLibrary.simpleMessage(
       "Solicitud de administrador",
     ),
@@ -149,6 +164,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "company": MessageLookupByLibrary.simpleMessage("Empresa"),
     "company_contacts": MessageLookupByLibrary.simpleMessage(
       "Contactos de la empresa",
+    ),
+    "complete_both_passwords": MessageLookupByLibrary.simpleMessage(
+      "Completa ambas contraseñas",
     ),
     "confirm": MessageLookupByLibrary.simpleMessage("Confirmar"),
     "confirm_delete_sector": MessageLookupByLibrary.simpleMessage(
@@ -352,6 +370,9 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "invalid_data": MessageLookupByLibrary.simpleMessage("Datos no válidos"),
     "invalid_file": MessageLookupByLibrary.simpleMessage("Archivo no válido"),
+    "invalid_recovery_code": MessageLookupByLibrary.simpleMessage(
+      "El código de recuperación no es válido",
+    ),
     "is_connected_to": MessageLookupByLibrary.simpleMessage(
       "Está conectado a ",
     ),
@@ -497,11 +518,11 @@ class MessageLookup extends MessageLookupByLibrary {
     "password_recovery_request_sent": MessageLookupByLibrary.simpleMessage(
       "Solicitud de recuperación de contraseña enviada correctamente",
     ),
-    "password_recovery_request_subject": MessageLookupByLibrary.simpleMessage(
-      "Solicitud de recuperación de contraseña",
-    ),
     "password_required": MessageLookupByLibrary.simpleMessage(
       "La contraseña es obligatoria",
+    ),
+    "password_reset_success": MessageLookupByLibrary.simpleMessage(
+      "Contraseña restablecida correctamente",
     ),
     "passwords_do_not_match": MessageLookupByLibrary.simpleMessage(
       "Las contraseñas no coinciden",
@@ -521,12 +542,19 @@ class MessageLookup extends MessageLookupByLibrary {
     "recipient_required": MessageLookupByLibrary.simpleMessage(
       "Destinatario requerido",
     ),
+    "recovery_code": MessageLookupByLibrary.simpleMessage(
+      "Código de recuperación",
+    ),
     "request": MessageLookupByLibrary.simpleMessage("Solicitar"),
     "requestAdminConfirm": MessageLookupByLibrary.simpleMessage(
       "Para obtener permisos de administrador es necesario solicitar autorización. ¿Desea enviar la solicitud?",
     ),
     "requestAdminSent": MessageLookupByLibrary.simpleMessage(
       "Solicitud de permisos enviada correctamente.",
+    ),
+    "reset": MessageLookupByLibrary.simpleMessage("Restablecer"),
+    "reset_password": MessageLookupByLibrary.simpleMessage(
+      "Restablecer contraseña",
     ),
     "returned": MessageLookupByLibrary.simpleMessage("Devuelto"),
     "role": MessageLookupByLibrary.simpleMessage("Rol"),
@@ -745,6 +773,8 @@ class MessageLookup extends MessageLookupByLibrary {
     "users": MessageLookupByLibrary.simpleMessage("Usuarios"),
     "utilities": MessageLookupByLibrary.simpleMessage("Utilidades"),
     "ver": MessageLookupByLibrary.simpleMessage("Ver"),
+    "verify": MessageLookupByLibrary.simpleMessage("Verificar"),
+    "verify_code": MessageLookupByLibrary.simpleMessage("Verificar código"),
     "verify_password": MessageLookupByLibrary.simpleMessage(
       "Verificar contraseña",
     ),
