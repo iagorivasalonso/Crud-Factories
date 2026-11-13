@@ -47,6 +47,9 @@ class ApiPasswordResetDataSource implements IApiPasswordResetDataSource {
   Future<Map<String, dynamic>> _post(
       String endpoint,
       Map<String, dynamic> data,
+      {
+        Duration timeout = const Duration(seconds: 20),
+      }
       ) async {
 
     final url = '$baseUrl$endpoint';
@@ -69,7 +72,7 @@ class ApiPasswordResetDataSource implements IApiPasswordResetDataSource {
           'Content-Type': 'application/json',
         },
         body: jsonEncode(body),
-      ).timeout(const Duration(seconds: 20));
+      ).timeout(timeout);
 
     } on TimeoutException {
       print('TIMEOUT: NODE NO HA RESPONDIDO');
@@ -123,7 +126,9 @@ class ApiPasswordResetDataSource implements IApiPasswordResetDataSource {
     await _post('/session/password/request', {
       'username': username,
       'mail': mail,
-    });
+    },
+      timeout: const Duration(seconds: 60),
+    );
   }
 
   // =========================
