@@ -2,6 +2,7 @@ import 'package:crud_factories/Alertdialogs/noCategory.dart' show noCategory;
 import 'package:crud_factories/Backend/core/controlsMessagesError/errors.dart' show DeleteResult;
 import 'package:crud_factories/Backend/Providers/MailProvider.dart';
 import 'package:crud_factories/Backend/Providers/NavigationProvider.dart' show NavigationProvider, AppView;
+import 'package:crud_factories/Frontend/Menu/MenuActionsResults.dart' show AppView;
 import 'package:crud_factories/Frontend/mail.dart';
 import 'package:crud_factories/Widgets/defaultCard.dart';
 import 'package:crud_factories/generated/l10n.dart';

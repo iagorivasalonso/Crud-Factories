@@ -4,6 +4,7 @@ import 'package:crud_factories/Backend/Providers/EmployeeProvider.dart' show Emp
 import 'package:crud_factories/Backend/Providers/FactoryProvider.dart';
 import 'package:crud_factories/Backend/Providers/NavigationProvider.dart';
 import 'package:crud_factories/Backend/Providers/filterProvider.dart' show FilterProvider;
+import 'package:crud_factories/Frontend/Menu/MenuActionsResults.dart' show AppView;
 import 'package:crud_factories/Frontend/factory.dart' show FactoryFromPage;
 import 'package:crud_factories/Objects/Factory.dart';
 import 'package:crud_factories/generated/l10n.dart' show S;
