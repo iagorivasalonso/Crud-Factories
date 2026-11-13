@@ -201,7 +201,12 @@ Future<CreateResult> create (Mail mail) async {
     }
 
    final idNew = mails.isNotEmpty
-         ? createId(mails.last.id)
+         ? createId(
+          mails
+         .map((m) => int.parse(m.id))
+         .reduce((a, b) => a > b ? a : b)
+         .toString(),
+   )
          : "1";
 
     final newMail = Mail(

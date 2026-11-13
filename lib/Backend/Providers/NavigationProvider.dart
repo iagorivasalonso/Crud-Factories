@@ -1,28 +1,11 @@
 
 import 'package:crud_factories/Backend/Providers/EditStateProvider.dart' show EditStateProvider;
+import 'package:crud_factories/Frontend/Menu/MenuActionsResults.dart' show AppView;
 import 'package:crud_factories/Functions/changesNoSave.dart' show changesNoSave;
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:http/http.dart';
 import 'package:provider/provider.dart';
 
-enum AppView {
-  home,
-
-  createFactory,
-  createAddress,
-  createShipment,
-
-  importData,
-
-  factories,
-  mails,
-  shipments,
-
-  sendMail,
-  connections,
-
-  adminUsers
-}
 
 class NavigationProvider extends ChangeNotifier {
   AppView _current = AppView.home;

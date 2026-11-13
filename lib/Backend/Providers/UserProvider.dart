@@ -141,7 +141,12 @@ class UserProvider  extends ChangeNotifier {
     }
 
     final idNew = users.isNotEmpty
-        ? createId(users.last.id)
+        ? createId(
+      users
+          .map((u) => int.parse(u.id))
+          .reduce((a, b) => a > b ? a : b)
+          .toString(),
+    )
         : "1";
 
    final newUser = User(

@@ -173,8 +173,15 @@ class SectorProvider extends ChangeNotifier {
     }
 
     final idNew = sectors.isNotEmpty
-        ? createId(sectors.last.id)
+        ? createId(
+      sectors
+          .map((s) => int.parse(s.id))
+          .reduce((a, b) => a > b ? a : b)
+          .toString(),
+    )
         : "1";
+
+
 
     final newSector = Sector(
         id: idNew,

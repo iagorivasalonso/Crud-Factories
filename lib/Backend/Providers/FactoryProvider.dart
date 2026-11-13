@@ -123,8 +123,12 @@ class FactoryProvider extends ChangeNotifier {
   //   SET FACTORIES BY SECTOR
   // ==============================
 
-  List<Factory> factoriesBySector(String sectorId) {
-    if (sectorId == "0") return _factories;
+  List<Factory> factoriesBySector(String? sectorId) {
+
+    if (sectorId == null || sectorId == "0") {
+      return _factories;
+    }
+
 
     final cleanSectorId = sectorId.trim();
 
