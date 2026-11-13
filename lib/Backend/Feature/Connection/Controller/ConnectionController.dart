@@ -216,7 +216,12 @@ print(e);
           }
 
           final idNew = provider.connections.isNotEmpty
-              ? createId(provider.connections.last.id)
+              ? createId(
+            provider.connections
+                .map((c) => int.parse(c.id))
+                .reduce((a, b) => a > b ? a : b)
+                .toString(),
+          )
               : "1";
           conection.id = idNew; //asignamos el id
 
