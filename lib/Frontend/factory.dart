@@ -123,10 +123,6 @@ class _FactoryFromPageState extends State<FactoryFromPage> {
 
 
     final isEditing = factorySelected != null;
-    final Sector newSectorOption = Sector(
-      id: "-",
-      name: S.of(context).new_male,
-    );
 
 
 
@@ -165,294 +161,380 @@ class _FactoryFromPageState extends State<FactoryFromPage> {
     ];
 
     return isNotMobile()
-       ? Scaffold(
-      body: Scrollbar(
-        controller: verticalScroll,
-        thumbVisibility: true,
-        child: Scrollbar(
-          controller: horizontalScroll,
-          thumbVisibility: true,
-          notificationPredicate: (notification) =>
-          notification.metrics.axis == Axis.horizontal,
-          child: SingleChildScrollView(
-            controller: verticalScroll,
-            scrollDirection: Axis.vertical,
-            child: SingleChildScrollView(
-              controller: horizontalScroll,
-              scrollDirection: Axis.horizontal,
-              child: Padding(
-                padding: const EdgeInsets.only(left: 30.0, top: 30.0),
-                child: Container(
-                  constraints: BoxConstraints(
-                    minWidth: MediaQuery.of(context).size.width,
-                    minHeight: MediaQuery.of(context).size.height,
+        ? Scaffold(
+          body: LayoutBuilder(
+            builder: (context, constraints) {
+              const contentWidth = 886.0;
+
+              final availableWidth = constraints.maxWidth > contentWidth
+                  ? constraints.maxWidth
+                  : contentWidth;
+
+              return ScrollbarTheme(
+                data: ScrollbarThemeData(
+                  thumbColor: WidgetStatePropertyAll(
+                    Colors.grey.shade500,
                   ),
-                  child: Align(
-                    alignment: Alignment.topLeft,
-                    child: SizedBox(
-                      width: 856,
-                      child: Column(
-                        children: [
-                          headView(
-                              title: title1
-                          ),
-
-                          defaultTextfield(
-                            nameCamp: S.of(context).name,
-                            controllerCamp: controllers.name,
-                            campOld: factorySelected?.name ?? '',
-                            context: context,
-                          ),
-
-                          Padding(
-                            padding: const EdgeInsets.only(top: 20.0, bottom: 30.0),
-                            child: layoutVariant(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              items: [
-
-                                Flexible(
-                                  child: SizedBox(
-                                    width: 600,
-                                    child: textfieldCalendar(
-                                      context: context,
-                                      nameCamp: S.of(context).discharge_date,
-                                      campOld: factorySelected?.highDate ?? '',
-                                      controllerCamp: controllers.highDate,
-                                    ),
-                                  ),
-                                ),
-                                SizedBox(width: 100),
-                                Flexible(
-                                  child: GenericDropdown<Sector>(
-                                    items: [
-                                      if (!isEditing)
-                                      newSectorOption,
-                                      ...context.watch<SectorProvider>().sectors
-                                    ],
-                                    camp:S.of(context).sector,
-                                    selectedItem: selectedSector,
-                                    hint:  S.of(context).select,
-                                    itemLabel: (sector) => sector.name,
-                                    onChanged: (sectorChoose) =>
-                                        _onSectorChanged(context, sectorChoose,isEditing),
-
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-
-                          headView(
-                              title: S.of(context).contact
-                          ),
-
-                          layoutVariant(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              items: [
-                                Flexible(
-                                  child: defaultTextfield(
-                                    nameCamp: S.of(context).phone_1,
-                                    controllerCamp: controllers.telephone1,
-                                    campOld: factorySelected?.thelephones.isNotEmpty == true
-                                        ? factorySelected!.thelephones[0]
-                                        : '',
-                                    context: context,
-                                  ),
-                                ),
-
-                                Flexible(
-                                  child: defaultTextfield(
-                                    nameCamp: S.of(context).phone_2,
-                                    controllerCamp: controllers.telephone2,
-                                    campOld: (factorySelected?.thelephones.length ?? 0) > 1
-                                        ? factorySelected?.thelephones[1] ?? ''
-                                        : '',
-                                    context: context,
-                                  ),
-                                ),
-                              ]
-                          ),
-
-                          layoutVariant(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              items: [
-                                Flexible(
-                                  child: defaultTextfield(
-                                    nameCamp: S.of(context).mail,
-                                    controllerCamp: controllers.mail,
-                                    campOld: factorySelected?.mail ?? '',
-                                    context: context,
-                                  ),
-                                ),
-
-                                Flexible(
-                                  child: defaultTextfield(
-                                    nameCamp: S.of(context).web_page,
-                                    controllerCamp: controllers.web,
-                                    campOld: factorySelected?.web ?? '',
-                                    context: context,
-                                  ),
-                                ),
-                              ]
-                          ),
-
-                          defaultTextfield(
-                            nameCamp: S.of(context).address,
-                            controllerCamp: controllers.address,
-                            campOld: factorySelected?.address.fullAddress ?? '',
-                            context: context,
-                          ),
-                          layoutVariant(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              items: [
-                                Flexible(
-                                  child: defaultTextfield(
-                                    nameCamp: S.of(context).city,
-                                    controllerCamp: controllers.city,
-                                    campOld: factorySelected?.address.city ?? '',
-                                    context: context,
-                                  ),
-                                ),
-
-                                Flexible(
-                                  child: defaultTextfield(
-                                    nameCamp: S.of(context).postal_code,
-                                    controllerCamp: controllers.postcode,
-                                    campOld : factorySelected?.address.postcode ?? '',
-                                    context: context,
-                                  ),
-                                ),
-                              ]
-                          ),
-
-                          Align(
-                            alignment: Alignment.topLeft,
+                ),
+                child: Scrollbar(
+                  controller: verticalScroll,
+                  thumbVisibility: true,
+                  thickness: 4, // Añadir
+                  radius: const Radius.circular(4),
+                  child: Scrollbar(
+                    controller: horizontalScroll,
+                    thumbVisibility: true,
+                    thickness: 4,
+                    radius: const Radius.circular(4),
+                    notificationPredicate: (notification) =>
+                    notification.metrics.axis == Axis.horizontal,
+                    child: SingleChildScrollView(
+                      controller: verticalScroll,
+                      scrollDirection: Axis.vertical,
+                      child: SingleChildScrollView(
+                        controller: horizontalScroll,
+                        scrollDirection: Axis.horizontal,
+                        child: SizedBox(
+                          width: availableWidth,
+                          child: Align(
+                            alignment: Alignment.topCenter,
                             child: SizedBox(
-                              width: 400,
-                              child: defaultTextfield(
-                                nameCamp: S.of(context).province,
-                                controllerCamp: controllers.province,
-                                campOld: factorySelected?.address.province ?? '',
-                                context: context,
-                              ),
-                            ),
-                          ),
-
-
-                          layoutVariant(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            items: [
-
-                              // TEXTFIELD
-                              Flexible(
-                                child: Align(
-                                  alignment: Alignment.topLeft,
-                                  child: SizedBox(
-                                    height: 120, // 👈 clave para igualar con la lista
-                                    child: defaultTextfield(
-                                      nameCamp: S.of(context).employees,
-                                      controllerCamp: controllers.employeeNew,
-                                      campOld: '',
-                                      context: context,
-                                    ),
-                                  ),
+                              width: contentWidth,
+                              child: Padding(
+                                padding: const EdgeInsets.only(
+                                  left: 30,
+                                  top: 30,
                                 ),
-                              ),
-
-                              // BOTONES (uno debajo del otro)
-                              Padding(
-                                padding: const EdgeInsets.only(top: 70.0,right: 20.0), // 👈 baja los botones
-                                child: SizedBox(
-                                  width: 50,
-                                  child: Column(
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: [
-                                      materialButton(
-                                        icon: const Icon(Icons.add),
-                                        function: () => _addEmplepoye(context, controllers, factoryId),
-                                      ),
-                                      const SizedBox(height: 12),
-                                      materialButton(
-                                        icon: const Icon(Icons.delete),
-                                        function: () => _deleteEmplepoye(context),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ),
-
-                              // LISTA
-                              Flexible(
-                                child: Padding(
-                                  padding: const EdgeInsets.only(top: 50.0),
-                                  child: SizedBox(
-                                    height: 170,
-                                    child: Container(
-                                      width: 250,
-                                      decoration: BoxDecoration(
-                                        border: Border.all(color: Colors.grey),
-                                        borderRadius: BorderRadius.circular(4),
-                                      ),
-                                      child: ContactList(
-                                        contacsCurrent:employees,
-                                        selected: selectedEmployee,
-                                        onSelect: (e) {
-                                          setState(() => selectedEmployee = e);
-                                        },
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                          Padding(
-                                padding: const EdgeInsets.only(left: 600.0, top:100.0,bottom: 20.0),
-                                child: Row(
+                                child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    materialButton(
-                                        nameAction: action,
-                                        function: () =>_onSaveFactory(
-                                                context,
-                                                factorySelected,
-                                                controllers,
-                                                factoryId
-                                            )
-                                    ),
-
-                                    Padding(
-                                      padding: const EdgeInsets.only(left: 20.0),
-                                      child: materialButton(
-                                        nameAction: action2,
-                                        function: () =>
-                                            _onResetFactory(
-                                                context,
-                                                controllers,
-                                                factorySelected,
-                                            ),
-                                      ),
+                                    headView(title: title),
+                                    _buildContent(
+                                      title: title1,
+                                      factorySelected: factorySelected,
+                                      edit: isEditing,
+                                      action: action,
+                                      action2: action2,
+                                      factoryId: factoryId,
+                                      employees: employees,
                                     ),
                                   ],
+                                ),
+                              ),
                             ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              );
+        },
+      ),
+    )
+        : Scaffold(
+      appBar: appBarAndroid(context, name: title1),
+      body: ScrollbarTheme(
+          data: ScrollbarThemeData(
+              thumbColor: WidgetStatePropertyAll(
+                   Colors.grey.shade500
+              ),
+          ),
+          child: Scrollbar(
+              controller: verticalScroll,
+              thumbVisibility: true,
+              thickness: 4,
+              radius: const Radius.circular(4),
+              child: SingleChildScrollView(
+                  controller: verticalScroll,
+                  scrollDirection: Axis.vertical,
+                  child: _buildContent(
+                        title: title1,
+                        factorySelected: factorySelected,
+                        edit: isEditing,
+                        action: action,
+                        action2: action2,
+                        factoryId: factoryId,
+                        employees: employees,
+                  ),
+              )
+          )
+      )
+    );
+  }
+
+  Widget _buildContent ({
+    required String title,
+    Factory? factorySelected,
+    required bool edit,
+    required String action,
+    required String action2,
+    required String factoryId,
+    required List<Empleoyee> employees,
+  }) {
+
+    final Sector newSectorOption = Sector(
+      id: "-",
+      name: S.of(context).new_male,
+    );
+
+
+    return Container(
+      constraints: BoxConstraints(
+        minHeight: MediaQuery.of(context).size.height,
+      ),
+      child: Align(
+        alignment: Alignment.topLeft,
+        child: SizedBox(
+          width: 856,
+          child: Column(
+            children: [
+              defaultTextfield(
+                nameCamp: S.of(context).name,
+                controllerCamp: controllers.name,
+                campOld: factorySelected?.name ?? '',
+                context: context,
+              ),
+
+              Padding(
+                padding: const EdgeInsets.only(left: 30.0, top: 20.0, bottom: 30.0),
+                child: layoutVariant(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  items: [
+
+                    Flexible(
+                      child: SizedBox(
+                        width: 600,
+                        child: textfieldCalendar(
+                          context: context,
+                          nameCamp: S.of(context).discharge_date,
+                          campOld: factorySelected?.highDate ?? '',
+                          controllerCamp: controllers.highDate,
+                        ),
+                      ),
+                    ),
+                    SizedBox(width: 100),
+                    SizedBox(
+                      width: 350,
+                      child: GenericDropdown<Sector>(
+                        items: [
+                          if (!edit)
+                            newSectorOption,
+                          ...context.watch<SectorProvider>().sectors
+                        ],
+                        camp:S.of(context).sector,
+                        selectedItem: selectedSector,
+                        hint:  S.of(context).select,
+                        itemLabel: (sector) => sector.name,
+                        onChanged: (sectorChoose) =>
+                            _onSectorChanged(context, sectorChoose,edit),
+
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+
+              headView(
+                  title: S.of(context).contact
+              ),
+
+              layoutVariant(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  items: [
+                    Flexible(
+                      child: defaultTextfield(
+                        nameCamp: S.of(context).phone_1,
+                        controllerCamp: controllers.telephone1,
+                        campOld: factorySelected?.thelephones.isNotEmpty == true
+                            ? factorySelected!.thelephones[0]
+                            : '',
+                        context: context,
+                      ),
+                    ),
+
+                    Flexible(
+                      child: defaultTextfield(
+                        nameCamp: S.of(context).phone_2,
+                        controllerCamp: controllers.telephone2,
+                        campOld: (factorySelected?.thelephones.length ?? 0) > 1
+                            ? factorySelected?.thelephones[1] ?? ''
+                            : '',
+                        context: context,
+                      ),
+                    ),
+                  ]
+              ),
+
+              layoutVariant(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  items: [
+                    Flexible(
+                      child: defaultTextfield(
+                        nameCamp: S.of(context).mail,
+                        controllerCamp: controllers.mail,
+                        campOld: factorySelected?.mail ?? '',
+                        context: context,
+                      ),
+                    ),
+
+                    Flexible(
+                      child: defaultTextfield(
+                        nameCamp: S.of(context).web_page,
+                        controllerCamp: controllers.web,
+                        campOld: factorySelected?.web ?? '',
+                        context: context,
+                      ),
+                    ),
+                  ]
+              ),
+
+              defaultTextfield(
+                nameCamp: S.of(context).address,
+                controllerCamp: controllers.address,
+                campOld: factorySelected?.address.fullAddress ?? '',
+                context: context,
+              ),
+              layoutVariant(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  items: [
+                    Flexible(
+                      child: defaultTextfield(
+                        nameCamp: S.of(context).city,
+                        controllerCamp: controllers.city,
+                        campOld: factorySelected?.address.city ?? '',
+                        context: context,
+                      ),
+                    ),
+
+                    Flexible(
+                      child: defaultTextfield(
+                        nameCamp: S.of(context).postal_code,
+                        controllerCamp: controllers.postcode,
+                        campOld : factorySelected?.address.postcode ?? '',
+                        context: context,
+                      ),
+                    ),
+                  ]
+              ),
+
+              Align(
+                alignment: Alignment.topLeft,
+                child: SizedBox(
+                  width: 400,
+                  child: defaultTextfield(
+                    nameCamp: S.of(context).province,
+                    controllerCamp: controllers.province,
+                    campOld: factorySelected?.address.province ?? '',
+                    context: context,
+                  ),
+                ),
+              ),
+
+
+              layoutVariant(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                items: [
+
+                  // TEXTFIELD
+                  Flexible(
+                    child: Align(
+                      alignment: Alignment.topLeft,
+                      child: SizedBox(
+                        height: 120, // 👈 clave para igualar con la lista
+                        child: defaultTextfield(
+                          nameCamp: S.of(context).employees,
+                          controllerCamp: controllers.employeeNew,
+                          campOld: '',
+                          context: context,
+                        ),
+                      ),
+                    ),
+                  ),
+
+                  // BOTONES (uno debajo del otro)
+                  Padding(
+                    padding: const EdgeInsets.only(top: 70.0,right: 20.0), // 👈 baja los botones
+                    child: SizedBox(
+                      width: 50,
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          materialButton(
+                            icon: const Icon(Icons.add),
+                            function: () => _addEmplepoye(context, controllers, factoryId),
+                          ),
+                          const SizedBox(height: 12),
+                          materialButton(
+                            icon: const Icon(Icons.delete),
+                            function: () => _deleteEmplepoye(context),
                           ),
                         ],
                       ),
                     ),
                   ),
+
+                  // LISTA
+                  Flexible(
+                    child: Padding(
+                      padding: const EdgeInsets.only(top: 50.0),
+                      child: SizedBox(
+                        height: 170,
+                        child: Container(
+                          width: 250,
+                          decoration: BoxDecoration(
+                            border: Border.all(color: Colors.grey),
+                            borderRadius: BorderRadius.circular(4),
+                          ),
+                          child: ContactList(
+                            contacsCurrent:employees,
+                            selected: selectedEmployee,
+                            onSelect: (e) {
+                              setState(() => selectedEmployee = e);
+                            },
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              Padding(
+                padding: const EdgeInsets.only(left: 500.0, top:100.0,bottom: 20.0),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    materialButton(
+                        nameAction: action,
+                        function: () =>_onSaveFactory(
+                            context,
+                            factorySelected,
+                            controllers,
+                            factoryId
+                        )
+                    ),
+
+                    Padding(
+                      padding: const EdgeInsets.only(left: 20.0),
+                      child: materialButton(
+                        nameAction: action2,
+                        function: () =>
+                            _onResetFactory(
+                              context,
+                              controllers,
+                              factorySelected,
+                            ),
+                      ),
+                    ),
+                  ],
                 ),
               ),
-            ),
+            ],
           ),
         ),
       ),
-    )
-       : Scaffold(
-           appBar: appBarAndroid(context, name: title1),
-           body: Text("factori"),
-        );
+    );
   }
-
   void loadSelectedFactory(Factory factory) {
     controllers.name.text = factory.name;
     controllers.highDate.text = factory.highDate;
