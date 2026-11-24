@@ -14,9 +14,9 @@ import '../Objects/Sector.dart';
 class customDataTable extends StatelessWidget {
 
   final ScrollController scrollController;
-  final List<String> columns;
 
   final bool showSectorColumn;
+  final bool isCreateMode;
 
   final List<LineSendController> lines;
   final List<bool> sendValues;
@@ -34,10 +34,10 @@ class customDataTable extends StatelessWidget {
   customDataTable({
     super.key,
     required this.scrollController,
-    required this.columns,
     required this.showSectorColumn,
-    required this.sendValues,
     required this.lines,
+    required this.sendValues,
+    required this.isCreateMode,
     required this.mesage,
     this.onObservationChanged,
     required this.onStateChanged,
@@ -53,7 +53,19 @@ class customDataTable extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
 
-    final isCreateMode = key is ValueKey<String> && (key as ValueKey<String>).value == 'new';
+    final campKey = filter == SendFilter.date
+        ? S.of(context).company
+        : S.of(context).date;
+
+    List<String> columns = isCreateMode
+          ? showSectorColumn == false
+                  ? [S.of(context).company, S.of(context).observations, S.of(context).state, S.of(context).select]
+                  : [S.of(context).company, S.of(context).sector, S.of(context).observations, S.of(context).state, S.of(context).select]
+
+          :  showSectorColumn == false
+                 ? [campKey, S.of(context).observations, S.of(context).state,]
+                 : [campKey, S.of(context).sector, S.of(context).observations, S.of(context).state];
+
 
     return Column(
         children: [
@@ -64,7 +76,6 @@ class customDataTable extends StatelessWidget {
                   height: 250,
                   child: Scrollbar(
                       controller: scrollController,
-                    ///vere como queda
                       child: SingleChildScrollView(
                             controller: scrollController,
                             scrollDirection: Axis.vertical,
