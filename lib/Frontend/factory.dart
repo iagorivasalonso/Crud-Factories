@@ -178,7 +178,7 @@ class _FactoryFromPageState extends State<FactoryFromPage> {
                 child: Scrollbar(
                   controller: verticalScroll,
                   thumbVisibility: true,
-                  thickness: 4, // Añadir
+                  thickness: 4,
                   radius: const Radius.circular(4),
                   child: Scrollbar(
                     controller: horizontalScroll,
