@@ -207,7 +207,7 @@ class _FactoryFromPageState extends State<FactoryFromPage> {
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    headView(title: title),
+                                    headView(title: title1),
                                     _buildContent(
                                       title: title1,
                                       factorySelected: factorySelected,
