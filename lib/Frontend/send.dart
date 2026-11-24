@@ -9,12 +9,13 @@ import 'package:crud_factories/Functions/isNotAndroid.dart' show isNotMobile;
 import 'package:crud_factories/Objects/LineSend.dart';
 import 'package:crud_factories/Objects/Sector.dart';
 import 'package:crud_factories/Widgets/CustomDataTable.dart';
+import 'package:crud_factories/Widgets/headView.dart' show headView;
 import 'package:crud_factories/Widgets/headViewsAndroid.dart';
 import 'package:crud_factories/Widgets/textfield.dart';
 import 'package:crud_factories/generated/l10n.dart';
 import 'package:crud_factories/helpers/localization_helper.dart';
-import 'package:fluent_ui/fluent_ui.dart';
-import 'package:flutter/material.dart' show Scaffold;
+import 'package:flutter/material.dart';
+
 import 'package:provider/provider.dart' show WatchContext, ReadContext, Consumer;
 import 'package:collection/collection.dart';
 import '../Backend/Providers/LineSendProvider.dart';
@@ -118,30 +119,28 @@ class _SendFromPageState extends State<SendFromPage> {
 
   @override
   Widget build(BuildContext context0) {
+
     final vm = context.watch<SendFromViewModel>();
     final providerLines = context.watch<LineSendProvider>();
 
     final isEditing = widget.lines.isNotEmpty;
 
+    final title = isEditing
+        ? S.of(context).edit
+        : S.of(context).new_male;
+
+    final name = S.of(context).send;
+    final title1 = "$title $name";
+
     String action1 = isEditing
-        ? S
-        .of(context)
-        .save
-        : S
-        .of(context)
-        .new_male;
+        ? S.of(context).save
+        : S.of(context).new_male;
 
     String action2 = isEditing
-        ? S
-        .of(context)
-        .undo
-        : S
-        .of(context)
-        .reboot;
+        ? S.of(context).undo
+        : S.of(context).reboot;
 
-    final providerSectors = context
-        .watch<SectorProvider>()
-        .sectors;
+    final providerSectors = context.watch<SectorProvider>().sectors;
 
     final selectedSector = providerSectors.firstWhereOrNull(
           (s) => s.id == vm.sectorId,
@@ -150,7 +149,6 @@ class _SendFromPageState extends State<SendFromPage> {
 
     String messageResult = "";
 
-    String campKey = "";
     String titleSector = "";
 
     final sectorsWithFactories = providerSectors.where((sector) {
@@ -161,17 +159,8 @@ class _SendFromPageState extends State<SendFromPage> {
     }).toList();
 
     if (isEditing) {
-      campKey = widget.filter == SendFilter.date
-          ? S
-          .of(context)
-          .company
-          : S
-          .of(context)
-          .date;
 
-      final sectorId = context
-          .watch<FilterProvider>()
-          .sectorId;
+      final sectorId = context.watch<FilterProvider>().sectorId;
 
       if (sectorId == "0") {
         all_sectors = widget.filter == SendFilter.date
@@ -179,12 +168,8 @@ class _SendFromPageState extends State<SendFromPage> {
             : false;
 
         titleSector = widget.filter == SendFilter.date
-            ? S
-            .of(context)
-            .all_sectors
-            : S
-            .of(context)
-            .list_of_sends;
+            ? S.of(context).all_sectors
+            : S.of(context).list_of_sends;
       }
       else {
         all_sectors = false;
@@ -194,12 +179,8 @@ class _SendFromPageState extends State<SendFromPage> {
         );
 
         titleSector = widget.filter == SendFilter.date
-            ? '${S
-            .of(context)
-            .sector_of} ${sectorSelected.name}'
-            : S
-            .of(context)
-            .list_of_sends;
+            ? '${S.of(context).sector_of} ${sectorSelected.name}'
+            : S.of(context).list_of_sends;
       }
 
       final lines = widget.lines;
@@ -214,249 +195,179 @@ class _SendFromPageState extends State<SendFromPage> {
           : false;
 
 
-      messageResult =
-          LocalizationHelper.factoriesBD(context, vm.controllers.length);
+      messageResult = LocalizationHelper.factoriesBD(context, vm.controllers.length);
     }
 
     return isNotMobile()
         ? Scaffold(
-        body: Scrollbar(
-          controller: verticalScroll,
-          thumbVisibility: true,
-          child: Scrollbar(
-            controller: horizontalScroll,
-            thumbVisibility: true,
-            notificationPredicate: (notification) =>
-            notification.metrics.axis == Axis.horizontal,
-            child: SingleChildScrollView(
-              controller: verticalScroll,
-              scrollDirection: Axis.vertical,
-              child: SingleChildScrollView(
-                controller: horizontalScroll,
-                scrollDirection: Axis.horizontal,
-                child: Padding(
-                  padding: const EdgeInsets.only(left: 30.0, top: 30.0),
-                  child: Container(
-                      constraints: BoxConstraints(
-                        minWidth: MediaQuery
-                            .of(context)
-                            .size
-                            .width,
-                        minHeight: MediaQuery
-                            .of(context)
-                            .size
-                            .height,
+            body: LayoutBuilder(
+              builder: (context,constraints) {
+
+                const contentWidth = 980.0;
+
+                final availableWidth = constraints.maxWidth > contentWidth
+                    ? constraints.maxWidth
+                    : contentWidth;
+
+                return ScrollbarTheme(
+                  data: ScrollbarThemeData(
+                    thumbColor: WidgetStatePropertyAll(
+                      Colors.grey.shade500,
+                    ),
+                  ),
+                  child: Scrollbar(
+                    controller: verticalScroll,
+                    thumbVisibility: true,
+                    thickness: 4,
+                    radius: const Radius.circular(4),
+                    child: Scrollbar(
+                      controller: horizontalScroll,
+                      thumbVisibility: true,
+                      thickness: 4,
+                      radius: const Radius.circular(4),
+                      notificationPredicate: (notification) =>
+                      notification.metrics.axis == Axis.horizontal,
+                      child: SingleChildScrollView(
+                        controller: verticalScroll,
+                        scrollDirection: Axis.vertical,
+                        child: SingleChildScrollView(
+                          controller: horizontalScroll,
+                          scrollDirection: Axis.horizontal,
+                          child: SizedBox(
+                            width: availableWidth,
+                            child: Padding(
+                              padding: const EdgeInsets.only(left: 30.0, top: 30.0),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  headView(title: title1),
+                                  _buildContent(
+                                    edit: isEditing,
+                                    titleSector: titleSector,
+                                    selectedSector: selectedSector,
+                                    sectorsWithFactories: sectorsWithFactories,
+                                    messageResult: messageResult,
+                                    action1: action1,
+                                    action2: action2,
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ),
                       ),
-                      child: Align(
-                        alignment: Alignment.topLeft,
-                        child: SizedBox(
-                          width: 980,
-                          child: Column(
+                    ),
+                  ),
+                );
+              }
+            )
+           ) : Scaffold(
+                 appBar: appBarAndroid(context, name: title1),
+                 body: ScrollbarTheme(
+                     data: ScrollbarThemeData(
+                       thumbColor:  WidgetStatePropertyAll(
+                          Colors.grey.shade500
+                       ),
+                     ),
+                     child: Scrollbar(
+                         controller: verticalScroll,
+                         thumbVisibility: true,
+                         thickness: 4,
+                         radius: const Radius.circular(4),
+                         child: SingleChildScrollView(
+                             controller: verticalScroll,
+                             scrollDirection: Axis.vertical,
+                             child: _buildContent(
+                               edit: isEditing,
+                               titleSector: titleSector,
+                               selectedSector: selectedSector,
+                               sectorsWithFactories: sectorsWithFactories,
+                               messageResult: messageResult,
+                               action1: action1,
+                               action2: action2,
+                             ),
+                         )
+                     )
+                 )
+    );
+  }
+
+  Widget _buildContent({
+      required bool edit,
+      required String titleSector,
+      required Sector? selectedSector,
+      required List <Sector> sectorsWithFactories,
+      required String messageResult,
+      required String action1,
+      required String action2,
+
+       }) {
+
+    return Container(
+         constraints: BoxConstraints(
+                 minHeight: MediaQuery.of(context).size.height,
+             ),
+             child: Align(
+                   alignment: Alignment.topLeft,
+                      child: SizedBox(
+                         width: 980,
+                         child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Container(
                                   width: 500,
-                                  child: isEditing == false
+                                  child: edit == false
                                       ? textfieldCalendar(
-                                    context: context,
-                                    nameCamp: S
-                                        .of(context)
-                                        .date,
-                                    controllerCamp: controllerSearchSend,
-                                  )
-                                      : defaultTextfield(
-                                      nameCamp: widget.filter == SendFilter.date
-                                          ? S
-                                          .of(context)
-                                          .date
-                                          : S
-                                          .of(context)
-                                          .company,
-                                      controllerCamp: controllerSearchSend,
-                                      context: context
+                                            context: context,
+                                            nameCamp: S.of(context).date,
+                                            controllerCamp: controllerSearchSend,
+                                       )
+                                      :defaultTextfield(
+                                               nameCamp: widget.filter == SendFilter.date
+                                                 ? S.of(context).date
+                                                 : S.of(context).company,
+                                               controllerCamp: controllerSearchSend,
+                                               context: context
                                   ),
                                 ),
 
                                 Padding(
-                                  padding: const EdgeInsets.only(
-                                      left: 35.0, top: 15.0),
+                                  padding: const EdgeInsets.only(left: 35.0, top: 15.0),
                                   child: SizedBox(
                                     width: 300,
                                     height: 50,
-                                    child: isEditing == false
+                                    child: edit == false
                                         ? GenericDropdown<Sector>(
-                                      items: sectorsWithFactories,
-                                      camp: S
-                                          .of(context)
-                                          .sector,
-                                      opDefault: S
-                                          .of(context)
-                                          .all_male,
-                                      selectedItem: selectedSector,
-                                      hint: S
-                                          .of(context)
-                                          .sector,
-                                      itemLabel: (sector) => sector.name,
-                                      onChanged: (sectorChoose) =>
-                                          _onSectorChanged(
-                                              context, sectorChoose),
-                                    )
+                                               items: sectorsWithFactories,
+                                               camp: S.of(context).sector,
+                                               opDefault: S.of(context).all_male,
+                                               selectedItem: selectedSector,
+                                               hint: S.of(context).sector,
+                                               itemLabel: (sector) => sector.name,
+                                               onChanged: (sectorChoose) =>
+                                                  _onSectorChanged(context, sectorChoose),
+                                        )
                                         : Padding(
-                                      padding: const EdgeInsets.only(
-                                          left: 30.0, top: 30.0),
+                                      padding: const EdgeInsets.only(left: 30.0, top: 30.0),
                                       child: Text(titleSector,
-                                        style: TextStyle(
-                                            fontWeight: FontWeight.bold),),
+                                        style: TextStyle(fontWeight: FontWeight.bold),),
                                     ),
                                   ),
                                 ),
 
                                 Padding(
-                                  padding: const EdgeInsets.only(
-                                      left: 50.0, top: 30.0, bottom: 50.0),
-                                  child: SizedBox(
-                                    child: isEditing == false
-                                        ? Consumer<SendFromViewModel>(
-                                      builder: (context, vm, _) {
-                                        return customDataTable(
-                                          key: const ValueKey("new"),
-                                          scrollController: verticalScrollTable,
-
-                                          columns: all_sectors == false
-                                              ? [
-                                            S
-                                                .of(context)
-                                                .company,
-                                            S
-                                                .of(context)
-                                                .observations,
-                                            S
-                                                .of(context)
-                                                .state,
-                                            S
-                                                .of(context)
-                                                .select
-                                          ]
-                                              : [
-                                            S
-                                                .of(context)
-                                                .company,
-                                            S
-                                                .of(context)
-                                                .sector,
-                                            S
-                                                .of(context)
-                                                .observations,
-                                            S
-                                                .of(context)
-                                                .state,
-                                            S
-                                                .of(context)
-                                                .select
-                                          ],
-
-                                          showSectorColumn: all_sectors,
-                                          lines: vm.controllers,
-                                          sendValues: vm.send,
-                                          onStateChanged: (index, value) {
-                                            context
-                                                .read<EditStateProvider>()
-                                                .markChanged();
-                                          },
-
-                                          onSendChanged: (i, value) {
-                                            context
-                                                .read<EditStateProvider>()
-                                                .markChanged();
-                                            vm.toggleSend(i, value);
-                                          },
-
-                                          onSelectedAllChanged: (value) {
-                                            for (int i = 0; i <
-                                                vm.send.length; i++) {
-                                              vm.send[i] = value;
-                                            }
-                                            vm.notifyListeners();
-                                          },
-
-                                          mesage: messageResult,
-                                        );
-                                      },
-                                    )
-                                        : Consumer<SendFromViewModel>(
-                                      builder: (context, vm, _) {
-                                        return customDataTable(
-                                          key: const ValueKey("edit"),
-                                          scrollController: verticalScrollTable,
-
-                                          columns: all_sectors == false
-                                              ? [
-                                            campKey,
-                                            S
-                                                .of(context)
-                                                .observations,
-                                            S
-                                                .of(context)
-                                                .state,
-
-                                          ]
-                                              : [
-                                            campKey,
-                                            S
-                                                .of(context)
-                                                .sector,
-                                            S
-                                                .of(context)
-                                                .observations,
-                                            S
-                                                .of(context)
-                                                .state,
-
-                                          ],
-
-                                          showSectorColumn: all_sectors,
-                                          filter: widget.filter,
-                                          lines: vm.controllers,
-                                          sendValues: vm.send,
-                                          onObservationChanged: (index, value) {
-                                            context
-                                                .read<EditStateProvider>()
-                                                .markChanged();
-                                            providerLines.updateLines(
-                                              vm.controllers[index].id,
-                                              observations: value,
-                                            );
-                                          },
-
-                                          onStateChanged: (index, value) {
-                                            context
-                                                .read<EditStateProvider>()
-                                                .markChanged();
-                                            providerLines.updateLines(
-                                              vm.controllers[index].id,
-                                              state: value.name,
-                                            );
-                                          },
-
-                                          onSendChanged: (i, value) {
-                                            vm.toggleSend(i, value);
-                                          },
-
-
-                                          onSelectedAllChanged: (value) {
-                                            for (int i = 0; i <
-                                                vm.send.length; i++) {
-                                              vm.send[i] = value;
-                                            }
-                                            vm.notifyListeners();
-                                          },
-
-                                          mesage: messageResult,
-                                        );
-                                      },
-                                    ),
+                                  padding: const EdgeInsets.only(left: 50.0, top: 30.0, bottom: 50.0),
+                                  child: isNotMobile()
+                                     ? _buildDesktopTable(
+                                             editable:edit,
+                                             messageResult: messageResult
+                                       )
+                                     : _buildMobileTable(
+                                            editable: edit,
+                                            messageResult: messageResult
                                   ),
                                 ),
+
                                 const SizedBox(height: 20,),
                                 Padding(
                                   padding: const EdgeInsets.only(bottom: 40.0),
@@ -485,18 +396,105 @@ class _SendFromPageState extends State<SendFromPage> {
                           ),
                         ),
                       )
-                  ),
-                ),
-              ),
-            ),
-          ),
-        )
-    ) : Scaffold(
-      appBar: appBarAndroid(context, name: "sasd"),
-      body: Text("creart email"),
-    );
-  }
+                  );
+}
 
+Widget _buildDesktopTable({
+  required bool editable,
+  required String messageResult
+}) {
+
+  final providerLines = context.read<LineSendProvider>();
+
+  return SizedBox(
+          child: editable == false
+              ? Consumer<SendFromViewModel>(
+            builder: (context, vm, _) {
+              return customDataTable(
+                key: const ValueKey("new"),
+                scrollController: verticalScrollTable,
+                isCreateMode: true,
+                showSectorColumn: all_sectors,
+                lines: vm.controllers,
+                sendValues: vm.send,
+                onStateChanged: (index, value) {
+                  context.read<EditStateProvider>().markChanged();
+                },
+      
+                onSendChanged: (i, value) {
+                  context
+                      .read<EditStateProvider>()
+                      .markChanged();
+                  vm.toggleSend(i, value);
+                },
+      
+                onSelectedAllChanged: (value) {
+                  for (int i = 0; i <
+                      vm.send.length; i++) {
+                    vm.send[i] = value;
+                  }
+                  vm.notifyListeners();
+                },
+      
+                mesage: messageResult,
+              );
+            },
+          )
+              : Consumer<SendFromViewModel>(
+            builder: (context, vm, _) {
+              return customDataTable(
+                key: const ValueKey("edit"),
+                scrollController: verticalScrollTable,
+                isCreateMode: false,
+                showSectorColumn: all_sectors,
+                filter: widget.filter,
+                lines: vm.controllers,
+                sendValues: vm.send,
+                onObservationChanged: (index, value) {
+                       context.read<EditStateProvider>().markChanged();
+
+                       providerLines.updateLines(
+                                  vm.controllers[index].id,
+                                 observations: value,
+                       );
+                },
+      
+                onStateChanged: (index, value) {
+                      context.read<EditStateProvider>().markChanged();
+
+                      providerLines.updateLines(
+                                     vm.controllers[index].id,
+                                     state: value.name,
+                      );
+                },
+      
+                onSendChanged: (i, value) {
+                  vm.toggleSend(i, value);
+                },
+      
+      
+                onSelectedAllChanged: (value) {
+                  for (int i = 0; i <
+                      vm.send.length; i++) {
+                    vm.send[i] = value;
+                  }
+                  vm.notifyListeners();
+                },
+      
+                mesage: messageResult,
+              );
+            },
+          ),
+        );
+
+}
+
+  Widget _buildMobileTable({
+    required bool editable,
+    required String messageResult
+  }) {
+     return Text(messageResult);
+  }
   void _onSectorChanged(BuildContext context, Sector? sectorChoose) {
     if (sectorChoose != null) {
       context.read<SendFromViewModel>()
