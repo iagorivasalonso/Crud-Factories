@@ -209,7 +209,6 @@ class _FactoryFromPageState extends State<FactoryFromPage> {
                                   children: [
                                     headView(title: title1),
                                     _buildContent(
-                                      title: title1,
                                       factorySelected: factorySelected,
                                       edit: isEditing,
                                       action: action,
@@ -248,7 +247,6 @@ class _FactoryFromPageState extends State<FactoryFromPage> {
                   controller: verticalScroll,
                   scrollDirection: Axis.vertical,
                   child: _buildContent(
-                        title: title1,
                         factorySelected: factorySelected,
                         edit: isEditing,
                         action: action,
@@ -263,7 +261,6 @@ class _FactoryFromPageState extends State<FactoryFromPage> {
   }
 
   Widget _buildContent ({
-    required String title,
     Factory? factorySelected,
     required bool edit,
     required String action,
