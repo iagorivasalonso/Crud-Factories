@@ -231,32 +231,32 @@ class _FactoryFromPageState extends State<FactoryFromPage> {
       ),
     )
         : Scaffold(
-      appBar: appBarAndroid(context, name: title1),
-      body: ScrollbarTheme(
-          data: ScrollbarThemeData(
-              thumbColor: WidgetStatePropertyAll(
-                   Colors.grey.shade500
-              ),
-          ),
-          child: Scrollbar(
-              controller: verticalScroll,
-              thumbVisibility: true,
-              thickness: 4,
-              radius: const Radius.circular(4),
-              child: SingleChildScrollView(
-                  controller: verticalScroll,
-                  scrollDirection: Axis.vertical,
-                  child: _buildContent(
-                        factorySelected: factorySelected,
-                        edit: isEditing,
-                        action: action,
-                        action2: action2,
-                        factoryId: factoryId,
-                        employees: employees,
-                  ),
-              )
-          )
-      )
+                appBar: appBarAndroid(context, name: title1),
+                body: ScrollbarTheme(
+                    data: ScrollbarThemeData(
+                        thumbColor: WidgetStatePropertyAll(
+                             Colors.grey.shade500
+                        ),
+                    ),
+                    child: Scrollbar(
+                        controller: verticalScroll,
+                        thumbVisibility: true,
+                        thickness: 4,
+                        radius: const Radius.circular(4),
+                        child: SingleChildScrollView(
+                            controller: verticalScroll,
+                            scrollDirection: Axis.vertical,
+                            child: _buildContent(
+                                  factorySelected: factorySelected,
+                                  edit: isEditing,
+                                  action: action,
+                                  action2: action2,
+                                  factoryId: factoryId,
+                                  employees: employees,
+                            ),
+                        )
+                    )
+                )
     );
   }
 
