@@ -278,13 +278,13 @@ class _SendFromPageState extends State<SendFromPage> {
                              controller: verticalScroll,
                              scrollDirection: Axis.vertical,
                              child: _buildContent(
-                               edit: isEditing,
-                               titleSector: titleSector,
-                               selectedSector: selectedSector,
-                               sectorsWithFactories: sectorsWithFactories,
-                               messageResult: messageResult,
-                               action1: action1,
-                               action2: action2,
+                                   edit: isEditing,
+                                   titleSector: titleSector,
+                                   selectedSector: selectedSector,
+                                   sectorsWithFactories: sectorsWithFactories,
+                                   messageResult: messageResult,
+                                   action1: action1,
+                                   action2: action2,
                              ),
                          )
                      )
