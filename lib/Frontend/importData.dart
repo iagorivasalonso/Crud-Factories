@@ -46,97 +46,153 @@ class _NewImportState extends State<NewImport> {
   @override
   Widget build(BuildContext context) {
 
-    final provaiderImport = context.read<ImportProvaider>();
+    String title = S.of(context).import_data;
 
     return isNotMobile()
         ? Scaffold(
-      body: Scrollbar(
-        controller: verticalScroll,
-        thumbVisibility: true,
-        child: Scrollbar(
-          controller: horizontalScroll,
-          thumbVisibility: true,
-          notificationPredicate: (notification) =>
-          notification.metrics.axis == Axis.horizontal,
-          child: SingleChildScrollView(
-            controller: verticalScroll,
-            scrollDirection: Axis.vertical,
-            child: SingleChildScrollView(
-              controller: horizontalScroll,
-              scrollDirection: Axis.horizontal,
-              child: Padding(
-                padding: const EdgeInsets.only(left: 30.0, top: 30.0),
-                child: Container(
-                  constraints: BoxConstraints(
-                    minWidth: MediaQuery.of(context).size.width,
-                    minHeight: MediaQuery.of(context).size.height,
-                  ),
-                  child: Align(
-                    alignment: Alignment.topLeft,
-                    child: SizedBox(
-                      width: 680,
-                      child: Column(
-                        children: [
-                          headView(
-                              title: S.of(context).import_data
-                          ),
+              body: LayoutBuilder(
+                builder: (context, constraints) {
 
-                          Padding(
-                            padding: const EdgeInsets.only(top:10.0,bottom: 30.0),
-                            child: Row(
-                              children: [
-                                Text(S.of(context).Import_data_in_CSV_format)
-                              ] ,
+                  const contentWidth = 800.0;
+                  const contentHeight = 480.0;
+
+                  final availableWidth = constraints.maxWidth > contentWidth
+                      ? constraints.maxWidth
+                      : contentWidth;
+
+                  final availableHeight = constraints.maxHeight > contentHeight
+                      ? constraints.maxHeight
+                      : contentHeight;
+
+
+                  return ScrollbarTheme(
+                    data: ScrollbarThemeData(
+                        thumbColor: WidgetStatePropertyAll(
+                             Colors.grey.shade500
+                        ),
+                     ),
+                    child: Scrollbar(
+                      controller: verticalScroll,
+                      thumbVisibility: true,
+                      thickness: 4,
+                      radius: const Radius.circular(4),
+                      child: Scrollbar(
+                        controller: horizontalScroll,
+                        thumbVisibility: true,
+                        thickness: 4,
+                        radius: const Radius.circular(4),
+                        notificationPredicate: (notification) =>
+                        notification.metrics.axis == Axis.horizontal,
+                        child: SingleChildScrollView(
+                          controller: verticalScroll,
+                          scrollDirection: Axis.vertical,
+                          child: SingleChildScrollView(
+                            controller: horizontalScroll,
+                            scrollDirection: Axis.horizontal,
+                            child: SizedBox(
+                              width: availableWidth,
+                              height: availableHeight,
+                              child: Align(
+                                alignment: Alignment.topCenter,
+                                child: SizedBox(
+                                  width: contentWidth,
+                                  height: contentHeight,
+                                  child: Padding(
+                                    padding: const EdgeInsets.only(left: 30.0, top: 30.0),
+                                    child: Column(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: [
+                                        headView(
+                                            title: title
+                                        ),
+                                        _buildContent(),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              ),
                             ),
                           ),
-
-                              SizedBox(
-                                width: 700,
-                                child: CSVPickerField(
-                                    controller: controllerImportPicker,
-                                    campName: S.of(context).route,
-                                    actionName: S.of(context).examine,
-                                    function: () => provaiderImport.pickFile(context, controllerImportPicker),
-                                ),
-                              ),
-
-                             Padding(
-                                padding: const EdgeInsets.only(left: 450.0, top: 260.0),
-                                child: Row(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    materialButton(
-                                        nameAction: S.of(context).import_data,
-                                        function: () => _onSaveList(context)
-                                    ),
-
-                                   Padding(
-                                        padding: const EdgeInsets.only(left: 20.0),
-                                        child: materialButton(
-                                          nameAction:S.of(context).delete,
-                                          function: () => _onClear(context)
-
-                                        ),
-                                      ),
-                                  ],
-                                ),
-                              ),
-                        ],
+                        ),
                       ),
                     ),
-                  ),
-                ),
+                  );
+                }
+              ),
+           )
+        : Scaffold(
+              appBar: appBarAndroid(context, name: title),
+              body: ScrollbarTheme(
+                  data: ScrollbarThemeData(
+                       thumbColor: WidgetStatePropertyAll(
+                          Colors.grey.shade500
+                       ),
+                    ),
+                  child: Scrollbar(
+                      controller: verticalScroll,
+                      thumbVisibility: true,
+                      thickness: 4,
+                      radius: const Radius.circular(4),
+                      child: SingleChildScrollView(
+                               controller: verticalScroll,
+                               scrollDirection: Axis.vertical,
+                               child: _buildContent(),
+                           )
+                  )
+              ),
+    );
+  }
+
+  Widget _buildContent() {
+
+    final provaiderImport = context.read<ImportProvaider>();
+
+      return SizedBox(
+        child: Column(
+          children: [
+            Padding(
+              padding: const EdgeInsets.only(top:10.0,bottom: 30.0),
+              child: Row(
+                children: [
+                  Text(S.of(context).Import_data_in_CSV_format)
+                ] ,
               ),
             ),
-          ),
-        ),
-      ),
-    )
-        : Scaffold(
-      appBar: appBarAndroid(context, name: S.of(context).sending_mails),
-      body: Text("creart email"),
-    );
 
+            SizedBox(
+              width: 700,
+              child: CSVPickerField(
+                controller: controllerImportPicker,
+                campName: S.of(context).route,
+                actionName: S.of(context).examine,
+                function: () => provaiderImport.pickFile(context, controllerImportPicker),
+              ),
+            ),
+
+            Padding(
+              padding: const EdgeInsets.only(left: 450.0, top: 260.0),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  materialButton(
+                      nameAction: S.of(context).import_data,
+                      function: () => _onSaveList(context)
+                  ),
+
+                  Padding(
+                    padding: const EdgeInsets.only(left: 20.0),
+                    child: materialButton(
+                        nameAction:S.of(context).delete,
+                        function: () => _onClear(context)
+
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      );
   }
   Future<void> _onSaveList(BuildContext context) async {
 
