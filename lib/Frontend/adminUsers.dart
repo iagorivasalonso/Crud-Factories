@@ -1,6 +1,7 @@
 import 'package:crud_factories/Alertdialogs/createUser.dart';
 import 'package:crud_factories/Alertdialogs/warning.dart' show warning;
 import 'package:crud_factories/Backend/core/controlsMessagesError/errors.dart';
+import 'package:crud_factories/Functions/isNotAndroid.dart';
 import 'package:crud_factories/Objects/User.dart';
 import 'package:crud_factories/Widgets/dropDownButton.dart' show GenericDropdown;
 import 'package:crud_factories/Widgets/headView.dart';
@@ -43,156 +44,200 @@ class _adminPageState extends State<adminPage> {
   Widget build(BuildContext context) {
 
     return Scaffold(
-      body: Scrollbar(
-          controller: verticalScroll,
-          thumbVisibility: true,
-          child: Scrollbar(
-              controller: horizontalScroll,
-              thumbVisibility: true,
-              notificationPredicate: (notification) =>
-              notification.metrics.axis == Axis.horizontal,
-              child: SingleChildScrollView(
-                 controller: verticalScroll,
-                 scrollDirection: Axis.vertical,
-                 child: SingleChildScrollView(
-                   controller: horizontalScroll,
-                   scrollDirection: Axis.horizontal,
-                   child: Padding(
-                       padding: const EdgeInsetsGeometry.only(left: 60.0, top: 30.0),
-                       child: Container(
-                           constraints: BoxConstraints(
-                             minWidth: MediaQuery.of(context).size.width,
-                             minHeight: MediaQuery.of(context).size.height,
-                           ),
+      body: LayoutBuilder(
+        builder: (context, constraints) {
+
+          const contentWidth = 980.0;
+          const contentHeight = 530.0;
+
+          final availableWidth = constraints.maxWidth > contentWidth
+              ? constraints.maxWidth
+              : contentWidth;
+
+          final availableHeight = constraints.maxHeight > contentHeight
+              ? constraints.maxHeight
+              : contentHeight;
+
+          return ScrollbarTheme(
+            data: ScrollbarThemeData(
+                  thumbColor: WidgetStatePropertyAll(
+                     Colors.grey.shade500
+                  ),
+            ),
+            child: Scrollbar(
+                controller: verticalScroll,
+                thumbVisibility: true,
+                thickness: 4,
+                radius: const Radius.circular(4),
+                child: Scrollbar(
+                    controller: horizontalScroll,
+                    thumbVisibility: true,
+                    thickness: 4,
+                    radius: const Radius.circular(4),
+                    notificationPredicate: (notification) =>
+                    notification.metrics.axis == Axis.horizontal,
+                    child: SingleChildScrollView(
+                       controller: verticalScroll,
+                       scrollDirection: Axis.vertical,
+                       child: SingleChildScrollView(
+                         controller: horizontalScroll,
+                         scrollDirection: Axis.horizontal,
+                         child: SizedBox(
+                           width: availableWidth,
+                           height: availableHeight,
                            child: Align(
-                               alignment: Alignment.topLeft,
-                               child: SizedBox(
-                                   width: 800,
-                                   child: Column(
-                                     children: [
-                                           headView(title: S.of(context).user_management),
-
-                                       Row(
-                                         children: [
-                                           Expanded(
-                                             child: Padding(
-                                               padding: const EdgeInsets.only(
-                                                 top: 50,
-                                                 left: 10,
-                                                 bottom: 20,
-                                               ),
-                                               child: SizedBox(
-                                                 width: 100,
-                                                 child: GenericDropdown<UserRole>(
-                                                   items: [...UserRole.values],
-                                                   opDefault: S.of(context).all_male,
-                                                   camp: S.of(context).role,
-                                                   selectedItem: selectedRol,
-                                                   hint: S.of(context).all_male,
-                                                   itemLabel: (rol) {
-                                                     switch (rol) {
-                                                       case UserRole.admin:
-                                                         return S.of(context).administrator;
-                                                       case UserRole.user:
-                                                         return S.of(context).user;
-                                                     }
-                                                   },
-                                                   onChanged: (role) {
-                                                     setState(() {
-                                                       selectedRol = role;
-                                                     });
-                                                   },
-                                                 ),
-                                               ),
-                                             ),
-                                           ),
-                                           Padding(
-                                             padding: const EdgeInsets.only(right: 10),
-                                             child: materialButton(
-                                               function: () {
-                                                 final userProvider = context.read<UserProvider>();
-
-                                                 userProvider.select(null);
-
-                                                 showDialog(
-                                                   context: context,
-                                                   builder: (context) => const createUser(),
-                                                 );
-                                               },
-                                               nameAction: S.of(context).new_user,
-                                             ),
-                                           ),
-                                         ],
-                                       ),
-                                         SizedBox(
-                                           height: 500,
-                                           child: Consumer<UserProvider>(
-                                               builder: (context,userProvider,child) {
-
-                                                 final users = userProvider.users;
-
-                                                 final resultUsers = selectedRol == null
-                                                     ? users
-                                                     : users.where((user) => user.role ==  selectedRol!.name).toList();
-
-                                                 return tableUsers(
-                                                      scrollController: verticalScrollTable,
-                                                      columns: selectedRol == null
-                                                          ? [S.of(context).user,S.of(context).mail,S.of(context).role,S.of(context).active_user, S.of(context).actions]
-                                                          : [S.of(context).user,S.of(context).mail,S.of(context).active_user, S.of(context).actions],
-                                                      rol: selectedRol,
-                                                      users: resultUsers,
-                                                      onDelete: (index, value) async {
-
-                                                            final accepted = await warning(
-                                                              context,
-                                                              S.of(context).delete_account_confirm,
-                                                            );
-
-                                                            if (!accepted) return;
-
-                                                            final result = await userProvider.delete(resultUsers[index].id);
-
-                                                            if(result == DeleteResult.success)
-                                                            {
-                                                               await confirm(context, S.of(context).user_deleted_successfully);
-                                                            }
-                                                            else {
-                                                              await error(
-                                                                context,
-                                                                S.of(context)
-                                                                    .account_delete_error,
-                                                              );
-                                                            }
-                                                      },
-                                                      onEdit: (index, value) async {
-
-                                                        final userEdit = resultUsers[index];
-
-                                                        userProvider.select(userEdit);
-
-                                                        showDialog(
-                                                          context: context,
-                                                          builder: (context) => const createUser(),
-                                                        );
-                                                      },
-                                                    );
-                                               }
-                                           ),
-                                         )
-                                     ],
-                                   ),
+                             alignment: Alignment.topCenter,
+                             child: SizedBox(
+                               width: contentWidth,
+                               height: contentHeight,
+                               child: Padding(
+                                   padding: const EdgeInsetsGeometry.only(left: 60.0, top: 30.0),
+                                   child: _buildContent()
                                ),
+                             ),
                            ),
-                       ),    
-                   ),
-                 ),
-              )
-          )
+                         ),
+                       ),
+                    )
+                )
+            ),
+          );
+        }
       ),
     );
-    
-
-
   }
+
+  Widget _buildContent() {
+
+           return Align(
+             alignment: Alignment.topLeft,
+             child: SizedBox(
+               child: Column(
+                 children: [
+                   headView(title: S.of(context).user_management),
+                   Row(
+                     children: [
+                       Padding(
+                         padding: const EdgeInsets.only(top: 50, left: 10, bottom: 20,),
+                         child: SizedBox(
+                           width: 400,
+                           child: GenericDropdown<UserRole>(
+                             items: [...UserRole.values],
+                             opDefault: S.of(context).all_male,
+                             camp: S.of(context).role,
+                             selectedItem: selectedRol,
+                             hint: S.of(context).all_male,
+                             itemLabel: (rol) {
+                               switch (rol) {
+                                 case UserRole.admin:
+                                   return S.of(context).administrator;
+                                 case UserRole.user:
+                                   return S.of(context).user;
+                               }
+                             },
+                             onChanged: (role) {
+                               setState(() {
+                                 selectedRol = role;
+                               });
+                             },
+                           ),
+                         ),
+                       ),
+                       const Spacer(),
+                       Padding(
+                         padding: const EdgeInsets.only(right: 20.0),
+                         child: materialButton(
+                           function: () {
+                             final userProvider = context.read<UserProvider>();
+
+                             userProvider.select(null);
+
+                             showDialog(
+                               context: context,
+                               builder: (context) => const createUser(),
+                             );
+                           },
+                           nameAction: S.of(context).new_user,
+                         ),
+                       ),
+                     ],
+                   ),
+                   Expanded(
+                     child: isNotMobile()
+                             ? _buildDesktopTable()
+                             : _buildMobileTable()
+                   )
+                 ],
+               ),
+             ),
+           );
+  }
+
+  Widget _buildDesktopTable() {
+
+       return SizedBox(
+         child: Padding(
+           padding: const EdgeInsets.only(right: 50.0),
+           child: Consumer<UserProvider>(
+               builder: (context,userProvider,child) {
+
+                 final users = userProvider.users;
+
+                 final resultUsers = selectedRol == null
+                     ? users
+                     : users.where((user) => user.role ==  selectedRol!.name).toList();
+
+                 return tableUsers(
+                   scrollController: verticalScrollTable,
+                   columns: selectedRol == null
+                       ? [S.of(context).user,S.of(context).mail,S.of(context).role,S.of(context).active_user, S.of(context).actions]
+                       : [S.of(context).user,S.of(context).mail,S.of(context).active_user, S.of(context).actions],
+                   rol: selectedRol,
+                   users: resultUsers,
+                   onDelete: (index, value) async {
+
+                     final accepted = await warning(
+                       context,
+                       S.of(context).delete_account_confirm,
+                     );
+
+                     if (!accepted) return;
+
+                     final result = await userProvider.delete(resultUsers[index].id);
+
+                     if(result == DeleteResult.success)
+                     {
+                       await confirm(context, S.of(context).user_deleted_successfully);
+                     }
+                     else {
+                       await error(
+                         context,
+                         S.of(context)
+                             .account_delete_error,
+                       );
+                     }
+                   },
+                   onEdit: (index, value) async {
+
+                     final userEdit = resultUsers[index];
+
+                     userProvider.select(userEdit);
+
+                     showDialog(
+                       context: context,
+                       builder: (context) => const createUser(),
+                     );
+                   },
+                 );
+               }
+           ),
+         ),
+       );
+  }
+
+
+  Widget _buildMobileTable() {
+    return Text("target");
+  }
+
 }
