@@ -5,6 +5,7 @@ import 'package:crud_factories/Functions/isNotAndroid.dart';
 import 'package:crud_factories/Objects/User.dart';
 import 'package:crud_factories/Widgets/dropDownButton.dart' show GenericDropdown;
 import 'package:crud_factories/Widgets/headView.dart';
+import 'package:crud_factories/Widgets/headViewsAndroid.dart' show appBarAndroid;
 import 'package:crud_factories/Widgets/materialButton.dart';
 import 'package:crud_factories/Widgets/tableUser.dart';
 import 'package:crud_factories/generated/l10n.dart' show S;
@@ -43,68 +44,97 @@ class _adminPageState extends State<adminPage> {
   @override
   Widget build(BuildContext context) {
 
-    return Scaffold(
-      body: LayoutBuilder(
-        builder: (context, constraints) {
+    String title = S.of(context).user_management;
 
-          const contentWidth = 980.0;
-          const contentHeight = 530.0;
+    return isNotMobile()
+       ? Scaffold(
+              body: LayoutBuilder(
+                builder: (context, constraints) {
 
-          final availableWidth = constraints.maxWidth > contentWidth
-              ? constraints.maxWidth
-              : contentWidth;
+                  const contentWidth = 980.0;
+                  const contentHeight = 530.0;
 
-          final availableHeight = constraints.maxHeight > contentHeight
-              ? constraints.maxHeight
-              : contentHeight;
+                  final availableWidth = constraints.maxWidth > contentWidth
+                      ? constraints.maxWidth
+                      : contentWidth;
 
-          return ScrollbarTheme(
-            data: ScrollbarThemeData(
-                  thumbColor: WidgetStatePropertyAll(
-                     Colors.grey.shade500
-                  ),
-            ),
-            child: Scrollbar(
-                controller: verticalScroll,
-                thumbVisibility: true,
-                thickness: 4,
-                radius: const Radius.circular(4),
-                child: Scrollbar(
-                    controller: horizontalScroll,
-                    thumbVisibility: true,
-                    thickness: 4,
-                    radius: const Radius.circular(4),
-                    notificationPredicate: (notification) =>
-                    notification.metrics.axis == Axis.horizontal,
-                    child: SingleChildScrollView(
-                       controller: verticalScroll,
-                       scrollDirection: Axis.vertical,
-                       child: SingleChildScrollView(
-                         controller: horizontalScroll,
-                         scrollDirection: Axis.horizontal,
-                         child: SizedBox(
-                           width: availableWidth,
-                           height: availableHeight,
-                           child: Align(
-                             alignment: Alignment.topCenter,
-                             child: SizedBox(
-                               width: contentWidth,
-                               height: contentHeight,
-                               child: Padding(
-                                   padding: const EdgeInsetsGeometry.only(left: 60.0, top: 30.0),
-                                   child: _buildContent()
+                  final availableHeight = constraints.maxHeight > contentHeight
+                      ? constraints.maxHeight
+                      : contentHeight;
+
+                  return ScrollbarTheme(
+                    data: ScrollbarThemeData(
+                          thumbColor: WidgetStatePropertyAll(
+                             Colors.grey.shade500
+                          ),
+                    ),
+                    child: Scrollbar(
+                        controller: verticalScroll,
+                        thumbVisibility: true,
+                        thickness: 4,
+                        radius: const Radius.circular(4),
+                        child: Scrollbar(
+                            controller: horizontalScroll,
+                            thumbVisibility: true,
+                            thickness: 4,
+                            radius: const Radius.circular(4),
+                            notificationPredicate: (notification) =>
+                            notification.metrics.axis == Axis.horizontal,
+                            child: SingleChildScrollView(
+                               controller: verticalScroll,
+                               scrollDirection: Axis.vertical,
+                               child: SingleChildScrollView(
+                                 controller: horizontalScroll,
+                                 scrollDirection: Axis.horizontal,
+                                 child: SizedBox(
+                                   width: availableWidth,
+                                   height: availableHeight,
+                                   child: Align(
+                                     alignment: Alignment.topCenter,
+                                     child: SizedBox(
+                                       width: contentWidth,
+                                       height: contentHeight,
+                                       child: Padding(
+                                           padding: const EdgeInsetsGeometry.only(left: 60.0, top: 30.0),
+                                           child: Column(
+                                             children: [
+                                               headView(title: title),
+                                               _buildContent(),
+                                             ],
+                                           )
+                                       ),
+                                     ),
+                                   ),
+                                 ),
                                ),
-                             ),
-                           ),
-                         ),
-                       ),
-                    )
-                )
-            ),
-          );
-        }
-      ),
-    );
+                            )
+                        )
+                    ),
+                  );
+                }
+              ),
+    )
+        : Scaffold(
+              appBar: appBarAndroid(context, name: title),
+                    body: ScrollbarTheme(
+                            data: ScrollbarThemeData(
+                                thumbColor: WidgetStatePropertyAll(
+                                     Colors.grey.shade500
+                                )
+                        ),
+                        child: Scrollbar(
+                            controller: verticalScroll,
+                            thumbVisibility: true,
+                            thickness: 4,
+                            radius: const Radius.circular(4),
+                                child: SingleChildScrollView(
+                                    controller: verticalScroll,
+                                    scrollDirection: Axis.vertical,
+                                    child:   _buildContent(),
+                                )
+                        )
+                  )
+             );
   }
 
   Widget _buildContent() {
@@ -114,7 +144,6 @@ class _adminPageState extends State<adminPage> {
              child: SizedBox(
                child: Column(
                  children: [
-                   headView(title: S.of(context).user_management),
                    Row(
                      children: [
                        Padding(
