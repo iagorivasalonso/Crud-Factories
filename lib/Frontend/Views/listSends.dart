@@ -1,9 +1,10 @@
 import 'package:crud_factories/Alertdialogs/noCategory.dart' show noCategory;
 import 'package:crud_factories/Backend/core/controlsMessagesError/errors.dart' show DeleteResult;
 import 'package:crud_factories/Backend/Providers/LineSendProvider.dart';
-import 'package:crud_factories/Backend/Providers/NavigationProvider.dart' show NavigationProvider, AppView;
+import 'package:crud_factories/Backend/Providers/NavigationProvider.dart' show NavigationProvider;
 import 'package:crud_factories/Frontend/Menu/MenuActionsResults.dart' show AppView;
 import 'package:crud_factories/Frontend/send.dart';
+import 'package:crud_factories/Functions/isNotAndroid.dart';
 import 'package:crud_factories/generated/l10n.dart';
 import 'package:flutter/material.dart';
 import 'package:crud_factories/Alertdialogs/warning.dart';
@@ -61,6 +62,7 @@ class _listSendsState extends State<listSends> {
    void _selectSend (LineSendProvider current, int index, cardSend send) async {
 
      if(!await context.read<NavigationProvider>().canNavigate(context)) return;
+     if (!mounted) return;
 
      final sectorId = context.read<FilterProvider>().sectorId;
 
@@ -209,54 +211,70 @@ class _listSendsState extends State<listSends> {
     double mWidth = MediaQuery.of(context).size.width;
     final mWidthList = mWidth >= 280 ? 280.0 : 0.0;
 
+
+      return isNotMobile()
+            ? Row(
+                  children: [
+                      Container(
+                        color: Colors.grey,
+                        width: mWidthList,
+                        child: _buildList(
+                                 providerLines:providerLines,
+                                 sectorId: sectorId,
+                              ),
+                      ),
+
+                      SizedBox(
+                          width: mWidth - mWidthList,
+                          child: selectedLines.isEmpty
+                              ? const SizedBox()
+                              : SendFromPage(
+                                   lines: selectedLines,
+                                   filter:  providerLines.selectedFilter,
+                                   selectCamp:  selectCamp,
+                                   select: 0,
+                                ),
+                        ),
+                  ],
+            )
+            : SizedBox(
+                width: double.infinity,
+                child: _buildList(
+                        providerLines:providerLines,
+                        sectorId: sectorId,
+                ),
+            );
+    }
+    
+  Widget _buildList({required LineSendProvider providerLines, required String sectorId}){
+
+
     final filterOptions = [
       S.of(context).date,
       S.of(context).company,
     ];
 
+    return GenericListViewPage<cardSend>(
+         itens: providerLines.displayLines(
+           shipmentText: S.of(context).shipment,
+           sectorId: sectorId,
+         ),
+         filters: filterOptions,
+         defaultFilter: providerLines.selectedFilter == SendFilter.date
+             ? S.of(context).date
+             : S.of(context).company,
+         itemBuilder: (send, index) => defaultCard(
+             title: send.title,
+             description: providerLines.selectedFilter == SendFilter.date
+                 ? LineSend.showFormatDate(send.description, context)
+                 : "${S.of(context).sends}: ${send.description}",
+             color: selectCard == index? Colors.white : Colors.grey),
+         onDelete: (send) =>_onDelete(context,send),
+         onTap: (send, index) async => _onTap(context, index, send),
 
-
-      return Row(
-        children: [
-            Container(
-              color: Colors.grey,
-              width: mWidthList,
-              child: GenericListViewPage<cardSend>(
-                  itens: providerLines.displayLines(
-                     shipmentText: S.of(context).shipment,
-                    sectorId: sectorId,
-                  ),
-                  filters: filterOptions,
-                  defaultFilter: providerLines.selectedFilter == SendFilter.date
-                              ? S.of(context).date
-                              : S.of(context).company,
-                  itemBuilder: (send, index) => defaultCard(
-                      title: send.title,
-                      description: providerLines.selectedFilter == SendFilter.date
-                          ? LineSend.showFormatDate(send.description, context)
-                          : "${S.of(context).sends}: ${send.description}",
-                      color: selectCard == index? Colors.white : Colors.grey),
-                  onDelete: (send) =>_onDelete(context,send),
-                  onTap: (send, index) async => _onTap(context, index, send),
-                  
-                  onFilter: (filter, search) async => _sendFilter(filter,search),
-            )
-            ),
-          Expanded(
-            child: selectedLines.isEmpty
-                ? const SizedBox()
-                : SendFromPage(
-                     lines: selectedLines,
-                     filter:  providerLines.selectedFilter,
-                     selectCamp:  selectCamp,
-                     select: 0,
-                  ),
-          ),
-        ],
-      );
-    }
-    
-
+         onFilter: (filter, search) async => _sendFilter(filter,search),
+       );
+  }
 }
 
 

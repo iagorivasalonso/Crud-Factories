@@ -6,6 +6,7 @@ import 'package:crud_factories/Backend/Providers/NavigationProvider.dart';
 import 'package:crud_factories/Backend/Providers/filterProvider.dart' show FilterProvider;
 import 'package:crud_factories/Frontend/Menu/MenuActionsResults.dart' show AppView;
 import 'package:crud_factories/Frontend/factory.dart' show FactoryFromPage;
+import 'package:crud_factories/Functions/isNotAndroid.dart';
 import 'package:crud_factories/Objects/Factory.dart';
 import 'package:crud_factories/generated/l10n.dart' show S;
 import 'package:flutter/material.dart';
@@ -153,15 +154,49 @@ class _listFactoriesState extends State<listFactories> {
 
     if (providerFactories.isNotEmpty &&
         context.read<FactoryProvider>().selected == null) {
+
           WidgetsBinding.instance.addPostFrameCallback((_) {
-            context.read<FactoryProvider>().select(
-              providerFactories.first,
-            );
+
+            if(!mounted) return;
+
+            final provider = context.read<FactoryProvider>();
+
+            if (provider.selected == null) {
+              provider.select(providerFactories.first);
+            }
           });
     }
 
     double mWidth = MediaQuery.of(context).size.width;
     double mWidthList = mWidth > 280 ? 260 : 0;
+
+    return isNotMobile()
+        ? Row(
+          children: [
+            SizedBox(
+              width: mWidthList,
+              child: _builList(
+                          providerFactories: providerFactories
+                      )
+            ),
+
+            SizedBox(
+              width: mWidth-mWidthList,
+              child: context.watch<FactoryProvider>().selected != null
+                  ? FactoryFromPage()
+                  : const SizedBox.shrink(),
+            ),
+          ],
+        )
+        : SizedBox(
+              width: double.infinity,
+              child: _builList(
+                  providerFactories: providerFactories
+              )
+        );
+  }
+
+  Widget _builList({required List<Factory> providerFactories}) {
 
     final filterOptions = [
       S.of(context).name,
@@ -170,42 +205,28 @@ class _listFactoriesState extends State<listFactories> {
       S.of(context).city,
     ];
 
-    return Row(
-          children: [
-            SizedBox(
-              width: mWidthList,
-              child: GenericListViewPage<Factory>(
-                itens: providerFactories,
-                filters: filterOptions,
-                defaultFilter: S.of(context).name,
-                itemBuilder: (factory, index) => factoryCard(
-                  name: factory.name,
-                  address: (factory.address?.fullAddress.trim() ?? '').replaceAll(',', '').trim().isEmpty
-                      ? ''
-                      : factory.address?.fullAddress ?? '',
-                  telephone: (factory.thelephones.isNotEmpty == true)
-                      ? factory.thelephones.first
-                      : '',
-                  city: factory.address?.city ?? '',
-                ),
-                onFilter: _onFilter,
-                onDelete: (factory) => _onDelete(context, factory),
-                onTap: (factory, index) async {
-                  if(!await context.read<NavigationProvider>().canNavigate(context)) return;
+    return GenericListViewPage<Factory>(
+         itens: providerFactories,
+         filters: filterOptions,
+         defaultFilter: S.of(context).name,
+         itemBuilder: (factory, index) => factoryCard(
+           name: factory.name,
+           address: (factory.address?.fullAddress.trim() ?? '').replaceAll(',', '').trim().isEmpty
+               ? ''
+               : factory.address?.fullAddress ?? '',
+           telephone: (factory.thelephones.isNotEmpty == true)
+               ? factory.thelephones.first
+               : '',
+           city: factory.address?.city ?? '',
+         ),
+         onFilter: _onFilter,
+         onDelete: (factory) => _onDelete(context, factory),
+         onTap: (factory, index) async {
+           if(!await context.read<NavigationProvider>().canNavigate(context)) return;
 
-                  context.read<FactoryProvider>().select(factory);
-                },
-              ),
-            ),
-
-            SizedBox(
-              width: mWidth-mWidthList,
-              child: context.watch<FactoryProvider>().selected != null
-                  ? FactoryFromPage()
-                  : Text(""),
-            ),
-          ],
-        );
+           context.read<FactoryProvider>().select(factory);
+         },
+       );
   }
 }
 
